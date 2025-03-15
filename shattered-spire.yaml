@@ -3,6 +3,104 @@ version: "1.0"
 level_range: "1-5"
 author: "AI Assistant"
 
+core_theme: "Restore or destroy the fallen sky city"
+
+campaign_truths:
+  regional_state: 
+    - "A prosperous frontier region now facing resource shortages due to crystal contamination"
+    - "Local towns growing rapidly as crystal prospectors and researchers arrive"
+  
+  dark_forces:
+    - "Ancient crystal magic corrupting creatures and people who come in contact with it"
+    - "A secretive cult seeking to harness the fallen city's power for domination"
+  
+  world_alterations:
+    - "Crystal magic is a newly rediscovered form of power with unpredictable effects"
+    - "The boundary between the Material Plane and Elemental Plane of Earth is weakening"
+  
+  thematic_tone:
+    - "High fantasy with elements of cosmic horror and corruption"
+
+campaign_prep:
+  spiral_phases:
+    center:
+      core_theme: "Restore or destroy the fallen sky city"
+      campaign_truths: "Referenced from campaign_truths section above"
+      starting_location: "Crystalbrook - A frontier town experiencing strange crystal phenomena"
+      immediate_threats:
+        - "Recent crystal shard crash causing wildlife corruption"
+        - "Crystal-corrupted creatures attacking local farms"
+        - "Crystal cultists infiltrating the town seeking crash site information"
+    
+    first_spiral:
+      local_npcs_and_factions:
+        - "Merielle Stormwind (Sage) and her research assistants"
+        - "Lord Blackstone and the Merchant Guild"
+        - "Sister Clara and the Star-watching Monks"
+        - "The Crystal Seekers (cultist front organization)"
+        - "Frontier Defense League (local militia)"
+      
+      nearby_locations:
+        - "Crystal Crash Site (1 day travel from town)"
+        - "Abandoned Crystal Mines (half-day travel)"
+        - "Star Monk Observatory (on hill overlooking town)"
+        - "Wild Crystal Grove (forest area showing first signs of corruption)"
+      
+      immediate_quests:
+        - "Investigate the recent crash site"
+        - "Find missing researchers in the abandoned mines"
+        - "Help Merielle analyze crystal samples"
+        - "Protect a merchant caravan to neighboring settlement"
+      
+      current_situation: "Crystalbrook is experiencing strange phenomena after a large crystal impact nearby. Citizens report odd dreams, wildlife is becoming aggressive, and resource prospectors are flooding into town. Tension grows between those who want to exploit the crystals and those who fear them."
+    
+    second_spiral:
+      regional_powers:
+        - "The Court of Stars (ancient order that once allied with sky city)"
+        - "The Merchant Consortium (multi-city trading organization)"
+        - "The Crystal Ascendancy (secret cult's true form)"
+        - "The Kingdom of Aurand (distant political power taking interest)"
+      
+      connected_locations:
+        - "Shimmerhold (larger city three days travel)"
+        - "Floating Islands (smaller chunks of the sky city)"
+        - "Network of crystal caves throughout the region"
+        - "Ancient ruins containing sky city records"
+      
+      future_threats:
+        - "Growing corruption zone spreading from crash sites"
+        - "Cult's ritual to raise major fragment of the city"
+        - "Crystal dragon awakening"
+        - "Foreign powers attempting to seize crystal resources"
+      
+      broader_conflicts:
+        - "Religious conflict over meaning of fallen city"
+        - "Resource war as crystals become more valuable"
+        - "Knowledge race to understand crystal technology"
+        - "Spreading corruption threatening regional stability"
+    
+    outer_spiral:
+      world_events:
+        - "Other sky city fragments falling across the continent"
+        - "Changes in magical fields worldwide due to city's return"
+        - "Ancient sky city allies/enemies awakening"
+      
+      distant_powers:
+        - "The Elemental Court of Earth (sensing planar weakness)"
+        - "The Arcane Conclave (ancient mages who helped create sky city)"
+        - "Empire of the Golden Throne (political superpower)"
+      
+      epic_threats:
+        - "Complete return of corrupt city could tear reality"
+        - "Ancient sky city weapons of mass destruction"
+        - "Elemental invasion through weakened planar boundaries"
+      
+      campaign_conclusion:
+        destroy_shards: "Players destroy key shards and permanently ground the city fragments"
+        control_power: "Players master crystal magic to safely harness the city's power"
+        restore_city: "Players cleanse corruption and restore flying city to its former glory"
+        merge_planes: "Players guide merger of material plane and elemental earth in controlled way"
+
 overview: |
   An adventure where players discover fragments of an ancient floating city, 
   deal with mysterious crystal magic, and must prevent cultists from raising 
