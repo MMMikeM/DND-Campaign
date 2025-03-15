@@ -1,0 +1,310 @@
+title: "Shattered Spire Generic NPCs and Quests"
+version: "1.0"
+description: |
+  A collection of NPCs and associated questlines that can be dropped into any 
+  location in the Shattered Spire campaign. These characters can be adapted 
+  to fit various settings, providing on-the-fly content for player exploration.
+  
+  Quest details are stored in shattered-spire-quests.yaml and referenced by ID.
+
+# Simple NPC structure with quest references
+npcs:
+  # MERCHANTS AND TRADERS
+  - name: "Orin Blackhand"
+    type: "Merchant"
+    basic_traits: "Dwarven gem trader, paranoid, carries too many weapons"
+    appearance: |
+      Short even for a dwarf, with a meticulously groomed black beard adorned with tiny 
+      crystal beads. Deep-set eyes that dart nervously. Wears multiple layers of clothing 
+      with obvious weapon bulges. His hands are stained with mineral residue and
+      he constantly wears gloves with crystal-reinforced knuckles.
+    personality: |
+      Jumpy and suspicious, speaking in hushed tones as if constantly being overheard. 
+      Despite his paranoia, he's a shrewd trader with encyclopedic knowledge of gems. 
+      Becomes animated and almost normal when discussing crystal properties. Has a habit 
+      of stopping mid-sentence to listen to things others can't hear.
+    hooks: "Believes crystals are whispering to him"
+    quests:
+      - simple_quest_id: "SQ001"
+        summary: "Escort to nearby settlement"
+      - major_quest_id: "MQ001"
+        summary: "Investigate the mysterious whispering crystals"
+
+  - name: "Lyssa Silverweave"
+    type: "Merchant"
+    basic_traits: "Human textile merchant, charming, well-connected"
+    appearance: |
+      Elegant woman in her forties with silver-streaked dark hair always styled 
+      impeccably. Wears her own creations - flowing garments with subtle crystal 
+      thread patterns that catch the light. Her fingers are long and nimble, with 
+      calluses from years of weaving. A small crystal monocle hangs from a silver chain.
+    personality: |
+      Charismatic and socially adept, with a talent for remembering names and personal 
+      details. Speaks with a melodious voice that draws people in. Fiercely competitive
+      in business but hides it behind a veneer of warm courtesy. Obsessively secretive
+      about her weaving techniques.
+    hooks: "Secretly weaves crystal threads into her fabrics"
+    quests:
+      - simple_quest_id: "SQ002"
+        summary: "Find rare materials for special fabric"
+
+  # SCHOLARS AND RESEARCHERS
+  - name: "Professor Aldwin Thorngage"
+    type: "Scholar"
+    basic_traits: "Elderly human historian, absentminded, extensive knowledge"
+    appearance: |
+      Stooped elderly man with wild white hair and bushy eyebrows. Spectacles 
+      perpetually sliding down his nose. Wears layered academic robes with countless 
+      pockets stuffed with notes, writing implements, and odd trinkets. Walks with a 
+      cane that has crystal inlays and serves as both a walking aid and a pointing tool.
+    personality: |
+      Brilliant but scattered, frequently losing track of conversations to pursue 
+      tangential thoughts. Becomes intensely focused when discussing history. 
+      Kind-hearted but oblivious to social cues. Peppers speech with archaic
+      expressions and references to obscure historical events as if everyone would
+      understand them.
+    hooks: "Collecting conflicting accounts of sky city's fall"
+    quests:
+      - simple_quest_id: "SQ003"
+        summary: "Recover lost research notes from dangerous location"
+      - major_quest_id: "MQ002" 
+        summary: "Help reconcile contradictory historical accounts"
+
+  - name: "Kel Brightstone"
+    type: "Researcher"
+    basic_traits: "Half-elf crystal expert, enthusiastic, risk-taker"
+    appearance: |
+      Youthful half-elf with angular features and a shock of unnaturally blue hair. 
+      Left arm has a lattice of fine crystal growths implanted under the skin that
+      glow faintly when excited. Wears practical clothing with numerous protective
+      runes sewn in. A magnifying monocle with multiple lenses on a swivel apparatus
+      is always within reach.
+    personality: |
+      Speaks rapidly and enthusiastically about research, often using technical jargon.
+      Dismissive of safety concerns and eager to self-experiment. Competitive and
+      desperate to make a significant discovery. Shows more empathy for crystals than
+      people, treating them almost as living entities. Fidgety when not actively working.
+    hooks: "Testing crystal resonance on living subjects"
+    quests:
+      - simple_quest_id: "SQ004"
+        summary: "Gather specific crystal samples from corrupted areas"
+
+  # ADVENTURERS AND EXPLORERS
+  - name: "Brenna Stormbow"
+    type: "Explorer"
+    basic_traits: "Human ranger, weathered, excellent tracker"
+    appearance: |
+      Lean, muscular woman with sun-weathered skin and hair bleached by the elements, 
+      kept in a practical braid. Face bears a scar across her left cheek from a crystal
+      shard explosion. Wears well-maintained leathers with sky-blue accents and carries
+      a bow with crystalline inlays. Multiple crude star charts are tattooed on her forearms.
+    personality: |
+      Quiet and observant, speaking only when necessary but warm once trust is established. 
+      Has more patience for natural challenges than social complications. Methodical and
+      organized in approach to exploration. Deeply spiritual about the night sky, believing
+      the stars contain messages. Becomes visibly uncomfortable in enclosed spaces.
+    hooks: "Mapped several floating island positions over time"
+    quests:
+      - simple_quest_id: "SQ005"
+        summary: "Guide to unmapped crystal formation"
+      - major_quest_id: "MQ004"
+        summary: "Track and predict floating island movements"
+
+  - name: "Varric Tetherson"
+    type: "Adventurer"
+    basic_traits: "Dwarven fighter, boisterous, exaggerates stories"
+    appearance: |
+      Barrel-chested dwarf with a flamboyant red beard braided with golden rings.
+      Missing his right ear and covers it with an ornate crystal earpiece. Wears 
+      battle-scarred armor polished to a shine, with trophies from various monsters
+      attached as decorations. Carries an oversized battleaxe that has a crystal
+      embedded in its head.
+    personality: |
+      Loud and theatrical, dominating conversations with increasingly outlandish tales.
+      Genuinely brave but embellishes his exploits to legendary proportions. Loyal to
+      friends but quick to take offense at perceived slights. Harbors a deep fear of
+      being forgotten or deemed unimportant. Surprisingly gentle with animals and children.
+    hooks: "Claims to have been inside the largest floating island"
+    quests:
+      - simple_quest_id: "SQ006"
+        summary: "Help recover lost companion in crystal caves"
+
+  # LOCALS AND TOWNSFOLK
+  - name: "Clara Millhand"
+    type: "Farmer"
+    basic_traits: "Human farmer, hardworking, protective of family"
+    appearance: |
+      Sturdy woman in her thirties with calloused hands and sun-darkened skin.
+      Always wears a worn straw hat to protect from the sun. Simple, practical
+      clothing with numerous repairs. Has a crystal pendant she tries to hide,
+      believing it protects her family. Walks with a slight limp from an old
+      farming accident.
+    personality: |
+      Direct and plainspoken with little patience for fancy talk. Fiercely protective
+      of her children and land. Practical problem-solver who values action over words.
+      Deeply superstitious, following old farming traditions and omens. Suspicious of
+      magic but willing to accept help when her family's welfare is at stake.
+    hooks: "Crops growing in strange patterns near crystal deposit"
+    quests:
+      - simple_quest_id: "SQ007"
+        summary: "Clear corrupted vermin from farmland"
+      - major_quest_id: "MQ005"
+        summary: "Investigate mysterious crop patterns"
+
+  - name: "Mikkel Brewerson"
+    type: "Innkeeper"
+    basic_traits: "Half-orc innkeeper, observant, knows local gossip"
+    appearance: |
+      Imposing half-orc with graying temples and a neatly trimmed beard. Wears an
+      immaculate apron over simple but quality clothing. Has a crystal-embedded prosthetic
+      left hand that he's surprisingly dexterous with. Warm smile that transforms his
+      otherwise intimidating features.
+    personality: |
+      Friendly and welcoming host with a remarkable memory for names and preferences.
+      Listens more than he speaks, collecting stories and information. Firm but fair
+      when handling rowdy customers. Deeply curious about the world but content with
+      his chosen profession. Proud of his establishment and the community it serves.
+    hooks: "Collecting stories about crystal dreams from travelers"
+    quests:
+      - simple_quest_id: "SQ008"
+        summary: "Investigate strange guest who left peculiar item"
+
+  # CRIMINALS AND ROGUES
+  - name: "The Shimmer"
+    type: "Thief"
+    basic_traits: "Unknown race/gender, wears crystal-infused mask, graceful"
+    appearance: |
+      Slender figure in form-fitting dark clothing that seems to absorb light.
+      Wears a reflective crystal mask that obscures all facial features and subtly
+      changes appearance depending on the viewing angle. Moves with unnatural grace
+      and precision. Gloved hands occasionally reveal glimpses of crystalline skin
+      beneath when performing intricate tasks.
+    personality: |
+      Speaks rarely and in a voice artificially modulated by the mask. When they do
+      speak, they're precise and formal, using antiquated phrases. Displays a peculiar
+      code of honor, never harming innocents. Seems to possess knowledge of crystal
+      artifacts that predates current understanding. Shows occasional flashes of dry
+      humor despite their mysterious demeanor.
+    hooks: "Steals only crystal artifacts of a specific type"
+    quests:
+      - simple_quest_id: "SQ009"
+        summary: "Track down thief who stole important artifact"
+      - major_quest_id: "MQ007"
+        summary: "Uncover The Shimmer's true purpose"
+
+  - name: "Darius Quickfingers"
+    type: "Smuggler"
+    basic_traits: "Human smuggler, charming, always has an escape plan"
+    appearance: |
+      Handsome man with a carefully maintained goatee and a roguish smile. One
+      green eye and one with a crystal iris that shifts color subtly. Dresses in
+      fine but practical clothing that allows for quick movement. Multiple hidden
+      pockets and compartments in his garments. Wears rings with small mechanisms
+      built into them.
+    personality: |
+      Charismatic and quick-witted, able to talk his way into and out of most situations.
+      Maintains a façade of carefree confidence that masks careful planning and caution.
+      Treats smuggling as both an art form and a business. Surprisingly principled about
+      certain lines he won't cross. Struggles with growing crystal influence that grants
+      benefits but causes concerning changes.
+    hooks: "Discovered unusual crystal effects on certain contraband"
+    quests:
+      - simple_quest_id: "SQ010"
+        summary: "Deliver package while avoiding authorities"
+
+  # MAGICAL ENTITIES
+  - name: "Crystallis"
+    type: "Elemental Entity"
+    basic_traits: "Crystal elemental, childlike curiosity, shifting form"
+    appearance: |
+      Small humanoid figure roughly three feet tall, composed entirely of translucent
+      crystal that shifts between colors based on mood and communication. Internal
+      lights pulse in patterns when it communicates. Form is fluid, occasionally
+      growing new appendages or features as needed. Can partially dissolve into a
+      crystalline mist when threatened.
+    personality: |
+      Curious and innocent as a child, discovering the world with wonder. Communicates
+      through light patterns, emotional impressions, and broken fragments of language
+      it has absorbed. Has difficulty understanding human concepts of time and mortality.
+      Shows attachments to certain individuals who treat it kindly. Becomes distressed
+      around corrupted crystal formations.
+    hooks: "Separated from larger consciousness in sky city"
+    quests:
+      - simple_quest_id: "SQ011"
+        summary: "Help entity find compatible crystal host"
+      - major_quest_id: "MQ008"
+        summary: "Reconnect fragment with greater consciousness"
+
+  - name: "Vex'alia"
+    type: "Corrupted Fey"
+    basic_traits: "Fey being partially crystallized, capricious, ancient"
+    appearance: |
+      Unnaturally beautiful fey woman with skin that transitions from normal flesh
+      to faceted crystal formations. Long hair like spun crystal that moves as if
+      underwater. Eyes with kaleidoscopic crystal irises. Wears elaborate garments
+      made from impossibly thin crystal sheets that chime softly when she moves.
+      Left arm entirely crystallized with sharp-edged fingers.
+    personality: |
+      Mercurial and unpredictable, shifting between charming graciousness and cold
+      cruelty without warning. Speaks in riddles and bargains, never giving information
+      freely. Ancient perspective makes mortal concerns seem trivial. Obsessed with
+      collecting memories and experiences to replace those lost to crystallization.
+      Occasionally shows moments of wistful regret for her transformation.
+    hooks: "Trades crystal-infused favors for memories"
+    quests:
+      - simple_quest_id: "SQ012"
+        summary: "Retrieve personal item from corrupted area"
+      - major_quest_id: "MQ009"
+        summary: "Bargain with fey for ancient sky city knowledge"
+
+# Generic usable NPCs with no fixed quests
+generic_npcs:
+  - name: "Guard Captain Torval"
+    type: "Town Guard"
+    basic_traits: "Human guard, stern, dutiful"
+    appearance: |
+      Broad-shouldered man in his fifties with salt-and-pepper hair cut short and a 
+      well-maintained mustache. Wears standard guard armor but with crystal-reinforced
+      panels. Has a crystal shard embedded in his shoulder from an old wound that 
+      occasionally glows when he's agitated. Walks with perfect posture despite his age.
+    personality: |
+      Stern and by-the-book, with little tolerance for excuses. Protective of his 
+      town and guards with a fatherly attitude. Secretly fears the growing crystal
+      influence but maintains a stoic facade. Values order above all else. Surprisingly
+      compassionate when dealing with those who have legitimate problems.
+    hooks: "Tracking pattern of crystal-related crimes"
+    quest_types: ["GQ002", "GQ003"]
+
+  - name: "Magister Ella Brightmoon"
+    type: "Town Official"
+    basic_traits: "Half-elf bureaucrat, meticulous, overworked"
+    appearance: |
+      Slender half-elf woman with prematurely graying hair always tied in a perfect 
+      bun. Wears formal robes with subtle magical enhancements. Multiple enchanted
+      quills hover near her at all times, taking notes. Fidgets with a crystal-topped
+      stylus when thinking. Usually surrounded by floating documents.
+    personality: |
+      Speaks precisely and formally, using technical terms and legal language. Appears
+      coldly efficient but actually cares deeply about her community. Exhausted by
+      endless crystal-related problems requiring administrative solutions. Frustrated
+      by lack of resources. Has a dry, unexpected sense of humor that emerges rarely.
+    hooks: "Documenting crystal-related incidents officially"
+    quest_types: ["GQ001", "GQ002"]
+
+  - name: "Traveler Jax"
+    type: "Wandering Merchant"
+    basic_traits: "Human traveler, storyteller, collector of oddities"
+    appearance: |
+      Weathered human of indeterminate age with tanned skin and laugh lines. Dresses
+      in colorful but practical traveling clothes from various cultures. Wears a 
+      backpack containing numerous pouches and small compartments. Various minor
+      crystal trinkets hang from his belt and hat brim. Missing two fingers on his
+      left hand.
+    personality: |
+      Gregarious and full of stories from far-off places, some true and some 
+      embellished. Speaks with different regional accents depending on his mood.
+      Intensely curious about new experiences. Trades in information as much as
+      goods. Surprisingly insightful about human nature. Has a talent for being in
+      the right place at interesting times.
+    hooks: "Collects stories about crystal phenomena worldwide"
+    quest_types: ["GQ001", "GQ003"]
