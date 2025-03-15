@@ -1,0 +1,219 @@
+title: "So You Want to Be a Game Master"
+version: "1.0"
+source: "Based on D&D 5E Core Books"
+
+chapter_1:
+  title: "Introduction to Being a DM"
+  overview: |
+    It's good to be the Dungeon Master! Not only do you get to tell fantastic stories 
+    about heroes, villains, monsters, and magic, but you also get to create the world 
+    in which these stories live.
+  
+  what_you_need:
+    core_requirements:
+      - name: "Core Rulebooks"
+        items:
+          - "Player's Handbook - Core rules and player options"
+          - "Dungeon Master's Guide - Tools and guidance for running the game"
+          - "Monster Manual - Ready-to-use monsters and creatures"
+      - name: "Basic Materials"
+        items:
+          - "Notepads for tracking information"
+          - "Dice sets"
+          - "Maps and reference sheets"
+          - "Adventure materials (published or created)"
+
+chapter_2:
+  title: "The Role of the Dungeon Master"
+  core_responsibilities:
+    referee:
+      description: |
+        When it's not clear what ought to happen next, the DM decides how to apply
+        the rules and keep the story going.
+      duties:
+        - "Final authority on rules questions"
+        - "Keep the game moving"
+        - "Fair arbitration of disputes"
+    
+    storyteller:
+      description: |
+        The DM sets the pace of the story and presents the various challenges and
+        encounters that the players must overcome.
+      duties:
+        - "Narrate the world and events"
+        - "Present challenges and encounters"
+        - "Describe outcomes of player actions"
+    
+    world_builder:
+      description: |
+        As the architect of a campaign, the DM creates adventures by placing monsters,
+        traps, and treasures for the adventurers to discover.
+      duties:
+        - "Design or adapt adventures"
+        - "Create engaging locations"
+        - "Develop interesting NPCs"
+
+chapter_3:
+  title: "Running the Game"
+  session_management:
+    preparation:
+      before_session:
+        - "Review adventure materials"
+        - "Prepare monster stats and encounters"
+        - "Review player character abilities"
+        - "Set up maps and props"
+      
+      during_session:
+        - "Track initiative and combat details"
+        - "Monitor player engagement"
+        - "Manage pacing and flow"
+        - "Adapt to player choices"
+    
+    encounter_types:
+      combat:
+        - "Balance challenge level"
+        - "Track monster health and abilities"
+        - "Maintain excitement and tension"
+        - "Consider tactical options"
+      
+      social:
+        - "Roleplay NPCs consistently"
+        - "React to player approaches"
+        - "Consider NPC motivations"
+        - "Track relationship changes"
+      
+      exploration:
+        - "Describe environments vividly"
+        - "Present interesting choices"
+        - "Include meaningful discoveries"
+        - "Track time and resources"
+
+chapter_4:
+  title: "Creating Adventures"
+  adventure_structure:
+    scope:
+      single_session:
+        description: "One-shot adventures focused on a specific quest or goal"
+        elements:
+          - "Clear objective"
+          - "Contained story"
+          - "Satisfying conclusion"
+      
+      multi_session:
+        description: "Longer adventures with multiple connected elements"
+        elements:
+          - "Overarching plot"
+          - "Multiple encounters"
+          - "Character development opportunities"
+      
+      campaign:
+        description: "Extended series of connected adventures"
+        elements:
+          - "World development"
+          - "Long-term consequences"
+          - "Character growth"
+    
+    design_principles:
+      - "Start with a compelling hook"
+      - "Include multiple paths to success"
+      - "Balance different types of challenges"
+      - "Consider player character abilities"
+      - "Plan for unexpected choices"
+
+chapter_5:
+  title: "Running the World"
+  world_management:
+    setting_elements:
+      locations:
+        - "Design memorable places"
+        - "Consider geography and climate"
+        - "Create interesting features"
+        - "Plan travel routes"
+      
+      npcs:
+        - "Develop distinct personalities"
+        - "Consider motivations and goals"
+        - "Create memorable traits"
+        - "Plan relationships"
+      
+      factions:
+        - "Define group interests"
+        - "Create internal conflicts"
+        - "Plan interactions"
+        - "Track allegiances"
+    
+    world_events:
+      - "Natural disasters"
+      - "Political changes"
+      - "Economic shifts"
+      - "Cultural developments"
+
+chapter_6:
+  title: "DM Best Practices"
+  key_principles:
+    rules_approach:
+      primary_rule: |
+        The rules are tools to help you have fun. You're the DM—you're in charge 
+        of the game.
+      guidelines:
+        - "When in doubt, make it up"
+        - "Be consistent with rulings"
+        - "Keep the game moving"
+        - "Modify rules that aren't working"
+    
+    player_engagement:
+      core_concept: |
+        D&D is a shared narrative experience where everyone contributes to the story.
+      guidelines:
+        - "Ensure everyone gets spotlight time"
+        - "Listen to player ideas"
+        - "Encourage character development"
+        - "Balance challenge and success"
+    
+    table_management:
+      relationship: |
+        The DM-player relationship should be collaborative, not adversarial.
+      guidelines:
+        - "Present fair challenges"
+        - "Maintain impartiality"
+        - "Keep everyone involved"
+        - "Monitor and adjust pacing"
+
+chapter_7:
+  title: "Troubleshooting and Growth"
+  common_issues:
+    handling_mistakes:
+      approach: "Acknowledge, correct, and move forward"
+      guidelines:
+        - "Learn from errors"
+        - "Stay flexible"
+        - "Keep the game flowing"
+    
+    difficult_situations:
+      player_conflicts:
+        - "Address issues promptly"
+        - "Remain impartial"
+        - "Focus on solutions"
+      
+      game_balance:
+        - "Adjust challenge levels"
+        - "Consider house rules"
+        - "Monitor player satisfaction"
+  
+  improvement_path:
+    skill_development:
+      - "Study the rules"
+      - "Practice improvisation"
+      - "Develop storytelling"
+      - "Learn from feedback"
+    
+    resources:
+      books:
+        - "Core rulebooks"
+        - "Published adventures"
+        - "Setting guides"
+      
+      community:
+        - "Online forums"
+        - "Local gaming groups"
+        - "DM workshops" 
