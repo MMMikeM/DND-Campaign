@@ -1,8 +1,7 @@
 "use client"
 
 import NavigationDrawer from "./NavigationDrawer"
-import { useRouter } from "next/navigation"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 interface NavigationDrawerWrapperProps {
 	files: string[]
@@ -13,24 +12,6 @@ export default function NavigationDrawerWrapper({
 	files,
 	children,
 }: NavigationDrawerWrapperProps) {
-	const router = useRouter()
-
-	// Client-side handler for file selection
-	const handleSelectFile = (fileName: string) => {
-		console.log(`Selected file: ${fileName}`)
-
-		// Navigate based on file type
-		if (fileName.toLowerCase().includes("npc")) {
-			router.push("/npcs")
-		} else if (fileName.toLowerCase().includes("faction")) {
-			router.push("/factions")
-		} else if (fileName.toLowerCase().includes("location")) {
-			router.push("/locations")
-		} else if (fileName.toLowerCase().includes("quest")) {
-			router.push("/quests")
-		}
-	}
-
 	return (
 		<div className="flex h-screen overflow-hidden">
 			{/* Navigation Drawer */}
@@ -38,7 +19,7 @@ export default function NavigationDrawerWrapper({
 				<NavigationDrawer
 					files={files}
 					activeFile={null}
-					onSelectFile={handleSelectFile}
+					onSelectFile={() => {}} // Navigation is now handled by Link components
 				/>
 			</div>
 
