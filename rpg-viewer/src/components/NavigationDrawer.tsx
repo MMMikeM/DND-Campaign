@@ -109,9 +109,6 @@ export default function NavigationDrawer({
 	const [selectedFactionId, setSelectedFactionId] = useState<
 		string | undefined
 	>()
-	const [selectedLocationId, setSelectedLocationId] = useState<
-		string | undefined
-	>()
 	const [selectedQuestCategory, setSelectedQuestCategory] = useState<
 		string | undefined
 	>()
@@ -124,17 +121,6 @@ export default function NavigationDrawer({
 		locations: locationsData,
 		quests: questsData,
 	} = useCampaignData()
-
-	// Debug data from context
-	console.log("[NavigationDrawer] Data from context:", {
-		npcsCount: npcsData?.length || 0,
-		factionsCount: factionsData?.length || 0,
-		locationsCount: locationsData?.length || 0,
-		questsCount: questsData?.length || 0,
-	})
-
-	// Detailed log for factions
-	console.log("[NavigationDrawer] Factions data from context:", factionsData)
 
 	// No need for loading states anymore since data is passed from the server
 	const isLoadingNpcs = false
@@ -208,6 +194,7 @@ export default function NavigationDrawer({
 
 	// Add state for selected query params
 	const router = useRouter()
+	const pathname = usePathname()
 
 	// Helper to select NPC from list
 	const selectNpc = (npcId: string) => {
@@ -237,17 +224,15 @@ export default function NavigationDrawer({
 	}
 
 	// Helper to select Location from list
-	const selectLocation = (locationType: string) => {
-		setSelectedLocationId(locationType)
+	const selectLocation = (locationId: string) => {
 		// Find the Location file to open
 		const locationFile = locationFiles.find((f) =>
 			f.toLowerCase().includes("location"),
 		)
 		if (locationFile) {
 			onSelectFile(locationFile)
-			// Use router to navigate to proper route
-			const locationSlug = locationType.toLowerCase().replace(/\s+/g, "-")
-			router.push(`/locations/${encodeURIComponent(locationSlug)}`)
+			// Use router to navigate to proper route - no need to store state
+			router.push(`/locations/${encodeURIComponent(locationId)}`)
 		}
 	}
 
@@ -271,70 +256,73 @@ export default function NavigationDrawer({
 	const getNpcs = () => {
 		// Transform npcsData into a display-friendly format
 		const allNpcs: Array<{ id: string; name: string }> = []
-		npcsData.forEach((data) => {
+		for (const data of npcsData) {
 			if (data.npcs) {
-				Object.entries(data.npcs).forEach(([id, npc]) => {
-					const npcData = npc as Record<string, any>
+				for (const [id, npc] of Object.entries(data.npcs)) {
+					const npcData = npc as Record<string, unknown>
 					allNpcs.push({
 						id,
-						name: npcData.name || formatCategoryName(id),
+						name: (npcData.name as string) || formatCategoryName(id),
 					})
-				})
+				}
 			}
-		})
+		}
 		return allNpcs
 	}
 
 	// Same approach for factions
 	const getFactions = () => {
 		const allFactions: Array<{ id: string; name: string }> = []
-		console.log("Getting factions from factionsData:", factionsData)
 
 		if (!factionsData || factionsData.length === 0) {
 			console.warn("No factions data available")
 			return allFactions
 		}
 
-		factionsData.forEach((data) => {
-			console.log("Processing faction data object:", data)
-
+		for (const data of factionsData) {
 			if (data.factions) {
-				console.log(
-					"Factions found in data object, entries:",
-					Object.keys(data.factions).length,
-				)
-
-				Object.entries(data.factions).forEach(([id, faction]) => {
-					console.log(`Processing faction "${id}":`, faction)
-
-					const factionData = faction as Record<string, any>
+				for (const [id, faction] of Object.entries(data.factions)) {
+					const factionData = faction as Record<string, unknown>
 					allFactions.push({
 						id,
-						name: factionData.name || formatCategoryName(id),
+						name: (factionData.name as string) || formatCategoryName(id),
 					})
-				})
+				}
 			} else {
 				console.warn('No "factions" property in data object:', data)
 			}
-		})
+		}
 
-		console.log("Final factions list:", allFactions)
 		return allFactions
 	}
 
-	// Get location types
-	const getLocationTypes = () => {
-		const types = new Set<string>()
-		locationsData.forEach((data) => {
-			if (data.locations) {
-				Object.values(data.locations).forEach((location) => {
-					if ((location as any).type) {
-						types.add((location as any).type)
-					}
-				})
+	// Get location IDs with a stable approach for consistent server/client rendering
+	const getLocationIds = () => {
+		// Start with an empty array
+		const ids: string[] = []
+
+		// Only process data if it exists
+		if (
+			locationsData &&
+			Array.isArray(locationsData) &&
+			locationsData.length > 0
+		) {
+			// Create a stable set to avoid duplicates
+			const locationSet = new Set<string>()
+
+			// Process each data entry
+			for (const data of locationsData) {
+				if (data && data.locations && typeof data.locations === "object") {
+					// Add all location IDs to the set
+					Object.keys(data.locations).forEach((id) => locationSet.add(id))
+				}
 			}
-		})
-		return Array.from(types).sort()
+
+			// Convert set to array and sort for stable order
+			ids.push(...Array.from(locationSet))
+		}
+
+		return ids.sort()
 	}
 
 	// Get quest categories
@@ -347,15 +335,16 @@ export default function NavigationDrawer({
 			"Generic Quests",
 		])
 
-		questsData.forEach((data) => {
+		for (const data of questsData) {
 			if (data.quests) {
-				Object.values(data.quests).forEach((quest) => {
-					if ((quest as any).category) {
-						categories.add((quest as any).category)
+				for (const quest of Object.values(data.quests)) {
+					const questData = quest as Record<string, unknown>
+					if (questData.category) {
+						categories.add(questData.category as string)
 					}
-				})
+				}
 			}
-		})
+		}
 
 		return Array.from(categories).sort()
 	}
@@ -363,7 +352,7 @@ export default function NavigationDrawer({
 	// Get the data we need for the UI
 	const displayNpcs = getNpcs()
 	const displayFactions = getFactions()
-	const locationTypes = getLocationTypes()
+	const locationIds = getLocationIds()
 	const questCategories = getQuestCategories()
 
 	return (
@@ -422,9 +411,9 @@ export default function NavigationDrawer({
 											({displayFactions.length})
 										</span>
 									)}
-									{category === "Locations" && locationTypes && (
+									{category === "Locations" && locationIds && (
 										<span className="text-xs text-gray-400">
-											({locationTypes.length})
+											({locationIds.length})
 										</span>
 									)}
 									{category === "Quests" && questCategories && (
@@ -553,24 +542,26 @@ export default function NavigationDrawer({
 										<div className="text-sm text-gray-400 py-2 px-3">
 											Loading Locations...
 										</div>
-									) : locationTypes && locationTypes.length > 0 ? (
-										locationTypes.map((type) => (
+									) : locationIds && locationIds.length > 0 ? (
+										locationIds.map((id) => (
 											<button
 												type="button"
-												key={type}
+												key={id}
 												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center
 													${
-														selectedLocationId === type
+														pathname?.includes(
+															`/locations/${encodeURIComponent(id)}`,
+														)
 															? "bg-indigo-900 text-white"
 															: "hover:bg-gray-800 text-gray-300"
 													}`}
-												onClick={() => selectLocation(type)}
+												onClick={() => selectLocation(id)}
 												onKeyDown={(e) => {
-													if (e.key === "Enter") selectLocation(type)
+													if (e.key === "Enter") selectLocation(id)
 												}}
 											>
 												<FiHome className="w-4 h-4 mr-2 opacity-70" />
-												{formatCategoryName(type)}
+												{formatCategoryName(id)}
 											</button>
 										))
 									) : (
