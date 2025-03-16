@@ -1,130 +1,178 @@
-"use client";
+"use client"
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react"
 import {
 	ProcessedData,
 	ProcessedSection,
 	ProcessedArray,
 	ProcessedObject,
 	ProcessedValue,
-} from "@/types/yamlTypes";
-import { useCrossReference } from "./CrossReferenceContext";
-import dynamic from 'next/dynamic';
-
-// Dynamically import the content-specific server components
-const ContentDisplayServer = dynamic(() => import('./ContentDisplayServer'), { 
-	ssr: true, 
-	loading: () => <div className="p-4 text-center">Loading content...</div> 
-});
+} from "@/types/yamlTypes"
+import { useCrossReference } from "./CrossReferenceContext"
+import { useRouter } from "next/navigation"
 
 type YamlDisplayProps = {
-	filename: string | null;
-	data?: ProcessedData | null;
-};
+	filename: string | null
+	data?: ProcessedData | null
+}
 
 // Helper to determine content type based on filename and data
 const getContentType = (filename: string, data: ProcessedData): string => {
-	if (!filename) return "generic";
+	if (!filename) return "generic"
 
-	const lowerFilename = filename.toLowerCase();
+	const lowerFilename = filename.toLowerCase()
 
-	if (lowerFilename.includes("faction")) return "faction";
+	if (lowerFilename.includes("faction")) return "faction"
 	if (lowerFilename.includes("npc") || lowerFilename.includes("character"))
-		return "npc";
+		return "npc"
 	if (lowerFilename.includes("quest") || lowerFilename.includes("mission"))
-		return "quest";
+		return "quest"
 	if (lowerFilename.includes("location") || lowerFilename.includes("place"))
-		return "location";
+		return "location"
 
 	// If we can't determine from filename, check data sections
-	if (data.sections.some((s) => s.title === "factions")) return "faction";
+	if (data.sections.some((s) => s.title === "factions")) return "faction"
 	if (data.sections.some((s) => s.title === "npcs" || s.title === "characters"))
-		return "npc";
+		return "npc"
 	if (data.sections.some((s) => s.title === "quests" || s.title === "missions"))
-		return "quest";
+		return "quest"
 	if (
 		data.sections.some((s) => s.title === "locations" || s.title === "places")
 	)
-		return "location";
+		return "location"
 
-	return "generic";
-};
+	return "generic"
+}
 
 export default function YamlDisplay({ filename, data }: YamlDisplayProps) {
-	const [contentType, setContentType] = useState<string>("generic");
-	const { registerSectionRef, navigateToFile, navigateToSection } = useCrossReference();
-	const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
-	
-	const [processedData, setProcessedData] = useState<ProcessedData | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	const [contentType, setContentType] = useState<string>("generic")
+	const { registerSectionRef, navigateToFile, navigateToSection } =
+		useCrossReference()
+	const sectionRefs = useRef<Map<string, HTMLElement>>(new Map())
+	const router = useRouter()
+
+	const [processedData, setProcessedData] = useState<ProcessedData | null>(null)
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 
 	// Use provided data or set loading state
 	useEffect(() => {
 		// If we have direct data provided, use it
 		if (data) {
-			setProcessedData(data);
-			setIsLoading(false);
-			setError(null);
-			return;
+			setProcessedData(data)
+			setIsLoading(false)
+			setError(null)
+			return
 		}
-		
+
 		// Otherwise, set loading state if we have a filename but no data
 		if (filename && !data) {
-			setIsLoading(true);
-			setError(null);
+			setIsLoading(true)
+			setError(null)
 		} else if (!filename) {
 			// Reset state when no filename is provided
-			setProcessedData(null);
-			setIsLoading(false);
-			setError(null);
+			setProcessedData(null)
+			setIsLoading(false)
+			setError(null)
 		}
-	}, [filename, data]);
+	}, [filename, data])
 
-	// Determine content type when data changes
+	// Determine content type and handle redirects when data changes
 	useEffect(() => {
 		if (filename && processedData) {
-			setContentType(getContentType(filename, processedData));
+			const type = getContentType(filename, processedData)
+			setContentType(type)
 
 			// Clear section refs when changing files
-			sectionRefs.current.clear();
+			sectionRefs.current.clear()
+
+			// Handle redirects for special content types
+			if (type !== "generic") {
+				const parsedFilename = filename.toLowerCase()
+
+				// Redirect based on content type
+				switch (type) {
+					case "faction": {
+						const isFactionFile = parsedFilename.includes("factions")
+						if (isFactionFile) {
+							router.push("/factions")
+						} else {
+							const factionId = parsedFilename.replace(".yaml", "")
+							router.push(`/factions/${factionId}`)
+						}
+						break
+					}
+					case "npc": {
+						const isNpcsFile = parsedFilename.includes("npcs")
+						if (isNpcsFile) {
+							router.push("/npcs")
+						} else {
+							const npcId = parsedFilename.replace(".yaml", "")
+							router.push(`/npcs/${npcId}`)
+						}
+						break
+					}
+					case "quest": {
+						const isQuestsFile = parsedFilename.includes("quests")
+						if (isQuestsFile) {
+							router.push("/quests")
+						} else {
+							const questId = parsedFilename.replace(".yaml", "")
+							router.push(`/quests/${questId}`)
+						}
+						break
+					}
+					case "location": {
+						const isLocationsFile = parsedFilename.includes("locations")
+						if (isLocationsFile) {
+							router.push("/locations")
+						} else {
+							const locationId = parsedFilename.replace(".yaml", "")
+							router.push(`/locations/${locationId}`)
+						}
+						break
+					}
+				}
+			}
 		}
-	}, [filename, processedData]);
+	}, [filename, processedData, router])
 
 	// Register section references for navigation
 	const handleRef = (path: string) => (el: HTMLElement | null) => {
 		if (el) {
 			if (sectionRefs.current.get(path) !== el) {
-				sectionRefs.current.set(path, el);
-				registerSectionRef(path, el);
+				sectionRefs.current.set(path, el)
+				registerSectionRef(path, el)
 			}
 		}
-	};
+	}
 
 	// Loading and error states
 	if (!filename) {
 		return (
 			<div className="p-8 text-center text-gray-500">Select a file to view</div>
-		);
+		)
 	}
 
 	if (isLoading) {
-		return <div className="p-8 text-center">Loading data...</div>;
+		return <div className="p-8 text-center">Loading data...</div>
 	}
 
 	if (error) {
-		return <div className="p-8 text-center text-red-500">{error}</div>;
+		return <div className="p-8 text-center text-red-500">{error}</div>
 	}
 
 	if (!processedData) {
-		return null;
+		return null
 	}
 
-	// For special content types, use the ContentDisplayServer 
+	// For special content types, we'll show a loading message since we're redirecting
 	if (contentType !== "generic") {
 		return (
-			<ContentDisplayServer contentType={contentType} filename={filename} />
-		);
+			<div className="p-8 text-center">
+				Redirecting to {contentType} page...
+			</div>
+		)
 	}
 
 	// Generic YAML display for other content types
@@ -165,7 +213,7 @@ export default function YamlDisplay({ filename, data }: YamlDisplayProps) {
 				</div>
 			))}
 		</div>
-	);
+	)
 }
 
 // Render YAML values recursively
@@ -174,22 +222,22 @@ const renderValue = (
 	onNavigateFile: (file: string) => void,
 	onNavigateSection: (section: string) => void,
 ): React.ReactNode => {
-	if (!value) return null;
+	if (!value) return null
 
 	// Handle different types of values
-	if (typeof value === 'object') {
+	if (typeof value === "object") {
 		if (Array.isArray(value)) {
 			// Render as array
-			return renderArrayValue(value, onNavigateFile, onNavigateSection);
+			return renderArrayValue(value, onNavigateFile, onNavigateSection)
 		} else {
 			// Render as object
-			return renderObjectValue(value, onNavigateFile, onNavigateSection);
+			return renderObjectValue(value, onNavigateFile, onNavigateSection)
 		}
 	}
 
 	// Render primitives (string, number, boolean, etc.)
-	return renderPrimitiveValue(value, onNavigateFile, onNavigateSection);
-};
+	return renderPrimitiveValue(value, onNavigateFile, onNavigateSection)
+}
 
 // Render object values
 const renderObjectValue = (
@@ -198,7 +246,7 @@ const renderObjectValue = (
 	onNavigateSection: (section: string) => void,
 ): React.ReactNode => {
 	if (!obj || Object.keys(obj).length === 0) {
-		return <span className="text-gray-400">Empty object</span>;
+		return <span className="text-gray-400">Empty object</span>
 	}
 
 	return (
@@ -208,13 +256,15 @@ const renderObjectValue = (
 					key={key}
 					className="flex flex-col gap-1 p-2 rounded border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900"
 				>
-					<div className="font-medium text-gray-800 dark:text-gray-200">{key}</div>
+					<div className="font-medium text-gray-800 dark:text-gray-200">
+						{key}
+					</div>
 					<div>{renderValue(value, onNavigateFile, onNavigateSection)}</div>
 				</div>
 			))}
 		</div>
-	);
-};
+	)
+}
 
 // Render array values
 const renderArrayValue = (
@@ -223,13 +273,13 @@ const renderArrayValue = (
 	onNavigateSection: (section: string) => void,
 ): React.ReactNode => {
 	if (!array || array.length === 0) {
-		return <span className="text-gray-400">Empty list</span>;
+		return <span className="text-gray-400">Empty list</span>
 	}
 
 	// Determine if this is a list of primitive values or complex objects
 	const hasComplexItems = array.some(
-		(item) => typeof item === 'object' && item !== null
-	);
+		(item) => typeof item === "object" && item !== null,
+	)
 
 	if (hasComplexItems) {
 		// For complex items, use a more structured list
@@ -247,18 +297,20 @@ const renderArrayValue = (
 					</div>
 				))}
 			</div>
-		);
+		)
 	} else {
 		// For simple items, use a more compact list
 		return (
 			<ul className="list-disc ml-6 space-y-1">
 				{array.map((item, index) => (
-					<li key={index}>{renderValue(item, onNavigateFile, onNavigateSection)}</li>
+					<li key={index}>
+						{renderValue(item, onNavigateFile, onNavigateSection)}
+					</li>
 				))}
 			</ul>
-		);
+		)
 	}
-};
+}
 
 // Render primitive values
 const renderPrimitiveValue = (
@@ -268,13 +320,13 @@ const renderPrimitiveValue = (
 ): React.ReactNode => {
 	// Handle undefined or null
 	if (value === undefined || value === null) {
-		return <span className="text-gray-400">Not specified</span>;
+		return <span className="text-gray-400">Not specified</span>
 	}
 
 	// Handle strings that might be references or URLs
-	if (typeof value === 'string') {
+	if (typeof value === "string") {
 		// Check if it looks like a cross-reference to a file
-		if (value.endsWith('.yaml') || value.endsWith('.yml')) {
+		if (value.endsWith(".yaml") || value.endsWith(".yml")) {
 			return (
 				<button
 					onClick={() => onNavigateFile(value)}
@@ -282,11 +334,11 @@ const renderPrimitiveValue = (
 				>
 					{value}
 				</button>
-			);
+			)
 		}
 
 		// If it's a URL, make it clickable
-		const urlRegex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+		const urlRegex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i
 		if (urlRegex.test(value)) {
 			return (
 				<a
@@ -297,14 +349,14 @@ const renderPrimitiveValue = (
 				>
 					{value}
 				</a>
-			);
+			)
 		}
 
 		// Regular string
-		return <span>{value}</span>;
+		return <span>{value}</span>
 	}
 
-	if (typeof value === 'boolean') {
+	if (typeof value === "boolean") {
 		return (
 			<span
 				className={
@@ -315,17 +367,17 @@ const renderPrimitiveValue = (
 			>
 				{String(value)}
 			</span>
-		);
+		)
 	}
 
-	if (typeof value === 'number') {
+	if (typeof value === "number") {
 		return (
 			<span className="text-amber-600 dark:text-amber-400">
 				{String(value)}
 			</span>
-		);
+		)
 	}
 
 	// Other primitive
-	return <span>{String(value)}</span>;
-};
+	return <span>{String(value)}</span>
+}

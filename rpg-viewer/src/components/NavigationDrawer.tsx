@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import Link from "next/link"
 import { FiMenu, FiX, FiChevronRight, FiChevronDown } from "react-icons/fi"
 import {
 	FiUsers,
@@ -105,14 +106,6 @@ export default function NavigationDrawer({
 		Framework: false,
 		Other: false,
 	})
-	const [selectedNpcId, setSelectedNpcId] = useState<string | undefined>()
-	const [selectedFactionId, setSelectedFactionId] = useState<
-		string | undefined
-	>()
-	const [selectedQuestCategory, setSelectedQuestCategory] = useState<
-		string | undefined
-	>()
-	const [selectedQuestId, setSelectedQuestId] = useState<string | undefined>()
 
 	// Get data from context instead of fetching
 	const {
@@ -127,6 +120,25 @@ export default function NavigationDrawer({
 	const isLoadingFactions = false
 	const isLoadingLocations = false
 	const isLoadingQuests = false
+
+	// Add state for selected query params
+	const router = useRouter()
+	const pathname = usePathname()
+
+	// Extract the current NPC ID from the pathname
+	const currentNpcId = pathname?.startsWith("/npcs/")
+		? pathname.replace("/npcs/", "")
+		: undefined
+
+	// Extract the current faction ID from the pathname
+	const currentFactionId = pathname?.startsWith("/factions/")
+		? pathname.replace("/factions/", "")
+		: undefined
+
+	// Extract the current quest category from the pathname
+	const currentQuestCategory = pathname?.startsWith("/quests/")
+		? pathname.replace("/quests/", "")
+		: undefined
 
 	// Toggle drawer
 	const toggleDrawer = () => {
@@ -192,34 +204,23 @@ export default function NavigationDrawer({
 	const locationFiles = sortedFilesByCategory.Locations || []
 	const questFiles = sortedFilesByCategory.Quests || []
 
-	// Add state for selected query params
-	const router = useRouter()
-	const pathname = usePathname()
-
 	// Helper to select NPC from list
 	const selectNpc = (npcId: string) => {
-		setSelectedNpcId(npcId)
 		// Find the NPC file to open
 		const npcFile = npcFiles.find((f) => f.toLowerCase().includes("npc"))
 		if (npcFile) {
 			onSelectFile(npcFile)
-			// Use router to navigate to proper route with slugified ID
-			const npcSlug = npcId.toLowerCase().replace(/\s+/g, "-")
-			router.push(`/npcs/${encodeURIComponent(npcSlug)}`)
 		}
 	}
 
 	// Helper to select Faction from list
 	const selectFaction = (factionId: string) => {
-		setSelectedFactionId(factionId)
 		// Find the Faction file to open
 		const factionFile = factionFiles.find((f) =>
 			f.toLowerCase().includes("faction"),
 		)
 		if (factionFile) {
 			onSelectFile(factionFile)
-			// Use router to navigate to proper route
-			router.push(`/factions/${encodeURIComponent(factionId)}`)
 		}
 	}
 
@@ -231,24 +232,15 @@ export default function NavigationDrawer({
 		)
 		if (locationFile) {
 			onSelectFile(locationFile)
-			// Use router to navigate to proper route - no need to store state
-			router.push(`/locations/${encodeURIComponent(locationId)}`)
 		}
 	}
 
 	// Helper to select Quest category
 	const selectQuestCategory = (category: string) => {
-		setSelectedQuestCategory(category)
 		// Find the Quest file to open
 		const questFile = questFiles.find((f) => f.toLowerCase().includes("quest"))
 		if (questFile) {
 			onSelectFile(questFile)
-			// Use router to navigate to proper route - ensure consistent slug format
-			const questCategorySlug = category
-				.toLowerCase()
-				.replace(/\s+/g, "-")
-				.replace(/_/g, "-")
-			router.push(`/quests/${encodeURIComponent(questCategorySlug)}`)
 		}
 	}
 
@@ -256,17 +248,46 @@ export default function NavigationDrawer({
 	const getNpcs = () => {
 		// Transform npcsData into a display-friendly format
 		const allNpcs: Array<{ id: string; name: string }> = []
+
+		if (!npcsData || npcsData.length === 0) {
+			console.log("No NPC data available")
+			return allNpcs
+		}
+
 		for (const data of npcsData) {
-			if (data.npcs) {
-				for (const [id, npc] of Object.entries(data.npcs)) {
-					const npcData = npc as Record<string, unknown>
-					allNpcs.push({
-						id,
-						name: (npcData.name as string) || formatCategoryName(id),
-					})
+			// Check if data exists
+			if (!data) continue
+
+			// Process regular NPCs
+			if (data.npcs && Array.isArray(data.npcs)) {
+				for (const npc of data.npcs) {
+					if (npc && typeof npc === "object" && npc.name) {
+						// Use name as identifier if id is not provided
+						// This is safer than using indices which can change
+						const id = npc.id || npc.name.toLowerCase().replace(/\s+/g, "-")
+						allNpcs.push({
+							id,
+							name: npc.name,
+						})
+					}
+				}
+			}
+
+			// Process generic NPCs if they exist
+			if (data.generic_npcs && Array.isArray(data.generic_npcs)) {
+				for (const npc of data.generic_npcs) {
+					if (npc && typeof npc === "object" && npc.name) {
+						// Use name as identifier if id is not provided
+						const id = npc.id || npc.name.toLowerCase().replace(/\s+/g, "-")
+						allNpcs.push({
+							id,
+							name: npc.name,
+						})
+					}
 				}
 			}
 		}
+
 		return allNpcs
 	}
 
@@ -298,23 +319,17 @@ export default function NavigationDrawer({
 
 	// Get location IDs with a stable approach for consistent server/client rendering
 	const getLocationIds = () => {
-		// Start with an empty array
 		const ids: string[] = []
+		const locationSet = new Set<string>()
 
-		// Only process data if it exists
-		if (
-			locationsData &&
-			Array.isArray(locationsData) &&
-			locationsData.length > 0
-		) {
-			// Create a stable set to avoid duplicates
-			const locationSet = new Set<string>()
-
+		if (locationsData && locationsData.length > 0) {
 			// Process each data entry
 			for (const data of locationsData) {
-				if (data && data.locations && typeof data.locations === "object") {
+				if (data?.locations && typeof data.locations === "object") {
 					// Add all location IDs to the set
-					Object.keys(data.locations).forEach((id) => locationSet.add(id))
+					for (const id of Object.keys(data.locations)) {
+						locationSet.add(id)
+					}
 				}
 			}
 
@@ -325,9 +340,9 @@ export default function NavigationDrawer({
 		return ids.sort()
 	}
 
-	// Get quest categories
+	// Get quest categories with proper type
 	const getQuestCategories = () => {
-		const categories = new Set<string>([
+		const categoriesSet = new Set<string>([
 			"Main Quests",
 			"Side Quests",
 			"Faction Quests",
@@ -336,17 +351,23 @@ export default function NavigationDrawer({
 		])
 
 		for (const data of questsData) {
-			if (data.quests) {
+			if (data?.quests) {
 				for (const quest of Object.values(data.quests)) {
 					const questData = quest as Record<string, unknown>
 					if (questData.category) {
-						categories.add(questData.category as string)
+						categoriesSet.add(questData.category as string)
 					}
 				}
 			}
 		}
 
-		return Array.from(categories).sort()
+		// Convert to array of objects with id and name properties
+		return Array.from(categoriesSet)
+			.sort()
+			.map((category) => ({
+				id: category.toLowerCase().replace(/\s+/g, "-").replace(/_/g, "-"),
+				name: category,
+			}))
 	}
 
 	// Get the data we need for the UI
@@ -475,23 +496,20 @@ export default function NavigationDrawer({
 										</div>
 									) : displayNpcs.length > 0 ? (
 										displayNpcs.map((npc) => (
-											<button
-												type="button"
+											<Link
+												href={`/npcs/${npc.id}`}
 												key={npc.id}
 												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center
 													${
-														selectedNpcId === npc.id
+														currentNpcId === npc.id
 															? "bg-indigo-900 text-white"
 															: "hover:bg-gray-800 text-gray-300"
 													}`}
 												onClick={() => selectNpc(npc.id)}
-												onKeyDown={(e) => {
-													if (e.key === "Enter") selectNpc(npc.id)
-												}}
 											>
 												<FiUser className="w-4 h-4 mr-2 opacity-70" />
 												{npc.name}
-											</button>
+											</Link>
 										))
 									) : (
 										<div className="text-sm text-gray-400 py-2 px-3">
@@ -508,28 +526,26 @@ export default function NavigationDrawer({
 										<div className="text-sm text-gray-400 py-2 px-3">
 											Loading Factions...
 										</div>
-									) : displayFactions && displayFactions.length > 0 ? (
+									) : displayFactions.length > 0 ? (
 										displayFactions.map((faction) => (
-											<button
-												type="button"
+											<Link
+												href={`/factions/${faction.id}`}
 												key={faction.id}
 												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center
 													${
-														selectedFactionId === faction.id
+														currentFactionId === faction.id
 															? "bg-indigo-900 text-white"
 															: "hover:bg-gray-800 text-gray-300"
 													}`}
 												onClick={() => selectFaction(faction.id)}
-												onKeyDown={(e) => {
-													if (e.key === "Enter") selectFaction(faction.id)
-												}}
 											>
-												<span>{faction.name}</span>
-											</button>
+												<FiFlag className="w-4 h-4 mr-2 opacity-70" />
+												{faction.name}
+											</Link>
 										))
 									) : (
 										<div className="text-sm text-gray-400 py-2 px-3">
-											No factions found. Check console for debugging details.
+											No Factions found
 										</div>
 									)}
 								</div>
@@ -543,26 +559,21 @@ export default function NavigationDrawer({
 											Loading Locations...
 										</div>
 									) : locationIds && locationIds.length > 0 ? (
-										locationIds.map((id) => (
-											<button
-												type="button"
-												key={id}
+										locationIds.map((locationId) => (
+											<Link
+												href={`/locations/${locationId}`}
+												key={locationId}
 												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center
 													${
-														pathname?.includes(
-															`/locations/${encodeURIComponent(id)}`,
-														)
+														pathname === `/locations/${locationId}`
 															? "bg-indigo-900 text-white"
 															: "hover:bg-gray-800 text-gray-300"
 													}`}
-												onClick={() => selectLocation(id)}
-												onKeyDown={(e) => {
-													if (e.key === "Enter") selectLocation(id)
-												}}
+												onClick={() => selectLocation(locationId)}
 											>
-												<FiHome className="w-4 h-4 mr-2 opacity-70" />
-												{formatCategoryName(id)}
-											</button>
+												<FiMap className="w-4 h-4 mr-2 opacity-70" />
+												{formatCategoryName(locationId)}
+											</Link>
 										))
 									) : (
 										<div className="text-sm text-gray-400 py-2 px-3">
@@ -581,24 +592,20 @@ export default function NavigationDrawer({
 										</div>
 									) : questCategories && questCategories.length > 0 ? (
 										questCategories.map((questCategory) => (
-											<button
-												type="button"
-												key={questCategory}
+											<Link
+												href={`/quests/${questCategory.id}`}
+												key={questCategory.id}
 												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center
 													${
-														selectedQuestCategory === questCategory
+														currentQuestCategory === questCategory.id
 															? "bg-indigo-900 text-white"
 															: "hover:bg-gray-800 text-gray-300"
 													}`}
-												onClick={() => selectQuestCategory(questCategory)}
-												onKeyDown={(e) => {
-													if (e.key === "Enter")
-														selectQuestCategory(questCategory)
-												}}
+												onClick={() => selectQuestCategory(questCategory.id)}
 											>
-												{getIconForQuestCategory(questCategory)}
-												{formatCategoryName(questCategory)}
-											</button>
+												{getIconForQuestCategory(questCategory.name)}
+												{questCategory.name}
+											</Link>
 										))
 									) : (
 										<div className="text-sm text-gray-400 py-2 px-3">
