@@ -93,9 +93,6 @@ export default async function RootLayout({
 	// Content files for navigation (derived from data sources for consistency)
 	const contentFiles = dataSources.map(({ type }) => `${type}.yaml`)
 
-	// Log data for debugging
-	console.log("Server loaded factions data:", initialData.factions)
-
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
