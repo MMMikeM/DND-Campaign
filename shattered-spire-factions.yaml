@@ -10,9 +10,8 @@ description: "Details of the major factions and key individuals in the Shattered
 #
 # Faction schema:
 #   - type: string
-#   - public_goal?: string
-#   - true_goal?: string
-#   - goal?: string (alternative to public/true goals)
+#   - public_goal: string
+#   - true_goal: string
 #   - resources?: string[]
 #   - leadership?: Character[] (detailed members with roles)
 #     - name: string
@@ -125,7 +124,8 @@ factions:
 
   star_monks:
     type: "Religious Order"
-    goal: "Prevent the sky city's return and contain crystal corruption"
+    public_goal: "Study and preserve ancient knowledge of celestial phenomena"
+    true_goal: "Prevent the sky city's return and contain crystal corruption"
     resources:
       - "Ancient observatory in Crystalbrook"
       - "Hidden caches of anti-crystal artifacts"

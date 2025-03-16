@@ -42,20 +42,29 @@ export const factionsRouter = router({
 					const parsedYaml = yaml.load(fileContent);
 
 					// Validate data against schema
-					const validatedData = FactionsFileSchema.parse(parsedYaml);
+					try {
+						const validatedData = FactionsFileSchema.parse(parsedYaml);
 
-					// Transform data for the UI
-					return {
-						factions: Object.entries(validatedData.factions).map(
-							([id, faction]) => ({
-								id,
-								...faction,
-							}),
-						),
-						title: validatedData.title,
-						version: validatedData.version,
-						description: validatedData.description,
-					};
+						// Transform data for the UI
+						return {
+							factions: Object.entries(validatedData.factions).map(
+								([id, faction]) => ({
+									id,
+									...faction,
+								}),
+							),
+							title: validatedData.title,
+							version: validatedData.version,
+							description: validatedData.description,
+						};
+					} catch (validationErr) {
+						console.error("Schema validation error:", validationErr);
+						throw new Error(
+							`Faction schema validation failed: ${
+								(validationErr as Error).message
+							}. All factions must have 'type', 'public_goal', and 'true_goal' fields.`,
+						);
+					}
 				} catch (readErr) {
 					console.error("Error reading factions file:", readErr);
 					throw new Error(
@@ -112,19 +121,35 @@ export const factionsRouter = router({
 					const parsedYaml = yaml.load(fileContent);
 
 					// Validate data against schema
-					const validatedData = FactionsFileSchema.parse(parsedYaml);
+					try {
+						const validatedData = FactionsFileSchema.parse(parsedYaml);
 
-					// Get the specific faction
-					const faction = validatedData.factions[input];
+						// Get the specific faction
+						const faction = validatedData.factions[input];
 
-					if (!faction) {
-						throw new Error(`Faction with ID ${input} not found`);
+						if (!faction) {
+							throw new Error(`Faction with ID ${input} not found`);
+						}
+
+						// Additional validation for required fields
+						if (!faction.public_goal || !faction.true_goal) {
+							throw new Error(
+								`Faction '${input}' is missing required public_goal or true_goal fields`,
+							);
+						}
+
+						return {
+							id: input,
+							...faction,
+						};
+					} catch (validationErr) {
+						console.error("Schema validation error:", validationErr);
+						throw new Error(
+							`Faction schema validation failed: ${
+								(validationErr as Error).message
+							}`,
+						);
 					}
-
-					return {
-						id: input,
-						...faction,
-					};
 				} catch (readErr) {
 					console.error("Error reading factions file:", readErr);
 					throw new Error(
