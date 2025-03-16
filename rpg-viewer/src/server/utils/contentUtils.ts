@@ -46,15 +46,6 @@ export async function findAllContentFiles(
 		// await getPathJoin(process.cwd()),
 	]
 
-	console.log(
-		`[findAllContentFiles] Looking for ${contentType} files in directories:`,
-		contentDirectories,
-	)
-	logger.debug.data(
-		`Looking for ${contentType} files in directories`,
-		contentDirectories,
-	)
-
 	// Collect all found files
 	const foundFiles: string[] = []
 
@@ -82,10 +73,6 @@ export async function findAllContentFiles(
 						.map((file) => getPathJoin(directory, file))
 
 					if (matchingFiles.length > 0) {
-						console.log(
-							`[findAllContentFiles] Found ${matchingFiles.length} ${contentType} files in root:`,
-							matchingFiles,
-						)
 						foundFiles.push(...(await Promise.all(matchingFiles)))
 					}
 				} else {
@@ -97,10 +84,6 @@ export async function findAllContentFiles(
 					const yamlFiles = await Promise.all(yamlFilesPromises)
 
 					if (yamlFiles.length > 0) {
-						console.log(
-							`[findAllContentFiles] Found ${yamlFiles.length} ${contentType} files in directory:`,
-							yamlFiles,
-						)
 						foundFiles.push(...yamlFiles)
 					}
 				}
@@ -188,60 +171,33 @@ export async function getDataByType<T extends z.ZodTypeAny>(
 	campaignName: string,
 ): Promise<z.infer<T>[]> {
 	try {
-		console.log(
-			`[getDataByType] Loading ${contentType} data for campaign "${campaignName}"`,
-		)
 		const contentFiles = await findAllContentFiles(contentType, campaignName)
 
 		if (contentFiles.length === 0) {
 			const errorMsg = `${idToName(contentType)} files not found for campaign '${campaignName}'`
 			console.error(errorMsg)
-			logger.error.data(errorMsg)
 			throw new ContentError(errorMsg, contentType)
 		}
-
-		console.log(
-			`[getDataByType] Found ${contentFiles.length} ${contentType} files:`,
-			contentFiles,
-		)
-		logger.info.data(`Found ${contentFiles.length} ${contentType} files`, {
-			paths: contentFiles,
-		})
 
 		// Always collect data in an array
 		const allData: z.infer<T>[] = []
 
 		for (const filePath of contentFiles) {
 			try {
-				console.log(`[getDataByType] Parsing file: ${filePath}`)
 				const fileData = await parseContentFile<T>(
 					filePath,
 					contentType,
 					schema,
 				)
-				console.log(
-					`[getDataByType] Successfully parsed ${contentType} data:`,
-					contentType === "factions"
-						? `${JSON.stringify(fileData).substring(0, 100)}...`
-						: "Data loaded",
-				)
 
 				allData.push(fileData)
 			} catch (error) {
 				console.error(`[getDataByType] Error parsing file ${filePath}:`, error)
-				logger.warn.data(
-					`Error parsing file ${filePath}, skipping: ${(error as Error).message}`,
-				)
-				// Continue with other files
 			}
 		}
 
-		console.log(
-			`[getDataByType] Loaded ${allData.length} ${contentType} data objects`,
-		)
 		return allData
 	} catch (error) {
-		logger.error.data(`Error fetching ${contentType}`, error)
 		throw error instanceof ContentError
 			? error
 			: new ContentError(
@@ -282,9 +238,6 @@ export async function findContentById<T>(
 			if (typeof searchContent === "object") {
 				// Direct match with the ID as a key
 				if (searchContent[id] !== undefined) {
-					logger.debug.data(
-						`Found ${contentType} with ID "${id}" as direct key`,
-					)
 					return searchContent[id] as T
 				}
 
@@ -299,10 +252,6 @@ export async function findContentById<T>(
 				})
 
 				if (key) {
-					logger.debug.data(
-						`Found ${contentType} with ID "${id}" with flexible matching`,
-						{ matchedKey: key },
-					)
 					return searchContent[key] as T
 				}
 
@@ -315,7 +264,6 @@ export async function findContentById<T>(
 					)
 
 					if (item) {
-						logger.debug.data(`Found ${contentType} with ID "${id}" in array`)
 						return item as T
 					}
 				}
