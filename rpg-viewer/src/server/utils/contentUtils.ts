@@ -6,7 +6,6 @@ import {
 } from "@/server/fileSystem"
 import yaml from "js-yaml"
 import type { z } from "zod"
-import { logger } from "@/utils/logger"
 
 /**
  * Error class for content-related errors
@@ -93,7 +92,7 @@ export async function findAllContentFiles(
 				`[findAllContentFiles] Error reading directory ${directory}:`,
 				error,
 			)
-			logger.debug.data(`Error reading directory ${directory}`, error)
+			console.debug(`Error reading directory ${directory}`, error)
 			// Continue to next directory option
 		}
 	}
@@ -133,14 +132,14 @@ export async function parseContentFile<T extends z.ZodTypeAny>(
 		try {
 			return schema.parse(parsedYaml) as z.infer<T>
 		} catch (validationErr) {
-			logger.error.data(`Failed to validate ${contentType} data`, validationErr)
+			console.error(`Failed to validate ${contentType} data`, validationErr)
 			throw new ContentError(
 				`Schema validation failed: ${(validationErr as Error).message}`,
 				contentType,
 			)
 		}
 	} catch (readErr) {
-		logger.error.data(`Error reading ${contentType} file`, readErr)
+		console.error(`Error reading ${contentType} file`, readErr)
 		throw readErr instanceof ContentError
 			? readErr
 			: new ContentError(
@@ -276,7 +275,7 @@ export async function findContentById<T>(
 			contentType,
 		)
 	} catch (error) {
-		logger.error.data(`Error finding ${contentType} with ID "${id}"`, error)
+		console.error(`Error finding ${contentType} with ID "${id}"`, error)
 		throw error instanceof ContentError
 			? error
 			: new ContentError(
