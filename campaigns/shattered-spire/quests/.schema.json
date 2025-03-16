@@ -1,0 +1,77 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Quest Schema",
+	"description": "Schema for quest definition files in the Shattered Spire campaign",
+	"type": "object",
+	"required": ["title", "version", "description", "quests"],
+	"properties": {
+		"title": {
+			"type": "string",
+			"description": "The title of the quest collection"
+		},
+		"version": {
+			"type": "string",
+			"description": "Version number of the quest file"
+		},
+		"description": {
+			"type": "string",
+			"description": "Description of the quest collection"
+		},
+		"category": {
+			"type": "string",
+			"description": "Category of the quests in this file (Main, Side, Faction, Personal, or Generic)",
+			"enum": [
+				"Main Quests",
+				"Side Quests",
+				"Faction Quests",
+				"Personal Quests",
+				"Generic Quests"
+			]
+		},
+		"quests": {
+			"type": "array",
+			"description": "Array of quest objects",
+			"items": {
+				"type": "object",
+				"required": ["id", "title", "type", "difficulty", "description"],
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for the quest",
+						"pattern": "^[A-Z]{2}[0-9]{3}$"
+					},
+					"title": {
+						"type": "string",
+						"description": "Title of the quest"
+					},
+					"associated_npc": {
+						"type": "array",
+						"description": "NPCs associated with this quest",
+						"items": {
+							"type": "string"
+						}
+					},
+					"type": {
+						"type": "string",
+						"description": "Type of quest (e.g., Delivery, Escort, Investigation)"
+					},
+					"difficulty": {
+						"type": "string",
+						"description": "Difficulty level of the quest",
+						"enum": ["Easy", "Medium", "Hard", "Very Hard", "Legendary"]
+					},
+					"description": {
+						"type": "string",
+						"description": "Detailed description of the quest"
+					},
+					"adaptable": {
+						"type": "boolean",
+						"description": "Whether this quest can be adapted to different settings"
+					}
+				},
+				"additionalProperties": true
+			}
+		}
+	},
+	"additionalProperties": false
+}

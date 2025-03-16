@@ -9,11 +9,7 @@ description: |
 # - title: string (required)
 # - version: string (required)
 # - description: string (required)
-# - main_quests: Quest[] (optional)
-# - side_quests: Quest[] (optional)
-# - faction_quests: Quest[] (optional)
-# - personal_quests: Quest[] (optional)
-# - generic_quests: Quest[] (optional)
+# - quests: Quest[] (required)
 #
 # Quest schema:
 #   - id: string (required, unique identifier)
@@ -22,7 +18,8 @@ description: |
 #   - type: string (required, e.g., "Investigation", "Escort")
 #   - difficulty: string (required, e.g., "Easy", "Medium", "Hard")
 #   - description: string (required)
-#   - quest_stages: QuestStage[] (required)
+#   - category: string (optional, e.g., "Main", "Side", "Generic")
+#   - quest_stages: QuestStage[] (optional)
 #     - stage: number (required, 1-indexed)
 #     - title: string (required)
 #     - objectives: string[] (required)
@@ -38,24 +35,18 @@ description: |
 #       - choice: string (required)
 #       - consequences: string (required)
 #   - potential_twists: string[] (optional)
-#   - rewards: object (optional)
-#     - standard: string[] (default rewards)
-#     - [path_name]: string[] (path-specific rewards)
-#   - follow_up_quests: string[] or Record<string, string[]> (optional)
-#   - related_quests: string[] (optional)
-#   - adaptable: boolean (optional)
 
-# Main storyline quests that drive the campaign narrative forward
-main_quests:
+# All quests combined into a single array
+quests:
+  # Main Quests (formerly in main_quests)
   - id: "MQ001"
-    title: "Voices in the Stone"
+    title: "The Whispering Crystals"
     associated_npc: ["Orin Blackhand"]
     type: "Investigation"
     difficulty: "Medium"
-    description: |
-      Orin has begun hearing whispers from the crystal gems he trades. 
-      He needs help determining if he's going mad or if something 
-      supernatural is occurring.
+    description: "Investigate the rumors of crystals that whisper to those who handle them, potentially causing mental corruption."
+    adaptable: true
+    category: "Main"
     quest_stages:
       - stage: 1
         title: "Examining the Evidence"
@@ -642,17 +633,15 @@ main_quests:
     
     adaptable: false
 
-# Side quests that provide additional content and rewards
-side_quests:
+  # Side Quests (formerly in side_quests)
   - id: "SQ001"
-    title: "Escort to Safety"
+    title: "Merchant Escort"
     associated_npc: ["Orin Blackhand"]
     type: "Escort"
     difficulty: "Easy"
-    description: |
-      Escort a nervous merchant to a nearby settlement safely. Orin's crystal 
-      goods have been attracting unwanted attention, and he needs protection on 
-      the road as bandits and corrupted wildlife have been increasingly active.
+    description: "Escort the paranoid gem trader Orin Blackhand to a nearby settlement, protecting both him and his valuable crystal cargo."
+    adaptable: true
+    category: "Side"
     quest_stages:
       - stage: 1
         title: "Route Planning"
@@ -1123,26 +1112,26 @@ side_quests:
         - "120 gold base payment for collection services"
         - "Basic knowledge of crystal properties and behavior"
       
-      scientific_path:
+      scientific_zone_collection:
         - "150 gold research stipend"
         - "Crystal Detection Amulet (advantage on perception checks to find crystal formations)"
         - "Opportunity for future research contracts"
         - "Access to Academy research facilities for personal use (once per month)"
       
-      risk_taker_path:
+      risk_taker_collection:
         - "180 gold hazard bonus"
         - "Crystal Shard with minor magical property (create light for 1 hour per day)"
         - "Crystal resistance from exposure (advantage on saves vs. crystal effects for 1 week)"
       
-      collaborative_path:
+      collaborative_analysis:
         - "30 gold bonus for analysis assistance"
         - "Co-authorship on research paper (enhances reputation with academic community)"
         - "Research techniques (advantage on next three Arcana checks related to crystals)"
     
     follow_up_quests: 
-      scientific_path: ["SQ012", "MQ003"] # Crystal Properties Research, Crystalline Contagion
-      risk_taker_path: ["SQ035"] # Corruption Resistance
-      collaborative_path: ["SQ036"] # Academic Advancement
+      scientific_zone_collection: ["SQ012", "MQ003"] # Crystal Properties Research, Crystalline Contagion
+      risk_taker_collection: ["SQ035"] # Corruption Resistance
+      collaborative_analysis: ["SQ036"] # Academic Advancement
     
     related_quests: ["MQ003", "SQ007"]
     
@@ -2355,166 +2344,139 @@ side_quests:
     
     adaptable: true
 
-# Generic quests that can be attached to any NPC or location
-generic_quests:
+  # Generic Quests (formerly in generic_quests)
   - id: "GQ001"
-    title: "Crystal Courier"
-    associated_npc: ["Magister Elysia Vorne", "Merchant Dorrin"]
-    type: "Delivery"
+    title: "Information Gathering"
+    type: "Social"
     difficulty: "Easy"
-    description: |
-      A sensitive crystal sample needs transportation between researchers. The crystal exhibits 
-      unusual properties that could revolutionize magical research - or cause significant harm 
-      if it falls into the wrong hands. Multiple parties have expressed interest in acquiring it.
+    description: "Collect specific information from locals about crystal-related phenomena in the area."
+    adaptable: true
+    category: "Generic"
     quest_stages:
       - stage: 1
-        title: "Securing the Package"
+        title: "Research Briefing"
         objectives:
-          - "Meet with the sender Magister Vorne"
-          - "Learn handling requirements for crystal"
-          - "Prepare appropriate container and protections"
+          - "Meet with Kel to discuss specific crystal types needed"
+          - "Learn proper collection and preservation techniques"
+          - "Identify suitable corruption zones for sampling"
         completion_paths:
-          thorough:
-            description: "Take time to fully understand crystal properties and handling protocols"
-            challenges: "Arcana checks (DC 14), expensive containment materials (50 gold)"
-            outcomes: "Comprehensive knowledge of specimen and maximum protection"
-          expedient:
-            description: "Accept basic instructions and standard container"
-            challenges: "Intelligence checks (DC 16) to grasp essentials quickly, basic container (20 gold)"
-            outcomes: "Sufficient knowledge but higher risk of complications during transport"
+          attentive:
+            description: "Detailed study of collection protocols and crystal identification"
+            challenges: "Intelligence checks (DC 14), 3-hour training session, note-taking supplies (2 gold)"
+            outcomes: "Complete understanding of collection requirements and crystal identification"
+          cursory:
+            description: "Quick briefing on essentials only"
+            challenges: "Arcana checks (DC 16) to grasp key concepts quickly, 1-hour session"
+            outcomes: "Basic understanding with higher risk of sample contamination"
       
       - stage: 2
-        title: "Route Planning"
+        title: "Zone One: Forest Edge"
         objectives:
-          - "Identify potential hazards on journey"
-          - "Select route considering safety and efficiency"
-          - "Acquire necessary travel papers or permissions"
-        completion_paths:
-          cautious:
-            description: "Choose longer but safer routes avoiding population centers"
-            challenges: "Survival checks (DC 13), 2 additional travel days, wilderness navigation"
-            outcomes: "Lower risk of interception but more natural hazards and longer journey"
-          direct:
-            description: "Take fastest route through populated areas"
-            challenges: "Stealth checks (DC 15), Deception checks (DC 14), crowded environments"
-            outcomes: "Faster delivery (1-day journey) but higher risk of interception or theft attempts"
-      
-      - stage: 3
-        title: "Journey Complications"
-        objectives:
-          - "Respond to unexpected complications"
-          - "Maintain crystal stability during transport"
-          - "Evade interested parties seeking the crystal"
-        completion_paths:
-          evasive:
-            description: "Focus on avoiding confrontation and detection"
-            challenges: "Stealth checks (DC 16), Perception checks (DC 15), alternative pathfinding"
-            outcomes: "Successful evasion of most interested parties but slower progress"
-          confrontational:
-            description: "Deal directly with obstacles and pursuers"
-            challenges: "Intimidation checks (DC 15), potential combat with mercenaries (CR 2)"
-            outcomes: "Faster progress but potential damage to container or unwanted attention"
-          deceptive:
-            description: "Use misdirection and false information"
-            challenges: "Deception checks (DC 16), creating convincing decoy (25 gold in materials)"
-            outcomes: "Confusion among pursuers but complex web of lies to maintain"
-      
-      - stage: 4
-        title: "Crystal Reaction"
-        objectives:
-          - "Manage unexpected crystal behavior"
-          - "Prevent contamination or energy discharge"
-          - "Adapt to changing transport requirements"
+          - "Locate early-stage crystal formations in forest boundary"
+          - "Collect samples with minimal contamination"
+          - "Document environmental factors and crystal growth patterns"
         completion_paths:
           scientific:
-            description: "Use technical knowledge to stabilize the crystal"
-            challenges: "Arcana checks (DC 17), precise manipulation of containment (DC 15 Dexterity)"
-            outcomes: "Crystal stabilized with minimal energy discharge"
-          intuitive:
-            description: "Respond instinctively to crystal's energy patterns"
-            challenges: "Wisdom checks (DC 16), potential minor corruption exposure (DC 14 Constitution save)"
-            outcomes: "Temporary solution that requires ongoing attention"
+            description: "Methodical collection with proper documentation"
+            challenges: "Nature checks (DC 14), Arcana checks (DC 15), specialized tools (20 gold)"
+            outcomes: "High-quality samples with comprehensive environmental data"
+          risk_taker:
+            description: "Quicker collection focusing on quantity over quality"
+            challenges: "Dexterity checks (DC 15), potential corruption exposure (DC 14 Constitution save)"
+            outcomes: "More samples but variable quality and less documentation"
+      
+      - stage: 3
+        title: "Zone Two: Deep Corruption"
+        objectives:
+          - "Access moderate corruption zone safely"
+          - "Collect samples from mature crystal formations"
+          - "Record advanced corruption effects on surroundings"
+        completion_paths:
+          protective:
+            description: "Use specialized equipment and cautious approach"
+            challenges: "Arcana checks (DC 16), protective gear (35 gold), careful movement (half speed)"
+            outcomes: "Uncontaminated samples and detailed observations without personal exposure"
+          immersive:
+            description: "Direct contact approach accepting some exposure risk"
+            challenges: "Constitution saves (DC 15), Combat with corrupted wildlife (CR 2)"
+            outcomes: "Unique samples with personal insights from limited corruption exposure"
+      
+      - stage: 4
+        title: "Zone Three: Crystalline Heart"
+        objectives:
+          - "Penetrate heavily corrupted area"
+          - "Obtain rare crystal core samples"
+          - "Survive and exit with samples intact"
+        completion_paths:
+          circumspect:
+            description: "Careful navigation around major hazards"
+            challenges: "Perception checks (DC 16), Stealth checks (DC 15), 4-hour careful exploration"
+            outcomes: "Safe collection of samples without confronting major corruption entities"
+          confrontational:
+            description: "Direct approach to heart of corruption zone"
+            challenges: "Combat with Crystal Elemental (CR 3), Constitution saves (DC 16)"
+            outcomes: "Prime samples from central formation, potential rare crystalline discovery"
       
       - stage: 5
-        title: "Final Delivery"
+        title: "Research Compilation"
         objectives:
-          - "Verify recipient identity"
-          - "Complete transfer protocols"
-          - "Document transport completion"
+          - "Return samples to Kel Brightstone"
+          - "Assist with initial analysis"
+          - "Compile field notes into research document"
         completion_paths:
-          protocol:
-            description: "Follow exact delivery procedures with full documentation"
-            challenges: "Intelligence checks (DC 13), formal verification process (1 hour)"
-            outcomes: "Complete records of transfer and maximum accountability"
-          practical:
-            description: "Efficient handover focusing on crystal safety rather than paperwork"
-            challenges: "Insight checks (DC 15) to verify recipient authenticity, minimal documentation"
-            outcomes: "Faster completion but less formal record of transaction"
+          collaborative:
+            description: "Work closely with Kel on analysis and findings"
+            challenges: "Intelligence checks (DC 14), Arcana checks (DC 15), half-day commitment"
+            outcomes: "Full understanding of research implications, co-credit on research papers"
+          delivery:
+            description: "Simple handover of samples and notes"
+            challenges: "Basic organization of materials, minimal time investment"
+            outcomes: "Quest completion but minimal insight into research applications"
     
     key_decision_points:
       - stage: 3
-        decision: "Mysterious Offer"
+        decision: "Unexpected Discovery"
         choices:
-          - choice: "Competing researcher offers higher payment for sample"
-            consequences: "Ethical dilemma, potential reputation impact, higher immediate reward"
-          - choice: "Original client offers bonus for confidentiality"
-            consequences: "Reinforced relationship with quest giver, future opportunities"
-          - choice: "Third party offers information exchange instead of taking crystal"
-            consequences: "Valuable information gained, original mission still completed"
-      
-      - stage: 4
-        decision: "Crystal Behavior"
-        choices:
-          - choice: "Crystal begins to resonate with nearby corruption"
-            consequences: "Route modification needed, potential revealing of position"
-          - choice: "Crystal shows signs of intelligence/awareness"
-            consequences: "Ethical considerations, potential communication opportunity"
-          - choice: "Crystal temporarily affects carrier's perception or abilities"
-            consequences: "Unique temporary abilities but potential side effects"
+          - choice: "Living organism adapted to crystal environment"
+            consequences: "Ethical questions about collection, potential new research direction"
+          - choice: "Signs of deliberate corruption manipulation"
+            consequences: "Evidence of external interference, potential conspiracy"
+          - choice: "Rare crystal formation with unusual properties"
+            consequences: "Valuable discovery, but requires significant protection during transport"
     
     potential_twists:
-      - "The crystal is actually a dormant life form"
-      - "One of the researchers has malicious intent for the crystal"
-      - "The crystal's properties change depending on who carries it"
-      - "The crystal is part of a larger construct being assembled in pieces"
+      - "Kel is using the research for questionable experiments"
+      - "Another research team is competing for the same samples"
+      - "One of the samples contains a dormant crystal entity"
+      - "The corruption zones are deliberately created test sites"
     
     rewards:
       standard:
-        - "75 gold payment for basic delivery"
-        - "Letter of recommendation from Magister Vorne"
+        - "120 gold base payment for collection services"
+        - "Basic knowledge of crystal properties and behavior"
       
-      thorough_path:
-        - "100 gold completion payment"
-        - "Crystal resonance tool (advantage on detecting similar crystals)"
-        - "Future high-priority delivery offers from the Magisterium"
-        - "Access to basic research findings (academic knowledge)"
+      scientific_zone_collection:
+        - "150 gold research stipend"
+        - "Crystal Detection Amulet (advantage on perception checks to find crystal formations)"
+        - "Opportunity for future research contracts"
+        - "Access to Academy research facilities for personal use (once per month)"
       
-      expedient_path:
-        - "85 gold rapid delivery bonus"
-        - "Contact with merchant specializing in crystal trade"
-        - "Shortcut knowledge through restricted areas (time saving on future travel)"
+      risk_taker_collection:
+        - "180 gold hazard bonus"
+        - "Crystal Shard with minor magical property (create light for 1 hour per day)"
+        - "Crystal resistance from exposure (advantage on saves vs. crystal effects for 1 week)"
       
-      scientific_path:
-        - "90 gold hazard handling bonus"
-      diplomatic_path:
-        - "Merchant guild membership offer"
-        - "200 gold compensation from grateful business owners"
-        - "Trade discount on future purchases (10-20%)"
-      
-      enforcement_path:
-        - "300 gold official reward"
-        - "Deputy trade inspector credentials"
-        - "Authority to conduct future inspections"
-      
-      research_path:
-        - "250 gold research grant"
-        - "Crystal contamination detection tools"
-        - "Academic recognition for new contamination protocols"
+      collaborative_analysis:
+        - "30 gold bonus for analysis assistance"
+        - "Co-authorship on research paper (enhances reputation with academic community)"
+        - "Research techniques (advantage on next three Arcana checks related to crystals)"
     
-    follow_up_quests:
-      deliberate_contamination: ["MQ024"] # Conspiracy of Crystal
-      regulation_established: ["SQ026"] # Crystal Trade Regulation Enforcement
-      mutation_benefits: ["SQ027"] # Crystal Enhancement Therapy
+    follow_up_quests: 
+      scientific_zone_collection: ["SQ012", "MQ003"] # Crystal Properties Research, Crystalline Contagion
+      risk_taker_collection: ["SQ035"] # Corruption Resistance
+      collaborative_analysis: ["SQ036"] # Academic Advancement
+    
+    related_quests: ["MQ003", "SQ007"]
     
     adaptable: true
 

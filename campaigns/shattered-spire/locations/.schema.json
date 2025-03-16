@@ -1,0 +1,227 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Location Schema",
+    "description": "Schema for location definition files in the Shattered Spire campaign",
+    "type": "object",
+    "required": ["title", "version", "locations"],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "The title of the location collection"
+        },
+        "version": {
+            "type": "string",
+            "description": "Version number of the location file"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of the location collection"
+        },
+        "locations": {
+            "type": "object",
+            "description": "Map of location objects keyed by location ID",
+            "additionalProperties": {
+                "type": "object",
+                "required": ["type", "description"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the location (optional, as the key is often used as the identifier)"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of location (city, dungeon, wilderness, etc.)"
+                    },
+                    "region": {
+                        "type": "string",
+                        "description": "Region where the location is situated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "General description of the location"
+                    },
+                    "history": {
+                        "type": "string",
+                        "description": "Historical background of the location"
+                    },
+                    "notable_features": {
+                        "type": "array",
+                        "description": "Distinctive features of the location",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "npcs": {
+                        "type": "array", 
+                        "description": "NPCs associated with this location",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "factions": {
+                        "type": "array",
+                        "description": "Factions with influence in this location",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "points_of_interest": {
+                        "type": "array",
+                        "description": "Specific places of interest within this location",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the point of interest"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the point of interest"
+                                }
+                            }
+                        }
+                    },
+                    "danger_level": {
+                        "type": "string",
+                        "description": "Danger level of the location"
+                    },
+                    "faction_control": {
+                        "type": "string",
+                        "description": "ID of the faction controlling this location"
+                    },
+                    "connections": {
+                        "type": "array",
+                        "description": "IDs of other locations this location connects to",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "districts": {
+                        "type": "object",
+                        "description": "Districts within this location",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the district"
+                                },
+                                "features": {
+                                    "type": "array",
+                                    "description": "Notable features in this district",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "npcs": {
+                                    "type": "array",
+                                    "description": "NPCs found in this district",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "areas": {
+                        "type": "object",
+                        "description": "Areas within this location",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the area"
+                                },
+                                "features": {
+                                    "type": "array",
+                                    "description": "Notable features in this area",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "encounters": {
+                                    "type": "array",
+                                    "description": "Possible encounters in this area",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "treasure": {
+                                    "type": "array",
+                                    "description": "Treasures found in this area",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "npcs": {
+                                    "type": "array",
+                                    "description": "NPCs found in this area",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "quests": {
+                        "type": "object",
+                        "description": "Quests associated with this location",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "Title of the quest"
+                                },
+                                "quest_giver": {
+                                    "type": "string",
+                                    "description": "NPC who gives the quest"
+                                },
+                                "quest_id": {
+                                    "type": "string",
+                                    "description": "Unique ID for the quest"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the quest"
+                                },
+                                "rewards": {
+                                    "type": "array",
+                                    "description": "Rewards for completing the quest",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "related_locations": {
+                                    "type": "array",
+                                    "description": "Locations related to this quest",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "prerequisites": {
+                                    "type": "array",
+                                    "description": "Quests that must be completed first",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "follow_ups": {
+                                    "type": "array",
+                                    "description": "Quests that can be triggered after completion",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "additionalProperties": true
+            }
+        }
+    },
+    "additionalProperties": false
+} 
