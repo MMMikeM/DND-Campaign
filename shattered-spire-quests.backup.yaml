@@ -1363,20 +1363,19 @@ side_quests:
           - "Process discovery about Dornin's fate"
           - "Decide how to proceed with the situation"
           - "Prepare for potential confrontation or rescue"
-        completion_paths:
-          rescue:
+    completion_paths:
+      rescue:
             description: "Dornin is trapped but alive and needs extraction"
             challenges: "Strength checks (DC 16), engineering challenge to free trapped dwarf, time pressure"
             outcomes: "Successfully rescue Dornin, retrieve mining supplies, return to Varric"
-          recovery:
+      recovery:
             description: "Dornin has transformed due to crystal exposure and must be confronted"
             challenges: "Combat with Crystal-Transformed Dwarf (CR 4), moral decision about friend's fate"
             outcomes: "Resolution of Dornin's fate, recovery of personal effects, evidence of discovery"
-          revelation:
+      revelation:
             description: "Dornin has made a significant discovery and is willingly staying"
             challenges: "Persuasion checks (DC 16), Arcana checks (DC 15) to understand discovery importance"
             outcomes: "Communication established with Dornin, participation in documenting discovery"
-      
       - stage: 5
         title: "Resolution"
         objectives:
@@ -1501,13 +1500,13 @@ side_quests:
           - "Locate vermin nests in the fields"
           - "Eliminate or drive away field infestation"
           - "Protect remaining viable crops"
-        completion_paths:
-          extermination:
+    completion_paths:
+      extermination:
             description: "Systematically eliminate all corrupted creatures"
             challenges: "Combat with Crystal Rats and Crystal Mite Swarms (CR 1-2), tracking checks (DC 12)"
             outcomes: "Complete elimination of immediate threat but potential environmental impact"
-          relocation:
-            description: "Find the source of corruption and relocate creatures"
+      relocation:
+        description: "Find the source of corruption and relocate creatures"
             challenges: "Nature checks (DC 14), Animal Handling (DC 15), minor corrupted elemental (CR 2)"
             outcomes: "Reduced creature presence with potential for ecological balance"
       
@@ -1682,9 +1681,9 @@ side_quests:
           - "Locate the mysterious guest or determine their fate"
           - "Decide what to do with the crystal artifact"
           - "Report findings to Mikkel"
-        completion_paths:
-          return:
-            description: "Find the guest and return the item"
+    completion_paths:
+      return:
+        description: "Find the guest and return the item"
             challenges: "Persuasion checks (DC 15) to convince guest to meet, potential mild conflict resolution"
             outcomes: "Complete resolution, possible reward from original owner, guest's true purpose revealed"
           confiscate:
@@ -1830,13 +1829,13 @@ side_quests:
           - "Approach The Shimmer before or during the sale"
           - "Recover the artifact"
           - "Determine whether to capture or negotiate"
-        completion_paths:
-          capture:
-            description: "Attempt to capture The Shimmer"
+    completion_paths:
+      capture:
+        description: "Attempt to capture The Shimmer"
             challenges: "Combat with The Shimmer (CR 4), potential additional guards (CR 2), tactical environment"
             outcomes: "Thief apprehended, reputation for upholding the law, potential reward from authorities"
-          negotiate:
-            description: "Discover The Shimmer's motives and potentially ally"
+      negotiate:
+        description: "Discover The Shimmer's motives and potentially ally"
             challenges: "Insight checks (DC 16), Persuasion checks (DC 18), moral dilemma"
             outcomes: "Information about greater threat, potential alliance, artifact recovered peacefully"
           trickery:

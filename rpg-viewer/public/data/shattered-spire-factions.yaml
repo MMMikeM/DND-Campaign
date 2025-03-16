@@ -1,6 +1,33 @@
 title: "Shattered Spire Factions and NPCs"
 version: "1.0"
 
+# Schema definition:
+# - title: string
+# - version: string
+# - description?: string
+# - factions: record of Faction objects
+#
+# Faction schema:
+#   - type: string
+#   - public_goal?: string
+#   - true_goal?: string
+#   - goal?: string (alternative to public/true goals)
+#   - resources?: string[]
+#   - leadership?: Character[] (detailed members with roles)
+#     - name: string
+#     - role?: string
+#     - position?: string (alternative to role)
+#     - description: string
+#     - secret?: string
+#     - stats?: string
+#     - bio?: string
+#   - members?: Character[] (less detailed than leadership)
+#   - territory?: string
+#   - allies?: string[]
+#   - enemies?: string[]
+#   - quests?: string[]
+#   - notes?: string
+
 factions:
   # Local Factions - First Spiral
   crystal_seekers:

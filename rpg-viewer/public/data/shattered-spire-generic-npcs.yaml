@@ -7,6 +7,30 @@ description: |
   
   Quest details are stored in shattered-spire-quests.yaml and referenced by ID.
 
+# Schema definition:
+# - title: string
+# - version: string
+# - description?: string
+# - npcs: Npc[]
+#
+# Npc schema:
+#   - name: string
+#   - type: string
+#   - basic_traits: string
+#   - appearance: string
+#   - personality: string
+#   - hooks: string
+#   - quests?: NpcQuestReference[]
+#     - simple_quest_id?: string
+#     - major_quest_id?: string
+#     - summary: string
+#   - bio?: string
+#   - stats?: string
+#   - inventory?: string[]
+#   - secrets?: string
+#   - affiliations?: string[]
+#   - relationships?: string[]
+
 # Simple NPC structure with quest references
 npcs:
   # MERCHANTS AND TRADERS
