@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "NPC Schema",
+    "description": "Schema for NPC definition files in the Shattered Spire campaign",
+    "type": "object",
+    "required": ["title", "version", "description", "npcs"],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "The title of the NPC collection"
+        },
+        "version": {
+            "type": "string",
+            "description": "Version number of the NPC file"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of the NPC collection"
+        },
+        "npcs": {
+            "type": "array",
+            "description": "Array of NPC objects",
+            "items": {
+                "type": "object",
+                "required": ["name", "race", "gender", "occupation"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the NPC"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the NPC"
+                    },
+                    "race": {
+                        "type": "string",
+                        "description": "Race of the NPC"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "description": "Gender of the NPC"
+                    },
+                    "occupation": {
+                        "type": "string",
+                        "description": "Primary occupation of the NPC"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Physical description and personality of the NPC"
+                    },
+                    "background": {
+                        "type": "string",
+                        "description": "Background story of the NPC"
+                    },
+                    "motivation": {
+                        "type": "string",
+                        "description": "What motivates this NPC"
+                    },
+                    "faction": {
+                        "type": "string",
+                        "description": "The faction this NPC belongs to"
+                    }
+                },
+                "additionalProperties": true
+            }
+        }
+    },
+    "additionalProperties": false
+} 

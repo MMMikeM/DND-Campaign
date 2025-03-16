@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { trpc } from "@/trpc/client";
-import { useCrossReference } from "../CrossReferenceContext";
+import { useState, useEffect, type ChangeEvent } from "react"
+import { useCrossReference } from "../CrossReferenceContext"
+import type { NpcsFile } from "@/server/schemas/generated/npcsSchema"
 
 // Custom icon components to replace Heroicons
 const EyeIcon = () => (
@@ -27,7 +27,7 @@ const EyeIcon = () => (
 			d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
 		/>
 	</svg>
-);
+)
 
 const EyeSlashIcon = () => (
 	<svg
@@ -46,155 +46,93 @@ const EyeSlashIcon = () => (
 			d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
 		/>
 	</svg>
-);
+)
 
+// Use the generated schema type instead of manual interface
 interface NPCDisplayProps {
-	npcId?: string;
-	handleRef: (path: string) => (el: HTMLElement | null) => void;
+	npcsData: NpcsFile
+	initialNpcId?: string
 }
 
-export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
-	const { navigateToFile } = useCrossReference();
-	const [selectedNpcId, setSelectedNpcId] = useState<string | undefined>(npcId);
-	const [showSecret, setShowSecret] = useState(false);
-	const [showInventory, setShowInventory] = useState(false);
+export default function NPCDisplay({
+	npcsData,
+	initialNpcId,
+}: NPCDisplayProps) {
+	const { navigateToFile } = useCrossReference()
 
-	// Fetch all NPCs
-	const {
-		data: npcsData,
-		isLoading: isLoadingNpcs,
-		error: npcsError,
-	} = trpc.npcs.getAllNpcs.useQuery(undefined, {
-		refetchOnWindowFocus: false,
-		staleTime: 5 * 60 * 1000, // 5 minutes
-	});
+	// Determine the initial NPC ID only once
+	const defaultNpcId = initialNpcId || npcsData?.npcs?.[0]?.id || undefined
 
-	// Fetch specific NPC data if an ID is provided
-	const {
-		data: singleNpcData,
-		isLoading: isLoadingSingleNpc,
-		error: singleNpcError,
-	} = trpc.npcs.getNpcByNameOrId.useQuery(selectedNpcId || "", {
-		enabled: !!selectedNpcId,
-		refetchOnWindowFocus: false,
-		staleTime: 5 * 60 * 1000, // 5 minutes
-	});
+	const [selectedNpcId, setSelectedNpcId] = useState<string | undefined>(
+		defaultNpcId,
+	)
+	const [showSecret, setShowSecret] = useState(false)
+	const [showInventory, setShowInventory] = useState(false)
+	const [singleNpcData, setSingleNpcData] = useState<
+		NpcsFile["npcs"][0] | null
+	>(() => {
+		const npc = npcsData?.npcs?.find((n) => n.id === defaultNpcId)
+		return npc || npcsData?.npcs?.[0] || null
+	})
 
-	// Set the first NPC as selected if none is specified and we have NPCs data
+	// Update the selected NPC when the ID changes from props
 	useEffect(() => {
-		if (
-			!selectedNpcId &&
-			npcsData &&
-			npcsData.npcs &&
-			npcsData.npcs.length > 0
-		) {
-			setSelectedNpcId(npcsData.npcs[0].id);
+		if (initialNpcId && initialNpcId !== selectedNpcId) {
+			setSelectedNpcId(initialNpcId)
 		}
-	}, [npcsData, selectedNpcId]);
+	}, [initialNpcId, selectedNpcId])
 
-	// Reset DM content visibility when changing NPCs
+	// Update the NPC data when the selected ID changes
 	useEffect(() => {
-		setShowSecret(false);
-		setShowInventory(false);
-	}, []);
+		if (selectedNpcId) {
+			const npc = npcsData?.npcs?.find((n) => n.id === selectedNpcId)
+			if (npc && (!singleNpcData || npc.id !== singleNpcData.id)) {
+				setSingleNpcData(npc)
+			}
+		}
+	}, [selectedNpcId, npcsData, singleNpcData])
+
+	// Format NPC ID to a proper display name
+	const formatNpcName = (id: string): string => {
+		return id
+			.split("_")
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(" ")
+	}
 
 	// Handle NPC selection change
-	const handleNpcChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedNpcId(e.target.value);
-	};
+	const handleNpcChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		const newNpcId = e.target.value
+		setSelectedNpcId(newNpcId)
 
-	// Toggle secret visibility
-	const toggleSecret = () => {
-		setShowSecret(!showSecret);
-	};
-
-	// Toggle inventory visibility
-	const toggleInventory = () => {
-		setShowInventory(!showInventory);
-	};
-
-	// Toggle all DM content visibility
-	const toggleAllDMContent = () => {
-		const newState = !(showSecret && showInventory);
-		setShowSecret(newState);
-		setShowInventory(newState);
-	};
-
-	// Loading states
-	if (isLoadingNpcs) {
-		return <div className="p-4 text-center">Loading NPCs...</div>;
-	}
-
-	// Error states
-	if (npcsError) {
-		return (
-			<div className="p-4 text-center text-red-500">
-				Error loading NPCs: {npcsError.message}
-			</div>
-		);
-	}
-
-	if (!npcsData || npcsData.npcs.length === 0) {
-		return (
-			<div className="p-4 text-center">
-				No NPC data available. Please check your YAML file.
-			</div>
-		);
-	}
-
-	// Loading specific NPC
-	if (selectedNpcId && isLoadingSingleNpc) {
-		return <div className="p-4 text-center">Loading NPC details...</div>;
-	}
-
-	// Error loading specific NPC
-	if (selectedNpcId && singleNpcError) {
-		return (
-			<div className="p-4 text-center text-red-500">
-				Error loading NPC: {singleNpcError.message}
-			</div>
-		);
-	}
-
-	const npc = singleNpcData;
-
-	if (!npc) {
-		return <div className="p-4 text-center">Select an NPC to view details</div>;
-	}
-
-	// Check if NPC has any DM-only content
-	const hasDMContent =
-		npc.secret || (npc.inventory && npc.inventory.length > 0);
-
-	// Check the overall state of DM content visibility
-	const allDMContentVisible =
-		(npc.secret ? showSecret : true) &&
-		(npc.inventory && npc.inventory.length > 0 ? showInventory : true);
-
-	// Helper function to render content that might be a string or an array
-	const renderContent = (content: string | string[]) => {
-		if (Array.isArray(content)) {
-			return (
-				<ul className="space-y-2">
-					{content.map((item, index) => (
-						<li
-							key={`content-item-${index}-${item.substring(0, 10)}`}
-							className="flex items-start"
-						>
-							<span className="text-blue-400 mr-2 mt-1">•</span>
-							<span className="text-gray-700 dark:text-gray-300">{item}</span>
-						</li>
-					))}
-				</ul>
-			);
+		// Find the selected NPC data
+		const selectedNpc = npcsData.npcs.find((npc) => npc.id === newNpcId)
+		if (selectedNpc) {
+			setSingleNpcData(selectedNpc)
 		}
-		// If it's a string, render as before
-		return (
-			<div className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-				{content}
-			</div>
-		);
-	};
+
+		// For client-side navigation, we redirect to the new NPC page
+		// This will trigger a server-side load of the new NPC data
+		if (typeof window !== "undefined") {
+			window.location.href = `/npcs/${newNpcId}`
+		}
+	}
+
+	const toggleSecret = () => {
+		setShowSecret(!showSecret)
+	}
+
+	const toggleInventory = () => {
+		setShowInventory(!showInventory)
+	}
+
+	const toggleAllDMContent = () => {
+		setShowSecret(true)
+		setShowInventory(true)
+	}
+
+	// Function to create an ID for the heading element
+	const getHeadingId = (id: string) => `npc-${id}`
 
 	return (
 		<article className="bg-white dark:bg-gray-900 rounded-lg shadow-md border dark:border-gray-800 transition-colors duration-300">
@@ -222,20 +160,19 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 							<div className="flex flex-col">
 								<h1
 									className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-1"
-									ref={handleRef(`npc-${npc.id}`)}
-									id={`npc-${npc.id}`}
+									id={getHeadingId(singleNpcData?.id || "")}
 								>
-									{npc.name}
+									{singleNpcData?.name}
 								</h1>
 
 								{/* DM Content Status */}
-								{hasDMContent && (
+								{singleNpcData?.secret && (
 									<div className="flex items-center mt-1">
 										<div
-											className={`h-2 w-2 rounded-full mr-2 ${allDMContentVisible ? "bg-green-500" : "bg-amber-500"}`}
+											className={`h-2 w-2 rounded-full mr-2 ${showSecret && showInventory ? "bg-green-500" : "bg-amber-500"}`}
 										/>
 										<span className="text-xs text-gray-500 dark:text-gray-400">
-											{allDMContentVisible
+											{showSecret && showInventory
 												? "All DM content visible"
 												: "Some DM content hidden"}
 										</span>
@@ -244,27 +181,27 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 							</div>
 
 							{/* DM Content Toggle Button */}
-							{hasDMContent && (
+							{singleNpcData?.secret && (
 								<button
 									type="button"
 									onClick={toggleAllDMContent}
 									className={`flex items-center text-sm font-medium ml-4 p-2 rounded-full transition ${
-										allDMContentVisible
+										showSecret && showInventory
 											? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50"
 											: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
 									}`}
 									aria-label={
-										allDMContentVisible
+										showSecret && showInventory
 											? "Hide all DM content"
 											: "Show all DM content"
 									}
 									title={
-										allDMContentVisible
+										showSecret && showInventory
 											? "Hide all DM content"
 											: "Show all DM content"
 									}
 								>
-									{allDMContentVisible ? (
+									{showSecret && showInventory ? (
 										<>
 											<EyeSlashIcon />
 											<span className="sr-only">Hide All DM Content</span>
@@ -302,10 +239,12 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 								Role
 							</h3>
 						</div>
-						<div className="text-gray-800 dark:text-gray-200">{npc.role}</div>
+						<div className="text-gray-800 dark:text-gray-200">
+							{singleNpcData?.role}
+						</div>
 					</div>
 
-					{npc.location && (
+					{singleNpcData?.location && (
 						<div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/30 shadow-sm">
 							<div className="flex items-center mb-2">
 								<span className="text-emerald-500 mr-2">📍</span>
@@ -314,7 +253,7 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 								</h3>
 							</div>
 							<div className="text-gray-800 dark:text-gray-200">
-								{npc.location}
+								{singleNpcData?.location}
 							</div>
 						</div>
 					)}
@@ -329,7 +268,7 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 								Description
 							</h3>
 						</div>
-						<div className="p-4">{renderContent(npc.description)}</div>
+						<div className="p-4">{singleNpcData?.description}</div>
 					</div>
 
 					<div className="bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-800/30 shadow-sm overflow-hidden">
@@ -339,7 +278,7 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 								Personality
 							</h3>
 						</div>
-						<div className="p-4">{renderContent(npc.personality)}</div>
+						<div className="p-4">{singleNpcData?.personality}</div>
 					</div>
 				</div>
 
@@ -353,13 +292,13 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 					</div>
 					<div className="p-4">
 						<div className="text-gray-700 dark:text-gray-300">
-							{npc.motivation}
+							{singleNpcData?.motivation}
 						</div>
 					</div>
 				</div>
 
 				{/* Secret (DM Info) */}
-				{npc.secret && (
+				{singleNpcData?.secret && (
 					<div
 						className={`bg-white dark:bg-gray-800 rounded-lg border ${showSecret ? "border-green-200 dark:border-green-800/30" : "border-red-200 dark:border-red-800/30"} shadow-sm overflow-hidden relative transition-colors duration-300`}
 					>
@@ -398,7 +337,7 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 									showSecret ? "" : "blur-md select-none"
 								}`}
 							>
-								{npc.secret}
+								{singleNpcData?.secret}
 							</div>
 
 							{!showSecret && (
@@ -417,7 +356,7 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 				)}
 
 				{/* Quests */}
-				{npc.quests && npc.quests.length > 0 && (
+				{singleNpcData?.quests && (
 					<div className="bg-white dark:bg-gray-800 rounded-lg border border-amber-200 dark:border-amber-800/30 shadow-sm overflow-hidden">
 						<div className="flex items-center p-3 border-b border-amber-200 dark:border-amber-800/30 bg-amber-50 dark:bg-amber-900/20">
 							<span className="text-amber-500 mr-2">📜</span>
@@ -427,35 +366,62 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 						</div>
 						<div className="p-4">
 							<ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-								{npc.quests.map((questId) => (
-									<li key={`quest-${questId}`} className="relative">
+								{Array.isArray(singleNpcData.quests) ? (
+									singleNpcData.quests.map((questId) => (
+										<li key={`quest-${questId}`} className="relative">
+											<button
+												type="button"
+												className="w-full text-left p-2 rounded-md bg-amber-50 dark:bg-amber-900/10 hover:bg-amber-100 dark:hover:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 transition-colors flex items-center text-amber-700 dark:text-amber-300"
+												onClick={() =>
+													navigateToFile(
+														`shattered-spire-quests.yaml#${questId}`,
+													)
+												}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" || e.key === " ") {
+														e.preventDefault()
+														navigateToFile(
+															`shattered-spire-quests.yaml#${questId}`,
+														)
+													}
+												}}
+											>
+												<span className="mr-2">📋</span>
+												{questId}
+											</button>
+										</li>
+									))
+								) : (
+									<li className="relative">
 										<button
 											type="button"
 											className="w-full text-left p-2 rounded-md bg-amber-50 dark:bg-amber-900/10 hover:bg-amber-100 dark:hover:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 transition-colors flex items-center text-amber-700 dark:text-amber-300"
 											onClick={() =>
-												navigateToFile(`shattered-spire-quests.yaml#${questId}`)
+												navigateToFile(
+													`shattered-spire-quests.yaml#${singleNpcData.quests}`,
+												)
 											}
 											onKeyDown={(e) => {
 												if (e.key === "Enter" || e.key === " ") {
-													e.preventDefault();
+													e.preventDefault()
 													navigateToFile(
-														`shattered-spire-quests.yaml#${questId}`,
-													);
+														`shattered-spire-quests.yaml#${singleNpcData.quests}`,
+													)
 												}
 											}}
 										>
 											<span className="mr-2">📋</span>
-											{questId}
+											{singleNpcData.quests}
 										</button>
 									</li>
-								))}
+								)}
 							</ul>
 						</div>
 					</div>
 				)}
 
 				{/* Stats */}
-				{npc.stats && (
+				{singleNpcData?.stats && (
 					<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
 						<div className="flex items-center p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">
 							<span className="text-gray-500 mr-2">📊</span>
@@ -465,14 +431,14 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 						</div>
 						<div className="p-4">
 							<div className="text-gray-700 dark:text-gray-300 whitespace-pre-line font-mono bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
-								{npc.stats}
+								{singleNpcData?.stats}
 							</div>
 						</div>
 					</div>
 				)}
 
 				{/* Relationships */}
-				{npc.relationships && npc.relationships.length > 0 && (
+				{singleNpcData?.relationships && (
 					<div className="bg-white dark:bg-gray-800 rounded-lg border border-teal-200 dark:border-teal-800/30 shadow-sm overflow-hidden">
 						<div className="flex items-center p-3 border-b border-teal-200 dark:border-teal-800/30 bg-teal-50 dark:bg-teal-900/20">
 							<span className="text-teal-500 mr-2">🔗</span>
@@ -482,24 +448,33 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 						</div>
 						<div className="p-4">
 							<ul className="space-y-2">
-								{npc.relationships.map((relationship) => (
-									<li
-										key={`rel-${relationship.substring(0, 20)}`}
-										className="flex items-start"
-									>
+								{Array.isArray(singleNpcData.relationships) ? (
+									singleNpcData.relationships.map((relationship) => (
+										<li
+											key={`rel-${relationship.substring(0, 20)}`}
+											className="flex items-start"
+										>
+											<span className="text-teal-400 mr-2 mt-1">•</span>
+											<span className="text-gray-700 dark:text-gray-300">
+												{relationship}
+											</span>
+										</li>
+									))
+								) : (
+									<li className="flex items-start">
 										<span className="text-teal-400 mr-2 mt-1">•</span>
 										<span className="text-gray-700 dark:text-gray-300">
-											{relationship}
+											{singleNpcData.relationships}
 										</span>
 									</li>
-								))}
+								)}
 							</ul>
 						</div>
 					</div>
 				)}
 
 				{/* Affiliations */}
-				{npc.affiliations && npc.affiliations.length > 0 && (
+				{singleNpcData?.affiliations && (
 					<div className="bg-white dark:bg-gray-800 rounded-lg border border-cyan-200 dark:border-cyan-800/30 shadow-sm overflow-hidden">
 						<div className="flex items-center p-3 border-b border-cyan-200 dark:border-cyan-800/30 bg-cyan-50 dark:bg-cyan-900/20">
 							<span className="text-cyan-500 mr-2">🏢</span>
@@ -509,24 +484,33 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 						</div>
 						<div className="p-4">
 							<ul className="space-y-2">
-								{npc.affiliations.map((affiliation) => (
-									<li
-										key={`aff-${affiliation.substring(0, 20)}`}
-										className="flex items-start"
-									>
+								{Array.isArray(singleNpcData.affiliations) ? (
+									singleNpcData.affiliations.map((affiliation) => (
+										<li
+											key={`aff-${affiliation.substring(0, 20)}`}
+											className="flex items-start"
+										>
+											<span className="text-cyan-400 mr-2 mt-1">•</span>
+											<span className="text-gray-700 dark:text-gray-300">
+												{affiliation}
+											</span>
+										</li>
+									))
+								) : (
+									<li className="flex items-start">
 										<span className="text-cyan-400 mr-2 mt-1">•</span>
 										<span className="text-gray-700 dark:text-gray-300">
-											{affiliation}
+											{singleNpcData.affiliations}
 										</span>
 									</li>
-								))}
+								)}
 							</ul>
 						</div>
 					</div>
 				)}
 
 				{/* Inventory - DM Only */}
-				{npc.inventory && npc.inventory.length > 0 && (
+				{singleNpcData?.inventory && (
 					<div
 						className={`bg-white dark:bg-gray-800 rounded-lg border ${showInventory ? "border-green-200 dark:border-green-800/30" : "border-yellow-200 dark:border-yellow-800/30"} shadow-sm overflow-hidden relative transition-colors duration-300`}
 					>
@@ -567,17 +551,26 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 									showInventory ? "" : "blur-md select-none"
 								}`}
 							>
-								{npc.inventory.map((item) => (
-									<li
-										key={`inv-${item.substring(0, 20)}`}
-										className="flex items-start"
-									>
+								{Array.isArray(singleNpcData.inventory) ? (
+									singleNpcData.inventory.map((item) => (
+										<li
+											key={`inv-${item.substring(0, 20)}`}
+											className="flex items-start"
+										>
+											<span className="text-yellow-400 mr-2 mt-1">•</span>
+											<span className="text-gray-700 dark:text-gray-300">
+												{item}
+											</span>
+										</li>
+									))
+								) : (
+									<li className="flex items-start">
 										<span className="text-yellow-400 mr-2 mt-1">•</span>
 										<span className="text-gray-700 dark:text-gray-300">
-											{item}
+											{singleNpcData.inventory}
 										</span>
 									</li>
-								))}
+								)}
 							</ul>
 
 							{!showInventory && (
@@ -596,5 +589,5 @@ export default function NPCDisplay({ npcId, handleRef }: NPCDisplayProps) {
 				)}
 			</main>
 		</article>
-	);
+	)
 }

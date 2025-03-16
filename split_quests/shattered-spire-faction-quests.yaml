@@ -1,0 +1,105 @@
+# - faction_quests: Quest[] (optional)
+
+title: "Shattered Spire Faction Quests"
+version: "1.1"
+description: |
+  Collection of faction quests for the Shattered Spire campaign with branching paths and
+  multiple completion options. Each quest has a unique ID that can be referenced
+  from NPC files. Quest chains show connections to related quests.
+
+quests:
+  - id: "FQ001"
+    title: "Merchants Guild: Crystal Trading Rights"
+    associated_npc: ["Guildmaster Verin Thorne"]
+    type: "Negotiation"
+    difficulty: "Medium"
+    description: |
+      The Merchants Guild seeks to secure exclusive trading rights for a newly 
+      discovered variety of crystal with unique properties. Your task is to help 
+      them navigate the complex negotiations with rival factions and local authorities.
+    quest_stages:
+      - stage: 1
+        title: "Market Assessment"
+        objectives:
+          - "Determine potential value of new crystal variety"
+          - "Identify current market stakeholders"
+          - "Assess competition for trading rights"
+        completion_paths:
+          thorough:
+            description: "Conduct comprehensive market research"
+            challenges: "Investigation checks (DC 15), 5 days of research"
+            outcomes: "Complete understanding of market dynamics and faction interests"
+          expedient:
+            description: "Gather essential information quickly"
+            challenges: "Persuasion checks (DC 16), bribery costs (50 gold)"
+            outcomes: "Basic understanding acquired in 2 days, but may miss subtle details"
+      
+      - stage: 2
+        title: "Rival Negotiation"
+        objectives:
+          - "Approach rival faction representatives"
+          - "Determine their interests and demands"
+          - "Find potential compromise points"
+        completion_paths:
+          diplomatic:
+            description: "Seek mutually beneficial arrangement with rivals"
+            challenges: "Persuasion checks (DC 16), Insight checks (DC 15)"
+            outcomes: "Potential for partnership that increases overall profits but shares control"
+          aggressive:
+            description: "Use leverage to push rivals out of negotiations"
+            challenges: "Intimidation checks (DC 17), risk of reputation damage"
+            outcomes: "Elimination of competition but creates lasting enemies (-2 reputation with rival factions)"
+      
+      - stage: 3
+        title: "Authority Permission"
+        objectives:
+          - "Present case to city authorities"
+          - "Address regulatory concerns"
+          - "Secure necessary permits"
+        completion_paths:
+          legal:
+            description: "Work through official channels and procedures"
+            challenges: "Bureaucratic process (1 week), fees (100 gold)"
+            outcomes: "Fully legal and documented rights with government backing"
+          backdoor:
+            description: "Expedite process through unofficial channels"
+            challenges: "Deception checks (DC 16), bribery (200 gold)"
+            outcomes: "Faster approval (2 days) but vulnerable to future scrutiny"
+    
+    key_decision_points:
+      - stage: 2
+        decision: "Rival Treatment"
+        choices:
+          - choice: "Form partnership with Gemcutters Association"
+            consequences: "Shared profits but expanded market reach and reduced risks"
+          - choice: "Undermine rivals through targeted misinformation"
+            consequences: "Short-term advantage but creates determined enemies"
+          - choice: "Buy out smaller competitors"
+            consequences: "Consolidates power but requires significant investment (500 gold)"
+    
+    potential_twists:
+      - "Crystal has dangerous properties unknown to current market"
+      - "Rival faction has royal family connections"
+      - "Authorities have hidden agenda regarding crystal regulation"
+      - "Foreign merchant consortium enters negotiations unexpectedly"
+    
+    rewards:
+      standard:
+        - "200 gold payment from Merchants Guild"
+        - "10% discount on guild market purchases for 1 month"
+      diplomatic_path:
+        - "250 gold"
+        - "Trade alliance benefits (access to rare goods from multiple factions)"
+        - "Improved standing with multiple factions (+1 reputation with 3 merchant factions)"
+      aggressive_path:
+        - "350 gold"
+        - "Exclusive trading rights documents (worth 200 gold to right buyer)"
+        - "Enemy status with rival faction (occasional sabotage attempts)"
+    
+    follow_up_quests: 
+      diplomatic_path: ["FQ005", "SQ012"]
+      aggressive_path: ["FQ006", "SQ013"]
+    
+    related_quests: ["MQ001", "SQ008"]
+    
+    adaptable: true

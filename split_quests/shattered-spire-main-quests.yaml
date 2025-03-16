@@ -1,0 +1,604 @@
+title: "Shattered Spire Main Quests"
+version: "1.1"
+description: |
+  Collection of main quests for the Shattered Spire campaign with branching paths and
+  multiple completion options. Each quest has a unique ID that can be referenced
+  from NPC files. Quest chains show connections to related quests.
+
+quests:
+  - id: "MQ001"
+    title: "Voices in the Stone"
+    associated_npc: ["Orin Blackhand"]
+    type: "Investigation"
+    difficulty: "Medium"
+    description: |
+      Orin has begun hearing whispers from the crystal gems he trades. 
+      He needs help determining if he's going mad or if something 
+      supernatural is occurring.
+    quest_stages:
+      - stage: 1
+        title: "Examining the Evidence"
+        objectives:
+          - "Verify Orin's claims by examining his crystal stock"
+          - "Document when and where whispering occurs"
+          - "Identify patterns in the crystal types that speak"
+        completion_paths:
+          scientific:
+            description: "Use detection magic and methodical testing"
+            challenges: "Arcana checks (DC 15), magical detection resources (50 gold)"
+            outcomes: "Precise understanding of which crystals communicate"
+          intuitive:
+            description: "Meditate near crystals, attempt to hear voices yourself"
+            challenges: "Wisdom saves (DC 14), risk of minor corruption"
+            outcomes: "Establish partial communication with crystal consciousness"
+      
+      - stage: 2
+        title: "Tracking the Source"
+        objectives:
+          - "Locate origin point of the communicating crystals"
+          - "Travel to source location"
+          - "Investigate unusual crystal formation"
+        completion_paths:
+          diplomatic:
+            description: "Attempt peaceful contact with crystal entity"
+            challenges: "Persuasion checks (DC 16), Insight checks (DC 14)"
+            outcomes: "Begin dialogue with fragment of sky city consciousness"
+          defensive:
+            description: "Approach with caution, ready to contain hostile entity"
+            challenges: "Combat with crystal guardians (CR 3), Constitution saves (DC 13)"
+            outcomes: "Subdue manifestation of crystal consciousness for study"
+      
+      - stage: 3
+        title: "Resolving the Connection"
+        objectives:
+          - "Determine nature of crystal consciousness"
+          - "Decide how to proceed with the connection"
+          - "Implement solution for Orin"
+        completion_paths:
+          alliance:
+            description: "Help establish stable communication channel"
+            challenges: "Arcana checks (DC 17), resource gathering (100 gold)"
+            outcomes: "Orin becomes willing intermediary for crystal intelligence"
+          severance:
+            description: "Sever the unwanted connection permanently"
+            challenges: "Arcana ritual (DC 16), potential vengeance from entity"
+            outcomes: "Orin freed from voices but crystals in area become inert"
+          exploitation:
+            description: "Help Orin control and use the connection for profit"
+            challenges: "Wisdom saves (DC 15), Deception checks (DC 14)"
+            outcomes: "Orin gains crystal powers but begins slow transformation"
+    
+    key_decision_points:
+      - stage: 3
+        decision: "Entity Nature"
+        choices:
+          - choice: "Crystal entity is benevolent researcher from sky city"
+            consequences: "Opens diplomatic solutions and potential knowledge exchange"
+          - choice: "Crystal entity is malevolent consciousness seeking influence"
+            consequences: "Increases risks of alliance path, may require containment"
+          - choice: "Crystal entity is neutral but alien consciousness"
+            consequences: "Communication challenges, unpredictable responses"
+    
+    potential_twists:
+      - "Crystal entity is benevolent researcher from sky city"
+      - "Rival merchant is poisoning Orin to drive him mad"
+      - "Crystals are a cult recruitment tool"
+      - "Entity is trying to warn about imminent danger"
+    
+    rewards:
+      standard:
+        - "150 gold base payment from Orin"
+        - "Crystal knowledge (advantage on Arcana checks related to crystal lore for 1 month)"
+      alliance_path:
+        - "300 gold"
+        - "Crystal of True Speaking (allows telepathic communication 1/day)"
+        - "Discount on future gem purchases (10%)"
+        - "Information about sky city history"
+      severance_path:
+        - "250 gold"
+        - "Crystal Silencing Amulet (advantage on saves vs. crystal effects)"
+        - "Orin's lasting gratitude"
+      exploitation_path:
+        - "400 gold"
+        - "Crystal Resonance Stone (cast Detect Thoughts 1/day)"
+        - "Gradual corruption side effects (minor crystal growths, occasional whispers)"
+    
+    follow_up_quests: 
+      alliance_path: ["MQ010", "SQ015"]
+      severance_path: ["MQ011"]
+      exploitation_path: ["MQ010", "SQ016"]
+    
+    related_quests: ["SQ001", "MQ008"]
+    
+    adaptable: false
+
+  - id: "MQ002"
+    title: "Conflicting Histories"
+    associated_npc: ["Professor Aldwin Thorngage"]
+    type: "Research"
+    difficulty: "Medium"
+    description: |
+      Professor Thorngage is compiling accounts of the sky city's fall 
+      but has discovered alarming inconsistencies. He needs help 
+      gathering and verifying additional sources.
+    quest_stages:
+      - stage: 1
+        title: "Village Testimonies"
+        objectives:
+          - "Interview elderly witnesses in remote villages"
+          - "Document their accounts of the fall"
+          - "Identify consistent elements across stories"
+        completion_paths:
+          thorough:
+            description: "Visit multiple villages for comprehensive accounts"
+            challenges: "Persuasion checks (DC 14), travel hazards (wilderness CR 2), 5-day journey"
+            outcomes: "Complete collection of firsthand accounts with regional variations"
+          selective:
+            description: "Focus on the most reliable witnesses only"
+            challenges: "Insight checks (DC 16) to determine reliability, History checks (DC 14)"
+            outcomes: "Few but high-quality accounts with verifiable details"
+      
+      - stage: 2
+        title: "The Lost Journal"
+        objectives:
+          - "Recover journal from abandoned expedition site"
+          - "Navigate hazardous ruins"
+          - "Decipher damaged records"
+        completion_paths:
+          preservation:
+            description: "Carefully extract and preserve fragile documents"
+            challenges: "Dexterity checks (DC 15), Intelligence checks (DC 16) for puzzle solving, 2-day process"
+            outcomes: "Complete journal with minimal damage and full historical context"
+          expedient:
+            description: "Quick recovery focusing on key information"
+            challenges: "Combat with guardian constructs (CR 3), Investigation checks (DC 14)"
+            outcomes: "Partial but immediately useful information recovered in half a day"
+      
+      - stage: 3
+        title: "Restricted Archives"
+        objectives:
+          - "Gain access to sealed archives in major city"
+          - "Research classified historical documents"
+          - "Compare with collected accounts"
+        completion_paths:
+          official:
+            description: "Obtain formal permission through proper channels"
+            challenges: "Persuasion checks (DC 16), bureaucratic process (1 week waiting time), bribes (50 gold)"
+            outcomes: "Full sanctioned access to archives with staff assistance"
+          covert:
+            description: "Sneak into archives after hours"
+            challenges: "Stealth checks (DC 17), guard patrols (CR 2), lockpicking (DC 15)"
+            outcomes: "Access to even restricted sections but risk of discovery and imprisonment"
+      
+      - stage: 4
+        title: "The Truth Revealed"
+        objectives:
+          - "Compile all gathered information"
+          - "Reconcile contradictions"
+          - "Present findings to Professor Thorngage"
+        completion_paths:
+          full_disclosure:
+            description: "Reveal all discovered information, including troubling implications"
+            challenges: "History checks (DC 17), determining what the truth actually is"
+            outcomes: "Complete historical record with potential political consequences"
+          edited_truth:
+            description: "Curate information to protect certain interests"
+            challenges: "Deception checks (DC 16), moral choices, deciding what to conceal"
+            outcomes: "Politically acceptable version that omits dangerous truths"
+    
+    key_decision_points:
+      - stage: 2
+        decision: "Journal Authenticity"
+        choices:
+          - choice: "Journal contains deliberate misinformation"
+            consequences: "Requires careful analysis to separate truth from propaganda"
+          - choice: "Journal is authentic but contradicts official narrative"
+            consequences: "Raises questions about historical accuracy of accepted accounts"
+          - choice: "Journal contains forbidden magical knowledge"
+            consequences: "Possession may be illegal, but knowledge is valuable"
+      
+      - stage: 4
+        decision: "Historical Truth"
+        choices:
+          - choice: "Sky city fell due to internal conflict"
+            consequences: "Politically sensitive but historically accurate"
+          - choice: "Sky city was destroyed by external force still present today"
+            consequences: "Current danger implications requiring immediate attention"
+          - choice: "Sky city never truly fell but transformed"
+            consequences: "Revolutionary understanding of crystal phenomena"
+    
+    potential_twists:
+      - "Someone is actively destroying historical records"
+      - "One interviewee is actually centuries old and witnessed the fall"
+      - "The contradictions suggest multiple sky cities existed"
+      - "Professor Thorngage has hidden agenda for the research"
+    
+    rewards:
+      standard:
+        - "100 gold base payment from Professor Thorngage"
+        - "Academic credentials (advantage on knowledge checks in libraries)"
+      full_disclosure_path:
+        - "250 gold"
+        - "Book: 'The True Fall' (grants advantage on history checks about sky city)"
+        - "Introduction to scholarly contacts in three major cities"
+        - "Possible political enemies (minor noble faction becomes hostile)"
+      edited_path:
+        - "300 gold"
+        - "Political favor from grateful officials (one free major request)"
+        - "Redacted version of historical records (partial information)"
+        - "Professor's secret approval (continued private research support)"
+    
+    follow_up_quests: 
+      full_disclosure_path: ["MQ012", "SQ030"]
+      edited_path: ["MQ010", "SQ031"]
+    
+    related_quests: ["SQ003", "MQ010"]
+    
+    adaptable: false
+
+  - id: "MQ003"
+    title: "Crystalline Contagion"
+    associated_npc: ["Doctor Mira Brighthand", "Councilor Thorne"]
+    type: "Containment/Investigation"
+    difficulty: "Hard"
+    description: |
+      A particularly virulent form of crystal corruption is spreading rapidly 
+      through the region, affecting plants, animals, and potentially people. 
+      Local authorities are desperate for assistance as several villages are 
+      already showing signs of infection, and panic is spreading faster than the contagion.
+    quest_stages:
+      - stage: 1
+        title: "Outbreak Assessment"
+        objectives:
+          - "Establish quarantine perimeter"
+          - "Document spread patterns"
+          - "Identify patient zero"
+        completion_paths:
+          scientific:
+            description: "Methodical research approach to understand the contagion"
+            challenges: "Arcana checks (DC 16), Medicine checks (DC 15), equipment needs (100 gold)"
+            outcomes: "Comprehensive understanding of corruption patterns and transmission vectors"
+          emergency:
+            description: "Rapid response to contain immediate threats"
+            challenges: "Combat with corrupted creatures (CR 3), Athletics checks (DC 14), time pressure (48 hours)"
+            outcomes: "Temporary containment established but less information gathered about root causes"
+          political:
+            description: "Work with local authorities to manage public response"
+            challenges: "Persuasion checks (DC 14), Insight checks (DC 15), navigating bureaucracy (3-day process)"
+            outcomes: "Public cooperation secured, resources from council (200 gold), potential cover-up pressure"
+      
+      - stage: 2
+        title: "Finding the Source"
+        objectives:
+          - "Trace corruption to origin point"
+          - "Secure the primary contamination zone"
+          - "Collect samples for study"
+        completion_paths:
+          cautious:
+            description: "Use protective measures and careful sampling techniques"
+            challenges: "Slow progress (3 days), Arcana checks (DC 17), specialized containers (75 gold)"
+            outcomes: "Safe retrieval of pure samples with minimal contamination risk to researchers"
+          direct:
+            description: "Enter the heart of the contamination zone quickly"
+            challenges: "Constitution saves (DC 15) against corruption, combat with major corrupted entity (CR 4)"
+            outcomes: "Faster results (1 day) but 20% risk of party members becoming infected with minor corruption"
+          proxy:
+            description: "Use local volunteers or expendable resources to collect samples"
+            challenges: "Persuasion checks (DC 16), Deception checks (DC 15), payment to volunteers (150 gold)"
+            outcomes: "Safety for party but ethical questions and potential community resentment (reputation -2)"
+      
+      - stage: 3
+        title: "Alarming Discovery"
+        objectives:
+          - "Analyze findings from source investigation"
+          - "Determine true nature of contamination"
+          - "Decide who to inform about discovery"
+        completion_paths:
+          open_disclosure:
+            description: "Share all findings publicly and transparently"
+            challenges: "Persuasion checks (DC 16), managing public panic, opposition from officials (DC 17)"
+            outcomes: "Full public awareness, potential mass evacuation, government resources mobilized (500 gold)"
+          selective_truth:
+            description: "Inform authorities but manage public information"
+            challenges: "Deception checks (DC 15), Persuasion checks (DC 16), maintaining trust (DC 14)"
+            outcomes: "Controlled official response, potential accusations of concealment later (30% chance)"
+          covert_operation:
+            description: "Keep discovery secret and handle situation discreetly"
+            challenges: "Stealth checks (DC 16), operating without official support, secrecy maintenance (DC 15)"
+            outcomes: "Freedom to act without oversight, potential catastrophic misunderstanding if discovered"
+      
+      - stage: 4
+        title: "The Deliberate Infection"
+        objectives:
+          - "Confront evidence that contamination was intentionally spread"
+          - "Identify responsible faction"
+          - "Decide how to address perpetrators"
+        completion_paths:
+          justice:
+            description: "Gather evidence to bring perpetrators to legal justice"
+            challenges: "Investigation checks (DC 18), evidence collection (DC 16), potential legal obstacles"
+            outcomes: "Public trial initiated, political consequences, potential deeper conspiracies revealed"
+          vigilante:
+            description: "Take direct action against those responsible"
+            challenges: "Combat with well-protected conspirators (CR 5), stealth infiltration (DC 17)"
+            outcomes: "Immediate resolution, potential martyrdom of perpetrators, possible legal consequences"
+          negotiation:
+            description: "Understand motivations and seek compromise"
+            challenges: "Insight checks (DC 16), Persuasion checks (DC 18), difficult ethical considerations"
+            outcomes: "Potential revelation that contamination serves greater purpose, conditional cooperation"
+      
+      - stage: 5
+        title: "Developing a Response"
+        objectives:
+          - "Analyze corruption samples"
+          - "Develop containment or cure"
+          - "Test solution in controlled environment"
+        completion_paths:
+          cure:
+            description: "Create remedy for those already affected"
+            challenges: "Arcana checks (DC 19), Medicine checks (DC 18), rare ingredients quest (three CR 4 encounters)"
+            outcomes: "Ability to cure infected individuals but time-consuming process (1 cure per day per crafter)"
+          containment:
+            description: "Develop method to stop spread and isolate corruption"
+            challenges: "Arcana checks (DC 17), large-scale ritual preparation (300 gold), 5-day setup time"
+            outcomes: "Means to contain but not reverse existing contamination, requires ongoing maintenance"
+          adaptation:
+            description: "Find way to stabilize corruption and integrate safely"
+            challenges: "Medicine checks (DC 18), revolutionary approach (DC 16), resistance from traditionalists"
+            outcomes: "Population retains crystal aspects but without harmful effects, social transformation begins"
+      
+      - stage: 6
+        title: "Implementation"
+        objectives:
+          - "Deploy solution across affected area"
+          - "Deal with any resistant corruption"
+          - "Establish monitoring system"
+        completion_paths:
+          widespread:
+            description: "Blanket the entire region with the solution"
+            challenges: "Logistics checks (DC 15), resource intensive (2000 gold), 2-week operation"
+            outcomes: "Complete resolution across region but high cost and potential side effects (10% chance)"
+          targeted:
+            description: "Focus on critical infection nodes only"
+            challenges: "Investigation checks (DC 16), precision application (DC 15), 1-week operation"
+            outcomes: "Efficient use of resources (800 gold) but requires ongoing vigilance and monitoring"
+          sacrificial:
+            description: "Quarantine and abandon worst-affected areas"
+            challenges: "Persuasion checks (DC 18), evacuation operation (DC 16), ethical burden"
+            outcomes: "Containment of worst infection, creation of permanent exclusion zones, displaced populations"
+    
+    key_decision_points:
+      - stage: 3
+        decision: "Origin discovery"
+        choices:
+          - choice: "Contagion is weaponized by rival nation"
+            consequences: "International diplomatic incident, potential for regional war footing"
+          - choice: "Contagion is experiment by local mage college"
+            consequences: "Institution faces dissolution, new magical regulations, academic fallout"
+          - choice: "Contagion is attempt to accelerate crystal evolution"
+            consequences: "Philosophical division in population about how to respond, religious implications"
+      
+      - stage: 4
+        decision: "Perpetrator confrontation"
+        choices:
+          - choice: "Expose conspiracy publicly"
+            consequences: "Political upheaval, faction warfare, possible information market crash"
+          - choice: "Secret deal with conspirators"
+            consequences: "Access to their advanced research, moral compromise, potential betrayal"
+          - choice: "Eliminate knowledge of deliberate spread"
+            consequences: "Public sees only natural disaster, truth remains hidden, conspiracy continues"
+          
+      - stage: 5
+        decision: "Adaptation approval"
+        choices:
+          - choice: "Support crystal integration into population"
+            consequences: "Beginning of new crystal-human hybrid society, cultural transformation"
+          - choice: "Prevent any permanent crystal changes"
+            consequences: "Maintenance of human purity, ongoing treatment needs, cultural preservation"
+          - choice: "Allow individual choice about crystal integration"
+            consequences: "Social division, emerging crystal-human subspecies, freedom of choice preserved"
+    
+    potential_twists:
+      - "Corruption is actually a defensive response to a worse threat approaching the region"
+      - "A faction is deliberately spreading the corruption for evolutionary purposes they believe beneficial"
+      - "The corruption grants beneficial abilities alongside harmful effects (enhanced senses, lifespan)"
+      - "Corruption is actually an attempt at communication from crystal entity trying to warn of danger"
+      - "The contagion is the first stage of the sky city attempting to rebuild itself using organic matter"
+      - "Patient zero is a transformed spy from ancient sky city civilization with deliberate mission"
+    
+    rewards:
+      standard:
+        - "200 gold initial payment from local authorities"
+        - "Crystal identification training (advantage on checks to identify crystal corruption)"
+      
+      scientific_path:
+        - "400 gold research stipend"
+        - "Crystal Purification Stone (detect and purify minor corruption 1/day)"
+        - "Regional recognition as corruption expert"
+        - "Research journal of findings (valuable to academics, worth 200 gold)"
+      
+      adaptation_path:
+        - "350 gold from research institutions"
+        - "Crystal Affinity (minor beneficial mutation granting resistance to crystal effects)"
+        - "Support from emerging crystal-touched faction"
+        - "Access to unique crystal-integration techniques"
+      
+      sacrificial_path:
+        - "500 gold hazard payment"
+        - "Deed to property in safe zone (worth 1000 gold)"
+        - "Enemies among displaced populations (-2 reputation in certain communities)"
+        - "Containment ward stones (create 10ft barrier against corruption 1/day)"
+      
+      conspiracy_uncovered:
+        - "600 gold bounty on conspirators"
+        - "Political position offer from grateful authority"
+        - "Target status among remaining conspiracy members (occasional assassins)"
+        - "Conspiracy documents (reveals connections to other plots in the region)"
+    
+    follow_up_quests:
+      scientific_path: ["MQ013", "SQ017"] # Monitoring Recovery, Crystal Purification Technology
+      adaptation_path: ["MQ017", "SQ019"] # The New Crystal Society, Personal Adaptation Struggles
+      conspiracy_uncovered: ["MQ018", "SQ018"] # The Deeper Conspiracy, Protecting Whistleblowers
+      sacrificial_path: ["MQ019"] # Secrets of the Exclusion Zone
+    
+    related_quests: ["SQ004", "MQ009"]
+    
+    adaptable: false
+
+  - id: "MQ004"
+    title: "Patterns in the Sky"
+    associated_npc: ["Brenna Stormbow"]
+    type: "Exploration"
+    difficulty: "Hard"
+    description: |
+      Brenna has been tracking the movements of floating islands for months 
+      and believes they're forming a pattern that predicts where the next 
+      major fragment will appear. If correct, this could provide unprecedented 
+      access to a newly arrived sky city fragment before others discover it.
+    quest_stages:
+      - stage: 1
+        title: "Observation Network"
+        objectives:
+          - "Establish observation markers at specific high points"
+          - "Set up recording instruments"
+          - "Create communication network between sites"
+        completion_paths:
+          technological:
+            description: "Use crystal-powered observation devices for precision"
+            challenges: "Arcana checks (DC 16), specialized materials (250 gold), Crafting checks (DC 15)"
+            outcomes: "Automated observation system with high accuracy (90% prediction rate)"
+          traditional:
+            description: "Train local observers using traditional methods"
+            challenges: "Persuasion checks (DC 14), Survival checks (DC 15), payment to volunteers (100 gold)"
+            outcomes: "Network of human observers with local investment in project (75% prediction rate)"
+      
+      - stage: 2
+        title: "Data Collection"
+        objectives:
+          - "Gather movement records over time"
+          - "Document environmental effects around island paths"
+          - "Map crystal density variations near trajectories"
+        completion_paths:
+          thorough:
+            description: "Comprehensive data collection across all variables"
+            challenges: "Intelligence checks (DC 16), 2-week observation period, multiple skill checks (DC 14-16)"
+            outcomes: "Complete dataset with unexpected correlations discovered (celestial alignment patterns)"
+          focused:
+            description: "Target specific movement patterns identified as most critical"
+            challenges: "Investigation checks (DC 17), making correct pattern identification"
+            outcomes: "Faster results (5 days) with targeted data on main trajectory but less context"
+      
+      - stage: 3
+        title: "Pattern Analysis"
+        objectives:
+          - "Interpret collected data"
+          - "Identify convergence point of floating islands"
+          - "Calculate arrival time of major fragment"
+        completion_paths:
+          collaborative:
+            description: "Work with multiple experts to analyze patterns"
+            challenges: "Persuasion checks (DC 15) to recruit experts, funding (150 gold), coordinating viewpoints"
+            outcomes: "Robust prediction with multiple verification methods (95% confidence, 3-day window)"
+          intuitive:
+            description: "Rely on Brenna's instinctive understanding of patterns"
+            challenges: "Wisdom checks (DC 18), Insight checks (DC 16), interpreting vague impressions"
+            outcomes: "Faster prediction (2 days) with spiritual insights but wider timeframe (7-day window)"
+      
+      - stage: 4
+        title: "Expedition Preparation"
+        objectives:
+          - "Prepare for expedition to predicted landing site"
+          - "Gather necessary survival and research equipment"
+          - "Establish advance camp near location"
+        completion_paths:
+          scientific:
+            description: "Focus on research equipment and observation tools"
+            challenges: "Investigation checks (DC 15), specialized equipment (300 gold), Survival checks (DC 14)"
+            outcomes: "Prepared to thoroughly document and study the fragment with advanced instruments"
+          exploratory:
+            description: "Prepare for potential entry into the fragment"
+            challenges: "Athletics checks (DC 15), specialized climbing/delving gear (200 gold), Survival (DC 16)"
+            outcomes: "Ready to explore the fragment's interior with appropriate safety measures"
+      
+      - stage: 5
+        title: "The Arrival"
+        objectives:
+          - "Witness the fragment's arrival"
+          - "Secure initial access to the site"
+          - "Respond to unexpected arrival conditions"
+        completion_paths:
+          methodical:
+            description: "Carefully document the arrival process and secure perimeter"
+            challenges: "Perception checks (DC 16), establishing research camp (DC 14), territorial creatures (CR 3)"
+            outcomes: "Comprehensive understanding of arrival mechanics, stable research position"
+          opportunistic:
+            description: "Be first to access the fragment interior after landing"
+            challenges: "Athletics checks (DC 17), Acrobatics checks (DC 16), crystal guardians (CR 5)"
+            outcomes: "First access to interior chambers and potential artifacts, higher risk"
+          diplomatic:
+            description: "Establish communication with any entities in the fragment"
+            challenges: "Insight checks (DC 17), Persuasion checks (DC 18), potential psychic contact (DC 15)"
+            outcomes: "Potential alliance with fragment inhabitants, access to historical knowledge"
+    
+    key_decision_points:
+      - stage: 3
+        decision: "Fragment Purpose"
+        choices:
+          - choice: "Fragment contains valuable resources to harvest"
+            consequences: "Economic opportunity but potential exploitation risks"
+          - choice: "Fragment is a knowledge repository from sky city"
+            consequences: "Research focus with academic significance"
+          - choice: "Fragment has strategic military importance"
+            consequences: "Security concerns, potential government involvement"
+      
+      - stage: 5
+        decision: "Fragment Inhabitants"
+        choices:
+          - choice: "Fragment contains automated guardians"
+            consequences: "Combat-oriented approach needed, security challenges"
+          - choice: "Fragment contains sentient survivors in stasis"
+            consequences: "Diplomatic opportunities, potential culture shock"
+          - choice: "Fragment is part of living entity"
+            consequences: "Entire approach changes to communication rather than exploration"
+    
+    potential_twists:
+      - "Fragment contains living inhabitants from sky city in suspended animation"
+      - "Fragment arrival will trigger major environmental catastrophe requiring immediate containment"
+      - "Multiple fragments are converging simultaneously, creating a larger structure"
+      - "Fragment's purpose is to reconnect with other pieces to rebuild the sky city"
+      - "The fragment is actually being controlled remotely by an unknown intelligence"
+      - "Time flows differently within the fragment (slower or faster than outside)"
+    
+    rewards:
+      standard:
+        - "150 gold initial payment from Brenna"
+        - "Sky Fragment Map (identifies other potential fragment landing zones)"
+      
+      scientific_path:
+        - "400 gold research grant from academic institution"
+        - "Crystal Navigation Device (advantage on navigation checks when in crystal-influenced areas)"
+        - "Academic recognition and research opportunities in three major cities"
+        - "Data crystals containing sky city astronomical observations"
+      
+      exploratory_path:
+        - "Sky city artifact of significant power (Fragment Key allowing access to sealed sky city structures)"
+        - "Map to other predicted fragment landings (75% accuracy)"
+        - "350 gold from expedition sponsors"
+        - "Crystal climbing gear (+5 to climbing checks in crystalline environments)"
+      
+      diplomatic_path:
+        - "Alliance with fragment consciousnesses or inhabitants"
+        - "Ancient knowledge of crystal manipulation techniques (one unique spell or ability)"
+        - "300 gold worth of sky city cultural artifacts"
+        - "Ongoing communication channel with fragment entities"
+    
+    follow_up_quests:
+      scientific_path: ["MQ014", "SQ032"] # Fragment Research, Academic Publication
+      exploratory_path: ["MQ014", "SQ033"] # Fragment Exploration, Artifact Recovery
+      diplomatic_path: ["MQ015", "SQ034"] # Sky City Emissaries, Cultural Exchange
+    
+    related_quests: ["SQ005", "MQ008"]
+    
+    adaptable: false
+
+# Side quests that provide additional content and rewards
