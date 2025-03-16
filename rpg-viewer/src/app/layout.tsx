@@ -1,7 +1,7 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import Providers from "@/components/Providers"
+import { CrossReferenceProvider } from "@/components/CrossReferenceContext"
 import { getDataByType } from "@/server/utils/contentUtils"
 import type {
 	NpcsFile,
@@ -103,11 +103,11 @@ export default async function RootLayout({
 				suppressHydrationWarning
 			>
 				<CampaignDataProvider initialData={initialData}>
-					<Providers>
+					<CrossReferenceProvider onFileChange={() => {}}>
 						<NavigationDrawerWrapper files={contentFiles}>
 							{children}
 						</NavigationDrawerWrapper>
-					</Providers>
+					</CrossReferenceProvider>
 				</CampaignDataProvider>
 			</body>
 		</html>

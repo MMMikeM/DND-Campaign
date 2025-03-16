@@ -153,6 +153,21 @@ export default function NavigationDrawer({
 		}))
 	}
 
+	// Auto-expand categories based on current path
+	useEffect(() => {
+		if (pathname) {
+			if (pathname.includes("/npcs")) {
+				setExpandedCategories((prev) => ({ ...prev, NPCs: true }))
+			} else if (pathname.includes("/factions")) {
+				setExpandedCategories((prev) => ({ ...prev, Factions: true }))
+			} else if (pathname.includes("/locations")) {
+				setExpandedCategories((prev) => ({ ...prev, Locations: true }))
+			} else if (pathname.includes("/quests")) {
+				setExpandedCategories((prev) => ({ ...prev, Quests: true }))
+			}
+		}
+	}, [pathname])
+
 	// Auto-expand the category of the active file
 	useEffect(() => {
 		if (activeFile) {
