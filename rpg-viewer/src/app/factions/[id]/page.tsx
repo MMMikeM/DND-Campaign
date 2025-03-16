@@ -12,8 +12,6 @@ import { idToName } from "@/server/utils/contentUtils"
 // Types for our components
 type FactionData = z.infer<typeof FactionsFileSchema>
 type Faction = FactionData["factions"][string]
-type FactionLeader = NonNullable<Faction["leadership"]>[number]
-type FactionMember = NonNullable<Faction["members"]>[number]
 
 // Get faction type icon/color
 const getFactionTypeStyle = (type: string) => {
@@ -66,15 +64,15 @@ const getFactionTypeStyle = (type: string) => {
 function FactionHeader({
 	factionId,
 	factionIds,
-	currentFaction,
+	faction,
 	handleFactionChange,
 }: {
 	factionId: string
 	factionIds: string[]
-	currentFaction: Faction
+	faction: Faction
 	handleFactionChange: (e: ChangeEvent<HTMLSelectElement>) => void
 }) {
-	const typeStyle = getFactionTypeStyle(currentFaction.type ?? "default")
+	const typeStyle = getFactionTypeStyle(faction.type ?? "default")
 
 	return (
 		<header className="relative">
@@ -100,7 +98,7 @@ function FactionHeader({
 						{idToName(factionId)}
 					</h1>
 
-					{currentFaction.type && (
+					{faction.type && (
 						<div className="flex items-center mt-2">
 							<span
 								className={[
@@ -115,8 +113,7 @@ function FactionHeader({
 									typeStyle.textClass,
 								].join(" ")}
 							>
-								<span className="mr-1">{typeStyle.icon}</span>{" "}
-								{currentFaction.type}
+								<span className="mr-1">{typeStyle.icon}</span> {faction.type}
 							</span>
 						</div>
 					)}
@@ -167,8 +164,8 @@ function FactionGoals({ faction }: { faction: Faction }) {
 }
 
 // Description section component
-function FactionDescription({ description }: { description?: string }) {
-	if (!description) return null
+function FactionDescription({ faction }: { faction: Faction }) {
+	if (!faction.description) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
@@ -179,15 +176,17 @@ function FactionDescription({ description }: { description?: string }) {
 				</h2>
 			</div>
 			<div className="p-4">
-				<p className="text-gray-700 dark:text-gray-300">{description}</p>
+				<p className="text-gray-700 dark:text-gray-300">
+					{faction.description}
+				</p>
 			</div>
 		</div>
 	)
 }
 
 // Resources section component
-function FactionResources({ resources }: { resources?: string[] }) {
-	if (!resources || resources.length === 0) return null
+function FactionResources({ faction }: { faction: Faction }) {
+	if (!faction.resources || faction.resources.length === 0) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
@@ -199,7 +198,7 @@ function FactionResources({ resources }: { resources?: string[] }) {
 			</div>
 			<div className="p-4">
 				<ul className="space-y-2 dark:text-gray-300">
-					{resources.map((resource) => (
+					{faction.resources.map((resource) => (
 						<li key={`resource-${resource}`} className="flex items-start">
 							<span className="text-gray-400 mr-2 mt-1">•</span>
 							<span>{resource}</span>
@@ -212,8 +211,8 @@ function FactionResources({ resources }: { resources?: string[] }) {
 }
 
 // Leadership section component
-function FactionLeadership({ leadership }: { leadership?: FactionLeader[] }) {
-	if (!leadership || leadership.length === 0) return null
+function FactionLeadership({ faction }: { faction: Faction }) {
+	if (!faction.leadership || faction.leadership.length === 0) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
@@ -224,7 +223,7 @@ function FactionLeadership({ leadership }: { leadership?: FactionLeader[] }) {
 				</h2>
 			</div>
 			<div className="p-4 grid grid-cols-1 gap-4">
-				{leadership.map((leader) => (
+				{faction.leadership.map((leader) => (
 					<div
 						key={`leader-${leader.name}`}
 						className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-800/70 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
@@ -260,8 +259,8 @@ function FactionLeadership({ leadership }: { leadership?: FactionLeader[] }) {
 }
 
 // Territory section component
-function FactionTerritory({ territory }: { territory?: string }) {
-	if (!territory) return null
+function FactionTerritory({ faction }: { faction: Faction }) {
+	if (!faction.territory) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
@@ -272,17 +271,17 @@ function FactionTerritory({ territory }: { territory?: string }) {
 				</h2>
 			</div>
 			<div className="p-4">
-				<p className="text-gray-700 dark:text-gray-300">{territory}</p>
+				<p className="text-gray-700 dark:text-gray-300">{faction.territory}</p>
 			</div>
 		</div>
 	)
 }
 
 // Relations section component (allies & enemies)
-function FactionRelations({
-	allies,
-	enemies,
-}: { allies?: string[]; enemies?: string[] }) {
+function FactionRelations({ faction }: { faction: Faction }) {
+	const allies = faction.allies
+	const enemies = faction.enemies
+
 	if ((!allies || allies.length === 0) && (!enemies || enemies.length === 0))
 		return null
 
@@ -336,8 +335,8 @@ function FactionRelations({
 }
 
 // Notes section component
-function FactionNotes({ notes }: { notes?: string }) {
-	if (!notes) return null
+function FactionNotes({ faction }: { faction: Faction }) {
+	if (!faction.notes) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-amber-200 dark:border-amber-800/30 shadow-sm overflow-hidden">
@@ -349,7 +348,7 @@ function FactionNotes({ notes }: { notes?: string }) {
 			</div>
 			<div className="p-4">
 				<div className="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-					{notes}
+					{faction.notes}
 				</div>
 			</div>
 		</div>
@@ -357,8 +356,8 @@ function FactionNotes({ notes }: { notes?: string }) {
 }
 
 // Members section component
-function FactionMembers({ members }: { members?: FactionMember[] }) {
-	if (!members || members.length === 0) return null
+function FactionMembers({ faction }: { faction: Faction }) {
+	if (!faction.members || faction.members.length === 0) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
@@ -369,7 +368,7 @@ function FactionMembers({ members }: { members?: FactionMember[] }) {
 				</h2>
 			</div>
 			<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-				{members.map((member) => (
+				{faction.members.map((member) => (
 					<div
 						key={`member-${member.name}`}
 						className="p-3 bg-gray-50 dark:bg-gray-800/40 rounded-md border border-gray-200 dark:border-gray-700"
@@ -392,10 +391,13 @@ function FactionMembers({ members }: { members?: FactionMember[] }) {
 
 // Quests section component
 function FactionQuests({
-	quests,
+	faction,
 	navigateToFile,
-}: { quests?: string[]; navigateToFile: (path: string) => void }) {
-	if (!quests || quests.length === 0) return null
+}: {
+	faction: Faction
+	navigateToFile: (path: string) => void
+}) {
+	if (!faction.quests || faction.quests.length === 0) return null
 
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-indigo-200 dark:border-indigo-800/30 shadow-sm overflow-hidden">
@@ -407,7 +409,7 @@ function FactionQuests({
 			</div>
 			<div className="p-4">
 				<ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-					{quests.map((quest) => (
+					{faction.quests.map((quest) => (
 						<li key={`quest-${quest}`} className="relative">
 							<button
 								className="w-full text-left p-2 rounded-md bg-indigo-50 dark:bg-indigo-900/10 hover:bg-indigo-100 dark:hover:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/30 transition-colors flex items-center text-indigo-700 dark:text-indigo-300"
@@ -477,24 +479,21 @@ export default function FactionPage({ params }: { params: { id: string } }) {
 					<FactionHeader
 						factionId={factionId}
 						factionIds={factionIds}
-						currentFaction={currentFaction}
+						faction={currentFaction}
 						handleFactionChange={handleFactionChange}
 					/>
 
 					<main className="p-6 pt-2 space-y-6">
 						<FactionGoals faction={currentFaction} />
-						<FactionDescription description={currentFaction.description} />
-						<FactionResources resources={currentFaction.resources} />
-						<FactionLeadership leadership={currentFaction.leadership} />
-						<FactionTerritory territory={currentFaction.territory} />
-						<FactionRelations
-							allies={currentFaction.allies}
-							enemies={currentFaction.enemies}
-						/>
-						<FactionNotes notes={currentFaction.notes} />
-						<FactionMembers members={currentFaction.members} />
+						<FactionDescription faction={currentFaction} />
+						<FactionResources faction={currentFaction} />
+						<FactionLeadership faction={currentFaction} />
+						<FactionTerritory faction={currentFaction} />
+						<FactionRelations faction={currentFaction} />
+						<FactionNotes faction={currentFaction} />
+						<FactionMembers faction={currentFaction} />
 						<FactionQuests
-							quests={currentFaction.quests}
+							faction={currentFaction}
 							navigateToFile={navigateToFile}
 						/>
 					</main>

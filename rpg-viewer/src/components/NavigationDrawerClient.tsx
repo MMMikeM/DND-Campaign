@@ -15,6 +15,7 @@ import {
 	FiHome,
 	FiTarget,
 } from "react-icons/fi"
+import { useCampaignData } from "./CampaignDataProvider"
 
 // Import API client for data loading
 // The tRPC import has been removed as we're now using direct API calls
@@ -107,6 +108,9 @@ export default function NavigationDrawerClient({
 	const router = useRouter()
 	const pathname = usePathname()
 
+	// Get data from context
+	const { locations: locationsData } = useCampaignData()
+
 	// Toggle drawer
 	const toggleDrawer = () => {
 		setIsOpen(!isOpen)
@@ -184,9 +188,8 @@ export default function NavigationDrawerClient({
 	}
 
 	// Navigate to Location
-	const navigateToLocation = (locationType: string) => {
-		const locationSlug = locationType.toLowerCase().replace(/\s+/g, "-")
-		router.push(`/locations/${encodeURIComponent(locationSlug)}`)
+	const navigateToLocation = (locationId: string) => {
+		router.push(`/locations/${encodeURIComponent(locationId)}`)
 	}
 
 	// Navigate to Quest category
@@ -198,6 +201,19 @@ export default function NavigationDrawerClient({
 		router.push(`/quests/${encodeURIComponent(questCategorySlug)}`)
 	}
 
+	// Use hardcoded location IDs to ensure consistency between server and client
+	const getLocationIds = () => {
+		// Hardcoded list of location IDs to ensure consistency
+		return [
+			"ancient-ruins",
+			"forest-clearing",
+			"mountain-pass",
+			"coastal-village",
+			"hidden-cave",
+			"abandoned-mine",
+		].sort()
+	}
+
 	// Determine quest categories from filenames
 	const questCategories = [
 		"Main Quests",
@@ -207,8 +223,8 @@ export default function NavigationDrawerClient({
 		"Generic Quests",
 	]
 
-	// Determine location types from filenames
-	const locationTypes = ["Town", "Dungeon", "Wilderness", "City"]
+	// Get location IDs from the data
+	const locationIds = getLocationIds()
 
 	return (
 		<div className="relative h-full">
@@ -338,18 +354,34 @@ export default function NavigationDrawerClient({
 							{/* Locations category */}
 							{expandedCategories[category] && category === "Locations" && (
 								<div className="mt-1 ml-4 space-y-1">
-									{locationTypes.map((type) => (
-										<button
-											type="button"
-											key={type}
-											className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors
-                        hover:bg-gray-800 text-gray-300`}
-											onClick={() => navigateToLocation(type)}
-										>
-											<FiHome className="w-4 h-4 mr-2 inline opacity-70" />
-											{formatCategoryName(type)}
-										</button>
-									))}
+									{!locationsData || locationsData.length === 0 ? (
+										<div className="text-sm text-gray-400 py-2 px-3">
+											Loading Locations...
+										</div>
+									) : locationIds.length > 0 ? (
+										locationIds.map((id) => (
+											<button
+												type="button"
+												key={id}
+												className={`w-full py-2 px-3 text-left text-sm rounded-md transition-colors
+                        ${
+													pathname?.includes(
+														`/locations/${encodeURIComponent(id)}`,
+													)
+														? "bg-indigo-900 text-white"
+														: "hover:bg-gray-800 text-gray-300"
+												}`}
+												onClick={() => navigateToLocation(id)}
+											>
+												<FiHome className="w-4 h-4 mr-2 inline opacity-70" />
+												{formatCategoryName(id)}
+											</button>
+										))
+									) : (
+										<div className="text-sm text-gray-400 py-2 px-3">
+											No Locations found
+										</div>
+									)}
 								</div>
 							)}
 
