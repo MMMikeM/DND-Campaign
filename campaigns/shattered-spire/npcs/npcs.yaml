@@ -1,0 +1,453 @@
+# yaml-language-server: $schema=./.schema.json
+title: "Shattered Spire Generic NPCs and Quests"
+version: "1.0"
+description: |
+  A collection of NPCs and associated questlines that can be dropped into any 
+  location in the Shattered Spire campaign. These characters can be adapted 
+  to fit various settings, providing on-the-fly content for player exploration.
+  
+  Quest details are stored in shattered-spire-quests.yaml and referenced by ID.
+
+# Schema definition:
+# - title: string
+# - version: string
+# - description?: string
+# - npcs: Npc[] (array of NPC objects)
+#
+# Npc schema:
+#   - name: string
+#   - role: string (the NPC's occupation or position)
+#   - location?: string (where the NPC can typically be found)
+#   - description: string | string[] (detailed physical description, as paragraph or bullet points)
+#   - personality: string | string[] (behavior and character traits, as paragraph or bullet points)
+#   - motivation: string (what drives this character)
+#   - secret?: string (hidden information about the NPC)
+#   - stats?: string (suggestion for game statistics)
+#   - quests?: string[] (quest IDs associated with this NPC)
+#   - relationships?: string[] (connections to other characters/factions)
+#   - affiliations?: string[] (groups the NPC belongs to or works with)
+#   - inventory?: string[] (notable items the NPC possesses)
+
+npcs:
+  # MERCHANTS AND TRADERS
+  - name: "Orin Blackhand"
+    role: "Gem Trader"
+    location: "Traveling merchant, often found in marketplaces"
+    description:
+      - "Short even for a dwarf, with a meticulously groomed black beard adorned with tiny crystal beads."
+      - "Deep-set eyes that dart nervously. Wears multiple layers of clothing with obvious weapon bulges."
+      - "His hands are stained with mineral residue and he constantly wears gloves with crystal-reinforced knuckles."
+    personality:
+      - "Jumpy and suspicious, speaking in hushed tones as if constantly being overheard."
+      - "Despite his paranoia, he's a shrewd trader with encyclopedic knowledge of gems."
+      - "Becomes animated and almost normal when discussing crystal properties."
+      - "Has a habit of stopping mid-sentence to listen to things others can't hear."
+    motivation: "Believes crystals are whispering to him and wants to understand their messages"
+    secret: "Slowly being influenced by crystal corruption from handling too many specimens"
+    stats: "Use Commoner stats with proficiency in Arcana for crystal knowledge"
+    quests:
+      - "escort_merchant"
+      - "whispering_crystals"
+    relationships:
+      - "Cautious supplier to the Merchant Guild"
+      - "Unwitting informant to Crystal Seekers who buy from him"
+    inventory:
+      - "Collection of rare crystal specimens"
+      - "Several hidden weapons"
+      - "Crystal-detection lens"
+
+  - name: "Lyssa Silverweave"
+    role: "Textile Merchant"
+    location: "Permanent shop in any major settlement"
+    description:
+      - "Elegant woman in her forties with silver-streaked dark hair always styled impeccably."
+      - "Wears her own creations - flowing garments with subtle crystal thread patterns that catch the light."
+      - "Her fingers are long and nimble, with calluses from years of weaving."
+      - "A small crystal monocle hangs from a silver chain."
+    personality:
+      - "Charismatic and socially adept, with a talent for remembering names and personal details."
+      - "Speaks with a melodious voice that draws people in."
+      - "Fiercely competitive in business but hides it behind a veneer of warm courtesy."
+      - "Obsessively secretive about her weaving techniques."
+    motivation: "Secretly weaves crystal threads into her fabrics to create subtle enchantments"
+    secret: "Her crystal fabrics record conversations held near them"
+    stats: "Use Noble stats with proficiency in Persuasion"
+    quests:
+      - "rare_materials"
+    relationships:
+      - "Supplier to regional nobility"
+      - "Has unwittingly created garments for Crystal Seeker cultists"
+    inventory:
+      - "Crystal-enhanced loom"
+      - "Collection of enchanted textiles"
+      - "Crystal monocle that reveals magic"
+
+  # SCHOLARS AND RESEARCHERS
+  - name: "Professor Aldwin Thorngage"
+    role: "Historian"
+    location: "Small cluttered office in any academic institution"
+    description:
+      - "Stooped elderly human man with wild white hair and bushy eyebrows."
+      - "Spectacles perpetually sliding down his nose."
+      - "Wears layered academic robes with countless pockets stuffed with notes, writing implements, and odd trinkets."
+      - "Walks with a cane that has crystal inlays and serves as both a walking aid and a pointing tool."
+    personality:
+      - "Brilliant but scattered, frequently losing track of conversations to pursue tangential thoughts."
+      - "Becomes intensely focused when discussing history."
+      - "Kind-hearted but oblivious to social cues."
+      - "Peppers speech with archaic expressions and references to obscure historical events as if everyone would understand them."
+    motivation: "Collecting conflicting accounts of sky city's fall to determine the truth"
+    secret: "Has fragmentary memories of witnessing the sky city fall as a much younger man"
+    stats: "Use Sage stats with expertise in History"
+    quests:
+      - "lost_research"
+      - "historical_accounts"
+    relationships:
+      - "Respected but often dismissed colleague in academic circles"
+      - "Once apprenticed the Crystal Seekers' Professor Vex"
+    inventory:
+      - "Ancient crystal-inscribed tablet fragments"
+      - "Crystal-inlaid walking cane"
+      - "Journal full of seemingly random observations that form a pattern"
+
+  - name: "Kel Brightstone"
+    role: "Crystal Researcher"
+    location: "Makeshift laboratory near crystal formations"
+    description:
+      - "Youthful half-elf with angular features and a shock of unnaturally blue hair."
+      - "Left arm has a lattice of fine crystal growths implanted under the skin that glow faintly when excited."
+      - "Wears practical clothing with numerous protective runes sewn in."
+      - "A magnifying monocle with multiple lenses on a swivel apparatus is always within reach."
+    personality:
+      - "Speaks rapidly and enthusiastically about research, often using technical jargon."
+      - "Dismissive of safety concerns and eager to self-experiment."
+      - "Competitive and desperate to make a significant discovery."
+      - "Shows more empathy for crystals than people, treating them almost as living entities."
+      - "Fidgety when not actively working."
+    motivation: "Testing crystal resonance on living subjects to understand transformation potential"
+    secret: "Already experiencing mental changes from crystal self-experimentation"
+    stats: "Use Mage stats with focus on transmutation magic"
+    quests:
+      - "crystal_samples"
+    relationships:
+      - "Former student of Merielle Stormwind who went in a dangerous direction"
+      - "Unwitting test subject for Crystal Ascendancy observations"
+    inventory:
+      - "Self-designed crystal analysis tools"
+      - "Journals documenting transformation experiments"
+      - "Collection of crystal samples in various stages of resonance"
+
+  # ADVENTURERS AND EXPLORERS
+  - name: "Brenna Stormbow"
+    role: "Wilderness Guide"
+    location: "Campsites on the edges of settlements"
+    description:
+      - "Lean, muscular woman with sun-weathered skin and hair bleached by the elements, kept in a practical braid."
+      - "Face bears a scar across her left cheek from a crystal shard explosion."
+      - "Wears well-maintained leathers with sky-blue accents and carries a bow with crystalline inlays."
+      - "Multiple crude star charts are tattooed on her forearms."
+    personality:
+      - "Quiet and observant, speaking only when necessary but warm once trust is established."
+      - "Has more patience for natural challenges than social complications."
+      - "Methodical and organized in approach to exploration."
+      - "Deeply spiritual about the night sky, believing the stars contain messages."
+      - "Becomes visibly uncomfortable in enclosed spaces."
+    motivation: "Mapped several floating island positions over time, seeking a pattern"
+    secret: "Can predict where floating islands will appear next through star observations"
+    stats: "Use Ranger stats with favored terrain of mountainous regions"
+    quests:
+      - "crystal_formation_guide"
+      - "track_islands"
+    relationships:
+      - "Occasional information supplier to Star Monks"
+      - "Sister was lost to crystal corruption, now assumed dead"
+    inventory:
+      - "Maps of floating island patterns"
+      - "Crystal-inlaid bow that never misses natural targets"
+      - "Star chart that updates itself mysteriously"
+
+  - name: "Varric Tetherson"
+    role: "Treasure Hunter"
+    location: "Taverns in frontier settlements"
+    description:
+      - "Barrel-chested dwarf with a flamboyant red beard braided with golden rings."
+      - "Missing his right ear and covers it with an ornate crystal earpiece."
+      - "Wears battle-scarred armor polished to a shine, with trophies from various monsters attached as decorations."
+      - "Carries an oversized battleaxe that has a crystal embedded in its head."
+    personality:
+      - "Loud and theatrical, dominating conversations with increasingly outlandish tales."
+      - "Genuinely brave but embellishes his exploits to legendary proportions."
+      - "Loyal to friends but quick to take offense at perceived slights."
+      - "Harbors a deep fear of being forgotten or deemed unimportant."
+      - "Surprisingly gentle with animals and children."
+    motivation: "Claims to have been inside the largest floating island and seeks to return"
+    secret: "His crystal earpiece lets him hear whispers from the sky city"
+    stats: "Use Veteran stats with high Strength and Constitution"
+    quests:
+      - "lost_companion"
+    relationships:
+      - "Drinking buddy of several Merchant Guild guards"
+      - "Has sold artifacts to Lord Asterin of the Court of Stars"
+    inventory:
+      - "Crystal-embedded battleaxe that vibrates near crystal deposits"
+      - "Collection of supposedly magical trinkets (mostly fake)"
+      - "One genuine sky city artifact he doesn't recognize the importance of"
+
+  # LOCALS AND TOWNSFOLK
+  - name: "Clara Millhand"
+    role: "Farmer"
+    location: "Family farm outside any settlement"
+    description:
+      - "Sturdy woman in her thirties with calloused hands and sun-darkened skin."
+      - "Always wears a worn straw hat to protect from the sun."
+      - "Simple, practical clothing with numerous repairs."
+      - "Has a crystal pendant she tries to hide, believing it protects her family."
+      - "Walks with a slight limp from an old farming accident."
+    personality:
+      - "Direct and plainspoken with little patience for fancy talk."
+      - "Fiercely protective of her children and land."
+      - "Practical problem-solver who values action over words."
+      - "Deeply superstitious, following old farming traditions and omens."
+      - "Suspicious of magic but willing to accept help when her family's welfare is at stake."
+    motivation: "Protect her family from the strange crop patterns forming near crystal deposits"
+    secret: "Her youngest child has started manifesting crystal-related abilities"
+    stats: "Use Commoner stats with unusual wisdom and perception"
+    quests:
+      - "farm_vermin"
+      - "crop_patterns"
+    relationships:
+      - "Supplies food to local settlements"
+      - "Her brother works as a guard for the Merchant Guild"
+    inventory:
+      - "Protective crystal pendant passed down through generations"
+      - "Farming tools with unusual resiliency to crystal corruption"
+
+  - name: "Mikkel Brewerson"
+    role: "Innkeeper"
+    location: "Tavern in any settlement"
+    description:
+      - "Imposing half-orc with graying temples and a neatly trimmed beard."
+      - "Wears an immaculate apron over simple but quality clothing."
+      - "Has a crystal-embedded prosthetic left hand that he's surprisingly dexterous with."
+      - "Warm smile that transforms his otherwise intimidating features."
+    personality:
+      - "Friendly and welcoming host with a remarkable memory for names and preferences."
+      - "Listens more than he speaks, collecting stories and information."
+      - "Firm but fair when handling rowdy customers."
+      - "Deeply curious about the world but content with his chosen profession."
+      - "Proud of his establishment and the community it serves."
+    motivation: "Collecting stories about crystal dreams from travelers to understand a pattern"
+    secret: "His prosthetic hand allows him to sense emotional states through crystal resonance"
+    stats: "Use Commoner stats with high Charisma and Wisdom"
+    quests:
+      - "strange_guest"
+    relationships:
+      - "Neutral ground provider for meetings between factions"
+      - "Former adventurer with connections to regional mercenary groups"
+    inventory:
+      - "Crystal-embedded prosthetic hand"
+      - "Collection of unusual drinks with minor magical properties"
+      - "Hidden weapons behind the bar"
+
+  # CRIMINALS AND ROGUES
+  - name: "The Shimmer"
+    role: "Master Thief"
+    location: "Appears in high-security locations then vanishes"
+    description:
+      - "Slender figure in form-fitting dark clothing that seems to absorb light."
+      - "Wears a reflective crystal mask that obscures all facial features and subtly changes appearance depending on the viewing angle."
+      - "Moves with unnatural grace and precision."
+      - "Gloved hands occasionally reveal glimpses of crystalline skin beneath when performing intricate tasks."
+    personality:
+      - "Speaks rarely and in a voice artificially modulated by the mask."
+      - "When they do speak, they're precise and formal, using antiquated phrases."
+      - "Displays a peculiar code of honor, never harming innocents."
+      - "Seems to possess knowledge of crystal artifacts that predates current understanding."
+      - "Shows occasional flashes of dry humor despite their mysterious demeanor."
+    motivation: "Steals only crystal artifacts of a specific type for unknown purposes"
+    secret: "Actually a projection of a consciousness trapped in the sky city"
+    stats: "Use Master Thief stats with supernatural stealth abilities"
+    quests:
+      - "track_thief"
+      - "shimmer_purpose"
+    relationships:
+      - "Urban legend among security forces"
+      - "Has stolen from both the Crystal Seekers and the Court of Stars"
+    inventory:
+      - "Crystal mask that alters perception"
+      - "Collection of stolen crystal artifacts with a specific resonance pattern"
+      - "Tools that seem technologically impossible for the setting"
+
+  - name: "Darius Quickfingers"
+    role: "Smuggler"
+    location: "Black markets and back alleys of larger settlements"
+    description:
+      - "Handsome human man with a carefully maintained goatee and a roguish smile."
+      - "One green eye and one with a crystal iris that shifts color subtly."
+      - "Dresses in fine but practical clothing that allows for quick movement."
+      - "Multiple hidden pockets and compartments in his garments."
+      - "Wears rings with small mechanisms built into them."
+    personality:
+      - "Charismatic and quick-witted, able to talk his way into and out of most situations."
+      - "Maintains a façade of carefree confidence that masks careful planning and caution."
+      - "Treats smuggling as both an art form and a business."
+      - "Surprisingly principled about certain lines he won't cross."
+      - "Struggles with growing crystal influence that grants benefits but causes concerning changes."
+    motivation: "Discovered unusual crystal effects on certain contraband and exploits this"
+    secret: "His crystalline eye lets him see magical auras but is slowly spreading"
+    stats: "Use Spy stats with expertise in Deception"
+    quests:
+      - "deliver_package"
+    relationships:
+      - "Has smuggled items for most major factions"
+      - "Former lover of a high-ranking Merchant Guild member"
+    inventory:
+      - "Collection of mechanical rings with various effects"
+      - "Crystal contraband with enhanced properties"
+      - "Map of secret routes throughout the region"
+
+  # MAGICAL ENTITIES
+  - name: "Crystallis"
+    role: "Crystal Elemental"
+    location: "Found near pure crystal formations"
+    description:
+      - "Small humanoid figure roughly three feet tall, composed entirely of translucent crystal that shifts between colors based on mood and communication."
+      - "Internal lights pulse in patterns when it communicates."
+      - "Form is fluid, occasionally growing new appendages or features as needed."
+      - "Can partially dissolve into a crystalline mist when threatened."
+    personality:
+      - "Curious and innocent as a child, discovering the world with wonder."
+      - "Communicates through light patterns, emotional impressions, and broken fragments of language it has absorbed."
+      - "Has difficulty understanding human concepts of time and mortality."
+      - "Shows attachments to certain individuals who treat it kindly."
+      - "Becomes distressed around corrupted crystal formations."
+    motivation: "Separated from larger consciousness in sky city and seeking to reconnect"
+    secret: "Contains a fragment of the sky city's central consciousness"
+    stats: "Use Minor Elemental stats with crystal-based abilities"
+    quests:
+      - "crystal_host"
+      - "reconnect_consciousness"
+    relationships:
+      - "Hunted by the Crystal Seekers"
+      - "Protected by certain Star Monks who understand its nature"
+    inventory:
+      - "Its own crystalline body can reshape into simple tools"
+      - "Stores memories as colored light patterns"
+
+  - name: "Vexalia"
+    role: "Corrupted Fey"
+    location: "Ancient groves near crystal formations"
+    description:
+      - "Unnaturally beautiful fey woman with skin that transitions from normal flesh to faceted crystal formations."
+      - "Long hair like spun crystal that moves as if underwater."
+      - "Eyes with kaleidoscopic crystal irises."
+      - "Wears elaborate garments made from impossibly thin crystal sheets that chime softly when she moves."
+      - "Left arm entirely crystallized with sharp-edged fingers."
+    personality:
+      - "Mercurial and unpredictable, shifting between charming graciousness and cold cruelty without warning."
+      - "Speaks in riddles and bargains, never giving information freely."
+      - "Ancient perspective makes mortal concerns seem trivial."
+      - "Obsessed with collecting memories and experiences to replace those lost to crystallization."
+      - "Occasionally shows moments of wistful regret for her transformation."
+    motivation: "Trades crystal-infused favors for memories to restore her fading identity"
+    secret: "Was present when the sky city fell and partially caused its crystallization"
+    stats: "Use Archfey stats with crystal-themed abilities"
+    quests:
+      - "retrieve_item"
+      - "fey_bargain"
+    relationships:
+      - "Ancient enemy of the Crystal Dragon"
+      - "Has made bargains with members of all major factions"
+    inventory:
+      - "Collection of crystallized memories"
+      - "Fey artifacts partially transformed by crystal energy"
+      - "Shards of the original sky city impact"
+
+# Generic NPCs that can be placed anywhere
+generic_npcs:
+  - name: "Guard Captain Torval"
+    role: "Town Guard Captain"
+    location: "Guard headquarters in any settlement"
+    description:
+      - "Broad-shouldered human man in his fifties with salt-and-pepper hair cut short and a well-maintained mustache."
+      - "Wears standard guard armor but with crystal-reinforced panels."
+      - "Has a crystal shard embedded in his shoulder from an old wound that occasionally glows when he's agitated."
+      - "Walks with perfect posture despite his age."
+    personality:
+      - "Stern and by-the-book, with little tolerance for excuses."
+      - "Protective of his town and guards with a fatherly attitude."
+      - "Secretly fears the growing crystal influence but maintains a stoic facade."
+      - "Values order above all else."
+      - "Surprisingly compassionate when dealing with those who have legitimate problems."
+    motivation: "Tracking pattern of crystal-related crimes to protect his community"
+    secret: "The crystal in his shoulder lets him sense when crystal-corrupted individuals are nearby"
+    stats: "Use Veteran stats with leadership abilities"
+    quests:
+      - "investigate_corruption"
+      - "guard_escort"
+    relationships:
+      - "Respected authority figure in local community"
+      - "Uneasy alliance with Sheriff Branna in shared jurisdictions"
+    inventory:
+      - "Crystal-reinforced armor"
+      - "Well-maintained sword and shield"
+      - "Registry of crystal-related incidents"
+
+  - name: "Magister Ella Brightmoon"
+    role: "Town Official"
+    location: "Town hall or administrative building"
+    description:
+      - "Slender half-elf woman with prematurely graying hair always tied in a perfect bun."
+      - "Wears formal robes with subtle magical enhancements."
+      - "Multiple enchanted quills hover near her at all times, taking notes."
+      - "Fidgets with a crystal-topped stylus when thinking."
+      - "Usually surrounded by floating documents."
+    personality:
+      - "Speaks precisely and formally, using technical terms and legal language."
+      - "Appears coldly efficient but actually cares deeply about her community."
+      - "Exhausted by endless crystal-related problems requiring administrative solutions."
+      - "Frustrated by lack of resources."
+      - "Has a dry, unexpected sense of humor that emerges rarely."
+    motivation: "Documenting crystal-related incidents officially to establish patterns"
+    secret: "Using bureaucracy to deliberately slow dangerous crystal research"
+    stats: "Use Noble stats with high Intelligence"
+    quests:
+      - "document_recovery"
+      - "bureaucratic_investigation"
+    relationships:
+      - "Official liaison between local government and factions"
+      - "Distant relation to Lord Asterin of the Court of Stars"
+    inventory:
+      - "Crystal-topped stylus with minor enchantments"
+      - "Enchanted quills that record conversations"
+      - "Organized records of regional crystal incidents"
+
+  - name: "Traveler Jax"
+    role: "Wandering Merchant"
+    location: "Roads between settlements or marketplaces"
+    description:
+      - "Weathered human of indeterminate age with tanned skin and laugh lines."
+      - "Dresses in colorful but practical traveling clothes from various cultures."
+      - "Wears a backpack containing numerous pouches and small compartments."
+      - "Various minor crystal trinkets hang from his belt and hat brim."
+      - "Missing two fingers on his left hand."
+    personality:
+      - "Gregarious and full of stories from far-off places, some true and some embellished."
+      - "Speaks with different regional accents depending on his mood."
+      - "Intensely curious about new experiences."
+      - "Trades in information as much as goods."
+      - "Surprisingly insightful about human nature."
+      - "Has a talent for being in the right place at interesting times."
+    motivation: "Collects stories about crystal phenomena worldwide to map its spread"
+    secret: "Actually an agent of a distant kingdom assessing the crystal threat"
+    stats: "Use Bard stats with expertise in Persuasion"
+    quests:
+      - "deliver_message"
+      - "gather_information"
+    relationships:
+      - "Knows merchants in every settlement"
+      - "Has unintentionally carried crystal-corrupted items between regions"
+    inventory:
+      - "Collection of trinkets from all over the world"
+      - "Journal documenting crystal phenomena in distant lands"
+      - "Secret communication devices disguised as ordinary items"

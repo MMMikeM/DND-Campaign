@@ -1,37 +1,37 @@
 {
-  "name": "rpg-viewer",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.68.0",
-    "@trpc/client": "^11.0.0-rc.833",
-    "@trpc/next": "^11.0.0-rc.833",
-    "@trpc/react-query": "^11.0.0-rc.833",
-    "@trpc/server": "^11.0.0-rc.833",
-    "@types/js-yaml": "^4.0.9",
-    "js-yaml": "^4.1.0",
-    "next": "15.2.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0",
-    "superjson": "^2.2.2",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.2",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+	"name": "rpg-viewer",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"generate-schemas": "tsx src/server/utils/generateSchemas.ts"
+	},
+	"dependencies": {
+		"@types/js-yaml": "^4.0.9",
+		"glob": "^11.0.1",
+		"js-yaml": "^4.1.0",
+		"json-schema-to-zod": "^2.6.0",
+		"next": "15.2.2",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-icons": "^5.5.0",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20.17.24",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-next": "15.2.2",
+		"tailwindcss": "^4",
+		"ts-node": "^10.9.2",
+		"tsx": "^4.7.1",
+		"typescript": "~5.7.0"
+	},
+	"packageManager": "pnpm@9.14.2"
 }

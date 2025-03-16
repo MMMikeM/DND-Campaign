@@ -1,44 +1,49 @@
-// Use the Next.js server-only package to ensure this code only runs on the server
-import "server-only";
-import fs from "fs";
+"use server"
+import { promises as fsPromises } from "fs";
 import path from "path";
 
 // Export functions that interact with the file system
-export function readFile(filePath: string): string {
-	return fs.readFileSync(filePath, "utf8");
-}
-
-export function fileExists(filePath: string): boolean {
-	return fs.existsSync(filePath);
-}
-
-export function readDirectory(dirPath: string): string[] {
-	return fs.readdirSync(dirPath);
-}
-
-export function makeDirectory(dirPath: string): void {
-	fs.mkdirSync(dirPath, { recursive: true });
-}
-
-export function copyFile(srcPath: string, destPath: string): void {
-	fs.copyFileSync(srcPath, destPath);
-}
-
-export function getPathJoin(...paths: string[]): string {
-	return path.join(...paths);
-}
-
-export function getBasename(filePath: string): string {
-	return path.basename(filePath);
-}
-
-export function getYAMLFilesInDirectory(dirPath: string): string[] {
+export const readFile = async (filePath: string): Promise<string> => {
 	try {
-		if (!fileExists(dirPath)) {
+		return await fsPromises.readFile(filePath, "utf8");
+	} catch (error) {
+		throw new Error(`Failed to read file ${filePath}: ${(error as Error).message}`);
+	}
+};
+
+export const fileExists = async (filePath: string): Promise<boolean> => {
+	try {
+		await fsPromises.access(filePath);
+		return true;
+	} catch {
+		return false;
+	}
+};
+
+export const readDirectory = async (dirPath: string): Promise<string[]> => {
+	try {
+		return await fsPromises.readdir(dirPath);
+	} catch (error) {
+		throw new Error(`Failed to read directory ${dirPath}: ${(error as Error).message}`);
+	}
+};
+
+export const getPathJoin = async (...paths: string[]): Promise<string> => {
+	return path.join(...paths);
+};
+
+export const getBasename = async (filePath: string): Promise<string> => {
+	return path.basename(filePath);
+};
+
+export const getYAMLFilesInDirectory = async (dirPath: string): Promise<string[]> => {
+	try {
+		if (!(await fileExists(dirPath))) {
 			return [];
 		}
 
-		return readDirectory(dirPath).filter(
+		const files = await readDirectory(dirPath);
+		return files.filter(
 			(file) =>
 				file.toLowerCase().endsWith(".yaml") ||
 				file.toLowerCase().endsWith(".yml"),
@@ -47,28 +52,27 @@ export function getYAMLFilesInDirectory(dirPath: string): string[] {
 		console.error(`Error reading directory ${dirPath}:`, error);
 		return [];
 	}
-}
+};
 
 // Function to find a file in multiple locations
-export function findYAMLFile(
+export const findYAMLFile = async (
 	filename: string,
-): { filePath: string; content: string } | null {
+): Promise<{ filePath: string; content: string } | null> => {
 	// Sanitize the filename to prevent directory traversal
 	const sanitizedFile = getBasename(filename);
 
 	// Define possible locations to look for the file
 	const cwd = process.cwd();
-	const possibleLocations = [
-		getPathJoin(cwd, "..", sanitizedFile), // Parent directory - prioritized for development
-		getPathJoin(cwd, "public", "data", sanitizedFile), // Public data directory
-		global.yamlDir ? getPathJoin(global.yamlDir, sanitizedFile) : null, // If global.yamlDir is set
-	].filter(Boolean) as string[];
+	const possibleLocations = await Promise.all([
+		getPathJoin(cwd, "..", await sanitizedFile), // Parent directory - prioritized for development
+		getPathJoin(cwd, "public", "data", await sanitizedFile), // Public data directory
+	].filter(Boolean) )		;
 
 	// Find the file in possible locations
 	for (const location of possibleLocations) {
-		if (fileExists(location)) {
+		if (await fileExists(location)) {
 			try {
-				const content = readFile(location);
+				const content = await readFile(location);
 				return { filePath: location, content };
 			} catch (readError) {
 				throw new Error(
@@ -79,4 +83,4 @@ export function findYAMLFile(
 	}
 
 	return null;
-}
+};

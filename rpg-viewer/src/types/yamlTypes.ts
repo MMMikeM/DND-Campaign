@@ -1,33 +1,34 @@
-export interface ProcessedValue {
-  type: "string" | "number" | "boolean" | "null" | "array" | "object";
-  value: unknown;
-  isLinkable?: boolean;
-}
+// YAML processing types for shared usage between server and client components
 
-export interface ProcessedObject {
-  [key: string]: ProcessedSection;
+export interface ProcessedSection {
+	title: string;
+	titleFormatted: string;
+	type: "primitive" | "array" | "object";
+	path: string;
+	value: unknown;
+	isLinkable?: boolean;
 }
 
 export interface ProcessedArray {
-  items: ProcessedValue[];
+	items: ProcessedValue[];
 }
 
-export interface ProcessedSection {
-  title: string;
-  titleFormatted: string;
-  type: "primitive" | "array" | "object";
-  path: string;
-  value: string | number | boolean | null | ProcessedObject | ProcessedArray;
-  description?: string;
-  isLinkable?: boolean;
+export interface ProcessedObject {
+	properties: Record<string, ProcessedValue>;
+}
+
+export interface ProcessedValue {
+	type: "string" | "number" | "boolean" | "null" | "array" | "object";
+	value: unknown;
+	isLinkable?: boolean;
 }
 
 export interface ProcessedData {
-  title: string;
-  description?: string;
-  sections: ProcessedSection[];
+	title?: string;
+	description?: string;
+	sections: ProcessedSection[];
 }
 
 export interface YamlData {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }
