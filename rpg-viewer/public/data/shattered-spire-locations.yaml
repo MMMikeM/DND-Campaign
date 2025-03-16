@@ -1,6 +1,30 @@
 title: "Shattered Spire Campaign Locations"
 version: "1.0"
 
+# Schema definition:
+# - title: string
+# - version: string
+# - locations: record of Location objects
+#
+# Location schema:
+#   - type: string
+#   - description: string
+#   - districts?: record of District objects
+#     - description: string
+#     - features?: string[]
+#     - npcs?: string[]
+#   - areas?: record of Area objects
+#     - description: string
+#     - features?: string[]
+#     - encounters?: string[]
+#     - treasure?: string[]
+#     - npcs?: string[]
+#   - quests?: record of Quest objects
+#     - title: string
+#     - quest_giver: string
+#     - description: string
+#     - rewards: string[]
+
 locations:
   # Starting Location - Center Spiral
   crystalbrook:

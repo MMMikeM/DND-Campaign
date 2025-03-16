@@ -5,6 +5,37 @@ description: |
   multiple completion options. Each quest has a unique ID that can be referenced
   from NPC files. Quest chains show connections to related quests.
 
+# Schema definition:
+# - title: string
+# - version: string
+# - description: string
+# - main_quests?: Quest[]
+# - side_quests?: Quest[]
+# - faction_quests?: Quest[]
+# - personal_quests?: Quest[]
+#
+# Quest schema:
+#   - id: string
+#   - title: string
+#   - associated_npc?: string[]
+#   - type: string
+#   - difficulty: string
+#   - description: string
+#   - quest_stages?: QuestStage[]
+#     - stage: number
+#     - title: string
+#     - objectives: string[]
+#     - completion_paths: record of CompletionPath
+#       - description: string
+#       - challenges: string
+#       - outcomes: string
+#   - key_decision_points?: KeyDecisionPoint[]
+#   - potential_twists?: string[]
+#   - rewards?: QuestRewards (string[] or record of string[])
+#   - follow_up_quests?: string[] or record of string[]
+#   - related_quests?: string[]
+#   - adaptable?: boolean
+
 # Main storyline quests that drive the campaign narrative forward
 main_quests:
   - id: "MQ001"

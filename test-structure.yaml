@@ -1,0 +1,38 @@
+side_quests:
+  - id: "SQ001"
+    title: "Escort to Safety"
+    associated_npc: ["Orin Blackhand"]
+    type: "Escort"
+    difficulty: "Easy"
+    description: |
+      Escort a nervous merchant to a nearby settlement safely.
+    quest_stages:
+      - stage: 1
+        title: "Route Planning"
+        objectives:
+          - "Discuss possible routes with Orin"
+          - "Gather intelligence on recent bandit activity"
+        completion_paths:
+          thorough:
+            description: "Investigate multiple routes"
+            challenges: "Investigation checks (DC 12)"
+            outcomes: "Complete information about dangers"
+          expedient:
+            description: "Quick assessment"
+            challenges: "Insight checks (DC 14)"
+            outcomes: "Basic understanding of route options"
+      
+      - stage: 2
+        title: "The Journey"
+        objectives:
+          - "Protect Orin from potential threats"
+          - "Ensure crystal goods remain intact"
+        completion_paths:
+          direct_route:
+            description: "Take the main road"
+            challenges: "Perception checks (DC 12)"
+            outcomes: "Faster arrival but higher risk"
+          scenic_route:
+            description: "Take wilderness trails"
+            challenges: "Survival checks (DC 14)"
+            outcomes: "Safer from bandits but more environmental hazards" 
