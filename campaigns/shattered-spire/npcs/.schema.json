@@ -22,7 +22,7 @@
             "description": "Array of NPC objects",
             "items": {
                 "type": "object",
-                "required": ["name", "race", "gender", "occupation"],
+                "required": ["name", "race", "gender", "occupation", "description", "personality", "background", "motivation", "secret", "stats"],
                 "properties": {
                     "id": {
                         "type": "string",
@@ -44,9 +44,27 @@
                         "type": "string",
                         "description": "Primary occupation of the NPC"
                     },
-                    "description": {
+                    "role": {
                         "type": "string",
+                        "description": "Role or position of the NPC"
+                    },
+                    "description": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
                         "description": "Physical description and personality of the NPC"
+                    },
+                    "quirk": {
+                        "type": "string",
+                        "description": "A quirky or unusual trait of the NPC"
+                    },
+                    "personality": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Personality traits of the NPC"
                     },
                     "background": {
                         "type": "string",
@@ -56,13 +74,81 @@
                         "type": "string",
                         "description": "What motivates this NPC"
                     },
-                    "faction": {
+                    "secret": {
                         "type": "string",
-                        "description": "The faction this NPC belongs to"
+                        "description": "Secret information about the NPC"
+                    },
+                    "stats": {
+                        "type": "string",
+                        "description": "Game statistics for the NPC"
+                    },
+                    "quests": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["id", "description"],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "ID of the quest"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the quest relationship"
+                                }
+                            }
+                        },
+                        "description": "Quests associated with this NPC"
+                    },
+                    "relationships": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["id", "description"],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "ID of the related character or faction"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the relationship"
+                                }
+                            }
+                        },
+                        "description": "Relationships with other characters or factions"
+                    },
+                    "location": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["id", "description"],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "ID of the location"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description of the NPC's presence at this location"
+                                }
+                            }
+                        },
+                        "description": "Locations where the NPC can be found"
+                    },
+                    "inventory": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Items in the NPC's inventory"
                     }
                 },
                 "additionalProperties": true
             }
+        },
+        "generic_npcs": {
+            "description": "Generic NPCs for general use"
         }
     },
     "additionalProperties": false
