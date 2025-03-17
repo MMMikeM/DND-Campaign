@@ -1,19 +1,9 @@
+import { nameToId } from "@/server/utils/contentUtils"
 import type { QuestRelatedNPCsProps } from "./types"
 import Link from "next/link"
 
 export default function QuestRelatedNPCs({ quest }: QuestRelatedNPCsProps) {
 	if (!quest.related_npcs || quest.related_npcs.length === 0) return null
-
-	// Helper function to get NPC URL
-	const getNpcUrl = (npcName: string) => {
-		// Convert NPC name to slug format for navigation
-		const npcSlug = npcName
-			.toLowerCase()
-			.replace(/\s+/g, "-")
-			.replace(/[^\w-]+/g, "")
-
-		return `/npcs/${npcSlug}`
-	}
 
 	return (
 		<div className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-900/10 p-4 rounded-lg border border-indigo-200 dark:border-indigo-800/30 shadow-sm">
@@ -27,7 +17,7 @@ export default function QuestRelatedNPCs({ quest }: QuestRelatedNPCsProps) {
 				{quest.related_npcs.map((npc, index) => (
 					<li key={`related-npc-${quest.id}-${index}`} className="pl-1">
 						<Link
-							href={getNpcUrl(npc)}
+							href={`/npcs/${nameToId(npc)}`}
 							className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
 						>
 							{npc}

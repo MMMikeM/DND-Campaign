@@ -1,7 +1,7 @@
 import type { Location } from "./types"
-import { formatName } from "./types"
 import { MapIcon, EncounterIcon, TreasureIcon } from "./icons"
 import Link from "next/link"
+import { idToName } from "@/server/utils/contentUtils"
 
 // Areas section component
 export function LocationAreas({
@@ -31,7 +31,7 @@ export function LocationAreas({
 							<span className="text-indigo-500 mr-2">
 								<MapIcon />
 							</span>
-							{formatName(areaId)}
+							{idToName(areaId)}
 						</h3>
 
 						{area.description && (
@@ -126,7 +126,7 @@ export function LocationAreas({
 												href={`/npcs/${npc}`}
 												className="text-blue-600 dark:text-blue-400 hover:underline"
 											>
-												{formatName(npc)}
+												{idToName(npc)}
 											</Link>
 										</li>
 									))}

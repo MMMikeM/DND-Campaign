@@ -1,5 +1,5 @@
+import { idToName } from "@/server/utils/contentUtils"
 import type { Location } from "./types"
-import { formatName } from "./types"
 import Link from "next/link"
 
 // Quests section component
@@ -27,7 +27,7 @@ export function LocationQuests({
 						<div className="p-3 bg-amber-100 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800/30">
 							<h3 className="text-lg font-semibold text-amber-800 dark:text-amber-200 flex items-center">
 								<span className="text-amber-500 mr-2">📜</span>
-								{quest.title || formatName(questId)}
+								{quest.title || idToName(questId)}
 							</h3>
 
 							{quest.quest_giver && (
@@ -38,7 +38,7 @@ export function LocationQuests({
 										href={`/npcs/${quest.quest_giver}`}
 										className="ml-1 text-blue-600 dark:text-blue-400 hover:underline"
 									>
-										{formatName(quest.quest_giver)}
+										{idToName(quest.quest_giver)}
 									</Link>
 								</div>
 							)}
@@ -93,7 +93,7 @@ export function LocationQuests({
 														href={`/locations/${loc}`}
 														className="text-blue-600 dark:text-blue-400 hover:underline"
 													>
-														{formatName(loc)}
+														{idToName(loc)}
 													</Link>
 												</li>
 											))}
@@ -118,7 +118,7 @@ export function LocationQuests({
 													>
 														<span className="text-purple-400 mr-2 mt-1">•</span>
 														<span className="text-gray-700 dark:text-gray-300">
-															{formatName(prereq)}
+															{idToName(prereq)}
 														</span>
 													</li>
 												))}
@@ -140,7 +140,7 @@ export function LocationQuests({
 													>
 														<span className="text-indigo-400 mr-2 mt-1">•</span>
 														<span className="text-gray-700 dark:text-gray-300">
-															{formatName(followUp)}
+															{idToName(followUp)}
 														</span>
 													</li>
 												))}

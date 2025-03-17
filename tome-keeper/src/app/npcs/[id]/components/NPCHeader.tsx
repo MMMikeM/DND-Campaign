@@ -1,11 +1,12 @@
 import type { ChangeEvent } from "react"
-import { formatName, getNPCRoleStyle } from "./types"
+import { getNPCRoleStyle } from "./types"
 import type { NPC } from "./types"
 import { EyeIcon, EyeSlashIcon } from "./icons"
+import { nameToId } from "@/server/utils/contentUtils"
 
 // Helper function to get NPC ID
 const getNpcId = (npc: NPC): string => {
-	return npc.id || (npc.name ? npc.name.toLowerCase().replace(/\s+/g, "-") : "")
+	return npc.id || (npc.name ? nameToId(npc.name) : "")
 }
 
 // Header component with NPC selector and title

@@ -1,5 +1,5 @@
+import { idToName } from "@/server/utils/contentUtils"
 import type { Location } from "./types"
-import { formatName } from "./types"
 import Link from "next/link"
 
 // Connections section component
@@ -27,7 +27,7 @@ export function LocationConnections({
 								className="block w-full text-left p-2 rounded-md bg-green-50 dark:bg-green-900/10 hover:bg-green-100 dark:hover:bg-green-900/20 border border-green-100 dark:border-green-800/30 transition-colors flex items-center text-green-700 dark:text-green-300"
 							>
 								<span className="mr-2">📍</span>
-								{formatName(connection)}
+								{idToName(connection)}
 							</Link>
 						</li>
 					))}

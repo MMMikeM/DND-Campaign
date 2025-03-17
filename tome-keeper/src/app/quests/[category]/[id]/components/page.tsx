@@ -18,6 +18,7 @@ import {
 	QuestAdaptability,
 	type Quest,
 } from "."
+import { idToName } from "@/server/utils/contentUtils"
 
 // Main page component
 export default function QuestPage({
@@ -129,8 +130,7 @@ export default function QuestPage({
 				selectedQuest.category || getCategoryFromId(newQuestId)
 
 			if (questCategory) {
-				// Format the category for the URL
-				const categorySlug = questCategory.toLowerCase().replace(/\s+/g, "-")
+				const categorySlug = idToName(questCategory)
 				router.push(`/quests/${categorySlug}/${newQuestId}`)
 			} else {
 				// Fallback to the old route if no category
@@ -181,9 +181,7 @@ export default function QuestPage({
 	// Get the category for the current quest
 	const currentCategory =
 		currentQuest.category || getCategoryFromId(currentQuest.id || "")
-	const formattedCategory = currentCategory
-		? currentCategory.toLowerCase().replace(/\s+/g, "-")
-		: ""
+	const formattedCategory = idToName(currentCategory)
 
 	return (
 		<Suspense fallback={<div>Loading quest data...</div>}>

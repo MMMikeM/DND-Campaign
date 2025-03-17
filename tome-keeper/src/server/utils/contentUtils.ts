@@ -160,6 +160,13 @@ export function idToName(id: string): string {
 }
 
 /**
+ * Convert a properly formatted display name to an ID or name with hyphens/underscores
+ */
+export function nameToId(name: string): string {
+	return name.toLowerCase().replace(/\s+/g, "-")
+}
+
+/**
  * Generic function to get data by type
  * Returns the data directly as validated by the schema
  * Always returns an array of data, even for a single file
@@ -245,8 +252,8 @@ export async function findContentById<T>(
 					const normalizedKey = k.toLowerCase()
 					return (
 						normalizedKey === searchId ||
-						normalizedKey.replace(/\s+/g, "-") === searchId ||
-						normalizedKey.replace(/_/g, "-") === searchId.replace(/\s+/g, "-")
+						nameToId(k) === searchId ||
+						nameToId(k.replace(/_/g, "-")) === nameToId(searchId)
 					)
 				})
 
