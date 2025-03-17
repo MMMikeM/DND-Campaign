@@ -4,14 +4,7 @@ import { Suspense, use, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useCampaignData } from "@/components/CampaignDataProvider"
 import QuestPage from "./components/page"
-
-// Format category from slug (e.g., "side-quests" to "Side Quests")
-const formatCategory = (slug: string): string => {
-	return slug
-		.split("-")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ")
-}
+import { idToName } from "@/server/utils/contentUtils"
 
 export default function CategoryQuestPage({
 	params,
@@ -19,16 +12,9 @@ export default function CategoryQuestPage({
 	params: Promise<{ category: string; id: string }>
 }) {
 	const { category: categorySlug, id: questId } = use(params)
-	const formattedCategory = formatCategory(categorySlug)
+	const formattedCategory = idToName(categorySlug)
 	const router = useRouter()
 	const { quests: questsDataArray } = useCampaignData()
-
-	// Add detailed debugging for category and quest ID
-	console.log("==== CATEGORY/ID PAGE DEBUGGING ====")
-	console.log("Raw params:", { categorySlug, questId })
-	console.log("Formatted category:", formattedCategory)
-	console.log("Number of quest groups:", questsDataArray?.length || 0)
-	console.log("================================")
 
 	// Validate that the quest exists and belongs to this category
 	useEffect(() => {
@@ -129,13 +115,6 @@ export default function CategoryQuestPage({
 				}
 			}
 		}
-
-		console.log("Validation results:", {
-			questFound,
-			belongsToCategory,
-			foundInGroup,
-		})
-		console.log("================================")
 
 		// If quest doesn't exist or doesn't belong to this category, redirect
 		if (!questFound) {
