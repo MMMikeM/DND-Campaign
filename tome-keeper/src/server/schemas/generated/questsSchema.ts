@@ -9,7 +9,7 @@ export const QuestsFileSchema = z.object({
 /**Description of the quest collection*/
 "description": z.string().describe("Description of the quest collection"), 
 /**Category of the quests in this file (Main, Side, Faction, Personal, or Generic)*/
-"category": z.enum(["Main Quests","Side Quests","Faction Quests","Personal Quests","Generic Quests"]).describe("Category of the quests in this file (Main, Side, Faction, Personal, or Generic)").optional(), 
+"category": z.enum(["Main Quests","Side Quests","Faction Quests","Personal Quests","Generic Quests"]).describe("Category of the quests in this file (Main, Side, Faction, Personal, or Generic)"), 
 /**Array of quest objects*/
 "quests": z.array(z.object({ 
 /**Unique identifier for the quest*/
