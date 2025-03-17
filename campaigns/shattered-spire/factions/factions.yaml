@@ -2,7 +2,6 @@
 title: "Shattered Spire Factions and NPCs"
 version: "1.0"
 description: "Details of the major factions and key individuals in the Shattered Spire region."
-
 factions:
   # Local Factions - First Spiral
   crystal_seekers:

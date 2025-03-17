@@ -9,13 +9,7 @@ interface CategoryCardProps {
 	color: string
 }
 
-function CategoryCard({
-	title,
-	description,
-	icon,
-	href,
-	color,
-}: CategoryCardProps) {
+function CategoryCard({ title, description, icon, href, color }: CategoryCardProps) {
 	return (
 		<Link href={href}>
 			<div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
@@ -23,9 +17,7 @@ function CategoryCard({
 					<div className="text-white">{icon}</div>
 				</div>
 				<div className="p-6">
-					<h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-						{title}
-					</h3>
+					<h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{title}</h3>
 					<p className="text-gray-600 dark:text-gray-300">{description}</p>
 				</div>
 			</div>
@@ -88,9 +80,8 @@ export default function HomePage() {
 						Getting Started
 					</h2>
 					<p className="text-gray-700 dark:text-gray-300 mb-4">
-						Use the navigation drawer on the left to browse through your
-						campaign data. You can view details about NPCs, factions, locations,
-						and quests.
+						Use the navigation drawer on the left to browse through your campaign data. You can view
+						details about NPCs, factions, locations, and quests.
 					</p>
 					<p className="text-gray-700 dark:text-gray-300">
 						Select any category above to start exploring your campaign world.

@@ -22,9 +22,9 @@ import {
 export default function CategoryQuestPage({
 	params,
 }: {
-	params: Promise<{ category: string; id: string }>
+	params: Promise<{ slug: string; id: string }>
 }) {
-	const { category: categorySlug, id: questId } = use(params)
+	const { slug: categorySlug, id: questId } = use(params)
 	const router = useRouter()
 	const { quests: questsDataArray } = useCampaignData()
 	const [showDMNotes, setShowDMNotes] = useState(false)

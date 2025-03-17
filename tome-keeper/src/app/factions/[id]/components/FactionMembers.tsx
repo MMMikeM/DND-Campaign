@@ -1,4 +1,5 @@
 import type { Faction } from "./types"
+import { GradientCard, createCardHeader } from "@/components/GradientCard"
 
 interface FactionMembersProps {
 	faction: Faction
@@ -7,15 +8,12 @@ interface FactionMembersProps {
 export function FactionMembers({ faction }: FactionMembersProps) {
 	if (!faction.members || faction.members.length === 0) return null
 
+	const membersIcon = <span className="text-gray-500 mr-2">👥</span>
+	const header = createCardHeader("Members", membersIcon, "gray")
+
 	return (
-		<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-			<div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">
-				<span className="text-gray-500 mr-2">👥</span>
-				<h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-					Members
-				</h2>
-			</div>
-			<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+		<GradientCard headerContent={header} colorTheme="gray">
+			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 				{faction.members.map((member) => (
 					<div
 						key={`member-${member.name}`}
@@ -26,13 +24,11 @@ export function FactionMembers({ faction }: FactionMembersProps) {
 							{member.name}
 						</h3>
 						{member.description && (
-							<p className="text-gray-700 dark:text-gray-300 mt-1">
-								{member.description}
-							</p>
+							<p className="text-gray-700 dark:text-gray-300 mt-1">{member.description}</p>
 						)}
 					</div>
 				))}
 			</div>
-		</div>
+		</GradientCard>
 	)
 }

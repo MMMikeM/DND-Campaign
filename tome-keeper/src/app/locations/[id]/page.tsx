@@ -19,9 +19,7 @@ import {
 } from "./components"
 
 // Main page component
-export default function LocationPage({
-	params,
-}: { params: Promise<{ id: string }> }) {
+export default function LocationPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id: locationId } = use(params)
 
 	const { locations: locationsDataArray } = useCampaignData()

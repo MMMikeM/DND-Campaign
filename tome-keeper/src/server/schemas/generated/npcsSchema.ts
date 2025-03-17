@@ -55,9 +55,9 @@ export const NpcsFileSchema = z.object({
 /**Description of the NPC's presence at this location*/
 "description": z.string().describe("Description of the NPC's presence at this location") })).describe("Locations where the NPC can be found").optional(), 
 /**Items in the NPC's inventory*/
-"inventory": z.array(z.string()).describe("Items in the NPC's inventory").optional() }).catchall(z.any())).describe("Array of NPC objects"), 
+"inventory": z.array(z.string()).describe("Items in the NPC's inventory").optional() })).describe("Array of NPC objects"), 
 /**Generic NPCs for general use*/
-"generic_npcs": z.any().describe("Generic NPCs for general use").optional() }).strict().describe("Schema for NPC definition files in the Shattered Spire campaign")
+"generic_npcs": z.any().describe("Generic NPCs for general use").optional() }).describe("Schema for NPC definition files in the Shattered Spire campaign")
 
 // Export TypeScript type
 export type NpcsFile = z.infer<typeof NpcsFileSchema>;

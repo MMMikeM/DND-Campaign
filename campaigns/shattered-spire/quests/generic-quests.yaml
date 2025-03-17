@@ -1,1456 +1,1647 @@
-# yaml-language-server: $schema=./.schema.json
-title: "Shattered Spire Generic Quests"
+title: Shattered Spire Generic Quests
 version: "1.1"
-description: |
-  Collection of generic quests for the Shattered Spire campaign with branching paths and
-  multiple completion options. Each quest has a unique ID that can be referenced
-  from NPC files. Generic quests can be attached to any NPC or location.
-category: "Generic Quests"
+description: >
+  Collection of generic quests for the Shattered Spire campaign with branching
+  paths and
 
+  multiple completion options. Each quest has a unique ID that can be referenced
+
+  from NPC files. Generic quests can be attached to any NPC or location.
+category: Generic Quests
 quests:
-  - id: "GQ001"
-    title: "Crystal Courier"
-    associated_npc: ["Magister Elysia Vorne", "Merchant Dorrin"]
-    type: "Delivery"
-    difficulty: "Easy"
-    description: |
-      A sensitive crystal sample needs transportation between researchers. The crystal exhibits 
-      unusual properties that could revolutionize magical research - or cause significant harm 
-      if it falls into the wrong hands. Multiple parties have expressed interest in acquiring it.
+  - id: GQ001
+    title: Crystal Courier
+    associated_npc:
+      - Magister Elysia Vorne
+      - Merchant Dorrin
+    type: Delivery
+    difficulty: Easy
+    description: >
+      A sensitive crystal sample needs transportation between researchers. The
+      crystal exhibits 
+
+      unusual properties that could revolutionize magical research - or cause
+      significant harm 
+
+      if it falls into the wrong hands. Multiple parties have expressed interest
+      in acquiring it.
     quest_stages:
       - stage: 1
-        title: "Securing the Package"
+        title: Securing the Package
         objectives:
-          - "Meet with the sender Magister Vorne"
-          - "Learn handling requirements for crystal"
-          - "Prepare appropriate container and protections"
+          - Meet with the sender Magister Vorne
+          - Learn handling requirements for crystal
+          - Prepare appropriate container and protections
         completion_paths:
           thorough:
-            description: "Take time to fully understand crystal properties and handling protocols"
-            challenges: "Arcana checks (DC 14), expensive containment materials (50 gold)"
-            outcomes: "Comprehensive knowledge of specimen and maximum protection"
+            description: Take time to fully understand crystal properties and handling
+              protocols
+            challenges: Arcana checks (DC 14), expensive containment materials (50 gold)
+            outcomes: Comprehensive knowledge of specimen and maximum protection
           expedient:
-            description: "Accept basic instructions and standard container"
-            challenges: "Intelligence checks (DC 16) to grasp essentials quickly, basic container (20 gold)"
-            outcomes: "Sufficient knowledge but higher risk of complications during transport"
-      
+            description: Accept basic instructions and standard container
+            challenges: Intelligence checks (DC 16) to grasp essentials quickly, basic
+              container (20 gold)
+            outcomes: Sufficient knowledge but higher risk of complications during transport
       - stage: 2
-        title: "Route Planning"
+        title: Route Planning
         objectives:
-          - "Identify potential hazards on journey"
-          - "Select route considering safety and efficiency"
-          - "Acquire necessary travel papers or permissions"
+          - Identify potential hazards on journey
+          - Select route considering safety and efficiency
+          - Acquire necessary travel papers or permissions
         completion_paths:
           cautious:
-            description: "Choose longer but safer routes avoiding population centers"
-            challenges: "Survival checks (DC 13), 2 additional travel days, wilderness navigation"
-            outcomes: "Lower risk of interception but more natural hazards and longer journey"
+            description: Choose longer but safer routes avoiding population centers
+            challenges: Survival checks (DC 13), 2 additional travel days, wilderness
+              navigation
+            outcomes: Lower risk of interception but more natural hazards and longer journey
           direct:
-            description: "Take fastest route through populated areas"
-            challenges: "Stealth checks (DC 15), Deception checks (DC 14), crowded environments"
-            outcomes: "Faster delivery (1-day journey) but higher risk of interception or theft attempts"
-      
+            description: Take fastest route through populated areas
+            challenges: Stealth checks (DC 15), Deception checks (DC 14), crowded
+              environments
+            outcomes: Faster delivery (1-day journey) but higher risk of interception or
+              theft attempts
       - stage: 3
-        title: "Journey Complications"
+        title: Journey Complications
         objectives:
-          - "Respond to unexpected complications"
-          - "Maintain crystal stability during transport"
-          - "Evade interested parties seeking the crystal"
+          - Respond to unexpected complications
+          - Maintain crystal stability during transport
+          - Evade interested parties seeking the crystal
         completion_paths:
           evasive:
-            description: "Focus on avoiding confrontation and detection"
-            challenges: "Stealth checks (DC 16), Perception checks (DC 15), alternative pathfinding"
-            outcomes: "Successful evasion of most interested parties but slower progress"
+            description: Focus on avoiding confrontation and detection
+            challenges: Stealth checks (DC 16), Perception checks (DC 15), alternative
+              pathfinding
+            outcomes: Successful evasion of most interested parties but slower progress
           confrontational:
-            description: "Deal directly with obstacles and pursuers"
-            challenges: "Intimidation checks (DC 15), potential combat with mercenaries (CR 2)"
-            outcomes: "Faster progress but potential damage to container or unwanted attention"
+            description: Deal directly with obstacles and pursuers
+            challenges: Intimidation checks (DC 15), potential combat with mercenaries (CR
+              2)
+            outcomes: Faster progress but potential damage to container or unwanted
+              attention
           deceptive:
-            description: "Use misdirection and false information"
-            challenges: "Deception checks (DC 16), creating convincing decoy (25 gold in materials)"
-            outcomes: "Confusion among pursuers but complex web of lies to maintain"
-      
+            description: Use misdirection and false information
+            challenges: Deception checks (DC 16), creating convincing decoy (25 gold in
+              materials)
+            outcomes: Confusion among pursuers but complex web of lies to maintain
       - stage: 4
-        title: "Crystal Reaction"
+        title: Crystal Reaction
         objectives:
-          - "Manage unexpected crystal behavior"
-          - "Prevent contamination or energy discharge"
-          - "Adapt to changing transport requirements"
+          - Manage unexpected crystal behavior
+          - Prevent contamination or energy discharge
+          - Adapt to changing transport requirements
         completion_paths:
           scientific:
-            description: "Use technical knowledge to stabilize the crystal"
-            challenges: "Arcana checks (DC 17), precise manipulation of containment (DC 15 Dexterity)"
-            outcomes: "Crystal stabilized with minimal energy discharge"
+            description: Use technical knowledge to stabilize the crystal
+            challenges: Arcana checks (DC 17), precise manipulation of containment (DC 15
+              Dexterity)
+            outcomes: Crystal stabilized with minimal energy discharge
           intuitive:
-            description: "Respond instinctively to crystal's energy patterns"
-            challenges: "Wisdom checks (DC 16), potential minor corruption exposure (DC 14 Constitution save)"
-            outcomes: "Temporary solution that requires ongoing attention"
-      
+            description: Respond instinctively to crystal's energy patterns
+            challenges: Wisdom checks (DC 16), potential minor corruption exposure (DC 14
+              Constitution save)
+            outcomes: Temporary solution that requires ongoing attention
       - stage: 5
-        title: "Final Delivery"
+        title: Final Delivery
         objectives:
-          - "Verify recipient identity"
-          - "Complete transfer protocols"
-          - "Document transport completion"
+          - Verify recipient identity
+          - Complete transfer protocols
+          - Document transport completion
         completion_paths:
           protocol:
-            description: "Follow exact delivery procedures with full documentation"
-            challenges: "Intelligence checks (DC 13), formal verification process (1 hour)"
-            outcomes: "Complete records of transfer and maximum accountability"
+            description: Follow exact delivery procedures with full documentation
+            challenges: Intelligence checks (DC 13), formal verification process (1 hour)
+            outcomes: Complete records of transfer and maximum accountability
           practical:
-            description: "Efficient handover focusing on crystal safety rather than paperwork"
-            challenges: "Insight checks (DC 15) to verify recipient authenticity, minimal documentation"
-            outcomes: "Faster completion but less formal record of transaction"
-    
+            description: Efficient handover focusing on crystal safety rather than paperwork
+            challenges: Insight checks (DC 15) to verify recipient authenticity, minimal
+              documentation
+            outcomes: Faster completion but less formal record of transaction
     key_decision_points:
       - stage: 3
-        decision: "Mysterious Offer"
+        decision: Mysterious Offer
         choices:
-          - choice: "Competing researcher offers higher payment for sample"
-            consequences: "Ethical dilemma, potential reputation impact, higher immediate reward"
-          - choice: "Original client offers bonus for confidentiality"
-            consequences: "Reinforced relationship with quest giver, future opportunities"
-          - choice: "Third party offers information exchange instead of taking crystal"
-            consequences: "Valuable information gained, original mission still completed"
-      
+          - choice: Competing researcher offers higher payment for sample
+            consequences: Ethical dilemma, potential reputation impact, higher immediate
+              reward
+          - choice: Original client offers bonus for confidentiality
+            consequences: Reinforced relationship with quest giver, future opportunities
+          - choice: Third party offers information exchange instead of taking crystal
+            consequences: Valuable information gained, original mission still completed
       - stage: 4
-        decision: "Crystal Behavior"
+        decision: Crystal Behavior
         choices:
-          - choice: "Crystal begins to resonate with nearby corruption"
-            consequences: "Route modification needed, potential revealing of position"
-          - choice: "Crystal shows signs of intelligence/awareness"
-            consequences: "Ethical considerations, potential communication opportunity"
-          - choice: "Crystal temporarily affects carrier's perception or abilities"
-            consequences: "Unique temporary abilities but potential side effects"
-    
+          - choice: Crystal begins to resonate with nearby corruption
+            consequences: Route modification needed, potential revealing of position
+          - choice: Crystal shows signs of intelligence/awareness
+            consequences: Ethical considerations, potential communication opportunity
+          - choice: Crystal temporarily affects carrier's perception or abilities
+            consequences: Unique temporary abilities but potential side effects
     potential_twists:
-      - "The crystal is actually a dormant life form"
-      - "One of the researchers has malicious intent for the crystal"
-      - "The crystal's properties change depending on who carries it"
-      - "The crystal is part of a larger construct being assembled in pieces"
-    
+      - The crystal is actually a dormant life form
+      - One of the researchers has malicious intent for the crystal
+      - The crystal's properties change depending on who carries it
+      - The crystal is part of a larger construct being assembled in pieces
     rewards:
       standard:
-        - "75 gold payment for basic delivery"
-        - "Letter of recommendation from Magister Vorne"
-      
+        - 75 gold payment for basic delivery
+        - Letter of recommendation from Magister Vorne
       thorough_path:
-        - "100 gold completion payment"
-        - "Crystal resonance tool (advantage on detecting similar crystals)"
-        - "Future high-priority delivery offers from the Magisterium"
-        - "Access to basic research findings (academic knowledge)"
-      
+        - 100 gold completion payment
+        - Crystal resonance tool (advantage on detecting similar crystals)
+        - Future high-priority delivery offers from the Magisterium
+        - Access to basic research findings (academic knowledge)
       expedient_path:
-        - "85 gold rapid delivery bonus"
-        - "Contact with merchant specializing in crystal trade"
-        - "Shortcut knowledge through restricted areas (time saving on future travel)"
-      
+        - 85 gold rapid delivery bonus
+        - Contact with merchant specializing in crystal trade
+        - Shortcut knowledge through restricted areas (time saving on future
+          travel)
       scientific_path:
-        - "90 gold hazard handling bonus"
+        - 90 gold hazard handling bonus
       diplomatic_path:
-        - "Merchant guild membership offer"
-        - "200 gold compensation from grateful business owners"
-        - "Trade discount on future purchases (10-20%)"
-      
+        - Merchant guild membership offer
+        - 200 gold compensation from grateful business owners
+        - Trade discount on future purchases (10-20%)
       enforcement_path:
-        - "300 gold official reward"
-        - "Deputy trade inspector credentials"
-        - "Authority to conduct future inspections"
-      
+        - 300 gold official reward
+        - Deputy trade inspector credentials
+        - Authority to conduct future inspections
       research_path:
-        - "250 gold research grant"
-        - "Crystal contamination detection tools"
-        - "Academic recognition for new contamination protocols"
-    
+        - 250 gold research grant
+        - Crystal contamination detection tools
+        - Academic recognition for new contamination protocols
     follow_up_quests:
-      deliberate_contamination: ["MQ024"] # Conspiracy of Crystal
-      regulation_established: ["SQ026"] # Crystal Trade Regulation Enforcement
-      mutation_benefits: ["SQ027"] # Crystal Enhancement Therapy
-    
+      - MQ024
+      - SQ026
+      - SQ027
     adaptable: true
+  - id: GQ002
+    title: Missing Person
+    associated_npc:
+      - Elder Marta
+      - Ranger Trevin
+    type: Search and Rescue
+    difficulty: Medium
+    description: >
+      A villager has vanished after venturing into a crystal-affected area. As
+      days pass, 
 
-  - id: "GQ002"
-    title: "Missing Person"
-    associated_npc: ["Elder Marta", "Ranger Trevin"]
-    type: "Search and Rescue"
-    difficulty: "Medium"
-    description: |
-      A villager has vanished after venturing into a crystal-affected area. As days pass, 
-      hopes of finding them alive diminish, especially as recent crystal corruption has 
-      intensified in the region. The missing person may have family-specific relationships 
+      hopes of finding them alive diminish, especially as recent crystal
+      corruption has 
+
+      intensified in the region. The missing person may have family-specific
+      relationships 
+
       (partner, child, parent) that can be customized based on campaign needs.
     objectives:
-      - "Track missing person through affected zone"
-      - "Deal with crystal-corrupted hazards"
-      - "Return missing person safely if possible"
+      - Track missing person through affected zone
+      - Deal with crystal-corrupted hazards
+      - Return missing person safely if possible
     quest_stages:
       - stage: 1
-        title: "Gathering Information"
+        title: Gathering Information
         objectives:
-          - "Interview family and friends of missing person"
-          - "Determine reason for venturing into dangerous area"
-          - "Collect personal items for tracking purposes"
+          - Interview family and friends of missing person
+          - Determine reason for venturing into dangerous area
+          - Collect personal items for tracking purposes
         completion_paths:
           empathetic:
-            description: "Focus on emotional connections and personal details"
-            challenges: "Insight checks (DC 14), building trust with distraught family"
-            outcomes: "Personal connection to mission, detailed background information"
+            description: Focus on emotional connections and personal details
+            challenges: Insight checks (DC 14), building trust with distraught family
+            outcomes: Personal connection to mission, detailed background information
           investigative:
-            description: "Analyze facts, evidence, and patterns methodically"
-            challenges: "Investigation checks (DC 15), connecting disparate clues"
-            outcomes: "Clear timeline of events, potential hidden motives discovered"
+            description: Analyze facts, evidence, and patterns methodically
+            challenges: Investigation checks (DC 15), connecting disparate clues
+            outcomes: Clear timeline of events, potential hidden motives discovered
           expedited:
-            description: "Gather essential information quickly to start search immediately"
-            challenges: "Perception checks (DC 16), quick witness interviews, 1-hour preparation"
-            outcomes: "Fast start but may pursue incorrect leads initially"
-      
+            description: Gather essential information quickly to start search immediately
+            challenges: Perception checks (DC 16), quick witness interviews, 1-hour
+              preparation
+            outcomes: Fast start but may pursue incorrect leads initially
       - stage: 2
-        title: "The Search Begins"
+        title: The Search Begins
         objectives:
-          - "Identify entry point into crystal-affected area"
-          - "Locate and follow initial trail signs"
-          - "Navigate increasingly dangerous terrain"
+          - Identify entry point into crystal-affected area
+          - Locate and follow initial trail signs
+          - Navigate increasingly dangerous terrain
         completion_paths:
           methodical:
-            description: "Careful, thorough search pattern covering all potential routes"
-            challenges: "Survival checks (DC 14), time consumption (2 days), careful mapping"
-            outcomes: "Comprehensive search less likely to miss subtle clues"
+            description: Careful, thorough search pattern covering all potential routes
+            challenges: Survival checks (DC 14), time consumption (2 days), careful mapping
+            outcomes: Comprehensive search less likely to miss subtle clues
           intuitive:
-            description: "Follow hunches and focus on most likely path"
-            challenges: "Wisdom checks (DC 16), potential to miss critical trail"
-            outcomes: "Faster progress if correct (half day), wasted time if wrong (extra day)"
+            description: Follow hunches and focus on most likely path
+            challenges: Wisdom checks (DC 16), potential to miss critical trail
+            outcomes: Faster progress if correct (half day), wasted time if wrong (extra
+              day)
           local_guide:
-            description: "Enlist help of someone familiar with the area"
-            challenges: "Persuasion check (DC 14), payment for guide (30 gold), potential ulterior motives"
-            outcomes: "Enhanced navigation but less control over search approach"
-      
+            description: Enlist help of someone familiar with the area
+            challenges: Persuasion check (DC 14), payment for guide (30 gold), potential
+              ulterior motives
+            outcomes: Enhanced navigation but less control over search approach
       - stage: 3
-        title: "Signs of Trouble"
+        title: Signs of Trouble
         objectives:
-          - "Discover evidence of what happened to missing person"
-          - "Assess environmental dangers in immediate area"
-          - "Determine if trail continues or ends here"
+          - Discover evidence of what happened to missing person
+          - Assess environmental dangers in immediate area
+          - Determine if trail continues or ends here
         completion_paths:
           cautious:
-            description: "Carefully document and analyze all clues before proceeding"
-            challenges: "Investigation checks (DC 15), 3-hour detailed examination"
-            outcomes: "Comprehensive understanding of situation, safer approach"
+            description: Carefully document and analyze all clues before proceeding
+            challenges: Investigation checks (DC 15), 3-hour detailed examination
+            outcomes: Comprehensive understanding of situation, safer approach
           urgent:
-            description: "Follow signs immediately, prioritizing speed of rescue"
-            challenges: "Constitution checks (DC 14) against corruption exposure, hasty decisions"
-            outcomes: "Faster progress but higher personal risk and potential missed details"
+            description: Follow signs immediately, prioritizing speed of rescue
+            challenges: Constitution checks (DC 14) against corruption exposure, hasty
+              decisions
+            outcomes: Faster progress but higher personal risk and potential missed details
           divided:
-            description: "Split party to follow multiple leads simultaneously"
-            challenges: "Reduced party strength, Survival checks at disadvantage, coordination"
-            outcomes: "Cover more ground but increased vulnerability for each subgroup"
-      
+            description: Split party to follow multiple leads simultaneously
+            challenges: Reduced party strength, Survival checks at disadvantage,
+              coordination
+            outcomes: Cover more ground but increased vulnerability for each subgroup
       - stage: 4
-        title: "Crystal Transformation"
+        title: Crystal Transformation
         objectives:
-          - "Find missing person partially transformed by crystal exposure"
-          - "Assess nature and extent of transformation"
-          - "Determine if safe approach is possible"
+          - Find missing person partially transformed by crystal exposure
+          - Assess nature and extent of transformation
+          - Determine if safe approach is possible
         completion_paths:
           medical:
-            description: "Treat the transformation as a condition requiring treatment"
-            challenges: "Medicine checks (DC 16), stabilization procedure, medical supplies (25 gold)"
-            outcomes: "Slow physical corruption progression temporarily"
+            description: Treat the transformation as a condition requiring treatment
+            challenges: Medicine checks (DC 16), stabilization procedure, medical supplies
+              (25 gold)
+            outcomes: Slow physical corruption progression temporarily
           magical:
-            description: "Attempt magical intervention to halt or reverse effects"
-            challenges: "Arcana checks (DC 17), specific spell components (50 gold), ritual casting"
-            outcomes: "Potential for greater reversal but risks accelerating transformation if failed"
+            description: Attempt magical intervention to halt or reverse effects
+            challenges: Arcana checks (DC 17), specific spell components (50 gold), ritual
+              casting
+            outcomes: Potential for greater reversal but risks accelerating transformation
+              if failed
           adaptation:
-            description: "Help missing person adjust to and control new state"
-            challenges: "Insight checks (DC 15), Persuasion checks (DC 16), finding balance"
-            outcomes: "Person retains some crystal aspects but with greater stability and control"
-      
+            description: Help missing person adjust to and control new state
+            challenges: Insight checks (DC 15), Persuasion checks (DC 16), finding balance
+            outcomes: Person retains some crystal aspects but with greater stability and
+              control
       - stage: 5
-        title: "The Return Journey"
+        title: The Return Journey
         objectives:
-          - "Transport potentially unstable person safely"
-          - "Navigate back through hazardous territory"
-          - "Manage transformation progression during travel"
+          - Transport potentially unstable person safely
+          - Navigate back through hazardous territory
+          - Manage transformation progression during travel
         completion_paths:
           containment:
-            description: "Focus on preventing further transformation or contamination spread"
-            challenges: "Containment materials (30 gold), potential resistance from subject"
-            outcomes: "Safety for rescuers and environment but potential trauma for rescued"
+            description: Focus on preventing further transformation or contamination spread
+            challenges: Containment materials (30 gold), potential resistance from subject
+            outcomes: Safety for rescuers and environment but potential trauma for rescued
           supportive:
-            description: "Prioritize comfort and agency of rescued person"
-            challenges: "Balancing care with safety (DC 15 Wisdom), emotional support"
-            outcomes: "Better psychological outcome but higher contamination risk"
+            description: Prioritize comfort and agency of rescued person
+            challenges: Balancing care with safety (DC 15 Wisdom), emotional support
+            outcomes: Better psychological outcome but higher contamination risk
           urgent:
-            description: "Fastest possible route to civilization for treatment"
-            challenges: "Forced marches (DC 15 Constitution), environmental hazards, 1-day journey"
-            outcomes: "Quicker access to advanced help but physical strain on all"
-      
+            description: Fastest possible route to civilization for treatment
+            challenges: Forced marches (DC 15 Constitution), environmental hazards, 1-day
+              journey
+            outcomes: Quicker access to advanced help but physical strain on all
       - stage: 6
-        title: "Community Reaction"
+        title: Community Reaction
         objectives:
-          - "Present transformed person to family/community"
-          - "Address fears and misunderstandings about transformation"
-          - "Establish long-term solution for person's condition"
+          - Present transformed person to family/community
+          - Address fears and misunderstandings about transformation
+          - Establish long-term solution for person's condition
         completion_paths:
           integration:
-            description: "Help community accept and adapt to the changed person"
-            challenges: "Persuasion checks (DC 17), overcoming prejudice, education efforts"
-            outcomes: "Person remains with family but community tensions possible"
+            description: Help community accept and adapt to the changed person
+            challenges: Persuasion checks (DC 17), overcoming prejudice, education efforts
+            outcomes: Person remains with family but community tensions possible
           isolation:
-            description: "Establish separate but safe living arrangement"
-            challenges: "Creating appropriate living space (100 gold), emotional impact"
-            outcomes: "Physical safety but emotional separation"
+            description: Establish separate but safe living arrangement
+            challenges: Creating appropriate living space (100 gold), emotional impact
+            outcomes: Physical safety but emotional separation
           specialized_care:
-            description: "Find experts or facility equipped to handle the condition"
-            challenges: "Research (DC 15 Investigation), travel arrangements, significant cost (300 gold)"
-            outcomes: "Best chance for management or reversal but removes person from community"
-    
+            description: Find experts or facility equipped to handle the condition
+            challenges: Research (DC 15 Investigation), travel arrangements, significant
+              cost (300 gold)
+            outcomes: Best chance for management or reversal but removes person from
+              community
     key_decision_points:
       - stage: 4
-        decision: "True Nature of Transformation"
+        decision: True Nature of Transformation
         choices:
-          - choice: "Transformation is painful affliction the person wishes cured"
-            consequences: "Focus on treatment and reversal approaches"
-          - choice: "Transformation grants abilities the person wishes to keep"
-            consequences: "Shift to control and adaptation rather than cure"
-          - choice: "Transformation is affecting the person's mind/personality"
-            consequences: "Question of consent and who the 'real person' is now"
-      
+          - choice: Transformation is painful affliction the person wishes cured
+            consequences: Focus on treatment and reversal approaches
+          - choice: Transformation grants abilities the person wishes to keep
+            consequences: Shift to control and adaptation rather than cure
+          - choice: Transformation is affecting the person's mind/personality
+            consequences: Question of consent and who the 'real person' is now
       - stage: 6
-        decision: "Family Acceptance"
+        decision: Family Acceptance
         choices:
-          - choice: "Family rejects the transformed person"
-            consequences: "Emotional trauma, need for alternative arrangements"
-          - choice: "Family accepts but community rejects"
-            consequences: "Potential need for family to relocate with rescued person"
-          - choice: "Complete acceptance but with conditions"
-            consequences: "Ongoing monitoring, restricted activities, adaptation period"
-    
+          - choice: Family rejects the transformed person
+            consequences: Emotional trauma, need for alternative arrangements
+          - choice: Family accepts but community rejects
+            consequences: Potential need for family to relocate with rescued person
+          - choice: Complete acceptance but with conditions
+            consequences: Ongoing monitoring, restricted activities, adaptation period
     potential_twists:
-      - "Person went intentionally seeking transformation"
-      - "Person was lured by telepathic crystal entity"
-      - "Transformation is contagious through prolonged contact"
-      - "Person discovered valuable resource and was targeted by rivals"
-      - "Transformation grants prophetic visions of critical importance"
-    
+      - Person went intentionally seeking transformation
+      - Person was lured by telepathic crystal entity
+      - Transformation is contagious through prolonged contact
+      - Person discovered valuable resource and was targeted by rivals
+      - Transformation grants prophetic visions of critical importance
     rewards:
       standard:
-        - "100 gold reward from family"
-        - "Gratitude of local community"
-      
+        - 100 gold reward from family
+        - Gratitude of local community
       medical_path:
-        - "Family heirloom with minor magical properties"
-        - "200 gold reward from grateful family"
-        - "Local reputation as reliable problem-solver"
-        - "Knowledge of crystal corruption treatment techniques"
-      
+        - Family heirloom with minor magical properties
+        - 200 gold reward from grateful family
+        - Local reputation as reliable problem-solver
+        - Knowledge of crystal corruption treatment techniques
       adaptation_path:
-        - "Insights into crystal properties (advantage on saves vs. crystal effects for 1 month)"
-        - "Alliance with transformed individual with unique abilities"
-        - "150 gold and ongoing consulting opportunities"
-        - "Connection to others studying controlled transformation"
-      
+        - Insights into crystal properties (advantage on saves vs. crystal
+          effects for 1 month)
+        - Alliance with transformed individual with unique abilities
+        - 150 gold and ongoing consulting opportunities
+        - Connection to others studying controlled transformation
       specialized_care_path:
-        - "250 gold from research institution"
-        - "Access to specialized knowledge about crystal transformations"
-        - "Connection to network studying crystal phenomena"
-        - "Research notes on transformation process (valuable to certain scholars)"
-    
+        - 250 gold from research institution
+        - Access to specialized knowledge about crystal transformations
+        - Connection to network studying crystal phenomena
+        - Research notes on transformation process (valuable to certain scholars)
     follow_up_quests:
-      medical_path: ["SQ023", "MQ003"] # Crystal Corruption Cure Research, Crystalline Contagion
-      adaptation_path: ["SQ024", "MQ005"] # The Crystal Community, Crystal Integration
-      specialized_care_path: ["MQ003"] # Crystalline Contagion
-    
-    related_quests: ["MQ003", "SQ008"]
+      - SQ023
+      - MQ003
+      - SQ024
+      - MQ005
+    related_quests:
+      - MQ003
+      - SQ008
+  - id: GQ003
+    title: Strange Dreams
+    associated_npc:
+      - Dream Sage Elara
+      - Mayor Thorne
+    type: Investigation/Magical
+    difficulty: Medium
+    description: >
+      A cluster of people in the settlement have begun sharing identical vivid
+      dreams 
 
-  - id: "GQ003"
-    title: "Strange Dreams"
-    associated_npc: ["Dream Sage Elara", "Mayor Thorne"]
-    type: "Investigation/Magical"
-    difficulty: "Medium"
-    description: |
-      A cluster of people in the settlement have begun sharing identical vivid dreams 
-      involving crystalline structures, ancient voices, and prophetic visions. The dreams 
-      are becoming more intense and have begun affecting the waking world, with dreamers 
-      occasionally manifesting minor crystal growths during sleep. Local authorities are 
-      concerned about both the physical manifestations and the growing anxiety among citizens.
+      involving crystalline structures, ancient voices, and prophetic visions.
+      The dreams 
+
+      are becoming more intense and have begun affecting the waking world, with
+      dreamers 
+
+      occasionally manifesting minor crystal growths during sleep. Local
+      authorities are 
+
+      concerned about both the physical manifestations and the growing anxiety
+      among citizens.
     quest_stages:
       - stage: 1
-        title: "Dream Patterns"
+        title: Dream Patterns
         objectives:
-          - "Interview multiple affected dreamers"
-          - "Document recurring symbols and experiences"
-          - "Create dream map showing connections"
+          - Interview multiple affected dreamers
+          - Document recurring symbols and experiences
+          - Create dream map showing connections
         completion_paths:
           empathic:
-            description: "Build trust with dreamers through emotional connection"
-            challenges: "Insight checks (DC 14), earning trust of frightened subjects, 1-day interviews"
-            outcomes: "More intimate details revealed, personal dream experiences shared"
+            description: Build trust with dreamers through emotional connection
+            challenges: Insight checks (DC 14), earning trust of frightened subjects, 1-day
+              interviews
+            outcomes: More intimate details revealed, personal dream experiences shared
           analytical:
-            description: "Systematically categorize and analyze dream elements"
-            challenges: "Intelligence checks (DC 15), pattern recognition, documentation system (10 gold)"
-            outcomes: "Comprehensive dream taxonomy, identification of key recurring elements"
+            description: Systematically categorize and analyze dream elements
+            challenges: Intelligence checks (DC 15), pattern recognition, documentation
+              system (10 gold)
+            outcomes: Comprehensive dream taxonomy, identification of key recurring elements
           skeptical:
-            description: "Look for mundane explanations and potential deception"
-            challenges: "Investigation checks (DC 16), examining alternative causes, confrontational approach"
-            outcomes: "Elimination of false leads, potential discovery of deliberate influence"
-      
+            description: Look for mundane explanations and potential deception
+            challenges: Investigation checks (DC 16), examining alternative causes,
+              confrontational approach
+            outcomes: Elimination of false leads, potential discovery of deliberate
+              influence
       - stage: 2
-        title: "Physical Symptoms"
+        title: Physical Symptoms
         objectives:
-          - "Document physical manifestations from dreams"
-          - "Determine if symptoms are spreading to non-dreamers"
-          - "Assess medical implications"
+          - Document physical manifestations from dreams
+          - Determine if symptoms are spreading to non-dreamers
+          - Assess medical implications
         completion_paths:
           medical:
-            description: "Treat as physiological condition requiring treatment"
-            challenges: "Medicine checks (DC 15), developing symptom management, medical supplies (30 gold)"
-            outcomes: "Temporary relief of physical symptoms, containment protocol"
+            description: Treat as physiological condition requiring treatment
+            challenges: Medicine checks (DC 15), developing symptom management, medical
+              supplies (30 gold)
+            outcomes: Temporary relief of physical symptoms, containment protocol
           magical:
-            description: "Analyze arcane signatures in manifestations"
-            challenges: "Arcana checks (DC 17), identifying magical energy patterns, detection tools (25 gold)"
-            outcomes: "Recognition of specific magical influence or entity"
+            description: Analyze arcane signatures in manifestations
+            challenges: Arcana checks (DC 17), identifying magical energy patterns,
+              detection tools (25 gold)
+            outcomes: Recognition of specific magical influence or entity
           quarantine:
-            description: "Isolate affected individuals to prevent potential spread"
-            challenges: "Persuasion checks (DC 15), managing fear and resistance, secure location (50 gold)"
-            outcomes: "Controlled environment for observation, prevention of new cases"
-      
+            description: Isolate affected individuals to prevent potential spread
+            challenges: Persuasion checks (DC 15), managing fear and resistance, secure
+              location (50 gold)
+            outcomes: Controlled environment for observation, prevention of new cases
       - stage: 3
-        title: "Dream Walking"
+        title: Dream Walking
         objectives:
-          - "Prepare ritual to enter shared dreamscape"
-          - "Navigate the crystalline dream landscape"
-          - "Communicate with dream entities"
+          - Prepare ritual to enter shared dreamscape
+          - Navigate the crystalline dream landscape
+          - Communicate with dream entities
         completion_paths:
           observer:
-            description: "Enter dream state but remain detached and observational"
-            challenges: "Wisdom saves (DC 16), resisting dream influence, mental discipline techniques"
-            outcomes: "Objective information without personal entanglement"
+            description: Enter dream state but remain detached and observational
+            challenges: Wisdom saves (DC 16), resisting dream influence, mental discipline
+              techniques
+            outcomes: Objective information without personal entanglement
           participant:
-            description: "Fully immerse in dream experience to understand from within"
-            challenges: "Constitution saves (DC 15), risk of bringing dream elements back, 8-hour dream journey"
-            outcomes: "Deep understanding of dream meaning, potential dream abilities"
+            description: Fully immerse in dream experience to understand from within
+            challenges: Constitution saves (DC 15), risk of bringing dream elements back,
+              8-hour dream journey
+            outcomes: Deep understanding of dream meaning, potential dream abilities
           guide:
-            description: "Enter with intention to guide and influence dream direction"
-            challenges: "Charisma checks (DC 18), contest of will with dream entities, dream manipulation tools (40 gold)"
-            outcomes: "Ability to reshape dream elements, potential to communicate intent"
-      
+            description: Enter with intention to guide and influence dream direction
+            challenges: Charisma checks (DC 18), contest of will with dream entities, dream
+              manipulation tools (40 gold)
+            outcomes: Ability to reshape dream elements, potential to communicate intent
       - stage: 4
-        title: "The Crystal Source"
+        title: The Crystal Source
         objectives:
-          - "Identify physical location connected to dreams"
-          - "Investigate crystal formation influencing dreamers"
-          - "Determine nature of connection"
+          - Identify physical location connected to dreams
+          - Investigate crystal formation influencing dreamers
+          - Determine nature of connection
         completion_paths:
           disrupt:
-            description: "Attempt to break or block the dream connection"
-            challenges: "Combat with crystal guardians (CR 3), ritual components (100 gold), 4-hour ritual"
-            outcomes: "End dream phenomena but lose potential knowledge/benefits"
+            description: Attempt to break or block the dream connection
+            challenges: Combat with crystal guardians (CR 3), ritual components (100 gold),
+              4-hour ritual
+            outcomes: End dream phenomena but lose potential knowledge/benefits
           stabilize:
-            description: "Create controlled conduit for dream energy"
-            challenges: "Arcana checks (DC 17), precise magical manipulation, specialized crystals (75 gold)"
-            outcomes: "Maintain connection but remove harmful elements"
+            description: Create controlled conduit for dream energy
+            challenges: Arcana checks (DC 17), precise magical manipulation, specialized
+              crystals (75 gold)
+            outcomes: Maintain connection but remove harmful elements
           amplify:
-            description: "Strengthen the dream connection for clearer communication"
-            challenges: "Wisdom saves (DC 16), risk of overwhelming mental influence, psychic amplifiers (60 gold)"
-            outcomes: "Full communication with entity/consciousness behind dreams"
-      
+            description: Strengthen the dream connection for clearer communication
+            challenges: Wisdom saves (DC 16), risk of overwhelming mental influence, psychic
+              amplifiers (60 gold)
+            outcomes: Full communication with entity/consciousness behind dreams
       - stage: 5
-        title: "Dream Message"
+        title: Dream Message
         objectives:
-          - "Interpret the meaning of shared dreams"
-          - "Determine if action is required"
-          - "Address community concerns about dream phenomena"
+          - Interpret the meaning of shared dreams
+          - Determine if action is required
+          - Address community concerns about dream phenomena
         completion_paths:
           prophecy:
-            description: "Treat dreams as warnings of future events requiring preparation"
-            challenges: "History and Religion checks (DC 16), interpreting symbolic meaning, 2-day analysis"
-            outcomes: "Preparation for predicted events, potential prevention measures"
+            description: Treat dreams as warnings of future events requiring preparation
+            challenges: History and Religion checks (DC 16), interpreting symbolic meaning,
+              2-day analysis
+            outcomes: Preparation for predicted events, potential prevention measures
           communion:
-            description: "Establish ongoing communication channel with dream source"
-            challenges: "Ritual components (150 gold), designated intermediaries, 5-hour ceremony"
-            outcomes: "Regular dream guidance, information exchange"
+            description: Establish ongoing communication channel with dream source
+            challenges: Ritual components (150 gold), designated intermediaries, 5-hour
+              ceremony
+            outcomes: Regular dream guidance, information exchange
           rejection:
-            description: "Assist community in blocking and rejecting dream influence"
-            challenges: "Community coordination, protective measures (200 gold), public education campaign"
-            outcomes: "Mental autonomy restored, potential valuable connection lost"
-    
+            description: Assist community in blocking and rejecting dream influence
+            challenges: Community coordination, protective measures (200 gold), public
+              education campaign
+            outcomes: Mental autonomy restored, potential valuable connection lost
     key_decision_points:
       - stage: 3
-        decision: "Dream Entity Nature"
+        decision: Dream Entity Nature
         choices:
-          - choice: "Dreams are sent by benevolent entity seeking help"
-            consequences: "Focus shifts to providing assistance to entity"
-          - choice: "Dreams are attempt to manipulate population for entity's purposes"
-            consequences: "Resistance and protection become priority"
-          - choice: "Dreams are unintentional leakage from awakening consciousness"
-            consequences: "Question of whether to fully wake or keep dormant the consciousness"
-      
+          - choice: Dreams are sent by benevolent entity seeking help
+            consequences: Focus shifts to providing assistance to entity
+          - choice: Dreams are attempt to manipulate population for entity's purposes
+            consequences: Resistance and protection become priority
+          - choice: Dreams are unintentional leakage from awakening consciousness
+            consequences: Question of whether to fully wake or keep dormant the consciousness
       - stage: 5
-        decision: "Dream Content Revelation"
+        decision: Dream Content Revelation
         choices:
-          - choice: "Dreams predict imminent danger to settlement"
-            consequences: "Evacuation plans, defensive preparations"
-          - choice: "Dreams contain location of powerful artifact"
-            consequences: "Expedition planning, potential competing interests"
-          - choice: "Dreams indicate changes happening to dreamers themselves"
-            consequences: "Long-term adaptation strategies, evolution implications"
-    
+          - choice: Dreams predict imminent danger to settlement
+            consequences: Evacuation plans, defensive preparations
+          - choice: Dreams contain location of powerful artifact
+            consequences: Expedition planning, potential competing interests
+          - choice: Dreams indicate changes happening to dreamers themselves
+            consequences: Long-term adaptation strategies, evolution implications
     potential_twists:
-      - "Dreams are memories from people who lived in the sky city"
-      - "A sleeping crystal entity is using dreamers to see the current world"
-      - "Dreams are preparation for dreamers to serve as vessels for ancient consciousness"
-      - "The dreams are actually from the future, showing potential crystal apocalypse"
-      - "Dreams are side effect of natural crystal attunement process with positive outcome"
-    
+      - Dreams are memories from people who lived in the sky city
+      - A sleeping crystal entity is using dreamers to see the current world
+      - Dreams are preparation for dreamers to serve as vessels for ancient
+        consciousness
+      - The dreams are actually from the future, showing potential crystal
+        apocalypse
+      - Dreams are side effect of natural crystal attunement process with
+        positive outcome
     rewards:
       standard:
-        - "100 gold payment from Mayor Thorne"
-        - "Documentation of dream phenomena (valuable to researchers)"
-      
+        - 100 gold payment from Mayor Thorne
+        - Documentation of dream phenomena (valuable to researchers)
       disruption_path:
-        - "250 gold from grateful authorities"
-        - "Sleep Protection Amulet (advantage on saves vs. dream effects)"
-        - "Community relief from disturbing dreams"
-        - "Reputation as problem-solver (+1 to social checks in the region)"
-      
+        - 250 gold from grateful authorities
+        - Sleep Protection Amulet (advantage on saves vs. dream effects)
+        - Community relief from disturbing dreams
+        - Reputation as problem-solver (+1 to social checks in the region)
       communion_path:
-        - "Dream Crystal (allows sending messages through dreams 1/day)"
-        - "Ongoing dream-delivered information about crystal phenomena"
-        - "Connection to ancient knowledge source (advantage on History checks about sky cities)"
-        - "150 gold stipend for ongoing monitoring"
-      
+        - Dream Crystal (allows sending messages through dreams 1/day)
+        - Ongoing dream-delivered information about crystal phenomena
+        - Connection to ancient knowledge source (advantage on History checks
+          about sky cities)
+        - 150 gold stipend for ongoing monitoring
       prophecy_path:
-        - "150 gold from research institution"
-        - "Map to prophesied location or event"
-        - "Foreknowledge of coming events (advantage on related preparations)"
-        - "Dream Journal (allows recording of prophetic dreams with 75% accuracy)"
-      
+        - 150 gold from research institution
+        - Map to prophesied location or event
+        - Foreknowledge of coming events (advantage on related preparations)
+        - Dream Journal (allows recording of prophetic dreams with 75% accuracy)
       medical_path:
-        - "200 gold from medical authorities"
-        - "Crystal Growth Suppressant formula (treats minor crystal manifestations)"
-        - "Medical contacts in three settlements"
-    
+        - 200 gold from medical authorities
+        - Crystal Growth Suppressant formula (treats minor crystal
+          manifestations)
+        - Medical contacts in three settlements
     follow_up_quests:
-      disruption_path: ["SQ025"] # Dream Entity Revenge
-      communion_path: ["MQ022", "SQ046"] # Voice of the Crystal City, Dream Messengers
-      prophecy_path: ["MQ023", "SQ047"] # Averting the Crystal Catastrophe, Prophetic Verification
-      medical_path: ["SQ048", "MQ003"] # Crystal Symptom Treatment, Crystalline Contagion
-    
-    related_quests: ["MQ003", "SQ008", "GQ006"]
-    
+      - SQ025
+      - MQ022
+      - SQ046
+      - MQ023
+      - SQ047
+      - SQ048
+      - MQ003
+    related_quests:
+      - MQ003
+      - SQ008
+      - GQ006
     adaptable: true
+  - id: GQ004
+    title: Contaminated Supply
+    associated_npc:
+      - Merchant Guildmaster Denton
+      - Healer Kyra
+    type: Investigation/Regulation
+    difficulty: Medium
+    description: >
+      Reports of crystalline contamination in traded goods have emerged across
+      multiple 
 
-  - id: "GQ004"
-    title: "Contaminated Supply"
-    associated_npc: ["Merchant Guildmaster Denton", "Healer Kyra"]
-    type: "Investigation/Regulation"
-    difficulty: "Medium"
-    description: |
-      Reports of crystalline contamination in traded goods have emerged across multiple 
-      settlements. The affected items seem to cause minor crystal growth on organic materials 
-      they touch. Local authorities are concerned about both public health and trade reputation, 
+      settlements. The affected items seem to cause minor crystal growth on
+      organic materials 
+
+      they touch. Local authorities are concerned about both public health and
+      trade reputation, 
+
       creating pressure to resolve the situation quietly but thoroughly.
     objectives:
-      - "Identify affected goods and common source"
-      - "Investigate supply chain"
-      - "Address contamination at the source"
+      - Identify affected goods and common source
+      - Investigate supply chain
+      - Address contamination at the source
     quest_stages:
       - stage: 1
-        title: "Tracing the Goods"
+        title: Tracing the Goods
         objectives:
-          - "Interview affected merchants and customers"
-          - "Identify all contaminated product types"
-          - "Determine distribution pattern"
+          - Interview affected merchants and customers
+          - Identify all contaminated product types
+          - Determine distribution pattern
         completion_paths:
           diplomatic:
-            description: "Build cooperative network with concerned merchants"
-            challenges: "Persuasion checks (DC 15), earning trust of competitive traders"
-            outcomes: "Open information sharing, broader scope of contamination data"
+            description: Build cooperative network with concerned merchants
+            challenges: Persuasion checks (DC 15), earning trust of competitive traders
+            outcomes: Open information sharing, broader scope of contamination data
           investigative:
-            description: "Conduct forensic analysis of contaminated goods"
-            challenges: "Investigation checks (DC 16), arcana checks (DC 15) for crystal properties"
-            outcomes: "Detailed contamination profile, precise identification of affected goods"
+            description: Conduct forensic analysis of contaminated goods
+            challenges: Investigation checks (DC 16), arcana checks (DC 15) for crystal
+              properties
+            outcomes: Detailed contamination profile, precise identification of affected
+              goods
           authoritative:
-            description: "Use official authority to demand disclosure and cooperation"
-            challenges: "Intimidation checks (DC 14), managing resentment"
-            outcomes: "Immediate but potentially incomplete information, official backing"
-      
+            description: Use official authority to demand disclosure and cooperation
+            challenges: Intimidation checks (DC 14), managing resentment
+            outcomes: Immediate but potentially incomplete information, official backing
       - stage: 2
-        title: "Supply Chain Mapping"
+        title: Supply Chain Mapping
         objectives:
-          - "Create comprehensive map of affected supply routes"
-          - "Identify common nodes where contamination could occur"
-          - "Interview transport workers and warehousing staff"
+          - Create comprehensive map of affected supply routes
+          - Identify common nodes where contamination could occur
+          - Interview transport workers and warehousing staff
         completion_paths:
           comprehensive:
-            description: "Detailed mapping of entire regional trade network"
-            challenges: "Time-intensive (1 week), significant travel between locations"
-            outcomes: "Complete supply chain understanding, identification of all vulnerability points"
+            description: Detailed mapping of entire regional trade network
+            challenges: Time-intensive (1 week), significant travel between locations
+            outcomes: Complete supply chain understanding, identification of all
+              vulnerability points
           targeted:
-            description: "Focus investigation on highest probability contamination points"
-            challenges: "Intelligence checks (DC 16) to identify likely points"
-            outcomes: "Faster results (3 days) but may miss secondary contamination sources"
+            description: Focus investigation on highest probability contamination points
+            challenges: Intelligence checks (DC 16) to identify likely points
+            outcomes: Faster results (3 days) but may miss secondary contamination sources
           intermediaries:
-            description: "Work through guild contacts and trade officials"
-            challenges: "Social checks, bureaucracy navigation, potential information filtering"
-            outcomes: "Leverage existing knowledge but potential political interference"
-      
+            description: Work through guild contacts and trade officials
+            challenges: Social checks, bureaucracy navigation, potential information
+              filtering
+            outcomes: Leverage existing knowledge but potential political interference
       - stage: 3
-        title: "Contamination Source"
+        title: Contamination Source
         objectives:
-          - "Investigate primary contamination location"
-          - "Determine if contamination was accidental or deliberate"
-          - "Secure site to prevent ongoing contamination"
+          - Investigate primary contamination location
+          - Determine if contamination was accidental or deliberate
+          - Secure site to prevent ongoing contamination
         completion_paths:
           containment:
-            description: "Focus on immediate securing of contamination source"
-            challenges: "Physical labor, protective equipment (50 gold), crystal-affected area (CR 2)"
-            outcomes: "Quickly halt further contamination but less understanding of cause"
+            description: Focus on immediate securing of contamination source
+            challenges: Physical labor, protective equipment (50 gold), crystal-affected
+              area (CR 2)
+            outcomes: Quickly halt further contamination but less understanding of cause
           forensic:
-            description: "Detailed investigation of contamination mechanics"
-            challenges: "Arcana checks (DC 17), research time, sample analysis"
-            outcomes: "Complete understanding of contamination process, potential preventative measures"
+            description: Detailed investigation of contamination mechanics
+            challenges: Arcana checks (DC 17), research time, sample analysis
+            outcomes: Complete understanding of contamination process, potential
+              preventative measures
           surveillance:
-            description: "Monitor site to identify any responsible parties returning"
-            challenges: "Stealth checks (DC 15), extended observation period (2-3 days)"
-            outcomes: "Potential identification of deliberate contamination perpetrators"
-      
+            description: Monitor site to identify any responsible parties returning
+            challenges: Stealth checks (DC 15), extended observation period (2-3 days)
+            outcomes: Potential identification of deliberate contamination perpetrators
       - stage: 4
-        title: "Responsibility and Response"
+        title: Responsibility and Response
         objectives:
-          - "Determine liability for contamination"
-          - "Develop official response to affected merchants"
-          - "Create compensation or remediation plan"
+          - Determine liability for contamination
+          - Develop official response to affected merchants
+          - Create compensation or remediation plan
         completion_paths:
           accountability:
-            description: "Focus on identifying and punishing responsible parties"
-            challenges: "Investigation checks (DC 16), gathering legal evidence"
-            outcomes: "Justice served but potential economic disruption"
+            description: Focus on identifying and punishing responsible parties
+            challenges: Investigation checks (DC 16), gathering legal evidence
+            outcomes: Justice served but potential economic disruption
           remediation:
-            description: "Prioritize cleanup and support for affected businesses"
-            challenges: "Organizing cleanup efforts, funding sources (300+ gold)"
-            outcomes: "Economic stability but potential for repeated issue if root cause not addressed"
+            description: Prioritize cleanup and support for affected businesses
+            challenges: Organizing cleanup efforts, funding sources (300+ gold)
+            outcomes: Economic stability but potential for repeated issue if root cause not
+              addressed
           regulation:
-            description: "Develop new procedures to prevent future contamination"
-            challenges: "Drafting effective regulations, navigating bureaucracy"
-            outcomes: "Long-term protection but additional trade costs and restrictions"
-      
+            description: Develop new procedures to prevent future contamination
+            challenges: Drafting effective regulations, navigating bureaucracy
+            outcomes: Long-term protection but additional trade costs and restrictions
       - stage: 5
-        title: "Public Health Management"
+        title: Public Health Management
         objectives:
-          - "Address spread of contamination among population"
-          - "Develop treatment for those affected"
-          - "Create public information campaign"
+          - Address spread of contamination among population
+          - Develop treatment for those affected
+          - Create public information campaign
         completion_paths:
           transparent:
-            description: "Full public disclosure with comprehensive information"
-            challenges: "Managing potential panic, clear communication"
-            outcomes: "Public trust but potential short-term economic impact"
+            description: Full public disclosure with comprehensive information
+            challenges: Managing potential panic, clear communication
+            outcomes: Public trust but potential short-term economic impact
           controlled:
-            description: "Managed information release focusing on solutions not problems"
-            challenges: "Persuasion checks (DC 16), crafting limited but truthful narrative"
-            outcomes: "Balanced response with minimal market disruption"
+            description: Managed information release focusing on solutions not problems
+            challenges: Persuasion checks (DC 16), crafting limited but truthful narrative
+            outcomes: Balanced response with minimal market disruption
           suppression:
-            description: "Minimize public awareness while addressing issues quietly"
-            challenges: "Stealth operation, ethical concerns, potential information leaks"
-            outcomes: "Economic stability but risk of public trust issues if discovered"
-    
+            description: Minimize public awareness while addressing issues quietly
+            challenges: Stealth operation, ethical concerns, potential information leaks
+            outcomes: Economic stability but risk of public trust issues if discovered
     key_decision_points:
       - stage: 3
-        decision: "Contamination origin"
+        decision: Contamination origin
         choices:
-          - choice: "Accidental exposure during normal mining operations"
-            consequences: "Focus on safety regulations and industry standards"
-          - choice: "Deliberate sabotage by competing trade organization"
-            consequences: "Criminal investigation, potential trade conflict"
-          - choice: "Natural mutation of crystal properties reacting to goods"
-            consequences: "Scientific research needed, fundamental change in crystal understanding"
-      
+          - choice: Accidental exposure during normal mining operations
+            consequences: Focus on safety regulations and industry standards
+          - choice: Deliberate sabotage by competing trade organization
+            consequences: Criminal investigation, potential trade conflict
+          - choice: Natural mutation of crystal properties reacting to goods
+            consequences: Scientific research needed, fundamental change in crystal
+              understanding
       - stage: 5
-        decision: "Contamination effects"
+        decision: Contamination effects
         choices:
-          - choice: "Minimal health impact but significant property damage"
-            consequences: "Economic focus to response, compensation systems"
-          - choice: "Gradual harmful health effects requiring treatment"
-            consequences: "Medical response, treatment development, affected tracking"
-          - choice: "Potentially beneficial mutations with social implications"
-            consequences: "Ethical debate, regulation of potential enhancement"
-    
+          - choice: Minimal health impact but significant property damage
+            consequences: Economic focus to response, compensation systems
+          - choice: Gradual harmful health effects requiring treatment
+            consequences: Medical response, treatment development, affected tracking
+          - choice: Potentially beneficial mutations with social implications
+            consequences: Ethical debate, regulation of potential enhancement
     potential_twists:
-      - "Contamination was deliberate attempt to 'improve' population with crystal properties"
-      - "Government official orchestrated contamination to justify increased regulation"
-      - "Affected individuals develop minor beneficial abilities after exposure"
-      - "Contamination is precursor to much more dangerous second-stage effect"
-      - "Crystal contamination is actually attempt by crystal consciousness to communicate"
-    
+      - Contamination was deliberate attempt to 'improve' population with
+        crystal properties
+      - Government official orchestrated contamination to justify increased
+        regulation
+      - Affected individuals develop minor beneficial abilities after exposure
+      - Contamination is precursor to much more dangerous second-stage effect
+      - Crystal contamination is actually attempt by crystal consciousness to
+        communicate
     rewards:
       standard_rewards:
-        - "150 gold payment from local authorities"
-        - "Letter of commendation from Merchant Guildmaster Denton"
-        - "Basic crystal contamination detection tool"
-      
+        - 150 gold payment from local authorities
+        - Letter of commendation from Merchant Guildmaster Denton
+        - Basic crystal contamination detection tool
       diplomatic_path:
-        - "Merchant guild membership offer"
-        - "200 gold compensation from grateful business owners"
-        - "Trade discount on future purchases (10-20%)"
-        - "Contacts among multiple trading houses"
-      
+        - Merchant guild membership offer
+        - 200 gold compensation from grateful business owners
+        - Trade discount on future purchases (10-20%)
+        - Contacts among multiple trading houses
       investigative_path:
-        - "250 gold research stipend"
-        - "Advanced crystal detection apparatus"
-        - "Knowledge of crystal contamination properties (+2 to Arcana checks involving crystals)"
-      
+        - 250 gold research stipend
+        - Advanced crystal detection apparatus
+        - Knowledge of crystal contamination properties (+2 to Arcana checks
+          involving crystals)
       authoritative_path:
-        - "300 gold official reward"
-        - "Deputy trade inspector credentials"
-        - "Authority to conduct future inspections"
-      
+        - 300 gold official reward
+        - Deputy trade inspector credentials
+        - Authority to conduct future inspections
       containment_path:
-        - "200 gold hazard pay"
-        - "Crystal-resistant gloves (advantage on saves against crystal effects for hands)"
-        - "Reputation as effective crisis responder"
-      
+        - 200 gold hazard pay
+        - Crystal-resistant gloves (advantage on saves against crystal effects
+          for hands)
+        - Reputation as effective crisis responder
       forensic_path:
-        - "250 gold research grant"
-        - "Crystal contamination detection tools"
-        - "Academic recognition for new contamination protocols"
-      
+        - 250 gold research grant
+        - Crystal contamination detection tools
+        - Academic recognition for new contamination protocols
       regulatory_path:
-        - "175 gold consultant fee"
-        - "Ability to bypass certain trade restrictions"
-        - "Political favor from trade officials"
-      
+        - 175 gold consultant fee
+        - Ability to bypass certain trade restrictions
+        - Political favor from trade officials
       transparent_path:
-        - "Public acclaim and increased reputation"
-        - "Free lodging in affected settlements"
-        - "Information network of grateful citizens"
-    
+        - Public acclaim and increased reputation
+        - Free lodging in affected settlements
+        - Information network of grateful citizens
     follow_up_quests:
-      deliberate_contamination: ["MQ003", "SQ007"] # Conspiracy of Crystal, Crystal Vermin
-      regulation_established: ["GQ008"] # Crystal Resonance Testing
-      mutation_benefits: ["SQ004"] # Crystal Samples
-    
-    related_quests: ["SQ007", "GQ008", "SQ004", "MQ003"]
-    
+      - MQ003
+      - SQ007
+      - GQ008
+      - SQ004
+    related_quests:
+      - SQ007
+      - GQ008
+      - SQ004
+      - MQ003
     adaptable: true
+  - id: GQ005
+    title: Claim Jumpers
+    associated_npc:
+      - Foreman Durnik
+      - Miner Pela
+    type: Security/Negotiation
+    difficulty: Easy
+    description: >
+      A dispute has erupted at a promising crystal mining claim. The original
+      prospector 
 
-  - id: "GQ005"
-    title: "Claim Jumpers"
-    associated_npc: ["Foreman Durnik", "Miner Pela"]
-    type: "Security/Negotiation"
-    difficulty: "Easy"
-    description: |
-      A dispute has erupted at a promising crystal mining claim. The original prospector 
-      has returned to find unauthorized miners working the site, but the situation is 
-      complicated by unclear claim boundaries and rumors of an especially valuable crystal 
-      formation discovered in a border area. The local mining authority is overwhelmed 
+      has returned to find unauthorized miners working the site, but the
+      situation is 
+
+      complicated by unclear claim boundaries and rumors of an especially
+      valuable crystal 
+
+      formation discovered in a border area. The local mining authority is
+      overwhelmed 
+
       with similar disputes, leading both parties to seek outside mediation.
     quest_stages:
       - stage: 1
-        title: "Claim Assessment"
+        title: Claim Assessment
         objectives:
-          - "Review legal documentation for the claim"
-          - "Survey the disputed territory boundaries"
-          - "Interview original claimant and new miners"
+          - Review legal documentation for the claim
+          - Survey the disputed territory boundaries
+          - Interview original claimant and new miners
         completion_paths:
           legal:
-            description: "Focus on documentation and legal precedent"
-            challenges: "Investigation checks (DC 14), deciphering complicated legal language, 3-hour research"
-            outcomes: "Clear understanding of legal ownership, potential procedural solutions"
+            description: Focus on documentation and legal precedent
+            challenges: Investigation checks (DC 14), deciphering complicated legal
+              language, 3-hour research
+            outcomes: Clear understanding of legal ownership, potential procedural solutions
           geological:
-            description: "Assess the mineral deposits and crystal formations"
-            challenges: "Nature checks (DC 15), identifying crystal value and distribution, mine exploration (2 hours)"
-            outcomes: "Knowledge of where the most valuable deposits are located"
+            description: Assess the mineral deposits and crystal formations
+            challenges: Nature checks (DC 15), identifying crystal value and distribution,
+              mine exploration (2 hours)
+            outcomes: Knowledge of where the most valuable deposits are located
           historical:
-            description: "Research previous disputes and local mining traditions"
-            challenges: "History checks (DC 13), interviewing elder miners, 2-hour information gathering"
-            outcomes: "Contextual understanding, potential historical resolution methods"
-      
+            description: Research previous disputes and local mining traditions
+            challenges: History checks (DC 13), interviewing elder miners, 2-hour
+              information gathering
+            outcomes: Contextual understanding, potential historical resolution methods
       - stage: 2
-        title: "Initial Confrontation"
+        title: Initial Confrontation
         objectives:
-          - "Approach unauthorized miners on the claim"
-          - "Present findings about claim legitimacy"
-          - "Assess willingness to negotiate"
+          - Approach unauthorized miners on the claim
+          - Present findings about claim legitimacy
+          - Assess willingness to negotiate
         completion_paths:
           diplomatic:
-            description: "Facilitate calm discussion between parties"
-            challenges: "Persuasion checks (DC 14), maintaining neutral position, 1-hour mediated discussion"
-            outcomes: "Open dialogue established, reduced hostility, willingness to consider compromise"
+            description: Facilitate calm discussion between parties
+            challenges: Persuasion checks (DC 14), maintaining neutral position, 1-hour
+              mediated discussion
+            outcomes: Open dialogue established, reduced hostility, willingness to consider
+              compromise
           authoritative:
-            description: "Assert findings firmly and compel compliance"
-            challenges: "Intimidation checks (DC 15), potential for escalation if failed, immediate resolution attempt"
-            outcomes: "Quick compliance from lesser party but potential resentment and later trouble"
+            description: Assert findings firmly and compel compliance
+            challenges: Intimidation checks (DC 15), potential for escalation if failed,
+              immediate resolution attempt
+            outcomes: Quick compliance from lesser party but potential resentment and later
+              trouble
           investigative:
-            description: "Reveal inconsistencies in claims to both parties"
-            challenges: "Insight checks (DC 16), revealing sensitive information tactfully"
-            outcomes: "Both parties recognize weaknesses in their positions, more amenable to compromise"
-      
+            description: Reveal inconsistencies in claims to both parties
+            challenges: Insight checks (DC 16), revealing sensitive information tactfully
+            outcomes: Both parties recognize weaknesses in their positions, more amenable to
+              compromise
       - stage: 3
-        title: "Discovery Revelation"
+        title: Discovery Revelation
         objectives:
-          - "Inspect the valuable crystal formation"
-          - "Determine true value and uniqueness"
-          - "Assess mining rights implications"
+          - Inspect the valuable crystal formation
+          - Determine true value and uniqueness
+          - Assess mining rights implications
         completion_paths:
           appraisal:
-            description: "Accurately evaluate commercial potential of the formation"
-            challenges: "Investigation checks (DC 15), knowledge of crystal market (DC 14 Intelligence)"
-            outcomes: "Clear monetary value established, enabling financial negotiation"
+            description: Accurately evaluate commercial potential of the formation
+            challenges: Investigation checks (DC 15), knowledge of crystal market (DC 14
+              Intelligence)
+            outcomes: Clear monetary value established, enabling financial negotiation
           research:
-            description: "Study unusual properties of the crystal formation"
-            challenges: "Arcana checks (DC 16), testing crystal resonance, 2-hour examination"
-            outcomes: "Discovery of unique magical or scientific properties beyond monetary value"
+            description: Study unusual properties of the crystal formation
+            challenges: Arcana checks (DC 16), testing crystal resonance, 2-hour examination
+            outcomes: Discovery of unique magical or scientific properties beyond monetary
+              value
           ecological:
-            description: "Assess environmental impact of mining the formation"
-            challenges: "Nature checks (DC 15), understanding crystal ecosystem interactions"
-            outcomes: "Recognition of potential environmental consequences, alternative extraction methods"
-      
+            description: Assess environmental impact of mining the formation
+            challenges: Nature checks (DC 15), understanding crystal ecosystem interactions
+            outcomes: Recognition of potential environmental consequences, alternative
+              extraction methods
       - stage: 4
-        title: "Resolution Proposal"
+        title: Resolution Proposal
         objectives:
-          - "Develop compromise solution"
-          - "Present options to both parties"
-          - "Negotiate specific terms"
+          - Develop compromise solution
+          - Present options to both parties
+          - Negotiate specific terms
         completion_paths:
           partnership:
-            description: "Establish joint venture between both parties"
-            challenges: "Persuasion checks (DC 16), drafting equitable agreement, profit-sharing formula"
-            outcomes: "Collaborative mining operation with shared benefits and responsibilities"
+            description: Establish joint venture between both parties
+            challenges: Persuasion checks (DC 16), drafting equitable agreement,
+              profit-sharing formula
+            outcomes: Collaborative mining operation with shared benefits and
+              responsibilities
           division:
-            description: "Physically divide the claim fairly"
-            challenges: "Wisdom checks (DC 14) to create fair boundaries, surveying (2 hours)"
-            outcomes: "Clear geographic separation of interests with defined borders"
+            description: Physically divide the claim fairly
+            challenges: Wisdom checks (DC 14) to create fair boundaries, surveying (2 hours)
+            outcomes: Clear geographic separation of interests with defined borders
           buyout:
-            description: "Facilitate compensation for one party to relinquish claim"
-            challenges: "Negotiation (DC 15 Charisma), establishing fair price (200-500 gold range)"
-            outcomes: "Clean transfer of rights to single owner with appropriate compensation"
-      
+            description: Facilitate compensation for one party to relinquish claim
+            challenges: Negotiation (DC 15 Charisma), establishing fair price (200-500 gold
+              range)
+            outcomes: Clean transfer of rights to single owner with appropriate compensation
       - stage: 5
-        title: "Implementation"
+        title: Implementation
         objectives:
-          - "Formalize the agreement legally"
-          - "Establish oversight mechanisms"
-          - "Ensure peaceful transition"
+          - Formalize the agreement legally
+          - Establish oversight mechanisms
+          - Ensure peaceful transition
         completion_paths:
           official:
-            description: "Register agreement with mining authority"
-            challenges: "Bureaucratic navigation (DC 13 Intelligence), filing fees (25 gold), 1-day process"
-            outcomes: "Legally binding resolution with government enforcement if needed"
+            description: Register agreement with mining authority
+            challenges: Bureaucratic navigation (DC 13 Intelligence), filing fees (25 gold),
+              1-day process
+            outcomes: Legally binding resolution with government enforcement if needed
           community:
-            description: "Use community elders as witnesses and guarantors"
-            challenges: "Persuasion checks (DC 14) to involve respected locals, ceremonial gathering"
-            outcomes: "Social pressure ensuring compliance, improved standing with community"
+            description: Use community elders as witnesses and guarantors
+            challenges: Persuasion checks (DC 14) to involve respected locals, ceremonial
+              gathering
+            outcomes: Social pressure ensuring compliance, improved standing with community
           personal:
-            description: "Remain as neutral enforcer of the agreement temporarily"
-            challenges: "Commitment of several days, potential confrontations (Intimidation DC 14)"
-            outcomes: "Immediate stability but ongoing responsibility for agreement success"
-    
+            description: Remain as neutral enforcer of the agreement temporarily
+            challenges: Commitment of several days, potential confrontations (Intimidation
+              DC 14)
+            outcomes: Immediate stability but ongoing responsibility for agreement success
     key_decision_points:
       - stage: 3
-        decision: "Crystal Formation Nature"
+        decision: Crystal Formation Nature
         choices:
-          - choice: "Extremely valuable but easily extracted"
-            consequences: "Higher immediate worth but shorter mining potential"
-          - choice: "Moderate value but exceptionally extensive vein"
-            consequences: "Lower immediate value but long-term sustainable mining"
-          - choice: "Unique properties with research potential"
-            consequences: "Interest from academics and mages, specialized extraction required"
-      
+          - choice: Extremely valuable but easily extracted
+            consequences: Higher immediate worth but shorter mining potential
+          - choice: Moderate value but exceptionally extensive vein
+            consequences: Lower immediate value but long-term sustainable mining
+          - choice: Unique properties with research potential
+            consequences: Interest from academics and mages, specialized extraction required
       - stage: 4
-        decision: "Hidden Stakeholder"
+        decision: Hidden Stakeholder
         choices:
-          - choice: "Local noble secretly backing one party"
-            consequences: "Political complications and potential legal challenges"
-          - choice: "Original indigenous claim predating current system"
-            consequences: "Ethical considerations and potential traditional rights"
-          - choice: "Crystal entity influence affecting crystal growth"
-            consequences: "Magical/ecological considerations beyond simple ownership"
-    
+          - choice: Local noble secretly backing one party
+            consequences: Political complications and potential legal challenges
+          - choice: Original indigenous claim predating current system
+            consequences: Ethical considerations and potential traditional rights
+          - choice: Crystal entity influence affecting crystal growth
+            consequences: Magical/ecological considerations beyond simple ownership
     potential_twists:
-      - "Both parties are being manipulated by a third party"
-      - "The crystal formation is actually sentient"
-      - "Mining the formation could trigger local instability"
-      - "One claimant plans to use crystals for dangerous magical experiments"
-      - "The disputed area contains evidence of ancient civilization"
-    
+      - Both parties are being manipulated by a third party
+      - The crystal formation is actually sentient
+      - Mining the formation could trigger local instability
+      - One claimant plans to use crystals for dangerous magical experiments
+      - The disputed area contains evidence of ancient civilization
     rewards:
       standard:
-        - "50 gold mediation fee from both parties"
-        - "Small crystal sample (worth 15 gold)"
-      
+        - 50 gold mediation fee from both parties
+        - Small crystal sample (worth 15 gold)
       partnership_path:
-        - "100 gold bonus for successful joint venture creation"
-        - "5% ongoing interest in mining operation (approximately 10 gold per month)"
-        - "Mining contacts in two different organizations"
-        - "Right to purchase crystals at 10% discount"
-      
+        - 100 gold bonus for successful joint venture creation
+        - 5% ongoing interest in mining operation (approximately 10 gold per
+          month)
+        - Mining contacts in two different organizations
+        - Right to purchase crystals at 10% discount
       division_path:
-        - "75 gold completion payment"
-        - "Surveying tools (worth 25 gold)"
-        - "Detailed map of local crystal deposits"
-        - "Favor owed by local mining authority"
-      
+        - 75 gold completion payment
+        - Surveying tools (worth 25 gold)
+        - Detailed map of local crystal deposits
+        - Favor owed by local mining authority
       buyout_path:
-        - "10% commission on final settlement (20-50 gold)"
-        - "Gratitude of remaining miner (advantage on social checks with mining community)"
-        - "Sample of premium crystal (potential magical properties or worth 40 gold)"
-      
+        - 10% commission on final settlement (20-50 gold)
+        - Gratitude of remaining miner (advantage on social checks with mining
+          community)
+        - Sample of premium crystal (potential magical properties or worth 40
+          gold)
       research_path:
-        - "Research opportunity if interested in crystal properties"
-        - "Contact with academic institution studying crystal phenomena"
-        - "Knowledge of unique crystal properties (advantage on Arcana checks related to similar crystals)"
-    
+        - Research opportunity if interested in crystal properties
+        - Contact with academic institution studying crystal phenomena
+        - Knowledge of unique crystal properties (advantage on Arcana checks
+          related to similar crystals)
     follow_up_quests:
-      partnership_path: ["GQ007", "MQ006"] # Mining Enterprise, Mining Rights
-      division_path: ["SQ021"] # Boundary Enforcement
-      buyout_path: ["GQ010"] # Investment Opportunity
-      research_path: ["MQ003", "SQ022"] # Crystalline Contagion, Crystal Research Project
-    
-    related_quests: ["MQ006", "SQ013"]
-    
+      - GQ007
+      - MQ006
+      - SQ021
+      - GQ010
+      - MQ003
+      - SQ022
+    related_quests:
+      - MQ006
+      - SQ013
     adaptable: true
+  - id: GQ006
+    title: Reflections of the Past
+    associated_npc:
+      - Scholar Varis
+      - Village Elder Merina
+    type: Investigation/Temporal
+    difficulty: Medium
+    description: >
+      People in the area have reported seeing their reflections act
+      independently in crystal 
 
-  - id: "GQ006"
-    title: "Reflections of the Past"
-    associated_npc: ["Scholar Varis", "Village Elder Merina"]
-    type: "Investigation/Temporal"
-    difficulty: "Medium"
-    description: |
-      People in the area have reported seeing their reflections act independently in crystal 
-      surfaces. Some reflections appear to be showing future events, while others seem to 
-      display historical scenes from the sky city era. As more people report the phenomenon, 
-      some have begun purposely seeking out these visions, creating potential dangers.
+      surfaces. Some reflections appear to be showing future events, while
+      others seem to 
+
+      display historical scenes from the sky city era. As more people report the
+      phenomenon, 
+
+      some have begun purposely seeking out these visions, creating potential
+      dangers.
     objectives:
-      - "Interview affected individuals"
-      - "Examine crystal surfaces where phenomena occurred"
-      - "Determine if reflections' predictions come true"
-      - "Locate the source of the temporal disturbance"
+      - Interview affected individuals
+      - Examine crystal surfaces where phenomena occurred
+      - Determine if reflections' predictions come true
+      - Locate the source of the temporal disturbance
     quest_stages:
       - stage: 1
-        title: "Vision Collection"
+        title: Vision Collection
         objectives:
-          - "Interview people who have experienced reflection anomalies"
-          - "Categorize types of visions (past, future, alternate)"
-          - "Map locations where phenomena occur"
+          - Interview people who have experienced reflection anomalies
+          - Categorize types of visions (past, future, alternate)
+          - Map locations where phenomena occur
         completion_paths:
           systematic:
-            description: "Create standardized documentation of all reported visions"
-            challenges: "Organization checks (DC 14), creating documentation system"
-            outcomes: "Comprehensive vision database revealing patterns and correlations"
+            description: Create standardized documentation of all reported visions
+            challenges: Organization checks (DC 14), creating documentation system
+            outcomes: Comprehensive vision database revealing patterns and correlations
           empathic:
-            description: "Focus on emotional impact and personal meaning of visions"
-            challenges: "Insight checks (DC 15), building trust with traumatized witnesses"
-            outcomes: "Deeper understanding of how visions relate to individuals' lives and concerns"
+            description: Focus on emotional impact and personal meaning of visions
+            challenges: Insight checks (DC 15), building trust with traumatized witnesses
+            outcomes: Deeper understanding of how visions relate to individuals' lives and
+              concerns
           skeptical:
-            description: "Test claims and look for fabricated or exaggerated accounts"
-            challenges: "Investigation checks (DC 16), confronting inconsistencies"
-            outcomes: "Filtered data set of verified experiences only"
-      
+            description: Test claims and look for fabricated or exaggerated accounts
+            challenges: Investigation checks (DC 16), confronting inconsistencies
+            outcomes: Filtered data set of verified experiences only
       - stage: 2
-        title: "Crystal Analysis"
+        title: Crystal Analysis
         objectives:
-          - "Examine crystal surfaces where reflections appear"
-          - "Test reflective properties under different conditions"
-          - "Determine if crystals have been altered or affected"
+          - Examine crystal surfaces where reflections appear
+          - Test reflective properties under different conditions
+          - Determine if crystals have been altered or affected
         completion_paths:
           arcane:
-            description: "Focus on magical properties and temporal enchantments"
-            challenges: "Arcana checks (DC 17), magical testing tools (25 gold)"
-            outcomes: "Understanding of magical mechanisms behind reflections"
+            description: Focus on magical properties and temporal enchantments
+            challenges: Arcana checks (DC 17), magical testing tools (25 gold)
+            outcomes: Understanding of magical mechanisms behind reflections
           geological:
-            description: "Study physical properties and crystal structure"
-            challenges: "Nature checks (DC 16), microscopic examination, testing equipment (20 gold)"
-            outcomes: "Identification of unique crystal composition enabling phenomena"
+            description: Study physical properties and crystal structure
+            challenges: Nature checks (DC 16), microscopic examination, testing equipment
+              (20 gold)
+            outcomes: Identification of unique crystal composition enabling phenomena
           experiential:
-            description: "Personal experimentation with reflective surfaces"
-            challenges: "Constitution saves (DC 15), willpower tests, potential mental effects"
-            outcomes: "First-hand understanding of vision process, personal vision experience"
-      
+            description: Personal experimentation with reflective surfaces
+            challenges: Constitution saves (DC 15), willpower tests, potential mental
+              effects
+            outcomes: First-hand understanding of vision process, personal vision experience
       - stage: 3
-        title: "Temporal Mapping"
+        title: Temporal Mapping
         objectives:
-          - "Track vision content across time periods"
-          - "Verify predictions from future visions"
-          - "Authenticate historical scenes from past visions"
+          - Track vision content across time periods
+          - Verify predictions from future visions
+          - Authenticate historical scenes from past visions
         completion_paths:
           historical:
-            description: "Research historical records to verify past visions"
-            challenges: "History checks (DC 15), ancient language translation, archive access (10 gold fee)"
-            outcomes: "Confirmation of historical accuracy, context for events shown"
+            description: Research historical records to verify past visions
+            challenges: History checks (DC 15), ancient language translation, archive access
+              (10 gold fee)
+            outcomes: Confirmation of historical accuracy, context for events shown
           predictive:
-            description: "Document and monitor future predictions to test accuracy"
-            challenges: "Requires patience (3-day monitoring), detailed documentation"
-            outcomes: "Understanding of prediction reliability and mechanisms"
+            description: Document and monitor future predictions to test accuracy
+            challenges: Requires patience (3-day monitoring), detailed documentation
+            outcomes: Understanding of prediction reliability and mechanisms
           relational:
-            description: "Map connections between different time periods shown"
-            challenges: "Intelligence checks (DC 16), pattern recognition, timeline creation"
-            outcomes: "Discovery of meaningful connections across time periods"
-      
+            description: Map connections between different time periods shown
+            challenges: Intelligence checks (DC 16), pattern recognition, timeline creation
+            outcomes: Discovery of meaningful connections across time periods
       - stage: 4
-        title: "Source Location"
+        title: Source Location
         objectives:
-          - "Triangulate source of temporal disturbance"
-          - "Journey to source location"
-          - "Examine central crystal formation"
+          - Triangulate source of temporal disturbance
+          - Journey to source location
+          - Examine central crystal formation
         completion_paths:
           mathematical:
-            description: "Use precise measurements and calculations to locate source"
-            challenges: "Intelligence checks (DC 17), surveying equipment (30 gold), 2-day calculation process"
-            outcomes: "Exact location identified with minimal exploration needed"
+            description: Use precise measurements and calculations to locate source
+            challenges: Intelligence checks (DC 17), surveying equipment (30 gold), 2-day
+              calculation process
+            outcomes: Exact location identified with minimal exploration needed
           intuitive:
-            description: "Follow vision clues and personal sensitivity to locate source"
-            challenges: "Wisdom checks (DC 16), potential false leads, emotional burden"
-            outcomes: "Connection to source energy, potential additional visions during search"
+            description: Follow vision clues and personal sensitivity to locate source
+            challenges: Wisdom checks (DC 16), potential false leads, emotional burden
+            outcomes: Connection to source energy, potential additional visions during
+              search
           local_knowledge:
-            description: "Use local legends and elder knowledge to identify likely location"
-            challenges: "Persuasion checks (DC 14) to gain elder trust, interpreting folklore"
-            outcomes: "Contextual understanding of source's historical significance"
-      
+            description: Use local legends and elder knowledge to identify likely location
+            challenges: Persuasion checks (DC 14) to gain elder trust, interpreting folklore
+            outcomes: Contextual understanding of source's historical significance
       - stage: 5
-        title: "Temporal Nexus"
+        title: Temporal Nexus
         objectives:
-          - "Interact with the central crystal formation"
-          - "Determine how to address temporal disturbance"
-          - "Implement chosen solution"
+          - Interact with the central crystal formation
+          - Determine how to address temporal disturbance
+          - Implement chosen solution
         completion_paths:
           stabilization:
-            description: "Create magical barriers to contain and regulate temporal energy"
-            challenges: "Arcana checks (DC 18), specialized materials (100 gold), ritual casting"
-            outcomes: "Controlled vision phenomenon that can be used safely"
+            description: Create magical barriers to contain and regulate temporal energy
+            challenges: Arcana checks (DC 18), specialized materials (100 gold), ritual
+              casting
+            outcomes: Controlled vision phenomenon that can be used safely
           severance:
-            description: "Cut off the temporal energy flow entirely"
-            challenges: "Combat with time-displaced guardians (CR 3), destruction ritual"
-            outcomes: "End to vision phenomena and potential dangers"
+            description: Cut off the temporal energy flow entirely
+            challenges: Combat with time-displaced guardians (CR 3), destruction ritual
+            outcomes: End to vision phenomena and potential dangers
           attunement:
-            description: "Establish harmonious relationship with temporal crystal"
-            challenges: "Charisma checks (DC 17), meditation (8-hour process), personal energy expenditure"
-            outcomes: "Directed vision capabilities, temporal insights available when needed"
-    
+            description: Establish harmonious relationship with temporal crystal
+            challenges: Charisma checks (DC 17), meditation (8-hour process), personal
+              energy expenditure
+            outcomes: Directed vision capabilities, temporal insights available when needed
     key_decision_points:
       - stage: 3
-        decision: "Vision Content Revelation"
+        decision: Vision Content Revelation
         choices:
-          - choice: "Visions reveal impending disaster affecting the region"
-            consequences: "Focus shifts to disaster prevention, early warning system"
-          - choice: "Visions show location of ancient sky city artifact"
-            consequences: "Expedition planning, potential competing interests"
-          - choice: "Visions are communications from intelligence in another time"
-            consequences: "Diplomatic considerations, message interpretation"
-      
+          - choice: Visions reveal impending disaster affecting the region
+            consequences: Focus shifts to disaster prevention, early warning system
+          - choice: Visions show location of ancient sky city artifact
+            consequences: Expedition planning, potential competing interests
+          - choice: Visions are communications from intelligence in another time
+            consequences: Diplomatic considerations, message interpretation
       - stage: 5
-        decision: "Crystal Origin"
+        decision: Crystal Origin
         choices:
-          - choice: "Natural formation with unique properties"
-            consequences: "Scientific value, conservation approach"
-          - choice: "Deliberately created anchor point by sky city civilization"
-            consequences: "Historical significance, possible additional functions"
-          - choice: "Result of recent crystal corruption interacting with ley lines"
-            consequences: "Concerns about expansion or contamination"
-    
+          - choice: Natural formation with unique properties
+            consequences: Scientific value, conservation approach
+          - choice: Deliberately created anchor point by sky city civilization
+            consequences: Historical significance, possible additional functions
+          - choice: Result of recent crystal corruption interacting with ley lines
+            consequences: Concerns about expansion or contamination
     potential_twists:
-      - "Player characters appear in past visions seen by historical figures"
-      - "Future visions show multiple possible timelines based on current choices"
-      - "Crystals are actually storing consciousness of people from fallen sky city"
-      - "Some 'visions' are actually windows allowing entities to observe this world"
-      - "Time distortion is gradually expanding beyond reflective surfaces"
-    
+      - Player characters appear in past visions seen by historical figures
+      - Future visions show multiple possible timelines based on current choices
+      - Crystals are actually storing consciousness of people from fallen sky
+        city
+      - Some 'visions' are actually windows allowing entities to observe this
+        world
+      - Time distortion is gradually expanding beyond reflective surfaces
     rewards:
       standard:
-        - "120 gold research payment from Scholar Varis"
-        - "Documentation of vision reports"
-      
+        - 120 gold research payment from Scholar Varis
+        - Documentation of vision reports
       stabilization_path:
-        - "200 gold from grateful authorities"
-        - "Temporal Focus Crystal (allows seeing 1 hour into past or future once per day)"
-        - "Ongoing access to regulated vision crystal for personal use"
-        - "Research credit in scholarly publications"
-      
+        - 200 gold from grateful authorities
+        - Temporal Focus Crystal (allows seeing 1 hour into past or future once
+          per day)
+        - Ongoing access to regulated vision crystal for personal use
+        - Research credit in scholarly publications
       severance_path:
-        - "180 gold hazard pay"
-        - "Crystalline Shard (protects against time-affecting magic, advantage on saves)"
-        - "Gratitude of those previously troubled by unwanted visions"
-        - "Fragment of temporally-charged crystal (valuable to certain collectors)"
-      
+        - 180 gold hazard pay
+        - Crystalline Shard (protects against time-affecting magic, advantage on
+          saves)
+        - Gratitude of those previously troubled by unwanted visions
+        - Fragment of temporally-charged crystal (valuable to certain collectors)
       attunement_path:
-        - "130 gold stipend"
-        - "Personal temporal sensitivity (occasional helpful premonitions at DM's discretion)"
-        - "Respected position as temporal interpreter for community"
-        - "Invitation to exclusive circle of temporal researchers"
-    
+        - 130 gold stipend
+        - Personal temporal sensitivity (occasional helpful premonitions at DM's
+          discretion)
+        - Respected position as temporal interpreter for community
+        - Invitation to exclusive circle of temporal researchers
     follow_up_quests:
-      stabilization_path: ["MQ004", "SQ031"] # Patterns in the Sky, Temporal Research
-      severance_path: ["SQ032"] # Crystal Cleanup
-      attunement_path: ["SQ033", "MQ007"] # Temporal Interpreter, Crystal Networks
-    
-    related_quests: ["MQ004", "SQ008"]
-    
+      - MQ004
+      - SQ031
+      - SQ032
+      - SQ033
+      - MQ007
+    related_quests:
+      - MQ004
+      - SQ008
     adaptable: true
+  - id: GQ007
+    title: Crystal Festival Security
+    associated_npc:
+      - Guard Captain Holt
+      - Festival Organizer Miri
+    type: Protection
+    difficulty: Medium
+    description: >
+      The annual Crystal Harvest Festival is a time of celebration and commerce,
+      drawing 
 
-  - id: "GQ007"
-    title: "Crystal Festival Security"
-    associated_npc: ["Guard Captain Holt", "Festival Organizer Miri"]
-    type: "Protection"
-    difficulty: "Medium"
-    description: |
-      The annual Crystal Harvest Festival is a time of celebration and commerce, drawing 
-      visitors from surrounding settlements. This year, Guard Captain Holt has received 
-      multiple tips about a potential theft or sabotage targeting the festival's prized 
-      crystal displays. Local authorities need additional security personnel to ensure the 
-      event proceeds safely while keeping the threats discrete to avoid alarming the public.
+      visitors from surrounding settlements. This year, Guard Captain Holt has
+      received 
+
+      multiple tips about a potential theft or sabotage targeting the festival's
+      prized 
+
+      crystal displays. Local authorities need additional security personnel to
+      ensure the 
+
+      event proceeds safely while keeping the threats discrete to avoid alarming
+      the public.
     objectives:
-      - "Patrol festival grounds"
-      - "Investigate suspicious activity"
-      - "Prevent or respond to security threats"
+      - Patrol festival grounds
+      - Investigate suspicious activity
+      - Prevent or respond to security threats
     quest_stages:
       - stage: 1
-        title: "Festival Preparations"
+        title: Festival Preparations
         objectives:
-          - "Meet with festival organizers"
-          - "Learn about specific security concerns"
-          - "Identify vulnerable areas and times"
+          - Meet with festival organizers
+          - Learn about specific security concerns
+          - Identify vulnerable areas and times
         completion_paths:
           official:
-            description: "Work closely with event officials and their plan"
-            challenges: "Bureaucracy navigation (DC 13), limited autonomy, Persuasion checks (DC 14)"
-            outcomes: "Full knowledge of schedule and official support"
+            description: Work closely with event officials and their plan
+            challenges: Bureaucracy navigation (DC 13), limited autonomy, Persuasion checks
+              (DC 14)
+            outcomes: Full knowledge of schedule and official support
           independent:
-            description: "Create your own security assessment and plan"
-            challenges: "Investigation checks (DC 16), local knowledge requirements (DC 14)"
-            outcomes: "Freedom to operate without oversight, but less information"
-      
+            description: Create your own security assessment and plan
+            challenges: Investigation checks (DC 16), local knowledge requirements (DC 14)
+            outcomes: Freedom to operate without oversight, but less information
       - stage: 2
-        title: "Suspicious Activity"
+        title: Suspicious Activity
         objectives:
-          - "Monitor key areas during festival"
-          - "Investigate any unusual behavior"
-          - "Report or respond to potential threats"
+          - Monitor key areas during festival
+          - Investigate any unusual behavior
+          - Report or respond to potential threats
         completion_paths:
           preventative:
-            description: "Focus on identifying threats before they manifest"
-            challenges: "Insight checks (DC 15), Perception checks (DC 16), social infiltration"
-            outcomes: "Prevent major incident before it occurs"
+            description: Focus on identifying threats before they manifest
+            challenges: Insight checks (DC 15), Perception checks (DC 16), social
+              infiltration
+            outcomes: Prevent major incident before it occurs
           reactive:
-            description: "Respond quickly to emergent threats"
-            challenges: "Combat with saboteurs (CR 2), crowd control (DC 14 Charisma checks)"
-            outcomes: "Dramatic resolution, public recognition"
-          
+            description: Respond quickly to emergent threats
+            challenges: Combat with saboteurs (CR 2), crowd control (DC 14 Charisma checks)
+            outcomes: Dramatic resolution, public recognition
       - stage: 3
-        title: "The Bribe"
+        title: The Bribe
         objectives:
-          - "Respond to an offer to look the other way"
-          - "Decide how to handle attempted corruption"
-          - "Follow through on decision while maintaining cover"
+          - Respond to an offer to look the other way
+          - Decide how to handle attempted corruption
+          - Follow through on decision while maintaining cover
         completion_paths:
           reject:
-            description: "Refuse the bribe and maintain security integrity"
-            challenges: "Potential for immediate confrontation (CR 3), Intimidation check (DC 15)"
-            outcomes: "Respect from officials, thwarted plot"
+            description: Refuse the bribe and maintain security integrity
+            challenges: Potential for immediate confrontation (CR 3), Intimidation check (DC
+              15)
+            outcomes: Respect from officials, thwarted plot
           accept:
-            description: "Accept the bribe to gather intelligence on larger operation"
-            challenges: "Deception checks (DC 16), moral dilemmas, risk of exposure"
-            outcomes: "Information about criminal organization, evidence for future prosecution"
+            description: Accept the bribe to gather intelligence on larger operation
+            challenges: Deception checks (DC 16), moral dilemmas, risk of exposure
+            outcomes: Information about criminal organization, evidence for future
+              prosecution
           counter:
-            description: "Pretend to accept but set up sting operation"
-            challenges: "Complex coordination (DC 15 Intelligence), timing challenges"
-            outcomes: "Capture of multiple conspirators, higher reward"
-      
+            description: Pretend to accept but set up sting operation
+            challenges: Complex coordination (DC 15 Intelligence), timing challenges
+            outcomes: Capture of multiple conspirators, higher reward
       - stage: 4
-        title: "Confrontation"
+        title: Confrontation
         objectives:
-          - "Deal with primary security threat"
-          - "Minimize damage to festival"
-          - "Apprehend or negotiate with troublemakers"
+          - Deal with primary security threat
+          - Minimize damage to festival
+          - Apprehend or negotiate with troublemakers
         completion_paths:
           public:
-            description: "Confront threats openly with festival security backup"
-            challenges: "Combat with thieves (CR 3-4), protecting bystanders (DC 14 Dexterity)"
-            outcomes: "Public recognition, clean resolution"
+            description: Confront threats openly with festival security backup
+            challenges: Combat with thieves (CR 3-4), protecting bystanders (DC 14
+              Dexterity)
+            outcomes: Public recognition, clean resolution
           covert:
-            description: "Handle the situation quietly without disrupting festival"
-            challenges: "Stealth checks (DC 16), precise timing, limited resources"
-            outcomes: "Festival continues without panic, discrete payment from officials"
+            description: Handle the situation quietly without disrupting festival
+            challenges: Stealth checks (DC 16), precise timing, limited resources
+            outcomes: Festival continues without panic, discrete payment from officials
           diplomatic:
-            description: "Negotiate with troublemakers to redirect their efforts"
-            challenges: "Persuasion checks (DC 17), offering alternatives"
-            outcomes: "Potential unexpected ally, peaceful resolution"
-      
+            description: Negotiate with troublemakers to redirect their efforts
+            challenges: Persuasion checks (DC 17), offering alternatives
+            outcomes: Potential unexpected ally, peaceful resolution
       - stage: 5
-        title: "Aftermath"
+        title: Aftermath
         objectives:
-          - "Report to authorities"
-          - "Address any remaining security concerns"
-          - "Collect payment and recognition"
+          - Report to authorities
+          - Address any remaining security concerns
+          - Collect payment and recognition
         completion_paths:
           thorough:
-            description: "Provide detailed report with recommendations for future security"
-            challenges: "Time investment (4-6 hours), documentation expertise"
-            outcomes: "Long-term relationship with festival committee, future employment"
+            description: Provide detailed report with recommendations for future security
+            challenges: Time investment (4-6 hours), documentation expertise
+            outcomes: Long-term relationship with festival committee, future employment
           minimal:
-            description: "Quick debrief and collection of payment"
-            challenges: "Potential for overlooked details, Persuasion check (DC 12) for full payment"
-            outcomes: "Fast resolution and freedom to move on"
+            description: Quick debrief and collection of payment
+            challenges: Potential for overlooked details, Persuasion check (DC 12) for full
+              payment
+            outcomes: Fast resolution and freedom to move on
           celebration:
-            description: "Join the festival celebration as honored guests"
-            challenges: "Social expectations, potential revelations from relaxed attendees"
-            outcomes: "Community connections, potential leads for other quests"
-    
+            description: Join the festival celebration as honored guests
+            challenges: Social expectations, potential revelations from relaxed attendees
+            outcomes: Community connections, potential leads for other quests
     key_decision_points:
       - stage: 3
-        decision: "Criminal Network"
+        decision: Criminal Network
         choices:
-          - choice: "Local thieves guild operation"
-            consequences: "Localized threat, connections to urban crime syndicates"
-          - choice: "Rival settlement's attempt to discredit festival"
-            consequences: "Political implications, potential for broader conflict"
-          - choice: "Crystal cult seeking specific ritual component"
-            consequences: "Magical/religious motivation, specific targeting of certain crystals"
-      
+          - choice: Local thieves guild operation
+            consequences: Localized threat, connections to urban crime syndicates
+          - choice: Rival settlement's attempt to discredit festival
+            consequences: Political implications, potential for broader conflict
+          - choice: Crystal cult seeking specific ritual component
+            consequences: Magical/religious motivation, specific targeting of certain
+              crystals
       - stage: 4
-        decision: "Threat Focus"
+        decision: Threat Focus
         choices:
-          - choice: "Theft of valuable display crystals"
-            consequences: "Focus on protecting physical assets"
-          - choice: "Sabotage of crystal resonance demonstration"
-            consequences: "Preventing magical accident or public spectacle failure"
-          - choice: "Kidnapping of crystal expert during presentation"
-            consequences: "VIP protection becomes priority"
-    
+          - choice: Theft of valuable display crystals
+            consequences: Focus on protecting physical assets
+          - choice: Sabotage of crystal resonance demonstration
+            consequences: Preventing magical accident or public spectacle failure
+          - choice: Kidnapping of crystal expert during presentation
+            consequences: VIP protection becomes priority
     potential_twists:
-      - "Security threat is diversion for larger heist elsewhere"
-      - "Festival organizer is behind the plot"
-      - "Rare crystal specimen at festival causes unexpected magical effects"
-      - "Thieves are actually trying to prevent dangerous crystal from being activated"
-      - "Rival security team has been hired, creating jurisdiction conflicts"
-    
+      - Security threat is diversion for larger heist elsewhere
+      - Festival organizer is behind the plot
+      - Rare crystal specimen at festival causes unexpected magical effects
+      - Thieves are actually trying to prevent dangerous crystal from being
+        activated
+      - Rival security team has been hired, creating jurisdiction conflicts
     rewards:
       standard_rewards:
-        - "150 gold from festival committee"
-        - "Festival token with minor magical property"
-        - "Local reputation improvement"
-      
+        - 150 gold from festival committee
+        - Festival token with minor magical property
+        - Local reputation improvement
       official_path:
-        - "175 gold security payment"
-        - "Letter of recommendation from Guard Captain Holt"
-        - "Permission to carry weapons in restricted areas"
-      
+        - 175 gold security payment
+        - Letter of recommendation from Guard Captain Holt
+        - Permission to carry weapons in restricted areas
       independent_path:
-        - "150 gold plus 50 gold performance bonus"
-        - "Crystal detection amulet (advantage on Perception checks for crystal properties)"
-        - "Freedom to set up business connections during festival"
-      
+        - 150 gold plus 50 gold performance bonus
+        - Crystal detection amulet (advantage on Perception checks for crystal
+          properties)
+        - Freedom to set up business connections during festival
       preventative_path:
-        - "200 gold from grateful merchants"
-        - "Discounts at festival vendors (20% off purchases)"
-        - "Information about upcoming events requiring security"
-      
+        - 200 gold from grateful merchants
+        - Discounts at festival vendors (20% off purchases)
+        - Information about upcoming events requiring security
       reactive_path:
-        - "225 gold hazard pay"
-        - "Trophy from thwarted criminals (minor magical property)"
-        - "Public recognition and status"
-      
+        - 225 gold hazard pay
+        - Trophy from thwarted criminals (minor magical property)
+        - Public recognition and status
       reject_path:
-        - "200 gold honorable service bonus"
-        - "Badge of office (advantage on Persuasion checks with local authorities)"
-        - "Information about criminal operations in region"
-      
+        - 200 gold honorable service bonus
+        - Badge of office (advantage on Persuasion checks with local authorities)
+        - Information about criminal operations in region
       counter_path:
-        - "350 gold bounty for capturing multiple criminals"
-        - "Recognition from local authorities"
-        - "Contact in guard force for future assistance"
-      
+        - 350 gold bounty for capturing multiple criminals
+        - Recognition from local authorities
+        - Contact in guard force for future assistance
       diplomatic_path:
-        - "175 gold conflict resolution fee"
-        - "Contact among former criminals now working as informants"
-        - "Secret about festival history that could be valuable"
-    
+        - 175 gold conflict resolution fee
+        - Contact among former criminals now working as informants
+        - Secret about festival history that could be valuable
     follow_up_quests:
-      criminal_network: ["SQ009"] # Artifact Theft
-      security_success: ["GQ016"] # Track the Crime Lord
-      crystal_expertise: ["SQ004", "SQ011"] # Crystal Samples, Crystal Host
-    
-    related_quests: ["SQ009", "GQ016", "SQ004", "SQ011"]
-    
+      - SQ009
+      - GQ016
+      - SQ004
+      - SQ011
+    related_quests:
+      - SQ009
+      - GQ016
+      - SQ004
+      - SQ011
     adaptable: true
+  - id: GQ008
+    title: Crystal Resonance Testing
+    associated_npc:
+      - Lenna Crystalweave
+      - Elder Thorne
+    type: Research
+    difficulty: Easy
+    description: >
+      A researcher named Lenna Crystalweave needs assistance testing crystal
+      resonance effects in 
 
-  - id: "GQ008"
-    title: "Crystal Resonance Testing"
-    associated_npc: ["Lenna Crystalweave", "Elder Thorne"]
-    type: "Research"
-    difficulty: "Easy"
-    description: |
-      A researcher named Lenna Crystalweave needs assistance testing crystal resonance effects in 
-      different environments. Her work could lead to breakthroughs in understanding how crystals 
-      interact with the natural world, but some locals are suspicious of her methods.
+      different environments. Her work could lead to breakthroughs in
+      understanding how crystals 
+
+      interact with the natural world, but some locals are suspicious of her
+      methods.
     objectives:
-      - "Transport testing apparatus to multiple locations"
-      - "Set up and run experiments according to instructions"
-      - "Document results accurately"
+      - Transport testing apparatus to multiple locations
+      - Set up and run experiments according to instructions
+      - Document results accurately
     quest_stages:
       - stage: 1
-        title: "Experimental Design"
+        title: Experimental Design
         objectives:
-          - "Meet with Lenna Crystalweave"
-          - "Learn about her research methods"
-          - "Prepare testing equipment"
+          - Meet with Lenna Crystalweave
+          - Learn about her research methods
+          - Prepare testing equipment
         completion_paths:
           academic:
-            description: "Follow Lenna's precise scientific protocols"
-            challenges: "Intelligence checks (DC 14), careful equipment handling (DC 12)"
-            outcomes: "High-quality baseline data, Lenna's full trust"
+            description: Follow Lenna's precise scientific protocols
+            challenges: Intelligence checks (DC 14), careful equipment handling (DC 12)
+            outcomes: High-quality baseline data, Lenna's full trust
           creative:
-            description: "Suggest modifications to the experiment design"
-            challenges: "Arcana checks (DC 15), convincing researcher of value (DC 16 Persuasion)"
-            outcomes: "Experimental flexibility, potential for unexpected discoveries"
-      
+            description: Suggest modifications to the experiment design
+            challenges: Arcana checks (DC 15), convincing researcher of value (DC 16
+              Persuasion)
+            outcomes: Experimental flexibility, potential for unexpected discoveries
       - stage: 2
-        title: "Field Testing"
+        title: Field Testing
         objectives:
-          - "Travel to test sites with equipment"
-          - "Conduct resonance experiments"
-          - "Record environmental interactions"
+          - Travel to test sites with equipment
+          - Conduct resonance experiments
+          - Record environmental interactions
         completion_paths:
           thorough:
-            description: "Test in all suggested locations with multiple variables"
-            challenges: "Time investment (2 days), travel hazards (CR 1), precision (DC 14 Dexterity)"
-            outcomes: "Complete dataset, researcher's approval"
+            description: Test in all suggested locations with multiple variables
+            challenges: Time investment (2 days), travel hazards (CR 1), precision (DC 14
+              Dexterity)
+            outcomes: Complete dataset, researcher's approval
           expedited:
-            description: "Focus on locations most likely to show results"
-            challenges: "Determining high-value test sites (DC 16 Intelligence), risk of incomplete data"
-            outcomes: "Faster results (1 day), but potential scientific gaps"
+            description: Focus on locations most likely to show results
+            challenges: Determining high-value test sites (DC 16 Intelligence), risk of
+              incomplete data
+            outcomes: Faster results (1 day), but potential scientific gaps
           explorative:
-            description: "Add unauthorized test sites that seem promising"
-            challenges: "Navigation challenges (DC 14 Survival), unpredictable results"
-            outcomes: "Potential breakthrough discoveries or dangerous anomalies"
-      
+            description: Add unauthorized test sites that seem promising
+            challenges: Navigation challenges (DC 14 Survival), unpredictable results
+            outcomes: Potential breakthrough discoveries or dangerous anomalies
       - stage: 3
-        title: "Unexpected Discovery"
+        title: Unexpected Discovery
         objectives:
-          - "Investigate anomalous readings at one test site"
-          - "Determine if discovery warrants further study"
-          - "Decide how to report findings"
+          - Investigate anomalous readings at one test site
+          - Determine if discovery warrants further study
+          - Decide how to report findings
         completion_paths:
           disclose:
-            description: "Report everything to Lenna honestly"
-            challenges: "Potential disapproval if protocols were broken (DC 15 Persuasion)"
-            outcomes: "Full scientific collaboration on discovery"
+            description: Report everything to Lenna honestly
+            challenges: Potential disapproval if protocols were broken (DC 15 Persuasion)
+            outcomes: Full scientific collaboration on discovery
           study_privately:
-            description: "Investigate anomaly further before reporting"
-            challenges: "Solo research checks (DC 17 Arcana), lack of proper equipment"
-            outcomes: "Personal insights, possible personal danger from crystal effects (CR 2)"
+            description: Investigate anomaly further before reporting
+            challenges: Solo research checks (DC 17 Arcana), lack of proper equipment
+            outcomes: Personal insights, possible personal danger from crystal effects (CR
+              2)
           conceal:
-            description: "Hide anomalous results that might be concerning"
-            challenges: "Deception checks (DC 16), ethical dilemmas"
-            outcomes: "Protect research funding but risk later consequences"
-      
+            description: Hide anomalous results that might be concerning
+            challenges: Deception checks (DC 16), ethical dilemmas
+            outcomes: Protect research funding but risk later consequences
       - stage: 4
-        title: "Local Interference"
+        title: Local Interference
         objectives:
-          - "Deal with suspicious locals concerned about experiments"
-          - "Prevent sabotage of equipment or data"
-          - "Resolve community tensions around crystal research"
+          - Deal with suspicious locals concerned about experiments
+          - Prevent sabotage of equipment or data
+          - Resolve community tensions around crystal research
         completion_paths:
           educate:
-            description: "Take time to explain the research to concerned citizens"
-            challenges: "Persuasion checks (DC 13), patience, accessible explanations"
-            outcomes: "Community support, possible local assistants"
+            description: Take time to explain the research to concerned citizens
+            challenges: Persuasion checks (DC 13), patience, accessible explanations
+            outcomes: Community support, possible local assistants
           conceal:
-            description: "Continue research in secret to avoid interference"
-            challenges: "Stealth checks (DC 16), limited working time"
-            outcomes: "Uninterrupted but restricted research conditions"
+            description: Continue research in secret to avoid interference
+            challenges: Stealth checks (DC 16), limited working time
+            outcomes: Uninterrupted but restricted research conditions
           compromise:
-            description: "Modify research to address local concerns"
-            challenges: "Adapting protocols (DC 14 Intelligence), maintaining scientific validity"
-            outcomes: "Balance between community relations and research goals"
-    
+            description: Modify research to address local concerns
+            challenges: Adapting protocols (DC 14 Intelligence), maintaining scientific
+              validity
+            outcomes: Balance between community relations and research goals
     key_decision_points:
       - stage: 3
-        decision: "Anomalous Discovery Nature"
+        decision: Anomalous Discovery Nature
         choices:
-          - choice: "Harmless resonance pattern indicating crystal communication"
-            consequences: "Academic interest, potential for cross-discipline research"
-          - choice: "Dangerous energy buildup in certain crystal formations"
-            consequences: "Safety concerns, potential need for containment protocols"
-          - choice: "Evidence of intelligence/consciousness in crystal structures"
-            consequences: "Ethical considerations, possible diplomatic approach to crystals"
-      
+          - choice: Harmless resonance pattern indicating crystal communication
+            consequences: Academic interest, potential for cross-discipline research
+          - choice: Dangerous energy buildup in certain crystal formations
+            consequences: Safety concerns, potential need for containment protocols
+          - choice: Evidence of intelligence/consciousness in crystal structures
+            consequences: Ethical considerations, possible diplomatic approach to crystals
       - stage: 4
-        decision: "Local Relations Approach"
+        decision: Local Relations Approach
         choices:
-          - choice: "Transparent sharing of all research findings with community"
-            consequences: "Building trust but risking research interference or competition"
-          - choice: "Selective disclosure focusing on benefits not risks"
-            consequences: "Maintaining research independence but potential trust issues"
-          - choice: "Research first, community engagement later approach"
-            consequences: "Scientific progress prioritized, social integration challenges"
-    
+          - choice: Transparent sharing of all research findings with community
+            consequences: Building trust but risking research interference or competition
+          - choice: Selective disclosure focusing on benefits not risks
+            consequences: Maintaining research independence but potential trust issues
+          - choice: Research first, community engagement later approach
+            consequences: Scientific progress prioritized, social integration challenges
     potential_twists:
-      - "Research accidentally awakens dormant crystal entity"
-      - "Lenna is secretly working for entity trying to reactivate sky city"
-      - "Local opposition is led by someone who knows real dangers of the research"
-      - "Tests reveal location of valuable crystal deposit sought by multiple factions"
-    
+      - Research accidentally awakens dormant crystal entity
+      - Lenna is secretly working for entity trying to reactivate sky city
+      - Local opposition is led by someone who knows real dangers of the research
+      - Tests reveal location of valuable crystal deposit sought by multiple
+        factions
     rewards:
       standard_rewards:
-        - "100 gold from research grant"
-        - "Basic crystal tuning tools"
-        - "Lenna's recommendation for future academic work"
-      
+        - 100 gold from research grant
+        - Basic crystal tuning tools
+        - Lenna's recommendation for future academic work
       academic_path:
-        - "150 gold from research grant"
-        - "Crystal tuning fork with minor magical property"
-        - "Scientific knowledge that grants advantage on crystal-related checks"
-      
+        - 150 gold from research grant
+        - Crystal tuning fork with minor magical property
+        - Scientific knowledge that grants advantage on crystal-related checks
       creative_path:
-        - "125 gold from initial grant"
-        - "Co-authorship on research findings"
-        - "Experimental crystal focus (cast one chosen cantrip 1/day)"
-      
+        - 125 gold from initial grant
+        - Co-authorship on research findings
+        - Experimental crystal focus (cast one chosen cantrip 1/day)
       thorough_path:
-        - "175 gold for comprehensive work"
-        - "Precision measurement tools (advantage on Investigation checks for small details)"
-        - "Complete dataset valuable to other researchers"
-      
+        - 175 gold for comprehensive work
+        - Precision measurement tools (advantage on Investigation checks for
+          small details)
+        - Complete dataset valuable to other researchers
       expedited_path:
-        - "130 gold for efficient work"
-        - "Techniques for optimizing crystal resonance (ritual casting time reduced by 1 minute)"
-        - "Extra time for personal pursuits in the region"
-      
+        - 130 gold for efficient work
+        - Techniques for optimizing crystal resonance (ritual casting time
+          reduced by 1 minute)
+        - Extra time for personal pursuits in the region
       explorative_path:
-        - "160 gold plus discovery bonus"
-        - "Unique crystal sample with unusual properties"
-        - "Potential for naming newly discovered phenomenon"
-      
+        - 160 gold plus discovery bonus
+        - Unique crystal sample with unusual properties
+        - Potential for naming newly discovered phenomenon
       disclose_path:
-        - "180 gold research integrity bonus"
-        - "Lenna's complete trust for future collaborations"
-        - "Full documentation of discovery findings"
-      
+        - 180 gold research integrity bonus
+        - Lenna's complete trust for future collaborations
+        - Full documentation of discovery findings
       study_privately_path:
-        - "120 gold standard payment"
-        - "Personal crystal attunement (advantage on saving throws against crystal effects)"
-        - "Unique insights not shared with the broader research community"
-      
+        - 120 gold standard payment
+        - Personal crystal attunement (advantage on saving throws against
+          crystal effects)
+        - Unique insights not shared with the broader research community
       concealment_path:
-        - "100 gold initial payment"
-        - "Valuable anomalous crystal sample worth 300 gold to right buyer"
-        - "Potential corruption effects or valuable crystal mutation abilities"
-      
+        - 100 gold initial payment
+        - Valuable anomalous crystal sample worth 300 gold to right buyer
+        - Potential corruption effects or valuable crystal mutation abilities
       educate_path:
-        - "150 gold plus community contribution"
-        - "Local goodwill (discounts and assistance in community)"
-        - "Crystal teaching aid with minor magical property"
-      
+        - 150 gold plus community contribution
+        - Local goodwill (discounts and assistance in community)
+        - Crystal teaching aid with minor magical property
       compromise_path:
-        - "160 gold balanced approach bonus"
-        - "Modified research protocols applicable to other projects"
-        - "Both scientific and community recognition"
-    
+        - 160 gold balanced approach bonus
+        - Modified research protocols applicable to other projects
+        - Both scientific and community recognition
     follow_up_quests:
-      anomalous_discovery: ["SQ011"] # Crystal Host
-      local_support: ["GQ004"] # Contaminated Supply
-      lenna_betrayal: ["SQ012"] # Fey Token
-    
-    related_quests: ["SQ011", "GQ004", "SQ012"]
-    
-    adaptable: true 
+      - SQ011
+      - GQ004
+      - SQ012
+    related_quests:
+      - SQ011
+      - GQ004
+      - SQ012
+    adaptable: true
+  - id: GQ009
+    title: Crystal-Touched Timber
+    associated_npc:
+      - Gideon Woodfall
+    type: Resource Gathering/Investigation
+    difficulty: Medium
+    description: >
+      Gideon Woodfall has discovered a stand of valuable hardwood trees that
+      need 
+
+      to be harvested before advancing crystal corruption makes them unusable.
+      However, 
+
+      the crystal growth patterns in the area are unusual, and he needs help
+      both 
+
+      securing the timber and understanding the crystal's behavior.
+    quest_stages:
+      - stage: 1
+        title: Forest Assessment
+        objectives:
+          - Survey the affected forest area
+          - Identify safe logging routes
+          - Document crystal growth patterns
+        completion_paths:
+          careful:
+            description: Methodically map the area and crystal patterns
+            challenges: Nature checks (DC 14), Investigation checks (DC 15)
+            outcomes: Complete map of safe routes and crystal patterns
+          expedited:
+            description: Quick assessment focusing on immediate logging needs
+            challenges: Survival checks (DC 13), risk of crystal exposure
+            outcomes: Faster route identification but limited crystal data
+      - stage: 2
+        title: Timber Extraction
+        objectives:
+          - Clear safe paths to the valuable trees
+          - Protect workers during harvesting
+          - Manage crystal growth during operation
+        completion_paths:
+          containment:
+            description: Use protective measures to prevent crystal spread
+            challenges: Arcana checks (DC 15), requires special materials (50 gold)
+            outcomes: Safely harvested timber with minimal crystal exposure
+          aggressive:
+            description: Rapid harvesting before crystal spreads further
+            challenges: Athletics checks (DC 14), Constitution saves (DC 13)
+            outcomes: More timber recovered but higher risk of contamination
+      - stage: 3
+        title: Resource Distribution
+        objectives:
+          - Determine best use of harvested timber
+          - Negotiate with interested parties
+          - Handle crystal-touched wood safely
+        completion_paths:
+          merchant:
+            description: Sell to Merchant Guild for maximum profit
+            challenges: Persuasion checks (DC 14), Insight checks (DC 13)
+            outcomes: Higher payment but wood used for luxury items
+          community:
+            description: Distribute to local builders and craftsmen
+            challenges: Lower profit, requires organizing distribution
+            outcomes: Improved town relations and infrastructure
+    key_decision_points:
+      - stage: 2
+        decision: Crystal Management
+        choices:
+          - choice: Remove all crystal-touched sections
+            consequences: Less usable timber but guaranteed safe materials
+          - choice: Preserve crystal-touched sections for study
+            consequences: More valuable research materials but handling risks
+          - choice: Selective harvesting of partially affected wood
+            consequences: Balance of usable timber and research samples
+      - stage: 3
+        decision: Resource Allocation
+        choices:
+          - choice: Prioritize Merchant Guild contracts
+            consequences: Maximum profit and guild favor, potential community resentment
+          - choice: Focus on local community needs
+            consequences: Lower profit but strengthened community relations
+          - choice: Balance between guild and local use
+            consequences: Moderate profits and maintained relationships with both groups
+    potential_twists:
+      - Crystal patterns suggest deliberate manipulation by unknown party
+      - Timber has unique properties due to early-stage crystal exposure
+      - Local wildlife has adapted to use the crystal-touched trees
+      - Ancient logging marks discovered, suggesting historical significance
+    rewards:
+      standard:
+        - Payment for harvested timber (100-200 gold based on quantity and
+          quality)
+        - Reputation increase with Crystalbrook's logging community
+      merchant_path:
+        - Merchant Guild contract for future timber (guaranteed income)
+        - Access to guild storage facilities
+        - Crystal-resistant harvesting tools
+      community_path:
+        - Local craftsmen offer discounted services
+        - Crystalbrook town council commendation
+        - Priority access to future logging sites
+      research_path:
+        - Research notes on crystal-timber interaction
+        - Experimental crystal-treated woodworking tools
+        - Contacts with crystal researchers
+    follow_up_quests:
+      - FQ001
+      - SQ012
+      - GQ004
+    related_quests:
+      - GQ004
+      - FQ001
+    adaptable: true
