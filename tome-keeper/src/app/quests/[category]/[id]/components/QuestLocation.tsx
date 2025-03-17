@@ -5,12 +5,6 @@ import Link from "next/link"
 export default function QuestLocation({ quest }: QuestLocationProps) {
 	if (!quest.location) return null
 
-	const getLocationUrl = () => {
-		const locationSlug = nameToId(quest.location).toLowerCase()
-
-		return `/locations/${locationSlug}`
-	}
-
 	return (
 		<div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/30 shadow-sm">
 			<div className="flex items-center mb-2">
@@ -20,7 +14,7 @@ export default function QuestLocation({ quest }: QuestLocationProps) {
 				</h3>
 			</div>
 			<Link
-				href={getLocationUrl()}
+				href={`/locations/${nameToId(quest.location)}`}
 				className="text-gray-800 dark:text-gray-200 cursor-pointer hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors bg-transparent border-none p-0 text-left w-full inline-block"
 			>
 				{quest.location}

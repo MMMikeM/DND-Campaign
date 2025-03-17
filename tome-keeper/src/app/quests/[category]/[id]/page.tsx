@@ -1,10 +1,23 @@
 "use client"
 
-import { Suspense, use, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { use, useState } from "react"
+import type { ChangeEvent } from "react"
+import { useRouter, notFound } from "next/navigation"
 import { useCampaignData } from "@/components/CampaignDataProvider"
-import QuestPage from "./components/page"
-import { idToName } from "@/server/utils/contentUtils"
+import { nameToId } from "@/server/utils/contentUtils"
+import {
+	QuestHeader,
+	QuestDescription,
+	QuestObjectives,
+	QuestRewards,
+	QuestNotes,
+	QuestLocation,
+	QuestRelatedNPCs,
+	QuestStatus,
+	QuestTypeAndDifficulty,
+	QuestAssociatedNPCs,
+	QuestAdaptability,
+} from "./components"
 
 export default function CategoryQuestPage({
 	params,
@@ -12,134 +25,53 @@ export default function CategoryQuestPage({
 	params: Promise<{ category: string; id: string }>
 }) {
 	const { category: categorySlug, id: questId } = use(params)
-	const formattedCategory = idToName(categorySlug)
 	const router = useRouter()
 	const { quests: questsDataArray } = useCampaignData()
+	const [showDMNotes, setShowDMNotes] = useState(false)
 
-	// Validate that the quest exists and belongs to this category
-	useEffect(() => {
-		if (!questsDataArray || questsDataArray.length === 0) {
-			console.log("No quest data available yet")
-			return
-		}
+	const questFile =
+		questsDataArray.find((questFile) => nameToId(questFile.category) === categorySlug) || notFound()
 
-		let questFound = false
-		let belongsToCategory = false
-		let foundInGroup: string | undefined = undefined
+	const quest = questFile.quests?.find((q) => q.id === questId) || notFound()
 
-		console.log("==== QUEST VALIDATION DEBUGGING ====")
+	const handleQuestChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		const newQuestId = e.target.value
 
-		// Special case for faction quests
-		if (categorySlug === "faction-quests") {
-			console.log("Special case handling for faction-quests category")
-
-			// Look for the quest in any group
-			for (const questsFile of questsDataArray) {
-				if (questsFile.quests && questsFile.quests.length > 0) {
-					const quest = questsFile.quests.find(
-						(q) =>
-							q.id === questId || q.id?.toLowerCase() === questId.toLowerCase(),
-					)
-
-					if (quest) {
-						// If the quest ID starts with FQ or has faction in its category, it belongs to faction quests
-						if (
-							quest.id?.startsWith("FQ") ||
-							(quest.category || "").toLowerCase().includes("faction")
-						) {
-							console.log("Found faction quest:", {
-								id: quest.id,
-								title: quest.title,
-								category: quest.category,
-							})
-							questFound = true
-							belongsToCategory = true
-							break
-						}
-					}
-				}
-			}
-
-			if (questFound && belongsToCategory) {
-				// We found the quest and it belongs to faction quests, so we can return early
-				console.log("Validation successful for faction quest")
-				return
-			}
-		}
-
-		// Check each quest file
-		for (const questsFile of questsDataArray) {
-			console.log("Checking quest file:", {
-				title: questsFile.title,
-				category: questsFile.category,
-				questCount: questsFile.quests?.length || 0,
-			})
-
-			if (questsFile.quests && questsFile.quests.length > 0) {
-				// Find the quest
-				const quest = questsFile.quests.find(
-					(q) =>
-						q.id === questId || q.id?.toLowerCase() === questId.toLowerCase(),
-				)
-
-				if (quest) {
-					questFound = true
-					foundInGroup = questsFile.category
-
-					console.log("Found quest:", {
-						id: quest.id,
-						title: quest.title,
-						questCategory: quest.category,
-						fileCategory: questsFile.category,
-					})
-
-					// Check if it belongs to this category
-					const questCategory =
-						quest.category || getCategoryFromId(quest.id || "")
-
-					console.log("Category check:", {
-						questCategory,
-						formattedCategory,
-						match:
-							questCategory?.toLowerCase() === formattedCategory.toLowerCase(),
-					})
-
-					if (
-						questCategory &&
-						questCategory.toLowerCase() === formattedCategory.toLowerCase()
-					) {
-						belongsToCategory = true
-					}
-
-					break
-				}
-			}
-		}
-
-		// If quest doesn't exist or doesn't belong to this category, redirect
-		if (!questFound) {
-			console.log("Quest not found, redirecting to category page")
-			router.replace(`/quests/category/${categorySlug}`)
-		} else if (!belongsToCategory) {
-			// If quest exists but is in wrong category, redirect to correct category
-			console.log("Quest in wrong category, redirecting to correct page")
-			router.replace(`/quests/${questId}`)
-		}
-	}, [questsDataArray, questId, categorySlug, formattedCategory, router])
-
-	// Helper function to determine category from quest ID
-	const getCategoryFromId = (id: string): string | null => {
-		if (id.startsWith("MQ")) return "Main Quests"
-		if (id.startsWith("SQ")) return "Side Quests"
-		if (id.startsWith("FQ")) return "Faction Quests"
-		if (id.startsWith("PQ")) return "Personal Quests"
-		return null
+		router.push(`/quests/${categorySlug}/${newQuestId}`)
 	}
 
-	// Simply render the QuestPage component which will handle the display
+	const toggleDMNotes = () => setShowDMNotes(!showDMNotes)
+	const toggleAllDMContent = () => setShowDMNotes(true)
+
 	return (
-		<Suspense fallback={<div>Loading quest data...</div>}>
-			<QuestPage params={Promise.resolve({ id: questId })} />
-		</Suspense>
+		<div className="container mx-auto p-4">
+			<h1 className="text-2xl font-bold mb-4">{questFile.category || "Quests"}</h1>
+			<article className="bg-white dark:bg-gray-900 rounded-lg shadow-md border dark:border-gray-800 transition-colors duration-300">
+				<QuestHeader
+					quest={quest}
+					questId={questId}
+					quests={questFile.quests}
+					handleQuestChange={handleQuestChange}
+					showDMNotes={showDMNotes}
+					toggleDMNotes={toggleDMNotes}
+					toggleAllDMContent={toggleAllDMContent}
+				/>
+
+				<main className="p-6 pt-2 space-y-6">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<QuestStatus quest={quest} />
+						<QuestTypeAndDifficulty quest={quest} />
+					</div>
+					<QuestLocation quest={quest} />
+					<QuestDescription quest={quest} />
+					<QuestObjectives quest={quest} />
+					<QuestRewards quest={quest} />
+					<QuestAssociatedNPCs quest={quest} />
+					<QuestRelatedNPCs quest={quest} />
+					<QuestAdaptability quest={quest} />
+					<QuestNotes quest={quest} showDMNotes={showDMNotes} toggleDMNotes={toggleDMNotes} />
+				</main>
+			</article>
+		</div>
 	)
 }

@@ -3,7 +3,7 @@
 	"title": "Quest Schema",
 	"description": "Schema for quest definition files in the Shattered Spire campaign",
 	"type": "object",
-	"required": ["title", "version", "description", "quests"],
+	"required": ["title", "version", "description", "quests", "category"],
 	"properties": {
 		"title": {
 			"type": "string",
