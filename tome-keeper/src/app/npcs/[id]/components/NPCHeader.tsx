@@ -72,6 +72,11 @@ export function NPCHeader({
 								{npc.name}
 							</h1>
 
+							{/* Basic NPC Info */}
+							<div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+								{[npc.race, npc.gender, npc.occupation].filter(Boolean).join(" • ")}
+							</div>
+
 							{/* DM Content Status */}
 							{npc.secret && (
 								<div className="flex items-center mt-1">
@@ -98,15 +103,9 @@ export function NPCHeader({
 										: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
 								}`}
 								aria-label={
-									showSecret && showInventory
-										? "Hide all DM content"
-										: "Show all DM content"
+									showSecret && showInventory ? "Hide all DM content" : "Show all DM content"
 								}
-								title={
-									showSecret && showInventory
-										? "Hide all DM content"
-										: "Show all DM content"
-								}
+								title={showSecret && showInventory ? "Hide all DM content" : "Show all DM content"}
 							>
 								{showSecret && showInventory ? (
 									<>
@@ -147,9 +146,9 @@ export function NPCHeader({
 							</span>
 						)}
 
-						{npc.location && (
+						{npc.location && Array.isArray(npc.location) && npc.location.length > 0 && (
 							<span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300">
-								<span className="mr-1">📍</span> {npc.location}
+								<span className="mr-1">📍</span> {npc.location[0].description}
 							</span>
 						)}
 					</div>

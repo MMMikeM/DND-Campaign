@@ -18,9 +18,7 @@ import {
 } from "./components"
 
 // Main page component
-export default function NPCPage({
-	params,
-}: { params: Promise<{ id: string }> }) {
+export default function NPCPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id: npcId } = use(params)
 
 	const { npcs: npcsDataArray } = useCampaignData()
@@ -149,24 +147,31 @@ export default function NPCPage({
 										Role
 									</h3>
 								</div>
-								<div className="text-gray-800 dark:text-gray-200">
-									{currentNpc.role}
-								</div>
+								<div className="text-gray-800 dark:text-gray-200">{currentNpc.role}</div>
 							</div>
 
-							{currentNpc.location && (
-								<div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/30 shadow-sm">
-									<div className="flex items-center mb-2">
-										<span className="text-emerald-500 mr-2">📍</span>
-										<h3 className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
-											Location
-										</h3>
+							{currentNpc.location &&
+								Array.isArray(currentNpc.location) &&
+								currentNpc.location.length > 0 && (
+									<div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/30 shadow-sm">
+										<div className="flex items-center mb-2">
+											<span className="text-emerald-500 mr-2">📍</span>
+											<h3 className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
+												Location
+											</h3>
+										</div>
+										<div className="text-gray-800 dark:text-gray-200">
+											{currentNpc.location?.map((loc, index) => (
+												<div key={loc.id || index}>
+													{loc.description}
+													{index < (currentNpc.location?.length || 0) - 1 && (
+														<hr className="my-2 border-emerald-200 dark:border-emerald-800/30" />
+													)}
+												</div>
+											))}
+										</div>
 									</div>
-									<div className="text-gray-800 dark:text-gray-200">
-										{currentNpc.location}
-									</div>
-								</div>
-							)}
+								)}
 						</div>
 
 						{/* Description and Personality */}
@@ -175,15 +180,26 @@ export default function NPCPage({
 							<NPCPersonality npc={currentNpc} />
 						</div>
 
+						{/* Background */}
+						{currentNpc.background && (
+							<div className="bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-800/30 shadow-sm overflow-hidden">
+								<div className="flex items-center p-3 border-b border-purple-200 dark:border-purple-800/30 bg-purple-50 dark:bg-purple-900/20">
+									<span className="text-purple-500 mr-2">📖</span>
+									<h3 className="text-lg font-semibold text-purple-700 dark:text-purple-400">
+										Background
+									</h3>
+								</div>
+								<div className="p-4">
+									<p className="text-gray-700 dark:text-gray-300">{currentNpc.background}</p>
+								</div>
+							</div>
+						)}
+
 						{/* Motivation */}
 						<NPCMotivation npc={currentNpc} />
 
 						{/* Secret (DM Info) */}
-						<NPCSecret
-							npc={currentNpc}
-							showSecret={showSecret}
-							toggleSecret={toggleSecret}
-						/>
+						<NPCSecret npc={currentNpc} showSecret={showSecret} toggleSecret={toggleSecret} />
 
 						{/* Quests */}
 						<NPCQuests npc={currentNpc} />
