@@ -1,15 +1,12 @@
+import { nameToId } from "@/server/utils/contentUtils"
 import type { QuestLocationProps } from "./types"
 import Link from "next/link"
 
 export default function QuestLocation({ quest }: QuestLocationProps) {
 	if (!quest.location) return null
 
-	// Convert location name to slug format for navigation
 	const getLocationUrl = () => {
-		const locationSlug = quest.location
-			?.toLowerCase()
-			.replace(/\s+/g, "-")
-			.replace(/[^\w-]+/g, "")
+		const locationSlug = nameToId(quest.location).toLowerCase()
 
 		return `/locations/${locationSlug}`
 	}

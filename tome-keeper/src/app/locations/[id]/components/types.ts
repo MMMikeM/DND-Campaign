@@ -4,14 +4,6 @@ import type { LocationsFile } from "@/server/schemas"
 export type LocationData = LocationsFile
 export type Location = LocationData["locations"][string]
 
-// Format name function to properly capitalize
-export const formatName = (name: string) => {
-	return name
-		.split(/[-_]/)
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ")
-}
-
 // Get location type icon/color
 export const getLocationTypeStyle = (type: string) => {
 	const typeMap: Record<

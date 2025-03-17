@@ -17,6 +17,7 @@ import {
 	FiTarget,
 } from "react-icons/fi"
 import { useCampaignData } from "./CampaignDataProvider"
+import { nameToId, idToName } from "@/server/utils/contentUtils"
 
 interface NavigationDrawerProps {
 	files: string[]
@@ -72,21 +73,16 @@ const getIconForQuestCategory = (category: string) => {
 
 // Format file name for display
 const formatFileName = (file: string): string => {
-	return file
+	const cleanedName = file
 		.replace(/\.ya?ml$/, "")
 		.replace("shattered-spire-", "")
-		.replace(/[-_]/g, " ")
-		.split(" ")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ")
+
+	return idToName(cleanedName)
 }
 
 // Format category or type name for display
 const formatCategoryName = (name: string): string => {
-	return name
-		.split(/[-_\s]/)
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-		.join(" ")
+	return idToName(name)
 }
 
 export default function NavigationDrawer({
@@ -266,7 +262,7 @@ export default function NavigationDrawer({
 					if (npc && typeof npc === "object" && npc.name) {
 						// Use name as identifier if id is not provided
 						// This is safer than using indices which can change
-						const id = npc.id || npc.name.toLowerCase().replace(/\s+/g, "-")
+						const id = npc.id || nameToId(npc.name)
 						allNpcs.push({
 							id,
 							name: npc.name,
@@ -280,7 +276,7 @@ export default function NavigationDrawer({
 				for (const npc of data.generic_npcs) {
 					if (npc && typeof npc === "object" && npc.name) {
 						// Use name as identifier if id is not provided
-						const id = npc.id || npc.name.toLowerCase().replace(/\s+/g, "-")
+						const id = npc.id || nameToId(npc.name)
 						allNpcs.push({
 							id,
 							name: npc.name,

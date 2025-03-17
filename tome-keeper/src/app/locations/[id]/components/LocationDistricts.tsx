@@ -1,5 +1,5 @@
+import { idToName } from "@/server/utils/contentUtils"
 import type { Location } from "./types"
-import { formatName } from "./types"
 import Link from "next/link"
 
 // Districts section component
@@ -28,7 +28,7 @@ export function LocationDistricts({
 						<div className="p-3 bg-blue-100 dark:bg-blue-900/30 border-b border-blue-200 dark:border-blue-800/30">
 							<h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 flex items-center">
 								<span className="text-blue-500 mr-2">🏙️</span>
-								{formatName(districtId)}
+								{idToName(districtId)}
 							</h3>
 						</div>
 
@@ -80,7 +80,7 @@ export function LocationDistricts({
 													href={`/npcs/${npc}`}
 													className="text-blue-600 dark:text-blue-400 hover:underline"
 												>
-													{formatName(npc)}
+													{idToName(npc)}
 												</Link>
 											</li>
 										))}

@@ -1,6 +1,7 @@
 import type { ChangeEvent } from "react"
-import { formatName, getLocationTypeStyle } from "./types"
+import { getLocationTypeStyle } from "./types"
 import type { Location } from "./types"
+import { nameToId } from "@/server/utils/contentUtils"
 
 // Header component with location selector and title
 export function LocationHeader({
@@ -35,7 +36,7 @@ export function LocationHeader({
 					>
 						{locationIds.map((id) => (
 							<option key={id} value={id}>
-								{location.name || formatName(id)}
+								{location.name || nameToId(id)}
 							</option>
 						))}
 					</select>
@@ -46,7 +47,7 @@ export function LocationHeader({
 			<div className="p-6 pb-4 flex items-start justify-between">
 				<div className="flex-1">
 					<h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-1">
-						{location.name || formatName(locationId)}
+						{location.name || nameToId(locationId)}
 					</h1>
 
 					{location.type && (
@@ -76,7 +77,7 @@ export function LocationHeader({
 							{location.faction_control && (
 								<span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
 									<span className="mr-1">🏛️</span>{" "}
-									{formatName(location.faction_control)}
+									{nameToId(location.faction_control)}
 								</span>
 							)}
 						</div>

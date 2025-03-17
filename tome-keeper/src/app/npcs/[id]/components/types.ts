@@ -4,14 +4,6 @@ import type { NpcsFile } from "@/server/schemas/generated/npcsSchema"
 export type NPCData = NpcsFile
 export type NPC = NPCData["npcs"][number]
 
-// Format name function to properly capitalize
-export const formatName = (name: string) => {
-	return name
-		.split(/[-_]/)
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ")
-}
-
 // Get NPC role style (icon and colors)
 export const getNPCRoleStyle = (role: string) => {
 	const roleMap: Record<
