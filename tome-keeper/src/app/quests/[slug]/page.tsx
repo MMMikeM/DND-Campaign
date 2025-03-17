@@ -20,13 +20,14 @@ export default function QuestCategoryPage({ params }: { params: Promise<{ slug: 
 	}
 
 	const matchingQuestGroup = questsDataArray.find((questGroup) => {
-		const idMatch = questGroup.quests.find((quest) => quest.id === id)
+		const idMatch = questGroup.quests.find((quest) => quest.id.toLowerCase() === id)
 		const nameMatch = questGroup.quests.find((quest) => nameToId(quest.title) === id)
+
 		return idMatch || nameMatch
 	})
 
 	if (matchingQuestGroup) {
-		redirect(`/quests/${id}/${matchingQuestGroup.quests[0].id}`)
+		redirect(`/quests/${nameToId(matchingQuestGroup.category)}/${matchingQuestGroup.quests[0].id}`)
 	}
 
 	notFound()

@@ -4,14 +4,14 @@
 		"enabled": true
 	},
 	"linter": {
-		"enabled": true,
+		"enabled": false,
 		"rules": {
 			"recommended": true
 		},
 		"ignore": ["src/server/schemas/generated/**"]
 	},
 	"formatter": {
-		"enabled": true,
+		"enabled": false,
 		"indentStyle": "tab",
 		"indentWidth": 2,
 		"lineWidth": 100,

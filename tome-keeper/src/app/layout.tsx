@@ -2,22 +2,14 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { getDataByType } from "@/server/utils/contentUtils"
-import type {
-	NpcsFile,
-	FactionsFile,
-	LocationsFile,
-	QuestsFile,
-} from "@/server/schemas"
+import type { NpcsFile, FactionsFile, LocationsFile, QuestsFile } from "@/server/schemas"
 import {
 	NpcsFileSchema,
 	FactionsFileSchema,
 	LocationsFileSchema,
 	QuestsFileSchema,
 } from "@/server/schemas"
-import {
-	CampaignDataProvider,
-	type CampaignData,
-} from "@/components/CampaignDataProvider"
+import { CampaignDataProvider, type CampaignData } from "@/components/CampaignDataProvider"
 import NavigationDrawer from "@/components/NavigationDrawer"
 import ThemeInitializer from "@/components/ThemeInitializer"
 
@@ -41,28 +33,25 @@ const dataSources = [
  * @returns The campaign data object with all data types
  */
 async function getInitialData(): Promise<CampaignData> {
-	return Promise.allSettled(
-		dataSources.map(({ type, schema }) => fetchData(type, schema)),
-	).then((results) => {
-		// Create an object with the results
-		return dataSources.reduce(
-			(acc, { key }, index) => {
-				const result = results[index]
-				acc[key] =
-					result.status === "fulfilled"
-						? result.value
-						: (() => {
-								console.error(
-									`Failed to fetch ${dataSources[index].type} data:`,
-									result.reason,
-								)
-								return []
-							})()
-				return acc
-			},
-			{ npcs: [], factions: [], locations: [], quests: [] } as CampaignData,
-		)
-	})
+	return Promise.allSettled(dataSources.map(({ type, schema }) => fetchData(type, schema))).then(
+		(results) => {
+			// Create an object with the results
+			return dataSources.reduce(
+				(acc, { key }, index) => {
+					const result = results[index]
+					acc[key] =
+						result.status === "fulfilled"
+							? result.value
+							: (() => {
+									console.error(`Failed to fetch ${dataSources[index].type} data:`, result.reason)
+									return []
+								})()
+					return acc
+				},
+				{ npcs: [], factions: [], locations: [], quests: [] } as CampaignData,
+			)
+		},
+	)
 }
 
 // Helper function to fetch data with error handling

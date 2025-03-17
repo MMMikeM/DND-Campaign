@@ -96,7 +96,8 @@
                                     "type": "string",
                                     "description": "Description of the quest relationship"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "description": "Quests associated with this NPC"
                     },
@@ -114,7 +115,8 @@
                                     "type": "string",
                                     "description": "Description of the relationship"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "description": "Relationships with other characters or factions"
                     },
@@ -132,7 +134,8 @@
                                     "type": "string",
                                     "description": "Description of the NPC's presence at this location"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         },
                         "description": "Locations where the NPC can be found"
                     },
@@ -144,11 +147,13 @@
                         "description": "Items in the NPC's inventory"
                     }
                 },
-                "additionalProperties": true
+                "additionalProperties": false
             }
         },
         "generic_npcs": {
-            "description": "Generic NPCs for general use"
+            "description": "Generic NPCs for general use",
+            "type": "object",
+            "additionalProperties": false
         }
     },
     "additionalProperties": false
