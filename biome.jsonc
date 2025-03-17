@@ -14,7 +14,7 @@
 		"enabled": true,
 		"indentStyle": "tab",
 		"indentWidth": 2,
-		"lineWidth": 80,
+		"lineWidth": 100,
 		"ignore": [
 			// Ignore generated schema files
 			"src/server/schemas/generated/**",
@@ -30,6 +30,6 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"include": ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"]
+		"include": ["**/*.ts", "**/*.tsx"]
 	}
 }
