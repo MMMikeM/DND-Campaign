@@ -61,7 +61,7 @@ export const FactionsFileSchema = z.object({
 /**Quests associated with this faction*/
 "quests": z.array(z.string()).describe("Quests associated with this faction").optional(), 
 /**Additional notes about the faction*/
-"notes": z.string().describe("Additional notes about the faction").optional() }).catchall(z.any())).describe("Map of faction objects keyed by faction ID"), 
+"notes": z.string().describe("Additional notes about the faction").optional() }).strict()).describe("Map of faction objects keyed by faction ID"), 
 /**Key individual NPCs not directly tied to factions*/
 "key_npcs": z.record(z.object({ 
 /**Role or occupation of the NPC*/

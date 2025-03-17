@@ -16,6 +16,7 @@ import {
 	NPCAffiliations,
 	NPCStats,
 } from "./components"
+import { NPCBackground } from "./components/NPCBackground"
 
 // Main page component
 export default function NPCPage({ params }: { params: Promise<{ id: string }> }) {
@@ -118,15 +119,16 @@ export default function NPCPage({ params }: { params: Promise<{ id: string }> })
 	}
 
 	const toggleAllDMContent = () => {
-		setShowSecret(true)
-		setShowInventory(true)
+		const paired = showSecret || showInventory
+		setShowSecret(!paired)
+		setShowInventory(!paired)
 	}
 
 	return (
 		<Suspense fallback={<div>Loading NPC data...</div>}>
-			<div className="container mx-auto p-4">
-				<h1 className="text-2xl font-bold mb-4">NPCs</h1>
-				<article className="bg-white dark:bg-gray-900 rounded-lg shadow-md border dark:border-gray-800 transition-colors duration-300">
+			<div className="container mx-auto p-4 max-w-6xl">
+				<h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">NPCs</h1>
+				<article className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 transition-colors duration-300 overflow-hidden">
 					<NPCHeader
 						npc={currentNpc}
 						npcId={npcId}
@@ -136,84 +138,29 @@ export default function NPCPage({ params }: { params: Promise<{ id: string }> })
 						showInventory={showInventory}
 						toggleAllDMContent={toggleAllDMContent}
 					/>
-
-					<main className="p-6 pt-2 space-y-6">
+					<main className="p-6 pt-0 space-y-8">
 						{/* NPC Overview */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-900/10 p-4 rounded-lg border border-indigo-200 dark:border-indigo-800/30 shadow-sm">
-								<div className="flex items-center mb-2">
-									<span className="text-indigo-500 mr-2">👤</span>
-									<h3 className="text-lg font-semibold text-indigo-700 dark:text-indigo-400">
-										Role
-									</h3>
-								</div>
-								<div className="text-gray-800 dark:text-gray-200">{currentNpc.role}</div>
-							</div>
-
-							{currentNpc.location &&
-								Array.isArray(currentNpc.location) &&
-								currentNpc.location.length > 0 && (
-									<div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/30 shadow-sm">
-										<div className="flex items-center mb-2">
-											<span className="text-emerald-500 mr-2">📍</span>
-											<h3 className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
-												Location
-											</h3>
-										</div>
-										<div className="text-gray-800 dark:text-gray-200">
-											{currentNpc.location?.map((loc, index) => (
-												<div key={loc.id || index}>
-													{loc.description}
-													{index < (currentNpc.location?.length || 0) - 1 && (
-														<hr className="my-2 border-emerald-200 dark:border-emerald-800/30" />
-													)}
-												</div>
-											))}
-										</div>
-									</div>
-								)}
-						</div>
 
 						{/* Description and Personality */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<NPCDescription npc={currentNpc} />
 							<NPCPersonality npc={currentNpc} />
 						</div>
 
-						{/* Background */}
-						{currentNpc.background && (
-							<div className="bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-800/30 shadow-sm overflow-hidden">
-								<div className="flex items-center p-3 border-b border-purple-200 dark:border-purple-800/30 bg-purple-50 dark:bg-purple-900/20">
-									<span className="text-purple-500 mr-2">📖</span>
-									<h3 className="text-lg font-semibold text-purple-700 dark:text-purple-400">
-										Background
-									</h3>
-								</div>
-								<div className="p-4">
-									<p className="text-gray-700 dark:text-gray-300">{currentNpc.background}</p>
-								</div>
-							</div>
-						)}
+						<NPCBackground currentNpc={currentNpc} />
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<NPCMotivation npc={currentNpc} />
+							<NPCSecret npc={currentNpc} showSecret={showSecret} toggleSecret={toggleSecret} />
+						</div>
 
-						{/* Motivation */}
-						<NPCMotivation npc={currentNpc} />
-
-						{/* Secret (DM Info) */}
-						<NPCSecret npc={currentNpc} showSecret={showSecret} toggleSecret={toggleSecret} />
-
-						{/* Quests */}
 						<NPCQuests npc={currentNpc} />
 
-						{/* Stats */}
 						<NPCStats npc={currentNpc} />
 
-						{/* Relationships */}
 						<NPCRelationships npc={currentNpc} />
 
-						{/* Affiliations */}
 						<NPCAffiliations npc={currentNpc} />
 
-						{/* Inventory - DM Only */}
 						<NPCInventory
 							npc={currentNpc}
 							showInventory={showInventory}

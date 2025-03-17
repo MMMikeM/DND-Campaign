@@ -79,7 +79,8 @@
                                     "type": "string",
                                     "description": "Description of the point of interest"
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         }
                     },
                     "danger_level": {
@@ -121,7 +122,8 @@
                                         "type": "string"
                                     }
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         }
                     },
                     "areas": {
@@ -162,7 +164,8 @@
                                         "type": "string"
                                     }
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         }
                     },
                     "quests": {
@@ -215,11 +218,12 @@
                                         "type": "string"
                                     }
                                 }
-                            }
+                            },
+                            "additionalProperties": false
                         }
                     }
                 },
-                "additionalProperties": true
+                "additionalProperties": false
             }
         }
     },

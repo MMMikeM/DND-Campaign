@@ -1,106 +1,221 @@
-# - faction_quests: Quest[] (optional)
-# yaml-language-server: $schema=./.schema.json
-title: "Shattered Spire Faction Quests"
+title: Shattered Spire Faction Quests
 version: "1.1"
-description: |
-  Collection of faction quests for the Shattered Spire campaign with branching paths and
-  multiple completion options. Each quest has a unique ID that can be referenced
-  from NPC files. Quest chains show connections to related quests.
-category: "Faction Quests"
+description: >
+  Collection of faction quests for the Shattered Spire campaign with branching
+  paths and
 
+  multiple completion options. Each quest has a unique ID that can be referenced
+
+  from NPC files. Quest chains show connections to related quests.
+category: Faction Quests
 quests:
-  - id: "FQ001"
+  - id: FQ001
     title: "Merchants Guild: Crystal Trading Rights"
-    associated_npc: ["Guildmaster Verin Thorne"]
-    type: "Negotiation"
-    difficulty: "Medium"
-    description: |
+    associated_npc:
+      - Guildmaster Verin Thorne
+    type: Negotiation
+    difficulty: Medium
+    description: >
       The Merchants Guild seeks to secure exclusive trading rights for a newly 
-      discovered variety of crystal with unique properties. Your task is to help 
-      them navigate the complex negotiations with rival factions and local authorities.
+
+      discovered variety of crystal with unique properties. Your task is to
+      help 
+
+      them navigate the complex negotiations with rival factions and local
+      authorities.
     quest_stages:
       - stage: 1
-        title: "Market Assessment"
+        title: Market Assessment
         objectives:
-          - "Determine potential value of new crystal variety"
-          - "Identify current market stakeholders"
-          - "Assess competition for trading rights"
+          - Determine potential value of new crystal variety
+          - Identify current market stakeholders
+          - Assess competition for trading rights
         completion_paths:
           thorough:
-            description: "Conduct comprehensive market research"
-            challenges: "Investigation checks (DC 15), 5 days of research"
-            outcomes: "Complete understanding of market dynamics and faction interests"
+            description: Conduct comprehensive market research
+            challenges: Investigation checks (DC 15), 5 days of research
+            outcomes: Complete understanding of market dynamics and faction interests
           expedient:
-            description: "Gather essential information quickly"
-            challenges: "Persuasion checks (DC 16), bribery costs (50 gold)"
-            outcomes: "Basic understanding acquired in 2 days, but may miss subtle details"
-      
+            description: Gather essential information quickly
+            challenges: Persuasion checks (DC 16), bribery costs (50 gold)
+            outcomes: Basic understanding acquired in 2 days, but may miss subtle details
       - stage: 2
-        title: "Rival Negotiation"
+        title: Rival Negotiation
         objectives:
-          - "Approach rival faction representatives"
-          - "Determine their interests and demands"
-          - "Find potential compromise points"
+          - Approach rival faction representatives
+          - Determine their interests and demands
+          - Find potential compromise points
         completion_paths:
           diplomatic:
-            description: "Seek mutually beneficial arrangement with rivals"
-            challenges: "Persuasion checks (DC 16), Insight checks (DC 15)"
-            outcomes: "Potential for partnership that increases overall profits but shares control"
+            description: Seek mutually beneficial arrangement with rivals
+            challenges: Persuasion checks (DC 16), Insight checks (DC 15)
+            outcomes: Potential for partnership that increases overall profits but shares
+              control
           aggressive:
-            description: "Use leverage to push rivals out of negotiations"
-            challenges: "Intimidation checks (DC 17), risk of reputation damage"
-            outcomes: "Elimination of competition but creates lasting enemies (-2 reputation with rival factions)"
-      
+            description: Use leverage to push rivals out of negotiations
+            challenges: Intimidation checks (DC 17), risk of reputation damage
+            outcomes: Elimination of competition but creates lasting enemies (-2 reputation
+              with rival factions)
       - stage: 3
-        title: "Authority Permission"
+        title: Authority Permission
         objectives:
-          - "Present case to city authorities"
-          - "Address regulatory concerns"
-          - "Secure necessary permits"
+          - Present case to city authorities
+          - Address regulatory concerns
+          - Secure necessary permits
         completion_paths:
           legal:
-            description: "Work through official channels and procedures"
-            challenges: "Bureaucratic process (1 week), fees (100 gold)"
-            outcomes: "Fully legal and documented rights with government backing"
+            description: Work through official channels and procedures
+            challenges: Bureaucratic process (1 week), fees (100 gold)
+            outcomes: Fully legal and documented rights with government backing
           backdoor:
-            description: "Expedite process through unofficial channels"
-            challenges: "Deception checks (DC 16), bribery (200 gold)"
-            outcomes: "Faster approval (2 days) but vulnerable to future scrutiny"
-    
+            description: Expedite process through unofficial channels
+            challenges: Deception checks (DC 16), bribery (200 gold)
+            outcomes: Faster approval (2 days) but vulnerable to future scrutiny
     key_decision_points:
       - stage: 2
-        decision: "Rival Treatment"
+        decision: Rival Treatment
         choices:
-          - choice: "Form partnership with Gemcutters Association"
-            consequences: "Shared profits but expanded market reach and reduced risks"
-          - choice: "Undermine rivals through targeted misinformation"
-            consequences: "Short-term advantage but creates determined enemies"
-          - choice: "Buy out smaller competitors"
-            consequences: "Consolidates power but requires significant investment (500 gold)"
-    
+          - choice: Form partnership with Gemcutters Association
+            consequences: Shared profits but expanded market reach and reduced risks
+          - choice: Undermine rivals through targeted misinformation
+            consequences: Short-term advantage but creates determined enemies
+          - choice: Buy out smaller competitors
+            consequences: Consolidates power but requires significant investment (500 gold)
     potential_twists:
-      - "Crystal has dangerous properties unknown to current market"
-      - "Rival faction has royal family connections"
-      - "Authorities have hidden agenda regarding crystal regulation"
-      - "Foreign merchant consortium enters negotiations unexpectedly"
-    
+      - Crystal has dangerous properties unknown to current market
+      - Rival faction has royal family connections
+      - Authorities have hidden agenda regarding crystal regulation
+      - Foreign merchant consortium enters negotiations unexpectedly
     rewards:
       standard:
-        - "200 gold payment from Merchants Guild"
-        - "10% discount on guild market purchases for 1 month"
+        - 200 gold payment from Merchants Guild
+        - 10% discount on guild market purchases for 1 month
       diplomatic_path:
-        - "250 gold"
-        - "Trade alliance benefits (access to rare goods from multiple factions)"
-        - "Improved standing with multiple factions (+1 reputation with 3 merchant factions)"
+        - 250 gold
+        - Trade alliance benefits (access to rare goods from multiple factions)
+        - Improved standing with multiple factions (+1 reputation with 3
+          merchant factions)
       aggressive_path:
-        - "350 gold"
-        - "Exclusive trading rights documents (worth 200 gold to right buyer)"
-        - "Enemy status with rival faction (occasional sabotage attempts)"
-    
-    follow_up_quests: 
-      diplomatic_path: ["FQ005", "SQ012"]
-      aggressive_path: ["FQ006", "SQ013"]
-    
-    related_quests: ["MQ001", "SQ008"]
-    
+        - 350 gold
+        - Exclusive trading rights documents (worth 200 gold to right buyer)
+        - Enemy status with rival faction (occasional sabotage attempts)
+    follow_up_quests:
+      - FQ005
+      - SQ012
+      - FQ006
+      - SQ013
+    related_quests:
+      - MQ001
+      - SQ008
     adaptable: true
+  - id: FQ008
+    title: Crystal-Crafted Futures
+    associated_npc:
+      - Gideon Woodfall
+      - merchant_guild
+    type: Crafting/Trade
+    difficulty: Hard
+    description: >
+      The Merchant Guild sees an opportunity in Gideon's discovery of
+      crystal-touched 
+
+      timber. They want to develop a new line of luxury goods using this unique 
+
+      material, but need help understanding its properties and establishing a 
+
+      sustainable supply chain while managing local concerns.
+    quest_stages:
+      - stage: 1
+        title: Material Research
+        objectives:
+          - Study crystal-timber interaction patterns
+          - Test material properties and stability
+          - Document crafting potential
+        completion_paths:
+          thorough:
+            description: Comprehensive testing and documentation
+            challenges: Arcana checks (DC 16), Investigation checks (DC 15)
+            outcomes: Complete understanding of material properties
+          practical:
+            description: Focus on immediate crafting applications
+            challenges: Nature checks (DC 14), Crafting checks (DC 15)
+            outcomes: Practical crafting guidelines established
+      - stage: 2
+        title: Supply Chain Development
+        objectives:
+          - Establish sustainable harvesting zones
+          - Create safety protocols
+          - Train local workers
+        completion_paths:
+          guild_focused:
+            description: Prioritize guild control and efficiency
+            challenges: Persuasion checks (DC 15), requires guild investment (200 gold)
+            outcomes: Efficient but centralized operation
+          community_partnership:
+            description: Develop local partnerships and shared ownership
+            challenges: Diplomacy checks (DC 16), requires community trust
+            outcomes: Slower startup but broader support
+      - stage: 3
+        title: Market Development
+        objectives:
+          - Create sample products
+          - Identify target markets
+          - Address safety concerns
+        completion_paths:
+          luxury:
+            description: Focus on high-end decorative items
+            challenges: Crafting checks (DC 16), requires premium materials
+            outcomes: Higher profit margins but limited market
+          utility:
+            description: Develop practical applications
+            challenges: Engineering checks (DC 15), requires testing
+            outcomes: Broader market appeal but lower margins
+    key_decision_points:
+      - stage: 1
+        decision: Research Focus
+        choices:
+          - choice: Aesthetic properties
+            consequences: Better luxury goods potential but limited practical use
+          - choice: Structural properties
+            consequences: More practical applications but less unique appeal
+          - choice: Crystal interaction patterns
+            consequences: Better understanding of risks but slower development
+      - stage: 2
+        decision: Worker Relations
+        choices:
+          - choice: Guild-employed specialists
+            consequences: Better quality control but higher costs
+          - choice: Local worker training program
+            consequences: Community benefits but longer implementation time
+          - choice: Mixed workforce approach
+            consequences: Balanced benefits but more complex management
+    potential_twists:
+      - Crystal properties change based on harvest timing
+      - Competing merchant house shows interest
+      - Unexpected beneficial properties discovered
+      - Local artisans develop unique techniques
+    rewards:
+      standard:
+        - Guild membership opportunity
+        - Share in initial profits (300-500 gold)
+      luxury_path:
+        - Access to high-end guild markets
+        - Exclusive crafting techniques
+        - Premium materials discount
+      utility_path:
+        - Construction contract opportunities
+        - Guild engineering contacts
+        - Material testing laboratory access
+      partnership_path:
+        - Community trade agreements
+        - Local resource rights
+        - Shared research facility
+    follow_up_quests:
+      - FQ003
+      - FQ005
+      - SQ015
+    related_quests:
+      - GQ009
+      - FQ001
+      - FQ003
+    adaptable: false
