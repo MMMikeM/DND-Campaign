@@ -1,15 +1,33 @@
 {
-  "name": "dnd-campaign",
+  "name": "tome-keeper",
   "version": "1.0.0",
-  "main": "analyze_data_structure.js",
+  "description": "DND Campaign Management System",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm -r run dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "db:generate": "pnpm --filter shared db:generate",
+    "db:migrate": "pnpm --filter shared db:migrate",
+    "db:studio": "pnpm --filter shared db:studio",
+    "mcp:dev": "pnpm --filter mcp-server dev",
+    "mcp:build": "pnpm --filter mcp-server build",
+    "mcp:start": "pnpm --filter mcp-server start"
   },
-  "keywords": [],
+  "keywords": [
+    "dnd",
+    "campaign",
+    "management"
+  ],
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "yaml": "^2.7.0"
-  }
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "workspaces": [
+    "packages/*"
+  ]
 }
