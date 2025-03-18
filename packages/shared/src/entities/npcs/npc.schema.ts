@@ -1,10 +1,11 @@
 import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
+import { npcFactionSchema } from "../relations.schema.js"
 
 // Define the main npcs table
 export const npcs = sqliteTable("npcs", {
-	id: text("id").primaryKey().notNull(),
+	id: integer("id").primaryKey().notNull(),
 	name: text("name").notNull(),
 	race: text("race").notNull(),
 	gender: text("gender").notNull(),
@@ -21,144 +22,128 @@ export const npcs = sqliteTable("npcs", {
 export const npcDescriptions = sqliteTable(
 	"npc_descriptions",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
 		description: text("description").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.description] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.description] })],
 )
 
 // Define the npc personality traits table
 export const npcPersonalityTraits = sqliteTable(
 	"npc_personality_traits",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
 		trait: text("trait").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.trait] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.trait] })],
 )
 
 // Define the npc quests table
 export const npcQuests = sqliteTable(
 	"npc_quests",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
-		questId: text("quest_id").notNull(),
+		questId: integer("quest_id").notNull(),
 		description: text("description").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.questId] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.questId] })],
 )
 
 // Define the npc relationships table
 export const npcRelationships = sqliteTable(
 	"npc_relationships",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
-		targetId: text("target_id").notNull(),
+		targetId: integer("target_id")
+			.notNull()
+			.references(() => npcs.id),
 		description: text("description").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.targetId] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.targetId] })],
 )
 
 // Define the npc locations table
 export const npcLocations = sqliteTable(
 	"npc_locations",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
-		locationId: text("location_id").notNull(),
+		locationId: integer("location_id").notNull(),
 		description: text("description").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.locationId] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.locationId] })],
 )
 
 // Define the npc inventory table
 export const npcInventory = sqliteTable(
 	"npc_inventory",
 	{
-		npcId: text("npc_id")
+		npcId: integer("npc_id")
 			.notNull()
 			.references(() => npcs.id, { onDelete: "cascade" }),
 		item: text("item").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.npcId, table.item] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.npcId, table.item] })],
 )
 
-// Create Zod schemas for insert and select operations
-export const insertNpcSchema = createInsertSchema(npcs)
-export const selectNpcSchema = createSelectSchema(npcs)
-export const insertNpcDescriptionSchema = createInsertSchema(npcDescriptions)
-export const selectNpcDescriptionSchema = createSelectSchema(npcDescriptions)
-export const insertNpcPersonalitySchema = createInsertSchema(npcPersonalityTraits)
-export const selectNpcPersonalitySchema = createSelectSchema(npcPersonalityTraits)
-export const insertNpcQuestSchema = createInsertSchema(npcQuests)
-export const selectNpcQuestSchema = createSelectSchema(npcQuests)
-export const insertNpcRelationshipSchema = createInsertSchema(npcRelationships)
-export const selectNpcRelationshipSchema = createSelectSchema(npcRelationships)
-export const insertNpcLocationSchema = createInsertSchema(npcLocations)
-export const selectNpcLocationSchema = createSelectSchema(npcLocations)
-export const insertNpcInventorySchema = createInsertSchema(npcInventory)
-export const selectNpcInventorySchema = createSelectSchema(npcInventory)
+const npcSchemas = {
+	select: {
+		npcs: createSelectSchema(npcs),
+		npcDescriptions: createSelectSchema(npcDescriptions),
+		npcPersonalityTraits: createSelectSchema(npcPersonalityTraits),
+		npcQuests: createSelectSchema(npcQuests),
+		npcRelationships: createSelectSchema(npcRelationships),
+		npcLocations: createSelectSchema(npcLocations),
+		npcInventory: createSelectSchema(npcInventory),
+	},
+	insert: {
+		npcs: createInsertSchema(npcs),
+		npcDescriptions: createInsertSchema(npcDescriptions),
+		npcPersonalityTraits: createInsertSchema(npcPersonalityTraits),
+		npcQuests: createInsertSchema(npcQuests),
+		npcRelationships: createInsertSchema(npcRelationships),
+		npcLocations: createInsertSchema(npcLocations),
+		npcInventory: createInsertSchema(npcInventory),
+	},
+}
 
 // Define a typed NPC schema using Zod
-export const NpcSchema = selectNpcSchema.extend({
+export const NpcSchema = npcSchemas.select.npcs.extend({
 	description: z.array(z.string()),
 	personality: z.array(z.string()),
 	quests: z.array(
 		z.object({
-			id: z.string(),
+			id: z.number(),
 			description: z.string(),
 		}),
 	),
 	relationships: z.array(
 		z.object({
-			id: z.string(),
+			id: z.number(),
 			description: z.string(),
 		}),
 	),
 	location: z.array(
 		z.object({
-			id: z.string(),
+			id: z.number(),
 			description: z.string(),
 		}),
 	),
 	inventory: z.array(z.string()),
+	factions: z.array(npcFactionSchema.omit({ npcId: true })),
 })
 
 // Define types based on the Zod schemas
 export type Npc = z.infer<typeof NpcSchema>
-export type NewNpc = z.infer<typeof insertNpcSchema>
-export type NpcRelationship = z.infer<typeof selectNpcRelationshipSchema>
-export type NewNpcRelationship = z.infer<typeof insertNpcRelationshipSchema>
+export type NewNpc = z.infer<typeof npcSchemas.insert.npcs>
+export type NpcRelationship = z.infer<typeof npcSchemas.select.npcRelationships>
+export type NewNpcRelationship = z.infer<typeof npcSchemas.insert.npcRelationships>
