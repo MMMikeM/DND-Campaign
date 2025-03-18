@@ -26,9 +26,7 @@ export const factionResources = sqliteTable(
 			.references(() => factions.id, { onDelete: "cascade" }),
 		resource: text("resource").notNull(),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.resource] }),
-	}),
+	(table) => primaryKey({ columns: [table.factionId, table.resource] }),
 )
 
 // Define the faction leadership table
@@ -45,9 +43,7 @@ export const factionLeadership = sqliteTable(
 		stats: text("stats"),
 		bio: text("bio"),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.name] }),
-	}),
+	(table) => [primaryKey({ columns: [table.factionId, table.name] })],
 )
 
 // Define the faction members table
@@ -61,9 +57,7 @@ export const factionMembers = sqliteTable(
 		description: text("description"),
 		stats: text("stats"),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.name] }),
-	}),
+	(table) => [primaryKey({ columns: [table.factionId, table.name] })],
 )
 
 // Define the faction allies table
@@ -77,9 +71,7 @@ export const factionAllies = sqliteTable(
 			.notNull()
 			.references(() => factions.id),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.allyId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.factionId, table.allyId] })],
 )
 
 // Define the faction enemies table
@@ -93,9 +85,7 @@ export const factionEnemies = sqliteTable(
 			.notNull()
 			.references(() => factions.id),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.enemyId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.factionId, table.enemyId] })],
 )
 
 // Define the faction quests table
@@ -106,29 +96,45 @@ export const factionQuests = sqliteTable(
 			.notNull()
 			.references(() => factions.id, { onDelete: "cascade" }),
 		questId: integer("quest_id").notNull(),
-		// Note: Not adding a reference to quests table since it might be defined elsewhere
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.factionId, table.questId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.factionId, table.questId] })],
 )
 
-// Create Zod schemas for insert and select operations
-export const insertFactionSchema = createInsertSchema(factions)
-export const selectFactionSchema = createSelectSchema(factions)
-export const insertFactionResourceSchema = createInsertSchema(factionResources)
-export const selectFactionResourceSchema = createSelectSchema(factionResources)
-export const insertFactionLeadershipSchema = createInsertSchema(factionLeadership)
-export const selectFactionLeadershipSchema = createSelectSchema(factionLeadership)
-export const insertFactionMemberSchema = createInsertSchema(factionMembers)
-export const selectFactionMemberSchema = createSelectSchema(factionMembers)
-export const updateFactionMemberSchema = createUpdateSchema(factionMembers)
+const factionSchemas = {
+	select: {
+		factions: createSelectSchema(factions),
+		factionResources: createSelectSchema(factionResources),
+		factionLeadership: createSelectSchema(factionLeadership),
+		factionMembers: createSelectSchema(factionMembers),
+		factionAllies: createSelectSchema(factionAllies),
+		factionEnemies: createSelectSchema(factionEnemies),
+		factionQuests: createSelectSchema(factionQuests),
+	},
+	insert: {
+		factions: createInsertSchema(factions),
+		factionResources: createInsertSchema(factionResources),
+		factionLeadership: createInsertSchema(factionLeadership),
+		factionMembers: createInsertSchema(factionMembers),
+		factionAllies: createInsertSchema(factionAllies),
+		factionEnemies: createInsertSchema(factionEnemies),
+		factionQuests: createInsertSchema(factionQuests),
+	},
+	update: {
+		factions: createUpdateSchema(factions),
+		factionResources: createUpdateSchema(factionResources),
+		factionLeadership: createUpdateSchema(factionLeadership),
+		factionMembers: createUpdateSchema(factionMembers),
+		factionAllies: createUpdateSchema(factionAllies),
+		factionEnemies: createUpdateSchema(factionEnemies),
+		factionQuests: createUpdateSchema(factionQuests),
+	},
+}
 
 // Define a typed Faction schema using Zod
-export const FactionSchema = selectFactionSchema.extend({
+export const FactionSchema = factionSchemas.select.factions.extend({
 	resources: z.array(z.string()),
-	leadership: z.array(selectFactionLeadershipSchema.omit({ factionId: true })),
-	members: z.array(selectFactionMemberSchema.omit({ factionId: true })),
+	leadership: z.array(factionSchemas.select.factionLeadership.omit({ factionId: true })),
+	members: z.array(factionSchemas.select.factionMembers.omit({ factionId: true })),
 	allies: z.array(z.number()),
 	enemies: z.array(z.number()),
 	quests: z.array(z.number()),
@@ -136,6 +142,4 @@ export const FactionSchema = selectFactionSchema.extend({
 
 // Define types based on the Zod schemas
 export type Faction = z.infer<typeof FactionSchema>
-export type NewFaction = z.infer<typeof insertFactionSchema>
-export type FactionLeader = z.infer<typeof selectFactionLeadershipSchema>
-export type FactionMember = z.infer<typeof selectFactionMemberSchema>
+export type NewFaction = z.infer<typeof factionSchemas.insert.factions>
