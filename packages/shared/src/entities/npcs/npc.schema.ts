@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import { z } from "zod"
 import {
@@ -16,7 +16,7 @@ import {
 
 // Define the main npcs table
 export const npcs = sqliteTable("npcs", {
-	id: integer("id").primaryKey().notNull(),
+	id: integer("id").primaryKey({ autoIncrement: true }),
 	name: text("name").notNull(),
 	race: text("race").notNull(),
 	gender: text("gender").notNull(),
@@ -29,56 +29,89 @@ export const npcs = sqliteTable("npcs", {
 	stats: text("stats").notNull(),
 })
 
-// Define the npc descriptions table (for the array of descriptions)
-export const npcDescriptions = sqliteTable(
-	"npc_descriptions",
-	{
-		npcId: integer("npc_id")
-			.notNull()
-			.references(() => npcs.id, { onDelete: "cascade" }),
-		description: text("description").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.npcId, table.description] })],
-)
+// Define the npc descriptions table
+export const npcDescriptions = sqliteTable("npc_descriptions", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	description: text("description").notNull(),
+})
 
 // Define the npc personality traits table
-export const npcPersonalityTraits = sqliteTable(
-	"npc_personality_traits",
-	{
-		npcId: integer("npc_id")
-			.notNull()
-			.references(() => npcs.id, { onDelete: "cascade" }),
-		trait: text("trait").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.npcId, table.trait] })],
-)
+export const npcPersonalityTraits = sqliteTable("npc_personality_traits", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	trait: text("trait").notNull(),
+})
 
 // Define the npc relationships table
-export const npcRelationships = sqliteTable(
-	"npc_relationships",
-	{
-		npcId: integer("npc_id")
-			.notNull()
-			.references(() => npcs.id, { onDelete: "cascade" }),
-		targetId: integer("target_id")
-			.notNull()
-			.references(() => npcs.id),
-		description: text("description").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.npcId, table.targetId] })],
-)
+export const npcRelationships = sqliteTable("npc_relationships", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	targetId: integer("target_id")
+		.notNull()
+		.references(() => npcs.id),
+	description: text("description").notNull(),
+	relationship: text("relationship"),
+})
 
 // Define the npc inventory table
-export const npcInventory = sqliteTable(
-	"npc_inventory",
-	{
-		npcId: integer("npc_id")
-			.notNull()
-			.references(() => npcs.id, { onDelete: "cascade" }),
-		item: text("item").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.npcId, table.item] })],
-)
+export const npcInventory = sqliteTable("npc_inventory", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	item: text("item").notNull(),
+	quantity: integer("quantity").default(1),
+	notes: text("notes"),
+})
+
+// Define the npc location connection table
+export const npcLocations = sqliteTable("npc_locations", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	locationId: integer("location_id").notNull(),
+	context: text("context"),
+})
+
+// Define the npc faction connection table
+export const npcFactions = sqliteTable("npc_factions", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	factionId: integer("faction_id").notNull(),
+	role: text("role"),
+	status: text("status"),
+})
+
+// Define the npc quest connection table
+export const npcQuests = sqliteTable("npc_quests", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	questId: integer("quest_id").notNull(),
+	role: text("role"),
+})
+
+// Define the npc dialogue table
+export const npcDialogue = sqliteTable("npc_dialogue", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	npcId: integer("npc_id")
+		.notNull()
+		.references(() => npcs.id, { onDelete: "cascade" }),
+	topic: text("topic").notNull(),
+	response: text("response").notNull(),
+	condition: text("condition"),
+})
 
 const schemas = {
 	select: {
@@ -87,6 +120,10 @@ const schemas = {
 		npcPersonalityTraits: createSelectSchema(npcPersonalityTraits),
 		npcRelationships: createSelectSchema(npcRelationships),
 		npcInventory: createSelectSchema(npcInventory),
+		npcLocations: createSelectSchema(npcLocations),
+		npcFactions: createSelectSchema(npcFactions),
+		npcQuests: createSelectSchema(npcQuests),
+		npcDialogue: createSelectSchema(npcDialogue),
 	},
 	insert: {
 		npcs: createInsertSchema(npcs),
@@ -94,6 +131,10 @@ const schemas = {
 		npcPersonalityTraits: createInsertSchema(npcPersonalityTraits),
 		npcRelationships: createInsertSchema(npcRelationships),
 		npcInventory: createInsertSchema(npcInventory),
+		npcLocations: createInsertSchema(npcLocations),
+		npcFactions: createInsertSchema(npcFactions),
+		npcQuests: createInsertSchema(npcQuests),
+		npcDialogue: createInsertSchema(npcDialogue),
 	},
 	update: {
 		npcs: createUpdateSchema(npcs),
@@ -101,58 +142,77 @@ const schemas = {
 		npcPersonalityTraits: createUpdateSchema(npcPersonalityTraits),
 		npcRelationships: createUpdateSchema(npcRelationships),
 		npcInventory: createUpdateSchema(npcInventory),
+		npcLocations: createUpdateSchema(npcLocations),
+		npcFactions: createUpdateSchema(npcFactions),
+		npcQuests: createUpdateSchema(npcQuests),
+		npcDialogue: createUpdateSchema(npcDialogue),
 	},
 }
 
-const { select, insert } = schemas
+const { select, insert, update } = schemas
 
 // Define a typed NPC schema using Zod
 export const NpcSchema = select.npcs
 	.extend({
-		area: z.array(areaNpcSchema.omit({ npcId: true })),
-		description: z.array(select.npcDescriptions.omit({ npcId: true })),
-		dialogue: z.array(districtNpcSchema.omit({ npcId: true })),
-		disctrict: z.array(districtNpcSchema.omit({ npcId: true })),
-		factions: z.array(npcFactionSchema.omit({ npcId: true })),
-		inventory: z.array(select.npcInventory.omit({ npcId: true })),
-		location: z.array(npcLocationSchema.omit({ npcId: true })),
-		personality: z.array(select.npcPersonalityTraits.omit({ npcId: true })),
-		quests: z.array(questNpcSchema.omit({ npcId: true })),
+		descriptions: z.array(select.npcDescriptions.omit({ npcId: true })),
+		personalityTraits: z.array(select.npcPersonalityTraits.omit({ npcId: true })),
 		relationships: z.array(select.npcRelationships.omit({ npcId: true })),
+		inventory: z.array(select.npcInventory.omit({ npcId: true })),
+		locations: z.array(select.npcLocations.omit({ npcId: true })),
+		factions: z.array(select.npcFactions.omit({ npcId: true })),
+		quests: z.array(select.npcQuests.omit({ npcId: true })),
+		dialogue: z.array(select.npcDialogue.omit({ npcId: true })),
+		// Include the area and district relations from imported schemas
+		areas: z.array(areaNpcSchema.omit({ npcId: true })),
+		districts: z.array(districtNpcSchema.omit({ npcId: true })),
 	})
 	.strict()
 
-export const newNpcSchema = schemas.insert.npcs
+export const newNpcSchema = insert.npcs
 	.omit({ id: true })
 	.extend({
-		area: z.array(insertAreaNpcSchema.omit({ npcId: true })),
-		description: z.array(schemas.insert.npcDescriptions.omit({ npcId: true })),
-		dialogue: z.array(insertDistrictNpcSchema.omit({ npcId: true })),
-		disctrict: z.array(insertDistrictNpcSchema.omit({ npcId: true })),
-		factions: z.array(insertNpcFactionSchema.omit({ npcId: true })),
-		inventory: z.array(insert.npcInventory.omit({ npcId: true })),
-		location: z.array(insertNpcLocationSchema.omit({ npcId: true })),
-		personality: z.array(insert.npcPersonalityTraits.omit({ npcId: true })),
-		quests: z.array(insertQuestNpcSchema.omit({ npcId: true })),
-		relationships: z.array(insert.npcRelationships.omit({ npcId: true })),
+		descriptions: z.array(insert.npcDescriptions.omit({ id: true, npcId: true })).optional(),
+		personalityTraits: z
+			.array(insert.npcPersonalityTraits.omit({ id: true, npcId: true }))
+			.optional(),
+		relationships: z.array(insert.npcRelationships.omit({ id: true, npcId: true })).optional(),
+		inventory: z.array(insert.npcInventory.omit({ id: true, npcId: true })).optional(),
+		locations: z.array(insert.npcLocations.omit({ id: true, npcId: true })).optional(),
+		factions: z.array(insert.npcFactions.omit({ id: true, npcId: true })).optional(),
+		quests: z.array(insert.npcQuests.omit({ id: true, npcId: true })).optional(),
+		dialogue: z.array(insert.npcDialogue.omit({ id: true, npcId: true })).optional(),
+		// Include the area and district relations
+		areas: z.array(insertAreaNpcSchema.omit({ npcId: true })).optional(),
+		districts: z.array(insertDistrictNpcSchema.omit({ npcId: true })).optional(),
 	})
 	.strict()
 
-export const updateNpcSchema = schemas.update.npcs
+export const updateNpcSchema = update.npcs
 	.extend({
-		area: z.array(insertAreaNpcSchema.omit({ npcId: true })).optional(),
-		description: z.array(schemas.insert.npcDescriptions.omit({ npcId: true })).optional(),
-		dialogue: z.array(insertDistrictNpcSchema.omit({ npcId: true })).optional(),
-		disctrict: z.array(insertDistrictNpcSchema.omit({ npcId: true })).optional(),
-		factions: z.array(insertNpcFactionSchema.omit({ npcId: true })).optional(),
-		inventory: z.array(insert.npcInventory.omit({ npcId: true })).optional(),
-		location: z.array(insertNpcLocationSchema.omit({ npcId: true })).optional(),
-		personality: z.array(insert.npcPersonalityTraits.omit({ npcId: true })).optional(),
-		quests: z.array(insertQuestNpcSchema.omit({ npcId: true })).optional(),
-		relationships: z.array(insert.npcRelationships.omit({ npcId: true })).optional(),
+		descriptions: z.array(insert.npcDescriptions.omit({ id: true, npcId: true })).optional(),
+		personalityTraits: z
+			.array(insert.npcPersonalityTraits.omit({ id: true, npcId: true }))
+			.optional(),
+		relationships: z.array(insert.npcRelationships.omit({ id: true, npcId: true })).optional(),
+		inventory: z.array(insert.npcInventory.omit({ id: true, npcId: true })).optional(),
+		locations: z.array(insert.npcLocations.omit({ id: true, npcId: true })).optional(),
+		factions: z.array(insert.npcFactions.omit({ id: true, npcId: true })).optional(),
+		quests: z.array(insert.npcQuests.omit({ id: true, npcId: true })).optional(),
+		dialogue: z.array(insert.npcDialogue.omit({ id: true, npcId: true })).optional(),
+		// Include the area and district relations
+		areas: z.array(insertAreaNpcSchema.omit({ npcId: true })).optional(),
+		districts: z.array(insertDistrictNpcSchema.omit({ npcId: true })).optional(),
 	})
 	.strict()
+
+export const getNpcSchema = z
+	.number()
+	.refine((id) => id > 0, {
+		message: "NPC ID must be greater than 0",
+	})
+	.describe("Get an NPC by ID")
 
 // Define types based on the Zod schemas
 export type Npc = z.infer<typeof NpcSchema>
-export type NewNpc = z.infer<typeof schemas.insert.npcs>
+export type NewNpc = z.infer<typeof newNpcSchema>
+export type UpdateNpc = z.infer<typeof updateNpcSchema>

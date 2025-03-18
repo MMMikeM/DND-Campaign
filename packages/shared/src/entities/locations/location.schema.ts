@@ -1,16 +1,17 @@
-import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import {
+	insertLocationFactionSchema,
+	insertLocationNpcSchema,
 	locationFactions,
 	locationFactionSchema,
-	locationNpcs,
 	locationNpcSchema,
 } from "../relations.schema.js"
 import { z } from "zod"
 
 // Define the main locations table
 export const locations = sqliteTable("locations", {
-	id: integer("id").primaryKey().notNull(),
+	id: integer("id").primaryKey({ autoIncrement: true }),
 	name: text("name").notNull(),
 	type: text("type").notNull(),
 	region: text("region"),
@@ -21,148 +22,134 @@ export const locations = sqliteTable("locations", {
 })
 
 // Define the location features table
-export const locationNotableFeatures = sqliteTable(
-	"location_notable_features",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		feature: text("feature").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.feature] })],
-)
+export const locationNotableFeatures = sqliteTable("location_notable_features", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	feature: text("feature").notNull(),
+})
 
 // Define the location points of interest table
-export const locationPointsOfInterest = sqliteTable(
-	"location_points_of_interest",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		name: text("name").notNull(),
-		description: text("description").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.name] })],
-)
+export const locationPointsOfInterest = sqliteTable("location_points_of_interest", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	name: text("name").notNull(),
+	description: text("description").notNull(),
+})
 
 // Define the location connections table
-export const locationConnections = sqliteTable(
-	"location_connections",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		connectedLocationId: integer("connected_location_id")
-			.notNull()
-			.references(() => locations.id),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.connectedLocationId] })],
-)
+export const locationConnections = sqliteTable("location_connections", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	connectedLocationId: integer("connected_location_id")
+		.notNull()
+		.references(() => locations.id),
+})
 
 // Define the location districts table
-export const locationDistricts = sqliteTable(
-	"location_districts",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		districtId: integer("district_id").notNull(),
-		description: text("description").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.districtId] })],
-)
+export const locationDistricts = sqliteTable("location_districts", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	name: text("name").notNull(),
+	description: text("description").notNull(),
+})
 
 // Define the district features table
-export const districtFeatures = sqliteTable(
-	"district_features",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		districtId: integer("district_id").notNull(),
-		feature: text("feature").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.districtId, table.feature] })],
-)
+export const districtFeatures = sqliteTable("district_features", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	districtId: integer("district_id")
+		.notNull()
+		.references(() => locationDistricts.id, { onDelete: "cascade" }),
+	feature: text("feature").notNull(),
+})
 
 // Define the location areas table
-export const locationAreas = sqliteTable(
-	"location_areas",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		areaId: integer("area_id").notNull(),
-		description: text("description").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.areaId] })],
-)
+export const locationAreas = sqliteTable("location_areas", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	name: text("name").notNull(),
+	description: text("description").notNull(),
+})
 
 // Define the area features table
-export const areaFeatures = sqliteTable(
-	"area_features",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		areaId: integer("area_id").notNull(),
-		feature: text("feature").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.areaId, table.feature] })],
-)
+export const areaFeatures = sqliteTable("area_features", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	areaId: integer("area_id")
+		.notNull()
+		.references(() => locationAreas.id, { onDelete: "cascade" }),
+	feature: text("feature").notNull(),
+})
 
 // Define the area encounters table
-export const areaEncounters = sqliteTable(
-	"area_encounters",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		areaId: integer("area_id").notNull(),
-		encounter: text("encounter").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.areaId, table.encounter] })],
-)
+export const areaEncounters = sqliteTable("area_encounters", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	areaId: integer("area_id")
+		.notNull()
+		.references(() => locationAreas.id, { onDelete: "cascade" }),
+	encounter: text("encounter").notNull(),
+})
 
 // Define the area treasures table
-export const areaTreasures = sqliteTable(
-	"area_treasures",
-	{
-		locationId: integer("location_id")
-			.notNull()
-			.references(() => locations.id, { onDelete: "cascade" }),
-		areaId: integer("area_id").notNull(),
-		treasure: text("treasure").notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.locationId, table.areaId, table.treasure] })],
-)
+export const areaTreasures = sqliteTable("area_treasures", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	areaId: integer("area_id")
+		.notNull()
+		.references(() => locationAreas.id, { onDelete: "cascade" }),
+	treasure: text("treasure").notNull(),
+})
 
-const tables = {
-	locations,
-	locationNotableFeatures,
-	locationPointsOfInterest,
-	locationConnections,
-	locationDistricts,
-	districtFeatures,
-	locationAreas,
-	areaFeatures,
-	areaEncounters,
-	areaTreasures,
-}
+// Define the district NPCs table
+export const districtNpcs = sqliteTable("district_npcs", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	districtId: integer("district_id")
+		.notNull()
+		.references(() => locationDistricts.id, { onDelete: "cascade" }),
+	npcId: integer("npc_id").notNull(),
+})
 
-type Operations = "select" | "insert" | "update"
+// Define the area NPCs table
+export const areaNpcs = sqliteTable("area_npcs", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	areaId: integer("area_id")
+		.notNull()
+		.references(() => locationAreas.id, { onDelete: "cascade" }),
+	npcId: integer("npc_id").notNull(),
+})
 
-const schemas = {
+// Define location NPCs and factions tables
+export const locationNpcs = sqliteTable("location_npcs", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	locationId: integer("location_id")
+		.notNull()
+		.references(() => locations.id, { onDelete: "cascade" }),
+	npcId: integer("npc_id").notNull(),
+})
+
+const locationSchemas = {
 	select: {
 		locations: createSelectSchema(locations),
-		districtFeatures: createSelectSchema(districtFeatures),
-		locationAreas: createSelectSchema(locationAreas),
+		locationNotableFeatures: createSelectSchema(locationNotableFeatures),
+		locationPointsOfInterest: createSelectSchema(locationPointsOfInterest),
 		locationConnections: createSelectSchema(locationConnections),
 		locationDistricts: createSelectSchema(locationDistricts),
-		locationFactions: createSelectSchema(locationFactions),
-		locationNotableFeatures: createSelectSchema(locationNotableFeatures),
+		districtFeatures: createSelectSchema(districtFeatures),
+		locationAreas: createSelectSchema(locationAreas),
+		areaFeatures: createSelectSchema(areaFeatures),
+		areaEncounters: createSelectSchema(areaEncounters),
+		areaTreasures: createSelectSchema(areaTreasures),
+		districtNpcs: createSelectSchema(districtNpcs),
+		areaNpcs: createSelectSchema(areaNpcs),
 		locationNpcs: createSelectSchema(locationNpcs),
-		locationPointsOfInterest: createSelectSchema(locationPointsOfInterest),
+		locationFactions: createSelectSchema(locationFactions),
 	},
 	insert: {
 		locations: createInsertSchema(locations),
@@ -175,6 +162,10 @@ const schemas = {
 		areaFeatures: createInsertSchema(areaFeatures),
 		areaEncounters: createInsertSchema(areaEncounters),
 		areaTreasures: createInsertSchema(areaTreasures),
+		districtNpcs: createInsertSchema(districtNpcs),
+		areaNpcs: createInsertSchema(areaNpcs),
+		locationNpcs: createInsertSchema(locationNpcs),
+		locationFactions: createInsertSchema(locationFactions),
 	},
 	update: {
 		locations: createUpdateSchema(locations),
@@ -182,28 +173,121 @@ const schemas = {
 		locationPointsOfInterest: createUpdateSchema(locationPointsOfInterest),
 		locationConnections: createUpdateSchema(locationConnections),
 		locationDistricts: createUpdateSchema(locationDistricts),
+		districtFeatures: createUpdateSchema(districtFeatures),
+		locationAreas: createUpdateSchema(locationAreas),
 		areaFeatures: createUpdateSchema(areaFeatures),
 		areaEncounters: createUpdateSchema(areaEncounters),
 		areaTreasures: createUpdateSchema(areaTreasures),
+		districtNpcs: createUpdateSchema(districtNpcs),
+		areaNpcs: createUpdateSchema(areaNpcs),
+		locationNpcs: createUpdateSchema(locationNpcs),
+		locationFactions: createUpdateSchema(locationFactions),
 	},
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-} as const satisfies Record<Operations, Record<keyof typeof tables | string, any>>
+}
 
-const { select } = schemas
+const { select, insert, update } = locationSchemas
 
-// Define a typed Location schema using Zod
-export const LocationSchema = select.locations.extend({
-	notable_features: z.array(select.locationNotableFeatures.omit({ locationId: true })),
-	npcs: z.array(locationNpcSchema.omit({ locationId: true })),
-	factions: z.array(select.locationFactions.omit({ locationId: true })),
-	points_of_interest: z.array(select.locationPointsOfInterest.omit({ locationId: true })),
-	connections: z.array(select.locationConnections.omit({ locationId: true })),
-	districts: z.array(select.locationDistricts.omit({ locationId: true })),
-	areas: z.array(select.locationAreas.omit({ locationId: true })),
+// Update schema definitions for districts and areas to include their features, etc.
+export const DistrictSchema = select.locationDistricts.extend({
+	features: z.array(select.districtFeatures.omit({ districtId: true })),
+	npcs: z.array(select.districtNpcs.omit({ districtId: true })),
 })
+
+export const AreaSchema = select.locationAreas.extend({
+	features: z.array(select.areaFeatures.omit({ areaId: true })),
+	encounters: z.array(select.areaEncounters.omit({ areaId: true })),
+	treasures: z.array(select.areaTreasures.omit({ areaId: true })),
+	npcs: z.array(select.areaNpcs.omit({ areaId: true })),
+})
+
+export const LocationSchema = select.locations
+	.extend({
+		notableFeatures: z.array(select.locationNotableFeatures.omit({ locationId: true })),
+		pointsOfInterest: z.array(select.locationPointsOfInterest.omit({ locationId: true })),
+		connections: z.array(select.locationConnections.omit({ locationId: true })),
+		districts: z.array(DistrictSchema.omit({ locationId: true })),
+		areas: z.array(AreaSchema.omit({ locationId: true })),
+		npcs: z.array(locationNpcSchema.omit({ locationId: true })),
+		factions: z.array(locationFactionSchema.omit({ locationId: true })),
+	})
+	.strict()
+
+// Now define the insert and update schemas
+export const newLocationSchema = insert.locations
+	.omit({ id: true })
+	.extend({
+		notableFeatures: z
+			.array(insert.locationNotableFeatures.omit({ id: true, locationId: true }))
+			.optional(),
+		pointsOfInterest: z
+			.array(insert.locationPointsOfInterest.omit({ id: true, locationId: true }))
+			.optional(),
+		connections: z
+			.array(insert.locationConnections.omit({ id: true, locationId: true }))
+			.optional(),
+		districts: z
+			.array(
+				insert.locationDistricts.omit({ id: true, locationId: true }).extend({
+					features: z
+						.array(insert.districtFeatures.omit({ id: true, districtId: true }))
+						.optional(),
+					npcs: z.array(insert.districtNpcs.omit({ id: true, districtId: true })).optional(),
+				}),
+			)
+			.optional(),
+		areas: z
+			.array(
+				insert.locationAreas.omit({ id: true, locationId: true }).extend({
+					features: z.array(insert.areaFeatures.omit({ id: true, areaId: true })).optional(),
+					encounters: z.array(insert.areaEncounters.omit({ id: true, areaId: true })).optional(),
+					treasures: z.array(insert.areaTreasures.omit({ id: true, areaId: true })).optional(),
+					npcs: z.array(insert.areaNpcs.omit({ id: true, areaId: true })).optional(),
+				}),
+			)
+			.optional(),
+		npcs: z.array(insertLocationNpcSchema.omit({ locationId: true })).optional(),
+		factions: z.array(insertLocationFactionSchema.omit({ locationId: true })).optional(),
+	})
+	.strict()
+
+export const updateLocationSchema = update.locations
+	.extend({
+		notableFeatures: z.array(insert.locationNotableFeatures.omit({ locationId: true })).optional(),
+		pointsOfInterest: z
+			.array(insert.locationPointsOfInterest.omit({ locationId: true }))
+			.optional(),
+		connections: z.array(insert.locationConnections.omit({ locationId: true })).optional(),
+		districts: z
+			.array(
+				insert.locationDistricts.omit({ locationId: true }).extend({
+					features: z.array(insert.districtFeatures.omit({ districtId: true })).optional(),
+					npcs: z.array(insert.districtNpcs.omit({ districtId: true })).optional(),
+				}),
+			)
+			.optional(),
+		areas: z
+			.array(
+				insert.locationAreas.omit({ locationId: true }).extend({
+					features: z.array(insert.areaFeatures.omit({ areaId: true })).optional(),
+					encounters: z.array(insert.areaEncounters.omit({ areaId: true })).optional(),
+					treasures: z.array(insert.areaTreasures.omit({ areaId: true })).optional(),
+					npcs: z.array(insert.areaNpcs.omit({ areaId: true })).optional(),
+				}),
+			)
+			.optional(),
+		npcs: z.array(insertLocationNpcSchema.omit({ locationId: true })).optional(),
+		factions: z.array(insertLocationFactionSchema.omit({ locationId: true })).optional(),
+	})
+	.strict()
+
+export const getLocationSchema = z
+	.number()
+	.refine((id) => id > 0, {
+		message: "Location ID must be greater than 0",
+	})
+	.describe("Get a location by ID")
+
 // Define types based on the Zod schemas
 export type Location = z.infer<typeof LocationSchema>
-export type NewLocation = z.infer<typeof schemas.insert.locations>
-export type PointOfInterest = z.infer<typeof schemas.insert.locationPointsOfInterest>
-export type District = z.infer<typeof schemas.insert.locationDistricts>
-export type Area = z.infer<typeof schemas.insert.locationAreas>
+export type NewLocation = z.infer<typeof newLocationSchema>
+export type UpdateLocation = z.infer<typeof updateLocationSchema>

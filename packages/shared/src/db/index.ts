@@ -1,44 +1,58 @@
+import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
-import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3"
-import BetterSqlite3 from "better-sqlite3"
-import * as path from "node:path"
-import * as dotenv from "dotenv"
+import * as questSchema from "../entities/quests/quest.schema.js"
+import * as npcSchema from "../entities/npcs/npc.schema.js"
+import * as factionSchema from "../entities/factions/faction.schema.js"
+import * as locationSchema from "../entities/locations/location.schema.js"
+import * as relationsSchema from "../entities/relations.schema.js"
+import {
+	createQuestOperations,
+	createNPCOperations,
+	createFactionOperations,
+	createLocationOperations,
+} from "../entities/index.js"
 
-// Re-export all entity schemas
-export * from "../entities/quests/quest.schema.js"
-export * from "../entities/npcs/npc.schema.js"
-export * from "../entities/factions/faction.schema.js"
-export * from "../entities/locations/location.schema.js"
-
-// Define return type interface
-export interface DatabaseConnection {
-	db: BetterSQLite3Database
-	sqlite: BetterSqlite3.Database
-	close: () => void
+// Combined schema
+const schema = {
+	...questSchema,
+	...npcSchema,
+	...factionSchema,
+	...locationSchema,
+	...relationsSchema,
 }
 
-// Initialize database connection
-export function initializeDatabase(dbPath?: string): DatabaseConnection {
-	// Load environment variables if not already loaded
-	dotenv.config()
+/**
+ * Initialize the database connection and return operation adapters
+ * @param dbPath Path to the SQLite database file
+ * @returns Object containing adapters for database operations
+ */
+export function initializeDatabase(dbPath: string) {
+	// Create SQLite connection
+	const sqlite = new Database(dbPath)
 
-	// Use provided path or fall back to environment variable or default
-	const finalDbPath = dbPath || process.env.DB_PATH || path.join(process.cwd(), "data.sqlite")
+	// Create Drizzle ORM instance with all schemas
+	const db = drizzle(sqlite, { schema })
 
-	// Create database connection
-	const sqlite = new BetterSqlite3(finalDbPath)
-	const db = drizzle(sqlite)
+	// Create operations object that implements DatabaseOperations
+	const operations = {
+		quests: createQuestOperations(db),
+		npcs: createNPCOperations(db),
+		factions: createFactionOperations(db),
+		locations: createLocationOperations(db),
+	}
 
 	return {
 		db,
-		sqlite,
-		close: () => sqlite.close(),
+		operations,
 	}
 }
 
-// Export database types
-export type DrizzleDatabase = DatabaseConnection["db"]
+export type DrizzleDb = ReturnType<typeof drizzle<typeof schema>>
 
-// Re-export drizzle types and utilities that might be needed
-export { sql } from "drizzle-orm"
-export type { SQL } from "drizzle-orm"
+const path = process.env.DB_PATH
+
+if (!path) {
+	throw new Error("DB_PATH is not set")
+}
+
+export const getDb = () => initializeDatabase(path)
