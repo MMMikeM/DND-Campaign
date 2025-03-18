@@ -1,5 +1,11 @@
 import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core"
-import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
+import {
+	locationFactions,
+	locationFactionSchema,
+	locationNpcs,
+	locationNpcSchema,
+} from "../relations.schema.js"
 import { z } from "zod"
 
 // Define the main locations table
@@ -131,44 +137,73 @@ export const areaTreasures = sqliteTable(
 	(table) => [primaryKey({ columns: [table.locationId, table.areaId, table.treasure] })],
 )
 
-// Create Zod schemas for insert and select operations
-export const insertLocationSchema = createInsertSchema(locations)
-export const selectLocationSchema = createSelectSchema(locations)
-export const insertPointOfInterestSchema = createInsertSchema(locationPointsOfInterest)
-export const selectPointOfInterestSchema = createSelectSchema(locationPointsOfInterest)
-export const insertDistrictSchema = createInsertSchema(locationDistricts)
-export const selectDistrictSchema = createSelectSchema(locationDistricts)
-export const insertAreaSchema = createInsertSchema(locationAreas)
-export const selectAreaSchema = createSelectSchema(locationAreas)
+const tables = {
+	locations,
+	locationNotableFeatures,
+	locationPointsOfInterest,
+	locationConnections,
+	locationDistricts,
+	districtFeatures,
+	locationAreas,
+	areaFeatures,
+	areaEncounters,
+	areaTreasures,
+}
+
+type Operations = "select" | "insert" | "update"
+
+const schemas = {
+	select: {
+		locations: createSelectSchema(locations),
+		districtFeatures: createSelectSchema(districtFeatures),
+		locationAreas: createSelectSchema(locationAreas),
+		locationConnections: createSelectSchema(locationConnections),
+		locationDistricts: createSelectSchema(locationDistricts),
+		locationFactions: createSelectSchema(locationFactions),
+		locationNotableFeatures: createSelectSchema(locationNotableFeatures),
+		locationNpcs: createSelectSchema(locationNpcs),
+		locationPointsOfInterest: createSelectSchema(locationPointsOfInterest),
+	},
+	insert: {
+		locations: createInsertSchema(locations),
+		locationNotableFeatures: createInsertSchema(locationNotableFeatures),
+		locationPointsOfInterest: createInsertSchema(locationPointsOfInterest),
+		locationConnections: createInsertSchema(locationConnections),
+		locationDistricts: createInsertSchema(locationDistricts),
+		districtFeatures: createInsertSchema(districtFeatures),
+		locationAreas: createInsertSchema(locationAreas),
+		areaFeatures: createInsertSchema(areaFeatures),
+		areaEncounters: createInsertSchema(areaEncounters),
+		areaTreasures: createInsertSchema(areaTreasures),
+	},
+	update: {
+		locations: createUpdateSchema(locations),
+		locationNotableFeatures: createUpdateSchema(locationNotableFeatures),
+		locationPointsOfInterest: createUpdateSchema(locationPointsOfInterest),
+		locationConnections: createUpdateSchema(locationConnections),
+		locationDistricts: createUpdateSchema(locationDistricts),
+		areaFeatures: createUpdateSchema(areaFeatures),
+		areaEncounters: createUpdateSchema(areaEncounters),
+		areaTreasures: createUpdateSchema(areaTreasures),
+	},
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+} as const satisfies Record<Operations, Record<keyof typeof tables | string, any>>
+
+const { select } = schemas
 
 // Define a typed Location schema using Zod
-export const LocationSchema = selectLocationSchema.extend({
-	notable_features: z.array(z.string()),
-	npcs: z.array(z.number()),
-	factions: z.array(z.number()),
-	points_of_interest: z.array(selectPointOfInterestSchema.omit({ locationId: true })),
-	connections: z.array(z.number()),
-	districts: z.record(
-		z.object({
-			description: z.string(),
-			features: z.array(z.string()).optional(),
-			npcs: z.array(z.number()).optional(),
-		}),
-	),
-	areas: z.record(
-		z.object({
-			description: z.string(),
-			features: z.array(z.string()).optional(),
-			encounters: z.array(z.string()).optional(),
-			treasure: z.array(z.string()).optional(),
-			npcs: z.array(z.number()).optional(),
-		}),
-	),
+export const LocationSchema = select.locations.extend({
+	notable_features: z.array(select.locationNotableFeatures.omit({ locationId: true })),
+	npcs: z.array(locationNpcSchema.omit({ locationId: true })),
+	factions: z.array(select.locationFactions.omit({ locationId: true })),
+	points_of_interest: z.array(select.locationPointsOfInterest.omit({ locationId: true })),
+	connections: z.array(select.locationConnections.omit({ locationId: true })),
+	districts: z.array(select.locationDistricts.omit({ locationId: true })),
+	areas: z.array(select.locationAreas.omit({ locationId: true })),
 })
-
 // Define types based on the Zod schemas
 export type Location = z.infer<typeof LocationSchema>
-export type NewLocation = z.infer<typeof insertLocationSchema>
-export type PointOfInterest = z.infer<typeof selectPointOfInterestSchema>
-export type District = z.infer<typeof selectDistrictSchema>
-export type Area = z.infer<typeof selectAreaSchema>
+export type NewLocation = z.infer<typeof schemas.insert.locations>
+export type PointOfInterest = z.infer<typeof schemas.insert.locationPointsOfInterest>
+export type District = z.infer<typeof schemas.insert.locationDistricts>
+export type Area = z.infer<typeof schemas.insert.locationAreas>
