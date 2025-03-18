@@ -20,9 +20,7 @@ export const npcFactions = sqliteTable(
 		role: text("role").notNull(),
 		standing: text("standing"),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.npcId, table.factionId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.npcId, table.factionId] })],
 )
 
 // NPCs - LOCATIONS relationships
@@ -37,9 +35,7 @@ export const npcLocations = sqliteTable(
 			.references(() => locations.id),
 		description: text("description").notNull(),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.npcId, table.locationId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.npcId, table.locationId] })],
 )
 
 // LOCATIONS - NPCs relationships (for NPCs found specifically in a location)
@@ -53,9 +49,7 @@ export const locationNpcs = sqliteTable(
 			.notNull()
 			.references(() => npcs.id),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.locationId, table.npcId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.locationId, table.npcId] })],
 )
 
 // LOCATIONS - FACTIONS relationships (for faction control/presence)
@@ -71,9 +65,7 @@ export const locationFactions = sqliteTable(
 		influence: text("influence"), // Optional influence level
 		description: text("description"), // Optional details about faction presence
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.locationId, table.factionId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.locationId, table.factionId] })],
 )
 
 // DISTRICT - NPCs relationships
@@ -88,9 +80,7 @@ export const districtNpcs = sqliteTable(
 			.notNull()
 			.references(() => npcs.id),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.locationId, table.districtId, table.npcId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.locationId, table.districtId, table.npcId] })],
 )
 
 // AREA - NPCs relationships
@@ -105,9 +95,7 @@ export const areaNpcs = sqliteTable(
 			.notNull()
 			.references(() => npcs.id),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.locationId, table.areaId, table.npcId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.locationId, table.areaId, table.npcId] })],
 )
 
 // QUESTS - NPCs relationships
@@ -122,9 +110,7 @@ export const questNpcs = sqliteTable(
 			.references(() => npcs.id),
 		role: text("role"), // Optional role in the quest
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.questId, table.npcId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.questId, table.npcId] })],
 )
 
 // QUESTS - LOCATIONS relationships
@@ -139,9 +125,7 @@ export const questLocations = sqliteTable(
 			.references(() => locations.id),
 		description: text("description"), // Optional description of why this location is part of the quest
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.questId, table.locationId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.questId, table.locationId] })],
 )
 
 // QUESTS - FACTIONS relationships
@@ -156,29 +140,28 @@ export const questFactions = sqliteTable(
 			.references(() => factions.id),
 		role: text("role"), // e.g., "quest giver", "antagonist", "ally"
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.questId, table.factionId] }),
-	}),
+	(table) => [primaryKey({ columns: [table.questId, table.factionId] })],
 )
 
 // Schema definitions
-export const npcFactionSchema = createSelectSchema(npcFactions)
-export const insertNpcFactionSchema = createInsertSchema(npcFactions)
-export const npcLocationSchema = createSelectSchema(npcLocations)
-export const insertNpcLocationSchema = createInsertSchema(npcLocations)
-export const locationNpcSchema = createSelectSchema(locationNpcs)
-export const insertLocationNpcSchema = createInsertSchema(locationNpcs)
-export const locationFactionSchema = createSelectSchema(locationFactions)
-export const insertLocationFactionSchema = createInsertSchema(locationFactions)
-export const districtNpcSchema = createSelectSchema(districtNpcs)
-export const insertDistrictNpcSchema = createInsertSchema(districtNpcs)
 export const areaNpcSchema = createSelectSchema(areaNpcs)
-export const insertAreaNpcSchema = createInsertSchema(areaNpcs)
-export const questNpcSchema = createSelectSchema(questNpcs)
-export const insertQuestNpcSchema = createInsertSchema(questNpcs)
-export const questLocationSchema = createSelectSchema(questLocations)
-export const insertQuestLocationSchema = createInsertSchema(questLocations)
+export const districtNpcSchema = createSelectSchema(districtNpcs)
+export const locationFactionSchema = createSelectSchema(locationFactions)
+export const locationNpcSchema = createSelectSchema(locationNpcs)
+export const npcFactionSchema = createSelectSchema(npcFactions)
+export const npcLocationSchema = createSelectSchema(npcLocations)
 export const questFactionSchema = createSelectSchema(questFactions)
+export const questLocationSchema = createSelectSchema(questLocations)
+export const questNpcSchema = createSelectSchema(questNpcs)
+
+export const insertNpcFactionSchema = createInsertSchema(npcFactions)
+export const insertNpcLocationSchema = createInsertSchema(npcLocations)
+export const insertLocationNpcSchema = createInsertSchema(locationNpcs)
+export const insertLocationFactionSchema = createInsertSchema(locationFactions)
+export const insertDistrictNpcSchema = createInsertSchema(districtNpcs)
+export const insertAreaNpcSchema = createInsertSchema(areaNpcs)
+export const insertQuestNpcSchema = createInsertSchema(questNpcs)
+export const insertQuestLocationSchema = createInsertSchema(questLocations)
 export const insertQuestFactionSchema = createInsertSchema(questFactions)
 
 // Types
