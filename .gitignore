@@ -1,1 +1,12 @@
 node_modules
+playground
+.vscode
+*.log
+*.sqlite
+.mypy_cache
+package-lock.json
+.env
+.env.sse
+
+.DS_Store
+/dist

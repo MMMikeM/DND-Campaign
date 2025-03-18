@@ -2,14 +2,25 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
-import { type } from "arktype"
-import path from "node:path"
 import { randomUUID } from "node:crypto"
-import { SQLiteDatabase } from "./database.js"
 import logger from "./logger.js"
 import { createServer } from "node:http"
-import { initializeDatabase } from "@tome-keeper/shared"
-import { sql } from "drizzle-orm"
+
+import {
+	getDb,
+	getQuestSchema,
+	getLocationSchema,
+	getNpcSchema,
+	newFactionSchema,
+	newLocationSchema,
+	newNpcSchema,
+	newQuestSchema,
+	updateFactionSchema,
+	updateLocationSchema,
+	updateNpcSchema,
+	updateQuestSchema,
+	getFactionSchema,
+} from "@tome-keeper/shared"
 
 // Debug: Print all environment variables
 console.log("Environment variables:", {
@@ -21,47 +32,15 @@ console.log("Environment variables:", {
 	NODE_ENV: process.env.NODE_ENV,
 })
 
-interface SchemaType {
-	description?: string
-	arguments: Record<string, unknown>
-}
-
-function getArgumentsSchema(schema: SchemaType) {
-	if (!schema || !schema.arguments) {
-		return {
-			type: "object",
-			properties: {},
-			required: [],
-			description: schema?.description,
-		}
-	}
-
-	return {
-		type: "object",
-		properties: Object.fromEntries(
-			Object.entries(schema.arguments).map(([key, value]) => [
-				key,
-				typeof value === "object" && value !== null
-					? value
-					: { type: typeof value === "string" ? value : "string" },
-			]),
-		),
-		required: Object.keys(schema.arguments),
-		description: schema.description,
-	}
-}
-
-// Store insights in memory
-const insights: string[] = []
+const { operations, db } = getDb()
+console.log(db)
 
 // Initialize database
 logger.info("Initializing database...")
-const dbPath = process.env.DB_PATH || path.join(process.cwd(), "data.sqlite")
-const { mcp, sqlite, db } = initializeDatabase(dbPath)
 logger.info("Database initialized successfully")
 
 // Create MCP Server
-const server = new Server(
+const mcpServer = new Server(
 	{
 		name: "sqlite-manager",
 		version: "0.1.0",
@@ -75,351 +54,188 @@ const server = new Server(
 	},
 )
 
-const createTableParamsSchema = type({
-	name: '"mcp_dnd_create_table"',
-	arguments: {
-		query: type(/^CREATE TABLE/i).describe("a CREATE TABLE statement"),
-	},
-}).describe("Create a new table in the database")
-
-const listTablesParamsSchema = type({
-	name: '"mcp_dnd_list_tables"',
-	arguments: {},
-}).describe("List all tables in the database")
-
-const describeTableParamsSchema = type({
-	name: '"mcp_dnd_describe_table"',
-	arguments: {
-		table_name: "string",
-	},
-}).describe("Get schema information for a table")
-
-const appendInsightParamsSchema = type({
-	name: '"mcp_dnd_append_insight"',
-	arguments: {
-		insight: "string",
-	},
-}).describe("Add a business insight to the memo")
-
-// ===== Quest Tools =====
-const createQuestParamsSchema = type({
-	name: '"mcp_dnd_create_quest"',
-	arguments: {
-		quest: type("object"),
-	},
-}).describe("Create a new quest")
-
-const getQuestParamsSchema = type({
-	name: '"mcp_dnd_get_quest"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Get a quest by ID")
-
-const updateQuestParamsSchema = type({
-	name: '"mcp_dnd_update_quest"',
-	arguments: {
-		quest: type("object"),
-	},
-}).describe("Update an existing quest")
-
-const deleteQuestParamsSchema = type({
-	name: '"mcp_dnd_delete_quest"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Delete a quest")
-
-// ===== NPC Tools =====
-const createNPCParamsSchema = type({
-	name: '"mcp_dnd_create_npc"',
-	arguments: {
-		npc: type("object"),
-	},
-}).describe("Create a new NPC")
-
-const getNPCParamsSchema = type({
-	name: '"mcp_dnd_get_npc"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Get an NPC by ID")
-
-const updateNPCParamsSchema = type({
-	name: '"mcp_dnd_update_npc"',
-	arguments: {
-		npc: type("object"),
-	},
-}).describe("Update an existing NPC")
-
-const deleteNPCParamsSchema = type({
-	name: '"mcp_dnd_delete_npc"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Delete an NPC")
-
-// ===== Faction Tools =====
-const createFactionParamsSchema = type({
-	name: '"mcp_dnd_create_faction"',
-	arguments: {
-		id: "string",
-		faction: type("object"),
-	},
-}).describe("Create a new faction")
-
-const getFactionParamsSchema = type({
-	name: '"mcp_dnd_get_faction"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Get a faction by ID")
-
-const updateFactionParamsSchema = type({
-	name: '"mcp_dnd_update_faction"',
-	arguments: {
-		id: "string",
-		faction: type("object"),
-	},
-}).describe("Update an existing faction")
-
-const deleteFactionParamsSchema = type({
-	name: '"mcp_dnd_delete_faction"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Delete a faction")
-
-// ===== Location Tools =====
-const createLocationParamsSchema = type({
-	name: '"mcp_dnd_create_location"',
-	arguments: {
-		id: "string",
-		location: type("object"),
-	},
-}).describe("Create a new location")
-
-const getLocationParamsSchema = type({
-	name: '"mcp_dnd_get_location"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Get a location by ID")
-
-const updateLocationParamsSchema = type({
-	name: '"mcp_dnd_update_location"',
-	arguments: {
-		id: "string",
-		location: type("object"),
-	},
-}).describe("Update an existing location")
-
-const deleteLocationParamsSchema = type({
-	name: '"mcp_dnd_delete_location"',
-	arguments: {
-		id: "string",
-	},
-}).describe("Delete a location")
-
-const validParams = createTableParamsSchema
-	.or(listTablesParamsSchema)
-	.or(describeTableParamsSchema)
-	.or(appendInsightParamsSchema)
-	// Quest params
-	.or(createQuestParamsSchema)
-	.or(getQuestParamsSchema)
-	.or(updateQuestParamsSchema)
-	.or(deleteQuestParamsSchema)
-	// NPC params
-	.or(createNPCParamsSchema)
-	.or(getNPCParamsSchema)
-	.or(updateNPCParamsSchema)
-	.or(deleteNPCParamsSchema)
-	// Faction params
-	.or(createFactionParamsSchema)
-	.or(getFactionParamsSchema)
-	.or(updateFactionParamsSchema)
-	.or(deleteFactionParamsSchema)
-	// Location params
-	.or(createLocationParamsSchema)
-	.or(getLocationParamsSchema)
-	.or(updateLocationParamsSchema)
-	.or(deleteLocationParamsSchema)
-
 // Tool handlers
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
+mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 	tools: [
-		{
-			name: "mcp_dnd_create_table",
-			description: createTableParamsSchema.description,
-			inputSchema: getArgumentsSchema(createTableParamsSchema),
-		},
-		{
-			name: "mcp_dnd_list_tables",
-			description: listTablesParamsSchema.description,
-			inputSchema: getArgumentsSchema(listTablesParamsSchema),
-		},
-		{
-			name: "mcp_dnd_describe_table",
-			description: describeTableParamsSchema.description,
-			inputSchema: getArgumentsSchema(describeTableParamsSchema),
-		},
-		{
-			name: "mcp_dnd_append_insight",
-			description: appendInsightParamsSchema.description,
-			inputSchema: getArgumentsSchema(appendInsightParamsSchema),
-		},
+		// {
+		// 	name: "mcp_dnd_create_table",
+		// 	description: createTableParamsSchema.description,
+		// 	inputSchema: getArgumentsSchema(createTableParamsSchema),
+		// },
+		// {
+		// 	name: "mcp_dnd_list_tables",
+		// 	description: listTablesParamsSchema.description,
+		// 	inputSchema: getArgumentsSchema(listTablesParamsSchema),
+		// },
+		// {
+		// 	name: "mcp_dnd_describe_table",
+		// 	description: describeTableParamsSchema.description,
+		// 	inputSchema: getArgumentsSchema(describeTableParamsSchema),
+		// },
+		// {
+		// 	name: "mcp_dnd_append_insight",
+		// 	description: appendInsightParamsSchema.description,
+		// 	inputSchema: getArgumentsSchema(appendInsightParamsSchema),
+		// },
 		// Quest Tools
 		{
 			name: "mcp_dnd_create_quest",
-			description: createQuestParamsSchema.description,
-			inputSchema: getArgumentsSchema(createQuestParamsSchema),
+			description: "Create a new quest",
+			inputSchema: newQuestSchema,
 		},
 		{
 			name: "mcp_dnd_get_quest",
-			description: getQuestParamsSchema.description,
-			inputSchema: getArgumentsSchema(getQuestParamsSchema),
+			description: "Get a quest by ID",
+			inputSchema: getQuestSchema,
 		},
 		{
 			name: "mcp_dnd_update_quest",
-			description: updateQuestParamsSchema.description,
-			inputSchema: getArgumentsSchema(updateQuestParamsSchema),
+			description: "Update a quest",
+			inputSchema: updateQuestSchema,
 		},
 		{
 			name: "mcp_dnd_delete_quest",
-			description: deleteQuestParamsSchema.description,
-			inputSchema: getArgumentsSchema(deleteQuestParamsSchema),
+			description: "Delete a quest",
+			inputSchema: getQuestSchema,
 		},
 		// NPC Tools
 		{
 			name: "mcp_dnd_create_npc",
-			description: createNPCParamsSchema.description,
-			inputSchema: getArgumentsSchema(createNPCParamsSchema),
+			description: "Create a new NPC",
+			inputSchema: newNpcSchema,
 		},
 		{
 			name: "mcp_dnd_get_npc",
-			description: getNPCParamsSchema.description,
-			inputSchema: getArgumentsSchema(getNPCParamsSchema),
+			description: "Get an NPC by ID",
+			inputSchema: getNpcSchema,
 		},
 		{
 			name: "mcp_dnd_update_npc",
-			description: updateNPCParamsSchema.description,
-			inputSchema: getArgumentsSchema(updateNPCParamsSchema),
+			description: "Update an NPC",
+			inputSchema: updateNpcSchema,
 		},
 		{
 			name: "mcp_dnd_delete_npc",
-			description: deleteNPCParamsSchema.description,
-			inputSchema: getArgumentsSchema(deleteNPCParamsSchema),
+			description: "Delete an NPC",
+			inputSchema: getNpcSchema,
 		},
 		// Faction Tools
 		{
 			name: "mcp_dnd_create_faction",
-			description: createFactionParamsSchema.description,
-			inputSchema: getArgumentsSchema(createFactionParamsSchema),
+			description: "Create a new faction",
+			inputSchema: newFactionSchema,
 		},
 		{
 			name: "mcp_dnd_get_faction",
-			description: getFactionParamsSchema.description,
-			inputSchema: getArgumentsSchema(getFactionParamsSchema),
+			description: "Get a faction by ID",
+			inputSchema: getFactionSchema,
 		},
 		{
 			name: "mcp_dnd_update_faction",
-			description: updateFactionParamsSchema.description,
-			inputSchema: getArgumentsSchema(updateFactionParamsSchema),
+			description: "Update a faction",
+			inputSchema: updateFactionSchema,
 		},
 		{
 			name: "mcp_dnd_delete_faction",
-			description: deleteFactionParamsSchema.description,
-			inputSchema: getArgumentsSchema(deleteFactionParamsSchema),
+			description: "Delete a faction",
+			inputSchema: getFactionSchema,
 		},
 		// Location Tools
 		{
 			name: "mcp_dnd_create_location",
-			description: createLocationParamsSchema.description,
-			inputSchema: getArgumentsSchema(createLocationParamsSchema),
+			description: "Create a new location",
+			inputSchema: newLocationSchema,
 		},
 		{
 			name: "mcp_dnd_get_location",
-			description: getLocationParamsSchema.description,
-			inputSchema: getArgumentsSchema(getLocationParamsSchema),
+			description: "Get a location by ID",
+			inputSchema: getLocationSchema,
 		},
 		{
 			name: "mcp_dnd_update_location",
-			description: updateLocationParamsSchema.description,
-			inputSchema: getArgumentsSchema(updateLocationParamsSchema),
+			description: "Update a location",
+			inputSchema: updateLocationSchema,
 		},
 		{
 			name: "mcp_dnd_delete_location",
-			description: deleteLocationParamsSchema.description,
-			inputSchema: getArgumentsSchema(deleteLocationParamsSchema),
+			description: "Delete a location",
+			inputSchema: getLocationSchema,
 		},
 	],
 }))
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 	logger.debug("Handling CallToolRequest", {
+		request: request,
 		tool: request.params.name,
 		args: request.params.arguments,
 	})
 
 	try {
-		const data = validParams.assert(request.params)
-		const name = data.name
-		const args = data.arguments
+		const data = newFactionSchema
+			.or(newLocationSchema)
+			.or(newNpcSchema)
+			.or(newQuestSchema)
+			.or(updateFactionSchema)
+			.or(updateLocationSchema)
+			.or(updateNpcSchema)
+			.or(updateQuestSchema)
+			.parse(request.params.arguments)
+		const name = request.params.name
+		const args = request.params.arguments
 
 		switch (name) {
-			case "mcp_dnd_create_table": {
-				logger.info("Creating table", { query: args.query })
-				db.run(sql.raw(args.query))
-				logger.debug("Table created successfully")
-				return {
-					content: [{ type: "text", text: "Table created successfully" }],
-				}
-			}
+			// case "mcp_dnd_create_table": {
+			// 	logger.info("Creating table".or({ query: args.query })
+			// 	db.run("some thing")
+			// 	logger.debug("Table created successfully")
+			// 	return {
+			// 		content: [{ type: "text".or(text: "Table created successfully" }],
+			// 	}
+			// }
 
-			case "mcp_dnd_list_tables": {
-				logger.debug("Listing tables")
-				try {
-					const tables = mcp.mcp_dnd_list_tables()
-					logger.debug("Tables found", { count: tables.length, tables })
-					return { content: [{ type: "text", text: JSON.stringify(tables) }] }
-				} catch (error) {
-					logger.error("Failed to list tables", {
-						error: error instanceof Error ? error.message : String(error),
-					})
-					return {
-						content: [
-							{
-								type: "text",
-								text: `Error listing tables: ${error instanceof Error ? error.message : String(error)}`,
-							},
-						],
-					}
-				}
-			}
+			// case "mcp_dnd_list_tables": {
+			// 	logger.debug("Listing tables")
+			// 	try {
+			// 		const tables = await database.mcp_dnd_list_tables()
+			// 		logger.debug("Tables found".or({ count: tables.length, tables })
+			// 		return { content: [{ type: "text", text: JSON.stringify(tables) }] }
+			// 	} catch (error) {
+			// 		logger.error("Failed to list tables", {
+			// 			error: error instanceof Error ? error.message : String(error),
+			// 		})
+			// 		return {
+			// 			content: [
+			// 				{
+			// 					type: "text",
+			// 					text: `Error listing tables: ${error instanceof Error ? error.message : String(error)}`,
+			// 				},
+			// 			],
+			// 		}
+			// 	}
+			// }
 
-			case "mcp_dnd_describe_table": {
-				logger.debug("Describing table", { table: args.table_name })
-				const schema = mcp.mcp_dnd_describe_table(args.table_name)
-				logger.debug("Table schema", { columns: Object.keys(schema).length })
-				return { content: [{ type: "text", text: JSON.stringify(schema) }] }
-			}
+			// case "mcp_dnd_describe_table": {
+			// 	logger.debug("Describing table", { table: args.table_name })
+			// 	const schema = database.mcp_dnd_describe_table(args.table_name)
+			// 	logger.debug("Table schema", { columns: Object.keys(schema).length })
+			// 	return { content: [{ type: "text", text: JSON.stringify(schema) }] }
+			// }
 
-			case "mcp_dnd_append_insight": {
-				logger.info("Adding new insight", { insight: args.insight })
-				insights.push(args.insight)
-				await server.sendResourceUpdated({ uri: "memo://insights" })
-				logger.debug("Insight added successfully", { total: insights.length })
-				return { content: [{ type: "text", text: "Insight added" }] }
-			}
+			// case "mcp_dnd_append_insight": {
+			// 	logger.info("Adding new insight", { insight: args.insight })
+			// 	insights.push(args.insight)
+			// 	await mcpServer.sendResourceUpdated({ uri: "memo://insights" })
+			// 	logger.debug("Insight added successfully", { total: insights.length })
+			// 	return { content: [{ type: "text", text: "Insight added" }] }
+			// }
 
 			// Quest operations
 			case "mcp_dnd_create_quest": {
 				logger.info("Creating quest", { quest: args.quest })
 				try {
 					const questId = args.quest.id || randomUUID()
-					const result = mcp.mcp_dnd_create_quest(args.quest)
-					logger.debug("Quest created successfully")
+					const result = operations.quests.create(args.quest)
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
 					logger.error("Failed to create quest", { error: (error as Error).message })
@@ -432,7 +248,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_get_quest": {
 				logger.debug("Getting quest", { id: args.id })
 				try {
-					const quest = mcp.mcp_dnd_get_quest(args.id)
+					const quest = operations.quests.get(args.id)
 					logger.debug("Quest retrieved", { found: !!quest })
 					return { content: [{ type: "text", text: JSON.stringify(quest) }] }
 				} catch (error) {
@@ -446,7 +262,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_update_quest": {
 				logger.info("Updating quest", { quest: args.quest })
 				try {
-					mcp.mcp_dnd_update_quest(args.quest.id, args.quest)
+					operations.quests.update(args.quest.id, args.quest)
 					logger.debug("Quest updated successfully")
 					return { content: [{ type: "text", text: "Quest updated successfully" }] }
 				} catch (error) {
@@ -460,7 +276,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_delete_quest": {
 				logger.info("Deleting quest", { id: args.id })
 				try {
-					mcp.mcp_dnd_delete_quest(args.id)
+					operations.quests.delete(args.id)
 					logger.debug("Quest deleted successfully")
 					return { content: [{ type: "text", text: "Quest deleted successfully" }] }
 				} catch (error) {
@@ -476,7 +292,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 				logger.info("Creating NPC", { npc: args.npc })
 				try {
 					const npcId = args.npc.id || randomUUID()
-					const result = mcp.mcp_dnd_create_npc(args.npc)
+					const result = operations.npcs.create(args.npc)
 					logger.debug("NPC created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -490,7 +306,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_get_npc": {
 				logger.debug("Getting NPC", { id: args.id })
 				try {
-					const npc = mcp.mcp_dnd_get_npc(args.id)
+					const npc = operations.npcs.get(args.id)
 					logger.debug("NPC retrieved", { found: !!npc })
 					return { content: [{ type: "text", text: JSON.stringify(npc) }] }
 				} catch (error) {
@@ -504,7 +320,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_update_npc": {
 				logger.info("Updating NPC", { npc: args.npc })
 				try {
-					mcp.mcp_dnd_update_npc(args.npc.id, args.npc)
+					operations.npcs.update(args.npc.id, args.npc)
 					logger.debug("NPC updated successfully")
 					return { content: [{ type: "text", text: "NPC updated successfully" }] }
 				} catch (error) {
@@ -518,7 +334,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_delete_npc": {
 				logger.info("Deleting NPC", { id: args.id })
 				try {
-					mcp.mcp_dnd_delete_npc(args.id)
+					operations.npcs.delete(args.id)
 					logger.debug("NPC deleted successfully")
 					return { content: [{ type: "text", text: "NPC deleted successfully" }] }
 				} catch (error) {
@@ -533,7 +349,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_create_faction": {
 				logger.info("Creating faction", { faction: args.faction, id: args.id })
 				try {
-					const result = mcp.mcp_dnd_create_faction(args.faction)
+					const result = operations.factions.create(args.faction)
 					logger.debug("Faction created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -549,7 +365,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_get_faction": {
 				logger.debug("Getting faction", { id: args.id })
 				try {
-					const faction = mcp.mcp_dnd_get_faction(args.id)
+					const faction = operations.factions.get(args.id)
 					logger.debug("Faction retrieved", { found: !!faction })
 					return { content: [{ type: "text", text: JSON.stringify(faction) }] }
 				} catch (error) {
@@ -563,7 +379,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_update_faction": {
 				logger.info("Updating faction", { faction: args.faction, id: args.id })
 				try {
-					mcp.mcp_dnd_update_faction(args.id, args.faction)
+					operations.factions.update(args.id, args.faction)
 					logger.debug("Faction updated successfully")
 					return { content: [{ type: "text", text: "Faction updated successfully" }] }
 				} catch (error) {
@@ -579,7 +395,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_delete_faction": {
 				logger.info("Deleting faction", { id: args.id })
 				try {
-					mcp.mcp_dnd_delete_faction(args.id)
+					operations.factions.delete(args.id)
 					logger.debug("Faction deleted successfully")
 					return { content: [{ type: "text", text: "Faction deleted successfully" }] }
 				} catch (error) {
@@ -596,7 +412,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_create_location": {
 				logger.info("Creating location", { location: args.location, id: args.id })
 				try {
-					const result = mcp.mcp_dnd_create_location(args.location)
+					const result = operations.locations.create(args.location)
 					logger.debug("Location created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -612,7 +428,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_get_location": {
 				logger.debug("Getting location", { id: args.id })
 				try {
-					const location = mcp.mcp_dnd_get_location(args.id)
+					const location = operations.locations.get(args.id)
 					logger.debug("Location retrieved", { found: !!location })
 					return { content: [{ type: "text", text: JSON.stringify(location) }] }
 				} catch (error) {
@@ -628,7 +444,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_update_location": {
 				logger.info("Updating location", { location: args.location, id: args.id })
 				try {
-					mcp.mcp_dnd_update_location(args.id, args.location)
+					operations.locations.update(args.id, args.location)
 					logger.debug("Location updated successfully")
 					return { content: [{ type: "text", text: "Location updated successfully" }] }
 				} catch (error) {
@@ -644,7 +460,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 			case "mcp_dnd_delete_location": {
 				logger.info("Deleting location", { id: args.id })
 				try {
-					mcp.mcp_dnd_delete_location(args.id)
+					operations.locations.delete(args.id)
 					logger.debug("Location deleted successfully")
 					return { content: [{ type: "text", text: "Location deleted successfully" }] }
 				} catch (error) {
@@ -702,7 +518,7 @@ async function startServer() {
 					Connection: "keep-alive",
 				})
 				transport = new SSEServerTransport("/mcp", res)
-				await server.connect(transport)
+				await mcpServer.connect(transport)
 			} else if (req.url === "/mcp" && req.method === "POST") {
 				// Handle incoming messages
 				if (transport instanceof SSEServerTransport) {
@@ -724,23 +540,10 @@ async function startServer() {
 	} else {
 		// Default to stdio transport
 		transport = new StdioServerTransport()
-		await server.connect(transport)
+		await mcpServer.connect(transport)
 		logger.info("Server started with stdio transport")
 	}
 }
-
-// Handle cleanup
-process.on("SIGINT", () => {
-	logger.info("Shutting down server...")
-	sqlite.close()
-	process.exit(0)
-})
-
-process.on("SIGTERM", () => {
-	logger.info("Shutting down server...")
-	sqlite.close()
-	process.exit(0)
-})
 
 startServer().catch((err) => {
 	logger.fatal("Unhandled error", {

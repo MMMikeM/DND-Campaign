@@ -1,10 +1,10 @@
 import { migrate } from "drizzle-orm/better-sqlite3/migrator"
-import { initializeDatabase } from "./index.js"
+import { getDb, initializeDatabase } from "./index.js"
 
 // Run migrations
 async function main() {
 	console.log("Running migrations...")
-	const { db, sqlite, close } = initializeDatabase()
+	const { db } = getDb()
 
 	try {
 		await migrate(db, { migrationsFolder: "./drizzle" })

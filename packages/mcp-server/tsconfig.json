@@ -1,35 +1,20 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "composite": true,
     "declaration": true,
     "esModuleInterop": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "dist",
-    "paths": {
-      "@tome-keeper/shared": [
-        "../shared/src"
-      ],
-      "@tome-keeper/shared/*": [
-        "../shared/src/*"
-      ]
-    },
     "preserveSymlinks": true,
     "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES2020",
-    "types": [
-      "node"
-    ],
-    
+    "target": "ESNext",
+    "types": ["node"]
   },
-  "references": [
-    { "path": "../shared" }
-  ],
   "include": [
     "src/**/*"
   ],

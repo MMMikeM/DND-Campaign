@@ -3,267 +3,320 @@ import {
 	npcs,
 	npcDescriptions,
 	npcPersonalityTraits,
-	npcQuests,
 	npcRelationships,
-	npcLocations,
 	npcInventory,
+	npcLocations,
+	npcFactions,
+	npcQuests,
+	npcDialogue,
 	type Npc,
+	type NewNpc,
+	type UpdateNpc,
 } from "./npc.schema.js"
-import type { DrizzleDb } from "../../common/database.js"
+import type { DrizzleDb } from "../../db/index.js"
 
 export const createNPCOperations = (db: DrizzleDb) => {
-	const create = (npc: Npc): void => {
-		db.transaction((tx) => {
-			// Insert main NPC data
-			const result = tx
-				.insert(npcs)
-				.values({
-					name: npc.name,
-					race: npc.race,
-					gender: npc.gender,
-					occupation: npc.occupation,
-					role: npc.role,
-					quirk: npc.quirk,
-					background: npc.background,
-					motivation: npc.motivation,
-					secret: npc.secret,
-					stats: npc.stats,
-				})
-				.returning({ id: npcs.id })
-				.get()
+	const create = async (newNpc: NewNpc): Promise<number> => {
+		try {
+			return await db.transaction(async (tx) => {
+				// Insert main NPC data
+				const result = await tx
+					.insert(npcs)
+					.values({
+						name: newNpc.name,
+						race: newNpc.race,
+						gender: newNpc.gender,
+						occupation: newNpc.occupation,
+						role: newNpc.role,
+						quirk: newNpc.quirk,
+						background: newNpc.background,
+						motivation: newNpc.motivation,
+						secret: newNpc.secret,
+						stats: newNpc.stats,
+					})
+					.returning({ id: npcs.id })
 
-			const npcId = result.id
+				const npcId = result[0].id
 
-			// Insert descriptions
-			if (npc.description?.length) {
-				tx.insert(npcDescriptions)
-					.values(
-						npc.description.map((desc) => ({
+				// Insert descriptions
+				if (newNpc.descriptions?.length) {
+					await tx.insert(npcDescriptions).values(
+						newNpc.descriptions.map((desc) => ({
 							npcId,
-							description: desc,
+							description: desc.description,
 						})),
 					)
-					.run()
-			}
+				}
 
-			// Insert personality traits
-			if (npc.personality?.length) {
-				tx.insert(npcPersonalityTraits)
-					.values(
-						npc.personality.map((trait) => ({
+				// Insert personality traits
+				if (newNpc.personalityTraits?.length) {
+					await tx.insert(npcPersonalityTraits).values(
+						newNpc.personalityTraits.map((trait) => ({
 							npcId,
-							trait,
+							trait: trait.trait,
 						})),
 					)
-					.run()
-			}
+				}
 
-			// Insert relationships
-			if (npc.relationships?.length) {
-				tx.insert(npcRelationships)
-					.values(
-						npc.relationships.map((relationship) => ({
+				// Insert relationships
+				if (newNpc.relationships?.length) {
+					await tx.insert(npcRelationships).values(
+						newNpc.relationships.map((rel) => ({
 							npcId,
-							targetId: relationship.id,
-							description: relationship.description,
+							targetId: rel.targetId,
+							description: rel.description,
+							relationship: rel.relationship,
 						})),
 					)
-					.run()
-			}
+				}
 
-			// Insert quests
-			if (npc.quests?.length) {
-				tx.insert(npcQuests)
-					.values(
-						npc.quests.map((quest) => ({
+				// Insert inventory
+				if (newNpc.inventory?.length) {
+					await tx.insert(npcInventory).values(
+						newNpc.inventory.map((item) => ({
 							npcId,
-							questId: quest.id,
-							description: quest.description,
+							item: item.item,
+							quantity: item.quantity,
+							notes: item.notes,
 						})),
 					)
-					.run()
-			}
+				}
 
-			// Insert locations
-			if (npc.location?.length) {
-				tx.insert(npcLocations)
-					.values(
-						npc.location.map((loc) => ({
+				// Insert locations
+				if (newNpc.locations?.length) {
+					await tx.insert(npcLocations).values(
+						newNpc.locations.map((loc) => ({
 							npcId,
-							locationId: loc.id,
-							description: loc.description,
+							locationId: loc.locationId,
+							context: loc.context,
 						})),
 					)
-					.run()
-			}
+				}
 
-			// Insert inventory items
-			if (npc.inventory?.length) {
-				tx.insert(npcInventory)
-					.values(
-						npc.inventory.map((item) => ({
+				// Insert factions
+				if (newNpc.factions?.length) {
+					await tx.insert(npcFactions).values(
+						newNpc.factions.map((faction) => ({
 							npcId,
-							item,
+							factionId: faction.factionId,
+							role: faction.role,
+							status: faction.status,
 						})),
 					)
-					.run()
-			}
-		})
-	}
+				}
 
-	const get = (id: number) => {
-		// Return raw join results without processing
-		return db
-			.select({
-				npc: npcs,
-				description: npcDescriptions.description,
-				personality: npcPersonalityTraits.trait,
-				quest: {
-					id: npcQuests.questId,
-					description: npcQuests.description,
-				},
-				relationship: {
-					targetId: npcRelationships.targetId,
-					description: npcRelationships.description,
-				},
-				location: {
-					id: npcLocations.locationId,
-					description: npcLocations.description,
-				},
-				inventory: npcInventory.item,
+				// Insert quests
+				if (newNpc.quests?.length) {
+					await tx.insert(npcQuests).values(
+						newNpc.quests.map((quest) => ({
+							npcId,
+							questId: quest.questId,
+							role: quest.role,
+						})),
+					)
+				}
+
+				// Insert dialogue
+				if (newNpc.dialogue?.length) {
+					await tx.insert(npcDialogue).values(
+						newNpc.dialogue.map((dialogue) => ({
+							npcId,
+							topic: dialogue.topic,
+							response: dialogue.response,
+							condition: dialogue.condition,
+						})),
+					)
+				}
+
+				// Add area and district relations here when needed
+
+				return npcId
 			})
-			.from(npcs)
-			.leftJoin(npcDescriptions, eq(npcDescriptions.npcId, npcs.id))
-			.leftJoin(npcPersonalityTraits, eq(npcPersonalityTraits.npcId, npcs.id))
-			.leftJoin(npcQuests, eq(npcQuests.npcId, npcs.id))
-			.leftJoin(npcRelationships, eq(npcRelationships.npcId, npcs.id))
-			.leftJoin(npcLocations, eq(npcLocations.npcId, npcs.id))
-			.leftJoin(npcInventory, eq(npcInventory.npcId, npcs.id))
-			.where(eq(npcs.id, id))
-			.all()
+		} catch (error) {
+			console.error("Error creating NPC:", error)
+			throw error
+		}
 	}
 
-	const update = (id: number, partialNpc: Npc): void => {
-		db.transaction((tx) => {
-			// Extract the base NPC fields from partialNpc
-			const { description, personality, relationships, quests, location, inventory, ...npcFields } =
-				partialNpc
+	const get = async (id: number) => {
+		try {
+			// Return raw join results using left joins
+			const result = await db
+				.select()
+				.from(npcs)
+				.leftJoin(npcDescriptions, eq(npcDescriptions.npcId, npcs.id))
+				.leftJoin(npcPersonalityTraits, eq(npcPersonalityTraits.npcId, npcs.id))
+				.leftJoin(npcRelationships, eq(npcRelationships.npcId, npcs.id))
+				.leftJoin(npcInventory, eq(npcInventory.npcId, npcs.id))
+				.leftJoin(npcLocations, eq(npcLocations.npcId, npcs.id))
+				.leftJoin(npcFactions, eq(npcFactions.npcId, npcs.id))
+				.leftJoin(npcQuests, eq(npcQuests.npcId, npcs.id))
+				.leftJoin(npcDialogue, eq(npcDialogue.npcId, npcs.id))
+				.where(eq(npcs.id, id))
+				.all()
 
-			// Update main NPC record if there are fields to update
-			if (Object.keys(npcFields).length > 0) {
-				tx.update(npcs).set(npcFields).where(eq(npcs.id, id)).run()
-			}
+			return result
+		} catch (error) {
+			console.error("Error retrieving NPC:", error)
+			throw error
+		}
+	}
 
-			// Update related data only if provided in the partial update
+	const update = async (id: number, partialNpc: UpdateNpc): Promise<void> => {
+		try {
+			await db.transaction(async (tx) => {
+				// Extract the base NPC fields from partialNpc
+				const {
+					descriptions,
+					personalityTraits,
+					relationships,
+					inventory,
+					locations,
+					factions,
+					quests,
+					dialogue,
+					areas,
+					districts,
+					...npcFields
+				} = partialNpc
 
-			// Update descriptions if provided
-			if (description !== undefined) {
-				tx.delete(npcDescriptions).where(eq(npcDescriptions.npcId, id)).run()
-				if (description.length > 0) {
-					tx.insert(npcDescriptions)
-						.values(
-							description.map((desc) => ({
+				// Update main NPC record if there are fields to update
+				if (Object.keys(npcFields).length > 0) {
+					await tx.update(npcs).set(npcFields).where(eq(npcs.id, id))
+				}
+
+				// Update descriptions if provided
+				if (descriptions !== undefined) {
+					await tx.delete(npcDescriptions).where(eq(npcDescriptions.npcId, id))
+					if (descriptions.length > 0) {
+						await tx.insert(npcDescriptions).values(
+							descriptions.map((desc) => ({
 								npcId: id,
-								description: desc,
+								description: desc.description,
 							})),
 						)
-						.run()
+					}
 				}
-			}
 
-			// Update personality traits if provided
-			if (personality !== undefined) {
-				tx.delete(npcPersonalityTraits).where(eq(npcPersonalityTraits.npcId, id)).run()
-				if (personality.length > 0) {
-					tx.insert(npcPersonalityTraits)
-						.values(
-							personality.map((trait) => ({
+				// Update personality traits if provided
+				if (personalityTraits !== undefined) {
+					await tx.delete(npcPersonalityTraits).where(eq(npcPersonalityTraits.npcId, id))
+					if (personalityTraits.length > 0) {
+						await tx.insert(npcPersonalityTraits).values(
+							personalityTraits.map((trait) => ({
 								npcId: id,
-								trait,
+								trait: trait.trait,
 							})),
 						)
-						.run()
+					}
 				}
-			}
 
-			// Update relationships if provided
-			if (relationships !== undefined) {
-				tx.delete(npcRelationships).where(eq(npcRelationships.npcId, id)).run()
-				if (relationships.length > 0) {
-					tx.insert(npcRelationships)
-						.values(
-							relationships.map((relationship) => ({
+				// Update relationships if provided
+				if (relationships !== undefined) {
+					await tx.delete(npcRelationships).where(eq(npcRelationships.npcId, id))
+					if (relationships.length > 0) {
+						await tx.insert(npcRelationships).values(
+							relationships.map((rel) => ({
 								npcId: id,
-								targetId: relationship.id,
-								description: relationship.description,
+								targetId: rel.targetId,
+								description: rel.description,
+								relationship: rel.relationship,
 							})),
 						)
-						.run()
+					}
 				}
-			}
 
-			// Update quests if provided
-			if (quests !== undefined) {
-				tx.delete(npcQuests).where(eq(npcQuests.npcId, id)).run()
-				if (quests.length > 0) {
-					tx.insert(npcQuests)
-						.values(
-							quests.map((quest) => ({
-								npcId: id,
-								questId: quest.id,
-								description: quest.description,
-							})),
-						)
-						.run()
-				}
-			}
-
-			// Update locations if provided
-			if (location !== undefined) {
-				tx.delete(npcLocations).where(eq(npcLocations.npcId, id)).run()
-				if (location.length > 0) {
-					tx.insert(npcLocations)
-						.values(
-							location.map((loc) => ({
-								npcId: id,
-								locationId: loc.id,
-								description: loc.description,
-							})),
-						)
-						.run()
-				}
-			}
-
-			// Update inventory if provided
-			if (inventory !== undefined) {
-				tx.delete(npcInventory).where(eq(npcInventory.npcId, id)).run()
-				if (inventory.length > 0) {
-					tx.insert(npcInventory)
-						.values(
+				// Update inventory if provided
+				if (inventory !== undefined) {
+					await tx.delete(npcInventory).where(eq(npcInventory.npcId, id))
+					if (inventory.length > 0) {
+						await tx.insert(npcInventory).values(
 							inventory.map((item) => ({
 								npcId: id,
-								item,
+								item: item.item,
+								quantity: item.quantity,
+								notes: item.notes,
 							})),
 						)
-						.run()
+					}
 				}
-			}
-		})
+
+				// Update locations if provided
+				if (locations !== undefined) {
+					await tx.delete(npcLocations).where(eq(npcLocations.npcId, id))
+					if (locations.length > 0) {
+						await tx.insert(npcLocations).values(
+							locations.map((loc) => ({
+								npcId: id,
+								locationId: loc.locationId,
+								context: loc.context,
+							})),
+						)
+					}
+				}
+
+				// Update factions if provided
+				if (factions !== undefined) {
+					await tx.delete(npcFactions).where(eq(npcFactions.npcId, id))
+					if (factions.length > 0) {
+						await tx.insert(npcFactions).values(
+							factions.map((faction) => ({
+								npcId: id,
+								factionId: faction.factionId,
+								role: faction.role,
+								status: faction.status,
+							})),
+						)
+					}
+				}
+
+				// Update quests if provided
+				if (quests !== undefined) {
+					await tx.delete(npcQuests).where(eq(npcQuests.npcId, id))
+					if (quests.length > 0) {
+						await tx.insert(npcQuests).values(
+							quests.map((quest) => ({
+								npcId: id,
+								questId: quest.questId,
+								role: quest.role,
+							})),
+						)
+					}
+				}
+
+				// Update dialogue if provided
+				if (dialogue !== undefined) {
+					await tx.delete(npcDialogue).where(eq(npcDialogue.npcId, id))
+					if (dialogue.length > 0) {
+						await tx.insert(npcDialogue).values(
+							dialogue.map((d) => ({
+								npcId: id,
+								topic: d.topic,
+								response: d.response,
+								condition: d.condition,
+							})),
+						)
+					}
+				}
+
+				// Update areas and districts if needed
+			})
+		} catch (error) {
+			console.error("Error updating NPC:", error)
+			throw error
+		}
 	}
 
-	const deleteFn = (id: number): void => {
-		db.transaction((tx) => {
-			// Delete related data first
-			tx.delete(npcDescriptions).where(eq(npcDescriptions.npcId, id)).run()
-			tx.delete(npcPersonalityTraits).where(eq(npcPersonalityTraits.npcId, id)).run()
-			tx.delete(npcQuests).where(eq(npcQuests.npcId, id)).run()
-			tx.delete(npcRelationships).where(eq(npcRelationships.npcId, id)).run()
-			tx.delete(npcLocations).where(eq(npcLocations.npcId, id)).run()
-			tx.delete(npcInventory).where(eq(npcInventory.npcId, id)).run()
-
-			// Delete main NPC record
-			tx.delete(npcs).where(eq(npcs.id, id)).run()
-		})
+	const deleteFn = async (id: number): Promise<void> => {
+		try {
+			await db.transaction(async (tx) => {
+				// With cascade delete on schema, we can just delete the main record
+				await tx.delete(npcs).where(eq(npcs.id, id))
+			})
+		} catch (error) {
+			console.error("Error deleting NPC:", error)
+			throw error
+		}
 	}
 
 	return {
