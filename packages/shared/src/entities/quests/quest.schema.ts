@@ -4,7 +4,7 @@ import { z } from "zod"
 
 // Define the main quests table
 export const quests = sqliteTable("quests", {
-	id: text("id").primaryKey().notNull(),
+	id: integer("id").primaryKey().notNull(),
 	title: text("title").notNull(),
 	type: text("type").notNull(),
 	difficulty: text("difficulty").notNull(),
@@ -16,41 +16,33 @@ export const quests = sqliteTable("quests", {
 export const questStages = sqliteTable(
 	"quest_stages",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		stage: integer("stage").notNull(),
 		title: text("title").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.stage] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.stage] })],
 )
 
 // Define the quest objectives table
 export const questObjectives = sqliteTable(
 	"quest_objectives",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		stage: integer("stage").notNull(),
 		objective: text("objective").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.stage, table.objective] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.stage, table.objective] })],
 )
 
 // Define the quest completion paths table
 export const questCompletionPaths = sqliteTable(
 	"quest_completion_paths",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		stage: integer("stage").notNull(),
@@ -59,35 +51,27 @@ export const questCompletionPaths = sqliteTable(
 		challenges: text("challenges").notNull(),
 		outcomes: text("outcomes").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.stage, table.pathName] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.stage, table.pathName] })],
 )
 
 // Define the quest decision points table
 export const questDecisionPoints = sqliteTable(
 	"quest_decision_points",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		stage: integer("stage").notNull(),
 		decision: text("decision").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.stage, table.decision] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.stage, table.decision] })],
 )
 
 // Define the quest decision choices table
 export const questDecisionChoices = sqliteTable(
 	"quest_decision_choices",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		stage: integer("stage").notNull(),
@@ -95,93 +79,61 @@ export const questDecisionChoices = sqliteTable(
 		choice: text("choice").notNull(),
 		consequences: text("consequences").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.stage, table.decision, table.choice] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.stage, table.decision, table.choice] })],
 )
 
 // Define the quest twists table
 export const questTwists = sqliteTable(
 	"quest_twists",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		twist: text("twist").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.twist] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.twist] })],
 )
 
 // Define the quest rewards table
 export const questRewards = sqliteTable(
 	"quest_rewards",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		rewardPath: text("reward_path").notNull(),
 		reward: text("reward").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.rewardPath, table.reward] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.rewardPath, table.reward] })],
 )
 
 // Define the quest follow-ups table
 export const questFollowUps = sqliteTable(
 	"quest_follow_ups",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
 		path: text("path").notNull(),
-		followUpId: text("follow_up_id").notNull(),
+		followUpId: integer("follow_up_id")
+			.notNull()
+			.references(() => quests.id),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.path, table.followUpId] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.path, table.followUpId] })],
 )
 
 // Define the related quests table
 export const questRelated = sqliteTable(
 	"quest_related",
 	{
-		questId: text("quest_id")
+		questId: integer("quest_id")
 			.notNull()
 			.references(() => quests.id, { onDelete: "cascade" }),
-		relatedId: text("related_id").notNull(),
-	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.relatedId] }),
-		}
-	},
-)
-
-// Define the quest associated NPCs table
-export const questAssociatedNpcs = sqliteTable(
-	"quest_associated_npcs",
-	{
-		questId: text("quest_id")
+		relatedId: integer("related_id")
 			.notNull()
-			.references(() => quests.id, { onDelete: "cascade" }),
-		npcId: text("npc_id").notNull(),
+			.references(() => quests.id),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.questId, table.npcId] }),
-		}
-	},
+	(table) => [primaryKey({ columns: [table.questId, table.relatedId] })],
 )
 
 // Create Zod schemas for insert and select operations
@@ -222,9 +174,9 @@ export const QuestSchema = selectQuestSchema.extend({
 	),
 	potential_twists: z.array(z.string()),
 	rewards: z.record(z.array(z.string())),
-	follow_up_quests: z.record(z.array(z.string())),
-	related_quests: z.array(z.string()),
-	associated_npc: z.array(z.string()),
+	follow_up_quests: z.record(z.array(z.number())),
+	related_quests: z.array(z.number()),
+	associated_npc: z.array(z.number()),
 })
 
 // Define types based on the Zod schemas

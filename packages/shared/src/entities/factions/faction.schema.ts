@@ -1,10 +1,10 @@
-import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
-import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { sqliteTable, text, primaryKey, integer } from "drizzle-orm/sqlite-core"
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import { z } from "zod"
 
 // Define the main factions table
 export const factions = sqliteTable("factions", {
-	id: text("id").primaryKey().notNull(),
+	id: integer("id").primaryKey().notNull(),
 	name: text("name").notNull(),
 	type: text("type").notNull(),
 	alignment: text("alignment"),
@@ -21,25 +21,23 @@ export const factions = sqliteTable("factions", {
 export const factionResources = sqliteTable(
 	"faction_resources",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
 			.references(() => factions.id, { onDelete: "cascade" }),
 		resource: text("resource").notNull(),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.resource] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.resource] }),
+	}),
 )
 
 // Define the faction leadership table
 export const factionLeadership = sqliteTable(
 	"faction_leadership",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
-			.references(() => factions.id, { onDelete: "cascade" }),
+			.references(() => factions.id),
 		name: text("name").notNull(),
 		role: text("role"),
 		description: text("description"),
@@ -47,77 +45,72 @@ export const factionLeadership = sqliteTable(
 		stats: text("stats"),
 		bio: text("bio"),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.name] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.name] }),
+	}),
 )
 
 // Define the faction members table
 export const factionMembers = sqliteTable(
 	"faction_members",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
-			.references(() => factions.id, { onDelete: "cascade" }),
+			.references(() => factions.id),
 		name: text("name").notNull(),
 		description: text("description"),
 		stats: text("stats"),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.name] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.name] }),
+	}),
 )
 
 // Define the faction allies table
 export const factionAllies = sqliteTable(
 	"faction_allies",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
-			.references(() => factions.id, { onDelete: "cascade" }),
-		allyId: text("ally_id").notNull(),
+			.references(() => factions.id),
+		allyId: integer("ally_id")
+			.notNull()
+			.references(() => factions.id),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.allyId] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.allyId] }),
+	}),
 )
 
 // Define the faction enemies table
 export const factionEnemies = sqliteTable(
 	"faction_enemies",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
-			.references(() => factions.id, { onDelete: "cascade" }),
-		enemyId: text("enemy_id").notNull(),
+			.references(() => factions.id),
+		enemyId: integer("enemy_id")
+			.notNull()
+			.references(() => factions.id),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.enemyId] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.enemyId] }),
+	}),
 )
 
 // Define the faction quests table
 export const factionQuests = sqliteTable(
 	"faction_quests",
 	{
-		factionId: text("faction_id")
+		factionId: integer("faction_id")
 			.notNull()
 			.references(() => factions.id, { onDelete: "cascade" }),
-		questId: text("quest_id").notNull(),
+		questId: integer("quest_id").notNull(),
+		// Note: Not adding a reference to quests table since it might be defined elsewhere
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.factionId, table.questId] }),
-		}
-	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.factionId, table.questId] }),
+	}),
 )
 
 // Create Zod schemas for insert and select operations
@@ -129,15 +122,16 @@ export const insertFactionLeadershipSchema = createInsertSchema(factionLeadershi
 export const selectFactionLeadershipSchema = createSelectSchema(factionLeadership)
 export const insertFactionMemberSchema = createInsertSchema(factionMembers)
 export const selectFactionMemberSchema = createSelectSchema(factionMembers)
+export const updateFactionMemberSchema = createUpdateSchema(factionMembers)
 
 // Define a typed Faction schema using Zod
 export const FactionSchema = selectFactionSchema.extend({
 	resources: z.array(z.string()),
 	leadership: z.array(selectFactionLeadershipSchema.omit({ factionId: true })),
 	members: z.array(selectFactionMemberSchema.omit({ factionId: true })),
-	allies: z.array(z.string()),
-	enemies: z.array(z.string()),
-	quests: z.array(z.string()),
+	allies: z.array(z.number()),
+	enemies: z.array(z.number()),
+	quests: z.array(z.number()),
 })
 
 // Define types based on the Zod schemas
