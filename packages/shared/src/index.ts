@@ -1,17 +1,27 @@
-// Export core types
-export * from "./types/models.js"
-export * from "./types/operations.js"
-
-// Export entity schemas and operations
-export * from "./entities/index.js"
-
-// Export adapters
-export { McpAdapter } from "./common/mcp-adapter.js"
-
-// Export database initialization
-export * from "./common/database.js"
-
-export { sql } from "drizzle-orm"
-
-// Export database functionality
+// Export database initialization and utilities
 export * from "./db/index.js"
+
+export {
+	getFactionSchema,
+	FactionSchema,
+	newFactionSchema,
+	updateFactionSchema,
+} from "./entities/factions/faction.schema.js"
+export {
+	NpcSchema,
+	newNpcSchema,
+	updateNpcSchema,
+	getNpcSchema,
+} from "./entities/npcs/npc.schema.js"
+export {
+	QuestSchema,
+	newQuestSchema,
+	updateQuestSchema,
+	getQuestSchema,
+} from "./entities/quests/quest.schema.js"
+export {
+	LocationSchema,
+	newLocationSchema,
+	updateLocationSchema,
+	getLocationSchema,
+} from "./entities/locations/location.schema.js"

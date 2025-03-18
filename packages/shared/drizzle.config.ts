@@ -8,8 +8,6 @@ dotenv.config()
 export default {
 	schema: "./src/entities/**/**.schema.ts",
 	out: "./drizzle",
-	driver: "better-sqlite",
-	dbCredentials: {
-		url: process.env.DB_PATH || path.join(process.cwd(), "data.sqlite"),
-	},
+	driver: "durable-sqlite",
+	dialect: "sqlite",
 } satisfies Config
