@@ -1,6 +1,14 @@
 import { sqliteTable, text, primaryKey, integer } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 import { z } from "zod"
+import {
+	npcFactionSchema,
+	locationFactionSchema,
+	questFactionSchema,
+	insertNpcFactionSchema,
+	insertLocationFactionSchema,
+	insertQuestFactionSchema,
+} from "../relations.schema.js"
 
 // Define the main factions table
 export const factions = sqliteTable("factions", {
@@ -26,7 +34,7 @@ export const factionResources = sqliteTable(
 			.references(() => factions.id, { onDelete: "cascade" }),
 		resource: text("resource").notNull(),
 	},
-	(table) => primaryKey({ columns: [table.factionId, table.resource] }),
+	(table) => [primaryKey({ columns: [table.factionId, table.resource] })],
 )
 
 // Define the faction leadership table
@@ -130,16 +138,53 @@ const factionSchemas = {
 	},
 }
 
+const { select, insert, update } = factionSchemas
+
 // Define a typed Faction schema using Zod
-export const FactionSchema = factionSchemas.select.factions.extend({
-	resources: z.array(z.string()),
-	leadership: z.array(factionSchemas.select.factionLeadership.omit({ factionId: true })),
-	members: z.array(factionSchemas.select.factionMembers.omit({ factionId: true })),
-	allies: z.array(z.number()),
-	enemies: z.array(z.number()),
-	quests: z.array(z.number()),
-})
+export const FactionSchema = select.factions
+	.extend({
+		resources: z.array(select.factionResources.omit({ factionId: true })),
+		leadership: z.array(select.factionLeadership.omit({ factionId: true })),
+		members: z.array(select.factionMembers.omit({ factionId: true })),
+		allies: z.array(select.factionAllies.omit({ factionId: true })),
+		enemies: z.array(select.factionEnemies.omit({ factionId: true })),
+		quests: z.array(select.factionQuests.omit({ factionId: true })),
+		npcs: z.array(npcFactionSchema.omit({ factionId: true })),
+		locations: z.array(locationFactionSchema.omit({ factionId: true })),
+		associatedQuests: z.array(questFactionSchema.omit({ factionId: true })),
+	})
+	.strict()
+
+export const newFactionSchema = insert.factions
+	.omit({ id: true })
+	.extend({
+		resources: z.array(insert.factionResources.omit({ factionId: true })),
+		leadership: z.array(insert.factionLeadership.omit({ factionId: true })),
+		members: z.array(insert.factionMembers.omit({ factionId: true })),
+		allies: z.array(insert.factionAllies.omit({ factionId: true })),
+		enemies: z.array(insert.factionEnemies.omit({ factionId: true })),
+		quests: z.array(insert.factionQuests.omit({ factionId: true })),
+		npcs: z.array(insertNpcFactionSchema.omit({ factionId: true })),
+		locations: z.array(insertLocationFactionSchema.omit({ factionId: true })),
+		associatedQuests: z.array(insertQuestFactionSchema.omit({ factionId: true })),
+	})
+	.strict()
+
+export const updateFactionSchema = update.factions
+	.extend({
+		resources: z.array(insert.factionResources.omit({ factionId: true })).optional(),
+		leadership: z.array(insert.factionLeadership.omit({ factionId: true })).optional(),
+		members: z.array(insert.factionMembers.omit({ factionId: true })).optional(),
+		allies: z.array(insert.factionAllies.omit({ factionId: true })).optional(),
+		enemies: z.array(insert.factionEnemies.omit({ factionId: true })).optional(),
+		quests: z.array(insert.factionQuests.omit({ factionId: true })).optional(),
+		npcs: z.array(insertNpcFactionSchema.omit({ factionId: true })).optional(),
+		locations: z.array(insertLocationFactionSchema.omit({ factionId: true })).optional(),
+		associatedQuests: z.array(insertQuestFactionSchema.omit({ factionId: true })).optional(),
+	})
+	.strict()
 
 // Define types based on the Zod schemas
 export type Faction = z.infer<typeof FactionSchema>
-export type NewFaction = z.infer<typeof factionSchemas.insert.factions>
+export type NewFaction = z.infer<typeof newFactionSchema>
+export type UpdateFaction = z.infer<typeof updateFactionSchema>
