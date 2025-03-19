@@ -8,55 +8,68 @@ import { z } from "zod"
  * Converts a Zod schema to an MCP-compatible input schema
  * with improved type handling and description support
  */
-function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
+function zodToMCP(schema: z.ZodTypeAny): Tool["inputSchema"] {
 	// Extract descriptions from zod schemas
 	function getDescription(schema: z.ZodTypeAny): string | undefined {
-		const description = (schema as any)._def?.description
-		return typeof description === "string" ? description : undefined
+		// Access the _def property in a type-safe way
+		const def = schema._def
+		return typeof def.description === "string" ? def.description : undefined
+	}
+
+	// Define more specific return types for different schema components
+	interface SchemaProperty {
+		type: string
+		description?: string
+		[key: string]: unknown
 	}
 
 	// Process Zod schema recursively
-	function processSchema(schema: z.ZodTypeAny): any {
+	function processSchema(schema: z.ZodTypeAny): SchemaProperty {
 		const description = getDescription(schema)
 
 		// Unwrap optional and nullable
 		if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-			return processSchema(schema.unwrap())
+			const unwrapped = processSchema(schema.unwrap())
+			// Preserve the description from the optional/nullable wrapper if it exists
+			if (description) unwrapped.description = description
+			return unwrapped
 		}
 
 		// Handle primitives
 		if (schema instanceof z.ZodString) {
-			const result: { type: string; description?: string; pattern?: string; format?: string } = {
-				type: "string",
-			}
+			const result: SchemaProperty = { type: "string" }
 			if (description) result.description = description
 
 			// Handle string formats if defined
-			const { regex } = schema._def
-			if (regex) result.pattern = regex.source
+			// Access _def properties safely
+			const stringDef = schema._def
 
-			// Handle email, url, etc. formats when using z.string().email(), etc.
-			const { checks } = schema._def
-			if (checks?.length > 0) {
-				const checkType = checks[0].kind
-				if (checkType === "email") result.format = "email"
-				if (checkType === "url") result.format = "uri"
-				if (checkType === "uuid") result.format = "uuid"
+			// Handle patterns - need to check differently for regex
+			// Zod stores patterns in checks array
+			if (stringDef.checks) {
+				for (const check of stringDef.checks) {
+					if (check.kind === "regex" && check.regex) {
+						result.pattern = check.regex.source
+					}
+
+					// Handle special string formats
+					if (check.kind === "email") result.format = "email"
+					if (check.kind === "url") result.format = "uri"
+					if (check.kind === "uuid") result.format = "uuid"
+				}
 			}
 
 			return result
 		}
 
 		if (schema instanceof z.ZodNumber) {
-			const result: { type: string; description?: string; minimum?: number; maximum?: number } = {
-				type: "number",
-			}
+			const result: SchemaProperty = { type: "number" }
 			if (description) result.description = description
 
 			// Add min/max constraints if present
-			const { checks } = schema._def
-			if (checks?.length > 0) {
-				for (const check of checks) {
+			const numberDef = schema._def
+			if (numberDef.checks) {
+				for (const check of numberDef.checks) {
 					if (check.kind === "min") result.minimum = check.value
 					if (check.kind === "max") result.maximum = check.value
 				}
@@ -66,8 +79,8 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 		}
 
 		if (schema instanceof z.ZodBoolean) {
-			const result = { type: "boolean" }
-			if (description) (result as any).description = description
+			const result: SchemaProperty = { type: "boolean" }
+			if (description) result.description = description
 			return result
 		}
 
@@ -81,7 +94,7 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 
 		// Handle arrays
 		if (schema instanceof z.ZodArray) {
-			const result: { type: string; items?: any; description?: string } = {
+			const result: SchemaProperty & { items?: SchemaProperty } = {
 				type: "array",
 				items: processSchema(schema.element),
 			}
@@ -91,12 +104,12 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 
 		// Handle objects
 		if (schema instanceof z.ZodObject) {
-			const properties: Record<string, any> = {}
+			const properties: Record<string, SchemaProperty> = {}
 			const required: string[] = []
 
 			// Process each property
-			for (const [key, value] of Object.entries(schema.shape)) {
-				properties[key] = processSchema(value)
+			for (const [key, value] of Object.entries(schema.shape) as [string, z.ZodTypeAny][]) {
+				properties[key] = processSchema(value as z.ZodTypeAny)
 
 				// Track required fields
 				if (!(value instanceof z.ZodOptional) && !(value instanceof z.ZodNullable)) {
@@ -104,11 +117,9 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 				}
 			}
 
-			const result: {
-				type: string
-				properties: Record<string, any>
+			const result: SchemaProperty & {
+				properties: Record<string, SchemaProperty>
 				required?: string[]
-				description?: string
 			} = {
 				type: "object",
 				properties,
@@ -127,29 +138,33 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 
 		// Handle unions (enums)
 		if (schema instanceof z.ZodEnum) {
+			const enumDef = schema._def
 			return {
 				type: "string",
-				enum: schema._def.values,
+				enum: enumDef.values,
 				...(description ? { description } : {}),
 			}
 		}
 
 		if (schema instanceof z.ZodUnion) {
-			// For MCP, we convert unions to anyOf
-			return {
-				anyOf: schema._def.options.map(processSchema),
-				...(description ? { description } : {}),
+			const unionDef = schema._def
+			const result: SchemaProperty = {
+				type: "object",
+				anyOf: unionDef.options.map((option: z.ZodTypeAny) => processSchema(option)),
 			}
+			if (description) result.description = description
+			return result
 		}
 
 		if (schema instanceof z.ZodLiteral) {
-			const literalType = typeof schema._def.value
+			const literalDef = schema._def
+			const literalType = typeof literalDef.value
 			return {
 				type:
 					literalType === "string" || literalType === "number" || literalType === "boolean"
 						? literalType
 						: "string",
-				enum: [schema._def.value],
+				enum: [literalDef.value],
 				...(description ? { description } : {}),
 			}
 		}
@@ -162,7 +177,7 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 	const result = processSchema(schema)
 
 	// Ensure we return a valid MCP input schema
-	if (!result.type || result.type !== "object") {
+	if (result.type !== "object") {
 		return {
 			type: "object",
 			properties: {
@@ -172,5 +187,19 @@ function zodToMCPSchema(schema: z.ZodTypeAny): Tool["inputSchema"] {
 		}
 	}
 
-	return result
+	// Special handling for union types that may already have type="object" but need to be wrapped
+	if (schema instanceof z.ZodUnion) {
+		return {
+			type: "object",
+			properties: {
+				value: result,
+			},
+			required: ["value"],
+		}
+	}
+
+	// Type assertion to ensure correct return type
+	return result as Tool["inputSchema"]
 }
+
+export default zodToMCP
