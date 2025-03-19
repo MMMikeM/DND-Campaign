@@ -4,19 +4,13 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import logger from "./logger.js"
 import { createServer } from "node:http"
-
-import { factions, initializeDatabase, quests } from "@tome-keeper/shared"
+import z from "zod"
 import zodToMCP from "./zodToMcp.js"
 import { createInsertSchema } from "drizzle-zod"
+import { getDbPath, initializeDatabase, quests } from "@tome-keeper/shared"
 
-const testSchema = createInsertSchema(factions)
-
-const parsed = testSchema.parse({})
-
-const testSchema2 = zodToMCP(testSchema)
-
-// Debug: Print all environment variables
-console.log("Environment variables:", {
+// Debug: Log environment variables
+logger.debug("Environment variables", {
 	MCP_PORT: process.env.MCP_PORT,
 	MCP_TRANSPORT: process.env.MCP_TRANSPORT,
 	DB_PATH: process.env.DB_PATH,
@@ -27,7 +21,8 @@ console.log("Environment variables:", {
 
 // Initialize database
 logger.info("Initializing database...")
-const db = initializeDatabase("/Users/mikemurray/Development/DND-Campaign/data.sqlite")
+logger.info("Database path", { path: getDbPath() })
+const db = initializeDatabase("/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite")
 logger.info("Database initialized successfully")
 
 // Create MCP Server
@@ -66,7 +61,6 @@ mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 		},
 	],
 }))
-
 mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 	const args = request.params.arguments
 	const name = request.params.name
@@ -82,10 +76,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			// Quest operations
 			case "mcp_dnd_create_quest": {
 				if (!args) throw new Error("No arguments provided")
-				const parsed = newQuestSchema.parse(args)
+				const parsed = createInsertSchema(quests).parse(args)
 				logger.info("Creating quest", { parsed })
 				try {
-					const result = operations.quests.create(parsed)
+					const result = await db.insert(quests).values(parsed).execute()
+					logger.info("Quest created", { id: result })
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
 					logger.error("Failed to create quest", { error: (error as Error).message })
@@ -97,10 +92,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 			case "mcp_dnd_get_quest": {
 				if (!args) throw new Error("No arguments provided")
-				const parsed = getQuestSchema.parse(args)
+				logger.debug("Parsing arguments", { args })
+				const parsed = z.object({ id: z.number() }).parse(args)
 				logger.debug("Getting quest", { parsed })
 				try {
-					const quest = operations.quests.get(parsed)
+					const quest = await db.query.quests.findFirst().execute()
 					logger.debug("Quest retrieved", { found: !!quest })
 					return { content: [{ type: "text", text: JSON.stringify(quest) }] }
 				} catch (error) {
@@ -110,20 +106,27 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 					}
 				}
 			}
+
+			default: {
+				return {
+					content: [{ type: "text", text: `Unknown tool: ${name}` }],
+				}
+			}
 		}
 	} catch (error) {
-		logger.error("Failed to handle CallToolRequest", { error: (error as Error).message })
+		logger.error("Error handling tool call", { error: (error as Error).message })
 		return {
-			content: [
-				{ type: "text", text: `Error handling CallToolRequest: ${(error as Error).message}` },
-			],
+			content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
 		}
 	}
 })
 
 async function startServer() {
 	logger.info("Initializing server...")
-	console.log(process.env.MCP_PORT, process.env.MCP_TRANSPORT)
+	logger.debug("Server configuration", {
+		port: process.env.MCP_PORT,
+		transport: process.env.MCP_TRANSPORT,
+	})
 
 	const port = process.env.MCP_PORT ? Number(process.env.MCP_PORT) : 3100
 	let transport: StdioServerTransport | SSEServerTransport

@@ -1,5 +1,4 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils"
 import { createInsertSchema } from "drizzle-zod"
 
 // Define the main factions table

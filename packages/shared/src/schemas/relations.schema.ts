@@ -1,9 +1,9 @@
 // relations.schema.ts
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { factions } from "./faction.schema.js"
-import { locations } from "./location.schema.js"
-import { npcs } from "./npc.schema.js"
-import { quests } from "./quest.schema.js"
+import { factions } from "./faction.schema"
+import { locations } from "./location.schema"
+import { npcs } from "./npc.schema"
+import { quests } from "./quest.schema"
 
 // Define the npc location connection table
 const npcLocations = sqliteTable("npc_locations", {

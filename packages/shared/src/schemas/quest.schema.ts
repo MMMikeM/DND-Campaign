@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils"
+import { json } from "../db/utils.js"
 
 type CompletionPaths = {
 	stage: number

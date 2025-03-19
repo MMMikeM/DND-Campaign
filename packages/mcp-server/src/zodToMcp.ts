@@ -1,4 +1,4 @@
-import type { Tool } from "@modelcontextprotocol/sdk/types"
+import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
 /**
