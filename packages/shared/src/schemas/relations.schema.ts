@@ -1,12 +1,12 @@
 // relations.schema.ts
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { factions } from "./factions/faction.schema.js"
-import { locations } from "./locations/location.schema.js"
-import { npcs } from "./npcs/npc.schema.js"
-import { quests } from "./quests/quest.schema.js"
+import { factions } from "./faction.schema.js"
+import { locations } from "./location.schema.js"
+import { npcs } from "./npc.schema.js"
+import { quests } from "./quest.schema.js"
 
 // Define the npc location connection table
-export const npcLocations = sqliteTable("npc_locations", {
+const npcLocations = sqliteTable("npc_locations", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	npcId: integer("npc_id")
 		.notNull()
@@ -15,10 +15,8 @@ export const npcLocations = sqliteTable("npc_locations", {
 	context: text("context"),
 })
 
-export const locationNpcs = npcLocations
-
 // Define the npc faction connection table
-export const npcFactions = sqliteTable("npc_factions", {
+const npcFactions = sqliteTable("npc_factions", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	npcId: integer("npc_id")
 		.notNull()
@@ -28,10 +26,8 @@ export const npcFactions = sqliteTable("npc_factions", {
 	status: text("status"),
 })
 
-export const npcFaction = npcFactions
-
 // Define the npc quest connection table
-export const npcQuests = sqliteTable("npc_quests", {
+const npcQuests = sqliteTable("npc_quests", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	npcId: integer("npc_id")
 		.notNull()
@@ -40,10 +36,8 @@ export const npcQuests = sqliteTable("npc_quests", {
 	role: text("role"),
 })
 
-export const npcQuest = npcQuests
-
 // LOCATIONS - FACTIONS relationships (for faction control/presence)
-export const locationFactions = sqliteTable("location_factions", {
+const locationFactions = sqliteTable("location_factions", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	locationId: integer("location_id")
 		.notNull()
@@ -55,10 +49,8 @@ export const locationFactions = sqliteTable("location_factions", {
 	description: text("description"), // Optional details about faction presence
 })
 
-export const locationFaction = locationFactions
-
 // DISTRICT - NPCs relationships
-export const districtNpcs = sqliteTable("district_npcs", {
+const districtNpcs = sqliteTable("district_npcs", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	locationId: integer("location_id")
 		.notNull()
@@ -70,10 +62,8 @@ export const districtNpcs = sqliteTable("district_npcs", {
 	role: text("role"),
 })
 
-export const districtNpc = districtNpcs
-
 // AREA - NPCs relationships
-export const areaNpcs = sqliteTable("area_npcs", {
+const areaNpcs = sqliteTable("area_npcs", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	locationId: integer("location_id")
 		.notNull()
@@ -85,10 +75,8 @@ export const areaNpcs = sqliteTable("area_npcs", {
 	activity: text("activity"),
 })
 
-export const areaNpc = areaNpcs
-
 // QUESTS - NPCs relationships
-export const questNpcs = sqliteTable("quest_associated_npcs", {
+const questNpcs = sqliteTable("quest_associated_npcs", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	questId: integer("quest_id")
 		.notNull()
@@ -100,10 +88,8 @@ export const questNpcs = sqliteTable("quest_associated_npcs", {
 	importance: text("importance"),
 })
 
-export const questNpc = questNpcs
-
 // QUESTS - LOCATIONS relationships
-export const questLocations = sqliteTable("quest_locations", {
+const questLocations = sqliteTable("quest_locations", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	questId: integer("quest_id")
 		.notNull()
@@ -115,10 +101,8 @@ export const questLocations = sqliteTable("quest_locations", {
 	stage: integer("stage"), // Optional stage of the quest this location is relevant for
 })
 
-export const questLocation = questLocations
-
 // QUESTS - FACTIONS relationships
-export const questFactions = sqliteTable("quest_factions", {
+const questFaction = sqliteTable("quest_factions", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	questId: integer("quest_id")
 		.notNull()
@@ -130,4 +114,18 @@ export const questFactions = sqliteTable("quest_factions", {
 	interest: text("interest"), // Optional description of faction's interest in the quest
 })
 
-export const questFaction = questFactions
+export const relations = {
+	areaNpcs,
+	districtNpcs,
+	factionLocations: locationFactions,
+	factionNpcs: npcFactions,
+	npcActivities: areaNpcs,
+	npcAreas: areaNpcs,
+	npcDistricts: districtNpcs,
+	npcFactions,
+	npcLocations,
+	npcQuests,
+	questFactions: questFaction,
+	questLocations,
+	questNpcs,
+}
