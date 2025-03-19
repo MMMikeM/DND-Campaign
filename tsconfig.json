@@ -3,8 +3,8 @@
     "composite": true,
     "declaration": true,
     "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2020"

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { z } from "zod"
-import zodToMCPSchema from "./zodToMcp"
+import zodToMCPSchema from "./zodToMcp.js"
 
 describe("zodToMCPSchema", () => {
 	describe("primitives", () => {
