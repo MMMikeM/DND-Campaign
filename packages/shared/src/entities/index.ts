@@ -1,5 +1,4 @@
 // Export all entity schemas
-import * as relations from "./relations.schema.js"
 export * from "./quests/quest.schema.js"
 export * from "./npcs/npc.schema.js"
 export * from "./factions/faction.schema.js"

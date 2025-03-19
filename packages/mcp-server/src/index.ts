@@ -2,9 +2,9 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
-import { randomUUID } from "node:crypto"
 import logger from "./logger.js"
 import { createServer } from "node:http"
+import * as z from "zod"
 
 import {
 	getDb,
@@ -54,6 +54,51 @@ const mcpServer = new Server(
 	},
 )
 
+// Helper function to convert Zod schema to MCP schema
+function zodToMCP(schema: z.ZodType<unknown>) {
+	if (schema instanceof z.ZodObject) {
+		const shape = schema.shape
+		const properties: Record<string, { type: string; description?: string }> = {}
+		const required: string[] = []
+
+		for (const [key, value] of Object.entries(shape)) {
+			if (value instanceof z.ZodString) {
+				properties[key] = { type: "string" }
+			} else if (value instanceof z.ZodNumber) {
+				properties[key] = { type: "number" }
+			} else if (value instanceof z.ZodBoolean) {
+				properties[key] = { type: "boolean" }
+			} else if (value instanceof z.ZodArray) {
+				properties[key] = { type: "array" }
+			} else if (value instanceof z.ZodObject) {
+				properties[key] = { type: "object" }
+			} else if (value instanceof z.ZodOptional) {
+				properties[key] = { type: "any" }
+			} else if (value instanceof z.ZodNullable) {
+				properties[key] = { type: "any" }
+			} else {
+				properties[key] = { type: "any" }
+			}
+
+			if (!(value instanceof z.ZodOptional) && !(value instanceof z.ZodNullable)) {
+				required.push(key)
+			}
+		}
+
+		return {
+			type: "object",
+			properties,
+			required,
+		}
+	}
+
+	return {
+		type: "object",
+		properties: {},
+		required: [],
+	}
+}
+
 // Tool handlers
 mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 	tools: [
@@ -81,85 +126,91 @@ mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 		{
 			name: "mcp_dnd_create_quest",
 			description: "Create a new quest",
-			inputSchema: newQuestSchema,
+			inputSchema: zodToMCP(newQuestSchema),
 		},
 		{
 			name: "mcp_dnd_get_quest",
 			description: "Get a quest by ID",
-			inputSchema: getQuestSchema,
+			inputSchema: {
+				type: "object",
+				properties: {
+					id: { type: "number" },
+				},
+				required: ["id"],
+			},
 		},
 		{
 			name: "mcp_dnd_update_quest",
 			description: "Update a quest",
-			inputSchema: updateQuestSchema,
+			inputSchema: zodToMCP(updateQuestSchema),
 		},
 		{
 			name: "mcp_dnd_delete_quest",
 			description: "Delete a quest",
-			inputSchema: getQuestSchema,
+			inputSchema: zodToMCP(getQuestSchema),
 		},
 		// NPC Tools
 		{
 			name: "mcp_dnd_create_npc",
 			description: "Create a new NPC",
-			inputSchema: newNpcSchema,
+			inputSchema: zodToMCP(newNpcSchema),
 		},
 		{
 			name: "mcp_dnd_get_npc",
 			description: "Get an NPC by ID",
-			inputSchema: getNpcSchema,
+			inputSchema: zodToMCP(getNpcSchema),
 		},
 		{
 			name: "mcp_dnd_update_npc",
 			description: "Update an NPC",
-			inputSchema: updateNpcSchema,
+			inputSchema: zodToMCP(updateNpcSchema),
 		},
 		{
 			name: "mcp_dnd_delete_npc",
 			description: "Delete an NPC",
-			inputSchema: getNpcSchema,
+			inputSchema: zodToMCP(getNpcSchema),
 		},
 		// Faction Tools
 		{
 			name: "mcp_dnd_create_faction",
 			description: "Create a new faction",
-			inputSchema: newFactionSchema,
+			inputSchema: zodToMCP(newFactionSchema),
 		},
 		{
 			name: "mcp_dnd_get_faction",
 			description: "Get a faction by ID",
-			inputSchema: getFactionSchema,
+			inputSchema: zodToMCP(getFactionSchema),
 		},
 		{
 			name: "mcp_dnd_update_faction",
 			description: "Update a faction",
-			inputSchema: updateFactionSchema,
+			inputSchema: zodToMCP(updateFactionSchema),
 		},
 		{
 			name: "mcp_dnd_delete_faction",
 			description: "Delete a faction",
-			inputSchema: getFactionSchema,
+			inputSchema: zodToMCP(getFactionSchema),
 		},
 		// Location Tools
 		{
 			name: "mcp_dnd_create_location",
 			description: "Create a new location",
-			inputSchema: newLocationSchema,
+			inputSchema: zodToMCP(newLocationSchema),
 		},
 		{
 			name: "mcp_dnd_get_location",
 			description: "Get a location by ID",
-			inputSchema: getLocationSchema,
+			inputSchema: zodToMCP(getLocationSchema),
 		},
 		{
 			name: "mcp_dnd_update_location",
 			description: "Update a location",
-			inputSchema: updateLocationSchema,
+			inputSchema: zodToMCP(updateLocationSchema),
 		},
 		{
 			name: "mcp_dnd_delete_location",
 			description: "Delete a location",
-			inputSchema: getLocationSchema,
+			inputSchema: zodToMCP(getLocationSchema),
 		},
 	],
 }))
@@ -232,10 +283,13 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 			// Quest operations
 			case "mcp_dnd_create_quest": {
-				logger.info("Creating quest", { quest: args.quest })
+				if (!args) throw new Error("No arguments provided")
+				const test = db.query.quests.findMany()
+				return { content: [{ type: "text", text: JSON.stringify(test) }] }
+				const quest = newQuestSchema.parse(args.id)
+				logger.info("Creating quest", { quest })
 				try {
-					const questId = args.quest.id || randomUUID()
-					const result = operations.quests.create(args.quest)
+					const result = operations.quests.create(quest)
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
 					logger.error("Failed to create quest", { error: (error as Error).message })
@@ -246,9 +300,12 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_get_quest": {
-				logger.debug("Getting quest", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				console.log(args.id)
+				const id = getQuestSchema.parse(args.id)
+				logger.debug("Getting quest", { id })
 				try {
-					const quest = operations.quests.get(args.id)
+					const quest = operations.quests.get(id)
 					logger.debug("Quest retrieved", { found: !!quest })
 					return { content: [{ type: "text", text: JSON.stringify(quest) }] }
 				} catch (error) {
@@ -260,9 +317,12 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_update_quest": {
-				logger.info("Updating quest", { quest: args.quest })
+				if (!args) throw new Error("No arguments provided")
+				const quest = updateQuestSchema.parse(args)
+				logger.info("Updating quest", { quest })
 				try {
-					operations.quests.update(args.quest.id, args.quest)
+					if (!quest.id) throw new Error("Quest ID is required for update")
+					operations.quests.update(quest.id, quest)
 					logger.debug("Quest updated successfully")
 					return { content: [{ type: "text", text: "Quest updated successfully" }] }
 				} catch (error) {
@@ -274,9 +334,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_delete_quest": {
-				logger.info("Deleting quest", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getQuestSchema.parse(args)
+				logger.info("Deleting quest", { id })
 				try {
-					operations.quests.delete(args.id)
+					operations.quests.delete(id)
 					logger.debug("Quest deleted successfully")
 					return { content: [{ type: "text", text: "Quest deleted successfully" }] }
 				} catch (error) {
@@ -289,10 +351,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 			// NPC operations
 			case "mcp_dnd_create_npc": {
-				logger.info("Creating NPC", { npc: args.npc })
+				if (!args) throw new Error("No arguments provided")
+				const npc = newNpcSchema.parse(args)
+				logger.info("Creating NPC", { npc })
 				try {
-					const npcId = args.npc.id || randomUUID()
-					const result = operations.npcs.create(args.npc)
+					const result = operations.npcs.create(npc)
 					logger.debug("NPC created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -304,9 +367,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_get_npc": {
-				logger.debug("Getting NPC", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getNpcSchema.parse(args)
+				logger.debug("Getting NPC", { id })
 				try {
-					const npc = operations.npcs.get(args.id)
+					const npc = operations.npcs.get(id)
 					logger.debug("NPC retrieved", { found: !!npc })
 					return { content: [{ type: "text", text: JSON.stringify(npc) }] }
 				} catch (error) {
@@ -318,9 +383,12 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_update_npc": {
-				logger.info("Updating NPC", { npc: args.npc })
+				if (!args) throw new Error("No arguments provided")
+				const npc = updateNpcSchema.parse(args)
+				logger.info("Updating NPC", { npc })
 				try {
-					operations.npcs.update(args.npc.id, args.npc)
+					if (!npc.id) throw new Error("NPC ID is required for update")
+					operations.npcs.update(npc.id, npc)
 					logger.debug("NPC updated successfully")
 					return { content: [{ type: "text", text: "NPC updated successfully" }] }
 				} catch (error) {
@@ -332,9 +400,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_delete_npc": {
-				logger.info("Deleting NPC", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getNpcSchema.parse(args)
+				logger.info("Deleting NPC", { id })
 				try {
-					operations.npcs.delete(args.id)
+					operations.npcs.delete(id)
 					logger.debug("NPC deleted successfully")
 					return { content: [{ type: "text", text: "NPC deleted successfully" }] }
 				} catch (error) {
@@ -347,9 +417,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 			// Faction operations
 			case "mcp_dnd_create_faction": {
-				logger.info("Creating faction", { faction: args.faction, id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const faction = newFactionSchema.parse(args)
+				logger.info("Creating faction", { faction })
 				try {
-					const result = operations.factions.create(args.faction)
+					const result = operations.factions.create(faction)
 					logger.debug("Faction created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -363,9 +435,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_get_faction": {
-				logger.debug("Getting faction", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getFactionSchema.parse(args)
+				logger.debug("Getting faction", { id })
 				try {
-					const faction = operations.factions.get(args.id)
+					const faction = operations.factions.get(id)
 					logger.debug("Faction retrieved", { found: !!faction })
 					return { content: [{ type: "text", text: JSON.stringify(faction) }] }
 				} catch (error) {
@@ -377,9 +451,12 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_update_faction": {
-				logger.info("Updating faction", { faction: args.faction, id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const faction = updateFactionSchema.parse(args)
+				logger.info("Updating faction", { faction })
 				try {
-					operations.factions.update(args.id, args.faction)
+					if (!faction.id) throw new Error("Faction ID is required for update")
+					operations.factions.update(faction.id, faction)
 					logger.debug("Faction updated successfully")
 					return { content: [{ type: "text", text: "Faction updated successfully" }] }
 				} catch (error) {
@@ -393,9 +470,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_delete_faction": {
-				logger.info("Deleting faction", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getFactionSchema.parse(args)
+				logger.info("Deleting faction", { id })
 				try {
-					operations.factions.delete(args.id)
+					operations.factions.delete(id)
 					logger.debug("Faction deleted successfully")
 					return { content: [{ type: "text", text: "Faction deleted successfully" }] }
 				} catch (error) {
@@ -410,9 +489,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 			// Location operations
 			case "mcp_dnd_create_location": {
-				logger.info("Creating location", { location: args.location, id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const location = newLocationSchema.parse(args)
+				logger.info("Creating location", { location })
 				try {
-					const result = operations.locations.create(args.location)
+					const result = operations.locations.create(location)
 					logger.debug("Location created successfully")
 					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
 				} catch (error) {
@@ -426,9 +507,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_get_location": {
-				logger.debug("Getting location", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getLocationSchema.parse(args)
+				logger.debug("Getting location", { id })
 				try {
-					const location = operations.locations.get(args.id)
+					const location = operations.locations.get(id)
 					logger.debug("Location retrieved", { found: !!location })
 					return { content: [{ type: "text", text: JSON.stringify(location) }] }
 				} catch (error) {
@@ -442,9 +525,12 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_update_location": {
-				logger.info("Updating location", { location: args.location, id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const location = updateLocationSchema.parse(args)
+				logger.info("Updating location", { location })
 				try {
-					operations.locations.update(args.id, args.location)
+					if (!location.id) throw new Error("Location ID is required for update")
+					operations.locations.update(location.id, location)
 					logger.debug("Location updated successfully")
 					return { content: [{ type: "text", text: "Location updated successfully" }] }
 				} catch (error) {
@@ -458,9 +544,11 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 			}
 
 			case "mcp_dnd_delete_location": {
-				logger.info("Deleting location", { id: args.id })
+				if (!args) throw new Error("No arguments provided")
+				const id = getLocationSchema.parse(args)
+				logger.info("Deleting location", { id })
 				try {
-					operations.locations.delete(args.id)
+					operations.locations.delete(id)
 					logger.debug("Location deleted successfully")
 					return { content: [{ type: "text", text: "Location deleted successfully" }] }
 				} catch (error) {
@@ -510,23 +598,34 @@ async function startServer() {
 	if (process.env.MCP_TRANSPORT === "sse") {
 		// Create HTTP server for SSE
 		const httpServer = createServer(async (req, res) => {
-			if (req.url === "/mcp" && req.method === "GET") {
+			logger.info("Received request", {
+				url: req.url,
+				method: req.method,
+				headers: req.headers,
+			})
+
+			// Parse the URL to handle query parameters
+			const url = new URL(req.url || "", `http://${req.headers.host}`)
+			const pathname = url.pathname
+
+			if (pathname === "/mcp" && req.method === "GET") {
+				logger.info("Establishing SSE connection")
 				// SSE connection
-				res.writeHead(200, {
-					"Content-Type": "text/event-stream",
-					"Cache-Control": "no-cache",
-					Connection: "keep-alive",
-				})
 				transport = new SSEServerTransport("/mcp", res)
 				await mcpServer.connect(transport)
-			} else if (req.url === "/mcp" && req.method === "POST") {
+				logger.info("SSE connection established")
+			} else if (pathname === "/mcp" && req.method === "POST") {
+				logger.info("Handling POST request")
 				// Handle incoming messages
 				if (transport instanceof SSEServerTransport) {
 					await transport.handlePostMessage(req, res)
+					logger.info("POST request handled successfully")
 				} else {
+					logger.error("No SSE connection established for POST request")
 					res.writeHead(500).end("No SSE connection established")
 				}
 			} else {
+				logger.warn("Invalid request path", { pathname })
 				res.writeHead(404).end()
 			}
 		})
@@ -535,6 +634,7 @@ async function startServer() {
 			logger.info("SSE server listening", {
 				url: `http://localhost:${port}/mcp`,
 				transport: process.env.MCP_TRANSPORT,
+				port: port,
 			})
 		})
 	} else {

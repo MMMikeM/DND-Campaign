@@ -5,15 +5,11 @@ import {
 	npcPersonalityTraits,
 	npcRelationships,
 	npcInventory,
-	npcLocations,
-	npcFactions,
-	npcQuests,
 	npcDialogue,
-	type Npc,
-	type NewNpc,
-	type UpdateNpc,
 } from "./npc.schema.js"
+import { npcFactions, npcLocations, npcQuests } from "../relations.schema.js"
 import type { DrizzleDb } from "../../db/index.js"
+import type { NewNpc, UpdateNpc } from "./npc.zod.js"
 
 export const createNPCOperations = (db: DrizzleDb) => {
 	const create = async (newNpc: NewNpc): Promise<number> => {

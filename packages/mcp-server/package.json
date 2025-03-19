@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b",
-    "dev": "NODE_OPTIONS='--env-file=.env' tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "dev:sse": "tsx --watch --env-file=.env.sse src/index.ts",
     "start": "NODE_OPTIONS='--env-file=.env' tsx src/index.ts",
     "start:sse": "NODE_OPTIONS='--env-file=.env.sse' tsx src/index.ts",
@@ -41,6 +41,7 @@
     "@types/node": "^20.17.24",
     "dotenv": "^16.4.7",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   }
 }

@@ -6,22 +6,22 @@ export {
 	FactionSchema,
 	newFactionSchema,
 	updateFactionSchema,
-} from "./entities/factions/faction.schema.js"
+} from "./entities/factions/faction.zod.js"
 export {
 	NpcSchema,
 	newNpcSchema,
 	updateNpcSchema,
 	getNpcSchema,
-} from "./entities/npcs/npc.schema.js"
+} from "./entities/npcs/npc.zod.js"
 export {
 	QuestSchema,
 	newQuestSchema,
 	updateQuestSchema,
 	getQuestSchema,
-} from "./entities/quests/quest.schema.js"
+} from "./entities/quests/quest.zod.js"
 export {
 	LocationSchema,
 	newLocationSchema,
 	updateLocationSchema,
 	getLocationSchema,
-} from "./entities/locations/location.schema.js"
+} from "./entities/locations/location.zod.js"

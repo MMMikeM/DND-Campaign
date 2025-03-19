@@ -29,5 +29,8 @@
   "packageManager": "pnpm@9.14.2",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
 }
