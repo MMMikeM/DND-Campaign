@@ -10,14 +10,10 @@ import {
 	questRewards,
 	questFollowUps,
 	questRelated,
-	questNpcs,
-	questLocations,
-	questFactions,
-	type NewQuest,
-	type UpdateQuest,
-	type Stage,
 } from "./quest.schema.js"
 import type { DrizzleDb } from "../../db/index.js"
+import type { NewQuest, UpdateQuest, Stage } from "./quest.zod.js"
+import { questNpcs, questLocations, questFactions } from "../relations.schema.js"
 
 export const createQuestOperations = (db: DrizzleDb) => {
 	const create = async (newQuest: NewQuest): Promise<number> => {

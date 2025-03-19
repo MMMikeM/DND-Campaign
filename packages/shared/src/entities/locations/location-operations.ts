@@ -13,10 +13,9 @@ import {
 	districtNpcs,
 	areaNpcs,
 	locationNpcs,
-	type NewLocation,
-	type UpdateLocation,
 } from "./location.schema.js"
 import type { DrizzleDb } from "../../db/index.js"
+import type { NewLocation, UpdateLocation } from "./location.zod.js"
 import { locationFactions } from "../relations.schema.js"
 
 export const createLocationOperations = (db: DrizzleDb) => {

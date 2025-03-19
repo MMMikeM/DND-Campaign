@@ -9,11 +9,9 @@ import {
 	factionQuests,
 	factionNpcs,
 	factionLocations,
-	type Faction,
-	type NewFaction,
-	type UpdateFaction,
 } from "./faction.schema.js"
 import type { DrizzleDb } from "../../index.js"
+import type { NewFaction, UpdateFaction } from "./faction.zod.js"
 
 export const createFactionOperations = (db: DrizzleDb) => {
 	const create = async (newFaction: NewFaction): Promise<number> => {

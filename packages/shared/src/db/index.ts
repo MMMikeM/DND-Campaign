@@ -49,10 +49,12 @@ export function initializeDatabase(dbPath: string) {
 
 export type DrizzleDb = ReturnType<typeof drizzle<typeof schema>>
 
-const path = process.env.DB_PATH
+const path = process.env.DB_PATH || "/Users/mikemurray/Development/DND-Campaign/data.sqlite"
 
 if (!path) {
 	throw new Error("DB_PATH is not set")
 }
+
+console.log(path)
 
 export const getDb = () => initializeDatabase(path)
