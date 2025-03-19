@@ -5,7 +5,11 @@ const LOG_FILE = path.join(process.cwd(), "server.log")
 
 // Ensure log directory exists
 try {
-	fs.writeFileSync(LOG_FILE, "", { flag: "w" })
+	fs.writeFileSync(
+		"/Users/mikemurray/Development/DND-Campaign/packages/mcp-server/server.log",
+		"",
+		{ flag: "w" },
+	)
 } catch (error) {
 	// Silently fail - we don't want to interfere with stdout/stderr
 }

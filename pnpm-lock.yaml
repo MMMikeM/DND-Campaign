@@ -18,7 +18,7 @@ importers:
         specifier: ^1.7.0
         version: 1.7.0
       '@tome-keeper/shared':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../shared
       drizzle-zod:
         specifier: ^0.7.0

@@ -4,8 +4,8 @@
     "composite": true,
     "declaration": true,
     "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "dist",
     "preserveSymlinks": true,
     "rootDir": "src",
@@ -18,8 +18,12 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@tome-keeper/shared": ["../shared/src"],
-      "@tome-keeper/shared/*": ["../shared/src/*"]
+      "@tome-keeper/shared": [
+        "../shared/dist"
+      ],
+      "@tome-keeper/shared/*": [
+        "../shared/dist/*"
+      ]
     }
   },
   "references": [
