@@ -1,6 +1,11 @@
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import * as schema from "../schemas.js"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
+export const getDbPath = () =>
+	path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"), "dnddb.sqlite")
 
 /**
  * Initialize the database connection and return operation adapters
