@@ -3,17 +3,20 @@
   "version": "1.0.0",
   "description": "DND Campaign Management System",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "pnpm -r run dev",
-    "build": "pnpm -r run build",
+    "build": "pnpm build:shared && pnpm build:mcp-server",
+    "build:shared": "pnpm --filter @tome-keeper/shared build",
+    "build:mcp-server": "pnpm --filter @tome-keeper/mcp-server build",
     "lint": "pnpm -r run lint",
     "test": "pnpm -r run test",
-    "db:generate": "pnpm --filter shared db:generate",
-    "db:migrate": "pnpm --filter shared db:migrate",
-    "db:studio": "pnpm --filter shared db:studio",
-    "mcp:dev": "pnpm --filter mcp-server dev",
-    "mcp:build": "pnpm --filter mcp-server build",
-    "mcp:start": "pnpm --filter mcp-server start"
+    "db:generate": "pnpm --filter @tome-keeper/shared db:generate",
+    "db:migrate": "pnpm --filter @tome-keeper/shared db:migrate",
+    "db:studio": "pnpm --filter @tome-keeper/shared db:studio",
+    "mcp:dev": "pnpm --filter @tome-keeper/mcp-server dev",
+    "mcp:build": "pnpm --filter @tome-keeper/mcp-server build",
+    "mcp:start": "pnpm --filter @tome-keeper/mcp-server start"
   },
   "keywords": [
     "dnd",
@@ -23,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
   },
   "packageManager": "pnpm@9.14.2",

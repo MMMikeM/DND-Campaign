@@ -115,6 +115,7 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 });
 async function startServer() {
+    console.error("Starting server...");
     logger.info("Initializing server...");
     logger.debug("Server configuration", {
         port: process.env.MCP_PORT,
@@ -123,6 +124,7 @@ async function startServer() {
     const port = process.env.MCP_PORT ? Number(process.env.MCP_PORT) : 3100;
     let transport;
     if (process.env.MCP_TRANSPORT === "sse") {
+        console.error("Starting server with SSE transport...");
         // Create HTTP server for SSE
         const httpServer = createServer(async (req, res) => {
             logger.info("Received request", {
@@ -166,6 +168,8 @@ async function startServer() {
         });
     }
     else {
+        console.error("Starting server with stdio transport...");
+        logger.info("Starting server with stdio transport");
         // Default to stdio transport
         transport = new StdioServerTransport();
         await mcpServer.connect(transport);
@@ -173,6 +177,7 @@ async function startServer() {
     }
 }
 startServer().catch((err) => {
+    console.error(err);
     logger.fatal("Unhandled error", {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
