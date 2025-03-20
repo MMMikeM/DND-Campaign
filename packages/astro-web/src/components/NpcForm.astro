@@ -1,0 +1,231 @@
+---
+interface Props {
+	npc?: {
+		id?: number;
+		name: string;
+		race: string;
+		gender: string;
+		occupation: string;
+		role?: string;
+		quirk?: string;
+		background: string;
+		motivation: string;
+		secret: string;
+		stats: string;
+	};
+	action: string;
+	method?: 'POST' | 'PUT';
+}
+
+const { npc, action, method = 'POST' } = Astro.props;
+
+const races = ['Human', 'Elf', 'Dwarf', 'Halfling', 'Gnome', 'Half-Elf', 'Half-Orc', 'Tiefling', 'Dragonborn', 'Other'];
+const genders = ['Male', 'Female', 'Non-binary', 'Other'];
+---
+
+<form
+	action={action}
+	method={method === 'PUT' ? 'POST' : method}
+	class="space-y-6"
+	data-method={method}
+>
+	{npc?.id && <input type="hidden" name="id" value={npc.id} />}
+	
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<div>
+			<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+			<input
+				type="text"
+				name="name"
+				id="name"
+				value={npc?.name ?? ''}
+				required
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			/>
+			<p class="mt-1 text-sm text-red-600 hidden" id="name-error"></p>
+		</div>
+		
+		<div>
+			<label for="occupation" class="block text-sm font-medium text-gray-700">Occupation</label>
+			<input
+				type="text"
+				name="occupation"
+				id="occupation"
+				value={npc?.occupation ?? ''}
+				required
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			/>
+			<p class="mt-1 text-sm text-red-600 hidden" id="occupation-error"></p>
+		</div>
+		
+		<div>
+			<label for="race" class="block text-sm font-medium text-gray-700">Race</label>
+			<select
+				name="race"
+				id="race"
+				required
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			>
+				<option value="">Select a race</option>
+				{races.map((race) => (
+					<option selected={npc?.race === race} value={race}>
+						{race}
+					</option>
+				))}
+			</select>
+			<p class="mt-1 text-sm text-red-600 hidden" id="race-error"></p>
+		</div>
+		
+		<div>
+			<label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+			<select
+				name="gender"
+				id="gender"
+				required
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			>
+				<option value="">Select a gender</option>
+				{genders.map((gender) => (
+					<option selected={npc?.gender === gender} value={gender}>
+						{gender}
+					</option>
+				))}
+			</select>
+			<p class="mt-1 text-sm text-red-600 hidden" id="gender-error"></p>
+		</div>
+		
+		<div>
+			<label for="role" class="block text-sm font-medium text-gray-700">Role (Optional)</label>
+			<input
+				type="text"
+				name="role"
+				id="role"
+				value={npc?.role ?? ''}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			/>
+		</div>
+		
+		<div>
+			<label for="quirk" class="block text-sm font-medium text-gray-700">Quirk (Optional)</label>
+			<input
+				type="text"
+				name="quirk"
+				id="quirk"
+				value={npc?.quirk ?? ''}
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+			/>
+		</div>
+	</div>
+	
+	<div>
+		<label for="background" class="block text-sm font-medium text-gray-700">Background</label>
+		<textarea
+			name="background"
+			id="background"
+			rows="3"
+			required
+			class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+		>{npc?.background ?? ''}</textarea>
+		<p class="mt-1 text-sm text-red-600 hidden" id="background-error"></p>
+	</div>
+	
+	<div>
+		<label for="motivation" class="block text-sm font-medium text-gray-700">Motivation</label>
+		<textarea
+			name="motivation"
+			id="motivation"
+			rows="2"
+			required
+			class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+		>{npc?.motivation ?? ''}</textarea>
+		<p class="mt-1 text-sm text-red-600 hidden" id="motivation-error"></p>
+	</div>
+	
+	<div>
+		<label for="secret" class="block text-sm font-medium text-gray-700">Secret</label>
+		<textarea
+			name="secret"
+			id="secret"
+			rows="2"
+			required
+			class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+		>{npc?.secret ?? ''}</textarea>
+		<p class="mt-1 text-sm text-red-600 hidden" id="secret-error"></p>
+	</div>
+	
+	<div>
+		<label for="stats" class="block text-sm font-medium text-gray-700">Stats</label>
+		<textarea
+			name="stats"
+			id="stats"
+			rows="3"
+			required
+			placeholder="STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10"
+			class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+		>{npc?.stats ?? ''}</textarea>
+		<p class="mt-1 text-sm text-red-600 hidden" id="stats-error"></p>
+	</div>
+
+	<div class="flex justify-end gap-4">
+		<a
+			href="/npcs"
+			class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+		>
+			Cancel
+		</a>
+		<button
+			type="submit"
+			class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+		>
+			{npc ? 'Update NPC' : 'Create NPC'}
+		</button>
+	</div>
+</form>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const form = document.querySelector('form');
+		if (!form) return;
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			// Clear previous errors
+			document.querySelectorAll('[id$="-error"]').forEach((el) => {
+				el.textContent = '';
+				el.classList.add('hidden');
+			});
+
+			const formData = new FormData(form);
+			const method = form.dataset.method || 'POST';
+
+			try {
+				const response = await fetch(form.action, {
+					method,
+					body: formData
+				});
+
+				if (!response.ok) {
+					const data = await response.json();
+					if (data.error === 'Validation Error' && data.details) {
+						data.details.forEach((error: { path: string[]; message: string }) => {
+							const field = error.path[0];
+							const errorEl = document.getElementById(`${field}-error`);
+							if (errorEl) {
+								errorEl.textContent = error.message;
+								errorEl.classList.remove('hidden');
+							}
+						});
+					} else {
+						throw new Error(data.error || 'Failed to save NPC');
+					}
+				} else {
+					window.location.href = '/npcs';
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while saving the NPC');
+			}
+		});
+	});
+</script> 
