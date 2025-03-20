@@ -1,15 +1,22 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
-import logger from "./logger.js";
-import { createServer } from "node:http";
-import z from "zod";
-import { createInsertSchema } from "drizzle-zod";
-import { initializeDatabase, npcs, quests } from "@tome-keeper/shared";
-import { questTools } from "./tools/quests.js";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
+const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
+const sse_js_1 = require("@modelcontextprotocol/sdk/server/sse.js");
+const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
+const logger_js_1 = __importDefault(require("./logger.js"));
+const node_http_1 = require("node:http");
+const zod_1 = __importDefault(require("zod"));
+const drizzle_zod_1 = require("drizzle-zod");
+const shared_1 = require("@tome-keeper/shared");
+const quests_js_1 = require("./tools/quests.js");
+const path_1 = __importDefault(require("path"));
+const drizzle_orm_1 = require("drizzle-orm");
 // Debug: Log environment variables
-logger.debug("Environment variables", {
+logger_js_1.default.debug("Environment variables", {
     MCP_PORT: process.env.MCP_PORT,
     MCP_TRANSPORT: process.env.MCP_TRANSPORT,
     DB_PATH: process.env.DB_PATH,
@@ -18,11 +25,13 @@ logger.debug("Environment variables", {
     NODE_ENV: process.env.NODE_ENV,
 });
 // Initialize database
-logger.info("Initializing database...");
-const db = initializeDatabase("/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite");
-logger.info("Database initialized successfully");
+logger_js_1.default.info("Initializing database...");
+const dbPath = process.env.DB_PATH || path_1.default.join(process.cwd(), "dnddb.sqlite");
+logger_js_1.default.info(`Using database at: ${dbPath}`);
+const db = (0, shared_1.initializeDatabase)(dbPath);
+logger_js_1.default.info("Database initialized successfully");
 // Create MCP Server
-const mcpServer = new Server({
+const mcpServer = new index_js_1.Server({
     name: "sqlite-manager",
     version: "0.1.0",
 }, {
@@ -33,9 +42,9 @@ const mcpServer = new Server({
     },
 });
 // Tool handlers
-mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
+mcpServer.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
     tools: [
-        ...questTools,
+        ...quests_js_1.questTools,
         {
             name: "get_npc_quests",
             description: "Get all quests associated with an NPC",
@@ -49,10 +58,10 @@ mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
     ],
 }));
-mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
+mcpServer.setRequestHandler(types_js_1.CallToolRequestSchema, async (request) => {
     const args = request.params.arguments;
     const name = request.params.name;
-    logger.debug("Handling CallToolRequest", {
+    logger_js_1.default.debug("Handling CallToolRequest", {
         request: request,
         tool: name,
         args: args,
@@ -63,52 +72,81 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "mcp_dnd_create_quest": {
                 if (!args)
                     throw new Error("No arguments provided");
-                const parsed = createInsertSchema(quests).parse(args);
-                logger.info("Creating quest", { parsed });
+                const parsed = (0, drizzle_zod_1.createInsertSchema)(shared_1.quests).parse(args);
+                logger_js_1.default.info("Creating quest", { parsed });
                 try {
-                    const result = await db.insert(quests).values(parsed).execute();
-                    logger.info("Quest created", { id: result });
-                    return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] };
+                    const result = await db.insert(shared_1.quests).values(parsed).execute();
+                    logger_js_1.default.info("Quest created", { id: result });
+                    return {
+                        content: [{ type: "text", text: JSON.stringify({ id: result }) }],
+                    };
                 }
                 catch (error) {
-                    logger.error("Failed to create quest", { error: error.message });
+                    logger_js_1.default.error("Failed to create quest", {
+                        error: error.message,
+                    });
                     return {
-                        content: [{ type: "text", text: `Error creating quest: ${error.message}` }],
+                        content: [
+                            {
+                                type: "text",
+                                text: `Error creating quest: ${error.message}`,
+                            },
+                        ],
                     };
                 }
             }
             case "mcp_dnd_get_quest": {
                 if (!args)
                     throw new Error("No arguments provided");
-                logger.debug("Parsing arguments", { args });
-                const parsed = z.object({ id: z.number() }).parse(args);
-                logger.debug("Getting quest", { parsed });
+                logger_js_1.default.debug("Parsing arguments", { args });
+                const parsed = zod_1.default.object({ id: zod_1.default.number() }).parse(args);
+                logger_js_1.default.debug("Getting quest", { parsed });
                 try {
-                    const quest = await db.query.quests.findFirst().execute();
-                    logger.debug("Quest retrieved", { found: !!quest });
+                    const quest = await db
+                        .select()
+                        .from(shared_1.quests)
+                        .where((0, drizzle_orm_1.eq)(shared_1.quests.id, parsed.id))
+                        .limit(1);
+                    logger_js_1.default.debug("Quest retrieved", { found: !!quest });
                     return { content: [{ type: "text", text: JSON.stringify(quest) }] };
                 }
                 catch (error) {
-                    logger.error("Failed to get quest", { error: error.message });
+                    logger_js_1.default.error("Failed to get quest", {
+                        error: error.message,
+                    });
                     return {
-                        content: [{ type: "text", text: `Error getting quest: ${error.message}` }],
+                        content: [
+                            {
+                                type: "text",
+                                text: `Error getting quest: ${error.message}`,
+                            },
+                        ],
                     };
                 }
             }
             case "mcp_dnd_create_npc": {
                 if (!args)
                     throw new Error("No arguments provided");
-                const parsed = createInsertSchema(npcs).parse(args);
-                logger.info("Creating NPC", { parsed });
+                const parsed = (0, drizzle_zod_1.createInsertSchema)(shared_1.npcs).parse(args);
+                logger_js_1.default.info("Creating NPC", { parsed });
                 try {
-                    const result = await db.insert(npcs).values(parsed).execute();
-                    logger.info("NPC created", { id: result });
-                    return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] };
+                    const result = await db.insert(shared_1.npcs).values(parsed).execute();
+                    logger_js_1.default.info("NPC created", { id: result });
+                    return {
+                        content: [{ type: "text", text: JSON.stringify({ id: result }) }],
+                    };
                 }
                 catch (error) {
-                    logger.error("Failed to create NPC", { error: error.message });
+                    logger_js_1.default.error("Failed to create NPC", {
+                        error: error.message,
+                    });
                     return {
-                        content: [{ type: "text", text: `Error creating NPC: ${error.message}` }],
+                        content: [
+                            {
+                                type: "text",
+                                text: `Error creating NPC: ${error.message}`,
+                            },
+                        ],
                     };
                 }
             }
@@ -120,7 +158,9 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
     }
     catch (error) {
-        logger.error("Error handling tool call", { error: error.message });
+        logger_js_1.default.error("Error handling tool call", {
+            error: error.message,
+        });
         return {
             content: [{ type: "text", text: `Error: ${error.message}` }],
         };
@@ -128,8 +168,8 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 async function startServer() {
     console.error("Starting server...");
-    logger.info("Initializing server...");
-    logger.debug("Server configuration", {
+    logger_js_1.default.info("Initializing server...");
+    logger_js_1.default.debug("Server configuration", {
         port: process.env.MCP_PORT,
         transport: process.env.MCP_TRANSPORT,
     });
@@ -138,8 +178,8 @@ async function startServer() {
     if (process.env.MCP_TRANSPORT === "sse") {
         console.error("Starting server with SSE transport...");
         // Create HTTP server for SSE
-        const httpServer = createServer(async (req, res) => {
-            logger.info("Received request", {
+        const httpServer = (0, node_http_1.createServer)(async (req, res) => {
+            logger_js_1.default.info("Received request", {
                 url: req.url,
                 method: req.method,
                 headers: req.headers,
@@ -148,31 +188,31 @@ async function startServer() {
             const url = new URL(req.url || "", `http://${req.headers.host}`);
             const pathname = url.pathname;
             if (pathname === "/mcp" && req.method === "GET") {
-                logger.info("Establishing SSE connection");
+                logger_js_1.default.info("Establishing SSE connection");
                 // SSE connection
-                transport = new SSEServerTransport("/mcp", res);
+                transport = new sse_js_1.SSEServerTransport("/mcp", res);
                 await mcpServer.connect(transport);
-                logger.info("SSE connection established");
+                logger_js_1.default.info("SSE connection established");
             }
             else if (pathname === "/mcp" && req.method === "POST") {
-                logger.info("Handling POST request");
+                logger_js_1.default.info("Handling POST request");
                 // Handle incoming messages
-                if (transport instanceof SSEServerTransport) {
+                if (transport instanceof sse_js_1.SSEServerTransport) {
                     await transport.handlePostMessage(req, res);
-                    logger.info("POST request handled successfully");
+                    logger_js_1.default.info("POST request handled successfully");
                 }
                 else {
-                    logger.error("No SSE connection established for POST request");
+                    logger_js_1.default.error("No SSE connection established for POST request");
                     res.writeHead(500).end("No SSE connection established");
                 }
             }
             else {
-                logger.warn("Invalid request path", { pathname });
+                logger_js_1.default.warn("Invalid request path", { pathname });
                 res.writeHead(404).end();
             }
         });
         httpServer.listen(port, () => {
-            logger.info("SSE server listening", {
+            logger_js_1.default.info("SSE server listening", {
                 url: `http://localhost:${port}/mcp`,
                 transport: process.env.MCP_TRANSPORT,
                 port: port,
@@ -181,16 +221,16 @@ async function startServer() {
     }
     else {
         console.error("Starting server with stdio transport...");
-        logger.info("Starting server with stdio transport");
+        logger_js_1.default.info("Starting server with stdio transport");
         // Default to stdio transport
-        transport = new StdioServerTransport();
+        transport = new stdio_js_1.StdioServerTransport();
         await mcpServer.connect(transport);
-        logger.info("Server started with stdio transport");
+        logger_js_1.default.info("Server started with stdio transport");
     }
 }
 startServer().catch((err) => {
     console.error(err);
-    logger.fatal("Unhandled error", {
+    logger_js_1.default.fatal("Unhandled error", {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
     });
