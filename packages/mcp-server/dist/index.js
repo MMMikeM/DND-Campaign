@@ -15,6 +15,7 @@ const quests_1 = require("./tools/quests");
 const npcs_js_1 = require("./tools/npcs.js");
 const factions_js_1 = require("./tools/factions.js");
 const relations_js_1 = require("./tools/relations.js");
+const locations_js_1 = require("./tools/locations.js");
 // Debug: Log environment variables
 logger_js_1.default.debug("Environment variables", {
     MCP_PORT: process.env.MCP_PORT,
@@ -41,7 +42,7 @@ const mcpServer = new index_1.Server({
         prompts: {},
     },
 });
-const tools = [...quests_1.questTools, ...npcs_js_1.npcTools, ...relations_js_1.relationTools, ...factions_js_1.factionTools];
+const tools = [...quests_1.questTools, ...npcs_js_1.npcTools, ...relations_js_1.relationTools, ...factions_js_1.factionTools, ...locations_js_1.locationTools];
 // Tool handlers
 mcpServer.setRequestHandler(types_1.ListToolsRequestSchema, async () => ({
     tools,
@@ -60,12 +61,16 @@ mcpServer.setRequestHandler(types_1.CallToolRequestSchema, async (request) => {
         ...npcs_js_1.npcToolHandlers,
         ...relations_js_1.relationToolHandlers,
         ...factions_js_1.factionToolHandlers,
+        ...locations_js_1.locationToolHandlers,
     };
     try {
         // Look up the handler in our object
         const handler = toolHandlers[toolName];
         if (handler) {
-            return await handler(args);
+            const data = await handler(args);
+            return {
+                content: [{ type: "text", text: JSON.stringify(data) }],
+            };
         }
         return {
             content: [{ type: "text", text: `Unknown tool: ${name}` }],
