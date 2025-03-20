@@ -4,7 +4,6 @@
   "description": "MCP Server for DND Campaign Management System",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "build": "tsc -b",
     "dev": "tsx watch src/index.ts",
@@ -34,6 +33,7 @@
     "js-yaml": "^4.1.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
+    "drizzle-orm": "^0.40.1",
     "drizzle-zod": "^0.7.0",
     "zod": "^3.24.2"
   },
