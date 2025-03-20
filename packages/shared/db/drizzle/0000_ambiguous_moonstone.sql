@@ -1,37 +1,3 @@
-CREATE TABLE `faction_allies` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`faction_id` integer NOT NULL,
-	`ally_id` integer NOT NULL,
-	`relationship` text,
-	`notes` text,
-	FOREIGN KEY (`faction_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`ally_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
-CREATE TABLE `faction_enemies` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`faction_id` integer NOT NULL,
-	`enemy_id` integer NOT NULL,
-	`conflict` text,
-	`severity` text,
-	FOREIGN KEY (`faction_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`enemy_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
-CREATE TABLE `factions` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`name` text NOT NULL,
-	`type` text NOT NULL,
-	`alignment` text,
-	`description` text,
-	`public_goal` text,
-	`true_goal` text,
-	`headquarters` text,
-	`territory` text,
-	`history` text,
-	`notes` text
-);
---> statement-breakpoint
 CREATE TABLE `location_areas` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`location_id` integer NOT NULL,
@@ -94,4 +60,48 @@ CREATE TABLE `quests` (
 	`decision_choices` text,
 	`twists` text,
 	`rewards` text
+);
+--> statement-breakpoint
+CREATE TABLE `faction_allies` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`faction_id` integer NOT NULL,
+	`ally_id` integer NOT NULL,
+	`relationship` text,
+	`notes` text,
+	FOREIGN KEY (`faction_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`ally_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `faction_enemies` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`faction_id` integer NOT NULL,
+	`enemy_id` integer NOT NULL,
+	`conflict` text,
+	`severity` text,
+	FOREIGN KEY (`faction_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`enemy_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `factions` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL,
+	`type` text NOT NULL,
+	`alignment` text,
+	`description` text,
+	`public_goal` text,
+	`true_goal` text,
+	`headquarters` text,
+	`territory` text,
+	`history` text,
+	`notes` text
+);
+--> statement-breakpoint
+CREATE TABLE `quest_factions` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`quest_id` integer NOT NULL,
+	`faction_id` integer NOT NULL,
+	`role` text,
+	`interest` text,
+	FOREIGN KEY (`quest_id`) REFERENCES `quests`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`faction_id`) REFERENCES `factions`(`id`) ON UPDATE no action ON DELETE no action
 );

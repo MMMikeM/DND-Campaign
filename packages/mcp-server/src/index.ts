@@ -7,7 +7,8 @@ import { createServer } from "node:http"
 import z from "zod"
 import zodToMCP from "./zodToMcp.js"
 import { createInsertSchema } from "drizzle-zod"
-import { getDbPath, initializeDatabase, quests } from "@tome-keeper/shared"
+import { initializeDatabase, npcs, quests } from "@tome-keeper/shared"
+import { questTools } from "./tools/quests.js"
 
 // Debug: Log environment variables
 logger.debug("Environment variables", {
@@ -21,7 +22,6 @@ logger.debug("Environment variables", {
 
 // Initialize database
 logger.info("Initializing database...")
-logger.info("Database path", { path: getDbPath() })
 const db = initializeDatabase("/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite")
 logger.info("Database initialized successfully")
 
@@ -43,20 +43,17 @@ const mcpServer = new Server(
 // Tool handlers
 mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 	tools: [
+		...questTools,
+
 		{
-			name: "mcp_dnd_create_quest",
-			description: "Create a new quest",
-			inputSchema: zodToMCP(createInsertSchema(quests)),
-		},
-		{
-			name: "mcp_dnd_get_quest",
-			description: "Get a quest by ID",
+			name: "get_npc_quests",
+			description: "Get all quests associated with an NPC",
 			inputSchema: {
 				type: "object",
 				properties: {
-					id: { type: "number" },
+					npcId: { type: "number" },
 				},
-				required: ["id"],
+				required: ["npcId"],
 			},
 		},
 	],
@@ -108,6 +105,21 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 				}
 			}
 
+			case "mcp_dnd_create_npc": {
+				if (!args) throw new Error("No arguments provided")
+				const parsed = createInsertSchema(npcs).parse(args)
+				logger.info("Creating NPC", { parsed })
+				try {
+					const result = await db.insert(npcs).values(parsed).execute()
+					logger.info("NPC created", { id: result })
+					return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
+				} catch (error) {
+					logger.error("Failed to create NPC", { error: (error as Error).message })
+					return {
+						content: [{ type: "text", text: `Error creating NPC: ${(error as Error).message}` }],
+					}
+				}
+			}
 			default: {
 				return {
 					content: [{ type: "text", text: `Unknown tool: ${name}` }],

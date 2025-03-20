@@ -4,3 +4,5 @@ export * from "./schemas/npc.schema.js"
 export * from "./schemas/faction.schema.js"
 export * from "./schemas/location.schema.js"
 export * from "./schemas/relations.schema.js"
+
+
