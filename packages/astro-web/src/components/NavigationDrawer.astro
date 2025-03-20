@@ -1,0 +1,383 @@
+---
+import { cva } from 'class-variance-authority';
+import { nameToId, idToName } from '../../shared/utils/contentUtils';
+
+// Props for the NavigationDrawer component
+interface Props {
+  files: string[];
+  npcs?: Array<{ id: string; name: string }>;
+  factions?: Array<{ id: string; name: string }>;
+  locations?: string[];
+  questCategories?: Array<{ id: string; name: string }>;
+  currentPath?: string;
+}
+
+const {
+  files,
+  npcs = [],
+  factions = [],
+  locations = [],
+  questCategories = [],
+  currentPath = '',
+} = Astro.props;
+
+// Calculate which category should be expanded by default
+const isNpcPath = currentPath.startsWith('/npcs/');
+const isFactionPath = currentPath.startsWith('/factions/');
+const isLocationPath = currentPath.startsWith('/locations/');
+const isQuestPath = currentPath.startsWith('/quests/');
+
+// Extract the current entity ID from path
+const currentNpcId = isNpcPath ? currentPath.replace('/npcs/', '') : '';
+const currentFactionId = isFactionPath ? currentPath.replace('/factions/', '') : '';
+const currentLocationId = isLocationPath ? currentPath.replace('/locations/', '') : '';
+const currentQuestCategory = isQuestPath ? currentPath.replace('/quests/', '') : '';
+
+// Group files by category
+const getCategoryForFile = (file: string): string => {
+  const lowerFile = file.toLowerCase();
+  if (lowerFile.includes('faction')) return 'Factions';
+  if (lowerFile.includes('npc')) return 'NPCs';
+  if (lowerFile.includes('location')) return 'Locations';
+  if (lowerFile.includes('quest')) return 'Quests';
+  if (lowerFile.includes('framework')) return 'Framework';
+  return 'Other';
+};
+
+// Format file name for display
+const formatFileName = (file: string): string => {
+  const cleanedName = file
+    .replace(/\.ya?ml$/, '')
+    .replace('shattered-spire-', '');
+  
+  return idToName(cleanedName);
+};
+
+// Group files by category
+const filesByCategory = files.reduce(
+  (acc, file) => {
+    const category = getCategoryForFile(file);
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(file);
+    return acc;
+  },
+  {} as Record<string, string[]>,
+);
+
+// Sort categories for consistent display
+const sortedCategories = Object.keys(filesByCategory).sort((a, b) => {
+  const order = ['Factions', 'NPCs', 'Locations', 'Quests', 'Framework', 'Other'];
+  return order.indexOf(a) - order.indexOf(b);
+});
+
+// Define CSS variants
+const navLink = cva('w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center', {
+  variants: {
+    isActive: {
+      true: 'bg-indigo-900 text-white',
+      false: 'hover:bg-gray-800 text-gray-300',
+    },
+  },
+  defaultVariants: {
+    isActive: false,
+  }
+});
+
+// Icon SVGs
+const icons = {
+  users: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+  map: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>`,
+  book: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`,
+  code: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+  fileText: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+  flag: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`,
+  user: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
+  menuBurger: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`,
+  close: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+  chevronRight: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`,
+  chevronDown: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`,
+  target: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`,
+  archive: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>`,
+};
+
+// Get icon for category
+const getIconForCategory = (category: string) => {
+  switch (category) {
+    case 'Factions': return icons.users;
+    case 'NPCs': return icons.users;
+    case 'Locations': return icons.map;
+    case 'Quests': return icons.book;
+    case 'Framework': return icons.code;
+    default: return icons.fileText;
+  }
+};
+
+// Get icon for quest category
+const getIconForQuestCategory = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'main quests': return icons.target;
+    case 'side quests': return icons.book;
+    case 'faction quests': return icons.users;
+    case 'personal quests': return icons.user;
+    case 'generic quests': return icons.archive;
+    default: return icons.fileText;
+  }
+};
+---
+
+<div class="flex h-screen overflow-hidden">
+  <!-- Navigation Drawer -->
+  <div class="flex-shrink-0 relative h-full">
+    <!-- Mobile toggle button - shown only on small screens -->
+    <button
+      type="button"
+      id="toggleDrawerBtn"
+      class="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 rounded-md"
+      aria-label="Toggle navigation"
+    >
+      <span id="toggleDrawerIcon" set:html={icons.menuBurger} />
+    </button>
+
+    <!-- Drawer -->
+    <div
+      id="navigationDrawer"
+      class="fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:relative md:transform-none bg-gray-900 text-white w-64 md:w-72 overflow-y-auto"
+    >
+      <div class="sticky top-0 bg-gray-900 p-4 border-b border-gray-800 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-white">Tomekeeper</h2>
+        <button
+          type="button"
+          id="closeDrawerBtn"
+          class="md:hidden p-1 rounded-md hover:bg-gray-800 transition-colors"
+          aria-label="Close navigation"
+        >
+          <span set:html={icons.close} />
+        </button>
+      </div>
+
+      <div class="p-2">
+        {sortedCategories.map((category) => (
+          <div class="mb-2">
+            <button
+              type="button"
+              class="w-full px-3 py-2 flex items-center justify-between text-left rounded-md hover:bg-gray-800 transition-colors category-toggle"
+              data-category={category}
+              data-expanded={
+                (category === 'NPCs' && isNpcPath) ||
+                (category === 'Factions' && isFactionPath) ||
+                (category === 'Locations' && isLocationPath) ||
+                (category === 'Quests' && isQuestPath) ? 
+                'true' : 'false'
+              }
+            >
+              <div class="flex items-center space-x-2">
+                <span set:html={getIconForCategory(category)} />
+                <span class="font-medium">{category}</span>
+                {category === 'NPCs' && (
+                  <span class="text-xs text-gray-400">({npcs.length})</span>
+                )}
+                {category === 'Factions' && (
+                  <span class="text-xs text-gray-400">({factions.length})</span>
+                )}
+                {category === 'Locations' && (
+                  <span class="text-xs text-gray-400">({locations.length})</span>
+                )}
+                {category === 'Quests' && (
+                  <span class="text-xs text-gray-400">({questCategories.length})</span>
+                )}
+                {category !== 'NPCs' && 
+                 category !== 'Factions' && 
+                 category !== 'Locations' && 
+                 category !== 'Quests' && (
+                  <span class="text-xs text-gray-400">
+                    ({filesByCategory[category]?.length || 0})
+                  </span>
+                )}
+              </div>
+              <span class="chevron-icon" set:html={
+                (category === 'NPCs' && isNpcPath) ||
+                (category === 'Factions' && isFactionPath) ||
+                (category === 'Locations' && isLocationPath) ||
+                (category === 'Quests' && isQuestPath) ? 
+                icons.chevronDown : icons.chevronRight
+              } />
+            </button>
+
+            <!-- Category content -->
+            <div 
+              class="mt-1 ml-4 space-y-1 category-content"
+              style={
+                (category === 'NPCs' && isNpcPath) ||
+                (category === 'Factions' && isFactionPath) ||
+                (category === 'Locations' && isLocationPath) ||
+                (category === 'Quests' && isQuestPath) ? 
+                'display: block;' : 'display: none;'
+              } 
+              data-category={category}>
+              
+              {/* NPCs list */}
+              {category === 'NPCs' && (
+                npcs.length > 0 ? npcs.map(npc => (
+                  <a
+                    href={`/npcs/${npc.id}`}
+                    class={navLink({ isActive: currentNpcId === npc.id })}
+                  >
+                    <span set:html={icons.user} />
+                    {npc.name}
+                  </a>
+                )) : (
+                  <div class="text-sm text-gray-400 py-2 px-3">
+                    No NPCs found
+                  </div>
+                )
+              )}
+
+              {/* Factions list */}
+              {category === 'Factions' && (
+                factions.length > 0 ? factions.map(faction => (
+                  <a
+                    href={`/factions/${faction.id}`}
+                    class={navLink({ isActive: currentFactionId === faction.id })}
+                  >
+                    <span set:html={icons.flag} />
+                    {faction.name}
+                  </a>
+                )) : (
+                  <div class="text-sm text-gray-400 py-2 px-3">
+                    No Factions found
+                  </div>
+                )
+              )}
+
+              {/* Locations list */}
+              {category === 'Locations' && (
+                locations.length > 0 ? locations.map(locationId => (
+                  <a
+                    href={`/locations/${locationId}`}
+                    class={navLink({ isActive: currentLocationId === locationId })}
+                  >
+                    <span set:html={icons.map} />
+                    {idToName(locationId)}
+                  </a>
+                )) : (
+                  <div class="text-sm text-gray-400 py-2 px-3">
+                    No Locations found
+                  </div>
+                )
+              )}
+
+              {/* Quests list */}
+              {category === 'Quests' && (
+                questCategories.length > 0 ? questCategories.map(questCategory => (
+                  <a
+                    href={`/quests/${questCategory.id}`}
+                    class={navLink({ isActive: currentQuestCategory === questCategory.id })}
+                  >
+                    <span set:html={getIconForQuestCategory(questCategory.name)} />
+                    {questCategory.name}
+                  </a>
+                )) : (
+                  <div class="text-sm text-gray-400 py-2 px-3">
+                    No Quests found
+                  </div>
+                )
+              )}
+
+              {/* Other file categories */}
+              {category !== 'NPCs' && 
+               category !== 'Factions' && 
+               category !== 'Locations' && 
+               category !== 'Quests' && 
+               filesByCategory[category]?.map(file => (
+                <button
+                  type="button"
+                  class="w-full py-2 px-3 text-left text-sm rounded-md transition-colors flex items-center hover:bg-gray-800 text-gray-300"
+                >
+                  <span set:html={icons.fileText} class="w-4 h-4 mr-2 opacity-70" />
+                  {formatFileName(file)}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Overlay for mobile - closes drawer when clicking outside -->
+    <div
+      id="drawerOverlay"
+      class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden"
+      role="button"
+      aria-label="Close navigation"
+    ></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow overflow-y-auto p-4">
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle drawer functionality
+    const toggleDrawerBtn = document.getElementById('toggleDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const navigationDrawer = document.getElementById('navigationDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const toggleDrawerIcon = document.getElementById('toggleDrawerIcon');
+
+    let isOpen = false;
+
+    function toggleDrawer() {
+      isOpen = !isOpen;
+      
+      if (isOpen) {
+        navigationDrawer?.classList.remove('-translate-x-full');
+        navigationDrawer?.classList.add('translate-x-0');
+        drawerOverlay?.classList.remove('hidden');
+        toggleDrawerIcon?.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+      } else {
+        navigationDrawer?.classList.add('-translate-x-full');
+        navigationDrawer?.classList.remove('translate-x-0');
+        drawerOverlay?.classList.add('hidden');
+        toggleDrawerIcon?.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`;
+      }
+    }
+
+    toggleDrawerBtn?.addEventListener('click', toggleDrawer);
+    closeDrawerBtn?.addEventListener('click', toggleDrawer);
+    drawerOverlay?.addEventListener('click', toggleDrawer);
+    
+    // Category toggle functionality
+    const categoryToggles = document.querySelectorAll('.category-toggle');
+    
+    categoryToggles.forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        const button = e.currentTarget as HTMLElement;
+        const categoryName = button.getAttribute('data-category');
+        const isExpanded = button.getAttribute('data-expanded') === 'true';
+        const newExpandedState = !isExpanded;
+        
+        button.setAttribute('data-expanded', newExpandedState ? 'true' : 'false');
+        const chevronIcon = button.querySelector('.chevron-icon');
+        
+        if (chevronIcon) {
+          chevronIcon.innerHTML = newExpandedState 
+            ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`
+            : `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+        }
+        
+        // Find and toggle the related content
+        if (categoryName) {
+          const contentElement = document.querySelector(`.category-content[data-category="${categoryName}"]`);
+          if (contentElement) {
+            contentElement.setAttribute('style', newExpandedState ? 'display: block;' : 'display: none;');
+          }
+        }
+      });
+    });
+  });
+</script>
