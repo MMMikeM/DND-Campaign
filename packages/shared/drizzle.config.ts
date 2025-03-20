@@ -3,17 +3,14 @@ import * as dotenv from "dotenv"
 import * as path from "node:path"
 import { fileURLToPath } from "node:url"
 
-const getDbPath = () =>
-	path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"), "dnddb.sqlite")
-
 // Load environment variables
 dotenv.config()
 
 export default defineConfig({
 	dialect: "sqlite",
 	dbCredentials: {
-		url: getDbPath(),
+		url: "/Users/mikemurray/Development/DND-Campaign/packages/shared/dnddb.sqlite",
 	},
-	out: path.join(__dirname, "db/drizzle"),
-	schema: path.join(__dirname, "src/schemas/**/**.schema.ts"),
+	out: "/Users/mikemurray/Development/DND-Campaign/packages/shared/drizzle",
+	schema: "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/index.ts",
 })
