@@ -4,12 +4,12 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types"
 import logger from "./logger.js"
 import { createServer } from "node:http"
-import { initializeDatabase, type RunResult } from "@tome-keeper/shared"
 import { questToolHandlers, questTools, type QuestToolNames } from "./tools/quests"
 import { type NcpToolNames, npcToolHandlers, npcTools } from "./tools/npcs.js"
 import { factionToolHandlers, factionTools, type FactionToolNames } from "./tools/factions.js"
 import { relationToolHandlers, relationTools, type RelationToolNames } from "./tools/relations.js"
 import { locationToolHandlers, locationTools, type LocationToolNames } from "./tools/locations.js"
+import { initializeDatabase } from "@shared/index.js"
 
 // Debug: Log environment variables
 logger.debug("Environment variables", {

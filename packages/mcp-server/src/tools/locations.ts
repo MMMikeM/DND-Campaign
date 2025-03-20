@@ -66,7 +66,10 @@ export const locationToolHandlers: ToolHandlers<LocationToolNames> = {
 	mcp_dnd_create_location: async (args) => {
 		logger.debug("Creating location", { args })
 		const parsedArgs = createInsertSchema(locations).parse(args)
-		return await db.insert(locations).values(parsedArgs).returning()
+		return await db
+			.insert(locations)
+			.values(parsedArgs as any)
+			.returning()
 	},
 	mcp_dnd_get_all_locations: async () => {
 		logger.debug("Getting all locations")
@@ -82,7 +85,11 @@ export const locationToolHandlers: ToolHandlers<LocationToolNames> = {
 	mcp_dnd_update_location: async (args) => {
 		logger.debug("Updating location by ID", { args })
 		const parsed = createUpdateSchema(locations).extend({ id: z.number() }).parse(args)
-		return await db.update(locations).set(parsed).where(eq(locations.id, parsed.id)).returning()
+		return await db
+			.update(locations)
+			.set(parsed as any)
+			.where(eq(locations.id, parsed.id))
+			.returning()
 	},
 	mcp_dnd_delete_location: async (args) => {
 		logger.debug("Deleting location by ID", { args })

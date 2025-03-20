@@ -1,2 +1,2 @@
-declare const _default: import("drizzle-kit").Config;
+declare const _default: any;
 export default _default;
