@@ -66,37 +66,32 @@ export const factionToolHandlers: ToolHandlers<FactionToolNames> = {
 	mcp_dnd_create_faction: async (args) => {
 		logger.debug("Creating faction", { args })
 		const parsedArgs = createInsertSchema(factions).parse(args)
-		const faction = await db.insert(factions).values(parsedArgs).returning()
-		return { content: [{ type: "text", text: JSON.stringify(faction) }] }
+		return await db.insert(factions).values(parsedArgs).returning()
 	},
 	mcp_dnd_get_all_factions: async () => {
 		logger.debug("Getting all factions")
 
-		const allFactions = await db.select().from(factions)
-		return { content: [{ type: "text", text: JSON.stringify(factions) }] }
+		return await db.select().from(factions)
 	},
 	mcp_dnd_get_faction: async (args) => {
 		logger.debug("Getting faction by ID", { args })
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.debug("Parsed args", { parsed })
-		const faction = await db.select().from(factions).where(eq(factions.id, parsed.id))
-		return { content: [{ type: "text", text: JSON.stringify(faction) }] }
+		return await db.select().from(factions).where(eq(factions.id, parsed.id))
 	},
 	mcp_dnd_update_faction: async (args) => {
 		logger.debug("Updating faction by ID", { args })
 		const parsed = createUpdateSchema(factions).extend({ id: z.number() }).parse(args)
-		const faction = await db
+		return await db
 			.update(factions)
 			.set(parsed)
 			.where(eq(factions.id, parsed.id))
 			.returning()
-		return { content: [{ type: "text", text: JSON.stringify(faction) }] }
 	},
 	mcp_dnd_delete_faction: async (args) => {
 		logger.debug("Deleting faction by ID", { args })
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.debug("Parsed args", { parsed })
-		const deleted = await db.delete(factions).where(eq(factions.id, parsed.id)).returning()
-		return { content: [{ type: "text", text: JSON.stringify(deleted) }] }
+		return await db.delete(factions).where(eq(factions.id, parsed.id)).returning()
 	},
 }
