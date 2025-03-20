@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils.js"
+import { json } from "../db/utils"
 
 // Define the main npcs table
 export const npcs = sqliteTable("npcs", {

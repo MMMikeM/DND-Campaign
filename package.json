@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "DND Campaign Management System",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "pnpm -r run dev",
     "build": "pnpm build:shared && pnpm build:mcp-server",
