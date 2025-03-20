@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FactionForm from '../../components/FactionForm.astro';
+
+export const prerender = false;
+---
+
+<Layout title="New Faction">
+	<div class="max-w-4xl mx-auto">
+		<h1 class="text-4xl font-bold mb-8">Create New Faction</h1>
+		<FactionForm action="/api/factions" />
+	</div>
+</Layout> 

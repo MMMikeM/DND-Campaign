@@ -1,0 +1,25 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import QuestForm from '../../../components/QuestForm.astro';
+import { db } from '../../../lib/db';
+import { quests } from '@tome-keeper/shared';
+import { eq } from 'drizzle-orm';
+
+const { id } = Astro.params;
+const quest = await db.select().from(quests).where(eq(quests.id, Number(id))).get();
+
+if (!quest) {
+	return Astro.redirect('/quests');
+}
+---
+
+<Layout title="Edit Quest">
+	<div class="max-w-2xl mx-auto">
+		<h1 class="text-4xl font-bold mb-8">Edit Quest</h1>
+		<QuestForm
+			quest={quest}
+			action={`/api/quests/${id}`}
+			method="PUT"
+		/>
+	</div>
+</Layout> 
