@@ -130,49 +130,18 @@ export const relationToolHandlers: ToolHandlers<RelationToolNames> = {
 		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ questId: z.number() }).parse(args)
 		logger.info("Getting NPCs for quest", { parsed })
-		try {
-			const result = await db.select().from(npcQuests).where(eq(npcQuests.questId, parsed.questId))
-			logger.info("NPCs retrieved", { result })
-			return { content: [{ type: "text", text: JSON.stringify(result) }] }
-		} catch (error) {
-			logger.error("Failed to get NPCs for quest", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error getting NPCs for quest: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
+		return await db.select().from(npcQuests).where(eq(npcQuests.questId, parsed.questId))
 	},
 
 	associate_npc_quest: async (args) => {
 		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ npcId: z.number(), questId: z.number() }).parse(args)
 		logger.info("Associating NPC with quest", { parsed })
-		try {
-			const result = await db
+		return await db
 				.insert(npcQuests)
 				.values(parsed as any)
 				.execute()
-			logger.info("NPC associated with quest", { id: result })
-			return { content: [{ type: "text", text: JSON.stringify({ id: result }) }] }
-		} catch (error) {
-			logger.error("Failed to associate NPC with quest", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error associating NPC with quest: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
+
 	},
 	associate_npc_location: function (
 		args,

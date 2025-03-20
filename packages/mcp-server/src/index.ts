@@ -4,11 +4,12 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types"
 import logger from "./logger.js"
 import { createServer } from "node:http"
-import { initializeDatabase } from "@tome-keeper/shared"
+import { initializeDatabase, type RunResult } from "@tome-keeper/shared"
 import { questToolHandlers, questTools, type QuestToolNames } from "./tools/quests"
 import { type NcpToolNames, npcToolHandlers, npcTools } from "./tools/npcs.js"
 import { factionToolHandlers, factionTools, type FactionToolNames } from "./tools/factions.js"
 import { relationToolHandlers, relationTools, type RelationToolNames } from "./tools/relations.js"
+import { locationToolHandlers, locationTools, type LocationToolNames } from "./tools/locations.js"
 
 // Debug: Log environment variables
 logger.debug("Environment variables", {
@@ -41,7 +42,7 @@ const mcpServer = new Server(
 		},
 	},
 )
-const tools = [...questTools, ...npcTools, ...relationTools, ...factionTools]
+const tools = [...questTools, ...npcTools, ...relationTools, ...factionTools, ...locationTools]
 
 // Tool handlers
 mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -50,8 +51,9 @@ mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 
 export type ToolHandlers<T extends PropertyKey> = Record<
 	T,
-	// biome-ignore lint/complexity/noBannedTypes: <explanation>
-	(args: {} | undefined) => Promise<{ content: Array<{ type: string; text: string }> }>
+	(
+		args?: Record<string, unknown>,
+	) => Promise<RunResult | Record<string, unknown> | Record<string, unknown>[]>
 >
 
 mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -64,15 +66,21 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 		args: args,
 	})
 
-	type ToolNames = QuestToolNames | NcpToolNames | FactionToolNames | RelationToolNames
+	type ToolNames =
+		| QuestToolNames
+		| NcpToolNames
+		| FactionToolNames
+		| RelationToolNames
+		| LocationToolNames
 
-	const toolName = name as QuestToolNames | NcpToolNames | FactionToolNames | RelationToolNames
+	const toolName = name as ToolNames
 
 	const toolHandlers: ToolHandlers<ToolNames> = {
 		...questToolHandlers,
 		...npcToolHandlers,
 		...relationToolHandlers,
 		...factionToolHandlers,
+		...locationToolHandlers,
 	}
 
 	try {
@@ -80,7 +88,10 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 		const handler = toolHandlers[toolName]
 
 		if (handler) {
-			return await handler(args)
+			const data = await handler(args)
+			return {
+				content: [{ type: "text", text: JSON.stringify(data) }],
+			}
 		}
 		return {
 			content: [{ type: "text", text: `Unknown tool: ${name}` }],
