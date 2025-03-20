@@ -67,51 +67,17 @@ export const npcToolHandlers: ToolHandlers<NcpToolNames> = {
 		if (!args) throw new Error("No arguments provided")
 		const parsed = createInsertSchema(npcs).parse(args)
 		logger.info("Creating NPC", { parsed })
-		try {
-			const result = await db
+		return await db
 				.insert(npcs)
 				.values(parsed as any)
-				.execute()
-			logger.info("NPC created", { id: result })
-			return {
-				content: [{ type: "text", text: JSON.stringify({ id: result }) }],
-			}
-		} catch (error) {
-			logger.error("Failed to create NPC", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error creating NPC: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
 	},
 
 	mcp_dnd_get_npc: async (args) => {
 		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.info("Getting NPC", { parsed })
-		try {
-			const npc = await db.select().from(npcs).where(eq(npcs.id, parsed.id)).limit(1)
-			logger.info("NPC retrieved", { found: !!npc })
-			return { content: [{ type: "text", text: JSON.stringify(npc) }] }
-		} catch (error) {
-			logger.error("Failed to get NPC", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error getting NPC: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
+		return await db.select().from(npcs).where(eq(npcs.id, parsed.id)).limit(1)
+
 	},
 	mcp_dnd_update_npc: async (args) => {
 		if (!args) throw new Error("No arguments provided")
@@ -120,57 +86,20 @@ export const npcToolHandlers: ToolHandlers<NcpToolNames> = {
 			throw new Error("ID is required for updating NPC")
 		}
 		logger.info("Updating NPC", { parsed })
-		try {
-			const result = await db
+		return await db
 				.update(npcs)
 				.set(parsed as any)
 				.where(eq(npcs.id, parsed.id))
-				.execute()
-			logger.info("NPC updated", { id: result })
-			return {
-				content: [{ type: "text", text: JSON.stringify({ id: result }) }],
-			}
-		} catch (error) {
-			logger.error("Failed to update NPC", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error updating NPC: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
+
 	},
 	mcp_dnd_delete_npc: async (args) => {
 		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.info("Deleting NPC", { parsed })
-		try {
-			const result = await db.delete(npcs).where(eq(npcs.id, parsed.id)).execute()
-			logger.info("NPC deleted", { id: result })
-			return {
-				content: [{ type: "text", text: JSON.stringify({ id: result }) }],
-			}
-		} catch (error) {
-			logger.error("Failed to delete NPC", {
-				error: (error as Error).message,
-			})
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Error deleting NPC: ${(error as Error).message}`,
-					},
-				],
-			}
-		}
+		return await db.delete(npcs).where(eq(npcs.id, parsed.id))
+
 	},
-	mcp_dnd_get_all_npcs: function (
-		args,
-	): Promise<{ content: Array<{ type: string; text: string }> }> {
-		throw new Error("Function not implemented.")
+	mcp_dnd_get_all_npcs: async function (args) {
+		return await db.select().from(npcs)
 	},
 }
