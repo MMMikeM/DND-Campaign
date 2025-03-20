@@ -2,7 +2,6 @@
   "name": "@tome-keeper/shared",
   "version": "1.0.0",
   "description": "Shared utilities and types for DND Campaign Manager",
-  "type": "module",
   "files": [
     "dist"
   ],
