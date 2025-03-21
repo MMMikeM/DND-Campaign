@@ -1,0 +1,38 @@
+---
+import NPCDetail from '../../components/NPCDetail.astro';
+import Layout from '../../layouts/Layout.astro';
+
+if (!Astro.params.id || !Astro.params.category) {
+  return Astro.redirect('/');
+}
+
+const { category } = Astro.params;
+const pageTitle = `Tome Keeper - ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+const categories = ['npcs', 'factions', 'locations', 'quests'];
+if (!categories.includes(category)) {
+  return Astro.redirect('/404');
+}
+
+---
+
+<Layout title={pageTitle}>
+  {category === 'npcs' && <NPCDetail npc={data} />}
+  {category === 'factions' && (
+    <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+      <h1 class="text-2xl font-bold mb-4 text-white">{data.name}</h1>
+      <!-- Faction details rendering -->
+    </div>
+  )}
+  {category === 'locations' && (
+    <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+      <h1 class="text-2xl font-bold mb-4 text-white">{data.name}</h1>
+      <!-- Location details rendering -->
+    </div>
+  )}
+  {category === 'quests' && (
+    <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+      <h1 class="text-2xl font-bold mb-4 text-white">{data.title}</h1>
+      <!-- Quest details rendering -->
+    </div>
+  )}
+</Layout>
