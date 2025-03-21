@@ -1,0 +1,37 @@
+{
+	"name": "@tome-master/mcp",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"type": "module",
+	"scripts": {
+		"build": "tsup",
+		"build:watch": "tsup --watch",
+		"dev": "tsx watch ./src/index.ts",
+		"test": "vitest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.7.0",
+		"@tome-master/shared": "workspace:*",
+		"drizzle-orm": "^0.40.1",
+		"drizzle-zod": "^0.7.0",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"@modelcontextprotocol/inspector": "^0.6.0",
+		"@types/node": "catalog:",
+		"tsup": "catalog:",
+		"tsx": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"packageManager": "pnpm@9.14.2"
+}

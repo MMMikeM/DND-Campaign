@@ -1,5 +1,5 @@
-import type { Tool } from "@modelcontextprotocol/sdk/types"
-import { npcs } from "@tome-keeper/shared"
+import type { Tool } from "@modelcontextprotocol/sdk/types.js"
+import { npcs } from "@tome-master/shared"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 import zodToMCP from "../zodToMcp"
 import { z } from "zod"
@@ -64,7 +64,6 @@ export const npcTools: Array<Tool & { name: NcpToolNames }> = [
 
 export const npcToolHandlers: ToolHandlers<NcpToolNames> = {
 	mcp_dnd_create_npc: async (args) => {
-		if (!args) throw new Error("No arguments provided")
 		const parsed = createInsertSchema(npcs).parse(args)
 		logger.info("Creating NPC", { parsed })
 		return await db
@@ -73,18 +72,13 @@ export const npcToolHandlers: ToolHandlers<NcpToolNames> = {
 	},
 
 	mcp_dnd_get_npc: async (args) => {
-		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.info("Getting NPC", { parsed })
 		return await db.select().from(npcs).where(eq(npcs.id, parsed.id)).limit(1)
 
 	},
 	mcp_dnd_update_npc: async (args) => {
-		if (!args) throw new Error("No arguments provided")
-		const parsed = createInsertSchema(npcs).parse(args)
-		if (!parsed.id) {
-			throw new Error("ID is required for updating NPC")
-		}
+		const parsed = createUpdateSchema(npcs, { id: z.number() }).parse(args)
 		logger.info("Updating NPC", { parsed })
 		return await db
 				.update(npcs)
@@ -93,13 +87,13 @@ export const npcToolHandlers: ToolHandlers<NcpToolNames> = {
 
 	},
 	mcp_dnd_delete_npc: async (args) => {
-		if (!args) throw new Error("No arguments provided")
 		const parsed = z.object({ id: z.number() }).parse(args)
 		logger.info("Deleting NPC", { parsed })
 		return await db.delete(npcs).where(eq(npcs.id, parsed.id))
 
 	},
 	mcp_dnd_get_all_npcs: async function (args) {
+		logger.info("Getting all NPCs")
 		return await db.select().from(npcs)
 	},
 }

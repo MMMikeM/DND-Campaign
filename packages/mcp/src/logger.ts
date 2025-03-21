@@ -1,12 +1,15 @@
 import path from "node:path"
 import fs from "node:fs"
 
-const LOG_FILE = path.join(process.cwd(), "server.log")
+const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/packages/mcp-server/server.log"
 
 // Ensure log directory exists
 try {
+	console.error("Log file does not exist, creating it.")
+	console.error(LOG_FILE)
+	console.error(fs.readFileSync(LOG_FILE))
 	fs.writeFileSync(
-		"/Users/mikemurray/Development/DND-Campaign/packages/mcp-server/server.log",
+		LOG_FILE,
 		"",
 		{ flag: "w" },
 	)
