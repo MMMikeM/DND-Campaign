@@ -28,6 +28,17 @@ CREATE TABLE `locations` (
 	`notable_features` text
 );
 --> statement-breakpoint
+CREATE TABLE `npc_relationships` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`npc_id` integer NOT NULL,
+	`related_npc_id` integer NOT NULL,
+	`relationship_type` text NOT NULL,
+	`description` text NOT NULL,
+	`strength` text NOT NULL,
+	FOREIGN KEY (`npc_id`) REFERENCES `npcs`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`related_npc_id`) REFERENCES `npcs`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `npcs` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
@@ -48,7 +59,7 @@ CREATE TABLE `npcs` (
 --> statement-breakpoint
 CREATE TABLE `quests` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`title` text NOT NULL,
+	`name` text NOT NULL,
 	`type` text NOT NULL,
 	`difficulty` text NOT NULL,
 	`description` text NOT NULL,

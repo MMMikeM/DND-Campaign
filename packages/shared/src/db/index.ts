@@ -1,7 +1,6 @@
-// Using a default import with esModuleInterop
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
-import * as schema from "../schemas"
+import * as schema from "../schemas.js"
 
 // export const getDbPath = () =>
 // 	path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"), "dnddb.sqlite")

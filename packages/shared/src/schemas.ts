@@ -1,6 +1,6 @@
 // Export all entity schemas
-export * from "./schemas/quest.schema";
-export * from "./schemas/npc.schema";
-export * from "./schemas/faction.schema";
-export * from "./schemas/location.schema";
-export * from "./schemas/relations.schema";
+export * from "./schemas/quest.schema.js";
+export * from "./schemas/npc.schema.js";
+export * from "./schemas/faction.schema.js";
+export * from "./schemas/location.schema.js";
+export * from "./schemas/relations.schema.js";
