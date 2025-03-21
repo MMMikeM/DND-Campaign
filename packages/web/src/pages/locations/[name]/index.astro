@@ -1,0 +1,467 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import { getLocation } from "@entities";
+import Layout from "@layout";
+
+
+export const prerender = false;
+
+if (!Astro.params.name) {
+	return Astro.redirect('/locations');
+}
+
+const { name } = Astro.params;
+
+const location = await getLocation(name);
+
+if (!location) {
+	return Astro.redirect('/404');
+}
+
+---
+
+<Layout title={location.name}>
+	<div class="max-w-4xl mx-auto">
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center">
+				<Icon name="location" size="lg" color="amber" class="mr-3" />
+				<h1 class="text-4xl font-bold">{location.name}</h1>
+			</div>
+			<div class="flex gap-4">
+				<a 
+					href={`/locations/${location.id}/edit`} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				>
+					<Icon name="edit" class="mr-2" />
+					Edit
+				</a>
+				<button
+					type="button"
+					data-location-id={location.id}
+					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-location flex items-center"
+				>
+					<Icon name="delete" class="mr-2" />
+					Delete
+				</button>
+			</div>
+		</div>
+		
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			<div class="md:col-span-2">
+				<GradientCard
+					colorTheme="amber"
+					title="Basic Information"
+					icon="<i class='fas fa-info-circle'></i>"
+				>
+					<div class="grid grid-cols-2 gap-6">
+						<div>
+							<p class="text-sm text-gray-500">Type</p>
+							<p class="font-medium">{location.type}</p>
+						</div>
+						{location.region && (
+							<div>
+								<p class="text-sm text-gray-500">Region</p>
+								<p class="font-medium">{location.region}</p>
+							</div>
+						)}
+						{location.dangerLevel && (
+							<div>
+								<p class="text-sm text-gray-500">Danger Level</p>
+								<p class="font-medium flex items-center">
+									{location.dangerLevel === "High" && <Icon name="warning" color="red" class="mr-1" />}
+									{location.dangerLevel === "Medium" && <Icon name="warning" color="yellow" class="mr-1" />}
+									{location.dangerLevel === "Low" && <Icon name="info" color="blue" class="mr-1" />}
+									{location.dangerLevel}
+								</p>
+							</div>
+						)}
+						{location.factionControl && (
+							<div>
+								<p class="text-sm text-gray-500">Faction Control</p>
+								<p class="font-medium flex items-center">
+									<Icon name="flag" class="mr-1" />
+									{location.factionControl}
+								</p>
+							</div>
+							)}
+						{location.climate && (
+							<div>
+								<p class="text-sm text-gray-500">Climate</p>
+								<p class="font-medium">{location.climate}</p>
+							</div>
+						)}
+						{location.population && (
+							<div>
+								<p class="text-sm text-gray-500">Population</p>
+								<p class="font-medium">{location.population}</p>
+							</div>
+						)}
+						{location.resources && (
+							<div>
+								<p class="text-sm text-gray-500">Resources</p>
+								<p class="font-medium">{location.resources}</p>
+							</div>
+						)}
+						{location.status && (
+							<div>
+								<p class="text-sm text-gray-500">Status</p>
+								<p class="font-medium">{location.status}</p>
+							</div>
+						)}
+					</div>
+				</GradientCard>
+			</div>
+			
+			<div class="md:col-span-1">
+				<GradientCard
+					colorTheme="amber"
+					title="Quick Actions"
+					icon="<i class='fas fa-bolt'></i>"
+				>
+					<div class="flex flex-col gap-2">
+						<a href="/locations" class="text-amber-600 hover:text-amber-800 flex items-center">
+							<Icon name="back" class="mr-2" />
+							Back to Locations
+						</a>
+						<!-- Additional quick actions could be added here -->
+					</div>
+				</GradientCard>
+			</div>
+		</div>
+		
+		{location.description && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Description"
+					icon="<i class='fas fa-book'></i>"
+				>
+					<p class="whitespace-pre-line">{location.description}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{location.history && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="History"
+					icon="<i class='fas fa-scroll'></i>"
+				>
+					<p class="whitespace-pre-line">{location.history}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{location.notableFeatures && location.notableFeatures.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Notable Features"
+					icon="<i class='fas fa-star'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{location.notableFeatures.map((feature) => (
+							<li class="flex items-start">
+								<Icon name="star" size="sm" color="yellow" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{feature}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+			)}
+		
+		{location.threats && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="red"
+					title="Threats"
+					icon="<i class='fas fa-exclamation-triangle'></i>"
+				>
+					<p class="whitespace-pre-line">{location.threats}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{location.secrets && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Secrets"
+					icon="<i class='fas fa-user-secret'></i>"
+				>
+					<p class="whitespace-pre-line">{location.secrets}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{location.connections && location.connections.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="cyan"
+					title="Connections"
+					icon="<i class='fas fa-link'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{location.connections.map((connection) => (
+							<li class="flex items-start">
+								<Icon name="arrow-right" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{connection}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{location.npcs && location.npcs.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Notable Characters"
+					icon="<i class='fas fa-users'></i>"
+				>
+					<ul class="space-y-4">
+						{location.npcs.map((char) => (
+							<li class="flex items-start">
+								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/npcs/${char.npc.id}`} class="font-medium hover:text-blue-600 transition-colors">
+										{char.npc.name}
+									</a>
+									{char.context && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{char.context}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{location.factions && location.factions.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Faction Presence"
+					icon="<i class='fas fa-flag'></i>"
+				>
+					<ul class="space-y-4">
+						{location.factions.map((faction) => (
+							<li class="flex items-start">
+								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/factions/${faction.faction.id}`} class="font-medium hover:text-purple-600 transition-colors">
+										{faction.faction.name}
+									</a>
+									{faction.influence && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Influence: {faction.influence}
+										</div>
+									)}
+									{faction.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{faction.description}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{location.quests && location.quests.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Related Quests"
+					icon="<i class='fas fa-scroll'></i>"
+				>
+					<ul class="space-y-4">
+						{location.quests.map((quest) => (
+							<li class="flex items-start">
+								<Icon name="book" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/quests/${quest.quest.id}`} class="font-medium hover:text-green-600 transition-colors">
+										{quest.quest.name}
+									</a>
+									{quest.stage && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Stage: {quest.stage}
+										</div>
+									)}
+									{quest.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{quest.description}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{location.areas && location.areas.length > 0 && (
+			<div class="mb-6">
+				<div class="space-y-6">
+					{location.areas.map((area) => (
+						<GradientCard
+							colorTheme="cyan"
+							title={area.name}
+							icon="<i class='fas fa-map-marker'></i>"
+						>
+							<div class="space-y-4">
+								<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+									<div>
+										<p class="text-sm text-gray-500">Area Type</p>
+										<p class="font-medium">{area.areaType}</p>
+									</div>
+									<div>
+										<p class="text-sm text-gray-500">Environment</p>
+										<p class="font-medium">{area.environment}</p>
+									</div>
+									<div>
+										<p class="text-sm text-gray-500">Terrain</p>
+										<p class="font-medium">{area.terrain}</p>
+									</div>
+								</div>
+
+								<div class="mt-4">
+									<p class="text-sm text-gray-500 mb-2">Description</p>
+									<p class="whitespace-pre-line">{area.description}</p>
+								</div>
+
+								{area.features && area.features.length > 0 && (
+									<div class="mt-4">
+										<p class="text-sm text-gray-500 mb-2">Notable Features</p>
+										<ul class="list-disc list-inside space-y-1">
+											{area.features.map((feature) => (
+												<li class="flex items-start">
+													<Icon name="star" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
+													<span>{feature}</span>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
+
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{area.encounters && area.encounters.length > 0 && (
+										<div>
+											<p class="text-sm text-gray-500 mb-2">Possible Encounters</p>
+											<ul class="list-disc list-inside space-y-1">
+												{area.encounters.map((encounter) => (
+													<li class="flex items-start">
+														<Icon name="sword" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
+														<span>{encounter}</span>
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
+
+									{area.creatures && area.creatures.length > 0 && (
+										<div>
+											<p class="text-sm text-gray-500 mb-2">Creatures</p>
+											<ul class="list-disc list-inside space-y-1">
+												{area.creatures.map((creature) => (
+													<li class="flex items-start">
+														<Icon name="monster" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+														<span>{creature}</span>
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
+								</div>
+
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{area.treasures && area.treasures.length > 0 && (
+										<div>
+											<p class="text-sm text-gray-500 mb-2">Treasures</p>
+											<ul class="list-disc list-inside space-y-1">
+												{area.treasures.map((treasure) => (
+													<li class="flex items-start">
+														<Icon name="treasure" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+														<span>{treasure}</span>
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
+
+									{area.loot && area.loot.length > 0 && (
+										<div>
+											<p class="text-sm text-gray-500 mb-2">Other Loot</p>
+											<ul class="list-disc list-inside space-y-1">
+												{area.loot.map((item) => (
+													<li class="flex items-start">
+														<Icon name="package" size="sm" color="gray" class="mr-2 mt-1 flex-shrink-0" />
+														<span>{item}</span>
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
+								</div>
+
+								{area.plants && area.plants.length > 0 && (
+									<div>
+										<p class="text-sm text-gray-500 mb-2">Flora</p>
+										<ul class="list-disc list-inside space-y-1">
+											{area.plants.map((plant) => (
+												<li class="flex items-start">
+													<Icon name="leaf" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
+													<span>{plant}</span>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
+							</div>
+						</GradientCard>
+					))}
+				</div>
+			</div>
+		)}
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const deleteButton = document.querySelector('.delete-location');
+		if (!deleteButton) return;
+		
+		deleteButton.addEventListener('click', async () => {
+			const locationId = deleteButton.getAttribute('data-location-id');
+			if (!locationId) return;
+
+			if (!confirm('Are you sure you want to delete this location?')) return;
+
+			try {
+				const response = await fetch(`/api/locations/${locationId}`, {
+					method: 'DELETE'
+				});
+
+				if (response.ok) {
+					window.location.href = '/locations';
+				} else {
+					const data = await response.json();
+					throw new Error(data.error || 'Failed to delete location');
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while deleting the location');
+			}
+		});
+	});
+</script>
