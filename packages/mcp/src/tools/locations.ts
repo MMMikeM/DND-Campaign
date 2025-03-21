@@ -1,5 +1,5 @@
-import type { Tool } from "@modelcontextprotocol/sdk/types"
-import { locations } from "@tome-keeper/shared"
+import type { Tool } from "@modelcontextprotocol/sdk/types.js"
+import { locations } from "@tome-master/shared"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 import zodToMCP from "../zodToMcp"
 import { z } from "zod"
@@ -64,8 +64,8 @@ export const locationTools: Array<Tool & { name: LocationToolNames }> = [
 
 export const locationToolHandlers: ToolHandlers<LocationToolNames> = {
 	mcp_dnd_create_location: async (args) => {
-		logger.debug("Creating location", { args })
 		const parsedArgs = createInsertSchema(locations).parse(args)
+		logger.debug("Creating location", { parsedArgs })
 		return await db
 			.insert(locations)
 			.values(parsedArgs as any)
@@ -73,18 +73,16 @@ export const locationToolHandlers: ToolHandlers<LocationToolNames> = {
 	},
 	mcp_dnd_get_all_locations: async () => {
 		logger.debug("Getting all locations")
-
 		return await db.select().from(locations)
 	},
 	mcp_dnd_get_location: async (args) => {
-		logger.debug("Getting location by ID", { args })
 		const parsed = z.object({ id: z.number() }).parse(args)
-		logger.debug("Parsed args", { parsed })
+		logger.debug("Getting location", { parsed })
 		return await db.select().from(locations).where(eq(locations.id, parsed.id))
 	},
 	mcp_dnd_update_location: async (args) => {
-		logger.debug("Updating location by ID", { args })
-		const parsed = createUpdateSchema(locations).extend({ id: z.number() }).parse(args)
+		const parsed = createUpdateSchema(locations, {id: z.number()}).parse(args)
+		logger.debug("Updating location", { parsed })
 		return await db
 			.update(locations)
 			.set(parsed as any)
@@ -92,9 +90,8 @@ export const locationToolHandlers: ToolHandlers<LocationToolNames> = {
 			.returning()
 	},
 	mcp_dnd_delete_location: async (args) => {
-		logger.debug("Deleting location by ID", { args })
 		const parsed = z.object({ id: z.number() }).parse(args)
-		logger.debug("Parsed args", { parsed })
+		logger.debug("Deleting location", { parsed })
 		return await db.delete(locations).where(eq(locations.id, parsed.id)).returning()
 	},
 }

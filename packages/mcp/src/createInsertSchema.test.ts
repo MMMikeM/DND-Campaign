@@ -1,5 +1,5 @@
 import { createInsertSchema } from "drizzle-zod"
-import { factions } from "@tome-keeper/shared"
+import { factions } from "@tome-master/shared"
 import { describe, it, expect } from "vitest"
 
 describe("createInsertSchema", () => {

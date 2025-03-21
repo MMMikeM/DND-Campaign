@@ -1,15 +1,17 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index"
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio"
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse"
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types"
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
+import { initializeDatabase, RunResult } from "@tome-master/shared"
 import logger from "./logger.js"
-import { createServer } from "node:http"
-import { questToolHandlers, questTools, type QuestToolNames } from "./tools/quests"
-import { type NcpToolNames, npcToolHandlers, npcTools } from "./tools/npcs.js"
 import { factionToolHandlers, factionTools, type FactionToolNames } from "./tools/factions.js"
-import { relationToolHandlers, relationTools, type RelationToolNames } from "./tools/relations.js"
 import { locationToolHandlers, locationTools, type LocationToolNames } from "./tools/locations.js"
-import { initializeDatabase } from "@shared/index.js"
+import { npcToolHandlers, npcTools, type NcpToolNames } from "./tools/npcs.js"
+import { questToolHandlers, questTools, type QuestToolNames } from "./tools/quests.js"
+import { getByRelationToolHandlers, getByRelationTools, type GetRelations } from "./tools/relations.js"
+import { Server } from "@modelcontextprotocol/sdk/server/index.js"
+import { createServer } from "node:http"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import { addPrompts } from "./prompts/index.js"
 
 // Debug: Log environment variables
 logger.debug("Environment variables", {
@@ -31,7 +33,7 @@ logger.info("Database initialized successfully")
 // Create MCP Server
 const mcpServer = new Server(
 	{
-		name: "sqlite-manager",
+		name: "DND MCP",
 		version: "0.1.0",
 	},
 	{
@@ -42,12 +44,15 @@ const mcpServer = new Server(
 		},
 	},
 )
-const tools = [...questTools, ...npcTools, ...relationTools, ...factionTools, ...locationTools]
+const tools = [...questTools, ...npcTools, ...getByRelationTools, ...factionTools, ...locationTools]
 
 // Tool handlers
 mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
 	tools,
 }))
+
+addPrompts(mcpServer)
+
 
 export type ToolHandlers<T extends PropertyKey> = Record<
 	T,
@@ -70,7 +75,7 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 		| QuestToolNames
 		| NcpToolNames
 		| FactionToolNames
-		| RelationToolNames
+		| GetRelations
 		| LocationToolNames
 
 	const toolName = name as ToolNames
@@ -78,7 +83,7 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 	const toolHandlers: ToolHandlers<ToolNames> = {
 		...questToolHandlers,
 		...npcToolHandlers,
-		...relationToolHandlers,
+		...getByRelationToolHandlers,
 		...factionToolHandlers,
 		...locationToolHandlers,
 	}
@@ -105,6 +110,8 @@ mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
 		}
 	}
 })
+
+mcpServer
 
 async function startServer() {
 	console.error("Starting server...")
