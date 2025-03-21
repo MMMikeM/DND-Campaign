@@ -1,7 +1,7 @@
 ---
 import { cva } from 'class-variance-authority';
-import { getEntityNamesAndIds } from '../db/entities';
 import Icon from './Icon.astro';
+import { getEntityNamesAndIds } from '@entities';
 
 // Get route parameters directly from Astro.params
 const { category: currentCategory, id: currentId } = Astro.params;

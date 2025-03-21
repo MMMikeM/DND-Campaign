@@ -1,0 +1,37 @@
+---
+import Icon from '@components/Icon.astro';
+import EntityCard from './EntityCard.astro';
+import type { Faction } from 'types/entities';
+
+
+interface Props {
+  faction: Faction;
+}
+
+const { faction } = Astro.props;
+---
+
+<EntityCard id={faction.id} name={faction.name} entityType="faction">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0">
+      <div class="p-2 bg-indigo-100 rounded-md shadow-sm">
+        <Icon name="flag" size="lg" color="indigo" />
+      </div>
+    </div>
+    <div class="min-w-0 flex-1">
+      <h3 class="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+        {faction.name}
+      </h3>
+      {faction.type && (
+        <p class="text-sm font-medium text-indigo-500 mt-1">
+          {faction.type}
+        </p>
+      )}
+      {faction.description && (
+        <p class="mt-2 text-sm text-gray-600 line-clamp-2 leading-relaxed">
+          {faction.description}
+        </p>
+      )}
+    </div>
+  </div>
+</EntityCard>

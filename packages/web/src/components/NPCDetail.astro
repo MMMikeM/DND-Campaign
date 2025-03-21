@@ -1,13 +1,10 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { NPC } from "../types/models";
 import Chip from "./Chip.astro";
 
 // Props interface
-interface Props {
-  npc: NPC;
-}
+
 
 const { npc } = Astro.props;
 
