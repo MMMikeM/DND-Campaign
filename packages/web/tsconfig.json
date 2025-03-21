@@ -9,6 +9,18 @@
   ],
   "compilerOptions": {
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": [
+        "./components/*"
+      ],
+      "@layout": [
+        "./layouts/Layout.astro"
+      ],
+      "@entities": [
+        "./db/entities.ts"
+      ],
+    }
   }
 }
