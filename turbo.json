@@ -1,0 +1,67 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "dependsOn": ["^build"],
+      "outputs": [
+        "build/**",
+        ".vercel/**",
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**"
+      ]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "check-types": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false,
+      "dependsOn": ["db:generate"]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:seed": {
+      "cache": false,
+      "dependsOn": ["db:migrate"]
+    },
+    "db:drop": {
+      "cache": false
+    },
+    "db:reset": {
+      "cache": false,
+      "dependsOn": ["db:drop", "db:migrate"]
+    },
+    "mcp:dev": {
+      "dependsOn": ["@tome-master/shared#build"],
+      "cache": false,
+      "persistent": true
+    },
+    "mcp:build": {
+      "dependsOn": ["@tome-master/shared#build"],
+      "outputs": ["dist/**"]
+    },
+    "mcp:start": {
+      "dependsOn": ["mcp:build"],
+      "cache": false
+    }
+  }
+}
