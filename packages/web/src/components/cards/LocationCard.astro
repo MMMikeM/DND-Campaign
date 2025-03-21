@@ -1,0 +1,46 @@
+---
+import type { Location } from '../../types/entities';
+import EntityCard from './EntityCard.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const tags: Array<{value: string}> = [
+  location.type ? { value: location.type } : null,
+  location.region ? { value: location.region } : null,
+  location.dangerLevel ? { value: `Danger: ${location.dangerLevel}` } : null
+].filter((tag): tag is {value: string} => tag !== null);
+---
+
+<EntityCard id={location.id} name={location.name} entityType="location">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0">
+      <div class="p-2 bg-indigo-100 rounded-md shadow-sm">
+        <Icon name="map" size="lg" color="indigo" />
+      </div>
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex justify-between items-start">
+        <h3 class="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+          {location.name}
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium">
+              {tag.value}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      {location.description && (
+        <p class="mt-2 text-sm text-gray-600 line-clamp-2 leading-relaxed">
+          {location.description}
+        </p>
+      )}
+    </div>
+  </div>
+</EntityCard>

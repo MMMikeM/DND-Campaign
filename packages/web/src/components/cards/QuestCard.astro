@@ -1,0 +1,52 @@
+---
+import type { Quest } from '../../types/entities';
+import EntityCard from './EntityCard.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  quest: Quest;
+}
+
+const { quest } = Astro.props;
+const tags: Array<{value: string}> = [
+  quest.type ? { value: quest.type } : null,
+  quest.difficulty ? { value: quest.difficulty } : null,
+  quest.adaptable ? { value: 'Adaptable' } : null
+].filter((tag): tag is {value: string} => tag !== null);
+---
+
+<EntityCard id={quest.id} name={quest.name} entityType="quest">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0">
+      <div class="p-2 bg-indigo-100 rounded-md shadow-sm">
+        <Icon name="book" size="lg" color="indigo" />
+      </div>
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex justify-between items-start">
+        <h3 class="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+          {quest.name}
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium">
+              {tag.value}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      {quest.description && (
+        <p class="mt-2 text-sm text-gray-600 line-clamp-2 leading-relaxed">
+          {quest.description}
+        </p>
+      )}
+
+      {quest.rewards && (
+        <p class="mt-2 text-sm text-indigo-500 font-medium">
+          Reward: {quest.rewards}
+        </p>
+      )}
+    </div>
+  </div>
+</EntityCard>

@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="flex justify-between items-center mb-8">
+  <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h1>
+  <slot name="actions" />
+</div>
+
+<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+  <slot />
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.delete-entity').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const entityId = button.getAttribute('data-entity-id');
+        const entityType = button.getAttribute('data-entity-type');
+        if (!entityId || !entityType) return;
+
+        if (!confirm(`Are you sure you want to delete this ${entityType}?`)) return;
+
+        try {
+          const response = await fetch(`/api/${entityType}s/${entityId}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            // Remove the entity card from the UI
+            const entityCard = button.closest('.group');
+            if (entityCard) {
+              entityCard.remove();
+            }
+          } else {
+            const data = await response.json();
+            throw new Error(data.error || `Failed to delete ${entityType}`);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert(`An error occurred while deleting the ${entityType}`);
+        }
+      });
+    });
+  });
+</script>
