@@ -1,38 +1,40 @@
 {
-  "name": "tome-keeper",
-  "version": "1.0.0",
-  "description": "DND Campaign Management System",
-  "private": true,
-  "scripts": {
-    "dev": "pnpm -r run dev",
-    "build": "pnpm build:shared && pnpm build:mcp-server",
-    "build:shared": "pnpm --filter @tome-keeper/shared build",
-    "build:mcp-server": "pnpm --filter @tome-keeper/mcp-server build",
-    "lint": "pnpm -r run lint",
-    "test": "pnpm -r run test",
-    "db:generate": "pnpm --filter @tome-keeper/shared db:generate",
-    "db:migrate": "pnpm --filter @tome-keeper/shared db:migrate",
-    "db:studio": "pnpm --filter @tome-keeper/shared db:studio",
-    "mcp:dev": "pnpm --filter @tome-keeper/mcp-server dev",
-    "mcp:build": "pnpm --filter @tome-keeper/mcp-server build",
-    "mcp:start": "pnpm --filter @tome-keeper/mcp-server start"
-  },
-  "keywords": [
-    "dnd",
-    "campaign",
-    "management"
-  ],
-  "author": "",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=9.0.0"
-  },
-  "packageManager": "pnpm@9.14.2",
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependencies": {
-    "zod": "^3.24.2"
-  }
+	"name": "tome-master",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:studio": "turbo db:studio",
+    "db:seed": "turbo db:seed",
+    "db:drop": "turbo db:drop",
+    "db:reset": "turbo db:reset",
+    "mcp:dev": "turbo mcp:dev",
+    "mcp:build": "turbo mcp:build",
+    "mcp:start": "turbo mcp:start"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"drizzle-orm": "^0.40.1",
+		"drizzle-zod": "^0.7.0",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"turbo": "^2.4.4",
+		"@types/node": "catalog:",
+		"tsup": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"packageManager": "pnpm@9.14.2"
 }
