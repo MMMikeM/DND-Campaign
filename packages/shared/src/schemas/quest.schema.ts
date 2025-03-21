@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils"
+import { json } from "../db/utils.js"
 
 type CompletionPaths = {
 	stage: number
@@ -18,7 +18,7 @@ type DecisionChoices = {
 // Define the main quests table
 export const quests = sqliteTable("quests", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
-	title: text("title").notNull(),
+	name: text("name").notNull(),
 	type: text("type").notNull(),
 	difficulty: text("difficulty").notNull(),
 	description: text("description").notNull(),

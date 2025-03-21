@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "36cd1676-58d0-4312-a737-4fd2e4d3be2c",
+  "id": "3f58f5a3-3b49-44cc-99e7-430e592c6df2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "location_areas": {
@@ -199,6 +199,85 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "npc_relationships": {
+      "name": "npc_relationships",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_npc_id": {
+          "name": "related_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relationship_type": {
+          "name": "relationship_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "strength": {
+          "name": "strength",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_relationships_npc_id_npcs_id_fk": {
+          "name": "npc_relationships_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relationships",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_relationships_related_npc_id_npcs_id_fk": {
+          "name": "npc_relationships_related_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relationships",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "related_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "npcs": {
       "name": "npcs",
       "columns": {
@@ -324,8 +403,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "title": {
-          "name": "title",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

@@ -1,9 +1,0 @@
-export declare const npcLocations: any;
-export declare const npcFactions: any;
-export declare const npcQuests: any;
-export declare const locationFactions: any;
-export declare const districtNpcs: any;
-export declare const areaNpcs: any;
-export declare const questNpcs: any;
-export declare const questLocations: any;
-export declare const questFaction: any;

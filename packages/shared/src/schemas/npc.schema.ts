@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils"
+import { json } from "../db/utils.js"
 
 // Define the main npcs table
 export const npcs = sqliteTable("npcs", {
@@ -19,4 +19,17 @@ export const npcs = sqliteTable("npcs", {
 	personalityTraits: json<string[]>("personality_traits"),
 	inventory: json<{ item: string; quantity: number; notes?: string }[]>("inventory"),
 	dialogue: json<{ topic: string; response: string; condition?: string }[]>("dialogue"),
+})
+
+export const npcRelationships = sqliteTable("npc_relationships", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  npcId: integer("npc_id")
+    .notNull()
+    .references(() => npcs.id, { onDelete: "cascade" }),
+  relatedNpcId: integer("related_npc_id")
+    .notNull()
+    .references(() => npcs.id, { onDelete: "cascade" }),
+  relationshipType: text("relationship_type").notNull(),
+  description: text("description").notNull(),
+  strength: text("strength").notNull(), 
 })

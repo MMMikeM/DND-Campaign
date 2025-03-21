@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core"
-import { json } from "../db/utils"
+import { json } from "../db/utils.js"
 
 // Define the main locations table
 export const locations = sqliteTable("locations", {
