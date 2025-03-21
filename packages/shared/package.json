@@ -1,40 +1,54 @@
 {
-  "name": "@tome-keeper/shared",
+  "name": "@tome-master/shared",
   "version": "1.0.0",
-  "description": "Shared utilities and types for DND Campaign Manager",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
+	"private": true,
+  "description": "",
+  "type": "module",
+	"main": "./dist/es/index.js",
+  "module": "./dist/es/index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w",
-    "prepare": "npm run build",
-    "db:generate": "drizzle-kit generate",
+    "build": "bunchee",
+    "dev": "bunchee --watch",
+		"test": "vitest",
+    "db:generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },
-  "dependencies": {
-    "better-sqlite3": "^11.9.1",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.40.1",
-    "drizzle-zod": "^0.7.0",
-    "zod": "^3.24.2"
+	"exports": {
+    ".": {
+      "import": {
+        "types": "./dist/es/index.d.ts",
+        "default": "./dist/es/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
   },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
-    "@types/dotenv": "^8.2.3",
-    "@types/node": "^22.13.10",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+		"better-sqlite3": "^11.9.1",
+		"pino": "^9.6.0",
+		"pino-pretty": "^13.0.0",
+		"drizzle-orm": "^0.40.1",
+		"drizzle-zod": "^0.7.0",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"bunchee": "^6.5.0",
+		"@types/better-sqlite3": "^7.6.12",
+		"@types/node": "catalog:",
     "drizzle-kit": "^0.30.5",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
-  }
+		"tsup": "catalog:",
+		"tsx": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"packageManager": "pnpm@9.14.2"
 }
