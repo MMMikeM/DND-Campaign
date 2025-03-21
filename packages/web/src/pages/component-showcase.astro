@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+
+// Define the different variants we'll showcase
+const intents = ['primary', 'secondary', 'danger', 'success', 'ghost', 'link', 'outline'] as const;
+const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
+const roundedOptions = ['default', 'full', 'none'] as const;
+
+// For better component organization
+const Section = ({ title, description }: { title: string; description: string }) => (
+  <div class="mb-10">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">{title}</h2>
+    <p class="text-gray-600 mb-6">{description}</p>
+    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+      <slot />
+    </div>
+  </div>
+);
+---
+
+<Layout title="Component Showcase">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 mt-4">Button Component Showcase</h1>
+    <p class="text-xl text-gray-700 mb-10">
+      This page demonstrates the variations of the Button component using class-variance-authority (CVA).
+    </p>
+
+    <Section
+      title="Button Intents"
+      description="Different visual styles for different purposes. Use 'primary' for main actions, 'secondary' for less important actions, etc."
+    >
+      <div class="flex flex-wrap gap-4">
+        {intents.map((intent) => (
+          <Button intent={intent}>{intent} button</Button>
+        ))}
+      </div>
+    </Section>
+
+    <Section
+      title="Button Sizes"
+      description="Different sizes for different contexts. Use 'xs' for tight spaces, 'xl' for hero sections, etc."
+    >
+      <div class="flex flex-wrap items-center gap-4">
+        {sizes.map((size) => (
+          <Button size={size}>{size} button</Button>
+        ))}
+      </div>
+    </Section>
+
+    <Section
+      title="Button with Icons"
+      description="Buttons can include icons on either side to add visual context."
+    >
+      <div class="flex flex-wrap gap-4">
+        <Button icon="add">Add Item</Button>
+        <Button icon="edit">Edit Item</Button>
+        <Button icon="delete" intent="danger">Delete Item</Button>
+        <Button icon="chevron-right" iconPosition="right">Next Step</Button>
+        <Button icon="eye" intent="outline">View Details</Button>
+        <Button icon="search" intent="secondary">Search</Button>
+      </div>
+    </Section>
+
+    <Section
+      title="Button Shapes"
+      description="Different border radius options for different design needs."
+    >
+      <div class="flex flex-wrap gap-4">
+        {roundedOptions.map((rounded) => (
+          <Button rounded={rounded}>{rounded} rounded</Button>
+        ))}
+      </div>
+    </Section>
+    
+    <Section
+      title="Button States"
+      description="Buttons can be in different states like disabled."
+    >
+      <div class="flex flex-wrap gap-4">
+        <Button>Enabled Button</Button>
+        <Button disabled>Disabled Button</Button>
+        <Button intent="secondary">Enabled Secondary</Button>
+        <Button intent="secondary" disabled>Disabled Secondary</Button>
+      </div>
+    </Section>
+    
+    <Section
+      title="Button as Link"
+      description="Buttons can act as links while maintaining the button styling."
+    >
+      <div class="flex flex-wrap gap-4">
+        <Button as="a" href="/npcs">Internal Link</Button>
+        <Button 
+          as="a" 
+          href="https://github.com" 
+          external 
+          intent="secondary"
+          icon="link"
+        >
+          External Link
+        </Button>
+        <Button intent="link">Link Style Button</Button>
+      </div>
+    </Section>
+    
+    <Section
+      title="Full Width Button"
+      description="Buttons can take up the full width of their container."
+    >
+      <div class="space-y-4">
+        <Button fullWidth>Full Width Button</Button>
+        <Button fullWidth intent="secondary">Full Width Secondary</Button>
+        <Button fullWidth size="lg" icon="add">Create New Campaign</Button>
+      </div>
+    </Section>
+    
+    <Section
+      title="Combined Variants"
+      description="Buttons can combine multiple variants for precise styling."
+    >
+      <div class="flex flex-wrap gap-4">
+        <Button 
+          intent="success" 
+          size="lg" 
+          icon="shield" 
+          rounded="full"
+        >
+          Save Campaign
+        </Button>
+        
+        <Button 
+          intent="outline" 
+          size="sm" 
+          icon="eye" 
+          iconPosition="right"
+          rounded="full"
+        >
+          Preview
+        </Button>
+        
+        <Button 
+          intent="danger" 
+          icon="delete" 
+          disabled
+        >
+          Delete (Disabled)
+        </Button>
+        
+        <Button 
+          intent="ghost" 
+          icon="calendar"
+        >
+          Schedule Session
+        </Button>
+      </div>
+    </Section>
+  </div>
+</Layout>
