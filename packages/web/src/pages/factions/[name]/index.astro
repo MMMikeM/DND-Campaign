@@ -1,0 +1,364 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import { getFaction } from "@entities";
+import Layout from "@layout";
+
+
+export const prerender = false;
+
+if (!Astro.params.name){
+	return Astro.redirect('/factions');
+}
+
+const { name } = Astro.params;
+
+const faction = await getFaction(name)
+
+if (!faction) {
+	return Astro.redirect('/404');
+}
+
+---
+
+<Layout title={faction.name}>
+	<div class="max-w-4xl mx-auto">
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center">
+				<Icon name="flag" size="lg" color="purple" class="mr-3" />
+				<h1 class="text-4xl font-bold">{faction.name}</h1>
+			</div>
+			<div class="flex gap-4">
+				<a 
+					href={`/factions/${faction.id}/edit`} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				>
+					<Icon name="edit" class="mr-2" />
+					Edit
+				</a>
+				<button
+					type="button"
+					data-faction-id={faction.id}
+					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-faction flex items-center"
+				>
+					<Icon name="delete" class="mr-2" />
+					Delete
+				</button>
+			</div>
+		</div>
+		
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			<div class="md:col-span-2">
+				<GradientCard
+					colorTheme="purple"
+					title="Basic Information"
+					icon="<i class='fas fa-info-circle'></i>"
+				>
+					<div class="grid grid-cols-2 gap-6">
+						<div>
+							<p class="text-sm text-gray-500">Type</p>
+							<p class="font-medium">{faction.type}</p>
+						</div>
+						{faction.alignment && (
+							<div>
+								<p class="text-sm text-gray-500">Alignment</p>
+									<p class="font-medium">{faction.alignment}</p>
+							</div>
+						)}
+						{faction.headquarters && (
+							<div>
+								<p class="text-sm text-gray-500">Headquarters</p>
+								<p class="font-medium flex items-center">
+									<Icon name="location" class="mr-1" />
+									{faction.headquarters}
+								</p>
+							</div>
+						)}
+					</div>
+				</GradientCard>
+			</div>
+			
+			<div class="md:col-span-1">
+				<GradientCard
+					colorTheme="purple"
+					title="Quick Actions"
+					icon="<i class='fas fa-bolt'></i>"
+				>
+					<div class="flex flex-col gap-2">
+						<a href="/factions" class="text-purple-600 hover:text-purple-800 flex items-center">
+							<Icon name="back" class="mr-2" />
+							Back to Factions
+						</a>
+						<!-- Additional quick actions could be added here -->
+					</div>
+				</GradientCard>
+			</div>
+		</div>
+		
+		{faction.territory && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Territory"
+					icon="<i class='fas fa-map'></i>"
+				>
+					<p class="whitespace-pre-line">{faction.territory}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{faction.description && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Description"
+					icon="<i class='fas fa-book'></i>"
+				>
+					<p class="whitespace-pre-line">{faction.description}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+			{faction.publicGoal && (
+				<div>
+					<GradientCard
+						colorTheme="blue"
+						title="Public Goal"
+						icon="<i class='fas fa-scroll'></i>"
+					>
+						<p class="whitespace-pre-line">{faction.publicGoal}</p>
+					</GradientCard>
+				</div>
+			)}
+			
+			{faction.trueGoal && (
+				<div>
+					<GradientCard
+						colorTheme="red"
+						title="True Goal (Secret)"
+						icon="<i class='fas fa-eye-off'></i>"
+					>
+						<p class="whitespace-pre-line">{faction.trueGoal}</p>
+					</GradientCard>
+				</div>
+			)}
+		</div>
+		
+		{faction.history && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="History"
+					icon="<i class='fas fa-scroll'></i>"
+				>
+					<p class="whitespace-pre-line">{faction.history}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{faction.notes && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="cyan"
+					title="Notes"
+					icon="<i class='fas fa-file-text'></i>"
+				>
+					<p class="whitespace-pre-line">{faction.notes}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.allies && faction.allies.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Allies"
+					icon="<i class='fas fa-handshake'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{faction.allies.map((ally) => (
+							<li class="flex items-start">
+								<Icon name="users" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<span class="font-medium">{ally.name}</span>
+									{ally.relationship && (
+										<p class="text-sm text-gray-600 dark:text-gray-400">{ally.relationship}</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.enemies && faction.enemies.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="red"
+					title="Enemies"
+					icon="<i class='fas fa-skull'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{faction.enemies.map((enemy) => (
+							<li class="flex items-start">
+								<Icon name="warning" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<span class="font-medium">{enemy.name}</span>
+									{enemy.conflict && (
+										<p class="text-sm text-gray-600 dark:text-gray-400">
+											{enemy.conflict} - {enemy.severity}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.resources && faction.resources.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Resources"
+					icon="<i class='fas fa-coins'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{faction.resources.map((resource) => (
+							<li class="flex items-start">
+								<Icon name="star" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{resource}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.npcs && faction.npcs.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Members"
+					icon="<i class='fas fa-users'></i>"
+				>
+					<ul class="space-y-4">
+						{faction.npcs.map((member) => (
+							<li class="flex items-start">
+								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/npcs/${member.npc.id}`} class="font-medium hover:text-blue-600 transition-colors">
+										{member.npc.name}
+									</a>
+									<div class="text-sm text-gray-600 dark:text-gray-400">
+										{member.role && <span class="mr-2">{member.role}</span>}
+										{member.status && <span class="text-gray-400">({member.status})</span>}
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.locations && faction.locations.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Territory & Influence"
+					icon="<i class='fas fa-map-marker'></i>"
+				>
+					<ul class="space-y-4">
+						{faction.locations.map((loc) => (
+							<li class="flex items-start">
+								<Icon name="location" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/locations/${loc.location.id}`} class="font-medium hover:text-amber-600 transition-colors">
+										{loc.location.name}
+									</a>
+									{loc.influence && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Influence: {loc.influence}
+										</div>
+									)}
+									{loc.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{loc.description}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{faction.quests && faction.quests.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Related Quests"
+					icon="<i class='fas fa-scroll'></i>"
+				>
+					<ul class="space-y-4">
+						{faction.quests.map((quest) => (
+							<li class="flex items-start">
+								<Icon name="book" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/quests/${quest.quest.id}`} class="font-medium hover:text-green-600 transition-colors">
+										{quest.quest.name}
+									</a>
+									{quest.role && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Role: {quest.role}
+										</div>
+									)}
+									{quest.interest && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{quest.interest}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const deleteButton = document.querySelector('.delete-faction');
+		if (!deleteButton) return;
+		
+		deleteButton.addEventListener('click', async () => {
+			const factionId = deleteButton.getAttribute('data-faction-id');
+			if (!factionId) return;
+
+			if (!confirm('Are you sure you want to delete this faction?')) return;
+
+			try {
+				const response = await fetch(`/api/factions/${factionId}`, {
+					method: 'DELETE'
+				});
+
+				if (response.ok) {
+					window.location.href = '/factions';
+				} else {
+					const data = await response.json();
+					throw new Error(data.error || 'Failed to delete faction');
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while deleting the faction');
+			}
+		});
+	});
+</script>

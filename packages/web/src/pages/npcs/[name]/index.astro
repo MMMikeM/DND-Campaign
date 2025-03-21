@@ -1,0 +1,433 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import { getNpc } from "@entities";
+import Layout from "@layout";
+
+
+
+
+export const prerender = false;
+
+const { name } = Astro.params;
+
+if (!name) {
+	return Astro.redirect('/npcs');
+}
+
+const npc = await getNpc(name);
+
+if (!npc) {
+	return Astro.redirect('/404');
+}
+
+---
+
+<Layout title={npc.name}>
+	<div class="max-w-4xl mx-auto">
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center">
+				<Icon name="user" size="lg" color="blue" class="mr-3" />
+				<h1 class="text-4xl font-bold">{npc.name}</h1>
+			</div>
+			<div class="flex gap-4">
+				<a 
+					href={`/npcs/${npc.id}/edit`} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				>
+					<Icon name="edit" class="mr-2" />
+					Edit
+				</a>
+				<button
+					type="button"
+					data-npc-id={npc.id}
+					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-npc flex items-center"
+				>
+					<Icon name="delete" class="mr-2" />
+					Delete
+				</button>
+			</div>
+		</div>
+		
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			<div class="md:col-span-2">
+				<GradientCard
+					colorTheme="blue"
+					title="Basic Information"
+					icon="<i class='fas fa-info-circle'></i>"
+				>
+					<div class="grid grid-cols-2 gap-6">
+						<div>
+							<p class="text-sm text-gray-500">Race</p>
+							<p class="font-medium">{npc.race}</p>
+						</div>
+						{npc.class && (
+							<div>
+								<p class="text-sm text-gray-500">Class</p>
+								<p class="font-medium">{npc.class}</p>
+							</div>
+						)}
+						{npc.occupation && (
+							<div>
+								<p class="text-sm text-gray-500">Occupation</p>
+								<p class="font-medium">{npc.occupation}</p>
+							</div>
+						)}
+						{npc.location && (
+							<div>
+								<p class="text-sm text-gray-500">Location</p>
+								<p class="font-medium flex items-center">
+									<Icon name="location" class="mr-1" />
+									{npc.location}
+								</p>
+							</div>
+						)}
+						{npc.faction && (
+							<div>
+								<p class="text-sm text-gray-500">Faction</p>
+								<p class="font-medium flex items-center">
+									<Icon name="flag" class="mr-1" />
+									{npc.faction}
+								</p>
+							</div>
+						)}
+					</div>
+				</GradientCard>
+			</div>
+			
+			<div class="md:col-span-1">
+				<GradientCard
+					colorTheme="blue"
+					title="Quick Actions"
+					icon="<i class='fas fa-bolt'></i>"
+				>
+					<div class="flex flex-col gap-2">
+						<a href="/npcs" class="text-blue-600 hover:text-blue-800 flex items-center">
+							<Icon name="back" class="mr-2" />
+							Back to NPCs
+						</a>
+						<!-- Additional quick actions could be added here -->
+					</div>
+				</GradientCard>
+			</div>
+		</div>
+		
+		{npc.appearance && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Appearance"
+					icon="<i class='fas fa-eye'></i>"
+				>
+					<p class="whitespace-pre-line">{npc.appearance}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{npc.personality && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Personality"
+					icon="<i class='fas fa-user'></i>"
+				>
+					<div class="space-y-4">
+						<p class="whitespace-pre-line">{npc.personality}</p>
+						{npc.personalityTraits && npc.personalityTraits.length > 0 && (
+							<div class="mt-4">
+								<h3 class="text-sm font-medium text-gray-500 mb-2">Personality Traits</h3>
+								<ul class="list-disc list-inside space-y-2">
+									{npc.personalityTraits.map((trait) => (
+										<li class="flex items-start">
+											<Icon name="check" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+											<span>{trait}</span>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.role && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Role & Position"
+					icon="<i class='fas fa-user-tie'></i>"
+				>
+					<p class="whitespace-pre-line">{npc.role}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.quirk && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="pink"
+					title="Notable Quirk"
+					icon="<i class='fas fa-fingerprint'></i>"
+					hasSecret={true}
+				>
+					<p class="whitespace-pre-line">{npc.quirk}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.stats && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="cyan"
+					title="Stats & Abilities"
+					icon="<i class='fas fa-dice-d20'></i>"
+				>
+					<p class="whitespace-pre-line">{npc.stats}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.abilities && npc.abilities.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="cyan"
+					title="Abilities"
+					icon="<i class='fas fa-magic'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{npc.abilities.map((ability) => (
+							<li class="flex items-start">
+								<Icon name="magic" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{ability}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+		
+		{npc.inventory && npc.inventory.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Inventory"
+					icon="<i class='fas fa-backpack'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{npc.inventory.map((item) => (
+							<li class="flex items-start">
+								<Icon name="package" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<span class="font-medium">{item.item}</span>
+									<span class="text-gray-600 dark:text-gray-400"> × {item.quantity}</span>
+									{item.notes && (
+										<p class="text-sm text-gray-600 dark:text-gray-400">{item.notes}</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.dialogue && npc.dialogue.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Dialogue & Responses"
+					icon="<i class='fas fa-comments'></i>"
+				>
+					<div class="space-y-4">
+						{npc.dialogue.map((entry) => (
+							<div class="border-l-4 border-green-400 pl-4">
+								<p class="font-medium text-gray-900 dark:text-gray-100">{entry.topic}</p>
+								<p class="text-gray-600 dark:text-gray-300 mt-1">{entry.response}</p>
+								{entry.condition && (
+									<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 italic">
+										Condition: {entry.condition}
+									</p>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.secret && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="red"
+					title="Secret"
+					icon="<i class='fas fa-user-secret'></i>"
+				>
+					<p class="whitespace-pre-line">{npc.secret}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.notes && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="gray"
+					title="Notes"
+					icon="<i class='fas fa-file-text'></i>"
+				>
+					<p class="whitespace-pre-line">{npc.notes}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.locations && npc.locations.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Locations"
+					icon="<i class='fas fa-map-marker'></i>"
+				>
+					<ul class="space-y-4">
+						{npc.locations.map((loc) => (
+							<li class="flex items-start">
+								<Icon name="location" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/locations/${loc.location.id}`} class="font-medium hover:text-amber-600 transition-colors">
+										{loc.location.name}
+									</a>
+									{loc.context && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{loc.context}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.factions && npc.factions.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Faction Affiliations"
+					icon="<i class='fas fa-flag'></i>"
+				>
+					<ul class="space-y-4">
+						{npc.factions.map((faction) => (
+							<li class="flex items-start">
+								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/factions/${faction.faction.id}`} class="font-medium hover:text-purple-600 transition-colors">
+										{faction.faction.name}
+									</a>
+									<div class="text-sm text-gray-600 dark:text-gray-400">
+										{faction.role && <span class="mr-2">{faction.role}</span>}
+										{faction.status && <span class="text-gray-400">({faction.status})</span>}
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.quests && npc.quests.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Related Quests"
+					icon="<i class='fas fa-scroll'></i>"
+				>
+					<ul class="space-y-4">
+						{npc.quests.map((quest) => (
+							<li class="flex items-start">
+								<Icon name="book" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/quests/${quest.quest.id}`} class="font-medium hover:text-green-600 transition-colors">
+										{quest.quest.name}
+									</a>
+									{quest.role && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Role: {quest.role}
+										</div>
+									)}
+									{quest.importance && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											Importance: {quest.importance}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{npc.relationships && npc.relationships.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="NPC Relationships"
+					icon="<i class='fas fa-people-arrows'></i>"
+				>
+					<ul class="space-y-4">
+						{npc.relationships.map((rel) => (
+							<li class="flex items-start">
+								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/npcs/${rel.relatedNpc.id}`} class="font-medium hover:text-blue-600 transition-colors">
+										{rel.relatedNpc.name}
+									</a>
+									<div class="text-sm text-gray-600 dark:text-gray-400">
+										<span class="mr-2">{rel.relationshipType}</span>
+										<span class="text-gray-400">({rel.strength})</span>
+									</div>
+									{rel.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{rel.description}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const deleteButton = document.querySelector('.delete-npc');
+		if (!deleteButton) return;
+		
+		deleteButton.addEventListener('click', async () => {
+			const npcId = deleteButton.getAttribute('data-npc-id');
+			if (!npcId) return;
+
+			if (!confirm('Are you sure you want to delete this NPC?')) return;
+
+			try {
+				const response = await fetch(`/api/npcs/${npcId}`, {
+					method: 'DELETE'
+				});
+
+				if (response.ok) {
+					window.location.href = '/npcs';
+				} else {
+					const data = await response.json();
+					throw new Error(data.error || 'Failed to delete NPC');
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while deleting the NPC');
+			}
+		});
+	});
+</script>
