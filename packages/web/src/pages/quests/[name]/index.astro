@@ -1,0 +1,455 @@
+---
+
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import { getQuest } from "@entities";
+import Layout from "@layout";
+
+
+export const prerender = false;
+
+const { name } = Astro.params;
+
+if (!name) {
+	return Astro.redirect('/quests');
+}
+
+const quest = await getQuest(name);
+
+if (!quest) {
+	return Astro.redirect('/404');
+}
+
+---
+
+<Layout title={quest.name}>
+	<div class="max-w-4xl mx-auto">
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center">
+				<Icon name="scroll" size="lg" color="green" class="mr-3" />
+				<h1 class="text-4xl font-bold">{quest.name}</h1>
+			</div>
+			<div class="flex gap-4">
+				<a 
+					href={`/quests/${quest.id}/edit`} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				>
+					<Icon name="edit" class="mr-2" />
+					Edit
+				</a>
+				<button
+					type="button"
+					data-quest-id={quest.id}
+					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-quest flex items-center"
+				>
+					<Icon name="delete" class="mr-2" />
+					Delete
+				</button>
+			</div>
+		</div>
+		
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			<div class="md:col-span-2">
+				<GradientCard
+					colorTheme="green"
+					title="Basic Information"
+					icon="<i class='fas fa-info-circle'></i>"
+				>
+					<div class="grid grid-cols-2 gap-6">
+						<div>
+							<p class="text-sm text-gray-500">Type</p>
+							<p class="font-medium">{quest.type}</p>
+						</div>
+						{quest.level && (
+							<div>
+								<p class="text-sm text-gray-500">Level</p>
+								<p class="font-medium">{quest.level}</p>
+							</div>
+						)}
+						{quest.giver && (
+							<div>
+								<p class="text-sm text-gray-500">Quest Giver</p>
+								<p class="font-medium flex items-center">
+									<Icon name="user" class="mr-1" />
+									{quest.giver}
+								</p>
+							</div>
+						)}
+						{quest.location && (
+							<div>
+								<p class="text-sm text-gray-500">Location</p>
+								<p class="font-medium flex items-center">
+									<Icon name="location" class="mr-1" />
+									{quest.location}
+								</p>
+							</div>
+						)}
+						{quest.reward && (
+							<div>
+								<p class="text-sm text-gray-500">Reward</p>
+								<p class="font-medium flex items-center">
+									<Icon name="treasure" class="mr-1" />
+									{quest.reward}
+								</p>
+							</div>
+							)}
+						{quest.adaptable && (
+							<div>
+								<p class="text-sm text-gray-500">Adaptability</p>
+								<p class="font-medium flex items-center">
+									<Icon name="check" class="mr-1 text-green-500" />
+									Adaptable
+								</p>
+							</div>
+						)}
+					</div>
+				</GradientCard>
+			</div>
+			
+			<div class="md:col-span-1">
+				<GradientCard
+					colorTheme="green"
+					title="Quick Actions"
+					icon="<i class='fas fa-bolt'></i>"
+				>
+					<div class="flex flex-col gap-2">
+						<a href="/quests" class="text-green-600 hover:text-green-800 flex items-center">
+							<Icon name="back" class="mr-2" />
+							Back to Quests
+						</a>
+						<!-- Additional quick actions could be added here -->
+					</div>
+				</GradientCard>
+			</div>
+		</div>
+		
+		{quest.description && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Description"
+					icon="<i class='fas fa-book'></i>"
+				>
+					<p class="whitespace-pre-line">{quest.description}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{quest.objectives && quest.objectives.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Objectives"
+					icon="<i class='fas fa-tasks'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{quest.objectives.map((objective) => (
+							<li class="flex items-start">
+								<Icon name="chevron-right" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{objective}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+		
+		{quest.stages && quest.stages.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Quest Stages"
+					icon="<i class='fas fa-list-ol'></i>"
+				>
+					<div class="space-y-4">
+						{quest.stages.map((stage, index) => (
+							<div class="flex items-start">
+								<div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-semibold">
+									{stage.stage}
+								</div>
+								<div class="ml-4">
+									<h3 class="font-medium text-gray-900 dark:text-gray-100">{stage.title}</h3>
+								</div>
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.completionPaths && quest.completionPaths.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="green"
+					title="Completion Paths"
+					icon="<i class='fas fa-route'></i>"
+				>
+					<div class="space-y-6">
+						{quest.completionPaths.map((path) => (
+							<div class="border-l-4 border-green-400 pl-4">
+								<div class="flex items-center">
+									<div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-300 text-sm font-medium">
+										{path.stage}
+									</div>
+									<h3 class="ml-2 font-medium text-gray-900 dark:text-gray-100">{path.pathName}</h3>
+								</div>
+								<p class="mt-2 text-gray-600 dark:text-gray-300">{path.description}</p>
+								{path.challenges && (
+									<div class="mt-2">
+										<p class="text-sm font-medium text-gray-500">Challenges:</p>
+										<p class="text-gray-600 dark:text-gray-300">{path.challenges}</p>
+									</div>
+								)}
+								{path.outcomes && (
+									<div class="mt-2">
+										<p class="text-sm font-medium text-gray-500">Outcomes:</p>
+										<p class="text-gray-600 dark:text-gray-300">{path.outcomes}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.decisionPoints && quest.decisionPoints.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Decision Points"
+					icon="<i class='fas fa-random'></i>"
+				>
+					<div class="space-y-4">
+						{quest.decisionPoints.map((point) => (
+							<div class="flex items-start">
+								<div class="flex-shrink-0 h-6 w-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300 text-sm font-medium">
+									{point.stage}
+								</div>
+								<p class="ml-3 text-gray-600 dark:text-gray-300">{point.decision}</p>
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.decisionChoices && quest.decisionChoices.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Decision Choices"
+					icon="<i class='fas fa-code-branch'></i>"
+				>
+					<div class="space-y-6">
+						{quest.decisionChoices.map((choice) => (
+							<div class="border-l-4 border-amber-400 pl-4">
+								<div class="flex items-center">
+									<div class="flex-shrink-0 h-6 w-6 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-600 dark:text-amber-300 text-sm font-medium">
+										{choice.stage}
+									</div>
+									<h3 class="ml-2 font-medium text-gray-900 dark:text-gray-100">{choice.decision}</h3>
+								</div>
+								<p class="mt-2 text-gray-600 dark:text-gray-300">{choice.choice}</p>
+								{choice.consequences && (
+									<div class="mt-2">
+										<p class="text-sm font-medium text-gray-500">Consequences:</p>
+										<p class="text-gray-600 dark:text-gray-300">{choice.consequences}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+		
+		{quest.rewards && quest.rewards.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Rewards"
+					icon="<i class='fas fa-treasure-chest'></i>"
+				>
+					<div class="space-y-4">
+						{quest.rewards.map((reward) => (
+							<div class="flex items-start">
+								<Icon name="treasure" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<span class="font-medium">{reward.rewardPath}</span>
+									<p class="text-gray-600 dark:text-gray-300">{reward.reward}</p>
+								</div>
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.twists && quest.twists.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="pink"
+					title="Plot Twists"
+					icon="<i class='fas fa-surprise'></i>"
+				>
+					<ul class="list-disc list-inside space-y-2">
+						{quest.twists.map((twist) => (
+							<li class="flex items-start">
+								<Icon name="sparkles" size="sm" color="pink" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{twist}</span>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.hooks && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Hooks"
+					icon="<i class='fas fa-link'></i>"
+				>
+					<p class="whitespace-pre-line">{quest.hooks}</p>
+				</GradientCard>
+			</div>
+		)}
+		
+		{quest.notes && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="gray"
+					title="Notes"
+					icon="<i class='fas fa-file-text'></i>"
+				>
+					<p class="whitespace-pre-line">{quest.notes}</p>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.npcs && quest.npcs.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="blue"
+					title="Key Characters"
+					icon="<i class='fas fa-users'></i>"
+				>
+					<ul class="space-y-4">
+						{quest.npcs.map((char) => (
+							<li class="flex items-start">
+								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/npcs/${char.npc.id}`} class="font-medium hover:text-blue-600 transition-colors">
+										{char.npc.name}
+									</a>
+									<div class="text-sm text-gray-600 dark:text-gray-400">
+										{char.role && <span class="mr-2">{char.role}</span>}
+										{char.importance && <span class="text-gray-400">({char.importance})</span>}
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.locations && quest.locations.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Quest Locations"
+					icon="<i class='fas fa-map-marker'></i>"
+				>
+					<ul class="space-y-4">
+						{quest.locations.map((loc) => (
+							<li class="flex items-start">
+								<Icon name="location" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/locations/${loc.location.id}`} class="font-medium hover:text-amber-600 transition-colors">
+										{loc.location.name}
+									</a>
+									{loc.stage && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Stage: {loc.stage}
+										</div>
+									)}
+									{loc.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{loc.description}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{quest.factions && quest.factions.length > 0 && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="purple"
+					title="Involved Factions"
+					icon="<i class='fas fa-flag'></i>"
+				>
+					<ul class="space-y-4">
+						{quest.factions.map((faction) => (
+							<li class="flex items-start">
+								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/factions/${faction.faction.id}`} class="font-medium hover:text-purple-600 transition-colors">
+										{faction.faction.name}
+									</a>
+									{faction.role && (
+										<div class="text-sm text-gray-600 dark:text-gray-400">
+											Role: {faction.role}
+										</div>
+									)}
+									{faction.interest && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{faction.interest}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+	</div>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const deleteButton = document.querySelector('.delete-quest');
+		if (!deleteButton) return;
+		
+		deleteButton.addEventListener('click', async () => {
+			const questId = deleteButton.getAttribute('data-quest-id');
+			if (!questId) return;
+
+			if (!confirm('Are you sure you want to delete this quest?')) return;
+
+			try {
+				const response = await fetch(`/api/quests/${questId}`, {
+					method: 'DELETE'
+				});
+
+				if (response.ok) {
+					window.location.href = '/quests';
+				} else {
+					const data = await response.json();
+					throw new Error(data.error || 'Failed to delete quest');
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while deleting the quest');
+			}
+		});
+	});
+</script>

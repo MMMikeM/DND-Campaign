@@ -1,0 +1,21 @@
+---
+import LocationCard from "@components/cards/LocationCard.astro";
+import EntityListing from "@components/EntityListing.astro";
+import { getAllLocations } from "@entities";
+import Layout from "@layout";
+
+
+
+const locations = await getAllLocations()
+---
+
+<Layout title="Locations">
+  <EntityListing
+    title="Locations"
+    >
+  {locations.map(location => 
+      <LocationCard
+      location={location} />
+)}  
+  </EntityListing>
+</Layout>
