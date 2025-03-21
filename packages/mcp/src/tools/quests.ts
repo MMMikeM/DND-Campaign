@@ -1,11 +1,12 @@
-import type { Tool } from "@modelcontextprotocol/sdk/types"
-import { quests, npcs, RunResult } from "@tome-keeper/shared"
-import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
-import zodToMCP from "../zodToMcp"
-import { z } from "zod"
+import { Tool } from "@modelcontextprotocol/sdk/types.js"
+import { quests, RunResult } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
+import { integer } from "drizzle-orm/sqlite-core"
+import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
+import { z } from "zod"
 import { db, type ToolHandlers } from "../index"
 import logger from "../logger"
+import zodToMCP from "../zodToMcp"
 
 export type QuestToolNames =
 	| "mcp_dnd_get_quest"
@@ -73,18 +74,13 @@ export const questToolHandlers: ToolHandlers<QuestToolNames> = {
       .execute()
 
   },
-
   mcp_dnd_get_quest: async (args) => {
-    if (!args) throw new Error("No arguments provided")
-    logger.debug("Parsing arguments", { args })
     const parsed = z.object({ id: z.number() }).parse(args)
     logger.debug("Getting quest", { parsed })
     return await db.select().from(quests).where(eq(quests.id, parsed.id)).limit(1)
   },
-
   mcp_dnd_update_quest: async (args) => {
-    if (!args) throw new Error("No arguments provided")
-    const parsed = z.object({ id: z.number(), questId: z.number() }).parse(args)
+    const parsed = createUpdateSchema(quests, { id: z.number() }).parse(args)
     logger.info("Updating quest", { parsed })
     return await db
       .update(quests)
@@ -93,11 +89,12 @@ export const questToolHandlers: ToolHandlers<QuestToolNames> = {
       .execute()
 
   },
-  mcp_dnd_get_all_quests: async function (args?: Record<string, unknown>): Promise<RunResult | Record<string, unknown> | Record<string, unknown>[]> {
-    return await db.select().from(quests)
+  mcp_dnd_get_all_quests: async (args) => {
+			const parsed = z.object({ id: z.number() }).parse(args)
+			logger.debug("Getting quest", { parsed })
+			return await db.select().from(quests).where(eq(quests.id, parsed.id)).limit(1)
   },
-  mcp_dnd_delete_quest: async function (args?: Record<string, unknown>): Promise<RunResult | Record<string, unknown> | Record<string, unknown>[]> {
-    if (!args) throw new Error("No arguments provided")
+  mcp_dnd_delete_quest: async (args) =>  {
     const parsed = z.object({ id: z.number() }).parse(args)
     logger.info("Deleting quest", { parsed })
     return await db
