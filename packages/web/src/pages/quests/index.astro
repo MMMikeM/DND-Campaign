@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getAllQuests } from '../../db/entities';
-import QuestCard from '../../components/cards/QuestCard.astro';
+import EntityCard from '../../components/cards/EntityCard.astro';
 import EntityListing from '../../components/EntityListing.astro';
 
 const allQuests = await getAllQuests()
@@ -9,9 +9,10 @@ const allQuests = await getAllQuests()
 
 <Layout title="Quests">
   <EntityListing
-    title="NPCs">
+    title="Quests">
   {allQuests.map(quest => 
-      <QuestCard
-        quest={quest} />)}
+      <EntityCard
+        entity={quest}
+        entityType="quest" />)}
   </EntityListing>
 </Layout>

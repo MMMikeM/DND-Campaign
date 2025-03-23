@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getAllNpcs } from '../../db/entities';
 import EntityListing from '../../components/EntityListing.astro';
-import NPCCard from '../../components/cards/NPCCard.astro';
+import EntityCard from '../../components/cards/EntityCard.astro';
 
 const allNpcs = await getAllNpcs();
 ---
@@ -11,7 +11,8 @@ const allNpcs = await getAllNpcs();
   <EntityListing
     title="NPCs">
   {allNpcs.map(npc => 
-      <NPCCard
-        npc={npc} />)}
+      <EntityCard
+        entity={npc}
+        entityType="npc" />)}
   </EntityListing>
 </Layout>

@@ -1,0 +1,19 @@
+import { getFaction } from "@db/entities";
+
+export const prerender = false;
+
+const { name } = Astro.params;
+
+if (!name) {
+  return Astro.redirect('/factions');
+}
+
+// Get the faction using the name/slug parameter
+const faction = await getFaction(name);
+
+if (!faction) {
+  return Astro.redirect('/404');
+}
+
+// Now redirect to the actual edit page with ID parameter that the form can handle
+return Astro.redirect(`/factions/${faction.id}/edit`); 
