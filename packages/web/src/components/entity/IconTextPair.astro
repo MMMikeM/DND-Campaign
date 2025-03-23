@@ -1,0 +1,44 @@
+---
+import Icon from "@components/Icon.astro";
+import type { IconName, IconColor } from "types/icon";
+
+interface Props {
+  icon: IconName;
+  color?: IconColor;
+  text: string | null | undefined;
+  href?: string;
+  className?: string;
+  badge?: string;
+  badgeColor?: string;
+}
+
+const { 
+  icon, 
+  color = "current" as IconColor, 
+  text, 
+  href, 
+  className = "",
+  badge,
+  badgeColor
+} = Astro.props;
+
+// Don't render if text is empty
+if (!text) return null;
+---
+
+<div class={`flex items-center ${className}`}>
+  <Icon name={icon} color={color} class="mr-1" />
+  {href ? (
+    <a href={href} class="hover:underline">
+      {text}
+    </a>
+  ) : (
+    <span>{text}</span>
+  )}
+  
+  {badge && (
+    <span class={`ml-2 text-sm text-gray-500 ${badgeColor ? `text-${badgeColor}-600` : ''}`}>
+      ({badge})
+    </span>
+  )}
+</div> 

@@ -1,0 +1,50 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import type { IconName } from "types/icon";
+import type { ColorTheme } from "types";
+
+interface Props {
+  title: string;
+  icon?: IconName;
+  colorTheme?: ColorTheme;
+  content?: string | string[] | null;
+  className?: string;
+  hasSecret?: boolean;
+}
+
+const { 
+  title, 
+  icon = "file-text" as IconName, 
+  colorTheme = "blue" as ColorTheme,
+  content,
+  className = "",
+  hasSecret = false
+} = Astro.props;
+
+// Don't render if content is empty
+if (!content) return null;
+
+const formattedContent = Array.isArray(content) 
+  ? content.join('\n') 
+  : content || '';
+---
+
+<div class={`mb-6 ${className}`}>
+  <GradientCard
+    colorTheme={colorTheme}
+    title={title}
+    icon={icon}
+    hasSecret={hasSecret}
+  >
+    <div class="prose prose-sm dark:prose-invert max-w-none">
+      {Array.isArray(content) ? (
+        content.map((paragraph) => (
+          <p class="mb-3 last:mb-0">{paragraph}</p>
+        ))
+      ) : (
+        <p class="whitespace-pre-line">{content}</p>
+      )}
+      <slot />
+    </div>
+  </GradientCard>
+</div> 
