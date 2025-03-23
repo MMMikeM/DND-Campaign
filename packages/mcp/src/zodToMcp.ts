@@ -2,203 +2,228 @@ import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
 /**
- * Converts a Zod schema to an MCP-compatible input schema
- * with improved type handling and description support
- *//**
- * Converts a Zod schema to an MCP-compatible input schema
- * with improved type handling and description support
+ * Get schema properties as a type
  */
-function zodToMCP(schema: z.ZodTypeAny): Tool["inputSchema"] {
-	// Extract descriptions from zod schemas
-	function getDescription(schema: z.ZodTypeAny): string | undefined {
-		// Access the _def property in a type-safe way
-		const def = schema._def
-		return typeof def.description === "string" ? def.description : undefined
+type SchemaProperties<T extends z.ZodTypeAny> = T extends z.ZodObject<infer Shape>
+	? { [K in keyof Shape]?: string | SchemaProperties<Shape[K]> }
+	: never
+
+/**
+ * Converts a Zod schema to an MCP-compatible input schema with typed descriptions
+ *
+ * @param schema The Zod schema to convert
+ * @param descriptions Optional object with field descriptions that match the schema structure
+ */
+function zodToMCP<T extends z.ZodTypeAny>(
+	schema: T,
+	descriptions?: SchemaProperties<T>,
+): Tool["inputSchema"] {
+	// Helper functions
+	const getNestedDescription = (
+		path: string[],
+		descObj?: Record<string, unknown>,
+	): string | undefined => {
+		if (!descObj) return undefined
+
+		const [current, ...rest] = path
+		if (rest.length === 0) {
+			return typeof descObj[current] === "string" ? (descObj[current] as string) : undefined
+		}
+
+		const nested = descObj[current]
+		if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+			return getNestedDescription(rest, nested as Record<string, unknown>)
+		}
+
+		return undefined
 	}
 
-	// Define more specific return types for different schema components
+	const getDescription = (schema: z.ZodTypeAny, path: string[]): string | undefined => {
+		// Check if we have a description in the provided descriptions object
+		if (descriptions) {
+			const desc = getNestedDescription(path, descriptions as Record<string, unknown>)
+			if (desc) return desc
+		}
+
+		// Fall back to schema description
+		return typeof schema._def.description === "string" ? schema._def.description : undefined
+	}
+
+	const unwrapSchema = (schema: z.ZodTypeAny): z.ZodTypeAny =>
+		schema instanceof z.ZodOptional || schema instanceof z.ZodNullable
+			? unwrapSchema(schema._def.innerType)
+			: schema
+
+	const withDescription = (
+		schema: z.ZodTypeAny,
+		result: Record<string, unknown>,
+		path: string[],
+	): Record<string, unknown> => {
+		const description = getDescription(schema, path)
+		return description ? { ...result, description } : result
+	}
+
+	// Interface for schema properties
 	interface SchemaProperty {
 		type: string
 		description?: string
 		[key: string]: unknown
 	}
 
-	// Process Zod schema recursively
-	function processSchema(schema: z.ZodTypeAny): SchemaProperty {
-		const description = getDescription(schema)
-
-		// Unwrap optional and nullable
+	// Process schema based on its type
+	function processSchema(schema: z.ZodTypeAny, path: string[] = []): SchemaProperty {
+		// Handle wrapped types first
 		if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-			const unwrapped = processSchema(schema.unwrap())
-			// Preserve the description from the optional/nullable wrapper if it exists
-			if (description) unwrapped.description = description
-			return unwrapped
+			return processSchema(schema._def.innerType, path)
 		}
 
-		// Handle primitives
+		// Handle objects
+		if (schema instanceof z.ZodObject) {
+			return withDescription(schema, processObjectSchema(schema, path), path)
+		}
+
+		// Handle record type (dictionary/map)
+		if (schema instanceof z.ZodRecord) {
+			return withDescription(
+				schema,
+				{
+					type: "object",
+					additionalProperties: processSchema(schema._def.valueType, [
+						...path,
+						"additionalProperties",
+					]),
+				},
+				path,
+			)
+		}
+
+		// Handle arrays
+		if (schema instanceof z.ZodArray) {
+			return withDescription(
+				schema,
+				{
+					type: "array",
+					items: processSchema(schema.element, [...path, "items"]),
+				},
+				path,
+			)
+		}
+
+		// Handle primitive types
 		if (schema instanceof z.ZodString) {
 			const result: SchemaProperty = { type: "string" }
-			if (description) result.description = description
 
-			// Handle string formats if defined
-			// Access _def properties safely
-			const stringDef = schema._def
-
-			// Handle patterns - need to check differently for regex
-			// Zod stores patterns in checks array
-			if (stringDef.checks) {
-				for (const check of stringDef.checks) {
-					if (check.kind === "regex" && check.regex) {
-						result.pattern = check.regex.source
-					}
-
-					// Handle special string formats
+			// Add string validations
+			if (schema._def.checks) {
+				for (const check of schema._def.checks) {
+					if (check.kind === "regex" && check.regex) result.pattern = check.regex.source
 					if (check.kind === "email") result.format = "email"
 					if (check.kind === "url") result.format = "uri"
 					if (check.kind === "uuid") result.format = "uuid"
 				}
 			}
 
-			return result
+			return withDescription(schema, result, path)
 		}
 
-		if (schema instanceof z.ZodNumber) {
-			const result: SchemaProperty = { type: "number" }
-			if (description) result.description = description
+		if (schema instanceof z.ZodNumber) return withDescription(schema, { type: "number" }, path)
+		if (schema instanceof z.ZodBoolean) return withDescription(schema, { type: "boolean" }, path)
+		if (schema instanceof z.ZodNull || schema instanceof z.ZodUndefined) return { type: "null" }
 
-			// Add min/max constraints if present
-			const numberDef = schema._def
-			if (numberDef.checks) {
-				for (const check of numberDef.checks) {
-					if (check.kind === "min") result.minimum = check.value
-					if (check.kind === "max") result.maximum = check.value
-				}
-			}
-
-			return result
+		// Handle any type
+		if (schema instanceof z.ZodAny) {
+			return withDescription(schema, { type: "object" }, path)
 		}
 
-		if (schema instanceof z.ZodBoolean) {
-			const result: SchemaProperty = { type: "boolean" }
-			if (description) result.description = description
-			return result
-		}
-
-		if (schema instanceof z.ZodNull) {
-			return { type: "null" }
-		}
-
-		if (schema instanceof z.ZodUndefined) {
-			return { type: "null" }
-		}
-
-		// Handle arrays
-		if (schema instanceof z.ZodArray) {
-			const result: SchemaProperty & { items?: SchemaProperty } = {
-				type: "array",
-				items: processSchema(schema.element),
-			}
-			if (description) result.description = description
-			return result
-		}
-
-		// Handle objects
-		if (schema instanceof z.ZodObject) {
-			const properties: Record<string, SchemaProperty> = {}
-			const required: string[] = []
-
-			// Process each property
-			for (const [key, value] of Object.entries(schema.shape) as [string, z.ZodTypeAny][]) {
-				properties[key] = processSchema(value as z.ZodTypeAny)
-
-				// Track required fields
-				if (!(value instanceof z.ZodOptional) && !(value instanceof z.ZodNullable)) {
-					required.push(key)
-				}
-			}
-
-			const result: SchemaProperty & {
-				properties: Record<string, SchemaProperty>
-				required?: string[]
-			} = {
-				type: "object",
-				properties,
-			}
-
-			if (required.length > 0) {
-				result.required = required
-			}
-
-			if (description) {
-				result.description = description
-			}
-
-			return result
-		}
-
-		// Handle unions (enums)
+		// Handle enums
 		if (schema instanceof z.ZodEnum) {
-			const enumDef = schema._def
-			return {
-				type: "string",
-				enum: enumDef.values,
-				...(description ? { description } : {}),
-			}
+			return withDescription(
+				schema,
+				{
+					type: "string",
+					enum: schema._def.values,
+				},
+				path,
+			)
 		}
 
+		// Handle union types
 		if (schema instanceof z.ZodUnion) {
-			const unionDef = schema._def
-			const result: SchemaProperty = {
-				type: "object",
-				anyOf: unionDef.options.map((option: z.ZodTypeAny) => processSchema(option)),
-			}
-			if (description) result.description = description
-			return result
+			return withDescription(
+				schema,
+				{
+					type: "object",
+					anyOf: schema._def.options.map((option: z.ZodTypeAny) => processSchema(option, path)),
+				},
+				path,
+			)
 		}
 
+		// Handle literals
 		if (schema instanceof z.ZodLiteral) {
-			const literalDef = schema._def
-			const literalType = typeof literalDef.value
-			return {
-				type:
-					literalType === "string" || literalType === "number" || literalType === "boolean"
-						? literalType
-						: "string",
-				enum: [literalDef.value],
-				...(description ? { description } : {}),
-			}
+			const literalValue = schema._def.value
+			const literalType = typeof literalValue
+
+			return withDescription(
+				schema,
+				{
+					type: ["string", "number", "boolean"].includes(literalType) ? literalType : "string",
+					enum: [literalValue],
+				},
+				path,
+			)
 		}
 
-		// Fallback for any other schema types
+		// Fallback for unknown types
+		console.warn("Unknown schema type encountered:", schema)
 		return { type: "object", properties: {} }
 	}
 
-	// Start processing the schema
+	// Process object schema
+	function processObjectSchema(
+		schema: z.ZodObject<z.ZodRawShape>,
+		path: string[] = [],
+	): SchemaProperty {
+		const properties: Record<string, SchemaProperty> = {}
+		const required: string[] = []
+
+		// Process all fields
+		for (const key of Object.keys(schema.shape)) {
+			const value = schema.shape[key] as z.ZodTypeAny
+
+			// Process normally for all fields
+			properties[key] = processSchema(value, [...path, key])
+
+			// Track required fields
+			if (!(value instanceof z.ZodOptional) && !(value instanceof z.ZodNullable)) {
+				required.push(key)
+			}
+		}
+
+		const result: SchemaProperty = {
+			type: "object",
+			properties,
+		}
+
+		if (required.length > 0) {
+			result.required = required
+		}
+
+		return result
+	}
+
+	// Process the schema and handle final output format
 	const result = processSchema(schema)
 
-	// Ensure we return a valid MCP input schema
-	if (result.type !== "object") {
+	// Wrap non-object results or unions in a value property
+	if (result.type !== "object" || schema instanceof z.ZodUnion) {
 		return {
 			type: "object",
-			properties: {
-				value: result,
-			},
+			properties: { value: result },
 			required: ["value"],
 		}
 	}
 
-	// Special handling for union types that may already have type="object" but need to be wrapped
-	if (schema instanceof z.ZodUnion) {
-		return {
-			type: "object",
-			properties: {
-				value: result,
-			},
-			required: ["value"],
-		}
-	}
-
-	// Type assertion to ensure correct return type
 	return result as Tool["inputSchema"]
 }
 
