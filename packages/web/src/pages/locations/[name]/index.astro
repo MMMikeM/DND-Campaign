@@ -3,6 +3,8 @@ import GradientCard from "@components/cards/GradientCard.astro";
 import Icon from "@components/Icon.astro";
 import { getLocation } from "@entities";
 import Layout from "@layout";
+import Button from "@components/Button.astro";
+import { hasItems, hasItemsWithProperty, safeArrayAccess } from "@utils/dataHelpers";
 
 
 export const prerender = false;
@@ -19,29 +21,40 @@ if (!location) {
 	return Astro.redirect('/404');
 }
 
+// Get dominant faction if any
+const dominantFaction = safeArrayAccess(
+	location.factions?.filter(f => f.influence === 'dominant'), 
+	0
+);
+
+// Get first area for climate info
+const firstArea = safeArrayAccess(location.areas, 0);
 ---
 
 <Layout title={location.name}>
 	<div class="max-w-4xl mx-auto">
 		<div class="flex justify-between items-center mb-8">
 			<div class="flex items-center">
-				<Icon name="location" size="lg" color="amber" class="mr-3" />
-				<h1 class="text-4xl font-bold">{location.name}</h1>
+				<Icon name="map-pin" size="xl" color="amber" />
+				<h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+					{location.name || 'Location Details'}
+				</h1>
 			</div>
 			<div class="flex gap-4">
-				<a 
-					href={`/locations/${location.id}/edit`} 
-					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				<Button 
+					href={`/locations/${location.name}/edit`}
+					icon="pencil"
+					size="sm"
+					intent="secondary"
 				>
-					<Icon name="edit" class="mr-2" />
 					Edit
-				</a>
+				</Button>
 				<button
 					type="button"
 					data-location-id={location.id}
 					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-location flex items-center"
 				>
-					<Icon name="delete" class="mr-2" />
+					<Icon name="trash" class="mr-2" />
 					Delete
 				</button>
 			</div>
@@ -52,7 +65,7 @@ if (!location) {
 				<GradientCard
 					colorTheme="amber"
 					title="Basic Information"
-					icon="<i class='fas fa-info-circle'></i>"
+					icon="info"
 				>
 					<div class="grid grid-cols-2 gap-6">
 						<div>
@@ -69,44 +82,28 @@ if (!location) {
 							<div>
 								<p class="text-sm text-gray-500">Danger Level</p>
 								<p class="font-medium flex items-center">
-									{location.dangerLevel === "High" && <Icon name="warning" color="red" class="mr-1" />}
-									{location.dangerLevel === "Medium" && <Icon name="warning" color="yellow" class="mr-1" />}
-									{location.dangerLevel === "Low" && <Icon name="info" color="blue" class="mr-1" />}
+									{location.dangerLevel === "high" && <Icon name="circle-alert" color="red" class="mr-1" />}
+									{location.dangerLevel === "moderate" && <Icon name="circle-alert" color="yellow" class="mr-1" />}
+									{location.dangerLevel === "low" && <Icon name="info" color="blue" class="mr-1" />}
 									{location.dangerLevel}
 								</p>
 							</div>
 						)}
-						{location.factionControl && (
+						{dominantFaction && (
 							<div>
 								<p class="text-sm text-gray-500">Faction Control</p>
 								<p class="font-medium flex items-center">
 									<Icon name="flag" class="mr-1" />
-									{location.factionControl}
+									<a href={`/factions/${dominantFaction.factionId}`}>
+										{dominantFaction.faction?.name || 'Dominant faction'}
+									</a>
 								</p>
 							</div>
-							)}
-						{location.climate && (
+						)}
+						{firstArea?.climate && (
 							<div>
 								<p class="text-sm text-gray-500">Climate</p>
-								<p class="font-medium">{location.climate}</p>
-							</div>
-						)}
-						{location.population && (
-							<div>
-								<p class="text-sm text-gray-500">Population</p>
-								<p class="font-medium">{location.population}</p>
-							</div>
-						)}
-						{location.resources && (
-							<div>
-								<p class="text-sm text-gray-500">Resources</p>
-								<p class="font-medium">{location.resources}</p>
-							</div>
-						)}
-						{location.status && (
-							<div>
-								<p class="text-sm text-gray-500">Status</p>
-								<p class="font-medium">{location.status}</p>
+								<p class="font-medium">{firstArea.climate}</p>
 							</div>
 						)}
 					</div>
@@ -116,12 +113,12 @@ if (!location) {
 			<div class="md:col-span-1">
 				<GradientCard
 					colorTheme="amber"
-					title="Quick Actions"
-					icon="<i class='fas fa-bolt'></i>"
+					title="Quick Actions"	
+					icon="zap"
 				>
 					<div class="flex flex-col gap-2">
 						<a href="/locations" class="text-amber-600 hover:text-amber-800 flex items-center">
-							<Icon name="back" class="mr-2" />
+							<Icon name="arrow-left" class="mr-2" />
 							Back to Locations
 						</a>
 						<!-- Additional quick actions could be added here -->
@@ -133,9 +130,9 @@ if (!location) {
 		{location.description && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="amber"
+					colorTheme="blue"
 					title="Description"
-					icon="<i class='fas fa-book'></i>"
+					icon="book-open"
 				>
 					<p class="whitespace-pre-line">{location.description}</p>
 				</GradientCard>
@@ -145,21 +142,21 @@ if (!location) {
 		{location.history && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="purple"
+					colorTheme="indigo"
 					title="History"
-					icon="<i class='fas fa-scroll'></i>"
+					icon="book"
 				>
 					<p class="whitespace-pre-line">{location.history}</p>
 				</GradientCard>
 			</div>
 		)}
 		
-		{location.notableFeatures && location.notableFeatures.length > 0 && (
+		{hasItems(location.notableFeatures) && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="green"
+					colorTheme="purple"
 					title="Notable Features"
-					icon="<i class='fas fa-star'></i>"
+					icon="star"
 				>
 					<ul class="list-disc list-inside space-y-2">
 						{location.notableFeatures.map((feature) => (
@@ -171,16 +168,23 @@ if (!location) {
 					</ul>
 				</GradientCard>
 			</div>
-			)}
+		)}
 		
-		{location.threats && (
+		{hasItems(location.notableFeatures) && location.notableFeatures.filter(f => f.toLowerCase().includes('danger')).length > 0 && (
 			<div class="mb-6">
 				<GradientCard
 					colorTheme="red"
-					title="Threats"
-					icon="<i class='fas fa-exclamation-triangle'></i>"
+					title="Threats & Dangers"
+					icon="triangle-alert"
 				>
-					<p class="whitespace-pre-line">{location.threats}</p>
+					<ul class="list-disc list-inside space-y-2">
+						{location.notableFeatures.filter(f => f.toLowerCase().includes('danger')).map((threat: string) => (
+							<li class="flex items-start">
+								<Icon name="triangle-alert" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
+								<span>{threat}</span>
+							</li>
+						))}
+					</ul>
 				</GradientCard>
 			</div>
 		)}
@@ -188,52 +192,38 @@ if (!location) {
 		{location.secrets && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="purple"
+					colorTheme="red"
 					title="Secrets"
-					icon="<i class='fas fa-user-secret'></i>"
+					icon="triangle-alert"
 				>
 					<p class="whitespace-pre-line">{location.secrets}</p>
 				</GradientCard>
 			</div>
 		)}
 		
-		{location.connections && location.connections.length > 0 && (
+		{hasItemsWithProperty(location.relations, 'otherLocationId') && (
 			<div class="mb-6">
 				<GradientCard
 					colorTheme="cyan"
-					title="Connections"
-					icon="<i class='fas fa-link'></i>"
+					title="Connected Locations"
+					icon="link"
 				>
 					<ul class="list-disc list-inside space-y-2">
-						{location.connections.map((connection) => (
+						{location.relations.map((rel: any) => (
 							<li class="flex items-start">
 								<Icon name="arrow-right" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{connection}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{location.npcs && location.npcs.length > 0 && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="blue"
-					title="Notable Characters"
-					icon="<i class='fas fa-users'></i>"
-				>
-					<ul class="space-y-4">
-						{location.npcs.map((char) => (
-							<li class="flex items-start">
-								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
 								<div>
-									<a href={`/npcs/${char.npc.id}`} class="font-medium hover:text-blue-600 transition-colors">
-										{char.npc.name}
+									<a href={`/locations/${rel.otherLocationId}`} class="font-medium hover:text-cyan-600 transition-colors">
+										{rel.otherLocation?.name || `Connected location ${rel.otherLocationId}`}
 									</a>
-									{char.context && (
+									{hasItems(rel.notes) && (
 										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{char.context}
+											{Array.isArray(rel.notes) ? rel.notes.join('\n') : rel.notes}
+										</p>
+									)}
+									{rel.description && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{rel.description}
 										</p>
 									)}
 								</div>
@@ -244,20 +234,48 @@ if (!location) {
 			</div>
 		)}
 
-		{location.factions && location.factions.length > 0 && (
+		{hasItemsWithProperty(location.npcs, 'npcId') && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="purple"
-					title="Faction Presence"
-					icon="<i class='fas fa-flag'></i>"
+					colorTheme="green"
+					title="NPCs"
+					icon="users"
 				>
 					<ul class="space-y-4">
-						{location.factions.map((faction) => (
+						{location.npcs.map((char: any) => (
+							<li class="flex items-start">
+								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
+								<div>
+									<a href={`/npcs/${char.npcId}`} class="font-medium hover:text-blue-600 transition-colors">
+										{char.npc?.name || 'Unnamed NPC'}
+									</a>
+									{char.context && (
+										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+											{Array.isArray(char.context) ? char.context.join('\n') : char.context}
+										</p>
+									)}
+								</div>
+							</li>
+						))}
+					</ul>
+				</GradientCard>
+			</div>
+		)}
+
+		{hasItemsWithProperty(location.factions, 'factionId') && (
+			<div class="mb-6">
+				<GradientCard
+					colorTheme="amber"
+					title="Factions"
+					icon="flag"
+				>
+					<ul class="space-y-4">
+						{location.factions.map((faction: any) => (
 							<li class="flex items-start">
 								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
 								<div>
-									<a href={`/factions/${faction.faction.id}`} class="font-medium hover:text-purple-600 transition-colors">
-										{faction.faction.name}
+									<a href={`/factions/${faction.factionId}`} class="font-medium hover:text-purple-600 transition-colors">
+										{faction.faction?.name || 'Unnamed faction'}
 									</a>
 									{faction.influence && (
 										<div class="text-sm text-gray-600 dark:text-gray-400">
@@ -266,7 +284,7 @@ if (!location) {
 									)}
 									{faction.description && (
 										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{faction.description}
+											{Array.isArray(faction.description) ? faction.description.join('\n') : faction.description}
 										</p>
 									)}
 								</div>
@@ -277,20 +295,20 @@ if (!location) {
 			</div>
 		)}
 
-		{location.quests && location.quests.length > 0 && (
+		{hasItemsWithProperty(location.quests, 'questId') && (
 			<div class="mb-6">
 				<GradientCard
-					colorTheme="green"
-					title="Related Quests"
-					icon="<i class='fas fa-scroll'></i>"
+					colorTheme="purple"
+					title="Quest Connections"
+					icon="scroll"
 				>
 					<ul class="space-y-4">
-						{location.quests.map((quest) => (
+						{location.quests.map((quest: any) => (
 							<li class="flex items-start">
 								<Icon name="book" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
 								<div>
-									<a href={`/quests/${quest.quest.id}`} class="font-medium hover:text-green-600 transition-colors">
-										{quest.quest.name}
+									<a href={`/quests/${quest.questId}`} class="font-medium hover:text-green-600 transition-colors">
+										{quest.quest?.name || 'Unnamed quest'}
 									</a>
 									{quest.stage && (
 										<div class="text-sm text-gray-600 dark:text-gray-400">
@@ -299,7 +317,7 @@ if (!location) {
 									)}
 									{quest.description && (
 										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{quest.description}
+											{Array.isArray(quest.description) ? quest.description.join('\n') : quest.description}
 										</p>
 									)}
 								</div>
@@ -310,14 +328,14 @@ if (!location) {
 			</div>
 		)}
 
-		{location.areas && location.areas.length > 0 && (
+		{hasItems(location.areas) && (
 			<div class="mb-6">
 				<div class="space-y-6">
 					{location.areas.map((area) => (
 						<GradientCard
 							colorTheme="cyan"
 							title={area.name}
-							icon="<i class='fas fa-map-marker'></i>"
+							icon="map-pin"
 						>
 							<div class="space-y-4">
 								<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -335,12 +353,14 @@ if (!location) {
 									</div>
 								</div>
 
-								<div class="mt-4">
-									<p class="text-sm text-gray-500 mb-2">Description</p>
-									<p class="whitespace-pre-line">{area.description}</p>
-								</div>
+								{area.description && (
+									<div class="mt-4">
+										<p class="text-sm text-gray-500 mb-2">Description</p>
+										<p class="whitespace-pre-line">{area.description}</p>
+									</div>
+								)}
 
-								{area.features && area.features.length > 0 && (
+								{hasItems(area.features) && (
 									<div class="mt-4">
 										<p class="text-sm text-gray-500 mb-2">Notable Features</p>
 										<ul class="list-disc list-inside space-y-1">
@@ -355,7 +375,7 @@ if (!location) {
 								)}
 
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{area.encounters && area.encounters.length > 0 && (
+									{hasItems(area.encounters) && (
 										<div>
 											<p class="text-sm text-gray-500 mb-2">Possible Encounters</p>
 											<ul class="list-disc list-inside space-y-1">
@@ -369,13 +389,13 @@ if (!location) {
 										</div>
 									)}
 
-									{area.creatures && area.creatures.length > 0 && (
+									{hasItems(area.creatures) && (
 										<div>
 											<p class="text-sm text-gray-500 mb-2">Creatures</p>
 											<ul class="list-disc list-inside space-y-1">
 												{area.creatures.map((creature) => (
 													<li class="flex items-start">
-														<Icon name="monster" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
+														<Icon name="ghost" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
 														<span>{creature}</span>
 													</li>
 												))}
@@ -385,13 +405,13 @@ if (!location) {
 								</div>
 
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{area.treasures && area.treasures.length > 0 && (
+									{hasItems(area.treasures) && (
 										<div>
 											<p class="text-sm text-gray-500 mb-2">Treasures</p>
 											<ul class="list-disc list-inside space-y-1">
 												{area.treasures.map((treasure) => (
 													<li class="flex items-start">
-														<Icon name="treasure" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
+														<Icon name="gem" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
 														<span>{treasure}</span>
 													</li>
 												))}
@@ -399,7 +419,7 @@ if (!location) {
 										</div>
 									)}
 
-									{area.loot && area.loot.length > 0 && (
+									{hasItems(area.loot) && (
 										<div>
 											<p class="text-sm text-gray-500 mb-2">Other Loot</p>
 											<ul class="list-disc list-inside space-y-1">
@@ -414,7 +434,7 @@ if (!location) {
 									)}
 								</div>
 
-								{area.plants && area.plants.length > 0 && (
+								{hasItems(area.plants) && (
 									<div>
 										<p class="text-sm text-gray-500 mb-2">Flora</p>
 										<ul class="list-disc list-inside space-y-1">
