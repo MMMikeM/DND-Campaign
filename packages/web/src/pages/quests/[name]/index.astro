@@ -5,6 +5,7 @@ import Icon from "@components/Icon.astro";
 import { getQuest } from "@entities";
 import Layout from "@layout";
 import { hasItems, hasItemsWithProperty, safeArrayAccess } from "@utils/dataHelpers";
+import { getEntityUrl } from "@utils/slugs";
 
 
 export const prerender = false;
@@ -44,7 +45,7 @@ const firstReward = safeArrayAccess(quest.rewards, 0);
 			</div>
 			<div class="flex gap-4">
 				<a 
-					href={`/quests/${quest.id}/edit`} 
+					href={getEntityUrl('quests', quest.name, quest.id, 'edit')} 
 					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
 				>
 					<Icon name="pencil" class="mr-2" />
@@ -84,7 +85,7 @@ const firstReward = safeArrayAccess(quest.rewards, 0);
 								<p class="text-sm text-gray-500">Quest Giver</p>
 								<p class="font-medium flex items-center">
 									<Icon name="user" class="mr-1" />
-									<a href={`/npcs/${questGiver.npcId}`}>
+									<a href={getEntityUrl('npcs', questGiver.npc?.name)}>
 										{questGiver.npc?.name || 'Quest Giver'}
 									</a>
 								</p>
@@ -95,8 +96,11 @@ const firstReward = safeArrayAccess(quest.rewards, 0);
 								<p class="text-sm text-gray-500">Main Location</p>
 								<p class="font-medium flex items-center">
 									<Icon name="map-pin" class="mr-1" />
-									<a href={`/locations/${primaryLocation.locationId}`}>
-										{primaryLocation.location?.name || 'Main Location'}
+									<a 
+										href={getEntityUrl('locations', primaryLocation.location.name)} 
+										class="text-white underline hover:no-underline"
+									>
+										{primaryLocation.location.name}
 									</a>
 								</p>
 							</div>
@@ -111,7 +115,7 @@ const firstReward = safeArrayAccess(quest.rewards, 0);
 							</div>
 						)}
 						{quest.timeframe && (
-							<div>
+							<div class="col-span-2">
 								<p class="text-sm text-gray-500">Timeframe</p>
 								<p class="font-medium flex items-center">
 									<Icon name="clock" class="mr-1" />
@@ -140,350 +144,270 @@ const firstReward = safeArrayAccess(quest.rewards, 0);
 			</div>
 		</div>
 		
-		{quest.description && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="green"
-					title="Description"
-					icon="book-open"
-				>
-					<p class="whitespace-pre-line">{Array.isArray(quest.description) ? quest.description.join('\n') : quest.description}</p>
-				</GradientCard>
-			</div>
+		{hasItems(quest.description) && (
+			<GradientCard title="Description" icon="file-text" colorTheme="blue">
+				<div class="space-y-4">
+					{quest.description?.map((paragraph: string) => (
+						<p>{paragraph}</p>
+					))}
+				</div>
+			</GradientCard>
 		)}
 		
 		{hasItems(quest.objectives) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="blue"
-					title="Objectives"
-					icon="target"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{quest.objectives?.map((objective) => (
-							<li class="flex items-start">
-								<Icon name="chevron-right" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{objective}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+			<GradientCard title="Objectives" icon="check" colorTheme="green">
+				<ul class="list-disc list-inside space-y-2 ml-6">
+					{quest.objectives?.map((objective: string) => (
+						<li>{objective}</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 		
 		{hasItems(quest.stages) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="blue"
-					title="Quest Stages"
-					icon="list-ordered"
-				>
-					<div class="space-y-4">
-						{quest.stages.map((stage, index) => (
-							<div class="flex items-start">
-								<div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-semibold">
-									{stage.stage}
-								</div>
-								<div class="ml-4">
-									<h3 class="font-medium text-gray-900 dark:text-gray-100">{stage.title}</h3>
-									{stage.description && (
-										<p class="text-gray-600 dark:text-gray-300 mt-1">
-											{Array.isArray(stage.description) ? stage.description.join('\n') : stage.description}
-										</p>
-									)}
-									{stage.objectives && hasItems(stage.objectives) && (
-										<div class="mt-2">
-											<p class="text-sm text-gray-500">Stage Objectives:</p>
-											<ul class="list-disc list-inside mt-1">
-												{stage.objectives.map((obj: string) => (
-													<li class="text-gray-600">{obj}</li>
-												))}
-											</ul>
-										</div>
-									)}
-								</div>
+			<GradientCard title="Quest Stages" icon="git-branch" colorTheme="green">
+				<div class="space-y-6">
+					{quest.stages.sort((a: any, b: any) => a.stage - b.stage).map((stage: any) => (
+						<div class="relative border-l-2 border-green-500 pl-6 pb-6">
+							<div class="absolute -left-3 top-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+								{stage.stage}
 							</div>
-						))}
-					</div>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItems(quest.stages) && quest.stages.some(stage => hasItems(stage.completionPaths)) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="green"
-					title="Completion Paths"
-					icon="check"
-				>
-					<div class="space-y-6">
-						{quest.stages?.filter(stage => hasItems(stage.completionPaths)).map((stage) => (
-							<div class="border-l-4 border-green-400 pl-4">
-								<div class="flex items-center">
-									<div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-300 text-sm font-medium">
-										{stage.stage}
-									</div>
-									<h3 class="ml-2 font-medium text-gray-900 dark:text-gray-100">{stage.title || 'Completion Path'}</h3>
-								</div>
-								<p class="mt-2 text-gray-600 dark:text-gray-300">{Array.isArray(stage.completionPaths) ? stage.completionPaths.join('\n') : stage.completionPaths}</p>
-							</div>
-						))}
-					</div>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItems(quest.stages) && quest.stages.some(stage => hasItems(stage.decisions)) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Decision Points"
-					icon="git-branch"
-				>
-					<div class="space-y-4">
-						{quest.stages.filter(stage => hasItems(stage.decisions)).map((stage) => (
-							<div class="flex items-start">
-								<div class="flex-shrink-0 h-6 w-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300 text-sm font-medium">
-									{stage.stage}
-								</div>
-								<div class="ml-3">
-									<h4 class="font-medium">{stage.title || `Stage ${stage.stage}`}</h4>
-									{stage.decisions && stage.decisions.map((decision: any) => (
-										<p class="text-gray-600 dark:text-gray-300 mt-2">{decision.description}</p>
+							
+							<h4 class="text-xl font-semibold mb-2">{stage.title}</h4>
+							
+							{stage.description && stage.description.length > 0 && (
+								<div class="mb-4 space-y-2">
+									{stage.description.map((para: string) => (
+										<p>{para}</p>
 									))}
 								</div>
-							</div>
-						))}
-					</div>
-				</GradientCard>
-			</div>
+							)}
+							
+							{stage.objectives && stage.objectives.length > 0 && (
+								<div class="mb-4">
+									<h5 class="font-medium mb-2">Objectives</h5>
+									<ul class="list-disc list-inside ml-4 space-y-1">
+										{stage.objectives.map((objective: string) => (
+											<li>{objective}</li>
+										))}
+									</ul>
+								</div>
+							)}
+							
+							{stage.locations && stage.locations.length > 0 && (
+								<div class="mb-4">
+									<h5 class="font-medium mb-2">Locations</h5>
+									<ul class="list-disc list-inside ml-4 space-y-1">
+										{stage.locations.map((location: string) => (
+											<li>{location}</li>
+										))}
+									</ul>
+								</div>
+							)}
+							
+							{stage.encounters && stage.encounters.length > 0 && (
+								<div class="mb-4">
+									<h5 class="font-medium mb-2">Encounters</h5>
+									<ul class="list-disc list-inside ml-4 space-y-1">
+										{stage.encounters.map((encounter: string) => (
+											<li>{encounter}</li>
+										))}
+									</ul>
+								</div>
+							)}
+							
+							{stage.completionPaths && stage.completionPaths.length > 0 && (
+								<div>
+									<h5 class="font-medium mb-2">Completion Options</h5>
+									<ul class="list-disc list-inside ml-4 space-y-1">
+										{stage.completionPaths.map((path: string) => (
+											<li>{path}</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</div>
+					))}
+				</div>
+			</GradientCard>
 		)}
 
-		{hasItems(quest.stages) && quest.stages.some(stage => hasItems(stage.decisions) && stage.decisions.some(d => hasItems(d.options))) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="Decision Choices"
-					icon="list-checks"
-				>
-					<div class="space-y-6">
-						{quest.stages.filter(stage => hasItems(stage.decisions) && stage.decisions.some(d => hasItems(d.options))).map((stage) => (
-							<div class="border-l-4 border-amber-400 pl-4">
-								<div class="flex items-center">
-									<div class="flex-shrink-0 h-6 w-6 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-600 dark:text-amber-300 text-sm font-medium">
-										{stage.stage}
+		{quest.stages && quest.stages.some((stage: any) => hasItems(stage.decisions)) && (
+			<GradientCard title="Decision Points" icon="git-merge" colorTheme="red">
+				<div class="space-y-6">
+					{quest.stages.filter((stage: any) => hasItems(stage.decisions)).map((stage: any) => 
+						stage.decisions.map((decision: any, index: number) => (
+							<div class="border-l-4 border-red-500 pl-4 py-2">
+								<h4 class="text-lg font-semibold mb-2">Decision #{index + 1} (Stage {stage.stage})</h4>
+								
+								{decision.description && decision.description.length > 0 && (
+									<div class="mb-4 space-y-2">
+										{Array.isArray(decision.description) 
+											? decision.description.map((para: string) => (
+												<p>{para}</p>
+											))
+											: <p>{decision.description}</p>
+										}
 									</div>
-									<h3 class="ml-2 font-medium text-gray-900 dark:text-gray-100">{stage.title || `Stage ${stage.stage}`}</h3>
-								</div>
-								{stage.decisions && stage.decisions.map((decision: any) => (
-									<div class="mt-2">
-										<p class="font-medium">{decision.description}</p>
-										{hasItems(decision.options) && (
-											<ul class="list-disc list-inside mt-2">
-												{decision.options.map((option: string) => (
-													<li class="text-gray-600 dark:text-gray-300">{option}</li>
-												))}
-											</ul>
-										)}
-										{hasItems(decision.consequences) && (
-											<div class="mt-2">
-												<p class="text-sm font-medium text-gray-500">Consequences:</p>
-												<p class="text-gray-600 dark:text-gray-300">{Array.isArray(decision.consequences) ? decision.consequences.join('\n') : decision.consequences}</p>
-											</div>
-										)}
+								)}
+								
+								{decision.options && decision.options.length > 0 && (
+									<div class="mb-4">
+										<h5 class="font-medium mb-2">Options</h5>
+										<ul class="list-disc list-inside ml-4 space-y-1">
+											{decision.options.map((option: string) => (
+												<li>{option}</li>
+											))}
+										</ul>
 									</div>
-								))}
+								)}
+								
+								{decision.consequences && decision.consequences.length > 0 && (
+									<div>
+										<h5 class="font-medium mb-2">Consequences</h5>
+										<ul class="list-disc list-inside ml-4 space-y-1">
+											{Array.isArray(decision.consequences)
+												? decision.consequences.map((consequence: string) => (
+													<li>{consequence}</li>
+												))
+												: <li>{decision.consequences}</li>
+											}
+										</ul>
+									</div>
+								)}
 							</div>
-						))}
-					</div>
-				</GradientCard>
-			</div>
+						))
+					)}
+				</div>
+			</GradientCard>
 		)}
-		
+
 		{hasItems(quest.rewards) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="Rewards"
-					icon="gem"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{quest.rewards?.map((reward: string) => (
-							<li class="flex items-start">
-								<Icon name="gem" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{reward}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+			<GradientCard title="Rewards" icon="award" colorTheme="amber">
+				<ul class="list-disc list-inside space-y-2 ml-4">
+					{quest.rewards?.map((reward: string) => (
+						<li>{reward}</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 
 		{hasItems(quest.clues) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="pink"
-					title="Clues"
-					icon="search"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{quest.clues.map((clue: any) => (
-							<li class="flex items-start">
-								<Icon name="search" size="sm" color="pink" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<span>{clue.description || clue}</span>
-									{clue.pointsTo && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											Points to: {Array.isArray(clue.pointsTo) ? clue.pointsTo.join(', ') : clue.pointsTo}
-										</p>
-									)}
-									{clue.discoveryCondition && (
-										<p class="text-sm text-gray-600 dark:text-gray-400">
-											Discovery: {Array.isArray(clue.discoveryCondition) ? clue.discoveryCondition.join('\n') : clue.discoveryCondition}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+			<GradientCard title="Clues" icon="search" colorTheme="indigo">
+				<ul class="list-disc list-inside space-y-2 ml-6">
+					{quest.clues?.map((clue: string) => (
+						<li>{clue}</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 
 		{hasItems(quest.hooks) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Hooks"
-					icon="link"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{quest.hooks?.map((hook: string) => (
-							<li class="flex items-start">
-								<Icon name="link" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{hook}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+			<GradientCard title="Hooks" icon="anchor" colorTheme="purple">
+				<ul class="list-disc list-inside space-y-2 ml-6">
+					{quest.hooks?.map((hook: string) => (
+						<li>{hook}</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 		
 		{hasItems(quest.prerequisites) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="gray"
-					title="Prerequisites"
-					icon="info"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{quest.prerequisites?.map((prereq: string) => (
-							<li class="flex items-start">
-								<Icon name="info" size="sm" color="gray" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{prereq}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+			<GradientCard title="Prerequisites" icon="info" colorTheme="amber">
+				<ul class="list-disc list-inside space-y-2 ml-6">
+					{quest.prerequisites?.map((prereq: string) => (
+						<li>{prereq}</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 
-		{hasItemsWithProperty(quest.npcs, 'npcId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="blue"
-					title="Key Characters"
-					icon="users"
-				>
-					<ul class="space-y-4">
-						{quest.npcs.map((char: any) => (
-							<li class="flex items-start">
-								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/npcs/${char.npcId}`} class="font-medium hover:text-blue-600 transition-colors">
-										{char.npc?.name || 'Unknown character'}
-									</a>
-									<div class="text-sm text-gray-600 dark:text-gray-400">
-										{char.role && <span class="mr-2">{char.role}</span>}
-										{char.importance && <span class="text-gray-400">({char.importance})</span>}
-									</div>
-									{hasItems(char.notes) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(char.notes) ? char.notes.join('\n') : char.notes}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+		{hasItemsWithProperty(quest.npcs, 'npc') && (
+			<GradientCard title="Key NPCs" icon="users" colorTheme="blue">
+				<div class="space-y-3">
+					{quest.npcs.map((npcRel: any) => (
+						<div class="flex justify-between items-center">
+							<a 
+								href={getEntityUrl('npcs', npcRel.npc.name)} 
+								class="text-blue-600 dark:text-blue-400 hover:underline"
+							>
+								{npcRel.npc.name}
+							</a>
+							{npcRel.role && (
+								<span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full capitalize">
+									{npcRel.role}
+								</span>
+							)}
+						</div>
+					))}
+				</div>
+			</GradientCard>
 		)}
 
-		{hasItemsWithProperty(quest.locations, 'locationId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="Quest Locations"
-					icon="map-pin"
-				>
-					<ul class="space-y-4">
-						{quest.locations.map((loc: any) => (
-							<li class="flex items-start">
-								<Icon name="map-pin" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/locations/${loc.locationId}`} class="font-medium hover:text-amber-600 transition-colors">
-										{loc.location?.name || 'Unknown location'}
-									</a>
-									{loc.stage && (
-										<div class="text-sm text-gray-600 dark:text-gray-400">
-											Stage: {loc.stage}
-										</div>
-									)}
-									{hasItems(loc.description) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(loc.description) ? loc.description.join('\n') : loc.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+		{hasItemsWithProperty(quest.locations, 'location') && (
+			<GradientCard title="Locations" icon="map-pin" colorTheme="green">
+				<ul class="space-y-3">
+					{quest.locations.map((locationRel: any) => (
+						<li>
+							<a 
+								href={getEntityUrl('locations', locationRel.location.name)} 
+								class="text-blue-600 dark:text-blue-400 hover:underline"
+							>
+								{locationRel.location.name}
+							</a>
+						</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 
-		{hasItemsWithProperty(quest.factions, 'factionId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Involved Factions"
-					icon="flag"
-				>
-					<ul class="space-y-4">
-						{quest.factions.map((faction: any) => (
-							<li class="flex items-start">
-								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/factions/${faction.factionId}`} class="font-medium hover:text-purple-600 transition-colors">
-										{faction.faction?.name || 'Unknown faction'}
-									</a>
-									{faction.role && (
-										<div class="text-sm text-gray-600 dark:text-gray-400">
-											Role: {faction.role}
-										</div>
-									)}
-									{hasItems(faction.interest) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(faction.interest) ? faction.interest.join('\n') : faction.interest}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
+		{hasItemsWithProperty(quest.factions, 'faction') && (
+			<GradientCard title="Involved Factions" icon="flag" colorTheme="indigo">
+				<div class="space-y-3">
+					{quest.factions.map((factionRel: any) => (
+						<div>
+							<div class="flex justify-between items-center">
+								<a 
+									href={getEntityUrl('factions', factionRel.faction.name)} 
+									class="text-blue-600 dark:text-blue-400 hover:underline"
+								>
+									{factionRel.faction.name}
+								</a>
+								{factionRel.role && (
+									<span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full capitalize">
+										{factionRel.role}
+									</span>
+								)}
+							</div>
+							{factionRel.interest && factionRel.interest.length > 0 && (
+								<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{factionRel.interest[0]}</p>
+							)}
+						</div>
+					))}
+				</div>
+			</GradientCard>
+		)}
+
+		{hasItemsWithProperty(quest.relatedQuests, 'quest') && (
+			<GradientCard title="Related Quests" icon="git-pull-request" colorTheme="purple">
+				<ul class="space-y-3">
+					{quest.relatedQuests.map((questRel: any) => (
+						<li class="flex justify-between items-center">
+							<a 
+								href={getEntityUrl('quests', questRel.quest.name)} 
+								class="text-blue-600 dark:text-blue-400 hover:underline"
+							>
+								{questRel.quest.name}
+							</a>
+							{questRel.isRequired && (
+								<span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-full">
+									Required
+								</span>
+							)}
+						</li>
+					))}
+				</ul>
+			</GradientCard>
 		)}
 	</div>
 </Layout>

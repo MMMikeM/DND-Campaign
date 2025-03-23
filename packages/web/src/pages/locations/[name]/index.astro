@@ -3,17 +3,16 @@ import GradientCard from "@components/cards/GradientCard.astro";
 import Icon from "@components/Icon.astro";
 import { getLocation } from "@entities";
 import Layout from "@layout";
-import Button from "@components/Button.astro";
 import { hasItems, hasItemsWithProperty, safeArrayAccess } from "@utils/dataHelpers";
-
+import { getEntityUrl } from "@utils/slugs";
 
 export const prerender = false;
 
-if (!Astro.params.name) {
+const { name } = Astro.params;
+
+if (!name) {
 	return Astro.redirect('/locations');
 }
-
-const { name } = Astro.params;
 
 const location = await getLocation(name);
 
@@ -21,467 +20,236 @@ if (!location) {
 	return Astro.redirect('/404');
 }
 
-// Get dominant faction if any
-const dominantFaction = safeArrayAccess(
-	location.factions?.filter(f => f.influence === 'dominant'), 
-	0
-);
+// Get primary NPC if any
+const primaryNpc = safeArrayAccess(location.npcs, 0);
 
-// Get first area for climate info
-const firstArea = safeArrayAccess(location.areas, 0);
+// Get primary faction if any
+const primaryFaction = safeArrayAccess(location.factions, 0);
 ---
 
 <Layout title={location.name}>
 	<div class="max-w-4xl mx-auto">
 		<div class="flex justify-between items-center mb-8">
 			<div class="flex items-center">
-				<Icon name="map-pin" size="xl" color="amber" />
-				<h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-					{location.name || 'Location Details'}
-				</h1>
+				<Icon name="map" size="lg" color="green" class="mr-3" />
+				<h1 class="text-4xl font-bold">{location.name}</h1>
 			</div>
 			<div class="flex gap-4">
-				<Button 
-					href={`/locations/${location.name}/edit`}
-					icon="pencil"
-					size="sm"
-					intent="secondary"
+				<a 
+					href={getEntityUrl('locations', location.name, location.id, 'edit')} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
 				>
+					<Icon name="pencil" class="mr-2" />
 					Edit
-				</Button>
-				<button
-					type="button"
-					data-location-id={location.id}
-					class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 delete-location flex items-center"
-				>
-					<Icon name="trash" class="mr-2" />
-					Delete
-				</button>
+				</a>
 			</div>
 		</div>
 		
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-			<div class="md:col-span-2">
-				<GradientCard
-					colorTheme="amber"
-					title="Basic Information"
-					icon="info"
-				>
-					<div class="grid grid-cols-2 gap-6">
-						<div>
-							<p class="text-sm text-gray-500">Type</p>
-							<p class="font-medium">{location.type}</p>
+		<!-- Location Info Cards -->
+		<div class="grid grid-cols-3 gap-6 mb-10">
+			<GradientCard title="Type" icon="tag" colorTheme="blue">
+				<p class="capitalize">{location.type}</p>
+			</GradientCard>
+
+			<GradientCard title="Region" icon="globe" colorTheme="green">
+				<p>{location.region}</p>
+			</GradientCard>
+
+			<GradientCard title="Danger Level" icon="shield" colorTheme="red">
+				<p class="capitalize">{location.dangerLevel}</p>
+			</GradientCard>
+		</div>
+
+		<!-- Main Location Details -->
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+			<!-- Left Column - Core Details -->
+			<div class="md:col-span-2 space-y-6">
+				{location.description && (
+					<GradientCard title="Description" icon="file-text" colorTheme="blue">
+						<div class="space-y-4">
+							{location.description.map((paragraph: string) => (
+								<p>{paragraph}</p>
+							))}
 						</div>
-						{location.region && (
-							<div>
-								<p class="text-sm text-gray-500">Region</p>
-								<p class="font-medium">{location.region}</p>
-							</div>
-						)}
-						{location.dangerLevel && (
-							<div>
-								<p class="text-sm text-gray-500">Danger Level</p>
-								<p class="font-medium flex items-center">
-									{location.dangerLevel === "high" && <Icon name="circle-alert" color="red" class="mr-1" />}
-									{location.dangerLevel === "moderate" && <Icon name="circle-alert" color="yellow" class="mr-1" />}
-									{location.dangerLevel === "low" && <Icon name="info" color="blue" class="mr-1" />}
-									{location.dangerLevel}
-								</p>
-							</div>
-						)}
-						{dominantFaction && (
-							<div>
-								<p class="text-sm text-gray-500">Faction Control</p>
-								<p class="font-medium flex items-center">
-									<Icon name="flag" class="mr-1" />
-									<a href={`/factions/${dominantFaction.factionId}`}>
-										{dominantFaction.faction?.name || 'Dominant faction'}
+					</GradientCard>
+				)}
+
+				{location.history && (
+					<GradientCard title="History" icon="book-open" colorTheme="amber">
+						<p>{location.history}</p>
+					</GradientCard>
+				)}
+
+				{hasItems(location.notableFeatures) && (
+					<GradientCard title="Notable Features" icon="eye" colorTheme="purple">
+						<ul class="list-disc list-inside space-y-2 ml-6">
+							{location.notableFeatures.map((feature: string) => (
+								<li>{feature}</li>
+							))}
+						</ul>
+					</GradientCard>
+				)}
+
+				{/* Related Quests */}
+				{hasItemsWithProperty(location.quests, 'quest') && (
+					<GradientCard title="Quests" icon="file-text" colorTheme="green">
+						<div class="space-y-4">
+							{location.quests.map((questRel: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<a 
+										href={getEntityUrl('quests', questRel.quest.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{questRel.quest.name}
 									</a>
-								</p>
-							</div>
-						)}
-						{firstArea?.climate && (
-							<div>
-								<p class="text-sm text-gray-500">Climate</p>
-								<p class="font-medium">{firstArea.climate}</p>
-							</div>
-						)}
-					</div>
-				</GradientCard>
+									{questRel.description && questRel.description.length > 0 && (
+										<p class="text-gray-700 mt-1">{questRel.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				{/* NPCs */}
+				{hasItemsWithProperty(location.npcs, 'npc') && (
+					<GradientCard title="Notable Characters" icon="users" colorTheme="blue">
+						<div class="space-y-4">
+							{location.npcs.map((npcRel: any) => (
+								<div class="border-l-4 border-blue-500 pl-4 py-1.5">
+									<a 
+										href={getEntityUrl('npcs', npcRel.npc.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{npcRel.npc.name}
+									</a>
+									{npcRel.context && npcRel.context.length > 0 && (
+										<p class="text-gray-700 mt-1">{npcRel.context[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				{/* Connected Locations */}
+				{hasItemsWithProperty(location.relations, 'location') && (
+					<GradientCard title="Connected Locations" icon="map" colorTheme="green">
+						<div class="space-y-4">
+							{location.relations.map((relation: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-1.5">
+									<a 
+										href={getEntityUrl('locations', relation.location.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{relation.location.name}
+									</a>
+									{relation.description && relation.description.length > 0 && (
+										<p class="text-gray-700 mt-1">{relation.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				{hasItems(location.secrets) && (
+					<GradientCard title="Secrets" icon="lock" colorTheme="red" hasSecret={true}>
+						<ul class="list-disc list-inside space-y-2 ml-6">
+							{location.secrets.map((secret: string) => (
+								<li>{secret}</li>
+							))}
+						</ul>
+					</GradientCard>
+				)}
 			</div>
-			
-			<div class="md:col-span-1">
-				<GradientCard
-					colorTheme="amber"
-					title="Quick Actions"	
-					icon="zap"
-				>
-					<div class="flex flex-col gap-2">
-						<a href="/locations" class="text-amber-600 hover:text-amber-800 flex items-center">
-							<Icon name="arrow-left" class="mr-2" />
-							Back to Locations
-						</a>
-						<!-- Additional quick actions could be added here -->
-					</div>
-				</GradientCard>
+
+			<!-- Right Column - Secondary Details -->
+			<div class="space-y-6">
+				{/* Primary Faction */}
+				{primaryFaction?.faction && (
+					<GradientCard title="Primary Faction" icon="users" colorTheme="blue">
+						<div class="flex flex-col items-center text-center">
+							<Icon name="flag" size="lg" class="mb-2" />
+							<a 
+								href={getEntityUrl('factions', primaryFaction.faction.name)} 
+								class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+							>
+								{primaryFaction.faction.name}
+							</a>
+							{primaryFaction.influence && (
+								<span class="mt-2 text-xs px-3 py-1 bg-blue-900 text-blue-200 rounded-full capitalize">
+									{primaryFaction.influence} influence
+								</span>
+							)}
+						</div>
+					</GradientCard>
+				)}
+
+				{/* Other Factions */}
+				{hasItemsWithProperty(location.factions, 'faction') && location.factions.length > 1 && (
+					<GradientCard title="Other Factions" icon="flag" colorTheme="indigo">
+						<ul class="space-y-3">
+							{location.factions.slice(1).map((factionRel: any) => (
+								<li class="flex justify-between items-center">
+									<a 
+										href={getEntityUrl('factions', factionRel.faction.name)} 
+										class="text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{factionRel.faction.name}
+									</a>
+									{factionRel.influence && (
+										<span class="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded-full capitalize">
+											{factionRel.influence}
+										</span>
+									)}
+								</li>
+							))}
+						</ul>
+					</GradientCard>
+				)}
+
+				{/* Areas */}
+				{hasItems(location.areas) && (
+					<GradientCard title="Areas" icon="layout-grid" colorTheme="green">
+						<div class="space-y-4">
+							{location.areas.map((area: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<h3 class="font-semibold text-lg">{area.name}</h3>
+									<div class="text-gray-600 dark:text-gray-400 text-sm mb-2">
+										<span class="inline-block px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full capitalize">{area.areaType}</span>
+									</div>
+									{area.description && area.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300">{area.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				{/* Encounters */}
+				{hasItems(location.encounters) && (
+					<GradientCard title="Encounters" icon="zap" colorTheme="red">
+						<div class="space-y-4">
+							{location.encounters.map((encounter: any) => (
+								<div class="border-l-4 border-red-500 pl-4 py-2">
+									<h3 class="font-semibold text-lg">{encounter.name}</h3>
+									<div class="text-gray-600 dark:text-gray-400 text-sm mb-2 flex items-center gap-2">
+										<span class="inline-block px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full capitalize">{encounter.encounterType}</span>
+										{encounter.difficulty && (
+											<span class="text-gray-700 dark:text-gray-300">Difficulty: {encounter.difficulty}</span>
+										)}
+									</div>
+									{encounter.description && encounter.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300">{encounter.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
 			</div>
 		</div>
-		
-		{location.description && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="blue"
-					title="Description"
-					icon="book-open"
-				>
-					<p class="whitespace-pre-line">{location.description}</p>
-				</GradientCard>
-			</div>
-		)}
-		
-		{location.history && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="indigo"
-					title="History"
-					icon="book"
-				>
-					<p class="whitespace-pre-line">{location.history}</p>
-				</GradientCard>
-			</div>
-		)}
-		
-		{hasItems(location.notableFeatures) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Notable Features"
-					icon="star"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{location.notableFeatures.map((feature) => (
-							<li class="flex items-start">
-								<Icon name="star" size="sm" color="yellow" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{feature}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-		
-		{hasItems(location.notableFeatures) && location.notableFeatures.filter(f => f.toLowerCase().includes('danger')).length > 0 && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="red"
-					title="Threats & Dangers"
-					icon="triangle-alert"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{location.notableFeatures.filter(f => f.toLowerCase().includes('danger')).map((threat: string) => (
-							<li class="flex items-start">
-								<Icon name="triangle-alert" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
-								<span>{threat}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-		
-		{location.secrets && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="red"
-					title="Secrets"
-					icon="triangle-alert"
-				>
-					<p class="whitespace-pre-line">{location.secrets}</p>
-				</GradientCard>
-			</div>
-		)}
-		
-		{hasItemsWithProperty(location.relations, 'otherLocationId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="cyan"
-					title="Connected Locations"
-					icon="link"
-				>
-					<ul class="list-disc list-inside space-y-2">
-						{location.relations.map((rel: any) => (
-							<li class="flex items-start">
-								<Icon name="arrow-right" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/locations/${rel.otherLocationId}`} class="font-medium hover:text-cyan-600 transition-colors">
-										{rel.otherLocation?.name || `Connected location ${rel.otherLocationId}`}
-									</a>
-									{hasItems(rel.notes) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(rel.notes) ? rel.notes.join('\n') : rel.notes}
-										</p>
-									)}
-									{rel.description && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{rel.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(location.npcs, 'npcId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="green"
-					title="NPCs"
-					icon="users"
-				>
-					<ul class="space-y-4">
-						{location.npcs.map((char: any) => (
-							<li class="flex items-start">
-								<Icon name="user" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/npcs/${char.npcId}`} class="font-medium hover:text-blue-600 transition-colors">
-										{char.npc?.name || 'Unnamed NPC'}
-									</a>
-									{char.context && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(char.context) ? char.context.join('\n') : char.context}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(location.factions, 'factionId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="Factions"
-					icon="flag"
-				>
-					<ul class="space-y-4">
-						{location.factions.map((faction: any) => (
-							<li class="flex items-start">
-								<Icon name="flag" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/factions/${faction.factionId}`} class="font-medium hover:text-purple-600 transition-colors">
-										{faction.faction?.name || 'Unnamed faction'}
-									</a>
-									{faction.influence && (
-										<div class="text-sm text-gray-600 dark:text-gray-400">
-											Influence: {faction.influence}
-										</div>
-									)}
-									{faction.description && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(faction.description) ? faction.description.join('\n') : faction.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(location.quests, 'questId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Quest Connections"
-					icon="scroll"
-				>
-					<ul class="space-y-4">
-						{location.quests.map((quest: any) => (
-							<li class="flex items-start">
-								<Icon name="book" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/quests/${quest.questId}`} class="font-medium hover:text-green-600 transition-colors">
-										{quest.quest?.name || 'Unnamed quest'}
-									</a>
-									{quest.stage && (
-										<div class="text-sm text-gray-600 dark:text-gray-400">
-											Stage: {quest.stage}
-										</div>
-									)}
-									{quest.description && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(quest.description) ? quest.description.join('\n') : quest.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItems(location.areas) && (
-			<div class="mb-6">
-				<div class="space-y-6">
-					{location.areas.map((area) => (
-						<GradientCard
-							colorTheme="cyan"
-							title={area.name}
-							icon="map-pin"
-						>
-							<div class="space-y-4">
-								<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-									<div>
-										<p class="text-sm text-gray-500">Area Type</p>
-										<p class="font-medium">{area.areaType}</p>
-									</div>
-									<div>
-										<p class="text-sm text-gray-500">Environment</p>
-										<p class="font-medium">{area.environment}</p>
-									</div>
-									<div>
-										<p class="text-sm text-gray-500">Terrain</p>
-										<p class="font-medium">{area.terrain}</p>
-									</div>
-								</div>
-
-								{area.description && (
-									<div class="mt-4">
-										<p class="text-sm text-gray-500 mb-2">Description</p>
-										<p class="whitespace-pre-line">{area.description}</p>
-									</div>
-								)}
-
-								{hasItems(area.features) && (
-									<div class="mt-4">
-										<p class="text-sm text-gray-500 mb-2">Notable Features</p>
-										<ul class="list-disc list-inside space-y-1">
-											{area.features.map((feature) => (
-												<li class="flex items-start">
-													<Icon name="star" size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
-													<span>{feature}</span>
-												</li>
-											))}
-										</ul>
-									</div>
-								)}
-
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{hasItems(area.encounters) && (
-										<div>
-											<p class="text-sm text-gray-500 mb-2">Possible Encounters</p>
-											<ul class="list-disc list-inside space-y-1">
-												{area.encounters.map((encounter) => (
-													<li class="flex items-start">
-														<Icon name="sword" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
-														<span>{encounter}</span>
-													</li>
-												))}
-											</ul>
-										</div>
-									)}
-
-									{hasItems(area.creatures) && (
-										<div>
-											<p class="text-sm text-gray-500 mb-2">Creatures</p>
-											<ul class="list-disc list-inside space-y-1">
-												{area.creatures.map((creature) => (
-													<li class="flex items-start">
-														<Icon name="ghost" size="sm" color="purple" class="mr-2 mt-1 flex-shrink-0" />
-														<span>{creature}</span>
-													</li>
-												))}
-											</ul>
-										</div>
-									)}
-								</div>
-
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{hasItems(area.treasures) && (
-										<div>
-											<p class="text-sm text-gray-500 mb-2">Treasures</p>
-											<ul class="list-disc list-inside space-y-1">
-												{area.treasures.map((treasure) => (
-													<li class="flex items-start">
-														<Icon name="gem" size="sm" color="amber" class="mr-2 mt-1 flex-shrink-0" />
-														<span>{treasure}</span>
-													</li>
-												))}
-											</ul>
-										</div>
-									)}
-
-									{hasItems(area.loot) && (
-										<div>
-											<p class="text-sm text-gray-500 mb-2">Other Loot</p>
-											<ul class="list-disc list-inside space-y-1">
-												{area.loot.map((item) => (
-													<li class="flex items-start">
-														<Icon name="package" size="sm" color="gray" class="mr-2 mt-1 flex-shrink-0" />
-														<span>{item}</span>
-													</li>
-												))}
-											</ul>
-										</div>
-									)}
-								</div>
-
-								{hasItems(area.plants) && (
-									<div>
-										<p class="text-sm text-gray-500 mb-2">Flora</p>
-										<ul class="list-disc list-inside space-y-1">
-											{area.plants.map((plant) => (
-												<li class="flex items-start">
-													<Icon name="leaf" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
-													<span>{plant}</span>
-												</li>
-											))}
-										</ul>
-									</div>
-								)}
-							</div>
-						</GradientCard>
-					))}
-				</div>
-			</div>
-		)}
 	</div>
 </Layout>
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const deleteButton = document.querySelector('.delete-location');
-		if (!deleteButton) return;
-		
-		deleteButton.addEventListener('click', async () => {
-			const locationId = deleteButton.getAttribute('data-location-id');
-			if (!locationId) return;
-
-			if (!confirm('Are you sure you want to delete this location?')) return;
-
-			try {
-				const response = await fetch(`/api/locations/${locationId}`, {
-					method: 'DELETE'
-				});
-
-				if (response.ok) {
-					window.location.href = '/locations';
-				} else {
-					const data = await response.json();
-					throw new Error(data.error || 'Failed to delete location');
-				}
-			} catch (error) {
-				console.error('Error:', error);
-				alert('An error occurred while deleting the location');
-			}
-		});
-	});
-</script>

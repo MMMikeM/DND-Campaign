@@ -1,5 +1,5 @@
 ---
-import LocationCard from "@components/cards/LocationCard.astro";
+import EntityCard from "@components/cards/EntityCard.astro";
 import EntityListing from "@components/EntityListing.astro";
 import { getAllLocations } from "@entities";
 import Layout from "@layout";
@@ -14,8 +14,9 @@ const locations = await getAllLocations()
     title="Locations"
     >
   {locations.map(location => 
-      <LocationCard
-      location={location} />
+      <EntityCard
+        entity={location}
+        entityType="location" />
 )}  
   </EntityListing>
 </Layout>
