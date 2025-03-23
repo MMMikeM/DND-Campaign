@@ -6,6 +6,7 @@ import { getFaction } from "@entities";
 import Layout from "@layout";
 import Button from "@components/Button.astro";
 import { hasItems, hasItemsWithProperty, safeArrayAccess } from "@utils/dataHelpers";
+import { getEntityUrl } from "@utils/slugs";
 
 export const prerender = false;
 
@@ -21,578 +22,241 @@ if (!faction) {
 	return Astro.redirect('/404');
 }
 
-// Get leader NPC if any
-const leaderNPC = safeArrayAccess(
-	faction.members?.filter(member => member.status === 'leader'),
+// Get first leader, if any
+const firstLeader = safeArrayAccess(
+	faction.members?.filter(member => member.status === 'leader'), 
 	0
 );
 
-// Get headquarters location if any
-const headquarters = safeArrayAccess(
-	faction.locations,
-	0
-);
+// Get first location, if any
+const firstLocation = safeArrayAccess(faction.locations, 0);
 ---
 
 <Layout title={faction.name}>
 	<div class="max-w-4xl mx-auto">
-		<div class="mb-6">
-			<div class="flex flex-wrap justify-between items-center mb-4">
-				<h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-					{faction.name}
-				</h1>
-				<div class="flex gap-3">
-					<Button href={`/factions/${faction.id}/edit`} icon="pencil" intent="primary">Edit</Button>
-					<button
-						type="button"
-						data-faction-id={faction.id}
-						class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 delete-faction flex items-center"
-					>
-						<Icon name="trash" class="mr-2" size="sm" />
-						Delete
-					</button>
-				</div>
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center">
+				<Icon name="users" size="lg" color="indigo" class="mr-3" />
+				<h1 class="text-4xl font-bold">{faction.name}</h1>
 			</div>
-
-			<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 mb-6">
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					{/* Type */}
-					<div class="flex items-center">
-						<div class="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
-							<Icon name="layers" size="lg" color="blue" />
-						</div>
-						<div>
-							<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Type</p>
-							<p class="text-lg font-semibold text-gray-900 dark:text-white">{faction.type}</p>
-						</div>
-					</div>
-
-					{/* Alignment */}
-					{faction.alignment && (
-						<div class="flex items-center">
-							<div class="h-12 w-12 rounded-xl bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
-								<Icon name="dices" size="lg" color="purple" />
-							</div>
-							<div>
-								<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Alignment</p>
-								<p class="text-lg font-semibold text-gray-900 dark:text-white">{faction.alignment}</p>
-							</div>
-						</div>
-					)}
-
-					{/* Headquarters */}
-					{faction.headquarters && (
-						<div class="flex items-center">
-							<div class="h-12 w-12 rounded-xl bg-amber-100 dark:bg-amber-900 flex items-center justify-center mr-4">
-								<Icon name="building" size="lg" color="amber" />
-							</div>
-							<div>
-								<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Headquarters</p>
-								<p class="text-lg font-semibold text-gray-900 dark:text-white">{faction.headquarters}</p>
-							</div>
-						</div>
-					)}
-				</div>
+			<div class="flex gap-4">
+				<a 
+					href={getEntityUrl('factions', faction.name, faction.id, 'edit')} 
+					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+				>
+					<Icon name="pencil" class="mr-2" />
+					Edit
+				</a>
 			</div>
 		</div>
 		
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-			<div class="md:col-span-2">
-				<GradientCard
-					colorTheme="purple"
-					title="Basic Information"
-					icon="info"
-				>
-					<div class="grid grid-cols-2 gap-6">
-						<div>
-							<p class="text-sm text-gray-500">Type</p>
-							<p class="font-medium">{faction.type}</p>
-						</div>
-						{faction.alignment && (
-							<div>
-								<p class="text-sm text-gray-500">Alignment</p>
-								<p class="font-medium flex items-center">
-									{faction.alignment.includes('good') && <Icon name="heart" color="green" class="mr-1" />}
-									{faction.alignment.includes('evil') && <Icon name="skull" color="red" class="mr-1" />}
-									{faction.alignment.includes('neutral') && !faction.alignment.includes('true') && <Icon name="minus" color="gray" class="mr-1" />}
-									{faction.alignment.includes('lawful') && <Icon name="scale" color="blue" class="mr-1" />}
-									{faction.alignment.includes('chaotic') && <Icon name="dices" color="amber" class="mr-1" />}
-									{faction.alignment}
-								</p>
-							</div>
-						)}
-						{leaderNPC && (
-							<div>
-								<p class="text-sm text-gray-500">Leader</p>
-								<p class="font-medium flex items-center">
-									<Icon name="crown" color="amber" class="mr-1" />
-									<a href={`/npcs/${leaderNPC.npcId}`} class="text-amber-600 hover:text-amber-800 hover:underline">
-										{leaderNPC.npc?.name || 'Unknown leader'}
-									</a>
-								</p>
-							</div>
-						)}
-						{headquarters && (
-							<div>
-								<p class="text-sm text-gray-500">Headquarters</p>
-								<p class="font-medium flex items-center">
-									<Icon name="building" class="mr-1" />
-									<a href={`/locations/${headquarters.locationId}`} class="text-blue-600 hover:text-blue-800 hover:underline">
-										{headquarters.location?.name || faction.headquarters || 'Headquarters'}
-									</a>
-								</p>
-							</div>
-						)}
-						{faction.territory && (
-							<div>
-								<p class="text-sm text-gray-500">Territory</p>
-								<p class="font-medium flex items-center">
-									<Icon name="globe" class="mr-1" />
-									{faction.territory}
-								</p>
-							</div>
-						)}
-					</div>
+		<div class="grid grid-cols-3 gap-6 mb-10">
+			{faction.type && (
+				<GradientCard title="Type" icon="tag" colorTheme="blue">
+					<p class="capitalize">{faction.type}</p>
 				</GradientCard>
-			</div>
+			)}
 			
-			<div class="md:col-span-1">
-				<GradientCard
-					colorTheme="purple"
-					title="Quick Actions"
-					icon="zap"
-				>
-					<div class="flex flex-col gap-2">
-						<a href="/factions" class="text-purple-600 hover:text-purple-800 flex items-center">
-							<Icon name="arrow-left" class="mr-2" />
-							Back to Factions
-						</a>
-						<!-- Additional quick actions could be added here -->
-					</div>
+			{faction.alignment && (
+				<GradientCard title="Alignment" icon="compass" colorTheme="purple">
+					<p class="capitalize">{faction.alignment}</p>
 				</GradientCard>
+			)}
+			
+			{faction.territory && (
+				<GradientCard title="Territory" icon="map" colorTheme="green">
+					<p>{faction.territory}</p>
+				</GradientCard>
+			)}
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+			<!-- Left Column - Main Info -->
+			<div class="md:col-span-2 space-y-6">
+				<!-- Description -->
+				{hasItems(faction.description) && (
+					<GradientCard title="Description" icon="file-text" colorTheme="blue">
+						<div class="space-y-4">
+							{faction.description?.map((paragraph: string) => (
+								<p>{paragraph}</p>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				<!-- History -->
+				{hasItems(faction.history) && (
+					<GradientCard title="History" icon="book-open" colorTheme="amber">
+						<div class="space-y-4">
+							{faction.history?.map((paragraph: string) => (
+								<p>{paragraph}</p>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				<!-- Goals -->
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+					{faction.publicGoal && (
+						<GradientCard title="Public Goal" icon="flag" colorTheme="green">
+							<p>{faction.publicGoal}</p>
+						</GradientCard>
+					)}
+					
+					{faction.trueGoal && (
+						<GradientCard title="True Goal" icon="lock" colorTheme="red">
+							<p>{faction.trueGoal}</p>
+						</GradientCard>
+					)}
+				</div>
+
+				<!-- Members -->
+				{hasItemsWithProperty(faction.members, 'npc') && (
+					<GradientCard title="Notable Members" icon="users" colorTheme="purple">
+						<div class="space-y-4">
+							{faction.members.map((member: any) => (
+								<div class="border-l-4 border-purple-500 pl-4 py-2">
+									<div class="flex justify-between">
+										<a 
+											href={getEntityUrl('npcs', member.npc.name)} 
+											class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+										>
+											{member.npc.name}
+										</a>
+										{member.status && (
+											<span class="text-gray-600 dark:text-gray-400 text-sm capitalize px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+												{member.status}
+											</span>
+										)}
+									</div>
+									{member.role && (
+										<p class="text-gray-700 dark:text-gray-300 mt-1">{member.role}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				<!-- Locations -->
+				{hasItemsWithProperty(faction.locations, 'location') && (
+					<GradientCard title="Locations" icon="map" colorTheme="green">
+						<div class="space-y-4">
+							{faction.locations.map((locationRel: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<a 
+										href={getEntityUrl('locations', locationRel.location.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{locationRel.location.name}
+									</a>
+									{locationRel.description && locationRel.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300 mt-1">{locationRel.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				<!-- Faction Relationships -->
+				{hasItemsWithProperty(faction.relationships, 'faction') && (
+					<GradientCard title="Relationships with Other Factions" icon="git-branch" colorTheme="blue">
+						<div class="space-y-4">
+							{faction.relationships.map((relation: any) => (
+								<div class="border-l-4 pl-4 py-2" class:list={[
+									relation.type === 'ally' ? 'border-green-500' : '', 
+									relation.type === 'enemy' ? 'border-red-500' : '',
+									relation.type === 'neutral' ? 'border-gray-500' : ''
+								]}>
+									<div class="flex justify-between">
+										<a 
+											href={getEntityUrl('factions', relation.faction.name)} 
+											class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+										>
+											{relation.faction.name}
+										</a>
+										{relation.type && (
+											<span class:list={[
+												'text-sm capitalize px-2 py-1 rounded-full',
+												relation.type === 'ally' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : '',
+												relation.type === 'enemy' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : '',
+												relation.type === 'neutral' ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300' : ''
+											]}>
+												{relation.type}
+											</span>
+										)}
+									</div>
+									{relation.description && relation.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300 mt-1">{relation.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+
+				<!-- Quests -->
+				{hasItemsWithProperty(faction.quests, 'quest') && (
+					<GradientCard title="Quests" icon="file-text" colorTheme="green">
+						<div class="space-y-4">
+							{faction.quests.map((questRel: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<div class="flex justify-between">
+										<a 
+											href={getEntityUrl('quests', questRel.quest.name)} 
+											class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+										>
+											{questRel.quest.name}
+										</a>
+										{questRel.role && (
+											<span class="text-gray-600 dark:text-gray-400 text-sm capitalize px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+												{questRel.role}
+											</span>
+										)}
+									</div>
+									{questRel.interest && questRel.interest.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300 mt-1">{questRel.interest[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)}
+			</div>
+
+			<!-- Right Column -->
+			<div class="space-y-6">
+				<!-- Headquarters -->
+				{faction.headquarters && (
+					<GradientCard title="Headquarters" icon="building" colorTheme="indigo">
+						<p>{faction.headquarters}</p>
+					</GradientCard>
+				)}
+
+				<!-- Resources -->
+				{hasItems(faction.resources) && (
+					<GradientCard title="Resources" icon="database" colorTheme="amber">
+						<ul class="list-disc list-inside space-y-2 ml-4">
+							{faction.resources?.map((resource: string) => (
+								<li>{resource}</li>
+							))}
+						</ul>
+					</GradientCard>
+				)}
+
+				<!-- Notes -->
+				{hasItems(faction.notes) && (
+					<GradientCard title="GM Notes" icon="clipboard" colorTheme="green">
+						<div class="space-y-4">
+							{faction.notes?.map((note: string) => (
+								<p>{note}</p>
+							))}
+						</div>
+					</GradientCard>
+				)}
 			</div>
 		</div>
-		
-		{/* Description */}
-		{hasItems(faction.description) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Description"
-					icon="info"
-				>
-					<div class="prose prose-sm dark:prose-invert max-w-none">
-						{faction.description?.map((paragraph) => (
-							<p class="mb-3 last:mb-0">{paragraph}</p>
-						))}
-					</div>
-				</GradientCard>
-			</div>
-		)}
-		
-		{/* History */}
-		{hasItems(faction.history) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="History"
-					icon="book"
-				>
-					<div class="prose prose-sm dark:prose-invert max-w-none">
-						{faction.history?.map((paragraph) => (
-							<p class="mb-3 last:mb-0">{paragraph}</p>
-						))}
-					</div>
-				</GradientCard>
-			</div>
-		)}
-		
-		{/* Goals */}
-		{(faction.publicGoal || faction.trueGoal) && (
-			<div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-				{faction.publicGoal && (
-					<GradientCard
-						colorTheme="blue"
-						title="Public Goal"
-						icon="message-circle"
-					>
-						<div class="flex items-start">
-							<Icon name="users" size="sm" color="blue" class="mr-2 mt-1 flex-shrink-0" />
-							<p class="text-gray-800 dark:text-gray-200">{faction.publicGoal}</p>
-						</div>
-					</GradientCard>
-				)}
-				
-				{faction.trueGoal && (
-					<GradientCard
-						colorTheme="red"
-						title="True Goal"
-						icon="eye-off"
-					>
-						<div class="flex items-start">
-							<Icon name="lock" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
-							<p class="text-gray-800 dark:text-gray-200">{faction.trueGoal}</p>
-						</div>
-					</GradientCard>
-				)}
-			</div>
-		)}
-		
-		{hasItems(faction.resources) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="cyan"
-					title="Resources & Assets"
-					icon="database"
-				>
-					<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
-						{faction.resources?.map((resource) => (
-							<li class="flex items-start">
-								<Icon name={resource.toLowerCase().includes('gold') || resource.toLowerCase().includes('wealth') ? 'coins' : 
-									resource.toLowerCase().includes('weapon') ? 'sword' :
-									resource.toLowerCase().includes('magic') ? 'sparkles' :
-									resource.toLowerCase().includes('ship') || resource.toLowerCase().includes('fleet') ? 'ship' :
-									resource.toLowerCase().includes('information') || resource.toLowerCase().includes('intelligence') ? 'file-text' :
-									resource.toLowerCase().includes('ally') || resource.toLowerCase().includes('connection') ? 'users' :
-									'database'} 
-									size="sm" color="cyan" class="mr-2 mt-1 flex-shrink-0" />
-								<span class="text-gray-800 dark:text-gray-200">{resource}</span>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-		
-		{faction.territory && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="indigo"
-					title="Territory"
-					icon="map"
-				>
-					<div class="flex items-start">
-						<Icon name="map-pin" size="sm" color="indigo" class="mr-2 mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-gray-800 dark:text-gray-200">{faction.territory}</p>
-							{hasItems(faction.locations) && (
-								<div class="mt-4">
-									<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Notable Locations:</h4>
-									<ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
-										{faction.locations?.map((location) => (
-											<li class="flex items-center">
-												<Icon name="landmark" size="xs" color="indigo" class="mr-2 flex-shrink-0" />
-												<a href={`/locations/${location.locationId}`} class="text-sm hover:text-indigo-600 transition-colors">
-													{location.location?.name || `Location ${location.locationId}`}
-													{location.influence && (
-														<span class={`ml-2 px-1.5 py-0.5 rounded-full text-xs ${
-															location.influence === 'dominant' ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200' : 
-															location.influence === 'strong' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-															location.influence === 'moderate' ? 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200' : 
-															'bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200'
-														}`}>
-															{location.influence}
-														</span>
-													)}
-												</a>
-											</li>
-										))}
-									</ul>
-								</div>
-							)}
-						</div>
-					</div>
-				</GradientCard>
-			</div>
-		)}
-		
-		{hasItems(faction.notes) && (
-			<div class="mb-6">
-				<SecretCard
-					colorTheme="gray"
-					title="Notes"
-					icon="file-text"
-				>
-					<p class="whitespace-pre-line">{Array.isArray(faction.notes) ? faction.notes.join('\n') : faction.notes}</p>
-				</SecretCard>
-			</div>
-		)}
-
-		{/* Members */}
-		{hasItems(faction.members) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="green"
-					title="Members"
-					icon="users"
-				>
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						{faction.members?.map((member) => (
-							<div class="flex items-start space-x-3">
-								<div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-									<Icon name={member.status === 'leader' ? 'crown' : member.status === 'associate' ? 'user-check' : 'user'} 
-										size="md" color="green" />
-								</div>
-								<div>
-									<a href={`/npcs/${member.npcId}`} class="font-medium hover:text-green-600 transition-colors">
-										{member.npc?.name || `NPC ${member.npcId}`}
-									</a>
-									<div class="flex flex-wrap gap-2 mt-1.5">
-										{member.status && (
-											<span class={`px-2 py-0.5 rounded-full text-xs ${
-												member.status === 'leader' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-												member.status === 'member' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' :
-												member.status === 'associate' ? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200' :
-												'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-											}`}>
-												{member.status.charAt(0).toUpperCase() + member.status.slice(1)}
-											</span>
-										)}
-										{member.role && (
-											<span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-												{member.role}
-											</span>
-										)}
-									</div>
-									{member.npc?.occupation && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{member.npc.occupation}
-										</p>
-									)}
-								</div>
-							</div>
-						))}
-					</div>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(faction.locations, 'locationId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="amber"
-					title="Locations"
-					icon="map-pin"
-				>
-					<ul class="space-y-4">
-						{faction.locations?.map((loc) => (
-							<li class="flex items-start">
-								<Icon 
-									name="map-pin" 
-									size="sm" 
-									color="amber" 
-									class="mr-2 mt-1 flex-shrink-0" 
-								/>
-								<div>
-									<a href={`/locations/${loc.locationId}`} class="font-medium hover:text-amber-600 transition-colors">
-										{loc.location?.name || 'Unknown location'}
-									</a>
-									{loc.influence && (
-										<div class="text-sm text-gray-600 dark:text-gray-400">
-											Influence: {loc.influence}
-										</div>
-									)}
-									{hasItems(loc.description) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(loc.description) ? loc.description.join('\n') : loc.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{/* Quests */}
-		{hasItems(faction.quests) && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="purple"
-					title="Quests"
-					icon="map"
-				>
-					<ul class="space-y-4">
-						{faction.quests?.map((quest) => (
-							<li class="flex items-start space-x-3">
-								<div class={`p-2 rounded-md flex-shrink-0 ${
-									quest.role?.toLowerCase().includes('sponsor') ? 'bg-green-100 dark:bg-green-900' :
-									quest.role?.toLowerCase().includes('target') || quest.role?.toLowerCase().includes('antagonist') ? 'bg-red-100 dark:bg-red-900' :
-									'bg-purple-100 dark:bg-purple-900'
-								}`}>
-									<Icon 
-										name={
-											quest.role?.toLowerCase().includes('sponsor') ? 'award' :
-											quest.role?.toLowerCase().includes('target') || quest.role?.toLowerCase().includes('antagonist') ? 'target' :
-											'map'
-										} 
-										size="sm" 
-										color={
-											quest.role?.toLowerCase().includes('sponsor') ? 'green' :
-											quest.role?.toLowerCase().includes('target') || quest.role?.toLowerCase().includes('antagonist') ? 'red' :
-											'purple'
-										}
-									/>
-								</div>
-								<div class="flex-1">
-									<div class="flex flex-wrap items-center gap-2">
-										<a href={`/quests/${quest.questId}`} class="font-medium hover:text-purple-600 transition-colors">
-											{quest.quest?.name || `Quest ${quest.questId}`}
-										</a>
-										{quest.quest?.type && (
-											<span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-												{quest.quest.type}
-											</span>
-										)}
-										{quest.quest?.difficulty && (
-											<span class={`px-2 py-0.5 text-xs rounded-full ${
-												quest.quest.difficulty === 'easy' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-												quest.quest.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-												quest.quest.difficulty === 'hard' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
-												'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-											}`}>
-												{quest.quest.difficulty}
-											</span>
-										)}
-									</div>
-									{quest.role && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											<span class="font-medium">Role:</span> {quest.role}
-										</p>
-									)}
-									{hasItems(quest.interest) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											<span class="font-medium">Interest:</span> {Array.isArray(quest.interest) ? quest.interest.join(', ') : quest.interest}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(faction.relationships?.filter(rel => rel.type === 'ally'), 'otherFactionId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="green"
-					title="Allies"
-					icon="handshake"
-				>
-					<ul class="space-y-4">
-						{faction.relationships?.filter(rel => rel.type === 'ally').map((ally) => (
-							<li class="flex items-start">
-								<Icon name="handshake" size="sm" color="green" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/factions/${ally.otherFactionId}`} class="font-medium hover:text-green-600 transition-colors">
-										{ally.faction?.name || `Allied Faction ${ally.otherFactionId}`}
-									</a>
-									{ally.strength && (
-										<div class="text-sm text-gray-600 dark:text-gray-400 flex items-center mt-1">
-											<span class="font-medium mr-2">Strength:</span>
-											<span class={`px-2 py-0.5 rounded-full text-xs ${
-												ally.strength === 'strong' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-												ally.strength === 'moderate' ? 'bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-200' :
-												'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200'
-											}`}>
-												{ally.strength}
-											</span>
-										</div>
-									)}
-									{hasItems(ally.description) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(ally.description) ? ally.description.join('\n') : ally.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(faction.relationships?.filter(rel => rel.type === 'enemy'), 'otherFactionId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="red"
-					title="Enemies"
-					icon="triangle-alert"
-				>
-					<ul class="space-y-4">
-						{faction.relationships?.filter(rel => rel.type === 'enemy').map((enemy) => (
-							<li class="flex items-start">
-								<Icon name="triangle-alert" size="sm" color="red" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/factions/${enemy.otherFactionId}`} class="font-medium hover:text-red-600 transition-colors">
-										{enemy.faction?.name || `Enemy Faction ${enemy.otherFactionId}`}
-									</a>
-									{enemy.strength && (
-										<div class="text-sm text-gray-600 dark:text-gray-400 flex items-center mt-1">
-											<span class="font-medium mr-2">Hostility:</span>
-											<span class={`px-2 py-0.5 rounded-full text-xs ${
-												enemy.strength === 'strong' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-												enemy.strength === 'moderate' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
-												'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
-											}`}>
-												{enemy.strength}
-											</span>
-										</div>
-									)}
-									{hasItems(enemy.description) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(enemy.description) ? enemy.description.join('\n') : enemy.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
-
-		{hasItemsWithProperty(faction.relationships?.filter(rel => rel.type === 'neutral'), 'otherFactionId') && (
-			<div class="mb-6">
-				<GradientCard
-					colorTheme="gray"
-					title="Neutral Relations"
-					icon="circle-dashed"
-				>
-					<ul class="space-y-4">
-						{faction.relationships?.filter(rel => rel.type === 'neutral').map((relation) => (
-							<li class="flex items-start">
-								<Icon name="circle-dashed" size="sm" color="gray" class="mr-2 mt-1 flex-shrink-0" />
-								<div>
-									<a href={`/factions/${relation.otherFactionId}`} class="font-medium hover:text-gray-600 transition-colors">
-										{relation.faction?.name || `Neutral Faction ${relation.otherFactionId}`}
-									</a>
-									{relation.strength && (
-										<div class="text-sm text-gray-600 dark:text-gray-400 flex items-center mt-1">
-											<span class="font-medium mr-2">Relationship:</span>
-											<span class={`px-2 py-0.5 rounded-full text-xs ${
-												relation.strength === 'strong' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-												relation.strength === 'moderate' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' :
-												'bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200'
-											}`}>
-												{relation.strength}
-											</span>
-										</div>
-									)}
-									{hasItems(relation.description) && (
-										<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-											{Array.isArray(relation.description) ? relation.description.join('\n') : relation.description}
-										</p>
-									)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</GradientCard>
-			</div>
-		)}
 	</div>
 </Layout>
 

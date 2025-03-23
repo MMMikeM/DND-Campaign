@@ -1,5 +1,5 @@
 ---
-import FactionCard from "@components/cards/FactionCard.astro";
+import EntityCard from "@components/cards/EntityCard.astro";
 import EntityListing from "@components/EntityListing.astro";
 import { getAllFactions } from "@entities";
 import Layout from "@layout";
@@ -15,8 +15,9 @@ const factions = await getAllFactions()
     >
   {factions.map(faction => {
     return (
-      <FactionCard
-      faction={faction} />
+      <EntityCard
+        entity={faction}
+        entityType="faction" />
     );
   })}  
   </EntityListing>
