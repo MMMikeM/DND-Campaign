@@ -1,6 +1,7 @@
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
-import * as schema from "../schemas.js"
+import * as tables from "../schemas.js"
+import * as relations from "../schemas/drizzle.relations.js"
 
 // export const getDbPath = () =>
 // 	path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"), "dnddb.sqlite")
@@ -15,12 +16,12 @@ export function initializeDatabase(dbPath: string) {
 		throw new Error("DB path is required")
 	}
 	// Create SQLite connection
-	const sqlite = new Database(dbPath)
+	const sqlite = new Database(dbPath, {
+		readonly: false,
+	})
 
 	// Create Drizzle ORM instance with all schemas
-	const db = drizzle(sqlite, { schema })
-
-	return db
+	return drizzle(sqlite, { schema: { ...tables, ...relations } })
 }
 
 export type DrizzleDb = ReturnType<typeof initializeDatabase>
