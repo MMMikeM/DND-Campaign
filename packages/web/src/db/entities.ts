@@ -1,5 +1,6 @@
 import { z } from "astro:schema"
 import { db } from "."
+import { fromSlug } from "../utils/slugs"
 
 // Define entity configurations for lookup
 const entityConfig = {
@@ -350,7 +351,14 @@ const idOrNameParse = (idOrName: string | number) => {
 	const id = possibleNumberSchema.safeParse(idOrName)
 	const name = possibleStringSchema.safeParse(idOrName)
 
-	return { id: id.success ? id.data : undefined, name: name.success ? name.data : undefined }
+	// If this is a string, it might be a slug - convert it to a potential name
+	const nameFromSlug = name.success ? fromSlug(name.data) : undefined
+
+	return {
+		id: id.success ? id.data : undefined,
+		name: name.success ? name.data : undefined,
+		nameFromSlug,
+	}
 }
 
 export const getEntityNamesAndIds = (category: string) => {
@@ -393,7 +401,7 @@ export const getEntity = async (entity: (typeof entityConfig)[(typeof categories
 
 export const getFaction = async (factionIdOrName: number | string) => {
 	const queries = entityConfig.factions
-	const { id, name } = idOrNameParse(factionIdOrName)
+	const { id, name, nameFromSlug } = idOrNameParse(factionIdOrName)
 
 	if (id) {
 		const byId = await queries.findById(id)
@@ -403,9 +411,37 @@ export const getFaction = async (factionIdOrName: number | string) => {
 	}
 
 	if (name) {
+		// First try exact match
 		const byName = await queries.findByName(name)
 		if (byName) {
 			return byName
+		}
+
+		// Then try case-insensitive match by getting all factions and comparing
+		const allFactions = await queries.getAll()
+		const matchByNameIgnoreCase = allFactions.find(
+			(faction) => faction.name.toLowerCase() === name.toLowerCase(),
+		)
+
+		if (matchByNameIgnoreCase) {
+			return queries.findById(matchByNameIgnoreCase.id)
+		}
+
+		// Try with the slug-converted name
+		if (nameFromSlug && nameFromSlug !== name) {
+			const bySlugName = await queries.findByName(nameFromSlug)
+			if (bySlugName) {
+				return bySlugName
+			}
+
+			// Try case-insensitive match with the un-slugified name
+			const matchBySlugNameIgnoreCase = allFactions.find(
+				(faction) => faction.name.toLowerCase() === nameFromSlug.toLowerCase(),
+			)
+
+			if (matchBySlugNameIgnoreCase) {
+				return queries.findById(matchBySlugNameIgnoreCase.id)
+			}
 		}
 	}
 	throw new Error(`Faction with name or id of "${factionIdOrName}" not found`)
@@ -413,7 +449,7 @@ export const getFaction = async (factionIdOrName: number | string) => {
 
 export const getQuest = async (questIdOrName: number | string) => {
 	const queries = entityConfig.quests
-	const { id, name } = idOrNameParse(questIdOrName)
+	const { id, name, nameFromSlug } = idOrNameParse(questIdOrName)
 
 	if (id) {
 		const byId = await queries.findById(id)
@@ -422,9 +458,37 @@ export const getQuest = async (questIdOrName: number | string) => {
 		}
 	}
 	if (name) {
+		// First try exact match
 		const byName = await queries.findByName(name)
 		if (byName) {
 			return byName
+		}
+
+		// Then try case-insensitive match by getting all quests and comparing
+		const allQuests = await queries.getAll()
+		const matchByNameIgnoreCase = allQuests.find(
+			(quest) => quest.name.toLowerCase() === name.toLowerCase(),
+		)
+
+		if (matchByNameIgnoreCase) {
+			return queries.findById(matchByNameIgnoreCase.id)
+		}
+
+		// Try with the slug-converted name
+		if (nameFromSlug && nameFromSlug !== name) {
+			const bySlugName = await queries.findByName(nameFromSlug)
+			if (bySlugName) {
+				return bySlugName
+			}
+
+			// Try case-insensitive match with the un-slugified name
+			const matchBySlugNameIgnoreCase = allQuests.find(
+				(quest) => quest.name.toLowerCase() === nameFromSlug.toLowerCase(),
+			)
+
+			if (matchBySlugNameIgnoreCase) {
+				return queries.findById(matchBySlugNameIgnoreCase.id)
+			}
 		}
 	}
 	throw new Error(`Quest with name or id of "${questIdOrName}" not found`)
@@ -432,7 +496,7 @@ export const getQuest = async (questIdOrName: number | string) => {
 
 export const getLocation = async (locationIdOrName: number | string) => {
 	const queries = entityConfig.locations
-	const { id, name } = idOrNameParse(locationIdOrName)
+	const { id, name, nameFromSlug } = idOrNameParse(locationIdOrName)
 
 	if (id) {
 		const byId = await queries.findById(id)
@@ -441,9 +505,37 @@ export const getLocation = async (locationIdOrName: number | string) => {
 		}
 	}
 	if (name) {
+		// First try exact match
 		const byName = await queries.findByName(name)
 		if (byName) {
 			return byName
+		}
+
+		// Then try case-insensitive match by getting all locations and comparing
+		const allLocations = await queries.getAll()
+		const matchByNameIgnoreCase = allLocations.find(
+			(location) => location.name.toLowerCase() === name.toLowerCase(),
+		)
+
+		if (matchByNameIgnoreCase) {
+			return queries.findById(matchByNameIgnoreCase.id)
+		}
+
+		// Try with the slug-converted name
+		if (nameFromSlug && nameFromSlug !== name) {
+			const bySlugName = await queries.findByName(nameFromSlug)
+			if (bySlugName) {
+				return bySlugName
+			}
+
+			// Try case-insensitive match with the un-slugified name
+			const matchBySlugNameIgnoreCase = allLocations.find(
+				(location) => location.name.toLowerCase() === nameFromSlug.toLowerCase(),
+			)
+
+			if (matchBySlugNameIgnoreCase) {
+				return queries.findById(matchBySlugNameIgnoreCase.id)
+			}
 		}
 	}
 	throw new Error(`Location with name or id of "${locationIdOrName}" not found`)
@@ -451,7 +543,7 @@ export const getLocation = async (locationIdOrName: number | string) => {
 
 export const getNpc = async (npcIdOrName: number | string) => {
 	const queries = entityConfig.npcs
-	const { id, name } = idOrNameParse(npcIdOrName)
+	const { id, name, nameFromSlug } = idOrNameParse(npcIdOrName)
 
 	if (id) {
 		const byId = await queries.findById(id)
@@ -460,9 +552,37 @@ export const getNpc = async (npcIdOrName: number | string) => {
 		}
 	}
 	if (name) {
+		// First try exact match
 		const byName = await queries.findByName(name)
 		if (byName) {
 			return byName
+		}
+
+		// Then try case-insensitive match by getting all NPCs and comparing
+		const allNpcs = await queries.getAll()
+		const matchByNameIgnoreCase = allNpcs.find(
+			(npc) => npc.name.toLowerCase() === name.toLowerCase(),
+		)
+
+		if (matchByNameIgnoreCase) {
+			return queries.findById(matchByNameIgnoreCase.id)
+		}
+
+		// Try with the slug-converted name
+		if (nameFromSlug && nameFromSlug !== name) {
+			const bySlugName = await queries.findByName(nameFromSlug)
+			if (bySlugName) {
+				return bySlugName
+			}
+
+			// Try case-insensitive match with the un-slugified name
+			const matchBySlugNameIgnoreCase = allNpcs.find(
+				(npc) => npc.name.toLowerCase() === nameFromSlug.toLowerCase(),
+			)
+
+			if (matchBySlugNameIgnoreCase) {
+				return queries.findById(matchBySlugNameIgnoreCase.id)
+			}
 		}
 	}
 	throw new Error(`NPC with name or id of "${npcIdOrName}" not found`)
