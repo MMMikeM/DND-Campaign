@@ -11,7 +11,7 @@ const projectDir = __dirname;
 const mcpServerTsPath = path.join(
   projectDir, 
   'packages', 
-  'mcp-server', 
+  'mcp', 
   'src', 
   'index.ts'
 );
@@ -34,7 +34,7 @@ const env = {
 };
 
 // Run tsx on the TypeScript file
-const nodeProcess = spawn(npxPath, ['tsx', '--tsconfig', path.join(projectDir, 'packages/mcp-server/tsconfig.json'), mcpServerTsPath], {
+const nodeProcess = spawn(npxPath, ['tsx', '--tsconfig', path.join(projectDir, 'packages/mcp/tsconfig.json'), mcpServerTsPath], {
   stdio: 'inherit',
   cwd: projectDir,
   env
