@@ -2,6 +2,9 @@
 import type { HTMLAttributes } from "astro/types";
 import { cva, type VariantProps } from "class-variance-authority";
 import SecretToggleButton from "../SecretToggleButton.astro";
+import type { IconName } from "types/icon";
+import Icon from "@components/Icon.astro";
+import type { ColorTheme } from "types";
 
 // Define the gradient card variants using CVA
 const gradientCard = cva(
@@ -9,8 +12,7 @@ const gradientCard = cva(
     "bg-white rounded-lg border shadow-md overflow-hidden",
     "transition-all duration-300 hover:shadow-lg",
     "dark:bg-gray-800 dark:shadow-gray-900/30"
-  ].join(" "),
-  {}
+  ]
 );
 
 // Define the header variants using CVA
@@ -18,7 +20,7 @@ const cardHeader = cva(
   [
     "flex items-center justify-between p-4 border-b",
     "transition-colors duration-300"
-  ].join(" "),
+  ],
   {
     variants: {
       colorTheme: {
@@ -123,9 +125,9 @@ const iconColor = cva(
 );
 
 interface Props extends HTMLAttributes<'div'> {
-  colorTheme?: "blue" | "green" | "purple" | "amber" | "red" | "gray" | "cyan" | "pink" | "indigo";
+  colorTheme?: ColorTheme;
   title?: string;
-  icon?: string;
+  icon: IconName;
   rightContent?: string;
   customHeaderClass?: string;
   customBodyClass?: string;
@@ -153,7 +155,7 @@ const titleClassName = titleColor({ colorTheme });
   <div class={customGradient ? `flex items-center justify-between p-4 border-b ${customGradient}` : headerClassName}>
     <div class="flex items-center justify-between w-full">
       <div class="flex items-center">
-        {icon && <span class={iconClassName} set:html={icon} />}
+        {icon && <Icon name={icon} size="lg" class={iconClassName} color={colorTheme} />}
         {title && <h2 class={titleClassName}>{title}</h2>}
       </div>
       <div class="flex items-center space-x-2">
@@ -180,24 +182,3 @@ const titleClassName = titleColor({ colorTheme });
     transition: filter 0.3s ease;
   }
 </style>
-
-<script>
-  // Toggle content visibility when the secret button is clicked
-  document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('secretToggled', (e) => {
-      const button = e.target as HTMLElement;
-      const card = button.closest('div[class*="gradientCard"]');
-      
-      if (card) {
-        const content = card.querySelector('.secret-content');
-        if (content) {
-          if (e.detail.state) {
-            content.classList.remove('blur-sm');
-          } else {
-            content.classList.add('blur-sm');
-          }
-        }
-      }
-    });
-  });
-</script>

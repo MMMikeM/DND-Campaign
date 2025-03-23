@@ -9,10 +9,9 @@ interface Props {
 
 const { quest } = Astro.props;
 const tags: Array<{value: string}> = [
-  quest.type ? { value: quest.type } : null,
-  quest.difficulty ? { value: quest.difficulty } : null,
-  quest.adaptable ? { value: 'Adaptable' } : null
-].filter((tag): tag is {value: string} => tag !== null);
+  { value: quest.type },
+ { value: quest.difficulty },
+]
 ---
 
 <EntityCard id={quest.id} name={quest.name} entityType="quest">

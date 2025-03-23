@@ -1,0 +1,45 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import type { IconName } from "types/icon";
+import type { ColorTheme } from "types";
+
+export interface QuickAction {
+  href: string;
+  label: string;
+  iconName: IconName;
+  onClick?: string;
+}
+
+interface Props {
+  actions: QuickAction[];
+  colorTheme?: ColorTheme;
+  title?: string;
+}
+
+const { 
+  actions, 
+  colorTheme = "blue" as ColorTheme,
+  title = "Quick Actions"
+} = Astro.props;
+---
+
+<GradientCard
+  colorTheme={colorTheme}
+  title={title}
+  icon="zap"
+>
+  <div class="flex flex-col gap-2">
+    {actions.map(action => (
+      <a 
+        href={action.href} 
+        class={`text-${colorTheme}-600 hover:text-${colorTheme}-800 flex items-center`}
+        onclick={action.onClick}
+      >
+        <Icon name={action.iconName} class="mr-2" />
+        {action.label}
+      </a>
+    ))}
+    <slot />
+  </div>
+</GradientCard> 
