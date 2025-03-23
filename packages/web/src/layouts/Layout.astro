@@ -2,6 +2,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.astro';
 import Icon from '../components/Icon.astro';
 import "../styles/global.css"
+import type { IconName } from 'types/icon';
 
 interface Props {
 	title?: string;
@@ -15,7 +16,7 @@ const navItems = [
 	{ href: '/npcs', label: 'NPCs', icon: 'user' },
 	{ href: '/factions', label: 'Factions', icon: 'users' },
 	{ href: '/locations', label: 'Locations', icon: 'map' },
-];
+] satisfies { href: string; label: string; icon: IconName }[];
 ---
 <html lang="en">
 	<head>
@@ -33,7 +34,7 @@ const navItems = [
 					<div class="flex items-center justify-between h-16">
 						<div class="flex items-center">
 							<a href="/" class="flex items-center space-x-2">
-								<Icon name="dice" size="lg" />
+								<Icon name="dice-1" size="lg" />
 								<span class="text-xl font-bold">Tome Keeper</span>
 							</a>
 						</div>
@@ -56,7 +57,7 @@ const navItems = [
 								))}
 								<div class="relative group ml-2">
 									<button class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-indigo-100 hover:bg-indigo-500 hover:text-white transition-colors duration-200">
-										<Icon name="add" className="mr-1" />
+										<Icon name="plus" className="mr-1" />
 										<span>New</span>
 									</button>
 									<div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
