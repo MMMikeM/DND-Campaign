@@ -1,0 +1,53 @@
+---
+import Icon from "@components/Icon.astro";
+import Button from "@components/Button.astro";
+import type { IconName, IconColor } from "types/icon";
+
+interface Props {
+  entityName: string;
+  entityType: 'faction' | 'npc' | 'quest' | 'location';
+  entityId: number | string;
+  iconName?: IconName;
+  iconColor?: IconColor;
+  buttonSize?: 'sm' | 'md' | 'lg';
+}
+
+const { 
+  entityName, 
+  entityType, 
+  entityId, 
+  iconName = (entityType === 'faction' ? 'flag' : 
+             entityType === 'npc' ? 'user' : 
+             entityType === 'quest' ? 'scroll' : 'map-pin') as IconName,
+  iconColor = (entityType === 'faction' ? 'purple' : 
+              entityType === 'npc' ? 'blue' : 
+              entityType === 'quest' ? 'green' : 'amber') as IconColor,
+  buttonSize = 'sm'
+} = Astro.props;
+---
+
+<div class="flex justify-between items-center mb-8">
+  <div class="flex items-center">
+    <Icon name={iconName} size="lg" color={iconColor} class="mr-3" />
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-white">{entityName}</h1>
+  </div>
+  <div class="flex gap-3">
+    <Button 
+      href={`/${entityType}s/${entityId}/edit`} 
+      icon="pencil"
+      intent="primary"
+      size={buttonSize}
+    >
+      Edit
+    </Button>
+    <button
+      type="button"
+      data-entity-id={entityId}
+      data-entity-type={entityType}
+      class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 delete-entity flex items-center"
+    >
+      <Icon name="trash" class="mr-2" size={buttonSize} />
+      Delete
+    </button>
+  </div>
+</div> 

@@ -1,0 +1,60 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import type { IconName, IconColor } from "types/icon";
+import type { ColorTheme } from "types";
+
+export interface InfoItem {
+  label: string;
+  value: string | null | undefined;
+  iconName?: IconName;
+  iconColor?: IconColor;
+  href?: string;
+  visible?: boolean;
+}
+
+interface Props {
+  title?: string;
+  colorTheme?: ColorTheme;
+  icon?: IconName;
+  items: InfoItem[];
+}
+
+const { 
+  title = "Basic Information", 
+  colorTheme = "blue" as ColorTheme, 
+  icon = "info" as IconName,
+  items 
+} = Astro.props;
+
+// Filter out items where value is null/undefined or visible is explicitly false
+const filteredItems = items.filter(item => 
+  item.value && (item.visible !== false)
+);
+---
+
+<GradientCard
+  colorTheme={colorTheme}
+  title={title}
+  icon={icon}
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {filteredItems.map((item) => (
+      <div>
+        <p class="text-sm text-gray-500">{item.label}</p>
+        <p class="font-medium flex items-center">
+          {item.iconName && (
+            <Icon name={item.iconName} color={item.iconColor || (colorTheme as IconColor)} class="mr-1" />
+          )}
+          {item.href ? (
+            <a href={item.href} class={`text-${colorTheme}-600 hover:text-${colorTheme}-800 hover:underline`}>
+              {item.value}
+            </a>
+          ) : (
+            <span>{item.value}</span>
+          )}
+        </p>
+      </div>
+    ))}
+  </div>
+</GradientCard> 

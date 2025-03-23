@@ -1,0 +1,43 @@
+---
+import Icon from "@components/Icon.astro";
+import type { IconName, IconColor } from "types/icon";
+import type { ColorTheme } from "types";
+
+interface Props {
+  label: string;
+  value: string | null | undefined;
+  iconName?: IconName;
+  iconColor?: IconColor;
+  href?: string;
+  valueClass?: string;
+  labelClass?: string;
+}
+
+const { 
+  label, 
+  value, 
+  iconName, 
+  iconColor = "current" as IconColor,
+  href,
+  valueClass = "font-medium",
+  labelClass = "text-sm text-gray-500"
+} = Astro.props;
+
+if (!value) return null;
+---
+
+<div>
+  <p class={labelClass}>{label}</p>
+  <p class={`${valueClass} flex items-center`}>
+    {iconName && (
+      <Icon name={iconName} color={iconColor} class="mr-1" />
+    )}
+    {href ? (
+      <a href={href} class="text-blue-600 hover:text-blue-800 hover:underline">
+        {value}
+      </a>
+    ) : (
+      <span>{value}</span>
+    )}
+  </p>
+</div> 
