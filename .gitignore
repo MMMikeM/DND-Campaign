@@ -40,6 +40,8 @@ coverage/
 *.sln
 *.sw?
 .DS_Store
+*.DS_Store
+**/.DS_Store
 
 # Drizzle
 .drizzle/
