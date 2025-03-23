@@ -1,60 +1,122 @@
 ---
-interface Props {
-  id: number;
-  entityType: string;
-  name: string;
+import type { Faction, Location, Npc, Quest } from '../../types/entities';
+import Icon from '../Icon.astro';
+
+type EntityType = 'quest' | 'faction' | 'location' | 'npc';
+type Entity = Quest | Faction | Location | Npc;
+type IconName = Parameters<typeof Icon>[0]['name'];
+
+// Define config types to avoid linter errors
+interface EntityConfig {
+  icon: IconName;
+  tags: Array<{ value: string } | null>;
+  mainContent?: string | string[] | undefined;
+  subheader?: string;
+  footer?: string;
+  footerClass?: string;
 }
 
-const { id, name, entityType } = Astro.props;
+interface Props {
+  entity: Entity;
+  entityType: EntityType;
+}
+
+const { entity, entityType } = Astro.props;
+
+// Helper function to safely handle description arrays
+const getMainContent = (obj: any, prop: string): string | string[] | undefined => {
+  if (prop in obj && obj[prop]) {
+    return Array.isArray(obj[prop]) ? obj[prop].join(' ') : obj[prop];
+  }
+  return undefined;
+};
+
+// Configure entity-specific properties
+const config: Record<EntityType, EntityConfig> = {
+  quest: {
+    icon: "book",
+    tags: [
+      'type' in entity && entity.type ? { value: entity.type } : null,
+      'difficulty' in entity && entity.difficulty ? { value: entity.difficulty } : null
+    ],
+    mainContent: getMainContent(entity, 'description'),
+    footer: 'rewards' in entity && entity.rewards ? `Reward: ${entity.rewards}` : undefined,
+    footerClass: "text-indigo-500 font-medium"
+  },
+  faction: {
+    icon: "flag",
+    tags: [],
+    subheader: 'type' in entity && entity.type ? entity.type : undefined,
+    mainContent: getMainContent(entity, 'description')
+  },
+  location: {
+    icon: "map",
+    tags: [
+      'type' in entity && entity.type ? { value: entity.type } : null,
+      'region' in entity && entity.region ? { value: entity.region } : null,
+      'dangerLevel' in entity && entity.dangerLevel ? { value: `Danger: ${entity.dangerLevel}` } : null
+    ],
+    mainContent: getMainContent(entity, 'description')
+  },
+  npc: {
+    icon: "user",
+    tags: [
+      'race' in entity && entity.race ? { value: entity.race } : null,
+      'occupation' in entity && entity.occupation ? { value: entity.occupation } : null
+    ],
+    mainContent: getMainContent(entity, 'background'),
+    footer: 'quirk' in entity && entity.quirk ? `"${entity.quirk}"` : undefined,
+    footerClass: "text-indigo-500 italic"
+  }
+};
+
+const currentConfig = config[entityType];
+const tags = currentConfig.tags.filter((tag): tag is {value: string} => tag !== null);
 ---
 
-<div class="bg-white p-6 rounded-lg border border-gray-200 shadow-md transition-all duration-300 hover:shadow-lg hover:border-indigo-300 group relative">
-  <div class="space-y-4">
-    <slot />
-    
-    <div class="mt-3 flex justify-end gap-4">
-      <slot name="actions">
-        <a 
-          href={`/${entityType}s/${name}`} 
-          class="inline-flex items-center text-sm font-medium text-indigo-500 group-hover:text-indigo-700 transition-colors duration-300"
-        >
-          View Details
-          <svg 
-            class="ml-1 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </a>
-        <button
-          type="button"
-          data-entity-id={id}
-          data-entity-type={entityType}
-          class="inline-flex items-center text-sm font-medium text-red-500 hover:text-red-700 transition-colors duration-300 delete-entity"
-        >
-          Delete
-          <svg 
-            class="ml-1 w-4 h-4" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
-      </slot>
+<div id={`entity-${entityType}-${entity.id}`} class="bg-white overflow-hidden rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 group">
+  <a href={`/${entityType}s/${entity.name}`} class="block p-4">
+    <div class="flex items-start space-x-4">
+      <div class="flex-shrink-0">
+        <div class="p-2 bg-indigo-100 rounded-md shadow-sm">
+          <Icon name={currentConfig.icon} size="lg" color="indigo" />
+        </div>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="flex justify-between items-start">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+            {entity.name}
+          </h3>
+          {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium">
+                  {tag.value}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {currentConfig.subheader && (
+          <p class="text-sm font-medium text-indigo-500 mt-1">
+            {currentConfig.subheader}
+          </p>
+        )}
+        
+        {currentConfig.mainContent && (
+          <p class="mt-2 text-sm text-gray-600 line-clamp-2 leading-relaxed">
+            {currentConfig.mainContent}
+          </p>
+        )}
+
+        {currentConfig.footer && (
+          <p class={`mt-2 text-sm ${currentConfig.footerClass || ''}`}>
+            {currentConfig.footer}
+          </p>
+        )}
+      </div>
     </div>
-  </div>
+  </a>
+  <slot />
 </div>
