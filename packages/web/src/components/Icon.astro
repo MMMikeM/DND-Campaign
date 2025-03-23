@@ -94,7 +94,7 @@ type IconVariantProps = Omit<VariantProps<typeof iconStyles>, 'color'>;
 export interface Props extends HTMLAttributes<"span">, IconVariantProps {
   name: IconName;
   label?: string;
-  className?: string;
+  class?: string;
   isInteractive?: boolean;
   spacing?: IconSpacing;
   spacingPosition?: "left" | "right";
@@ -108,7 +108,7 @@ const {
   size = "md",
   color = "current",
   label,
-  className = "",
+  class: className = "",
   isInteractive = false,
   spacing = "none",
   spacingPosition = "left",
