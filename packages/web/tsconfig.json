@@ -21,6 +21,11 @@
       "@entities": [
         "./db/entities.ts"
       ],
-    }
+      "@utils/*": [
+        "./utils/*"
+      ]
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   }
 }

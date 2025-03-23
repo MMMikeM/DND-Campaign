@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
+import icon from 'astro-icon';
+import alpinejs from '@astrojs/alpinejs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,9 +11,17 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
-  integrations: [
-  ],
+  integrations: [icon({
+    include: {
+      lucide: ['*']
+    }
+  }), alpinejs()],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        external: [/^@swc\/helpers/]
+      }
+    }
   }
 });
