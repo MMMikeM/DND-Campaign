@@ -1,17 +1,14 @@
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
-import { initializeDatabase, RunResult } from "@tome-master/shared"
-import logger from "./logger.js"
-import { factionToolHandlers, factionTools, type FactionToolNames } from "./tools/factions.js"
-import { locationToolHandlers, locationTools, type LocationToolNames } from "./tools/locations.js"
-import { npcToolHandlers, npcTools, type NcpToolNames } from "./tools/npcs.js"
-import { questToolHandlers, questTools, type QuestToolNames } from "./tools/quests.js"
-import { getByRelationToolHandlers, getByRelationTools, type GetRelations } from "./tools/relations.js"
+import { initializeDatabase } from "@tome-master/shared"
+import { createLogger } from "./logger.js"
 import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { createServer } from "node:http"
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { addPrompts } from "./prompts/index.js"
+import { registerToolHandlers } from "./tools/tools.js"
+import { registerResourceHandlers } from "./resources/resources.js"
+
+export const logger = createLogger()
 
 // Debug: Log environment variables
 logger.debug("Environment variables", {
@@ -38,80 +35,20 @@ const mcpServer = new Server(
 	},
 	{
 		capabilities: {
-			resources: {},
+			resources: {
+				subscribe: true,
+				listChanged: true,
+			},
 			tools: {},
 			prompts: {},
 		},
 	},
 )
-const tools = [...questTools, ...npcTools, ...getByRelationTools, ...factionTools, ...locationTools]
 
-// Tool handlers
-mcpServer.setRequestHandler(ListToolsRequestSchema, async () => ({
-	tools,
-}))
+registerResourceHandlers(mcpServer)
+registerToolHandlers(mcpServer)
 
 addPrompts(mcpServer)
-
-
-export type ToolHandlers<T extends PropertyKey> = Record<
-	T,
-	(
-		args?: Record<string, unknown>,
-	) => Promise<RunResult | Record<string, unknown> | Record<string, unknown>[]>
->
-
-mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
-	const args = request.params.arguments
-	const name = request.params.name
-
-	logger.debug("Handling CallToolRequest", {
-		request: request,
-		tool: name,
-		args: args,
-	})
-
-	type ToolNames =
-		| QuestToolNames
-		| NcpToolNames
-		| FactionToolNames
-		| GetRelations
-		| LocationToolNames
-
-	const toolName = name as ToolNames
-
-	const toolHandlers: ToolHandlers<ToolNames> = {
-		...questToolHandlers,
-		...npcToolHandlers,
-		...getByRelationToolHandlers,
-		...factionToolHandlers,
-		...locationToolHandlers,
-	}
-
-	try {
-		// Look up the handler in our object
-		const handler = toolHandlers[toolName]
-
-		if (handler) {
-			const data = await handler(args)
-			return {
-				content: [{ type: "text", text: JSON.stringify(data) }],
-			}
-		}
-		return {
-			content: [{ type: "text", text: `Unknown tool: ${name}` }],
-		}
-	} catch (error) {
-		logger.error("Error handling tool call", {
-			error: (error as Error).message,
-		})
-		return {
-			content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
-		}
-	}
-})
-
-mcpServer
 
 async function startServer() {
 	console.error("Starting server...")

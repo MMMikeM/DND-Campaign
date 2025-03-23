@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig({
 	entry: ["src/index.ts"],
@@ -8,4 +8,5 @@ export default defineConfig({
 	env: {
 		NODE_ENV: "production",
 	},
-});
+	external: ["drizzle-orm", "drizzle-zod", "@swc/helpers"],
+})
