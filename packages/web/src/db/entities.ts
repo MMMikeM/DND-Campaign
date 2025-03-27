@@ -74,7 +74,6 @@ const entityConfig = {
 						with: {
 							region: true,
 							encounters: true,
-							atmosphere: true,
 							secrets: true,
 							incomingRelations: true,
 							outgoingRelations: true,
@@ -101,9 +100,9 @@ const entityConfig = {
 				where: (quests, { eq }) => eq(quests.id, id),
 				with: {
 					items: true,
-					region: true,
+					region: { columns: { name: true } },
 					requiredBy: true,
-					requires: true,
+					requires: { with: { prerequisites: true } },
 					twists: true,
 					factions: {
 						with: {
@@ -127,7 +126,7 @@ const entityConfig = {
 						where: (questsStages) => eq(questsStages.stage, 1),
 						with: {
 							clues: true,
-							location: true,
+							location: { columns: { name: true } },
 							outgoingDecisions: {
 								with: {
 									consequences: true,
