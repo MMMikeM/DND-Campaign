@@ -1,5 +1,5 @@
 // associations/tables.ts
-import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core"
+import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
 import { cascadeFk, nullableFk, list, pk, string, oneOf } from "../../db/utils.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
@@ -31,7 +31,7 @@ export const factionQuests = sqliteTable(
 		id: pk(),
 		questId: cascadeFk("quest_id", quests.id),
 		factionId: nullableFk("faction_id", factions.id),
-		role: text("role").notNull(),
+		role: string("role"),
 		interest: list("interest"),
 	},
 	(t) => [unique().on(t.questId, t.factionId)],
@@ -48,8 +48,8 @@ export const questHooks = sqliteTable("quest_hooks", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	discoveryCondition: list("discovery_condition"),
-	hookType: text("hook_type", { enum: ["rumor", "npc_interaction", "location_discovery"] }),
-	presentation: text("presentation", { enum: ["subtle", "clear", "urgent", "mysterious"] }),
+	hookType: oneOf("hook_type", ["rumor", "npc_interaction", "location_discovery"]),
+	presentation: oneOf("presentation", ["subtle", "clear", "urgent", "mysterious"]),
 	hookContent: list("hook_content"),
 })
 

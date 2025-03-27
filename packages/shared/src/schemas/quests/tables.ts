@@ -107,8 +107,6 @@ export const stageDecisions = sqliteTable(
 			"identity_question",
 		]),
 
-		dramatically_interesting: integer("dramatically_interesting", { mode: "boolean" }),
-
 		name: string("name"),
 		conditionValue: string("condition_value"),
 
