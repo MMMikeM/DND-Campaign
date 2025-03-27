@@ -9,20 +9,31 @@ type SchemaProperties<T extends z.ZodTypeAny> = T extends z.ZodObject<infer Shap
 	: never
 
 /**
+ * Define a more specific type for MCP Tool inputSchema to fix array issues
+ */
+type MCPInputSchema = {
+	type: "object"
+	properties: Record<string, unknown>
+	required?: string[]
+	[key: string]: unknown
+}
+
+/**
  * Converts a Zod schema to an MCP-compatible input schema with typed descriptions
+ *
+ * Features:
+ * - Converts Zod schemas to MCP JSON Schema format
+ * - Adds descriptions to fields from provided descriptions object
+ * - Special handling for JSON fields by detecting the union pattern
+ * - Automatically converts JSON fields to string arrays in the schema
+ * - Marks fields as required or optional in the description
  *
  * @param schema The Zod schema to convert
  * @param descriptions Optional object with field descriptions that match the schema structure
  */
-function zodToMCP<T extends z.ZodTypeAny>(
-	schema: T,
-	descriptions?: SchemaProperties<T>,
-): Tool["inputSchema"] {
+function zodToMCP<T extends z.ZodTypeAny>(schema: T, descriptions?: SchemaProperties<T>): MCPInputSchema {
 	// Helper functions
-	const getNestedDescription = (
-		path: string[],
-		descObj?: Record<string, unknown>,
-	): string | undefined => {
+	const getNestedDescription = (path: string[], descObj?: Record<string, unknown>): string | undefined => {
 		if (!descObj) return undefined
 
 		const [current, ...rest] = path
@@ -77,6 +88,26 @@ function zodToMCP<T extends z.ZodTypeAny>(
 			return processSchema(schema._def.innerType, path)
 		}
 
+		// Special handling for JSON fields (pattern detection)
+		if (schema instanceof z.ZodUnion) {
+			const options = schema._def.options
+
+			// Detect JSON field pattern (union of union, record, and array)
+			const isJsonStringArrayField =
+				options.length >= 3 &&
+				options[0] instanceof z.ZodUnion &&
+				options[1] instanceof z.ZodRecord &&
+				options[2] instanceof z.ZodArray
+
+			if (isJsonStringArrayField) {
+				return {
+					type: "array",
+					items: { type: "string" },
+					description: getDescription(schema, path),
+				}
+			}
+		}
+
 		// Handle objects
 		if (schema instanceof z.ZodObject) {
 			return withDescription(schema, processObjectSchema(schema, path), path)
@@ -88,10 +119,7 @@ function zodToMCP<T extends z.ZodTypeAny>(
 				schema,
 				{
 					type: "object",
-					additionalProperties: processSchema(schema._def.valueType, [
-						...path,
-						"additionalProperties",
-					]),
+					additionalProperties: processSchema(schema._def.valueType, [...path, "additionalProperties"]),
 				},
 				path,
 			)
@@ -180,10 +208,7 @@ function zodToMCP<T extends z.ZodTypeAny>(
 	}
 
 	// Process object schema
-	function processObjectSchema(
-		schema: z.ZodObject<z.ZodRawShape>,
-		path: string[] = [],
-	): SchemaProperty {
+	function processObjectSchema(schema: z.ZodObject<z.ZodRawShape>, path: string[] = []): SchemaProperty {
 		const properties: Record<string, SchemaProperty> = {}
 		const required: string[] = []
 
@@ -221,10 +246,39 @@ function zodToMCP<T extends z.ZodTypeAny>(
 			type: "object",
 			properties: { value: result },
 			required: ["value"],
+		} as MCPInputSchema
+	}
+
+	// Add additional context to descriptions if provided
+	// This enriches the schema with usage information
+	if (result.properties && typeof result.properties === "object") {
+		for (const key in result.properties) {
+			const prop = result.properties[key] as SchemaProperty
+			const isRequired = Array.isArray(result.required) && result.required.includes(key)
+
+			// If this is already detected as an array type with string items,
+			// enhance the description to make it clear it should be an array
+			if (
+				prop.type === "array" &&
+				prop.items &&
+				typeof prop.items === "object" &&
+				(prop.items as any).type === "string"
+			) {
+				// Update the description to clarify it's a string array
+				if (prop.description) {
+					prop.description = isRequired
+						? `${prop.description} (Required - provide as string array)`
+						: `${prop.description} (Optional - provide as string array)`
+				}
+			}
+			// Normal handling for other fields
+			else if (prop.description) {
+				prop.description = isRequired ? `${prop.description} (Required)` : `${prop.description} (Optional)`
+			}
 		}
 	}
 
-	return result as Tool["inputSchema"]
+	return result as MCPInputSchema
 }
 
 export default zodToMCP
