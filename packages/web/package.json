@@ -30,7 +30,8 @@
 		"@iconify-json/lucide": "^1.2.32",
 		"@tailwindcss/vite": "^4.0.14",
 		"@types/better-sqlite3": "^7.6.12",
-		"tailwindcss": "^4.0.14"
+		"tailwindcss": "^4.0.14",
+		"vitest": "^3.0.9"
 	},
 	"prettier": {
 		"printWidth": 120
