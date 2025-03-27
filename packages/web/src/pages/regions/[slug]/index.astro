@@ -4,11 +4,7 @@ import SecretCard from "@components/cards/SecretCard.astro";
 import Icon from "@components/Icon.astro";
 import { getRegion } from "@entities";
 import Layout from "@layout";
-import {
-	hasItems,
-	hasItemsWithProperty,
-	safeArrayAccess,
-} from "@utils/dataHelpers";
+import { hasItems, hasItemsWithProperty, safeArrayAccess } from "@utils/dataHelpers";
 import { getEntityUrl } from "@utils/slugs";
 import TwoColumnGrid from "@components/TwoColumnGrid.astro";
 import Chip from "@components/Chip.astro";
@@ -22,6 +18,8 @@ if (!slug) {
 }
 
 const location = await getRegion(slug);
+
+console.log(JSON.stringify(location, null, 2));
 
 if (!location) {
 	return Astro.redirect("/404");
@@ -142,9 +140,7 @@ const chips = [
 										</span>
 									</div>
 									{area.description && area.description.length > 0 && (
-										<p class="text-gray-700 dark:text-gray-300">
-											{area.description[0]}
-										</p>
+										<p class="text-gray-700 dark:text-gray-300">{area.description[0]}</p>
 									)}
 								</div>
 							))}
@@ -166,17 +162,12 @@ const chips = [
 											{encounter.encounterType}
 										</span>
 										{encounter.difficulty && (
-											<span class="text-gray-700 dark:text-gray-300">
-												Difficulty: {encounter.difficulty}
-											</span>
+											<span class="text-gray-700 dark:text-gray-300">Difficulty: {encounter.difficulty}</span>
 										)}
 									</div>
-									{encounter.description &&
-										encounter.description.length > 0 && (
-											<p class="text-gray-700 dark:text-gray-300">
-												{encounter.description[0]}
-											</p>
-										)}
+									{encounter.description && encounter.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300">{encounter.description[0]}</p>
+									)}
 								</div>
 							))}
 						</div>
@@ -234,11 +225,7 @@ const chips = [
 			{/* NPCs */}
 			{
 				availableData.npcs && (
-					<GradientCard
-						title="Notable Characters"
-						icon="users"
-						colorTheme="blue"
-					>
+					<GradientCard title="Notable Characters" icon="users" colorTheme="blue">
 						<div class="space-y-4">
 							{location.npcs.map((npcRel: any) => (
 								<div class="border-l-4 border-blue-500 pl-4 py-1.5">
@@ -248,9 +235,7 @@ const chips = [
 									>
 										{npcRel.npc.name}
 									</a>
-									{npcRel.context && npcRel.context.length > 0 && (
-										<p class="text-gray-700 mt-1">{npcRel.context[0]}</p>
-									)}
+									{npcRel.context && npcRel.context.length > 0 && <p class="text-gray-700 mt-1">{npcRel.context[0]}</p>}
 								</div>
 							))}
 						</div>
@@ -261,11 +246,7 @@ const chips = [
 			{/* Connected Locations */}
 			{
 				availableData.relations && (
-					<GradientCard
-						title="Connected Locations"
-						icon="map"
-						colorTheme="green"
-					>
+					<GradientCard title="Connected Locations" icon="map" colorTheme="green">
 						<div class="space-y-4">
 							{location.relations.map((relation: any) => (
 								<div class="border-l-4 border-green-500 pl-4 py-1.5">
