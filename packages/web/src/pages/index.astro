@@ -8,9 +8,9 @@ import type { IconName } from 'types/icon';
 const [npcs, factions, locations, quests] = await Promise.all([
 	getEntityNamesAndIds('npcs'),
 	getEntityNamesAndIds('factions'),
-	getEntityNamesAndIds('locations'),
+	getEntityNamesAndIds('regions'),
 	getEntityNamesAndIds('quests'),
-]);
+])
 
 
 // Feature cards data
@@ -137,7 +137,7 @@ const features: { title: string; description: string; icon: IconName; count: num
 									<div class="mt-3 ml-20">
 										<span class="inline-flex items-center text-sm font-medium text-indigo-500 group-hover:text-indigo-700 transition-colors duration-300">
 											View {feature.title.split(' ')[0]}
-												<Icon name="chevron-right" size="sm" className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+												<Icon name="chevron-right" size="sm" class="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
 										</span>
 									</div>
 								</div>
@@ -163,19 +163,19 @@ const features: { title: string; description: string; icon: IconName; count: num
 
 				<div class="mt-10 flex flex-wrap justify-center gap-4">
 					<a href="/npcs/new" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-						<Icon name="user" size="sm" className="mr-2" />
+						<Icon name="user" size="sm" class="mr-2" />
 						New NPC
 					</a>
 					<a href="/factions/new" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-						<Icon name="users" size="sm" className="mr-2" />
+						<Icon name="users" size="sm" class="mr-2" />
 						New Faction
 					</a>
 					<a href="/locations/new" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-						<Icon name="pin" size="sm" className="mr-2" />
+						<Icon name="pin" size="sm" class="mr-2" />
 						New Location
 					</a>
 					<a href="/quests/new" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-						<Icon name="book" size="sm" className="mr-2" />
+						<Icon name="book" size="sm" class="mr-2" />
 						New Quest
 					</a>
 				</div>

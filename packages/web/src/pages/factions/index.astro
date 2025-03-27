@@ -5,20 +5,11 @@ import { getAllFactions } from "@entities";
 import Layout from "@layout";
 
 
-
 const factions = await getAllFactions()
 ---
 
 <Layout title="Factions">
-  <EntityListing
-    title="Factions"
-    >
-  {factions.map(faction => {
-    return (
-      <EntityCard
-        entity={faction}
-        entityType="faction" />
-    );
-  })}  
+  <EntityListing title="Factions">
+    {factions.map(faction => <EntityCard entity={faction} entityType="faction" />)}
   </EntityListing>
 </Layout>
