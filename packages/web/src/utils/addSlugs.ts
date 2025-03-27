@@ -23,7 +23,7 @@ export interface Sluggable {
 /**
  * Type with slug added
  */
-export type WithSlug<T> = T & { slug: Slug }
+export type WithSlug<T extends Sluggable> = T & { slug: Slug }
 
 /**
  * Check if an object is a plain object (not null, not array, not Date, etc.)
@@ -35,24 +35,34 @@ const isPlainObject = (item: unknown): item is Record<string, unknown> => {
 /**
  * Type guard to check if an object should receive a slug
  */
-function isSluggable(obj: Record<string, unknown>): obj is Sluggable {
+function isSluggable(obj: Record<string, unknown>): obj is Sluggable & Record<string, unknown> {
 	return "name" in obj && typeof obj.name === "string" && "id" in obj && typeof obj.id === "number"
 }
 
 /**
+ * Helper for recursively applying the WithSlugsAdded transformation
+ */
+type RecursivelyWithSlugsAdded<T> =
+	// Handle null/undefined
+	T extends null | undefined
+		? T
+		: // Handle arrays
+			T extends Array<infer U>
+			? Array<RecursivelyWithSlugsAdded<U>>
+			: // Handle objects but preserve primitives
+				T extends object
+				? {
+						// For each property in the object, apply recursively
+						[K in keyof T]: RecursivelyWithSlugsAdded<T[K]>
+					} & // Add a slug if the object is sluggable
+					(T extends Sluggable ? { slug: Slug } : Record<string, never>)
+				: // Return primitives as is
+					T
+
+/**
  * Type that represents the result of adding slugs to objects
  */
-export type WithSlugsAdded<T> = T extends null | undefined
-	? T
-	: T extends (infer U)[]
-		? U extends Sluggable
-			? WithSlug<U>[]
-			: WithSlugsAdded<U>[]
-		: T extends Sluggable
-			? WithSlug<T> & { [K in keyof T]: WithSlugsAdded<T[K]> }
-			: T extends object
-				? { [K in keyof T]: WithSlugsAdded<T[K]> }
-				: T
+export type WithSlugsAdded<T> = RecursivelyWithSlugsAdded<T>
 
 /**
  * Recursively processes objects in data to add slugs where needed
@@ -79,7 +89,7 @@ export function addSlugsRecursively<T>(data: T): WithSlugsAdded<T> {
 
 		// Process all properties recursively
 		for (const key in result) {
-			if (Object.prototype.hasOwnProperty.call(result, key)) {
+			if (Object.hasOwn(result, key)) {
 				result[key] = addSlugsRecursively(result[key])
 			}
 		}
