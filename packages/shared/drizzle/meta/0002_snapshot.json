@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d9da233b-a139-48de-a025-e93d6dfeed5b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "59c469a2-dfea-4eec-afe9-46d8f8602289",
+  "prevId": "d88e160d-2f98-4f3e-b928-ca816d205d4f",
   "tables": {
     "location_atmosphere": {
       "name": "location_atmosphere",
@@ -1233,94 +1233,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "quest_consequences": {
-      "name": "quest_consequences",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "trigger_stage_id": {
-          "name": "trigger_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "manifestation_stage_id": {
-          "name": "manifestation_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "delay_factor": {
-          "name": "delay_factor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "consequence_type": {
-          "name": "consequence_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_consequences_trigger_stage_id_quest_stages_id_fk": {
-          "name": "quest_consequences_trigger_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_consequences",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "trigger_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_consequences_manifestation_stage_id_quest_stages_id_fk": {
-          "name": "quest_consequences_manifestation_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_consequences",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "manifestation_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "quest_dependencies": {
-      "name": "quest_dependencies",
+    "quest_prerequisites": {
+      "name": "quest_prerequisites",
       "columns": {
         "id": {
           "name": "id",
@@ -1336,8 +1250,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "dependency_type": {
-          "name": "dependency_type",
+        "prerequisite_type": {
+          "name": "prerequisite_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1353,9 +1267,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_dependencies_relation_id_quest_relations_id_fk": {
-          "name": "quest_dependencies_relation_id_quest_relations_id_fk",
-          "tableFrom": "quest_dependencies",
+        "quest_prerequisites_relation_id_quest_relations_id_fk": {
+          "name": "quest_prerequisites_relation_id_quest_relations_id_fk",
+          "tableFrom": "quest_prerequisites",
           "tableTo": "quest_relations",
           "columnsFrom": [
             "relation_id"
@@ -1443,133 +1357,6 @@
             "id"
           ],
           "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "quest_stage_links": {
-      "name": "quest_stage_links",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "from_stage_id": {
-          "name": "from_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "to_stage_id": {
-          "name": "to_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "condition_type": {
-          "name": "condition_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "dramatically_interesting": {
-          "name": "dramatically_interesting",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "link_name": {
-          "name": "link_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "condition_value": {
-          "name": "condition_value",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "success_description": {
-          "name": "success_description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "failure_description": {
-          "name": "failure_description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "narrative_transition": {
-          "name": "narrative_transition",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_stage_links_quest_id_quests_id_fk": {
-          "name": "quest_stage_links_quest_id_quests_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_stage_links_from_stage_id_quest_stages_id_fk": {
-          "name": "quest_stage_links_from_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "from_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_stage_links_to_stage_id_quest_stages_id_fk": {
-          "name": "quest_stage_links_to_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "to_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -1930,86 +1717,6 @@
             "id"
           ],
           "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "quest_decisions": {
-      "name": "quest_decisions",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "quest_stage_id": {
-          "name": "quest_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "decision_type": {
-          "name": "decision_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "potential_player_reactions": {
-          "name": "potential_player_reactions",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "options": {
-          "name": "options",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "consequences": {
-          "name": "consequences",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_decisions_quest_stage_id_quest_stages_id_fk": {
-          "name": "quest_decisions_quest_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_decisions",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "quest_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -2667,6 +2374,20 @@
           "notNull": false,
           "autoincrement": false
         },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "influence_level": {
           "name": "influence_level",
           "type": "text",
@@ -2710,6 +2431,32 @@
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_region_id_regions_id_fk": {
+          "name": "faction_influence_region_id_regions_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_location_id_locations_id_fk": {
+          "name": "faction_influence_location_id_locations_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
           ],
           "columnsTo": [
             "id"
@@ -3413,8 +3160,12 @@
   "enums": {},
   "_meta": {
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {
+      "\"quest_dependencies\"": "\"quest_prerequisites\""
+    },
+    "columns": {
+      "\"quest_prerequisites\".\"dependency_type\"": "\"quest_prerequisites\".\"prerequisite_type\""
+    }
   },
   "internal": {
     "indexes": {}

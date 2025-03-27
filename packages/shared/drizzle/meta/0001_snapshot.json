@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d9da233b-a139-48de-a025-e93d6dfeed5b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d88e160d-2f98-4f3e-b928-ca816d205d4f",
+  "prevId": "d9da233b-a139-48de-a025-e93d6dfeed5b",
   "tables": {
     "location_atmosphere": {
       "name": "location_atmosphere",
@@ -2667,6 +2667,20 @@
           "notNull": false,
           "autoincrement": false
         },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "influence_level": {
           "name": "influence_level",
           "type": "text",
@@ -2710,6 +2724,32 @@
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_region_id_regions_id_fk": {
+          "name": "faction_influence_region_id_regions_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_location_id_locations_id_fk": {
+          "name": "faction_influence_location_id_locations_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
           ],
           "columnsTo": [
             "id"

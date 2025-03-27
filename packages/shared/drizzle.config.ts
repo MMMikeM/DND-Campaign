@@ -5,6 +5,12 @@ export default defineConfig({
 	dbCredentials: {
 		url: "/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite",
 	},
-	out: "/Users/mikemurray/Development/DND-Campaign/packages/shared/drizzle",
-	schema: "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/index.ts",
+	schema: [
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/regions/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/factions/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/quests/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/npc/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/associations/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/story/tables.ts",
+	],
 })
