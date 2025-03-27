@@ -31,5 +31,8 @@
 		"@tailwindcss/vite": "^4.0.14",
 		"@types/better-sqlite3": "^7.6.12",
 		"tailwindcss": "^4.0.14"
+	},
+	"prettier": {
+		"printWidth": 120
 	}
 }

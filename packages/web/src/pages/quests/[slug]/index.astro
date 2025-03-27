@@ -1,18 +1,12 @@
 ---
-import GradientCard from "@components/cards/GradientCard.astro";
-import Icon from "@components/Icon.astro";
 import { getQuest } from "@entities";
 import Layout from "@layout";
-import {
-	hasItems,
-	hasItemsWithProperty,
-	safeArrayAccess,
-} from "@utils/dataHelpers";
-import { getEntityUrl } from "@utils/slugs";
 import TwoColumnGrid from "@components/TwoColumnGrid.astro";
 import Chip, { type Props as ChipProps } from "@components/Chip.astro";
-import { data } from "./exampleData";
 import List from "@components/List.astro";
+import { createAnimationScope } from "astro:transitions";
+import GradientCard from "@components/cards/GradientCard.astro";
+import ChipList from "@components/ChipList.astro";
 
 export const prerender = false;
 
@@ -53,7 +47,6 @@ const {
 	visibility,
 } = quest;
 
-
 const chips = [
 	{
 		item: type,
@@ -76,37 +69,29 @@ const chips = [
 			name: "eye",
 		},
 	},
-] satisfies (ChipProps & { item: string })[];
+	{
+		item: region?.name,
+		color: "blue",
+		icon: {
+			name: "map",
+		},
+	},
+	{
+		item: mood,
+		color: "blue",
+		icon: {
+			name: "smile",
+		},
+	},
+] satisfies (ChipProps & { item?: string | null })[];
 ---
 
 <Layout title={name}>
 	<TwoColumnGrid title={name}>
 		<Fragment slot="header">
-			{
-				chips.map((chip) => (
-					<Chip icon={chip.icon} color={chip.color}>
-						{chip.item}
-					</Chip>
-				))
-			}
+			<ChipList items={chips} />
 		</Fragment>
 		<Fragment slot="left-column">
-			{
-				region && (
-					<div>
-						<p class="text-sm text-gray-500">Region</p>
-						<p class="font-medium">{region}</p>
-					</div>
-				)
-			}
-			{
-				mood && (
-					<div>
-						<p class="text-sm text-gray-500">Mood</p>
-						<p class="font-medium">{mood}</p>
-					</div>
-				)
-			}
 			<List items={description} title="Description" />
 			<List items={prerequisites} title="Prerequisites" />
 			<List items={objectives} title="Objectives" />
@@ -116,112 +101,184 @@ const chips = [
 			<List items={successOutcomes} title="Success Outcomes" />
 			<List items={inspirations} title="Inspirations" />
 			<List items={themes} title="Themes" />
+			<List items={prerequisites} title="Prerequisites" />
+
+			{
+				requiredBy &&
+					requiredBy.map(({ creativePrompts, relationType, description }) => (
+						<>
+							<p>{relationType}</p>
+							<List items={description} title="Description" />
+							<List items={creativePrompts} title="Creative Prompts" />
+						</>
+					))
+			}
 			{
 				npcs &&
-					npcs.map(
-						({
-							npc,
-							creativePrompts,
-							description,
-							dramaticMoments,
-							hiddenAspects,
-							importance,
-							role,
-						}) => (
-							<>
-								<p>{npc.name}</p>
-								{importance && (
-									<Chip color="blue" icon={{ name: "star" }}>
-										{importance}
-									</Chip>
-								)}
-								{role && (
-									<Chip color="blue" icon={{ name: "tag" }}>
-										{role}
-									</Chip>
-								)}
-								<List items={description} title="Description" />
-								<List items={dramaticMoments} title="Dramatic Moments" />
-								<List items={hiddenAspects} title="Hidden Aspects" />
-								<List items={creativePrompts} title="Creative Prompts" />
-							</>
-						),
-					)
+					npcs.map(({ npc, creativePrompts, description, dramaticMoments, hiddenAspects, importance, role }) => (
+						<GradientCard title="NPC">
+							<p>{npc.name}</p>
+							{importance && (
+								<Chip color="blue" icon={{ name: "star" }}>
+									{importance}
+								</Chip>
+							)}
+							{role && (
+								<Chip color="blue" icon={{ name: "tag" }}>
+									{role}
+								</Chip>
+							)}
+							<List items={description} title="Description" />
+							<List items={dramaticMoments} title="Dramatic Moments" />
+							<List items={hiddenAspects} title="Hidden Aspects" />
+							<List items={creativePrompts} title="Creative Prompts" />
+						</GradientCard>
+					))
 			}
 			{
 				factions &&
-					factions.map(
-						({ interest, role, faction }) => (
-							<>
-								<h3 class="text-lg font-semibold">Faction</h3>
-								<p>{faction?.name}</p>
-								<p>{role}</p>
-								<p>{interest}</p>
-								<List items={description} title="Description" />
-								<List items={creativePrompts} title="Creative Prompts" />
-							</>
-						),
-					)
+					factions.map(({ interest, role, faction }) => (
+						<GradientCard title="Faction">
+							<p>{faction?.name}</p>
+							<p>{role}</p>
+							<p>{interest}</p>
+							<List items={description} title="Description" />
+							<List items={creativePrompts} title="Creative Prompts" />
+						</GradientCard>
+					))
 			}
-			<List items={prerequisites} title="Prerequisites" />
 			{
 				items &&
 					items.map(({ creativePrompts, name, significance, type, description }) => (
-							<>
-								<h3 class="text-lg font-semibold">Item</h3>
-								<p>{name}</p>
-								<p>{type}</p>
-								<p>{significance}</p>
-								<List items={description} title="Description" />
-								<List items={creativePrompts} title="Creative Prompts" />
-							</>
-						)
-					)
+						<GradientCard title="Item">
+							<p>{name}</p>
+							<p>{type}</p>
+							<p>{significance}</p>
+							<List items={description} title="Description" />
+							<List items={creativePrompts} title="Creative Prompts" />
+						</GradientCard>
+					))
 			}
 			{
 				twists &&
-					twists.map(
-						({ description, creativePrompts, impact, narrative_placement, twist_type }) => (
-							<>
-								<h3 class="text-lg font-semibold">Twist</h3>
-								<p>{twist_type}</p>
-								<p>{impact}</p>
-								<p>{narrative_placement}</p>
-
-								<List items={creativePrompts} title="Creative Prompts" />
-								<List items={description} title="Description" />
-							</>
-						),
-					)
-			}
-			<!-- {
-				stages &&
-					stages.map(
-						({ stage, description }) => (
-							<>
-								<p>{stage.name}</p>
-								<List items={description} title="Description" />
-							</>
-						),
-					)
+					twists.map(({ description, creativePrompts, impact, narrative_placement, twist_type }) => (
+						<GradientCard title="Twist">
+							<Chip color="blue">{twist_type}</Chip>
+							<Chip color="blue">{impact}</Chip>
+							<Chip color="blue">{narrative_placement}</Chip>
+							<List items={creativePrompts} title="Creative Prompts" />
+							<List items={creativePrompts} title="Creative Prompts" />
+							<List items={description} title="Description" />
+						</GradientCard>
+					))
 			}
 			{
-				requiredBy &&
-					requiredBy.map(
-						({ quest, description }) => (
-							<>
-								<p>{quest.name}</p>
-								List items={description} title="Description" />
-							</>
+				requires &&
+					requires.map(({ creativePrompts, description, relationType, prerequisites }) => (
+						<GradientCard title="Requires">
+							<Chip color="blue">{relationType}</Chip>
+							<List items={description} title="Description" />
+							<List items={creativePrompts} title="Creative Prompts" />
+							{JSON.stringify(prerequisites, null, 2)}
+						</GradientCard>
+					))
+			}
+			{
+				stages &&
+					stages.map(
+						({
+							clues,
+							completionPaths,
+							creativePrompts,
+							description,
+							dramatic_moments,
+							dramatic_question,
+							encounters,
+							location,
+							locations,
+							name,
+							objectives,
+							outgoingDecisions,
+							sensory_elements,
+							stage,
+						}) => (
+							<GradientCard title={`Stage ${stage}`}>
+								<div class="flex flex-col gap-2">
+									<h4 class="text-lg font-semibold">{name}</h4>
+									<p>{dramatic_question}</p>
+								</div>
+								<List items={description} title="Description" />
+								<List items={completionPaths} title="Completion Paths" />
+								<List items={dramatic_moments} title="Dramatic Moments" />
+								<List items={encounters} title="Encounters" />
+								<List items={objectives} title="Objectives" />
+								<List items={sensory_elements} title="Sensory Elements" />
+								<List items={locations} title="Locations" />
+								<List items={creativePrompts} title="Creative Prompts" />
+								{outgoingDecisions.map(
+									({
+										dramatically_interesting,
+										conditionType,
+										conditionValue,
+										consequences,
+										creativePrompts,
+										decision_type,
+										description,
+										failureDescription,
+										name,
+										narrativeTransition,
+										options,
+										potential_player_reactions,
+										successDescription,
+										toStage,
+									}) => (
+										<GradientCard title="Outgoing Decision">
+											<Chip color="blue">{name}</Chip>
+											<Chip color="blue">{decision_type}</Chip>
+											<Chip color="blue">{conditionType}</Chip>
+											<Chip color="blue">{conditionValue}</Chip>
+											<List items={description} title="Description" />
+											<List items={creativePrompts} title="Creative Prompts" />
+											<List items={failureDescription} title="Failure Description" />
+											<List items={successDescription} title="Success Description" />
+											<List items={narrativeTransition} title="Narrative Transition" />
+											<List items={potential_player_reactions} title="Potential Player Reactions" />
+											<List items={options} title="Options" />
+											{consequences.map(
+												({
+													consequence_type,
+													creativePrompts,
+													delay_factor,
+													description,
+													severity,
+													visibility,
+													affectedStageId,
+												}) => (
+													<GradientCard title={name}>
+														<Chip color="blue">{consequence_type}</Chip>
+														<Chip color="blue">{delay_factor}</Chip>
+														<Chip color="blue">{severity}</Chip>
+														<Chip color="blue">{visibility}</Chip>
+														<List items={description} title="Description" />
+														<List items={creativePrompts} title="Creative Prompts" />
+													</GradientCard>
+												),
+											)}
+										</GradientCard>
+									),
+								)}
+								{clues.map(({ creativePrompts, description, discoveryCondition, reveals }) => {
+									<GradientCard title="Clue">
+										<p>{discoveryCondition}</p>
+										<List items={description} title="Description" />
+										<List items={creativePrompts} title="Creative Prompts" />
+										<List items={reveals} title="Reveals" />
+									</GradientCard>;
+								})}
+							</GradientCard>
 						),
 					)
-			} -->
-			<div>{JSON.stringify(stages, null, 2)}</div>
-			<div>{JSON.stringify(factions, null, 2)}</div>
-			<div>{JSON.stringify(requiredBy, null, 2)}</div>
-			<div>{JSON.stringify(requires, null, 2)}</div>
-			<div>{JSON.stringify(twists, null, 2)}</div>
-			<div>{JSON.stringify(items, null, 2)}</div>
+			}
 		</Fragment>
 	</TwoColumnGrid>
 </Layout>
