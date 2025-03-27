@@ -1,13 +1,13 @@
 ---
 import { cva } from 'class-variance-authority';
 import Icon from './Icon.astro';
-import { getEntityNamesAndIds } from '@entities';
-
+import { getEntityNamesAndIds } from '../db/entities'  
+import addSlugs, { type Slug } from '@utils/addSlugs';
 // Get route parameters directly from Astro.params
 const { category: currentCategory, id: currentId } = Astro.params;
 
 // Define categories for the navigation (use lowercase to match URL patterns)
-const categories = ['npcs', 'factions', 'locations', 'quests'] as const;
+const categories = ['npcs', 'factions', 'regions', 'quests'] as const;
 
 // Fetch data using the server actions
 const data = await Promise.all(categories.map(async category => ({
@@ -15,10 +15,11 @@ const data = await Promise.all(categories.map(async category => ({
   data: await getEntityNamesAndIds(category),
 })));
 
+
 const dataByCategory = data.reduce((acc, { category, data }) => {
-  acc[category] = data;
+  acc[category] = addSlugs(data);
   return acc;
-}, {} as Record<string, { id: number; name: string }[]>);
+}, {} as Record<string, { id: number; name: string; slug: Slug }[]>);
 
 // Get icon for category
 const getIconForCategory = (category: string) => {
@@ -146,7 +147,7 @@ const formatCategoryName = (category: string) => {
                 <div class="pl-4 border-l-2 border-gray-800">
                   {dataByCategory[category].map(item => (
                     <a
-                      href={`/${category}/${item.id}`}
+                      href={`/${category}/${item.slug}`}
                       class={navLink({ isActive: currentId === String(item.id) })}
                     >
                       <span class="truncate">{item.name}</span>

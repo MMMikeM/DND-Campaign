@@ -1,0 +1,107 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { IconName } from "types/icon";
+import type { ColorTheme } from "types";
+import GradientCard from "./GradientCard.astro";
+import Icon from "@components/Icon.astro";
+
+interface Props extends HTMLAttributes<"div"> {
+  title?: string;
+  icon?: IconName;
+  colorTheme?: ColorTheme;
+  publicGoal: string;
+  secretGoal: string;
+  isInitiallyHidden?: boolean;
+}
+
+const {
+  title = "Faction Goals",
+  icon = "target",
+  colorTheme = "indigo",
+  publicGoal,
+  secretGoal,
+  isInitiallyHidden = true,
+  ...rest
+} = Astro.props;
+
+const hasSecretGoal = !!secretGoal;
+---
+
+<div x-data=`{ isHidden: ${hasSecretGoal && isInitiallyHidden} }`>
+  <GradientCard title={title} icon={icon} colorTheme={colorTheme} {...rest}>
+    <div class="space-y-4">
+      <div>
+        <div class="flex items-center mb-2">
+          <Icon name="flag" size="sm" class={`mr-2 text-green-500`} />
+          <h3 class="font-semibold text-green-700 dark:text-green-400">
+            Public Goal
+          </h3>
+        </div>
+        <p>{publicGoal}</p>
+      </div>
+
+      <div
+        class="relative mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex items-center mb-2 transition-opacity duration-500">
+          <div
+            class="transition-all duration-500 flex items-center"
+            :class="isHidden ? 'blur-md select-none opacity-70' : ''"
+          >
+            <Icon name="lock" size="sm" class={`mr-2 text-red-500`} />
+            <h3 class="font-semibold text-red-700 dark:text-red-400">
+              True Goal
+            </h3>
+          </div>
+
+          <button
+            type="button"
+            @click="isHidden = !isHidden"
+            class="ml-auto flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors focus:outline-none text-sm"
+            aria-label="Hide secret information"
+          >
+            <Icon name="eye-off" size="sm" class="mr-1" />
+            <span>Hide</span>
+          </button>
+        </div>
+
+        <div
+          class="transition-all duration-500"
+          :class="isHidden ? 'blur-md select-none opacity-70' : ''"
+        >
+          <p>{secretGoal}</p>
+        </div>
+
+        <button
+          x-cloak
+          x-show="isHidden"
+          @click="isHidden = false"
+          class="absolute inset-0 top-6 flex items-center justify-center w-full cursor-pointer focus:outline-none"
+          aria-label="Reveal secret information"
+        >
+          <div
+            class="bg-white/80 dark:bg-gray-900/80 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm transition-transform duration-300 hover:scale-105"
+          >
+            <div class="flex items-center space-x-2">
+              <Icon name="lock" size="sm" class="text-red-500" />
+              <span class="text-sm font-medium text-gray-800 dark:text-gray-200"
+                >SECRET INFORMATION</span
+              >
+              <Icon
+                name="eye"
+                size="sm"
+                class="text-gray-600 dark:text-gray-400 ml-1"
+              />
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </GradientCard>
+</div>
+
+<style>
+  [x-cloak] {
+    display: none !important;
+  }
+</style>

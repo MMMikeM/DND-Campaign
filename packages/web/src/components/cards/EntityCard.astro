@@ -1,6 +1,7 @@
 ---
 import type { Faction, Location, Npc, Quest } from '../../types/entities';
 import Icon from '../Icon.astro';
+import Chip from '../Chip.astro';
 
 type EntityType = 'quest' | 'faction' | 'location' | 'npc';
 type Entity = Quest | Faction | Location | Npc;
@@ -75,12 +76,15 @@ const tags = currentConfig.tags.filter((tag): tag is {value: string} => tag !== 
 ---
 
 <div id={`entity-${entityType}-${entity.id}`} class="bg-white overflow-hidden rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 group">
-  <a href={`/${entityType}s/${entity.name}`} class="block p-4">
+  <a href={`/${entityType}s/${entity.slug}`} class="block p-4">
     <div class="flex items-start space-x-4">
       <div class="flex-shrink-0">
-        <div class="p-2 bg-indigo-100 rounded-md shadow-sm">
-          <Icon name={currentConfig.icon} size="lg" color="indigo" />
-        </div>
+        <Chip 
+          color="indigo" 
+          size="lg" 
+          icon={{ name: currentConfig.icon}} 
+          class="!rounded-md !bg-indigo-100 !p-2 shadow-sm !text-indigo-700 !mr-0"
+        />
       </div>
       <div class="min-w-0 flex-1">
         <div class="flex justify-between items-start">
@@ -90,9 +94,7 @@ const tags = currentConfig.tags.filter((tag): tag is {value: string} => tag !== 
           {tags.length > 0 && (
             <div class="flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium">
-                  {tag.value}
-                </span>
+                <Chip color="indigo" size="sm">{tag.value}</Chip>
               ))}
             </div>
           )}
