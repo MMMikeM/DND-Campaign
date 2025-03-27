@@ -1,240 +1,182 @@
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
 import zodToMCP from "../zodToMcp"
 import {
+	type CamelToSnakeCase,
 	createEntityActionDescription,
 	createEntityHandler,
 	jsonArray,
 	type ToolDefinition,
+	ToolHandlerReturn,
 } from "./tool.utils"
+import { tables } from "@tome-master/shared"
+import z from "zod"
 
-import {
-	npcLocations,
-	npcFactions,
-	npcQuests,
-	locationFactions,
-	npcAreas,
-	questNpcs,
-	questLocations,
-	questFactions,
-	questClues,
-	npcSignificantItems,
-} from "@tome-master/shared"
+const {
+	assocationTables: {
+		clues,
+		items,
+		factionQuests,
+		questNpcs,
+		factionInfluence,
+		questHookNpcs,
+		questHooks,
+		regionConnections,
+	},
+} = tables
 
-// Association Tool Types
-export type AssociationToolNames =
-	| "manage_location_faction"
-	| "manage_npc_faction"
-	| "manage_npc_location"
-	| "manage_npc_quest"
-	| "manage_quest_location"
-	| "manage_quest_npc"
-	| "manage_quest_faction"
-	| "manage_quest_clue"
-	| "manage_area_npc"
-	| "manage_npc_significant_item"
+type ToolNames = keyof typeof tables.assocationTables
+
+type AssociationToolNames = `manage_${CamelToSnakeCase<ToolNames>}`
 
 // Schema Definitions
 const schemas = {
-	// NPC Association Schemas
-	npcLocationSchema: createInsertSchema(npcLocations, {
-		id: z.number().optional(),
-		context: jsonArray,
-	}),
-
-	npcFactionSchema: createInsertSchema(npcFactions, {
-		id: z.number().optional(),
-		role: z.string(),
-		status: z.enum(["leader", "member", "associate", "former"]),
-	}),
-
-	npcQuestSchema: createInsertSchema(npcQuests, {
-		id: z.number().optional(),
-		role: z.string(),
-		notes: jsonArray,
-	}),
-
-	// Location Association Schemas
-	locationFactionSchema: createInsertSchema(locationFactions, {
-		id: z.number().optional(),
+	clues: createInsertSchema(clues, {
 		description: jsonArray,
-	}),
-
-	npcAreaschema: createInsertSchema(npcAreas, {
-		id: z.number().optional(),
-		activity: jsonArray,
-	}),
-
-	// Quest Association Schemas
-	questNpcSchema: createInsertSchema(questNpcs, {
-		id: z.number().optional(),
-		role: z.string(),
-		notes: jsonArray,
-	}),
-
-	questLocationSchema: createInsertSchema(questLocations, {
-		id: z.number().optional(),
-		description: jsonArray,
-		stage: z.number().optional(),
-	}),
-
-	questFactionSchema: createInsertSchema(questFactions, {
-		id: z.number().optional(),
-		role: z.string(),
+		reveals: jsonArray,
+		discoveryCondition: jsonArray,
+		creativePrompts: jsonArray,
+	}).strict(),
+	factionQuests: createInsertSchema(factionQuests, {
 		interest: jsonArray,
-	}),
-
-	questClueSchema: createInsertSchema(questClues, {
-		id: z.number().optional(),
+	}).strict(),
+	items: createInsertSchema(items, {
 		description: jsonArray,
-		discoveryCondition: jsonArray.optional(),
-		pointsTo: jsonArray,
-	}),
-
-	npcSignificantItemSchema: createInsertSchema(npcSignificantItems, {
-		id: z.number().optional(),
+		locationId: z.number().optional(),
+		questId: z.number().optional(),
+		creativePrompts: jsonArray,
+	}).strict(),
+	questNpcs: createInsertSchema(questNpcs, {
+		creativePrompts: jsonArray,
 		description: jsonArray,
-		significance: z.string(),
-	}),
-}
+		dramaticMoments: jsonArray,
+		hiddenAspects: jsonArray,
+	}).strict(),
+	factionInfluence: createInsertSchema(factionInfluence, {
+		description: jsonArray,
+		creativePrompts: jsonArray,
+	}).strict(),
+	questHookNpcs: createInsertSchema(questHookNpcs, {}).strict(),
+	questHooks: createInsertSchema(questHooks, {
+		description: jsonArray,
+		creativePrompts: jsonArray,
+		discoveryCondition: jsonArray,
+		hookContent: jsonArray,
+	}).strict(),
+	regionConnections: createInsertSchema(regionConnections, {
+		description: jsonArray,
+		creativePrompts: jsonArray,
+		travelHazards: jsonArray,
+		pointsOfInterest: jsonArray,
+	}).strict(),
+} satisfies Record<ToolNames, z.ZodSchema<unknown>>
 
 // Association Tool Definitions
 export const associationToolDefinitions: Record<AssociationToolNames, ToolDefinition> = {
-	// NPC Location association
-	manage_npc_location: {
-		description: createEntityActionDescription("NPC-location"),
-		inputSchema: zodToMCP(schemas.npcLocationSchema, {
+	manage_clues: {
+		description: createEntityActionDescription("clue"),
+		inputSchema: zodToMCP(schemas.clues, {
 			id: "The ID of the association to update (omit to create new)",
-			npcId: "The ID of the NPC to manage with a location",
-			locationId: "The ID of the location where the NPC can be found",
-			context: "Array of context strings describing why/how the NPC is at this location",
+			description: "The description of the clue, in point form",
+			discoveryCondition: "The condition that must be met to discover the clue",
+			factionId: "The ID of the faction that owns the clue",
+			locationId: "The ID of the location that the clue is found in",
+			npcId: "The ID of the NPC that the clue is found by",
+			questStageId: "The ID of the quest stage that the clue is found in",
+			reveals: "The information that is revealed when the clue is discovered",
 		}),
-		handler: createEntityHandler(npcLocations, schemas.npcLocationSchema, "NPC-location"),
+		handler: createEntityHandler(clues, schemas.clues, "clue"),
 	},
-
-	// NPC Faction association
-	manage_npc_faction: {
-		description: createEntityActionDescription("NPC-faction"),
-		inputSchema: zodToMCP(schemas.npcFactionSchema, {
+	manage_faction_quests: {
+		description: createEntityActionDescription("faction-quest"),
+		inputSchema: zodToMCP(schemas.factionQuests, {
 			id: "The ID of the association to update (omit to create new)",
-			npcId: "The ID of the NPC to manage with a faction",
-			factionId: "The ID of the faction the NPC belongs to",
-			role: "The NPC's specific role within the faction",
-			status: "The NPC's standing in the faction (leader, member, manage, or former)",
+			factionId: "The ID of the faction that owns the quest",
+			interest: "The interest of the faction in the quest",
+			questId: "The ID of the quest that the faction is associated with",
+			role: "The role of the faction in the quest",
 		}),
-		handler: createEntityHandler(npcFactions, schemas.npcFactionSchema, "NPC-faction"),
+		handler: createEntityHandler(factionQuests, schemas.factionQuests, "faction-quest"),
 	},
-
-	// NPC Quest association
-	manage_npc_quest: {
-		description: createEntityActionDescription("NPC-quest"),
-		inputSchema: zodToMCP(schemas.npcQuestSchema, {
+	manage_items: {
+		description: createEntityActionDescription("item"),
+		inputSchema: zodToMCP(schemas.items, {
 			id: "The ID of the association to update (omit to create new)",
-			npcId: "The ID of the NPC to manage with a quest",
-			questId: "The ID of the quest the NPC is involved with",
-			role: "The role the NPC plays in the quest",
-			notes: "Additional notes about the NPC's involvement in the quest",
+			factionId: "The ID of the faction that owns the item",
+			locationId: "The ID of the location that the item is found in",
+			npcId: "The ID of the NPC that the item is associated with",
+			questId: "The ID of the quest that the item is associated with",
+			stageId: "The ID of the stage that the item is found in",
+			description: "The description of the item, in point form",
+			name: "The name of the item",
+			type: "The type of the item",
 		}),
-		handler: createEntityHandler(npcQuests, schemas.npcQuestSchema, "NPC-quest"),
+		handler: createEntityHandler(items, schemas.items, "item"),
 	},
-
-	// Location Faction association
-	manage_location_faction: {
-		description: createEntityActionDescription("location-faction"),
-		inputSchema: zodToMCP(schemas.locationFactionSchema, {
+	manage_quest_npcs: {
+		description: createEntityActionDescription("quest-npc"),
+		inputSchema: zodToMCP(schemas.questNpcs, {
 			id: "The ID of the association to update (omit to create new)",
-			locationId: "The ID of the location to manage with a faction",
-			factionId: "The ID of the faction with presence at this location",
-			influence: "The level of influence the faction has at this location",
-			description: "Details about the faction's presence and operations in this location",
+			npcId: "The ID of the NPC that the quest is associated with",
+			questId: "The ID of the quest that the NPC is associated with",
+			creativePrompts: "The creative prompts for the NPC",
+			description: "The description of the NPC, in point form",
+			dramaticMoments: "The dramatic moments of the NPC",
+			hiddenAspects: "The hidden aspects of the NPC",
+			importance: "The importance of the NPC in the quest",
+			role: "The role of the NPC in the quest",
 		}),
-		handler: createEntityHandler(
-			locationFactions,
-			schemas.locationFactionSchema,
-			"location-faction",
-		),
+		handler: createEntityHandler(questNpcs, schemas.questNpcs, "quest-npc"),
 	},
-
-	// Area NPC association
-	manage_area_npc: {
-		description: createEntityActionDescription("area-NPC"),
-		inputSchema: zodToMCP(schemas.npcAreaschema, {
+	manage_faction_influence: {
+		description: createEntityActionDescription("faction-influence"),
+		inputSchema: zodToMCP(schemas.factionInfluence, {
 			id: "The ID of the association to update (omit to create new)",
-			locationId: "The ID of the parent location",
-			areaId: "The ID of the specific area within the location",
-			npcId: "The ID of the NPC found in this area",
-			activity: "What the NPC is doing in this specific area",
+			factionId: "The ID of the faction that owns the influence",
+			questId: "The ID of the quest that the influence is associated with",
+			creativePrompts: "The creative prompts for the influence",
+			description: "The description of the influence, in point form",
+			influenceLevel: "The level of influence that the faction has in the quest",
 		}),
-		handler: createEntityHandler(npcAreas, schemas.npcAreaschema, "area-NPC"),
+		handler: createEntityHandler(factionInfluence, schemas.factionInfluence, "faction-influence"),
 	},
-
-	// Quest NPC association
-	manage_quest_npc: {
-		description: createEntityActionDescription("quest-NPC"),
-		inputSchema: zodToMCP(schemas.questNpcSchema, {
+	manage_quest_hook_npcs: {
+		description: createEntityActionDescription("quest-hook-npc"),
+		inputSchema: zodToMCP(schemas.questHookNpcs, {
 			id: "The ID of the association to update (omit to create new)",
-			questId: "The ID of the quest to manage with an NPC",
-			npcId: "The ID of the NPC involved in the quest",
-			role: "The specific role the NPC plays in the quest",
-			importance: "How important the NPC is to the quest (minor, supporting, major, critical)",
-			notes: "Additional notes about the NPC's involvement",
+			npcId: "The ID of the NPC that the quest hook is associated with",
+			dialogueHint: "The dialogue hint of the NPC in the quest hook",
+			hookId: "The ID of the quest hook that the NPC is associated with",
+			relationship: "The relationship of the NPC in the quest hook",
+			trustRequired: "The trust required for the NPC in the quest hook",
 		}),
-		handler: createEntityHandler(questNpcs, schemas.questNpcSchema, "quest-NPC"),
+		handler: createEntityHandler(questHookNpcs, schemas.questHookNpcs, "quest-hook-npc"),
 	},
-
-	// Quest Location association
-	manage_quest_location: {
-		description: createEntityActionDescription("quest-location"),
-		inputSchema: zodToMCP(schemas.questLocationSchema, {
+	manage_quest_hooks: {
+		description: createEntityActionDescription("quest-hook"),
+		inputSchema: zodToMCP(schemas.questHooks, {
 			id: "The ID of the association to update (omit to create new)",
-			questId: "The ID of the quest to manage with a location",
-			locationId: "The ID of the location where quest activities take place",
-			description: "Details of what quest-related events occur at this location",
-			stage: "Optional quest stage number when this location becomes relevant",
+			questId: "The ID of the quest that the hook is associated with",
+			creativePrompts: "The creative prompts for the quest hook",
+			description: "The description of the quest hook",
+			discoveryCondition: "The condition that must be met to discover the quest hook",
+			hookContent: "The content of the quest hook",
 		}),
-		handler: createEntityHandler(questLocations, schemas.questLocationSchema, "quest-location"),
+		handler: createEntityHandler(questHooks, schemas.questHooks, "quest-hook"),
 	},
-
-	// Quest Faction association
-	manage_quest_faction: {
-		description: createEntityActionDescription("quest-faction"),
-		inputSchema: zodToMCP(schemas.questFactionSchema, {
+	manage_region_connections: {
+		description: createEntityActionDescription("region-connection"),
+		inputSchema: zodToMCP(schemas.regionConnections, {
 			id: "The ID of the association to update (omit to create new)",
-			questId: "The ID of the quest to manage with a faction",
-			factionId: "The ID of the faction involved in the quest",
-			role: "How the faction is involved in the quest (e.g., sponsor, antagonist, affected party)",
-			interest: "Why the faction is interested in the quest's outcome",
+			travelHazards: "The travel hazards of the region connection",
+			pointsOfInterest: "The points of interest of the region connection",
+			controllingFaction: "The name of the faction that controls the region connection",
+			creativePrompts: "The creative prompts for the region connection",
+			description: "The description of the region connection",
+			relationId: "The ID of the relation that the region connection is associated with",
+			routeType: "The type of route for the region connection",
+			travelDifficulty: "The difficulty of travel for the region connection",
+			travelTime: "The time it takes to travel the region connection",
 		}),
-		handler: createEntityHandler(questFactions, schemas.questFactionSchema, "quest-faction"),
-	},
-
-	// Quest Clue association
-	manage_quest_clue: {
-		description: createEntityActionDescription("quest-clue"),
-		inputSchema: zodToMCP(schemas.questClueSchema, {
-			id: "The ID of the association to update (omit to create new)",
-			questId: "The ID of the quest this clue belongs to",
-			description: "The content and details of the clue",
-			locationId: "Optional ID of the location where this clue can be found",
-			npcId: "Optional ID of the NPC who possesses this clue",
-			discoveryCondition: "Circumstances required for players to discover this clue",
-			pointsTo: "What aspect of the quest this clue reveals or hints at",
-		}),
-		handler: createEntityHandler(questClues, schemas.questClueSchema, "quest-clue"),
-	},
-
-	// NPC Significant Item association
-	manage_npc_significant_item: {
-		description: createEntityActionDescription("NPC-item"),
-		inputSchema: zodToMCP(schemas.npcSignificantItemSchema, {
-			id: "The ID of the association to update (omit to create new)",
-			npcId: "The ID of the NPC who possesses the item",
-			name: "The name of the significant item",
-			description: "Physical description and properties of the item",
-			type: "The type of item (weapon, artifact, heirloom, etc.)",
-			significance: "Why this item is important to the NPC or plot",
-			questId: "Optional ID of a quest this item is relevant to",
-		}),
-		handler: createEntityHandler(npcSignificantItems, schemas.npcSignificantItemSchema, "NPC-item"),
+		handler: createEntityHandler(regionConnections, schemas.regionConnections, "region-connection"),
 	},
 }
