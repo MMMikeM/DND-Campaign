@@ -1,5 +1,5 @@
 // regions/tables.ts
-import { sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core"
 import { cascadeFk, oneOf, nullableFk, string, list, pk } from "../../db/utils.js"
 
 const regionTypes = [
@@ -114,15 +114,19 @@ export const regions = sqliteTable("regions", {
 	security: list("defenses"),
 })
 
-export const regionRelations = sqliteTable("region_relations", {
-	id: pk(),
-	regionId: cascadeFk("region_id", regions.id),
-	otherRegionId: nullableFk("other_region_id", regions.id),
-	relationType: string("relation_type"),
+export const regionRelations = sqliteTable(
+	"region_relations",
+	{
+		id: pk(),
+		regionId: cascadeFk("region_id", regions.id),
+		otherRegionId: nullableFk("other_region_id", regions.id),
+		relationType: string("relation_type"),
 
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-})
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+	},
+	(t) => [unique().on(t.regionId, t.otherRegionId)],
+)
 
 // Specific locations within regions
 export const locations = sqliteTable("locations", {
@@ -133,6 +137,7 @@ export const locations = sqliteTable("locations", {
 	name: string("name").unique(),
 	terrain: string("terrain"),
 	climate: string("climate"),
+	mood: string("mood"),
 	// lists
 	creativePrompts: list("creative_prompts"),
 	creatures: list("creatures"),
@@ -140,26 +145,7 @@ export const locations = sqliteTable("locations", {
 	environment: text("environment"),
 	features: list("features"),
 	treasures: list("treasures"),
-})
-
-// Relationships between locations
-export const locationRelations = sqliteTable("location_relations", {
-	id: pk(),
-	locationId: cascadeFk("location_id", locations.id),
-	otherLocationId: nullableFk("other_location_id", locations.id),
-
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-	relationType: string("relation_type"),
-})
-
-export const locationAtmosphere = sqliteTable("location_atmosphere", {
-	id: pk(),
-	locationId: cascadeFk("location_id", locations.id),
-
-	timeContext: oneOf("time_context", ["always", "day", "night", "dawn", "dusk", "seasonal"]),
-	lightingLevel: oneOf("lighting_level", ["pitch black", "dim", "shadowy", "well-lit", "bright", "blinding"]),
-	mood: oneOf("mood", ["peaceful", "tense", "eerie", "vibrant", "desolate", "chaotic", "oppressive"]),
+	lightingDescription: list("lighting_description"),
 
 	soundscape: list("soundscape"),
 	smells: list("smells"),
@@ -167,26 +153,44 @@ export const locationAtmosphere = sqliteTable("location_atmosphere", {
 	descriptors: list("descriptors"), // Evocative adjectives for quick reference
 })
 
+// Relationships between locations
+export const locationRelations = sqliteTable(
+	"location_relations",
+	{
+		id: pk(),
+		locationId: cascadeFk("location_id", locations.id),
+		otherLocationId: nullableFk("other_location_id", locations.id),
+
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+		relationType: string("relation_type"),
+	},
+	(t) => [unique().on(t.locationId, t.otherLocationId)],
+)
+
 // Encounters within locations
-export const locationEncounters = sqliteTable("location_encounters", {
-	id: pk(),
-	name: string("name").unique(),
-	locationId: cascadeFk("location_id", locations.id),
+export const locationEncounters = sqliteTable(
+	"location_encounters",
+	{
+		id: pk(),
+		name: string("name").unique(),
+		locationId: cascadeFk("location_id", locations.id),
 
-	encounterType: oneOf("encounter_type", encounterTypes),
-	dangerLevel: oneOf("danger_level", dangerLevels), // corrected to dangerLevel
-	difficulty: oneOf("difficulty", ["easy", "medium", "hard"]), // changed to oneOf
+		encounterType: oneOf("encounter_type", encounterTypes),
+		dangerLevel: oneOf("danger_level", dangerLevels), // corrected to dangerLevel
+		difficulty: oneOf("difficulty", ["easy", "medium", "hard"]), // changed to oneOf
 
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-	creatures: list("creatures"),
-	treasure: list("treasure"),
-})
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+		creatures: list("creatures"),
+		treasure: list("treasure"),
+	},
+	(t) => [unique().on(t.locationId, t.name)],
+)
 
 export const locationSecrets = sqliteTable("location_secrets", {
 	id: pk(),
 	locationId: cascadeFk("location_id", locations.id),
-
 	secretType: oneOf("secret_type", [
 		"historical",
 		"hidden area",
@@ -201,7 +205,6 @@ export const locationSecrets = sqliteTable("location_secrets", {
 		"challenging",
 		"nearly impossible",
 	]),
-
 	discoveryMethod: list("discovery_method"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
