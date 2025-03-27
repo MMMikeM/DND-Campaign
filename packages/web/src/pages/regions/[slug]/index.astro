@@ -1,0 +1,314 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import SecretCard from "@components/cards/SecretCard.astro";
+import Icon from "@components/Icon.astro";
+import { getRegion } from "@entities";
+import Layout from "@layout";
+import {
+	hasItems,
+	hasItemsWithProperty,
+	safeArrayAccess,
+} from "@utils/dataHelpers";
+import { getEntityUrl } from "@utils/slugs";
+import TwoColumnGrid from "@components/TwoColumnGrid.astro";
+import Chip from "@components/Chip.astro";
+import type { Props as ChipProps } from "@components/Chip.astro";
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	return Astro.redirect("/locations");
+}
+
+const location = await getRegion(slug);
+
+if (!location) {
+	return Astro.redirect("/404");
+}
+
+// Get primary NPC if any
+const primaryNpc = safeArrayAccess(location.npcs, 0);
+
+// Get primary faction if any
+const primaryFaction = safeArrayAccess(location.factions, 0);
+
+const availableData = {
+	description: hasItems(location.description),
+	history: location.history ? true : false,
+	notableFeatures: hasItems(location.notableFeatures),
+	secrets: hasItems(location.secrets),
+	areas: hasItems(location.areas),
+	encounters: hasItems(location.encounters),
+	quests: hasItemsWithProperty(location.quests, "quest"),
+	npcs: hasItemsWithProperty(location.npcs, "npc"),
+	relations: hasItemsWithProperty(location.relations, "location"),
+	factions: hasItemsWithProperty(location.factions, "faction"),
+};
+
+const chips = [
+	{
+		item: location.type,
+		color: "blue",
+		icon: {
+			name: "tag",
+		},
+	},
+	{
+		item: location.region,
+		color: "green",
+		icon: {
+			name: "map",
+		},
+	},
+	{
+		item: location.dangerLevel,
+		color: "red",
+		icon: {
+			name: "shield",
+		},
+	},
+] satisfies (ChipProps & { item: string })[];
+---
+
+<Layout title={location.name}>
+	<TwoColumnGrid title={location.name}>
+		<Fragment slot="header">
+			<!-- Location Info Cards -->
+			{
+				chips.map((chip) => (
+					<Chip icon={chip.icon} color={chip.color}>
+						{chip.item}
+					</Chip>
+				))
+			}
+		</Fragment>
+
+		<Fragment slot="left-column">
+			{
+				availableData.description && (
+					<GradientCard title="Description" icon="file-text" colorTheme="blue">
+						<div class="space-y-4">
+							{location.description.map((paragraph: string) => (
+								<p>{paragraph}</p>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{
+				availableData.history && (
+					<GradientCard title="History" icon="book-open" colorTheme="amber">
+						<p>{location.history}</p>
+					</GradientCard>
+				)
+			}
+
+			{
+				availableData.notableFeatures && (
+					<GradientCard title="Notable Features" icon="eye" colorTheme="purple">
+						<ul class="list-disc list-inside space-y-2 ml-6">
+							{location.notableFeatures.map((feature: string) => (
+								<li>{feature}</li>
+							))}
+						</ul>
+					</GradientCard>
+				)
+			}
+
+			{
+				availableData.secrets && (
+					<SecretCard title="Secrets" icon="lock" colorTheme="red">
+						<ul class="list-disc list-inside space-y-2 ml-6">
+							{location.secrets.map((secret: string) => (
+								<li>{secret}</li>
+							))}
+						</ul>
+					</SecretCard>
+				)
+			}
+			{/* Areas */}
+			{
+				availableData.areas && (
+					<GradientCard title="Areas" icon="layout-grid" colorTheme="green">
+						<div class="space-y-4">
+							{location.areas.map((area: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<h3 class="font-semibold text-lg">{area.name}</h3>
+									<div class="text-gray-600 dark:text-gray-400 text-sm mb-2">
+										<span class="inline-block px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full capitalize">
+											{area.areaType}
+										</span>
+									</div>
+									{area.description && area.description.length > 0 && (
+										<p class="text-gray-700 dark:text-gray-300">
+											{area.description[0]}
+										</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{/* Encounters */}
+			{
+				availableData.encounters && (
+					<GradientCard title="Encounters" icon="zap" colorTheme="red">
+						<div class="space-y-4">
+							{location.encounters.map((encounter: any) => (
+								<div class="border-l-4 border-red-500 pl-4 py-2">
+									<h3 class="font-semibold text-lg">{encounter.name}</h3>
+									<div class="text-gray-600 dark:text-gray-400 text-sm mb-2 flex items-center gap-2">
+										<span class="inline-block px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full capitalize">
+											{encounter.encounterType}
+										</span>
+										{encounter.difficulty && (
+											<span class="text-gray-700 dark:text-gray-300">
+												Difficulty: {encounter.difficulty}
+											</span>
+										)}
+									</div>
+									{encounter.description &&
+										encounter.description.length > 0 && (
+											<p class="text-gray-700 dark:text-gray-300">
+												{encounter.description[0]}
+											</p>
+										)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+		</Fragment>
+
+		<Fragment slot="right-column">
+			{/* Primary Faction */}
+			{
+				primaryFaction?.faction && (
+					<GradientCard title="Primary Faction" icon="users" colorTheme="blue">
+						<div class="flex flex-col items-center text-center">
+							<Icon name="flag" size="lg" class="mb-2" />
+							<a
+								href={getEntityUrl("factions", primaryFaction.faction.name)}
+								class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+							>
+								{primaryFaction.faction.name}
+							</a>
+							{primaryFaction.influence && (
+								<span class="mt-2 text-xs px-3 py-1 bg-blue-900 text-blue-200 rounded-full capitalize">
+									{primaryFaction.influence} influence
+								</span>
+							)}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{/* Related Quests */}
+			{
+				availableData.quests && (
+					<GradientCard title="Quests" icon="file-text" colorTheme="green">
+						<div class="space-y-4">
+							{location.quests.map((questRel: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-2">
+									<a
+										href={getEntityUrl("quests", questRel.quest.name)}
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{questRel.quest.name}
+									</a>
+									{questRel.description && questRel.description.length > 0 && (
+										<p class="text-gray-700 mt-1">{questRel.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{/* NPCs */}
+			{
+				availableData.npcs && (
+					<GradientCard
+						title="Notable Characters"
+						icon="users"
+						colorTheme="blue"
+					>
+						<div class="space-y-4">
+							{location.npcs.map((npcRel: any) => (
+								<div class="border-l-4 border-blue-500 pl-4 py-1.5">
+									<a
+										href={getEntityUrl("npcs", npcRel.npc.name)}
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{npcRel.npc.name}
+									</a>
+									{npcRel.context && npcRel.context.length > 0 && (
+										<p class="text-gray-700 mt-1">{npcRel.context[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{/* Connected Locations */}
+			{
+				availableData.relations && (
+					<GradientCard
+						title="Connected Locations"
+						icon="map"
+						colorTheme="green"
+					>
+						<div class="space-y-4">
+							{location.relations.map((relation: any) => (
+								<div class="border-l-4 border-green-500 pl-4 py-1.5">
+									<a
+										href={getEntityUrl("locations", relation.location.name)}
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{relation.location.name}
+									</a>
+									{relation.description && relation.description.length > 0 && (
+										<p class="text-gray-700 mt-1">{relation.description[0]}</p>
+									)}
+								</div>
+							))}
+						</div>
+					</GradientCard>
+				)
+			}
+
+			{/* Other Factions */}
+			{
+				availableData.factions && location.factions.length > 1 && (
+					<GradientCard title="Other Factions" icon="flag" colorTheme="indigo">
+						<ul class="space-y-3">
+							{location.factions.slice(1).map((factionRel: any) => (
+								<li class="flex justify-between items-center">
+									<a
+										href={getEntityUrl("factions", factionRel.faction.name)}
+										class="text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{factionRel.faction.name}
+									</a>
+									{factionRel.influence && (
+										<span class="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded-full capitalize">
+											{factionRel.influence}
+										</span>
+									)}
+								</li>
+							))}
+						</ul>
+					</GradientCard>
+				)
+			}
+		</Fragment>
+	</TwoColumnGrid>
+</Layout>

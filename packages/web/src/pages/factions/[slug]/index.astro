@@ -1,0 +1,368 @@
+---
+import GoalCard from "@components/cards/GoalCard.astro";
+import GradientCard from "@components/cards/GradientCard.astro";
+import { getFaction } from "@entities";
+import Layout from "@layout";
+import { hasItems, hasItemsWithProperty } from "@utils/dataHelpers";
+import { getEntityUrl } from "@utils/slugs";
+import TwoColumnGrid from "@components/TwoColumnGrid.astro";
+import Chip, { type Props as ChipProps } from "@components/Chip.astro";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	return Astro.redirect('/factions');
+}
+
+const faction = await getFaction(slug);
+
+console.log(JSON.stringify(faction, null, 2));
+
+if (!faction) {
+	return Astro.redirect('/404');
+}
+
+
+
+const has = {
+	description: hasItems(faction.description) ?? faction.description,
+	history: hasItems(faction.history) ?? faction.history,
+	members: hasItems(faction.members) ?? faction.members,
+	notes: hasItems(faction.notes) ?? faction.notes,
+	quests: hasItems(faction.quests) ?? faction.quests,
+	resources: hasItems(faction.resources) ?? faction.resources,
+	relations: hasItemsWithProperty(faction.relations, "faction"),
+	secretGoal: !!faction.secretGoal,
+	locations: hasItemsWithProperty(faction.locations, "location"),
+};
+
+const { 
+	alignment, 
+	foundationDate, 
+	headquarters, 
+	leadershipStructure, 
+	publicGoal, 
+	publicPerception, 
+	size, 
+	type, 
+	wealth, 
+	region,
+	description,
+	history,
+	members,
+	notes,
+	relations,
+	resources,
+	name, 
+	quests, 
+	reach, 
+	recruitment, 
+	secretGoal
+} = faction;
+
+
+console.log("Faction Data: ", faction);
+
+const chips = [
+	{
+		item: faction.type,
+		color: "blue",
+		icon: {
+			name: "tag",
+		},
+	},
+	{
+		item: faction.alignment!,
+		color: "purple",
+		icon: {
+			name: "compass",
+		},
+	},
+	{
+		item: faction.region?.name!,
+		color: "green",
+		icon: {
+			name: "map",
+		},
+	},
+] satisfies (ChipProps & { item: string })[];
+---
+
+<Layout title={faction.name}>
+	<TwoColumnGrid title={faction.name}>
+		<Fragment slot="header">
+			{chips.map((chip) => (
+				<Chip icon={chip.icon} color={chip.color}>
+					{chip.item}
+				</Chip>
+			))}
+
+			<!-- Basic Faction Information -->
+			<div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+				{foundationDate && (
+					<div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+						<h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Founded</h3>
+						<p class="mt-1 font-medium">{foundationDate}</p>
+					</div>
+				)}
+				
+				{size && (
+					<div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+						<h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Size</h3>
+						<p class="mt-1 font-medium">{size}</p>
+					</div>
+				)}
+				
+				{wealth && (
+					<div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+						<h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Wealth</h3>
+						<p class="mt-1 font-medium">{wealth}</p>
+					</div>
+				)}
+				
+				{reach && (
+					<div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+						<h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Reach</h3>
+						<p class="mt-1 font-medium">{reach}</p>
+					</div>
+				)}
+			</div>
+
+			<!-- Leadership Structure & Public Perception -->
+			{(leadershipStructure || publicPerception) && (
+				<div class="mt-4 space-y-4">
+					{leadershipStructure && (
+						<div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+							<h3 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2">Leadership Structure</h3>
+							<p class="text-gray-800 dark:text-gray-200">{leadershipStructure}</p>
+						</div>
+					)}
+					
+					{publicPerception && (
+						<div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+							<h3 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2">Public Perception</h3>
+							<p class="text-gray-800 dark:text-gray-200">{publicPerception}</p>
+						</div>
+					)}
+				</div>
+			)}
+		</Fragment>
+
+		<Fragment slot="left-column">
+			<!-- Description -->
+			{hasItems(faction.description) && (
+				<GradientCard title="Description" icon="file-text" colorTheme="blue">
+					<div class="space-y-4">
+						{faction.description?.map((paragraph: string) => (
+							<p>{paragraph}</p>
+						))}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- History -->
+			{hasItems(faction.history) && (
+				<GradientCard title="History" icon="book-open" colorTheme="amber">
+					<div class="space-y-4">
+						{faction.history?.map((paragraph: string) => (
+							<p>{paragraph}</p>
+						))}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- Goals -->
+				<GoalCard 
+					title="Faction Goals" 
+					icon="target" 
+					colorTheme="indigo"
+					publicGoal={publicGoal || ""}
+					secretGoal={secretGoal || ""}
+					isInitiallyHidden={true}
+				/>
+			
+
+			<!-- Resources -->
+			{has.resources	 && (
+				<GradientCard title="Resources" icon="database" colorTheme="amber">
+					<ul class="list-disc list-inside space-y-2 ml-4">
+						{faction.resources?.map((resource: string) => (
+							<li>{resource}</li>
+						))}
+					</ul>
+				</GradientCard>
+			)}
+			
+			<!-- Notes -->
+			{has.notes && (
+				<GradientCard title="GM Notes" icon="clipboard" colorTheme="green">
+					<div class="space-y-4">
+						{faction.notes?.map((note: string) => (
+							<p>{note}</p>
+						))}
+					</div>
+				</GradientCard>
+			)}
+		</Fragment>
+		
+		<Fragment slot="right-column">
+			<!-- Headquarters -->
+			{headquarters && (
+				<GradientCard title="Headquarters" icon="building" colorTheme="indigo">
+					<a href={getEntityUrl('locations', headquarters.name)}>{headquarters.name}</a>
+				</GradientCard>
+			)}
+
+			<!-- Members -->
+			{has.members && (
+				<GradientCard title="Notable Members" icon="users" colorTheme="purple">
+					<div class="space-y-4">
+						{faction.members.map((member: any) => {
+							return (
+								<div class="border-l-4 border-purple-500 pl-4 py-2">
+									<div class="flex justify-between">
+										<a 
+											href={getEntityUrl("npcs", member.name)} 
+											class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+										>
+											{member.name}
+										</a>
+										{member.status && (
+											<span class="text-gray-600 dark:text-gray-400 text-sm capitalize px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+												{member.status}
+											</span>
+										)}
+									</div>
+									{member.role && (
+										<p class="text-gray-700 dark:text-gray-300 mt-1">{member.role}</p>
+									)}
+								</div>
+							);
+						})}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- Locations -->
+			{has.locations && (
+				<GradientCard title="Locations" icon="map" colorTheme="green">
+					<div class="space-y-4">
+						{faction.locations.map((locationRel: any) => (
+							<div class="border-l-4 border-green-500 pl-4 py-2">
+								<a 
+									href={getEntityUrl('locations', locationRel.location.name)} 
+									class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+								>
+									{locationRel.location.name}
+								</a>
+								{locationRel.description && locationRel.description.length > 0 && (
+									<p class="text-gray-700 dark:text-gray-300 mt-1">{locationRel.description[0]}</p>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- Faction Relationships -->
+			{faction.relations && (
+				<GradientCard title="Relationships with Other Factions" icon="git-branch" colorTheme="blue">
+					<div class="space-y-4">
+					{faction.relations.map((relation) => (
+							<div class="border-l-4 pl-4 py-2" class:list={[
+								relation.type === 'ally' ? 'border-green-500' : '', 
+								relation.type === 'enemy' ? 'border-red-500' : '',
+								relation.type === 'neutral' ? 'border-gray-500' : ''
+							]}>
+								<div class="flex justify-between">
+									<a 
+										href={getEntityUrl('factions', relation.faction.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{relation.faction.name}
+									</a>
+									{relation.type && (
+										<span class:list={[
+											'text-sm capitalize px-2 py-1 rounded-full',
+											relation.type === 'ally' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : '',
+											relation.type === 'enemy' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : '',
+											relation.type === 'neutral' ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300' : ''
+										]}>
+											{relation.type}
+										</span>
+									)}
+								</div>
+								
+								{relation.description && relation.description.length > 0 && (
+									<div class="text-gray-700 dark:text-gray-300 mt-2">
+										<p class="font-medium mb-1">Description:</p>
+										<p>{relation.description[0]}</p>
+									</div>
+								)}
+								
+								{relation.strength && (
+									<div class="text-gray-700 dark:text-gray-300 mt-2">
+										<p class="font-medium mb-1">Relationship Strength:</p>
+										<p>{relation.strength}</p>
+									</div>
+								)}
+								
+								{relation.notes && relation.notes.length > 0 && (
+									<div class="text-gray-700 dark:text-gray-300 mt-2">
+										<p class="font-medium mb-1">Notes:</p>
+										<ul class="list-disc list-inside ml-2">
+											{relation.notes.map((note: string) => (
+												<li>{note}</li>
+											))}
+										</ul>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- Quests -->
+			{has.quests && (
+				<GradientCard title="Quests" icon="file-text" colorTheme="green">
+					<div class="space-y-4">
+						{faction.quests.map((questRel: any) => (
+							<div class="border-l-4 border-green-500 pl-4 py-2">
+								<div class="flex justify-between">
+									<a 
+										href={getEntityUrl('quests', questRel.quest.name)} 
+										class="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+									>
+										{questRel.quest.name}
+									</a>
+									{questRel.role && (
+										<span class="text-gray-600 dark:text-gray-400 text-sm capitalize px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+											{questRel.role}
+										</span>
+									)}
+								</div>
+								{questRel.interest && questRel.interest.length > 0 && (
+									<p class="text-gray-700 dark:text-gray-300 mt-1">{questRel.interest[0]}</p>
+								)}
+							</div>
+						))}
+					</div>
+				</GradientCard>
+			)}
+
+			<!-- Recruitment -->
+			{recruitment && (
+				<GradientCard title="Recruitment Practices" icon="user-plus" colorTheme="cyan">
+					<p>{recruitment}</p>
+				</GradientCard>
+			)}
+		</Fragment>
+
+		<Fragment slot="footer">
+This is the footer
+		</Fragment>
+	</TwoColumnGrid>
+</Layout>
