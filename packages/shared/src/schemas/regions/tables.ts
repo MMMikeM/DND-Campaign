@@ -1,5 +1,5 @@
 // regions/tables.ts
-import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core"
+import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
 import { cascadeFk, oneOf, nullableFk, string, list, pk } from "../../db/utils.js"
 
 const regionTypes = [
@@ -95,7 +95,7 @@ const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] a
 // Main regions table
 export const regions = sqliteTable("regions", {
 	id: pk(),
-	name: text("name").unique(),
+	name: string("name").unique(),
 	// enums
 	dangerLevel: oneOf("danger_level", dangerLevels),
 	type: oneOf("type", regionTypes),
@@ -138,11 +138,11 @@ export const locations = sqliteTable("locations", {
 	terrain: string("terrain"),
 	climate: string("climate"),
 	mood: string("mood"),
+	environment: string("environment"),
 	// lists
 	creativePrompts: list("creative_prompts"),
 	creatures: list("creatures"),
 	description: list("description"),
-	environment: text("environment"),
 	features: list("features"),
 	treasures: list("treasures"),
 	lightingDescription: list("lighting_description"),

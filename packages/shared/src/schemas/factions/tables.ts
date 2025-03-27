@@ -1,6 +1,6 @@
 // factions/tables.ts
-import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core"
-import { list, nullableFk, cascadeFk, pk, oneOf, string } from "../../db/utils.js"
+import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
+import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString } from "../../db/utils.js"
 import { locations, regions } from "../regions/tables.js"
 import { alignments, wealthLevels } from "../common.js"
 
@@ -33,7 +33,7 @@ export const factions = sqliteTable("factions", {
 	publicGoal: string("public_goal"),
 	publicPerception: string("public_perception"),
 	// nullable
-	secretGoal: text("secret_goal"),
+	secretGoal: nullableString("secret_goal"),
 	// list
 	description: list("description").notNull(),
 	values: list("values"),
