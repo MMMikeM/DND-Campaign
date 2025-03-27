@@ -1,6 +1,8 @@
 import { z } from "astro:schema"
 import { db } from "."
-import { fromSlug } from "../utils/slugs"
+import addSlugs from "@utils/addSlugs"
+import { unifyRelations } from "./utils"
+import { eq } from "drizzle-orm"
 
 // Define entity configurations for lookup
 const entityConfig = {
@@ -9,81 +11,18 @@ const entityConfig = {
 			db.query.npcs.findFirst({
 				where: (npcs, { eq }) => eq(npcs.id, id),
 				with: {
-					significantItems: {
-						with: {
-							npc: true,
-							quest: true,
-						},
-					},
-					areas: {
-						with: {
-							location: true,
-						},
-					},
-					factions: {
-						with: {
-							faction: true,
-						},
-					},
-					locations: {
-						with: {
-							location: true,
-						},
-					},
-					quests: {
-						with: {
-							quest: true,
-						},
-					},
-					relationships: {
-						with: {
-							relatedNpc: true,
-						},
-					},
-				},
-			}),
-		findByName: (name: string) =>
-			db.query.npcs.findFirst({
-				where: (npcs, { eq }) => eq(npcs.name, name),
-				with: {
-					areas: {
-						with: {
-							location: true,
-						},
-					},
-					factions: {
-						with: {
-							faction: true,
-						},
-					},
-					locations: {
-						with: {
-							location: true,
-						},
-					},
-					quests: {
-						with: {
-							quest: true,
-						},
-					},
-					relationships: {
-						with: {
-							relatedNpc: true,
-						},
-					},
-				},
-			}),
-		getAll: () =>
-			db.query.npcs.findMany({
-				with: {
-					areas: true,
 					factions: true,
-					locations: true,
+					incomingRelationships: { with: { sourceNpc: { columns: { name: true } } } },
+					outgoingRelationships: { with: { targetNpc: { columns: { name: true } } } },
 					quests: true,
-					relationships: true,
-					relatedTo: true,
+					items: true,
+					clues: { with: { stage: true } },
+					locations: { with: { location: true } },
+					questHooks: { with: { hook: true } },
 				},
 			}),
+
+		getAll: () => db.query.npcs.findMany({}),
 		getNamesAndIds: () =>
 			db.query.npcs.findMany({
 				columns: {
@@ -97,65 +36,17 @@ const entityConfig = {
 			db.query.factions.findFirst({
 				where: (factions, { eq }) => eq(factions.id, id),
 				with: {
-					relationships: {
-						with: {
-							faction: true,
-						},
-					},
-					otherRelationships: {
-						with: {
-							faction: true,
-						},
-					},
-					locations: {
-						with: {
-							location: true,
-						},
-					},
-					members: {
-						with: {
-							npc: true,
-						},
-					},
-					quests: {
-						with: {
-							quest: true,
-						},
-					},
+					members: { with: { npc: { columns: { name: true } } } },
+					headquarters: { with: { location: true } },
+					quests: true,
+					incomingRelationships: { with: { sourceFaction: { columns: { name: true } } } },
+					outgoingRelationships: { with: { targetFaction: { columns: { name: true } } } },
+					operations: true,
+					regions: true,
+					culture: true,
 				},
 			}),
-		findByName: (name: string) =>
-			db.query.factions.findFirst({
-				where: (factions, { eq }) => eq(factions.name, name),
-				with: {
-					relationships: {
-						with: {
-							faction: true,
-						},
-					},
-					otherRelationships: {
-						with: {
-							faction: true,
-						},
-					},
-					locations: {
-						with: {
-							location: true,
-						},
-					},
-					members: {
-						with: {
-							npc: true,
-						},
-					},
-					quests: {
-						with: {
-							quest: true,
-						},
-					},
-				},
-			}),
-		getAll: () => db.query.factions.findMany(),
+		getAll: () => db.query.factions.findMany({}),
 		getNamesAndIds: () =>
 			db.query.factions.findMany({
 				columns: {
@@ -164,82 +55,40 @@ const entityConfig = {
 				},
 			}),
 	},
-	locations: {
+	regions: {
 		findById: (id: number) =>
-			db.query.locations.findFirst({
-				where: (locations, { eq }) => eq(locations.id, id),
+			db.query.regions.findFirst({
+				where: (regions, { eq }) => eq(regions.id, id),
 				with: {
-					npcs: {
+					incomingRelations: {
 						with: {
-							npc: true,
+							sourceRegion: true,
 						},
 					},
-					factions: {
+					outgoingRelations: {
 						with: {
-							faction: true,
+							targetRegion: true,
 						},
 					},
-					quests: {
+					locations: {
 						with: {
-							quest: true,
+							region: true,
+							encounters: true,
+							atmosphere: true,
+							secrets: true,
+							incomingRelations: true,
+							outgoingRelations: true,
+							items: true,
+							npcs: true,
 						},
 					},
-					areas: {
-						with: {
-							location: true,
-						},
-					},
-					encounters: {
-						with: {
-							location: true,
-						},
-					},
-					relations: {
-						with: {
-							location: true,
-						},
-					},
+					quests: true,
+					factions: true,
 				},
 			}),
-		findByName: (name: string) =>
-			db.query.locations.findFirst({
-				where: (locations, { eq }) => eq(locations.name, name),
-				with: {
-					npcs: {
-						with: {
-							npc: true,
-						},
-					},
-					factions: {
-						with: {
-							faction: true,
-						},
-					},
-					quests: {
-						with: {
-							quest: true,
-						},
-					},
-					areas: {
-						with: {
-							location: true,
-						},
-					},
-					encounters: {
-						with: {
-							location: true,
-						},
-					},
-					relations: {
-						with: {
-							location: true,
-						},
-					},
-				},
-			}),
-		getAll: () => db.query.locations.findMany(),
+		getAll: () => db.query.regions.findMany({}),
 		getNamesAndIds: () =>
-			db.query.locations.findMany({
+			db.query.regions.findMany({
 				columns: {
 					id: true,
 					name: true,
@@ -251,89 +100,45 @@ const entityConfig = {
 			db.query.quests.findFirst({
 				where: (quests, { eq }) => eq(quests.id, id),
 				with: {
-					npcs: {
-						with: {
-							npc: true,
-						},
-					},
+					items: true,
+					region: true,
+					requiredBy: true,
+					requires: true,
+					twists: true,
 					factions: {
 						with: {
-							faction: true,
+							faction: {
+								columns: {
+									name: true,
+								},
+							},
 						},
 					},
-					locations: {
+					npcs: {
 						with: {
-							location: true,
-						},
-					},
-					clues: {
-						with: {
-							location: true,
-							quest: true,
-							npc: true,
-						},
-					},
-					relatedQuests: {
-						with: {
-							quest: true,
+							npc: {
+								columns: {
+									name: true,
+								},
+							},
 						},
 					},
 					stages: {
+						where: (questsStages) => eq(questsStages.stage, 1),
 						with: {
-							decisions: true,
-						},
-					},
-					relatedToQuests: {
-						with: {
-							quest: true,
+							clues: true,
+							location: true,
+							outgoingDecisions: {
+								with: {
+									consequences: true,
+									toStage: true,
+								},
+							},
 						},
 					},
 				},
 			}),
-		findByName: (name: string) =>
-			db.query.quests.findFirst({
-				where: (quests, { eq }) => eq(quests.name, name),
-				with: {
-					npcs: {
-						with: {
-							npc: true,
-						},
-					},
-					factions: {
-						with: {
-							faction: true,
-						},
-					},
-					locations: {
-						with: {
-							location: true,
-						},
-					},
-					clues: {
-						with: {
-							location: true,
-							quest: true,
-							npc: true,
-						},
-					},
-					relatedQuests: {
-						with: {
-							quest: true,
-						},
-					},
-					stages: {
-						with: {
-							decisions: true,
-						},
-					},
-					relatedToQuests: {
-						with: {
-							quest: true,
-						},
-					},
-				},
-			}),
-		getAll: () => db.query.quests.findMany(),
+		getAll: () => db.query.quests.findMany({}),
 		getNamesAndIds: () =>
 			db.query.quests.findMany({
 				columns: {
@@ -344,246 +149,128 @@ const entityConfig = {
 	},
 }
 
-const categories = ["npcs", "factions", "locations", "quests"] as const
+const categories = ["npcs", "factions", "regions", "quests"] as const
 const categorySchema = z.enum(categories)
 
-const idOrNameParse = (idOrName: string | number) => {
-	const id = possibleNumberSchema.safeParse(idOrName)
-	const name = possibleStringSchema.safeParse(idOrName)
-
-	// If this is a string, it might be a slug - convert it to a potential name
-	const nameFromSlug = name.success ? fromSlug(name.data) : undefined
-
-	return {
-		id: id.success ? id.data : undefined,
-		name: name.success ? name.data : undefined,
-		nameFromSlug,
-	}
-}
-
-export const getEntityNamesAndIds = (category: string) => {
+export const getEntityNamesAndIds = async (category: string) => {
 	try {
 		const categories = categorySchema.parse(category)
 
-		return entityConfig[categories].getNamesAndIds()
+		console.log("Categories:", categories)
+
+		const namesAndIds = await entityConfig[categories].getNamesAndIds()
+
+		if (!namesAndIds) {
+			throw new Error(`No names and IDs found for category: ${category}`)
+		}
+
+		function isNameNonNull(item: { id: number; name: string | null }): item is { id: number; name: string } {
+			return item.name !== null
+		}
+
+		if (!namesAndIds) {
+			throw new Error(`No names and IDs found for category: ${category}`)
+		}
+
+		if (!namesAndIds.every(isNameNonNull)) {
+			throw new Error(`Some names are null in category: ${category}`)
+		}
+
+		return namesAndIds
 	} catch (error) {
 		console.error("Error in getEntityNamesAndIds:", error)
 		throw new Error("Invalid category")
 	}
 }
 
-const possibleNumberSchema = z.coerce.number()
-const possibleStringSchema = z.string()
+export const getAllFactions = async () => await entityConfig.factions.getAll().then(addSlugs)
 
-export const getAllFactions = async () => await entityConfig.factions.getAll()
+export const getAllRegions = async () => await entityConfig.regions.getAll().then(addSlugs)
 
-export const getAllLocations = async () => await entityConfig.locations.getAll()
+export const getAllNpcs = async () => await entityConfig.npcs.getAll().then(addSlugs)
 
-export const getAllNpcs = async () => await entityConfig.npcs.getAll()
+export const getAllQuests = async () => await entityConfig.quests.getAll().then(addSlugs)
 
-export const getAllQuests = async () => await entityConfig.quests.getAll()
+export const getFaction = async (slug: string) => {
+	const selectedFaction = await getEntityNamesAndIds("factions")
+		.then(addSlugs)
+		.then((factions) => factions.find((faction) => faction.slug === slug))
 
-export const getEntity = async (entity: (typeof entityConfig)[(typeof categories)[number]]) => {
-	const returnFn = (nameOrId: number | string) => {
-		const { id, name } = idOrNameParse(nameOrId)
-		if (id) {
-			const data = entity.findById(id)
-			if (data) return data
-		}
-		if (name) {
-			const data = entity.findByName(name)
-			if (data) return data
-		}
-		throw new Error(`Entity with name or id of "${nameOrId}" not found`)
+	if (!selectedFaction) {
+		throw new Error(`Faction with slug of "${slug}" not found`)
 	}
-	return returnFn
+
+	const byId = await entityConfig.factions.findById(selectedFaction.id)
+
+	if (byId) {
+		const faction = unifyRelations(byId)
+			.from({ property: "incomingRelationships", key: "sourceFaction" })
+			.with({ property: "outgoingRelationships", key: "targetFaction" })
+			.to({ property: "relations", key: "faction" })
+
+		return addSlugs(faction)
+	}
+	throw new Error(`Faction with id of "${slug}" not found`)
 }
 
-export const getFaction = async (factionIdOrName: number | string) => {
-	const queries = entityConfig.factions
-	const { id, name, nameFromSlug } = idOrNameParse(factionIdOrName)
+export const getQuest = async (slug: string) => {
+	const selectedQuest = await (await getEntityNamesAndIds("quests").then(addSlugs)).find(
+		(quest) => quest.slug === slug,
+	)
 
-	if (id) {
-		const byId = await queries.findById(id)
-		if (byId) {
-			return byId
-		}
+	if (!selectedQuest) {
+		throw new Error(`Quest with slug of "${slug}" not found`)
 	}
 
-	if (name) {
-		// First try exact match
-		const byName = await queries.findByName(name)
-		if (byName) {
-			return byName
-		}
-
-		// Then try case-insensitive match by getting all factions and comparing
-		const allFactions = await queries.getAll()
-		const matchByNameIgnoreCase = allFactions.find(
-			(faction) => faction.name.toLowerCase() === name.toLowerCase(),
-		)
-
-		if (matchByNameIgnoreCase) {
-			return queries.findById(matchByNameIgnoreCase.id)
-		}
-
-		// Try with the slug-converted name
-		if (nameFromSlug && nameFromSlug !== name) {
-			const bySlugName = await queries.findByName(nameFromSlug)
-			if (bySlugName) {
-				return bySlugName
-			}
-
-			// Try case-insensitive match with the un-slugified name
-			const matchBySlugNameIgnoreCase = allFactions.find(
-				(faction) => faction.name.toLowerCase() === nameFromSlug.toLowerCase(),
-			)
-
-			if (matchBySlugNameIgnoreCase) {
-				return queries.findById(matchBySlugNameIgnoreCase.id)
-			}
-		}
+	const byId = await entityConfig.quests.findById(selectedQuest.id)
+	if (byId) {
+		return addSlugs(byId)
 	}
-	throw new Error(`Faction with name or id of "${factionIdOrName}" not found`)
+	throw new Error(`Quest with slug of "${slug}" not found`)
 }
 
-export const getQuest = async (questIdOrName: number | string) => {
-	const queries = entityConfig.quests
-	const { id, name, nameFromSlug } = idOrNameParse(questIdOrName)
+export const getRegion = async (slug: string) => {
+	console.log("Slug:", slug)
+	const selectedRegion = await getEntityNamesAndIds("regions")
+		.then(addSlugs)
+		.then((regions) => regions.find((region) => region.slug === slug))
 
-	if (id) {
-		const byId = await queries.findById(id)
-		if (byId) {
-			return byId
-		}
+	if (!selectedRegion) {
+		throw new Error(`Region with slug of "${slug}" not found`)
 	}
-	if (name) {
-		// First try exact match
-		const byName = await queries.findByName(name)
-		if (byName) {
-			return byName
-		}
 
-		// Then try case-insensitive match by getting all quests and comparing
-		const allQuests = await queries.getAll()
-		const matchByNameIgnoreCase = allQuests.find(
-			(quest) => quest.name.toLowerCase() === name.toLowerCase(),
-		)
+	const byId = await entityConfig.regions.findById(selectedRegion.id)
 
-		if (matchByNameIgnoreCase) {
-			return queries.findById(matchByNameIgnoreCase.id)
-		}
+	if (byId) {
+		const region = unifyRelations(byId)
+			.from({ property: "incomingRelations", key: "sourceRegion" })
+			.with({ property: "outgoingRelations", key: "targetRegion" })
+			.to({ property: "relations", key: "region" })
 
-		// Try with the slug-converted name
-		if (nameFromSlug && nameFromSlug !== name) {
-			const bySlugName = await queries.findByName(nameFromSlug)
-			if (bySlugName) {
-				return bySlugName
-			}
-
-			// Try case-insensitive match with the un-slugified name
-			const matchBySlugNameIgnoreCase = allQuests.find(
-				(quest) => quest.name.toLowerCase() === nameFromSlug.toLowerCase(),
-			)
-
-			if (matchBySlugNameIgnoreCase) {
-				return queries.findById(matchBySlugNameIgnoreCase.id)
-			}
-		}
+		return addSlugs(region)
 	}
-	throw new Error(`Quest with name or id of "${questIdOrName}" not found`)
+	throw new Error(`Region with slug of "${slug}" not found`)
 }
 
-export const getLocation = async (locationIdOrName: number | string) => {
-	const queries = entityConfig.locations
-	const { id, name, nameFromSlug } = idOrNameParse(locationIdOrName)
+export const getNpc = async (slug: string) => {
+	const selectedNpc = await getEntityNamesAndIds("npcs")
+		.then(addSlugs)
+		.then((npcs) => npcs.find((npc) => npc.slug === slug))
 
-	if (id) {
-		const byId = await queries.findById(id)
-		if (byId) {
-			return byId
-		}
+	if (!selectedNpc) {
+		throw new Error(`NPC with slug of "${slug}" not found`)
 	}
-	if (name) {
-		// First try exact match
-		const byName = await queries.findByName(name)
-		if (byName) {
-			return byName
-		}
 
-		// Then try case-insensitive match by getting all locations and comparing
-		const allLocations = await queries.getAll()
-		const matchByNameIgnoreCase = allLocations.find(
-			(location) => location.name.toLowerCase() === name.toLowerCase(),
-		)
+	const byId = await entityConfig.npcs.findById(selectedNpc.id)
 
-		if (matchByNameIgnoreCase) {
-			return queries.findById(matchByNameIgnoreCase.id)
-		}
-
-		// Try with the slug-converted name
-		if (nameFromSlug && nameFromSlug !== name) {
-			const bySlugName = await queries.findByName(nameFromSlug)
-			if (bySlugName) {
-				return bySlugName
-			}
-
-			// Try case-insensitive match with the un-slugified name
-			const matchBySlugNameIgnoreCase = allLocations.find(
-				(location) => location.name.toLowerCase() === nameFromSlug.toLowerCase(),
-			)
-
-			if (matchBySlugNameIgnoreCase) {
-				return queries.findById(matchBySlugNameIgnoreCase.id)
-			}
-		}
+	if (byId) {
+		console.log(byId)
+		const npc = unifyRelations(byId)
+			.from({ property: "incomingRelationships", key: "sourceNpc" })
+			.with({ property: "outgoingRelationships", key: "targetNpc" })
+			.to({ property: "relations", key: "npc" })
+		console.log(npc)
+		return addSlugs(npc)
 	}
-	throw new Error(`Location with name or id of "${locationIdOrName}" not found`)
-}
-
-export const getNpc = async (npcIdOrName: number | string) => {
-	const queries = entityConfig.npcs
-	const { id, name, nameFromSlug } = idOrNameParse(npcIdOrName)
-
-	if (id) {
-		const byId = await queries.findById(id)
-		if (byId) {
-			return byId
-		}
-	}
-	if (name) {
-		// First try exact match
-		const byName = await queries.findByName(name)
-		if (byName) {
-			return byName
-		}
-
-		// Then try case-insensitive match by getting all NPCs and comparing
-		const allNpcs = await queries.getAll()
-		const matchByNameIgnoreCase = allNpcs.find(
-			(npc) => npc.name.toLowerCase() === name.toLowerCase(),
-		)
-
-		if (matchByNameIgnoreCase) {
-			return queries.findById(matchByNameIgnoreCase.id)
-		}
-
-		// Try with the slug-converted name
-		if (nameFromSlug && nameFromSlug !== name) {
-			const bySlugName = await queries.findByName(nameFromSlug)
-			if (bySlugName) {
-				return bySlugName
-			}
-
-			// Try case-insensitive match with the un-slugified name
-			const matchBySlugNameIgnoreCase = allNpcs.find(
-				(npc) => npc.name.toLowerCase() === nameFromSlug.toLowerCase(),
-			)
-
-			if (matchBySlugNameIgnoreCase) {
-				return queries.findById(matchBySlugNameIgnoreCase.id)
-			}
-		}
-	}
-	throw new Error(`NPC with name or id of "${npcIdOrName}" not found`)
+	throw new Error(`NPC with slug of "${slug}" not found`)
 }
