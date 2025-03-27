@@ -1,0 +1,227 @@
+---
+import GradientCard from "@components/cards/GradientCard.astro";
+import Icon from "@components/Icon.astro";
+import { getQuest } from "@entities";
+import Layout from "@layout";
+import {
+	hasItems,
+	hasItemsWithProperty,
+	safeArrayAccess,
+} from "@utils/dataHelpers";
+import { getEntityUrl } from "@utils/slugs";
+import TwoColumnGrid from "@components/TwoColumnGrid.astro";
+import Chip, { type Props as ChipProps } from "@components/Chip.astro";
+import { data } from "./exampleData";
+import List from "@components/List.astro";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	return Astro.redirect("/quests");
+}
+
+const quest = await getQuest(slug);
+
+if (!quest) {
+	return Astro.redirect("/404");
+}
+
+const {
+	description,
+	objectives,
+	rewards,
+	prerequisites,
+	stages,
+	npcs,
+	factions,
+	creativePrompts,
+	failureOutcomes,
+	inspirations,
+	mood,
+	name,
+	region,
+	requiredBy,
+	requires,
+	successOutcomes,
+	themes,
+	twists,
+	type,
+	urgency,
+	items,
+	visibility,
+} = quest;
+
+
+const chips = [
+	{
+		item: type,
+		color: "blue",
+		icon: {
+			name: "tag",
+		},
+	},
+	{
+		item: urgency,
+		color: "green",
+		icon: {
+			name: "shield",
+		},
+	},
+	{
+		item: visibility,
+		color: "blue",
+		icon: {
+			name: "eye",
+		},
+	},
+] satisfies (ChipProps & { item: string })[];
+---
+
+<Layout title={name}>
+	<TwoColumnGrid title={name}>
+		<Fragment slot="header">
+			{
+				chips.map((chip) => (
+					<Chip icon={chip.icon} color={chip.color}>
+						{chip.item}
+					</Chip>
+				))
+			}
+		</Fragment>
+		<Fragment slot="left-column">
+			{
+				region && (
+					<div>
+						<p class="text-sm text-gray-500">Region</p>
+						<p class="font-medium">{region}</p>
+					</div>
+				)
+			}
+			{
+				mood && (
+					<div>
+						<p class="text-sm text-gray-500">Mood</p>
+						<p class="font-medium">{mood}</p>
+					</div>
+				)
+			}
+			<List items={description} title="Description" />
+			<List items={prerequisites} title="Prerequisites" />
+			<List items={objectives} title="Objectives" />
+			<List items={rewards} title="Rewards" />
+			<List items={creativePrompts} title="Creative Prompts" />
+			<List items={failureOutcomes} title="Failure Outcomes" />
+			<List items={successOutcomes} title="Success Outcomes" />
+			<List items={inspirations} title="Inspirations" />
+			<List items={themes} title="Themes" />
+			{
+				npcs &&
+					npcs.map(
+						({
+							npc,
+							creativePrompts,
+							description,
+							dramaticMoments,
+							hiddenAspects,
+							importance,
+							role,
+						}) => (
+							<>
+								<p>{npc.name}</p>
+								{importance && (
+									<Chip color="blue" icon={{ name: "star" }}>
+										{importance}
+									</Chip>
+								)}
+								{role && (
+									<Chip color="blue" icon={{ name: "tag" }}>
+										{role}
+									</Chip>
+								)}
+								<List items={description} title="Description" />
+								<List items={dramaticMoments} title="Dramatic Moments" />
+								<List items={hiddenAspects} title="Hidden Aspects" />
+								<List items={creativePrompts} title="Creative Prompts" />
+							</>
+						),
+					)
+			}
+			{
+				factions &&
+					factions.map(
+						({ interest, role, faction }) => (
+							<>
+								<h3 class="text-lg font-semibold">Faction</h3>
+								<p>{faction?.name}</p>
+								<p>{role}</p>
+								<p>{interest}</p>
+								<List items={description} title="Description" />
+								<List items={creativePrompts} title="Creative Prompts" />
+							</>
+						),
+					)
+			}
+			<List items={prerequisites} title="Prerequisites" />
+			{
+				items &&
+					items.map(({ creativePrompts, name, significance, type, description }) => (
+							<>
+								<h3 class="text-lg font-semibold">Item</h3>
+								<p>{name}</p>
+								<p>{type}</p>
+								<p>{significance}</p>
+								<List items={description} title="Description" />
+								<List items={creativePrompts} title="Creative Prompts" />
+							</>
+						)
+					)
+			}
+			{
+				twists &&
+					twists.map(
+						({ description, creativePrompts, impact, narrative_placement, twist_type }) => (
+							<>
+								<h3 class="text-lg font-semibold">Twist</h3>
+								<p>{twist_type}</p>
+								<p>{impact}</p>
+								<p>{narrative_placement}</p>
+
+								<List items={creativePrompts} title="Creative Prompts" />
+								<List items={description} title="Description" />
+							</>
+						),
+					)
+			}
+			<!-- {
+				stages &&
+					stages.map(
+						({ stage, description }) => (
+							<>
+								<p>{stage.name}</p>
+								<List items={description} title="Description" />
+							</>
+						),
+					)
+			}
+			{
+				requiredBy &&
+					requiredBy.map(
+						({ quest, description }) => (
+							<>
+								<p>{quest.name}</p>
+								List items={description} title="Description" />
+							</>
+						),
+					)
+			} -->
+			<div>{JSON.stringify(stages, null, 2)}</div>
+			<div>{JSON.stringify(factions, null, 2)}</div>
+			<div>{JSON.stringify(requiredBy, null, 2)}</div>
+			<div>{JSON.stringify(requires, null, 2)}</div>
+			<div>{JSON.stringify(twists, null, 2)}</div>
+			<div>{JSON.stringify(items, null, 2)}</div>
+		</Fragment>
+	</TwoColumnGrid>
+</Layout>
