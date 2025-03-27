@@ -1,9 +1,13 @@
 import { describe, it, expect, vi } from "vitest"
 import { z } from "zod"
 import zodToMCPSchema from "./zodToMcp.js"
-import { factions, factionRelationships } from "@tome-master/shared"
+import { tables } from "@tome-master/shared"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 import zodToMCP from "./zodToMcp.js"
+
+const {
+	factionTables: { factions, factionRelationships },
+} = tables
 
 vi.importMock("./logger.js")
 
@@ -612,15 +616,13 @@ describe("zodToMCPSchema", () => {
 				// 2. Or at least represented in our generic JSON structure that can handle arrays
 				else if (fieldSchema.type === "object" && fieldSchema.anyOf) {
 					// There should be an option for arrays in the anyOf
-					const hasArrayOption = fieldSchema.anyOf.some(
-						(option) => option.type === "array" && option.items,
-					)
+					const hasArrayOption = fieldSchema.anyOf.some((option) => option.type === "array" && option.items)
 					expect(hasArrayOption).toBe(true)
 				} else {
 					// If neither of the above conditions are met, the test should fail
-					expect(
-						fieldSchema.type === "array" || (fieldSchema.type === "object" && fieldSchema.anyOf),
-					).toBe(true)
+					expect(fieldSchema.type === "array" || (fieldSchema.type === "object" && fieldSchema.anyOf)).toBe(
+						true,
+					)
 				}
 			}
 		})
