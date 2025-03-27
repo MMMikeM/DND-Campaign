@@ -1,9 +1,14 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { IconAnimation, IconColor, IconName, IconSpacing } from "types/icon";
-import { Icon as AstroIcon } from 'astro-icon/components';
-
+import type {
+  IconAnimation,
+  IconColor,
+  IconName,
+  IconSize,
+  IconSpacing,
+} from "types/icon";
+import { Icon as AstroIcon } from "astro-icon/components";
 
 const iconColor: Record<IconColor, string> = {
   current: "text-current",
@@ -19,16 +24,16 @@ const iconColor: Record<IconColor, string> = {
   teal: "text-teal-500 dark:text-teal-400",
   pink: "text-pink-500 dark:text-pink-400",
   amber: "text-amber-500 dark:text-amber-400",
-  cyan: "text-cyan-500 dark:text-cyan-400"
-}
+  cyan: "text-cyan-500 dark:text-cyan-400",
+};
 
 // Define the icon variants using CVA
 const iconStyles = cva("inline-block", {
   variants: {
     size: {
-      xs: "w-3 h-3",
-      sm: "w-4 h-4",
-      md: "w-5 h-5",
+      xs: "w-2 h-2",
+      sm: "w-3 h-3",
+      md: "w-4 h-4",
       lg: "w-6 h-6",
       xl: "w-8 h-8",
     },
@@ -69,7 +74,7 @@ const iconStyles = cva("inline-block", {
       spacing: "md",
       class: "ml-3 mr-0",
     },
-    { 
+    {
       spacingPosition: "right",
       spacing: "lg",
       class: "ml-4 mr-0",
@@ -85,10 +90,7 @@ const iconStyles = cva("inline-block", {
 });
 
 // Extract the VariantProps but omit color to avoid conflict with HTMLAttributes
-type IconVariantProps = Omit<VariantProps<typeof iconStyles>, 'color'>;
-
-
-
+export type IconVariantProps = Omit<VariantProps<typeof iconStyles>, "color">;
 
 // Props interface
 export interface Props extends HTMLAttributes<"span">, IconVariantProps {
@@ -100,6 +102,7 @@ export interface Props extends HTMLAttributes<"span">, IconVariantProps {
   spacingPosition?: "left" | "right";
   animation?: IconAnimation;
   color?: IconColor;
+  show?: boolean;
 }
 
 // Destructure props with defaults
@@ -113,17 +116,40 @@ const {
   spacing = "none",
   spacingPosition = "left",
   animation = "none",
+  show = true,
 } = Astro.props;
 
+// size: {
+//       xs: "w-3 h-3",
+//       sm: "w-4 h-4",
+//       md: "w-5 h-5",
+//       lg: "w-6 h-6",
+//       xl: "w-8 h-8",
+//     },
 
+const sizeMap = {
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 32,
+} satisfies Record<IconSize, number>;
 ---
 
-<span 
-  class={iconStyles({ size, color, animation, spacing, spacingPosition, className })} 
+<span
+  class={iconStyles({
+    size,
+    color,
+    animation,
+    spacing,
+    spacingPosition,
+    className,
+  })}
   aria-label={label}
   role={label ? "img" : undefined}
   aria-hidden={!label}
   tabindex={isInteractive ? 0 : undefined}
+  x-show={show}
 >
-  <AstroIcon name={`lucide:${name}`} />
+  <AstroIcon name={`lucide:${name}`} size={sizeMap[size ?? "md"]} />
 </span>
