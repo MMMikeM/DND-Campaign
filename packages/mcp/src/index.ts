@@ -6,7 +6,6 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { createServer } from "node:http"
 import { addPrompts } from "./prompts/index.js"
 import { registerToolHandlers } from "./tools/tools.js"
-import { registerResourceHandlers } from "./resources/resources.js"
 
 export const logger = createLogger()
 
@@ -45,7 +44,6 @@ const mcpServer = new Server(
 	},
 )
 
-registerResourceHandlers(mcpServer)
 registerToolHandlers(mcpServer)
 
 addPrompts(mcpServer)
