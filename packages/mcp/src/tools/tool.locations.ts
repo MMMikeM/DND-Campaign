@@ -19,7 +19,6 @@ const {
 		regions,
 		locationEncounters,
 		locationRelations,
-		locationAtmosphere,
 		locationSecrets,
 	},
 } = tables
@@ -68,12 +67,6 @@ export const schemas = {
 		treasure: jsonArray,
 		creativePrompts: jsonArray,
 	}).strict(),
-	locationAtmosphere: createInsertSchema(locationAtmosphere, {
-		id: z.number().optional(),
-		soundscape: jsonArray,
-		smells: jsonArray,
-		weather: jsonArray,
-	}).strict(),
 	locationSecrets: createInsertSchema(locationSecrets, {
 		id: z.number().optional(),
 		description: jsonArray,
@@ -110,7 +103,6 @@ export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> 
 							with: {
 								region: true,
 								encounters: true,
-								atmosphere: true,
 								secrets: true,
 								incomingRelations: true,
 								outgoingRelations: true,
@@ -190,6 +182,12 @@ export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> 
 			features: "Distinctive features of the location (e.g. a fountain, a statue)",
 			treasures: "Treasures or items that can be found in this location",
 			locationType: "The type of location (e.g. tavern, shop, dungeon)",
+			soundscape: "Sounds associated with this location",
+			smells: "Smells associated with this location",
+			weather: "Weather conditions in this location",
+			descriptors: "Evocative adjectives for quick reference",
+			mood: "The mood or atmosphere of this location (peaceful, tense, eerie, vibrant, desolate, chaotic, oppressive)",
+			lightingDescription: "The description of the lighting in this location",
 		}),
 		handler: createEntityHandler(locations, schemas.locations, "location"),
 	},
@@ -222,22 +220,7 @@ export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> 
 		}),
 		handler: createEntityHandler(locationEncounters, schemas.locationEncounters, "location encounter"),
 	},
-	manage_location_atmosphere: {
-		description: createEntityActionDescription("location atmosphere"),
-		inputSchema: zodToMCP(schemas.locationAtmosphere, {
-			id: "The ID of the atmosphere to update (omit to create new)",
-			locationId: "The ID of the location where this atmosphere is described",
-			soundscape: "Sounds associated with this location",
-			smells: "Smells associated with this location",
-			weather: "Weather conditions in this location",
-			descriptors: "Evocative adjectives for quick reference",
-			lightingLevel:
-				"The level of lighting in this location (pitch black, dim, shadowy, well-lit, bright, blinding)",
-			mood: "The mood or atmosphere of this location (peaceful, tense, eerie, vibrant, desolate, chaotic, oppressive)",
-			timeContext: "The time context of this location (always, day, night, dawn, dusk, seasonal)",
-		}),
-		handler: createEntityHandler(locationAtmosphere, schemas.locationAtmosphere, "location atmosphere"),
-	},
+
 	manage_location_secrets: {
 		description: createEntityActionDescription("location secret"),
 		inputSchema: zodToMCP(schemas.locationSecrets, {
