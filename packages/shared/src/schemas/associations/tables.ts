@@ -1,5 +1,5 @@
 // associations/tables.ts
-import { sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core"
 import { cascadeFk, nullableFk, list, pk, string, oneOf } from "../../db/utils.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
@@ -9,25 +9,33 @@ import { trustLevel } from "../common.js"
 
 const importanceLevels = ["minor", "supporting", "major", "critical"] as const
 
-export const questNpcs = sqliteTable("quest_npcs", {
-	id: pk(),
-	npcId: cascadeFk("npc_id", npcs.id),
-	questId: nullableFk("quest_id", quests.id),
-	role: string("role"),
-	importance: oneOf("importance", importanceLevels),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-	dramaticMoments: list("dramatic_moments"),
-	hiddenAspects: list("hidden_aspects"),
-})
+export const questNpcs = sqliteTable(
+	"quest_npcs",
+	{
+		id: pk(),
+		npcId: cascadeFk("npc_id", npcs.id),
+		questId: nullableFk("quest_id", quests.id),
+		role: string("role"),
+		importance: oneOf("importance", importanceLevels),
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+		dramaticMoments: list("dramatic_moments"),
+		hiddenAspects: list("hidden_aspects"),
+	},
+	(t) => [unique().on(t.npcId, t.questId, t.role)],
+)
 
-export const factionQuests = sqliteTable("faction_quests", {
-	id: pk(),
-	questId: cascadeFk("quest_id", quests.id),
-	factionId: nullableFk("faction_id", factions.id),
-	role: text("role").notNull(),
-	interest: list("interest"),
-})
+export const factionQuests = sqliteTable(
+	"faction_quests",
+	{
+		id: pk(),
+		questId: cascadeFk("quest_id", quests.id),
+		factionId: nullableFk("faction_id", factions.id),
+		role: text("role").notNull(),
+		interest: list("interest"),
+	},
+	(t) => [unique().on(t.questId, t.factionId)],
+)
 
 export const questHooks = sqliteTable("quest_hooks", {
 	id: pk(),
@@ -45,14 +53,18 @@ export const questHooks = sqliteTable("quest_hooks", {
 	hookContent: list("hook_content"),
 })
 
-export const questHookNpcs = sqliteTable("quest_hook_npcs", {
-	id: pk(),
-	hookId: cascadeFk("hook_id", questHooks.id),
-	npcId: cascadeFk("npc_id", npcs.id),
-	relationship: string("relationship"),
-	trustRequired: oneOf("trust_required", trustLevel),
-	dialogueHint: string("dialogue_hint"),
-})
+export const questHookNpcs = sqliteTable(
+	"quest_hook_npcs",
+	{
+		id: pk(),
+		hookId: cascadeFk("hook_id", questHooks.id),
+		npcId: cascadeFk("npc_id", npcs.id),
+		relationship: string("relationship"),
+		trustRequired: oneOf("trust_required", trustLevel),
+		dialogueHint: string("dialogue_hint"),
+	},
+	(t) => [unique().on(t.hookId, t.npcId)],
+)
 
 export const clues = sqliteTable("clues", {
 	id: pk(),
@@ -90,10 +102,9 @@ export const factionInfluence = sqliteTable("faction_influence", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 })
-
 export const regionConnections = sqliteTable("region_connections", {
 	id: pk(),
-	relationId: cascadeFk("relation_id", regionRelations.id), // Reference to the relationship
+	relationId: cascadeFk("relation_id", regionRelations.id).unique(),
 	routeType: oneOf("route_type", ["road", "river", "mountain pass", "sea route", "portal", "wilderness"]),
 	travelDifficulty: oneOf("travel_difficulty", ["trivial", "easy", "moderate", "difficult", "treacherous"]),
 	travelTime: string("travel_time"),
