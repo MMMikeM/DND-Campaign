@@ -3,6 +3,7 @@
  * @param text The text to convert to a slug
  */
 export const toSlug = (text: string): string => {
+	console.log(text)
 	return text
 		.toLowerCase()
 		.replace(/[^\w\s-]/g, "") // Remove special characters except whitespace and hyphen
