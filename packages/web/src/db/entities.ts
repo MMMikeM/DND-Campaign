@@ -2,7 +2,7 @@ import { z } from "astro:schema"
 import { db } from "."
 import addSlugs from "@utils/addSlugs"
 import { unifyRelations } from "./utils"
-import { eq } from "drizzle-orm"
+import { eq, relations } from "drizzle-orm"
 
 // Define entity configurations for lookup
 const entityConfig = {
@@ -11,17 +11,39 @@ const entityConfig = {
 			db.query.npcs.findFirst({
 				where: (npcs, { eq }) => eq(npcs.id, id),
 				with: {
-					factions: true,
-					incomingRelationships: { with: { sourceNpc: { columns: { name: true } } } },
-					outgoingRelationships: { with: { targetNpc: { columns: { name: true } } } },
-					quests: true,
-					items: true,
-					clues: { with: { stage: true } },
-					locations: { with: { location: true } },
-					questHooks: { with: { hook: true } },
+					relatedFactions: { with: { faction: { columns: { name: true, id: true } } } },
+					incomingRelationships: { with: { sourceNpc: { columns: { name: true, id: true } } } },
+					outgoingRelationships: { with: { targetNpc: { columns: { name: true, id: true } } } },
+					relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
+					relatedItems: true,
+					relatedClues: {
+						with: {
+							stage: {
+								columns: { name: true, id: true },
+								with: { quest: { columns: { name: true, id: true } } },
+							},
+						},
+					},
+					relatedLocations: {
+						with: {
+							location: {
+								columns: { name: true, id: true },
+								with: { region: { columns: { name: true, id: true } } },
+							},
+						},
+					},
+					relatedQuestHooks: {
+						with: {
+							hook: {
+								with: {
+									quest: { columns: { name: true, id: true } },
+									stage: { columns: { name: true, id: true } },
+								},
+							},
+						},
+					},
 				},
 			}),
-
 		getAll: () => db.query.npcs.findMany({}),
 		getNamesAndIds: () =>
 			db.query.npcs.findMany({
@@ -36,13 +58,13 @@ const entityConfig = {
 			db.query.factions.findFirst({
 				where: (factions, { eq }) => eq(factions.id, id),
 				with: {
-					members: { with: { npc: { columns: { name: true } } } },
-					headquarters: { with: { location: true } },
-					quests: true,
-					incomingRelationships: { with: { sourceFaction: { columns: { name: true } } } },
-					outgoingRelationships: { with: { targetFaction: { columns: { name: true } } } },
+					members: { with: { npc: { columns: { name: true, id: true } } } },
+					headquarters: { with: { location: { columns: { name: true, id: true } } } },
+					relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
+					incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
+					outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
+					relatedRegions: { with: { region: { columns: { name: true, id: true } } } },
 					operations: true,
-					regions: true,
 					culture: true,
 				},
 			}),
@@ -62,27 +84,45 @@ const entityConfig = {
 				with: {
 					incomingRelations: {
 						with: {
-							sourceRegion: true,
+							connections: {
+								with: {
+									relation: {
+										with: {
+											sourceRegion: { columns: { name: true } },
+											targetRegion: { columns: { name: true } },
+										},
+									},
+								},
+							},
 						},
 					},
 					outgoingRelations: {
 						with: {
-							targetRegion: true,
+							connections: {
+								with: {
+									relation: {
+										with: {
+											sourceRegion: { columns: { name: true } },
+											targetRegion: { columns: { name: true } },
+										},
+									},
+								},
+							},
 						},
 					},
 					locations: {
 						with: {
-							region: true,
+							region: { columns: { name: true, id: true } },
 							encounters: true,
 							secrets: true,
-							incomingRelations: true,
-							outgoingRelations: true,
+							incomingRelations: { with: { sourceLocation: true } },
+							outgoingRelations: { with: { targetLocation: true } },
 							items: true,
 							npcs: true,
 						},
 					},
 					quests: true,
-					factions: true,
+					factions: { with: { faction: { columns: { name: true } } } },
 				},
 			}),
 		getAll: () => db.query.regions.findMany({}),
@@ -154,8 +194,6 @@ const categorySchema = z.enum(categories)
 export const getEntityNamesAndIds = async (category: string) => {
 	try {
 		const categories = categorySchema.parse(category)
-
-		console.log("Categories:", categories)
 
 		const namesAndIds = await entityConfig[categories].getNamesAndIds()
 
@@ -229,7 +267,6 @@ export const getQuest = async (slug: string) => {
 }
 
 export const getRegion = async (slug: string) => {
-	console.log("Slug:", slug)
 	const selectedRegion = await getEntityNamesAndIds("regions")
 		.then(addSlugs)
 		.then((regions) => regions.find((region) => region.slug === slug))
@@ -263,12 +300,11 @@ export const getNpc = async (slug: string) => {
 	const byId = await entityConfig.npcs.findById(selectedNpc.id)
 
 	if (byId) {
-		console.log(byId)
 		const npc = unifyRelations(byId)
 			.from({ property: "incomingRelationships", key: "sourceNpc" })
 			.with({ property: "outgoingRelationships", key: "targetNpc" })
 			.to({ property: "relations", key: "npc" })
-		console.log(npc)
+
 		return addSlugs(npc)
 	}
 	throw new Error(`NPC with slug of "${slug}" not found`)
