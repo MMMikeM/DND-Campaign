@@ -3,7 +3,6 @@
  * @param text The text to convert to a slug
  */
 export const toSlug = (text: string): string => {
-	console.log(text)
 	return text
 		.toLowerCase()
 		.replace(/[^\w\s-]/g, "") // Remove special characters except whitespace and hyphen
@@ -24,12 +23,12 @@ export const fromSlug = (slug: string): string => {
 
 /**
  * Get a URL for an entity
- * @param type The entity type ('npcs', 'quests', 'locations', 'factions')
+ * @param type The entity type ('npcs', 'quests', 'regions', 'factions')
  * @param name The entity name
  * @param id The entity ID (optional, used for edit routes)
  */
 export const getEntityUrl = (
-	type: "npcs" | "quests" | "locations" | "factions",
+	type: "npcs" | "quests" | "regions" | "factions",
 	name: string,
 	id?: number,
 	action?: "edit" | "delete",
