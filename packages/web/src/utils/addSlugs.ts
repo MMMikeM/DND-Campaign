@@ -54,8 +54,7 @@ type RecursivelyWithSlugsAdded<T> =
 				? {
 						// For each property in the object, apply recursively
 						[K in keyof T]: RecursivelyWithSlugsAdded<T[K]>
-					} & // Add a slug if the object is sluggable
-					(T extends Sluggable ? { slug: Slug } : Record<string, never>)
+					} & (T extends Sluggable ? { slug: Slug } : Record<string, never>) // Add a slug if the object is sluggable
 				: // Return primitives as is
 					T
 
