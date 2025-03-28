@@ -37,13 +37,26 @@ export const factionQuests = sqliteTable(
 	(t) => [unique().on(t.questId, t.factionId)],
 )
 
+export const items = sqliteTable("items", {
+	id: pk(),
+	name: string("name").unique(),
+	npcId: nullableFk("npc_id", npcs.id),
+	factionId: nullableFk("faction_id", factions.id),
+	locationId: nullableFk("location_id", locations.id),
+	questId: nullableFk("quest_id", quests.id),
+	stageId: nullableFk("stage_id", questStages.id),
+	type: string("type"),
+	description: list("description"),
+	creativePrompts: list("creative_prompts"),
+	significance: string("significance"),
+})
+
 export const questHooks = sqliteTable("quest_hooks", {
 	id: pk(),
-	questId: cascadeFk("quest_id", quests.id),
+	stageId: cascadeFk("stage_id", questStages.id),
 	locationId: nullableFk("location_id", locations.id),
-	stageId: nullableFk("stage_id", questStages.id),
 	factionId: nullableFk("faction_id", factions.id),
-	itemId: nullableFk("item_id", locations.id),
+	itemId: nullableFk("item_id", items.id),
 	source: string("source"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
@@ -76,20 +89,6 @@ export const clues = sqliteTable("clues", {
 	creativePrompts: list("creative_prompts"),
 	discoveryCondition: list("discovery_condition"),
 	reveals: list("reveals"),
-})
-
-export const items = sqliteTable("items", {
-	id: pk(),
-	name: string("name").unique(),
-	npcId: nullableFk("npc_id", npcs.id),
-	factionId: nullableFk("faction_id", factions.id),
-	locationId: nullableFk("location_id", locations.id),
-	questId: nullableFk("quest_id", quests.id),
-	stageId: nullableFk("stage_id", questStages.id),
-	type: string("type"),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-	significance: string("significance"),
 })
 
 export const factionInfluence = sqliteTable("faction_influence", {
