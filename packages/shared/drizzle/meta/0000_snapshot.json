@@ -1,96 +1,9 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d9da233b-a139-48de-a025-e93d6dfeed5b",
+  "id": "f9988b1f-424a-4050-8038-4faff08f4496",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "location_atmosphere": {
-      "name": "location_atmosphere",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "location_id": {
-          "name": "location_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "time_context": {
-          "name": "time_context",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "lighting_level": {
-          "name": "lighting_level",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "mood": {
-          "name": "mood",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "soundscape": {
-          "name": "soundscape",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "smells": {
-          "name": "smells",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "weather": {
-          "name": "weather",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "descriptors": {
-          "name": "descriptors",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_atmosphere_location_id_locations_id_fk": {
-          "name": "location_atmosphere_location_id_locations_id_fk",
-          "tableFrom": "location_atmosphere",
-          "tableTo": "locations",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
     "location_encounters": {
       "name": "location_encounters",
       "columns": {
@@ -172,6 +85,14 @@
             "name"
           ],
           "isUnique": true
+        },
+        "location_encounters_location_id_name_unique": {
+          "name": "location_encounters_location_id_name_unique",
+          "columns": [
+            "location_id",
+            "name"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
@@ -239,7 +160,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "location_relations_location_id_other_location_id_unique": {
+          "name": "location_relations_location_id_other_location_id_unique",
+          "columns": [
+            "location_id",
+            "other_location_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "location_relations_location_id_locations_id_fk": {
           "name": "location_relations_location_id_locations_id_fk",
@@ -397,6 +327,20 @@
           "notNull": true,
           "autoincrement": false
         },
+        "mood": {
+          "name": "mood",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "environment": {
+          "name": "environment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "creative_prompts": {
           "name": "creative_prompts",
           "type": "text",
@@ -418,13 +362,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "environment": {
-          "name": "environment",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "features": {
           "name": "features",
           "type": "text",
@@ -434,6 +371,41 @@
         },
         "treasures": {
           "name": "treasures",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lighting_description": {
+          "name": "lighting_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "soundscape": {
+          "name": "soundscape",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "smells": {
+          "name": "smells",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weather": {
+          "name": "weather",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "descriptors": {
+          "name": "descriptors",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -514,7 +486,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "region_relations_region_id_other_region_id_unique": {
+          "name": "region_relations_region_id_other_region_id_unique",
+          "columns": [
+            "region_id",
+            "other_region_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "region_relations_region_id_regions_id_fk": {
           "name": "region_relations_region_id_regions_id_fk",
@@ -561,7 +542,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "danger_level": {
@@ -730,7 +711,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "faction_culture_faction_id_unique": {
+          "name": "faction_culture_faction_id_unique",
+          "columns": [
+            "faction_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "faction_culture_faction_id_factions_id_fk": {
           "name": "faction_culture_faction_id_factions_id_fk",
@@ -789,7 +778,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "faction_headquarters_faction_id_location_id_unique": {
+          "name": "faction_headquarters_faction_id_location_id_unique",
+          "columns": [
+            "faction_id",
+            "location_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "faction_headquarters_faction_id_factions_id_fk": {
           "name": "faction_headquarters_faction_id_factions_id_fk",
@@ -917,6 +915,14 @@
             "name"
           ],
           "isUnique": true
+        },
+        "faction_operations_faction_id_name_unique": {
+          "name": "faction_operations_faction_id_name_unique",
+          "columns": [
+            "faction_id",
+            "name"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
@@ -984,7 +990,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "faction_regions_faction_id_region_id_unique": {
+          "name": "faction_regions_faction_id_region_id_unique",
+          "columns": [
+            "faction_id",
+            "region_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "faction_regions_faction_id_factions_id_fk": {
           "name": "faction_regions_faction_id_factions_id_fk",
@@ -1070,7 +1085,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "faction_relationships_faction_id_other_faction_id_unique": {
+          "name": "faction_relationships_faction_id_other_faction_id_unique",
+          "columns": [
+            "faction_id",
+            "other_faction_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "faction_relationships_faction_id_factions_id_fk": {
           "name": "faction_relationships_faction_id_factions_id_fk",
@@ -1233,8 +1257,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "quest_consequences": {
-      "name": "quest_consequences",
+    "decision_consequences": {
+      "name": "decision_consequences",
       "columns": {
         "id": {
           "name": "id",
@@ -1243,29 +1267,43 @@
           "notNull": true,
           "autoincrement": true
         },
-        "trigger_stage_id": {
-          "name": "trigger_stage_id",
+        "decision_id": {
+          "name": "decision_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "manifestation_stage_id": {
-          "name": "manifestation_stage_id",
+        "affected_stage_id": {
+          "name": "affected_stage_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "consequence_type": {
+          "name": "consequence_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "severity": {
+          "name": "severity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "delay_factor": {
           "name": "delay_factor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "consequence_type": {
-          "name": "consequence_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1286,14 +1324,23 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "decision_consequences_consequence_type_decision_id_unique": {
+          "name": "decision_consequences_consequence_type_decision_id_unique",
+          "columns": [
+            "consequence_type",
+            "decision_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
-        "quest_consequences_trigger_stage_id_quest_stages_id_fk": {
-          "name": "quest_consequences_trigger_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_consequences",
-          "tableTo": "quest_stages",
+        "decision_consequences_decision_id_stage_decisions_id_fk": {
+          "name": "decision_consequences_decision_id_stage_decisions_id_fk",
+          "tableFrom": "decision_consequences",
+          "tableTo": "stage_decisions",
           "columnsFrom": [
-            "trigger_stage_id"
+            "decision_id"
           ],
           "columnsTo": [
             "id"
@@ -1301,17 +1348,17 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "quest_consequences_manifestation_stage_id_quest_stages_id_fk": {
-          "name": "quest_consequences_manifestation_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_consequences",
+        "decision_consequences_affected_stage_id_quest_stages_id_fk": {
+          "name": "decision_consequences_affected_stage_id_quest_stages_id_fk",
+          "tableFrom": "decision_consequences",
           "tableTo": "quest_stages",
           "columnsFrom": [
-            "manifestation_stage_id"
+            "affected_stage_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -1319,8 +1366,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "quest_dependencies": {
-      "name": "quest_dependencies",
+    "quest_prerequisites": {
+      "name": "quest_prerequisites",
       "columns": {
         "id": {
           "name": "id",
@@ -1336,8 +1383,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "dependency_type": {
-          "name": "dependency_type",
+        "prerequisite_type": {
+          "name": "prerequisite_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1353,9 +1400,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_dependencies_relation_id_quest_relations_id_fk": {
-          "name": "quest_dependencies_relation_id_quest_relations_id_fk",
-          "tableFrom": "quest_dependencies",
+        "quest_prerequisites_relation_id_quest_relations_id_fk": {
+          "name": "quest_prerequisites_relation_id_quest_relations_id_fk",
+          "tableFrom": "quest_prerequisites",
           "tableTo": "quest_relations",
           "columnsFrom": [
             "relation_id"
@@ -1417,7 +1464,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "quest_relations_quest_id_related_quest_id_unique": {
+          "name": "quest_relations_quest_id_related_quest_id_unique",
+          "columns": [
+            "quest_id",
+            "related_quest_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "quest_relations_quest_id_quests_id_fk": {
           "name": "quest_relations_quest_id_quests_id_fk",
@@ -1443,133 +1499,6 @@
             "id"
           ],
           "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "quest_stage_links": {
-      "name": "quest_stage_links",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "from_stage_id": {
-          "name": "from_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "to_stage_id": {
-          "name": "to_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "condition_type": {
-          "name": "condition_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "dramatically_interesting": {
-          "name": "dramatically_interesting",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "link_name": {
-          "name": "link_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "condition_value": {
-          "name": "condition_value",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "success_description": {
-          "name": "success_description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "failure_description": {
-          "name": "failure_description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "narrative_transition": {
-          "name": "narrative_transition",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_stage_links_quest_id_quests_id_fk": {
-          "name": "quest_stage_links_quest_id_quests_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_stage_links_from_stage_id_quest_stages_id_fk": {
-          "name": "quest_stage_links_from_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "from_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_stage_links_to_stage_id_quest_stages_id_fk": {
-          "name": "quest_stage_links_to_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_stage_links",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "to_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -1652,13 +1581,6 @@
         },
         "encounters": {
           "name": "encounters",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "locations": {
-          "name": "locations",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1937,8 +1859,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "quest_decisions": {
-      "name": "quest_decisions",
+    "stage_decisions": {
+      "name": "stage_decisions",
       "columns": {
         "id": {
           "name": "id",
@@ -1947,15 +1869,71 @@
           "notNull": true,
           "autoincrement": true
         },
-        "quest_stage_id": {
-          "name": "quest_stage_id",
+        "quest_id": {
+          "name": "quest_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "from_stage_id": {
+          "name": "from_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "to_stage_id": {
+          "name": "to_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "condition_type": {
+          "name": "condition_type",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "decision_type": {
           "name": "decision_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "condition_value": {
+          "name": "condition_value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "success_description": {
+          "name": "success_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "failure_description": {
+          "name": "failure_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "narrative_transition": {
+          "name": "narrative_transition",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1988,28 +1966,57 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "consequences": {
-          "name": "consequences",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "stage_decisions_quest_id_from_stage_id_to_stage_id_unique": {
+          "name": "stage_decisions_quest_id_from_stage_id_to_stage_id_unique",
+          "columns": [
+            "quest_id",
+            "from_stage_id",
+            "to_stage_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
-        "quest_decisions_quest_stage_id_quest_stages_id_fk": {
-          "name": "quest_decisions_quest_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_decisions",
-          "tableTo": "quest_stages",
+        "stage_decisions_quest_id_quests_id_fk": {
+          "name": "stage_decisions_quest_id_quests_id_fk",
+          "tableFrom": "stage_decisions",
+          "tableTo": "quests",
           "columnsFrom": [
-            "quest_stage_id"
+            "quest_id"
           ],
           "columnsTo": [
             "id"
           ],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "stage_decisions_from_stage_id_quest_stages_id_fk": {
+          "name": "stage_decisions_from_stage_id_quest_stages_id_fk",
+          "tableFrom": "stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "from_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "stage_decisions_to_stage_id_quest_stages_id_fk": {
+          "name": "stage_decisions_to_stage_id_quest_stages_id_fk",
+          "tableFrom": "stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "to_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -2077,7 +2084,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "npc_factions_npc_id_faction_id_unique": {
+          "name": "npc_factions_npc_id_faction_id_unique",
+          "columns": [
+            "npc_id",
+            "faction_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "npc_factions_npc_id_npcs_id_fk": {
           "name": "npc_factions_npc_id_npcs_id_fk",
@@ -2149,7 +2165,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "npc_locations_npc_id_location_id_unique": {
+          "name": "npc_locations_npc_id_location_id_unique",
+          "columns": [
+            "npc_id",
+            "location_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "npc_locations_npc_id_npcs_id_fk": {
           "name": "npc_locations_npc_id_npcs_id_fk",
@@ -2270,7 +2295,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "npc_relationships_npc_id_related_npc_id_unique": {
+          "name": "npc_relationships_npc_id_related_npc_id_unique",
+          "columns": [
+            "npc_id",
+            "related_npc_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "npc_relationships_npc_id_npcs_id_fk": {
           "name": "npc_relationships_npc_id_npcs_id_fk",
@@ -2667,6 +2701,20 @@
           "notNull": false,
           "autoincrement": false
         },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "influence_level": {
           "name": "influence_level",
           "type": "text",
@@ -2710,6 +2758,32 @@
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_region_id_regions_id_fk": {
+          "name": "faction_influence_region_id_regions_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_location_id_locations_id_fk": {
+          "name": "faction_influence_location_id_locations_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
           ],
           "columnsTo": [
             "id"
@@ -2761,7 +2835,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "faction_quests_quest_id_faction_id_unique": {
+          "name": "faction_quests_quest_id_faction_id_unique",
+          "columns": [
+            "quest_id",
+            "faction_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "faction_quests_quest_id_quests_id_fk": {
           "name": "faction_quests_quest_id_quests_id_fk",
@@ -3001,7 +3084,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "quest_hook_npcs_hook_id_npc_id_unique": {
+          "name": "quest_hook_npcs_hook_id_npc_id_unique",
+          "columns": [
+            "hook_id",
+            "npc_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "quest_hook_npcs_hook_id_quest_hooks_id_fk": {
           "name": "quest_hook_npcs_hook_id_quest_hooks_id_fk",
@@ -3111,14 +3203,14 @@
           "name": "hook_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "presentation": {
           "name": "presentation",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "hook_content": {
@@ -3268,7 +3360,17 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "quest_npcs_npc_id_quest_id_role_unique": {
+          "name": "quest_npcs_npc_id_quest_id_role_unique",
+          "columns": [
+            "npc_id",
+            "quest_id",
+            "role"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "quest_npcs_npc_id_npcs_id_fk": {
           "name": "quest_npcs_npc_id_npcs_id_fk",
@@ -3375,7 +3477,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "region_connections_relation_id_unique": {
+          "name": "region_connections_relation_id_unique",
+          "columns": [
+            "relation_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "region_connections_relation_id_region_relations_id_fk": {
           "name": "region_connections_relation_id_region_relations_id_fk",
