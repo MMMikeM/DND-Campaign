@@ -61,7 +61,7 @@ export const factionHeadquarters = sqliteTable(
 	{
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
-		locationId: nullableFk("location_id", locations.id),
+		locationId: cascadeFk("location_id", locations.id),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
@@ -73,7 +73,7 @@ export const factionRelationships = sqliteTable(
 	{
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
-		otherFactionId: nullableFk("other_faction_id", factions.id),
+		otherFactionId: cascadeFk("other_faction_id", factions.id),
 		strength: oneOf("strength", relationshipStrength),
 		type: oneOf("type", relationshipTypes),
 		description: list("description"),

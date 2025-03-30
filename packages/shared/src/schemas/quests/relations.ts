@@ -4,10 +4,10 @@ import {
 	quests,
 	questRelations,
 	decisionConsequences,
-	questPrerequisites,
 	questStages,
 	stageDecisions,
 	questTwists,
+	questUnlockConditions,
 } from "./tables.js"
 import { locations, regions } from "../regions/tables.js"
 import { questNpcs, factionQuests, clues, items } from "../associations/tables.js"
@@ -22,12 +22,15 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 
 	// Quest components
 	stages: many(questStages, { relationName: "questStages" }),
-	stageDecisions: many(stageDecisions, { relationName: "stageDecisions" }),
 	twists: many(questTwists, { relationName: "questTwists" }),
 
 	// Improved naming for quest relations
-	requires: many(questRelations, { relationName: "questRequires" }),
-	requiredBy: many(questRelations, { relationName: "questRequiredBy" }),
+	precedes: many(questRelations, {
+		relationName: "prerequisiteFor",
+	}),
+	follows: many(questRelations, {
+		relationName: "requiredBy",
+	}),
 
 	// Associations with other entities
 	npcs: many(questNpcs, { relationName: "questNpcs" }),
@@ -36,27 +39,30 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 }))
 
 export const questRelationsRelations = relations(questRelations, ({ one, many }) => ({
-	// Source quest (the one that requires the target)
-	sourceQuest: one(quests, {
+	// The quest that must be completed first
+	prerequisiteQuest: one(quests, {
 		fields: [questRelations.questId],
 		references: [quests.id],
-		relationName: "questRequires",
+		relationName: "prerequisiteFor",
 	}),
-	// Target quest (the one that is required by the source)
-	targetQuest: one(quests, {
+	// The quest that becomes available after
+	subsequentQuest: one(quests, {
 		fields: [questRelations.relatedQuestId],
 		references: [quests.id],
-		relationName: "questRequiredBy",
+		relationName: "requiredBy",
 	}),
-	// Additional dependency details
-	prerequisites: many(questPrerequisites, { relationName: "relationPrerequisites" }),
+
+	// Specific conditions for this quest relationship
+	unlockConditions: many(questUnlockConditions, {
+		relationName: "relationConditions",
+	}),
 }))
 
-export const questPrerequisitesRelations = relations(questPrerequisites, ({ one }) => ({
+export const questUnlockConditionsRelations = relations(questUnlockConditions, ({ one }) => ({
 	relation: one(questRelations, {
-		fields: [questPrerequisites.relationId],
+		fields: [questUnlockConditions.relationId],
 		references: [questRelations.id],
-		relationName: "relationPrerequisites",
+		relationName: "relationConditions",
 	}),
 }))
 

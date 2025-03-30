@@ -19,7 +19,6 @@ export const quests = sqliteTable("quests", {
 	failureOutcomes: list("failure_outcomes"),
 	successOutcomes: list("success_outcomes"),
 	objectives: list("objectives"),
-	prerequisites: list("prerequisites"),
 	rewards: list("rewards"),
 	themes: list("themes"),
 	inspirations: list("inspirations"),
@@ -46,11 +45,20 @@ export const questRelations = sqliteTable(
 )
 
 // For specialized prerequisite relationships
-export const questPrerequisites = sqliteTable("quest_prerequisites", {
+export const questUnlockConditions = sqliteTable("quest_unlock_conditions", {
 	id: pk(),
 	relationId: cascadeFk("relation_id", questRelations.id),
-	prerequisiteType: oneOf("prerequisite_type", ["required", "optional", "completion_sensitive"]),
-	unlockCondition: string("unlock_condition"),
+	conditionType: oneOf("condition_type", [
+		"item_possession",
+		"party_member",
+		"prior_decision",
+		"faction_reputation",
+		"character_attribute",
+		"skill_threshold",
+		"quest_outcome",
+	]),
+	conditionDetails: string("condition_details"),
+	importance: oneOf("importance", ["critical", "recommended", "optional"]),
 })
 
 export const questTwists = sqliteTable("quest_twists", {
