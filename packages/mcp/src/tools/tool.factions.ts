@@ -103,7 +103,8 @@ export const factionToolDefinitions: Record<FactionToolNames, ToolDefinition> = 
 					with: {
 						members: { with: { npc: true } },
 						headquarters: { with: { location: true } },
-						quests: true,
+						relatedQuests: { with: { quest: true } },
+						relatedRegions: { with: { region: true } },
 						incomingRelationships: {
 							with: {
 								sourceFaction: true,
@@ -115,7 +116,6 @@ export const factionToolDefinitions: Record<FactionToolNames, ToolDefinition> = 
 							},
 						},
 						operations: true,
-						regions: true,
 						culture: true,
 					},
 				})) ?? {

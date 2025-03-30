@@ -102,11 +102,13 @@ export const questToolDefinitions: Record<QuestToolNames, ToolDefinition> = {
 					with: {
 						factions: true,
 						npcs: true,
-						stages: true,
 						items: true,
+						stages: {
+							with: { outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true },
+						},
 						region: true,
-						requiredBy: true,
-						requires: true,
+						requiredBy: { with: { prerequisites: true } },
+						requires: { with: { prerequisites: true } },
 						twists: true,
 					},
 				})) ?? {
@@ -185,7 +187,6 @@ export const questToolDefinitions: Record<QuestToolNames, ToolDefinition> = {
 			narrativeTransition: "Narrative transition that occurs due to this link",
 			conditionType: "The type of condition that triggers this link",
 			conditionValue: "The specific value or condition that must be met",
-			dramatically_interesting: "Flag indicating if this link is dramatically interesting",
 		}),
 		handler: createEntityHandler(stageDecisions, schemas.stageDecisions, "quest decision"),
 	},
