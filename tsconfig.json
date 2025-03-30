@@ -15,7 +15,7 @@
       "path": "packages/shared"
     },
     {
-      "path": "packages/mcp-server"
+      "path": "packages/mcp"
     }
   ]
 }
