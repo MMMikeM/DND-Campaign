@@ -10,7 +10,6 @@ import {
 } from "./tables.js"
 // Import quests for direct region reference
 import { quests } from "../quests/tables.js"
-import { factions } from "../factions/tables.js"
 import { npcLocations } from "../npc/tables.js"
 import { items, regionConnections } from "../associations/tables.js"
 import { factionRegions } from "../factions/tables.js"
