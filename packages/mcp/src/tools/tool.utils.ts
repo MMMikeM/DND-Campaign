@@ -20,7 +20,7 @@ export type ToolDefinition = {
 	handler: (args?: Record<string, unknown>) => Promise<ToolHandlerReturn>
 }
 
-export const jsonArray = z.array(z.string())
+export const jsonArray = z.array(z.string()).max(5)
 
 export type ToolHandlers<T extends PropertyKey> = Record<
 	T,
