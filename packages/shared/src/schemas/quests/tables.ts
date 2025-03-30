@@ -44,10 +44,9 @@ export const questRelations = sqliteTable(
 	(t) => [unique().on(t.questId, t.relatedQuestId)],
 )
 
-// For specialized prerequisite relationships
 export const questUnlockConditions = sqliteTable("quest_unlock_conditions", {
 	id: pk(),
-	relationId: cascadeFk("relation_id", questRelations.id),
+	questId: cascadeFk("quest_id", quests.id), // Changed from relationId
 	conditionType: oneOf("condition_type", [
 		"item_possession",
 		"party_member",

@@ -32,6 +32,10 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 		relationName: "requiredBy",
 	}),
 
+	unlockConditions: many(questUnlockConditions, {
+		relationName: "questUnlockConditions",
+	}),
+
 	// Associations with other entities
 	npcs: many(questNpcs, { relationName: "questNpcs" }),
 	factions: many(factionQuests, { relationName: "questFactions" }),
@@ -51,18 +55,13 @@ export const questRelationsRelations = relations(questRelations, ({ one, many })
 		references: [quests.id],
 		relationName: "requiredBy",
 	}),
-
-	// Specific conditions for this quest relationship
-	unlockConditions: many(questUnlockConditions, {
-		relationName: "relationConditions",
-	}),
 }))
 
 export const questUnlockConditionsRelations = relations(questUnlockConditions, ({ one }) => ({
-	relation: one(questRelations, {
-		fields: [questUnlockConditions.relationId],
-		references: [questRelations.id],
-		relationName: "relationConditions",
+	quest: one(quests, {
+		fields: [questUnlockConditions.questId],
+		references: [quests.id],
+		relationName: "questUnlockConditions",
 	}),
 }))
 
