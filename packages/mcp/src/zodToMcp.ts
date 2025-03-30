@@ -102,6 +102,8 @@ function zodToMCP<T extends z.ZodTypeAny>(schema: T, descriptions?: SchemaProper
 			if (isJsonStringArrayField) {
 				return {
 					type: "array",
+					minItems: 1,
+					maxItems: 5,
 					items: { type: "string" },
 					description: getDescription(schema, path),
 				}

@@ -86,7 +86,11 @@ export const npcToolDefinitions: Record<NpcToolNames, ToolDefinition> = {
 				(await db.query.npcs.findFirst({
 					where: eq(npcs.id, parsed.id),
 					with: {
-						factions: true,
+						relatedClues: { with: { stage: true } },
+						relatedQuests: true,
+						relatedItems: true,
+						relatedLocations: true,
+						relatedQuestHooks: { with: { hook: true } },
 						incomingRelationships: {
 							with: {
 								sourceNpc: true,
@@ -95,19 +99,6 @@ export const npcToolDefinitions: Record<NpcToolNames, ToolDefinition> = {
 						outgoingRelationships: {
 							with: {
 								targetNpc: true,
-							},
-						},
-						quests: true,
-						items: true,
-						clues: {
-							with: {
-								stage: true,
-							},
-						},
-						locations: true,
-						questHooks: {
-							with: {
-								hook: true,
 							},
 						},
 					},
