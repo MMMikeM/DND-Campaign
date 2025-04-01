@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 import { db, logger } from "../index"
-import zodToMCP from "../zodToMcp"
 import {
 	createEntityHandler,
 	createEntityActionDescription,
@@ -11,6 +10,7 @@ import {
 	type ToolDefinition,
 	type CamelToSnakeCase,
 } from "./tool.utils"
+import { zodToMCP } from "../zodToMcp"
 
 const {
 	regionTables: {
@@ -31,57 +31,94 @@ type TableTools = `manage_${CamelToSnakeCase<keyof typeof tables.regionTables>}`
 export type LocationToolNames = "get_all_regions" | "get_region_by_id" | TableTools
 
 export const schemas = {
-	id: z.object({ id: z.number() }),
+	id: z.object({ id: z.number().describe("The unique identifier for the region to retrieve") }),
+	
 	regions: createInsertSchema(regions, {
-		id: z.number().optional(),
-		culturalNotes: jsonArray,
-		creativePrompts: jsonArray,
-		description: jsonArray,
-		hazards: jsonArray,
-		pointsOfInterest: jsonArray,
-		rumors: jsonArray,
-		secrets: jsonArray,
-		security: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the region to update (omit to create new)"),
+			culturalNotes: jsonArray.describe("Distinctive traditions, customs, and social behaviors of the inhabitants in point form"),
+			creativePrompts: jsonArray.describe("Adventure hooks, campaign ideas, and storytelling suggestions for GMs"),
+			description: jsonArray.describe("Physical characteristics, notable features, and general atmosphere in point form"),
+			hazards: jsonArray.describe("Environmental dangers, natural threats, and potential risks to travelers in point form"),
+			pointsOfInterest: jsonArray.describe("Significant landmarks, natural wonders, and notable sites that aren't fully detailed locations"),
+			rumors: jsonArray.describe("Gossip, hearsay, and stories circulating among locals and travelers about this region"),
+			secrets: jsonArray.describe("Hidden truths, concealed history, and undiscovered elements known only to select individuals"),
+			security: jsonArray.describe("Military presence, law enforcement, defensive structures, and overall safety measures"),
+			name: (s) => s.describe("The distinctive name by which this region is commonly known"),
+			history: (s) => s.describe("Major historical events, founding, conflicts, and development over time"),
+			dangerLevel: (s) => s.describe("Overall threat assessment (safe, low, moderate, high, deadly)"),
+			economy: (s) => s.describe("Primary industries, trade goods, and economic activities sustaining the region"),
+			population: (s) => s.describe("Approximate number of inhabitants and demographic makeup"),
+			type: (s) => s.describe("Geographic or settlement classification (city, town, village, coastal, desert, forest, mountain, ocean, river, swamp, wilderness, etc.)"),
+	}).strict().describe("A distinct geographic area with its own characteristics, culture, and points of interest"),
+	
 	regionRelations: createInsertSchema(regionRelations, {
-		id: z.number().optional(),
-		description: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the relation to update (omit to create new)"),
+			description: jsonArray.describe("Details about how these regions interact, shared history, and current dynamics"),
+			creativePrompts: jsonArray.describe("Adventure ideas involving travel or conflict between these regions"),
+			regionId: (s) => s.describe("The ID of the primary region in this relationship (references regions.id)"),
+			otherRegionId: (s) => s.optional().describe("The ID of the secondary region in this relationship (references regions.id)"),
+			relationType: (s) => s.describe("The nature of their connection (allied, hostile, trade partners, political rivals, etc.)"),
+	}).strict().describe("Defines how two geographic regions interact and relate to each other"),
+	
 	locations: createInsertSchema(locations, {
-		id: z.number().optional(),
-		creativePrompts: jsonArray,
-		creatures: jsonArray,
-		description: jsonArray,
-		features: jsonArray,
-		treasures: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the location to update (omit to create new)"),
+			creativePrompts: jsonArray.describe("Scene-setting ideas, encounter suggestions, and narrative opportunities"),
+			creatures: jsonArray.describe("Typical inhabitants, wildlife, monsters, or other beings found here"),
+			description: jsonArray.describe("Visual details, spatial layout, and defining characteristics in point form"),
+			features: jsonArray.describe("Notable objects, architectural elements, or distinct aspects worth attention"),
+			treasures: jsonArray.describe("Valuables, rewards, and collectibles that might be discovered here"),
+			soundscape: jsonArray.describe("Characteristic noises, ambient sounds, and acoustic elements"),
+			smells: jsonArray.describe("Distinctive odors, scents, and olfactory experiences in this location"),
+			weather: jsonArray.describe("Typical or current meteorological conditions and their effects"),
+			descriptors: jsonArray.describe("Short, evocative adjectives for quick atmospheric reference during gameplay"),
+			lightingDescription: jsonArray.describe("Quality, sources, and characteristics of illumination or darkness"),
+			name: (s) => s.describe("The specific name of this place or site"),
+			regionId: (s) => s.optional().describe("The ID of the larger region this location is situated within (references regions.id)"),
+			terrain: (s) => s.describe("The physical landscape or ground characteristics (rocky, forested, marshy, etc.)"),
+			climate: (s) => s.describe("Prevailing weather patterns and atmospheric conditions (temperate, tropical, arid, etc.)"),
+			environment: (s) => s.describe("The broader context of the setting (urban, rural, wilderness, underground, etc.)"),
+			locationType: (s) => s.describe("The category of site (building, fortress, castle, tower, temple, cave, clearing, ruins, road, bridge, etc.)"),
+			mood: (s) => s.describe("The emotional atmosphere and feeling evoked (peaceful, tense, eerie, vibrant, desolate, chaotic, oppressive)"),
+	}).strict().describe("A specific place within a region where scenes, encounters, and adventures can occur"),
+	
 	locationRelations: createInsertSchema(locationRelations, {
-		id: z.number().optional(),
-		description: jsonArray,
-		creativePrompts: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the relation to update (omit to create new)"),
+			description: jsonArray.describe("Physical connections, proximity, and relationship dynamics between locations"),
+			creativePrompts: jsonArray.describe("Story ideas involving travel between these locations or utilizing their relationship"),
+			locationId: (s) => s.describe("The ID of the primary location in this relationship (references locations.id)"),
+			otherLocationId: (s) => s.optional().describe("The ID of the secondary location in this relationship (references locations.id)"),
+			relationType: (s) => s.describe("How these locations interact with each other (adjacent, connected, visible from, controls access to, etc.)"),
+	}).strict().describe("Defines how two specific locations relate to or connect with each other"),
+	
 	locationEncounters: createInsertSchema(locationEncounters, {
-		id: z.number().optional(),
-		description: jsonArray,
-		creatures: jsonArray,
-		treasure: jsonArray,
-		creativePrompts: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the encounter to update (omit to create new)"),
+			description: jsonArray.describe("Setup, progression, and possible outcomes of this encounter in point form"),
+			creatures: jsonArray.describe("Specific enemies, NPCs, or beings involved and their motivations"),
+			treasure: jsonArray.describe("Rewards, loot, and valuable items obtainable from this encounter"),
+			creativePrompts: jsonArray.describe("Variations, dramatic moments, and alternative approaches to running this encounter"),
+			locationId: (s) => s.describe("The ID of the location where this encounter takes place (references locations.id)"),
+			name: (s) => s.describe("A distinctive title or identifier for this encounter"),
+			encounterType: (s) => s.describe("The primary interaction type (combat, social, puzzle, trap, environmental)"),
+			difficulty: (s) => s.describe("Challenge level for players (easy, medium, hard)"),
+			dangerLevel: (s) => s.describe("Potential threat to character survival (safe, low, moderate, high, deadly)"),
+	}).strict().describe("A planned interaction, challenge, or event that can occur at a specific location"),
+	
 	locationSecrets: createInsertSchema(locationSecrets, {
-		id: z.number().optional(),
-		description: jsonArray,
-		consequences: jsonArray,
-		creativePrompts: jsonArray,
-		discoveryMethod: jsonArray,
-	}).strict(),
+			id: z.number().optional().describe("The ID of the secret to update (omit to create new)"),
+			description: jsonArray.describe("What the secret entails, its significance, and potential impact in point form"),
+			consequences: jsonArray.describe("What happens when this secret is discovered, both immediate and long-term"),
+			creativePrompts: jsonArray.describe("Ways to foreshadow, reveal, or incorporate this secret into the narrative"),
+			discoveryMethod: jsonArray.describe("Specific actions, checks, or circumstances that could reveal this secret"),
+			locationId: (s) => s.describe("The ID of the location where this secret exists (references locations.id)"),
+			difficultyToDiscover: (s) => s.describe("How challenging it is to uncover (obvious, simple, moderate, challenging, nearly impossible)"),
+			secretType: (s) => s.describe("The category of revelation (historical, hidden area, concealed item, true purpose, connection)"),
+	}).strict().describe("Hidden information, concealed areas, or unknown truths associated with a location"),
 }
 
 export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> = {
 	get_region_by_id: {
 		description: "Get detailed information about a specific region by ID",
-		inputSchema: zodToMCP(schemas.id, {
-			id: "The unique ID of the region to retrieve",
-		}),
+		inputSchema: zodToMCP(schemas.id),
 		handler: async (args) => {
 			const parsed = schemas.id.parse(args)
 			logger.info("Getting region by ID", { parsed })
@@ -123,7 +160,7 @@ export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> 
 
 	get_all_regions: {
 		description: "Get all locations in the campaign world",
-		inputSchema: zodToMCP(z.any()),
+		inputSchema: zodToMCP(z.object({})),
 		handler: async () => {
 			logger.info("Getting all locations")
 			return await db.query.locations.findMany()
@@ -133,106 +170,36 @@ export const locationToolDefinitions: Record<LocationToolNames, ToolDefinition> 
 		description:
 			createEntityActionDescription("region") +
 			"A region represents an area containing multiple locations, e.g. A town.",
-		inputSchema: zodToMCP(schemas.regions, {
-			id: "The ID of the region to update (omit to create new)",
-			name: "The name of the region",
-			description: "Detailed description of the region, in point form",
-			culturalNotes: "Cultural notes about the region, in point form",
-			history: "Historical background of the region",
-			secrets: "Hidden aspects or secrets about the region, in point form",
-			dangerLevel: "How dangerous this region is (safe, low, moderate, high, deadly)",
-			economy: "The main economic activity of the region",
-			hazards: "Natural or man-made hazards in the region, in point form",
-			pointsOfInterest:
-				"Points of interest in the region, in point form, careful not to overlap with specific locations",
-			population: "Population of the region",
-			rumors: "Rumors or gossip about the region",
-			type: "The type of region (city, town, wilderness, etc.)",
-			creativePrompts: "Creative prompts for this region",
-			security: "Security level and measures in place in the region, in point form",
-		}),
+		inputSchema: zodToMCP(schemas.regions),
 		handler: createEntityHandler(regions, schemas.regions, "region"),
 	},
 	manage_region_relations: {
 		description: createEntityActionDescription("region relation"),
-		inputSchema: zodToMCP(schemas.regionRelations, {
-			id: "The ID of the relation to update (omit to create new)",
-			regionId: "The ID of the primary region in this relation",
-			otherRegionId: "The ID of the secondary region in this relation",
-			description: "Description of how these regions are connected",
-			creativePrompts: "Creative prompts for this relation",
-			relationType: "The type of relation (e.g. ally, enemy, trade, etc.)",
-		}),
+		inputSchema: zodToMCP(schemas.regionRelations),
 		handler: createEntityHandler(regionRelations, schemas.regionRelations, "region relation"),
 	},
 	manage_locations: {
 		description:
 			createEntityActionDescription("location") +
 			"A location is a specific place within a region, e.g. A tavern.",
-		inputSchema: zodToMCP(schemas.locations, {
-			id: "The ID of the location to update (omit to create new)",
-			name: "The name of the location",
-			description: "Detailed description of the location's appearance and atmosphere",
-			regionId: "The ID of the region this location belongs to",
-			terrain: "The terrain of the location (e.g. forest, mountain, desert)",
-			climate: "The climate of the location (e.g. temperate, tropical, arid)",
-			environment: "The environment of the location (e.g. urban, rural, wilderness)",
-			creativePrompts: "Creative prompts for this location",
-			creatures: "Creatures that can be found in this location",
-			features: "Distinctive features of the location (e.g. a fountain, a statue)",
-			treasures: "Treasures or items that can be found in this location",
-			locationType: "The type of location (e.g. tavern, shop, dungeon)",
-			soundscape: "Sounds associated with this location",
-			smells: "Smells associated with this location",
-			weather: "Weather conditions in this location",
-			descriptors: "Evocative adjectives for quick reference",
-			mood: "The mood or atmosphere of this location (peaceful, tense, eerie, vibrant, desolate, chaotic, oppressive)",
-			lightingDescription: "The description of the lighting in this location",
-		}),
+		inputSchema: zodToMCP(schemas.locations),
 		handler: createEntityHandler(locations, schemas.locations, "location"),
 	},
 	manage_location_relations: {
 		description: createEntityActionDescription("location relation"),
-		inputSchema: zodToMCP(schemas.locationRelations, {
-			id: "The ID of the relation to update (omit to create new)",
-			locationId: "The ID of the primary location in this relation",
-			otherLocationId: "The ID of the secondary location in this relation",
-			description: "Description of how these locations are connected",
-			creativePrompts: "Creative prompts for this relation",
-			relationType: "The type of relation (e.g. friendly neighbour, ally, enemy, trade, etc.)",
-		}),
+		inputSchema: zodToMCP(schemas.locationRelations),
 		handler: createEntityHandler(locationRelations, schemas.locationRelations, "location relation"),
 	},
 
 	manage_location_encounters: {
 		description: createEntityActionDescription("location encounter"),
-		inputSchema: zodToMCP(schemas.locationEncounters, {
-			id: "The ID of the encounter to update (omit to create new)",
-			locationId: "The ID of the location where this encounter occurs",
-			name: "The name or title of this encounter",
-			description: "Detailed description of the encounter",
-			encounterType: "The type of encounter (combat, social, puzzle, trap, environmental)",
-			difficulty: "The difficulty level of this encounter",
-			creatures: "Creatures involved in this encounter",
-			treasure: "Treasure or rewards from completing this encounter",
-			creativePrompts: "Creative prompts for this encounter",
-			dangerLevel: "The danger level of this encounter (safe, low, moderate, high, deadly)",
-		}),
+		inputSchema: zodToMCP(schemas.locationEncounters),
 		handler: createEntityHandler(locationEncounters, schemas.locationEncounters, "location encounter"),
 	},
 
 	manage_location_secrets: {
 		description: createEntityActionDescription("location secret"),
-		inputSchema: zodToMCP(schemas.locationSecrets, {
-			id: "The ID of the secret to update (omit to create new)",
-			locationId: "The ID of the location where this secret is found",
-			description: "Detailed description of the secret",
-			consequences: "Consequences of discovering this secret",
-			creativePrompts: "Creative prompts related to this secret",
-			discoveryMethod: "How this secret can be discovered (e.g. overheard, found, revealed)",
-			difficultyToDiscover: "The difficulty level to discover this secret (easy, medium, hard)",
-			secretType: "The type of secret (e.g. hidden treasure, ancient artifact, dark past)",
-		}),
+		inputSchema: zodToMCP(schemas.locationSecrets),
 		handler: createEntityHandler(locationSecrets, schemas.locationSecrets, "location secret"),
 	},
 }

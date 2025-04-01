@@ -4,23 +4,21 @@ import { eq } from "drizzle-orm"
 import { z } from "zod"
 import { db, logger } from "../index"
 import zodToMCP from "../zodToMcp"
-
-export const inputSchema = (key: string) =>
-	zodToMCP(
-		z.object({
-			[key]: z.number(),
-		}),
-	)
+import zodToJsonSchema from "zod-to-json-schema"
 
 export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
 
 export type ToolDefinition = {
 	description: string
-	inputSchema: ReturnType<typeof inputSchema>
+	inputSchema: ReturnType<typeof zodToJsonSchema>
 	handler: (args?: Record<string, unknown>) => Promise<ToolHandlerReturn>
 }
 
 export const jsonArray = z.array(z.string()).max(5)
+
+export const id = z.coerce.number()
+
+export const optionalId = z.coerce.number().optional()
 
 export type ToolHandlers<T extends PropertyKey> = Record<
 	T,
