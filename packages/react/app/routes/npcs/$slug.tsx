@@ -1,14 +1,15 @@
-import { NavLink } from "react-router"
+import { NavLink, useParams, useNavigate } from "react-router"
 import * as Icons from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { Badge } from "~/components/ui/badge"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Separator } from "~/components/ui/separator"
 import { getNpc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import { List } from "~/components/ui/list"
-import { SimpleCard } from "../factions/components"
+import { List } from "~/components/List"
+import { Link } from "~/components/ui/link"
+import SimpleCard from "~/components/SimpleCard"
 
 // Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
@@ -41,9 +42,7 @@ const getTrustVariant = (trust: string): "default" | "destructive" | "outline" |
 }
 
 // Helper function to determine adaptability badge variant
-const getAdaptabilityVariant = (
-	adaptability: string,
-): "default" | "destructive" | "outline" | "secondary" => {
+const getAdaptabilityVariant = (adaptability: string): "default" | "destructive" | "outline" | "secondary" => {
 	switch (adaptability) {
 		case "opportunistic":
 			return "default"
@@ -60,6 +59,9 @@ const getAdaptabilityVariant = (
 
 export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	const npc = loaderData
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
 
 	const {
 		adaptability,
@@ -100,6 +102,10 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 		voiceNotes,
 	} = npc
 
+	const handleTabChange = (value: string) => {
+		navigate(`/npcs/${slug}/${value === "overview" ? "" : value}`)
+	}
+
 	if (!npc) {
 		return (
 			<div className="container mx-auto py-12 text-center">
@@ -132,42 +138,58 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 					{name}
 				</h1>
 				<div className="flex flex-wrap gap-2 mt-2">
-					<Badge variant="outline" className="flex items-center">
+					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character species">
 						<Icons.BadgeInfo className="h-3.5 w-3.5 mr-1" />
 						{race}
-					</Badge>
-					<Badge variant="outline" className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character's stage of life">
 						<Icons.ScrollText className="h-3.5 w-3.5 mr-1" />
 						{age}
-					</Badge>
-					<Badge variant="outline" className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip
+						variant="outline"
+						className="flex items-center"
+						tooltipContent="General attitude toward others"
+					>
 						<Icons.Smile className="h-3.5 w-3.5 mr-1" />
 						{disposition}
-					</Badge>
-					<Badge variant="outline" className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip
+						variant="outline"
+						className="flex items-center"
+						tooltipContent="Economic standing and available resources"
+					>
 						<Icons.Building className="h-3.5 w-3.5 mr-1" />
 						{wealth}
-					</Badge>
-					<Badge variant="outline" className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character identity">
 						<Icons.Users className="h-3.5 w-3.5 mr-1" />
 						{gender}
-					</Badge>
-					<Badge variant={getTrustVariant(trustLevel)} className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip
+						variant={getTrustVariant(trustLevel)}
+						className="flex items-center"
+						tooltipContent="How readily this character trusts others"
+					>
 						<Icons.UserCheck className="h-3.5 w-3.5 mr-1" />
 						{trustLevel} trust
-					</Badge>
-					<Badge variant={getAdaptabilityVariant(adaptability)} className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip
+						variant={getAdaptabilityVariant(adaptability)}
+						className="flex items-center"
+						tooltipContent="Flexibility in response to changing situations"
+					>
 						<Icons.Sparkles className="h-3.5 w-3.5 mr-1" />
 						{adaptability}
-					</Badge>
-					<Badge variant="outline" className="flex items-center">
+					</BadgeWithTooltip>
+					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Role in society">
 						<Icons.Briefcase className="h-3.5 w-3.5 mr-1" />
 						{occupation}
-					</Badge>
+					</BadgeWithTooltip>
 				</div>
 			</div>
 
-			<Tabs defaultValue="overview" className="w-full">
+			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 				<TabsList className="grid grid-cols-5 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
 					<TabsTrigger value="personality">Personality</TabsTrigger>
@@ -186,7 +208,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 							<div className="space-y-4">
 								<div>
 									<h3 className="font-medium mb-2 flex items-center">
-										<Icons.BookOpen className="h-4 w-4 mr-2" />
+										<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />
 										Background
 									</h3>
 									<List items={background} position="outside" spacing="sm" textColor="muted" />
@@ -196,7 +218,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 								<div>
 									<h3 className="font-medium mb-2 flex items-center">
-										<Icons.UserCircle className="h-4 w-4 mr-2" />
+										<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />
 										Appearance
 									</h3>
 									<List items={appearance} position="outside" spacing="sm" textColor="muted" />
@@ -207,14 +229,14 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
 										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Heart className="h-4 w-4 mr-2" />
+											<Icons.Heart className="h-4 w-4 mr-2 text-red-500" />
 											Alignment
 										</h3>
 										<p className="text-muted-foreground">{alignment}</p>
 									</div>
 									<div>
 										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Smile className="h-4 w-4 mr-2" />
+											<Icons.Smile className="h-4 w-4 mr-2 text-amber-500" />
 											Attitude
 										</h3>
 										<p className="text-muted-foreground">{attitude}</p>
@@ -226,14 +248,14 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
 										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Briefcase className="h-4 w-4 mr-2" />
+											<Icons.Briefcase className="h-4 w-4 mr-2 text-emerald-600" />
 											Occupation
 										</h3>
 										<p className="text-muted-foreground">{occupation}</p>
 									</div>
 									<div>
 										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Users className="h-4 w-4 mr-2" />
+											<Icons.Users className="h-4 w-4 mr-2 text-purple-600" />
 											Social Status
 										</h3>
 										<p className="text-muted-foreground">{socialStatus}</p>
@@ -246,7 +268,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 					<SimpleCard
 						title="Notable Feature"
 						description="What makes this NPC unique"
-						icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
+						icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-amber-500" />}
 					>
 						<div className="p-4 bg-muted rounded-md">
 							<p className="text-lg italic">{quirk}</p>
@@ -256,31 +278,31 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="personality">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<SimpleCard title="Personality Traits" icon={<Icons.UserCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Personality Traits" icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />}>
 							<List items={personalityTraits} position="outside" spacing="sm" />
 						</SimpleCard>
 
-						<SimpleCard title="Biases" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Biases" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-amber-600" />}>
 							<List items={biases} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<SimpleCard title="Drives" icon={<Icons.Brain className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Drives" icon={<Icons.Brain className="h-4 w-4 mr-2 text-purple-600" />}>
 							<List items={drives} position="outside" spacing="sm" />
 						</SimpleCard>
 
-						<SimpleCard title="Fears" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Fears" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-red-500" />}>
 							<List items={fears} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<SimpleCard title="Mannerisms" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Mannerisms" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-blue-600" />}>
 							<List items={mannerisms} position="outside" spacing="sm" />
 						</SimpleCard>
 
-						<SimpleCard title="Voice Notes" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Voice Notes" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-emerald-600" />}>
 							<List items={voiceNotes} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
@@ -288,21 +310,24 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="social">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<SimpleCard title="Dialogue Examples" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard
+							title="Dialogue Examples"
+							icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-indigo-600" />}
+						>
 							<List items={dialogue} position="outside" spacing="sm" className="italic" />
 						</SimpleCard>
 
-						<SimpleCard title="Rumors & Gossip" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Rumors & Gossip" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-purple-600" />}>
 							<List items={rumours} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<SimpleCard title="Preferred Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Preferred Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-green-600" />}>
 							<List items={preferredTopics} position="outside" spacing="sm" />
 						</SimpleCard>
 
-						<SimpleCard title="Avoided Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Avoided Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-red-600" />}>
 							<List items={avoidTopics} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
@@ -310,13 +335,13 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="knowledge">
 					<div className="grid grid-cols-1 gap-6 mb-6">
-						<SimpleCard title="Knowledge" icon={<Icons.BookOpen className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Knowledge" icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />}>
 							<List items={knowledge} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<SimpleCard title="Secrets" icon={<Icons.LockKeyhole className="h-4 w-4 mr-2" />}>
+						<SimpleCard title="Secrets" icon={<Icons.LockKeyhole className="h-4 w-4 mr-2 text-red-600" />}>
 							<List items={secrets} position="outside" spacing="sm" />
 						</SimpleCard>
 					</div>
@@ -327,18 +352,20 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						<SimpleCard
 							title="Relationships"
 							description={`Connections to other NPCs`}
-							icon={<Icons.Network className="h-4 w-4 mr-2" />}
+							icon={<Icons.Network className="h-4 w-4 mr-2 text-indigo-600" />}
 						>
 							{relations?.length > 0 ? (
 								<div className="space-y-4">
 									{relations.map((relationship) => (
 										<div key={`relationship-${relationship.id}`} className="border rounded p-3">
 											<div className="flex justify-between">
-												<h4 className="font-medium">{relationship.npc?.name}</h4>
+												<Link href={`/npcs/${relationship.npc?.slug}`}>
+													<h4 className="font-medium">{relationship.npc?.name}</h4>
+												</Link>
 											</div>
-											<Badge className="capitalize">
+											<BadgeWithTooltip className="capitalize" tooltipContent={`Relationship type - Strength`}>
 												{relationship.relationsshipStrength} - {relationship.type}
-											</Badge>
+											</BadgeWithTooltip>
 
 											{relationship.description && relationship.description.length > 0 && (
 												<div className="mt-2">
@@ -398,7 +425,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 														</NavLink>
 													)}
 												</h4>
-												<Badge
+												<BadgeWithTooltip
 													variant={
 														factionConnection.loyalty === "high"
 															? "default"
@@ -408,9 +435,10 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 																	? "secondary"
 																	: "outline"
 													}
+													tooltipContent={`Loyalty level: ${factionConnection.loyalty} - How loyal this NPC is to the faction`}
 												>
 													{factionConnection.loyalty} loyalty
-												</Badge>
+												</BadgeWithTooltip>
 											</div>
 											<div className="mt-2 text-sm">
 												<div className="flex">
@@ -470,7 +498,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 													)}
 													{!locationConnection.location && <span>Unnamed Location</span>}
 												</h4>
-												<Badge variant="outline">Location</Badge>
+												<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
+													Location
+												</BadgeWithTooltip>
 											</div>
 
 											{locationConnection.description && locationConnection.description.length > 0 && (
@@ -505,15 +535,12 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 											<div className="flex justify-between">
 												<h4 className="font-medium">
 													{questConnection.quest && (
-														<NavLink
-															to={`/quests/${questConnection.quest.slug}`}
-															className="hover:text-indigo-500"
-														>
+														<NavLink to={`/quests/${questConnection.quest.slug}`} className="hover:text-indigo-500">
 															{questConnection.quest.name}
 														</NavLink>
 													)}
 												</h4>
-												<Badge
+												<BadgeWithTooltip
 													variant={
 														questConnection.importance === "critical"
 															? "destructive"
@@ -523,9 +550,10 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 																	? "secondary"
 																	: "outline"
 													}
+													tooltipContent={`Importance: ${questConnection.importance} - How important this NPC is to the quest`}
 												>
 													{questConnection.importance}
-												</Badge>
+												</BadgeWithTooltip>
 											</div>
 											<p className="text-sm mt-1">
 												<span className="font-medium">Role:</span> {questConnection.role}
