@@ -5,7 +5,7 @@ import { NavLink } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
-import { Badge } from "~/components/ui/badge"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getAllNpcs } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
@@ -90,15 +90,27 @@ export default function NpcsIndexPage({ loaderData }: Route.ComponentProps) {
 								<CardContent>
 									<p className="text-sm mb-2">{appearance?.[0] || background?.[0]}</p>
 									<div className="flex flex-wrap items-center gap-2 mt-2">
-										<Badge variant="outline">{alignment}</Badge>
-										<Badge variant="outline">{gender}</Badge>
-										<Badge variant="outline" className="capitalize">
+										<BadgeWithTooltip variant="outline" tooltipContent="Moral compass and ethical stance">
+											{alignment}
+										</BadgeWithTooltip>
+										<BadgeWithTooltip variant="outline" tooltipContent="Character identity">
+											{gender}
+										</BadgeWithTooltip>
+										<BadgeWithTooltip
+											variant="outline"
+											className="capitalize"
+											tooltipContent="Economic resources and status"
+										>
 											{wealth}
-										</Badge>
+										</BadgeWithTooltip>
 										{trustLevel && (
-											<Badge variant="secondary" className="capitalize">
+											<BadgeWithTooltip
+												variant="secondary"
+												className="capitalize"
+												tooltipContent="How readily this character trusts others"
+											>
 												Trust: {trustLevel}
-											</Badge>
+											</BadgeWithTooltip>
 										)}
 									</div>
 								</CardContent>
