@@ -1,11 +1,11 @@
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
 import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
 import { getAllFactions } from "~/lib/entities"
 import { useState } from "react"
 import type { Route } from "./+types/index"
+import { InfoCard } from "~/components/InfoCard"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllFactions()
@@ -73,17 +73,12 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 
 					return (
 						<NavLink key={faction.id} to={`/factions/${slug}`}>
-							<Card className="h-full hover:shadow-md transition-shadow">
-								<CardHeader>
-									<CardTitle className="flex items-center">
-										<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />
-										{name}
-									</CardTitle>
-									<CardDescription>
-										{type} • {alignment}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
+							<InfoCard
+								title={name}
+								icon={<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />}
+								className="h-full hover:shadow-md transition-shadow"
+							>
+								<div className="p-4">
 									<p className="text-sm text-muted-foreground mb-2">{publicGoal}</p>
 									{description?.[0] && <p className="text-sm line-clamp-2">{description[0]}</p>}
 									{publicPerception && (
@@ -96,8 +91,8 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 											<span className="font-medium">Secret Goal:</span> {secretGoal}
 										</p>
 									)}
-								</CardContent>
-								<CardFooter>
+								</div>
+								<div className="border-t p-4">
 									<div className="flex flex-col w-full gap-2">
 										<div className="text-xs text-muted-foreground flex items-center gap-2">
 											<span className="capitalize">{size}</span>
@@ -114,8 +109,8 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 											<span>{notes?.length || 0} notes</span>
 										</div>
 									</div>
-								</CardFooter>
-							</Card>
+								</div>
+							</InfoCard>
 						</NavLink>
 					)
 				})}

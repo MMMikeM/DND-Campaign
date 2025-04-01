@@ -1,26 +1,20 @@
-import { ChevronLeft } from "lucide-react"
-import { Button } from "~/components/ui/button"
+import * as Icons from "lucide-react"
+import React from "react"
+import { useNavigate, useParams } from "react-router"
 import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { Separator } from "~/components/ui/separator"
 import { getFaction } from "~/lib/entities"
-import React from "react"
-import * as Icons from "lucide-react"
-import {
-	FactionHeader,
-	OverviewGoalsCard,
-	PerceptionSection,
-	HeadquartersCard,
-	DetailsCard,
-	SimplifiedDetailsCard,
-	CultureCard,
-	OperationCard,
-	RegionInfluenceCard,
-	RelationsCard,
-	RelatedQuestsCard,
-	MembersCard,
-} from "./components"
 import type { Route } from "./+types/$slug"
+
+// Tab content components
+import { OverviewContent } from "./components/OverviewContent"
+import { DetailsContent } from "./components/DetailsContent"
+import { CultureContent } from "./components/CultureContent"
+import { OperationsContent } from "./components/OperationsContent"
+import { InfluenceContent } from "./components/InfluenceContent"
+import { QuestsContent } from "./components/QuestsContent"
+import { MembersContent } from "./components/MembersContent"
+import type { Faction } from "~/lib/entities"
 
 // Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
@@ -38,151 +32,95 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function Faction({ loaderData }: Route.ComponentProps) {
 	const faction = loaderData
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
+
+	const handleTabChange = (value: string) => {
+		navigate(`/factions/${faction.slug}/${value === "overview" ? "" : value}`)
+	}
 
 	return (
-		<div className="container py-8">
-			<div className="mb-8">
+		<div className="container mx-auto py-6 px-4 sm:px-6">
+			<div className="mb-6">
 				<Link href="/factions" asButton variant="outline" className="mb-4">
 					<Icons.ChevronLeft className="h-4 w-4 mr-1" />
 					Back to Factions
 				</Link>
 
-				<FactionHeader {...faction} />
+				<Header {...faction} />
 
-				<Tabs defaultValue="overview" className="mt-6">
-					<TabsList className="grid grid-cols-7 mb-8">
-						<TabsTrigger value="overview">Overview</TabsTrigger>
-						<TabsTrigger value="details">Details</TabsTrigger>
-						<TabsTrigger value="culture">Culture</TabsTrigger>
-						<TabsTrigger value="operations">Operations</TabsTrigger>
-						<TabsTrigger value="influence">Influence</TabsTrigger>
-						<TabsTrigger value="quests">Quests</TabsTrigger>
-						<TabsTrigger value="members">Members</TabsTrigger>
+				<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
+					<TabsList className="grid grid-cols-7 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+						<TabsTrigger value="overview" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Overview</TabsTrigger>
+						<TabsTrigger value="details" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Details</TabsTrigger>
+						<TabsTrigger value="culture" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Culture</TabsTrigger>
+						<TabsTrigger value="operations" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Operations</TabsTrigger>
+						<TabsTrigger value="influence" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Influence</TabsTrigger>
+						<TabsTrigger value="quests" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Quests</TabsTrigger>
+						<TabsTrigger value="members" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">Members</TabsTrigger>
 					</TabsList>
 
 					{/* Overview Tab */}
-					<TabsContent value="overview" className="space-y-8">
-						<OverviewGoalsCard {...faction} />
-						<Separator />
-						<PerceptionSection {...faction} />
-						<Separator />
-						<HeadquartersCard {...faction} />
+					<TabsContent value="overview" className="space-y-6 animate-in fade-in-50 duration-300">
+						<OverviewContent {...faction} />
 					</TabsContent>
 
 					{/* Details Tab */}
-					<TabsContent value="details" className="space-y-6">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<SimplifiedDetailsCard
-								title="History"
-								icon={<Icons.BookOpen className="h-4 w-4 mr-2" />}
-								items={faction.history}
-							/>
-
-							<SimplifiedDetailsCard
-								title="Description"
-								icon={<Icons.Briefcase className="h-4 w-4 mr-2" />}
-								items={faction.description}
-							/>
-
-							<DetailsCard
-								title="Values"
-								icon={<Icons.ListFilter className="h-4 w-4 mr-2" />}
-								items={faction.values}
-							/>
-
-							<DetailsCard
-								title="Resources"
-								icon={<Icons.Briefcase className="h-4 w-4 mr-2" />}
-								items={faction.resources}
-							/>
-
-							<DetailsCard
-								title="Recruitment"
-								icon={<Icons.UserCircle className="h-4 w-4 mr-2" />}
-								items={faction.recruitment}
-							/>
-						</div>
+					<TabsContent value="details" className="animate-in fade-in-50 duration-300">
+						<DetailsContent {...faction} />
 					</TabsContent>
 
 					{/* Culture Tab */}
-					<TabsContent value="culture" className="space-y-6">
-						{faction.culture.length > 0 ? (
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-								{faction.culture.map((culture) => (
-									<React.Fragment key={`culture-${culture.id}`}>
-										<CultureCard
-											title="Symbols"
-											icon={<Icons.Fingerprint className="h-4 w-4 mr-2" />}
-											items={culture.symbols}
-										/>
-
-										<CultureCard
-											title="Rituals"
-											icon={<Icons.Calendar className="h-4 w-4 mr-2" />}
-											items={culture.rituals}
-										/>
-
-										<CultureCard
-											title="Taboos"
-											icon={<Icons.Accessibility className="h-4 w-4 mr-2" />}
-											items={culture.taboos}
-										/>
-
-										<CultureCard
-											title="Aesthetics"
-											icon={<Icons.Fingerprint className="h-4 w-4 mr-2" />}
-											items={culture.aesthetics}
-										/>
-
-										<CultureCard
-											title="Jargon"
-											icon={<Icons.Languages className="h-4 w-4 mr-2" />}
-											items={culture.jargon}
-										/>
-
-										<CultureCard
-											title="Recognition Signs"
-											icon={<Icons.Fingerprint className="h-4 w-4 mr-2" />}
-											items={culture.recognitionSigns}
-										/>
-									</React.Fragment>
-								))}
-							</div>
-						) : (
-							<p className="text-muted-foreground text-center py-10">
-								No cultural information available for this faction.
-							</p>
-						)}
+					<TabsContent value="culture" className="animate-in fade-in-50 duration-300">
+						<CultureContent {...faction} />
 					</TabsContent>
 
 					{/* Operations Tab */}
-					<TabsContent value="operations" className="space-y-8">
-						{faction.operations.map((operation) => (
-							<OperationCard key={`operation-${operation.id}`} operation={operation} />
-						)) ?? (
-							<p className="text-muted-foreground text-center py-10">
-								No active operations for this faction.
-							</p>
-						)}
+					<TabsContent value="operations" className="space-y-6 animate-in fade-in-50 duration-300">
+						<OperationsContent operations={faction.operations} />
 					</TabsContent>
 
 					{/* Influence Tab */}
-					<TabsContent value="influence" className="space-y-8">
-						<RegionInfluenceCard name={faction.name} relatedRegions={faction.relatedRegions} />
-						<RelationsCard outgoingRelationships={faction.outgoingRelationships} />
+					<TabsContent value="influence" className="space-y-6 animate-in fade-in-50 duration-300">
+						<InfluenceContent {...faction} />
 					</TabsContent>
 
 					{/* Quests Tab */}
-					<TabsContent value="quests" className="space-y-8">
-						<RelatedQuestsCard name={faction.name} relatedQuests={faction.relatedQuests} />
+					<TabsContent value="quests" className="animate-in fade-in-50 duration-300">
+						<QuestsContent {...faction} />
 					</TabsContent>
 
 					{/* Members Tab */}
-					<TabsContent value="members">
-						<MembersCard name={faction.name} members={faction.members} />
+					<TabsContent value="members" className="animate-in fade-in-50 duration-300">
+						<MembersContent {...faction} />
 					</TabsContent>
 				</Tabs>
 			</div>
 		</div>
 	)
 }
+
+
+
+interface FactionHeaderProps extends Pick<Faction, 'name' | 'type'> {
+	className?: string
+}
+
+export function Header({ name, type, className }: FactionHeaderProps) {
+	return (
+		<div className={className}>
+			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
+				<Icons.Flag className="h-6 w-6 mr-2 text-primary" />
+				{name}
+			</h1>
+			
+			{type && (
+				<p className="text-slate-600 dark:text-slate-400">
+					<Icons.Briefcase className="h-4 w-4 inline-block mr-1" />
+					{type}
+				</p>
+			)}
+		</div>
+	)
+} 
