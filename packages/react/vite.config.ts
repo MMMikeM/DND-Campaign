@@ -41,8 +41,5 @@ export default defineConfig({
 	ssr: {
 		// Mark better-sqlite3 as external to avoid bundling issues
 		external: ["better-sqlite3", "better-sqlite3/lib/index.js", "node:fs", "node:path"],
-		optimizeDeps: {
-			disabled: "build",
-		},
 	},
 })
