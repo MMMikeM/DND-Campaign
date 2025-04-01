@@ -10,7 +10,7 @@ import {
 	questUnlockConditions,
 } from "./tables.js"
 import { locations, regions } from "../regions/tables.js"
-import { questNpcs, factionQuests, clues, items } from "../associations/tables.js"
+import { questNpcs, factionQuests, clues, items, factionInfluence } from "../associations/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	// Parent region
@@ -25,11 +25,11 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	twists: many(questTwists, { relationName: "questTwists" }),
 
 	// Improved naming for quest relations
-	precedes: many(questRelations, {
-		relationName: "prerequisiteFor",
+	outgoingRelations: many(questRelations, {
+		relationName: "sourceQuests",
 	}),
-	follows: many(questRelations, {
-		relationName: "requiredBy",
+	incomingRelations: many(questRelations, {
+		relationName: "targetQuests",
 	}),
 
 	unlockConditions: many(questUnlockConditions, {
@@ -40,20 +40,26 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	npcs: many(questNpcs, { relationName: "questNpcs" }),
 	factions: many(factionQuests, { relationName: "questFactions" }),
 	items: many(items, { relationName: "questItems" }),
+	influence: many(factionInfluence, { relationName: "questInfluence" }),
 }))
 
 export const questRelationsRelations = relations(questRelations, ({ one, many }) => ({
-	// The quest that must be completed first
-	prerequisiteQuest: one(quests, {
+	// The source quest in the relationship
+	sourceQuest: one(quests, {
 		fields: [questRelations.questId],
 		references: [quests.id],
-		relationName: "prerequisiteFor",
+		relationName: "sourceQuests",
 	}),
-	// The quest that becomes available after
-	subsequentQuest: one(quests, {
+	// The target quest in the relationship
+	targetQuest: one(quests, {
 		fields: [questRelations.relatedQuestId],
 		references: [quests.id],
-		relationName: "requiredBy",
+		relationName: "targetQuests",
+	}),
+
+	// Specific conditions for this relationship
+	unlockConditions: many(questUnlockConditions, {
+		relationName: "relationConditions",
 	}),
 }))
 

@@ -93,14 +93,15 @@ export const clues = sqliteTable("clues", {
 
 export const factionInfluence = sqliteTable("faction_influence", {
 	id: pk(),
+	factionId: cascadeFk("faction_id", factions.id),
 	questId: nullableFk("quest_id", quests.id),
-	factionId: nullableFk("faction_id", factions.id),
 	regionId: nullableFk("region_id", regions.id),
 	locationId: nullableFk("location_id", locations.id),
 	influenceLevel: string("influence_level"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 })
+
 export const regionConnections = sqliteTable("region_connections", {
 	id: pk(),
 	relationId: cascadeFk("relation_id", regionRelations.id).unique(),
