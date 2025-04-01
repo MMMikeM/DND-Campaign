@@ -1,37 +1,16 @@
-import { NavLink } from "react-router"
+import { NavLink, useParams, useNavigate } from "react-router"
 import * as Icons from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import {
-	RegionHeader,
-	OverviewCard,
-	RegionTypeCard,
-	KeyStatsCard,
-	ListCard,
-	LocationsCard,
-	EconomyCard,
-	FactionsCard,
-} from "./components"
-import { SimpleCard } from "../factions/components"
-
-function getDangerVariant(level: string) {
-	switch (level) {
-		case "safe":
-			return "outline"
-		case "low":
-			return "secondary"
-		case "moderate":
-			return "default"
-		case "high":
-			return "destructive"
-		case "deadly":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}
+import { getDangerVariant } from "./utils"
+import { RegionHeader } from "./components/RegionHeader"
+import { OverviewContent } from "./components/OverviewContent"
+import { DetailsContent } from "./components/DetailsContent"
+import { LocationsContent } from "./components/LocationsContent"
+import { LoreContent } from "./components/LoreContent"
+import { ConnectionsContent } from "./components/ConnectionsContent"
 
 // Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
@@ -49,31 +28,15 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 	const region = loaderData
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
 
-	const {
-		creativePrompts,
-		culturalNotes,
-		dangerLevel,
-		description,
-		economy,
-		factions,
-		hazards,
-		history,
-		id,
-		locations,
-		name,
-		pointsOfInterest,
-		population,
-		quests,
-		rumors,
-		secrets,
-		security,
-		slug,
-		type,
-		relations,
-	} = region
+	const { name, type, dangerLevel, economy, population, slug } = region
 
-	const allRelations = [...relations]
+	const handleTabChange = (value: string) => {
+		navigate(`/regions/${slug}/${value === "overview" ? "" : value}`)
+	}
 
 	if (!region) {
 		return (
@@ -101,120 +64,35 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<RegionHeader
-				name={name}
-				type={type}
-				dangerLevel={dangerLevel}
-				economy={economy}
-				population={population}
-			/>
+			<RegionHeader name={name} type={type} dangerLevel={dangerLevel} economy={economy} population={population} />
 
-			<Tabs defaultValue="overview" className="w-full">
+			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 				<TabsList className="grid grid-cols-5 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
 					<TabsTrigger value="details">Details</TabsTrigger>
-					<TabsTrigger value="features">Features</TabsTrigger>
+					<TabsTrigger value="locations">Locations</TabsTrigger>
 					<TabsTrigger value="lore">Lore</TabsTrigger>
 					<TabsTrigger value="connections">Connections</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewCard
-						name={name}
-						history={history}
-						description={description}
-						culturalNotes={culturalNotes}
-					/>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<RegionTypeCard type={type} dangerLevel={dangerLevel} />
-						<KeyStatsCard {...region} />
-					</div>
+					<OverviewContent region={region} />
 				</TabsContent>
 
 				<TabsContent value="details">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<ListCard
-							title="Hazards"
-							icon={<Icons.AlertTriangle className="h-4 w-4 mr-2" />}
-							items={hazards}
-							emptyText="No known hazards"
-						/>
-
-						<ListCard
-							title="Points of Interest"
-							icon={<Icons.MapPin className="h-4 w-4 mr-2" />}
-							items={pointsOfInterest}
-							emptyText="No notable points of interest"
-						/>
-
-						<ListCard
-							title="Security"
-							icon={<Icons.Shield className="h-4 w-4 mr-2" />}
-							items={security}
-							emptyText="No security information available"
-						/>
-
-						<ListCard
-							title="Rumors"
-							icon={<Icons.MessageCircle className="h-4 w-4 mr-2" />}
-							items={rumors}
-							emptyText="No rumors circulating"
-						/>
-					</div>
+					<DetailsContent region={region} />
 				</TabsContent>
 
-				<TabsContent value="features">
-					<div className="grid grid-cols-1 gap-6 mb-6">
-						<LocationsCard locations={locations} />
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<EconomyCard economy={economy} population={population} />
-
-						<ListCard
-							title="Creative Prompts"
-							icon={<Icons.Eye className="h-4 w-4 mr-2" />}
-							items={creativePrompts}
-							emptyText="No creative prompts available"
-						/>
-					</div>
+				<TabsContent value="locations">
+					<LocationsContent region={region} />
 				</TabsContent>
 
 				<TabsContent value="lore">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<ListCard
-							title="Secrets"
-							icon={<Icons.Lock className="h-4 w-4 mr-2" />}
-							items={secrets}
-							emptyText="No secrets uncovered yet"
-						/>
-
-						<SimpleCard title="History" icon={<Icons.BookOpen className="h-4 w-4 mr-2" />}>
-							<p className="whitespace-pre-line">{history}</p>
-						</SimpleCard>
-					</div>
+					<LoreContent region={region} />
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						{/* Factions in Region */}
-						<FactionsCard name={name} factions={factions} />
-
-						{/* Relations with other regions section can go here */}
-						{allRelations.length > 0 ? (
-							<SimpleCard title="Connected Regions" icon={<Icons.Network className="h-4 w-4 mr-2" />}>
-								<div className="space-y-4">
-									{/* Render relations here */}
-									<p>Region connections coming soon</p>
-								</div>
-							</SimpleCard>
-						) : (
-							<SimpleCard title="Connected Regions" icon={<Icons.Network className="h-4 w-4 mr-2" />}>
-								<p className="text-muted-foreground">No connected regions defined yet.</p>
-							</SimpleCard>
-						)}
-					</div>
+					<ConnectionsContent region={region} />
 				</TabsContent>
 			</Tabs>
 		</div>
