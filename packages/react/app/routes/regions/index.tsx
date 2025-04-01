@@ -5,7 +5,7 @@ import { NavLink } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
-import { Badge } from "~/components/ui/badge"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getAllRegions } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
@@ -93,7 +93,7 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 									<p className="text-sm text-muted-foreground mb-2">{economy}</p>
 									{description?.[0] && <p className="text-sm line-clamp-2">{description[0]}</p>}
 									<div className="flex flex-wrap items-center gap-2 mt-3">
-										<Badge
+										<BadgeWithTooltip
 											variant={
 												dangerLevel === "safe"
 													? "outline"
@@ -103,9 +103,20 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 															? "default"
 															: "destructive"
 											}
+											tooltipContent={
+												dangerLevel === "safe"
+													? "Safe for all travelers"
+													: dangerLevel === "low"
+														? "Minor threats present"
+														: dangerLevel === "moderate"
+															? "Significant dangers"
+															: dangerLevel === "high"
+																? "Very dangerous"
+																: "Extremely deadly"
+											}
 										>
 											{dangerLevel}
-										</Badge>
+										</BadgeWithTooltip>
 									</div>
 								</CardContent>
 								<CardFooter>
