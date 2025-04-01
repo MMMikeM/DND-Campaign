@@ -13,7 +13,7 @@ import {
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
-import { locations, regionRelations } from "../regions/tables.js"
+import { locations, regionRelations, regions } from "../regions/tables.js"
 
 export const clueRelations = relations(clues, ({ one }) => ({
 	stage: one(questStages, {
@@ -61,6 +61,16 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 		fields: [factionInfluence.questId],
 		references: [quests.id],
 		relationName: "questFactionInfluence",
+	}),
+	region: one(regions, {
+		fields: [factionInfluence.regionId],
+		references: [regions.id],
+		relationName: "regionFactionInfluence",
+	}),
+	location: one(locations, {
+		fields: [factionInfluence.locationId],
+		references: [locations.id],
+		relationName: "locationFactionInfluence",
 	}),
 }))
 

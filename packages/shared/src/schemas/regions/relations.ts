@@ -11,7 +11,7 @@ import {
 // Import quests for direct region reference
 import { quests } from "../quests/tables.js"
 import { npcLocations } from "../npc/tables.js"
-import { items, regionConnections } from "../associations/tables.js"
+import { factionInfluence, items, regionConnections } from "../associations/tables.js"
 import { factionRegions } from "../factions/tables.js"
 
 export const regionsRelations = relations(regions, ({ many }) => ({
@@ -23,6 +23,7 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	locations: many(locations, { relationName: "regionLocations" }),
 	quests: many(quests, { relationName: "regionQuests" }),
 	factions: many(factionRegions, { relationName: "regionFactions" }),
+	influence: many(factionInfluence, { relationName: "regionFactionInfluence" }),
 }))
 
 export const regionRelationsRelations = relations(regionRelations, ({ one, many }) => ({
@@ -57,6 +58,7 @@ export const locationsRelations = relations(locations, ({ one, many }) => ({
 	secrets: many(locationSecrets, { relationName: "locationSecrets" }),
 	npcs: many(npcLocations, { relationName: "locationNpcs" }),
 	items: many(items, { relationName: "locationItems" }),
+	influence: many(factionInfluence, { relationName: "locationFactionInfluence" }),
 }))
 
 export const locationRelationsRelations = relations(locationRelations, ({ one }) => ({

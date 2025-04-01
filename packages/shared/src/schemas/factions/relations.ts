@@ -9,7 +9,7 @@ import {
 	factionCulture,
 } from "./tables.js"
 import { locations, regions } from "../regions/tables.js"
-import { factionQuests } from "../associations/tables.js"
+import { factionInfluence, factionQuests } from "../associations/tables.js"
 import { npcFactions } from "../npc/tables.js"
 
 export const factionsRelations = relations(factions, ({ many }) => ({
@@ -24,6 +24,7 @@ export const factionsRelations = relations(factions, ({ many }) => ({
 	culture: many(factionCulture, { relationName: "factionCulture" }),
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(factionQuests, { relationName: "factionQuests" }),
+	influence: many(factionInfluence, { relationName: "factionInfluence" }),
 }))
 
 export const factionRelationshipsRelations = relations(factionRelationships, ({ one }) => ({
