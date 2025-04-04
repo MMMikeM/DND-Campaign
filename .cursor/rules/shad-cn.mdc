@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+When working in react projects, prefer 
+
+react-icons
+shad-cn
+
+Do not change any shad-cn components unless explicitly requested

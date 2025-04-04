@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NavLink, useParams, useNavigate } from "react-router"
+import { NavLink, useParams, useNavigate, Outlet } from "react-router"
 import * as Icons from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
@@ -25,32 +25,49 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("Quest not found", { status: 404 })
 	}
 
-	const stages2 = await getQuestStages(quest.id)
+	const stages = await getQuestStages(quest.id)
 
-	return { quest, stages2 }
+	return { quest, stages }
 }
 
 export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
-	const { quest, stages2 } = loaderData
-	console.log(stages2)
-	const { tab, stageId } = useParams()
-	// If stageId is present, force the active tab to be "stages"
-	const activeTab = stageId ? "stages" : tab || "overview"
+	const { quest, stages } = loaderData
+	const { tab, stageSlug, stageTab } = useParams()
+
+	// If we are on a stage-specific route, force the active tab to be "stages"
+	const activeTab = stageSlug ? "stages" : tab || "overview"
 	const navigate = useNavigate()
 
-	const [selectedStageId, setSelectedStageId] = useState<number | null>(
-		stageId ? parseInt(stageId, 10) : stages2.stageTree?.id || null,
-	)
+	// Find the selected stage by slug if present, otherwise use first stage
+	const selectedStage = stageSlug ? quest.stages.find((stage) => stage.slug === stageSlug) : quest.stages[0] || null
 
-	const { factions, name, region, slug, type, urgency, visibility, mood } = quest
+	// Keep track of selected stage ID for compatibility with existing components
+	const selectedStageId = selectedStage?.id || null
+
+	const { name, slug } = quest
 
 	const handleTabChange = (value: string) => {
-		// When changing tabs, always navigate to the basic tab route (without stage)
-		navigate(`/quests/${slug}/${value === "overview" ? "" : value}`)
+		if (value === "stages" && selectedStage) {
+			// If switching to stages tab and we have a selected stage, navigate to the stage route
+			navigate(`/quests/${slug}/stages/${selectedStage.slug}`)
+		} else {
+			// Otherwise navigate to the basic tab route
+			navigate(`/quests/${slug}/${value === "overview" ? "" : value}`)
+		}
 	}
 
-	const handleStageSelect = (stageId: number | null) => {
-		setSelectedStageId(stageId)
+	const handleStageSelect = (stageId: number) => {
+		// Find the stage by ID to get its slug
+		const stage = quest.stages.find((s) => s.id === stageId)
+		if (stage) {
+			if (stageTab) {
+				// When selecting a stage, navigate to the stage route using the slug
+				navigate(`/quests/${slug}/stages/${stage.slug}/${stageTab}`)
+			} else {
+				// When selecting a stage, navigate to the stage route using the slug
+				navigate(`/quests/${slug}/stages/${stage.slug}`)
+			}
+		}
 	}
 
 	return (
@@ -80,12 +97,19 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="stages" className="space-y-6 mt-6">
-					<StagesContent
-						quest={quest}
-						stages={stages2}
-						selectedStageId={selectedStageId}
-						onStageSelect={handleStageSelect}
-					/>
+					{stageSlug && selectedStage ? (
+						<StagesContent
+							quest={quest}
+							stages={stages}
+							selectedStageId={selectedStageId}
+							onStageSelect={handleStageSelect}
+							stageTab={stageTab || "overview"}
+						/>
+					) : (
+						<div className="text-center p-6 border rounded-md">
+							<p className="text-muted-foreground">Please select a stage from the list</p>
+						</div>
+					)}
 				</TabsContent>
 
 				<TabsContent value="themes" className="space-y-6 mt-6">

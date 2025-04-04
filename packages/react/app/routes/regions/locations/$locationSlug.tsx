@@ -87,7 +87,7 @@ export default function LocationDetailPage({ loaderData }: Route.ComponentProps)
 					</NavLink>
 				</Button>
 			</div>
-
+			WTEFETERSORSIT
 			{/* Location Header - Compact */}
 			<div className="mb-4">
 				<h1 className="text-2xl font-bold flex items-center">
@@ -126,7 +126,6 @@ export default function LocationDetailPage({ loaderData }: Route.ComponentProps)
 					))}
 				</div>
 			</div>
-
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 				<TabsList className="grid w-full grid-cols-5 mb-4">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
