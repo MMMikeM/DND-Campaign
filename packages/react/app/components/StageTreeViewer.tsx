@@ -204,8 +204,6 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 		setEdges(newEdges)
 	}, [setNodes, setEdges, transformToReactFlow])
 
-	console.log({ nodes, edges })
-
 	return (
 		<div style={{ width: "100%", height: "40vh" }}>
 			<ReactFlow

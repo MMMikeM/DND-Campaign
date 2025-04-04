@@ -143,6 +143,7 @@ const entityConfig = {
 						with: {
 							clues: true,
 							location: { columns: { name: true, id: true } },
+							incomingConsequences: { with: { decision: true } },
 							outgoingDecisions: {
 								with: {
 									consequences: true,
