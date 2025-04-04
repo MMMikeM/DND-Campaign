@@ -19,7 +19,9 @@ export default [
 		route("npcs/:slug/:tab?", "./routes/npcs/$slug.tsx"),
 		// Routes for quests with list and detail views
 		route("quests", "./routes/quests/index.tsx"),
-		route("quests/:slug/:tab?/:stageId?", "./routes/quests/$slug.tsx"),
+		route("quests/:slug/:tab?", "./routes/quests/$slug.tsx", [
+			route("stages/:stageSlug/:stageTab?", "./routes/quests/stages/stageTabs/$stageTab.tsx"),
+		]),
 	]),
 	route("api/items", "./routes/api/items.ts"),
 ] satisfies RouteConfig

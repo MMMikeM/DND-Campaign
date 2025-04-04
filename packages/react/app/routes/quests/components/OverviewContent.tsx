@@ -12,8 +12,12 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 	const { name, description, themes, inspirations, objectives, successOutcomes, failureOutcomes, rewards } = quest
 
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-			<InfoCard title="Overview" icon={<Icons.Info className="h-4 w-4 mr-2 text-primary" />} className="lg:col-span-2">
+		<div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+			<InfoCard
+				title="Overview"
+				icon={<Icons.Info className="h-4 w-4 mr-2 text-primary" />}
+				className="lg:col-span-4 row-span-2"
+			>
 				<div>
 					<p className="text-sm text-muted-foreground mb-4">Essential information about {name}</p>
 					<div className="space-y-4">
@@ -54,6 +58,7 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 				title="Objectives"
 				icon={<Icons.Target className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No objectives defined"
+				className="lg:col-span-2 "
 			>
 				<div>
 					<p className="text-sm text-muted-foreground mb-4">Goals for this quest</p>
@@ -65,6 +70,7 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 				title="Rewards"
 				icon={<Icons.Gift className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No rewards defined"
+				className="lg:col-span-2 "
 			>
 				<div>
 					<p className="text-sm text-muted-foreground mb-4">What players can gain from this quest</p>
@@ -82,7 +88,7 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 			<InfoCard
 				title="Possible Outcomes"
 				icon={<Icons.GitBranch className="h-4 w-4 mr-2 text-primary" />}
-				className="lg:col-span-2"
+				className="col-span-6"
 			>
 				<div>
 					<p className="text-sm text-muted-foreground mb-4">Consequences of success or failure</p>

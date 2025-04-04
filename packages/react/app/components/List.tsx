@@ -101,7 +101,7 @@ export function List({
 						)}
 					>
 						{bulletColor && (
-							<div className={`flex-shrink-0 mr-3 ${spacing === "sm" ? "mt-0" : "mt-2"}`}>
+							<div className={`flex-shrink-0 mr-3 mt-2`}>
 								<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
 							</div>
 						)}
@@ -134,7 +134,10 @@ export function List({
 							{moreItems.map((item, index) => (
 								<motion.li
 									key={`${item.substring(0, 20)}-${index + displayItems.length}`}
-									className={(textColor === "muted" ? "text-muted-foreground" : "") + " relative"}
+									className={cn(
+										textColor === "muted" ? "text-muted-foreground" : "",
+										bulletColor && "flex items-start justify-start",
+									)}
 									initial={{ opacity: 0 }}
 									animate={{
 										opacity: 1,
@@ -152,7 +155,11 @@ export function List({
 									}}
 									style={{ transformOrigin: "top" }}
 								>
-									<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
+									{bulletColor && (
+										<div className={`flex-shrink-0 mr-3 mt-2`}>
+											<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
+										</div>
+									)}
 									<span className="text-slate-700 dark:text-slate-300">{item}</span>
 								</motion.li>
 							))}
