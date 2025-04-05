@@ -1,9 +1,13 @@
 import { defineConfig } from "drizzle-kit"
+import "dotenv/config"
+
+// Get database URL from environment variable or use default
+const dbUrl = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/dnd_campaign"
 
 export default defineConfig({
-	dialect: "sqlite",
+	dialect: "postgresql",
 	dbCredentials: {
-		url: "/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite",
+		url: dbUrl,
 	},
 	schema: [
 		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/regions/tables.ts",
@@ -13,4 +17,5 @@ export default defineConfig({
 		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/associations/tables.ts",
 		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/story/tables.ts",
 	],
+	out: "./drizzle",
 })

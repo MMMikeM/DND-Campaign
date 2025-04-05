@@ -1,5 +1,5 @@
 // regions/tables.ts
-import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
+import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, oneOf, nullableFk, string, list, pk } from "../../db/utils.js"
 
 const regionTypes = [
@@ -93,7 +93,7 @@ const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
 const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] as const
 
 // Main regions table
-export const regions = sqliteTable("regions", {
+export const regions = pgTable("regions", {
 	id: pk(),
 	name: string("name").unique(),
 	// enums
@@ -114,14 +114,15 @@ export const regions = sqliteTable("regions", {
 	security: list("defenses"),
 })
 
-export const regionRelations = sqliteTable(
-	"region_relations",
+const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
+
+export const regionConnections = pgTable(
+	"region_connections",
 	{
 		id: pk(),
 		regionId: cascadeFk("region_id", regions.id),
 		otherRegionId: nullableFk("other_region_id", regions.id),
-		relationType: string("relation_type"),
-
+		connectionType: oneOf("connection_type", connectionTypes),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
@@ -129,7 +130,7 @@ export const regionRelations = sqliteTable(
 )
 
 // Specific locations within regions
-export const locations = sqliteTable("locations", {
+export const locations = pgTable("locations", {
 	id: pk(),
 	regionId: nullableFk("region_id", regions.id),
 	locationType: oneOf("location_type", locationTypes),
@@ -153,9 +154,10 @@ export const locations = sqliteTable("locations", {
 	descriptors: list("descriptors"), // Evocative adjectives for quick reference
 })
 
-// Relationships between locations
-export const locationRelations = sqliteTable(
-	"location_relations",
+const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
+
+export const locationLinks = pgTable(
+	"location_links",
 	{
 		id: pk(),
 		locationId: cascadeFk("location_id", locations.id),
@@ -163,13 +165,13 @@ export const locationRelations = sqliteTable(
 
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
-		relationType: string("relation_type"),
+		linkType: oneOf("link_type", linkTypes),
 	},
 	(t) => [unique().on(t.locationId, t.otherLocationId)],
 )
 
 // Encounters within locations
-export const locationEncounters = sqliteTable(
+export const locationEncounters = pgTable(
 	"location_encounters",
 	{
 		id: pk(),
@@ -188,23 +190,11 @@ export const locationEncounters = sqliteTable(
 	(t) => [unique().on(t.locationId, t.name)],
 )
 
-export const locationSecrets = sqliteTable("location_secrets", {
+export const locationSecrets = pgTable("location_secrets", {
 	id: pk(),
 	locationId: cascadeFk("location_id", locations.id),
-	secretType: oneOf("secret_type", [
-		"historical",
-		"hidden area",
-		"concealed item",
-		"true purpose",
-		"connection",
-	]),
-	difficultyToDiscover: oneOf("difficulty", [
-		"obvious",
-		"simple",
-		"moderate",
-		"challenging",
-		"nearly impossible",
-	]),
+	secretType: oneOf("secret_type", ["historical", "hidden area", "concealed item", "true purpose", "connection"]),
+	difficultyToDiscover: oneOf("difficulty", ["obvious", "simple", "moderate", "challenging", "nearly impossible"]),
 	discoveryMethod: list("discovery_method"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
