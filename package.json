@@ -14,6 +14,8 @@
 		"db:seed": "turbo db:seed",
 		"db:drop": "turbo db:drop",
 		"db:reset": "turbo db:reset",
+		"db:up": "docker compose up -d",
+		"db:down": "docker compose down -v",
 		"mcp:dev": "turbo mcp:dev",
 		"mcp:build": "turbo mcp:build",
 		"mcp:start": "turbo mcp:start"
@@ -25,11 +27,13 @@
 		"@swc/helpers": "^0.5.15",
 		"drizzle-orm": "^0.40.1",
 		"drizzle-zod": "^0.7.0",
+		"pg": "^8.11.3",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.0-beta.1",
 		"@types/node": "catalog:",
+		"@types/pg": "^8.11.0",
 		"tsup": "catalog:",
 		"turbo": "^2.4.4",
 		"typescript": "catalog:",

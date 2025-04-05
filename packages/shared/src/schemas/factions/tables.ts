@@ -1,40 +1,36 @@
 // factions/tables.ts
-import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
+import { pgTable, unique } from "drizzle-orm/pg-core"
 import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString } from "../../db/utils.js"
 import { locations, regions } from "../regions/tables.js"
 import { alignments, wealthLevels } from "../common.js"
 
 const sizeTypes = ["tiny", "small", "medium", "large", "massive"] as const
 const reachLevels = ["local", "regional", "national", "continental", "global"] as const
-const relationshipStrength = [
-	"weak",
-	"moderate",
-	"friendly",
-	"strong",
-	"unbreakable",
-	"friction",
-	"cold",
-	"hostile",
-	"war",
-] as const
-const relationshipTypes = ["ally", "enemy", "neutral"] as const
 
-// Define the main factions table
-export const factions = sqliteTable("factions", {
+const factionTypes = [
+	"guild",
+	"cult",
+	"tribe",
+	"noble_house",
+	"mercantile",
+	"religious",
+	"military",
+	"criminal",
+	"political",
+	"arcane",
+] as const
+
+export const factions = pgTable("factions", {
 	id: pk(),
-	// enums
 	name: string("name").unique(),
 	alignment: oneOf("alignment", alignments),
 	size: oneOf("size", sizeTypes),
 	wealth: oneOf("wealth", wealthLevels),
 	reach: oneOf("reach", reachLevels),
-	// text
-	type: string("type"),
+	type: oneOf("type", factionTypes),
 	publicGoal: string("public_goal"),
 	publicPerception: string("public_perception"),
-	// nullable
 	secretGoal: nullableString("secret_goal"),
-	// list
 	description: list("description").notNull(),
 	values: list("values"),
 	history: list("history"),
@@ -43,7 +39,7 @@ export const factions = sqliteTable("factions", {
 	recruitment: list("recruitment").notNull(),
 })
 
-export const factionRegions = sqliteTable(
+export const factionRegions = pgTable(
 	"faction_regions",
 	{
 		id: pk(),
@@ -56,7 +52,7 @@ export const factionRegions = sqliteTable(
 	(t) => [unique().on(t.factionId, t.regionId)],
 )
 
-export const factionHeadquarters = sqliteTable(
+export const factionHeadquarters = pgTable(
 	"faction_headquarters",
 	{
 		id: pk(),
@@ -68,21 +64,34 @@ export const factionHeadquarters = sqliteTable(
 	(t) => [unique().on(t.factionId, t.locationId)],
 )
 
-export const factionRelationships = sqliteTable(
-	"faction_relationships",
+const diplomaticTypes = ["ally", "enemy", "neutral", "vassal", "suzerain", "rival", "trade"] as const
+const relationshipStrengths = [
+	"weak",
+	"moderate",
+	"friendly",
+	"strong",
+	"unbreakable",
+	"friction",
+	"cold",
+	"hostile",
+	"war",
+] as const
+
+export const factionDiplomacy = pgTable(
+	"faction_diplomacy",
 	{
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
 		otherFactionId: cascadeFk("other_faction_id", factions.id),
-		strength: oneOf("strength", relationshipStrength),
-		type: oneOf("type", relationshipTypes),
+		strength: oneOf("strength", relationshipStrengths),
+		diplomaticStatus: oneOf("diplomatic_status", diplomaticTypes),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
 	(t) => [unique().on(t.factionId, t.otherFactionId)],
 )
 
-export const factionOperations = sqliteTable(
+export const factionOperations = pgTable(
 	"faction_operations",
 	{
 		id: pk(),
@@ -101,7 +110,7 @@ export const factionOperations = sqliteTable(
 	(t) => [unique().on(t.factionId, t.name)],
 )
 
-export const factionCulture = sqliteTable(
+export const factionCulture = pgTable(
 	"faction_culture",
 	{
 		id: pk(),

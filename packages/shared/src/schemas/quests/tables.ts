@@ -1,11 +1,11 @@
 // quests/tables/ts
-import { sqliteTable, integer, unique } from "drizzle-orm/sqlite-core"
+import { pgTable, unique, integer } from "drizzle-orm/pg-core"
 import { cascadeFk, nullableFk, list, oneOf, pk, string } from "../../db/utils"
 import { locations, regions } from "../regions/tables"
 
 const questTypes = ["main", "side", "faction", "character", "generic"] as const
 
-export const quests = sqliteTable("quests", {
+export const quests = pgTable("quests", {
 	id: pk(),
 	name: string("name").unique(),
 	regionId: nullableFk("region_id", regions.id),
@@ -24,29 +24,24 @@ export const quests = sqliteTable("quests", {
 	inspirations: list("inspirations"),
 })
 
-// Primary relationship table between quests
-export const questRelations = sqliteTable(
-	"quest_relations",
+const dependencyTypes = ["prerequisite", "sequel", "parallel", "alternative", "hidden_connection"] as const
+
+export const questDependencies = pgTable(
+	"quest_dependencies",
 	{
 		id: pk(),
 		questId: cascadeFk("quest_id", quests.id),
 		relatedQuestId: nullableFk("related_quest_id", quests.id),
-		relationType: oneOf("relation_type", [
-			"prerequisite",
-			"sequel",
-			"parallel",
-			"alternative",
-			"hidden_connection",
-		]),
+		dependencyType: oneOf("dependency_type", dependencyTypes),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
 	(t) => [unique().on(t.questId, t.relatedQuestId)],
 )
 
-export const questUnlockConditions = sqliteTable("quest_unlock_conditions", {
+export const questUnlockConditions = pgTable("quest_unlock_conditions", {
 	id: pk(),
-	questId: cascadeFk("quest_id", quests.id), // Changed from relationId
+	questId: cascadeFk("quest_id", quests.id),
 	conditionType: oneOf("condition_type", [
 		"item_possession",
 		"party_member",
@@ -60,7 +55,7 @@ export const questUnlockConditions = sqliteTable("quest_unlock_conditions", {
 	importance: oneOf("importance", ["critical", "recommended", "optional"]),
 })
 
-export const questTwists = sqliteTable("quest_twists", {
+export const questTwists = pgTable("quest_twists", {
 	id: pk(),
 	questId: cascadeFk("quest_id", quests.id),
 	twist_type: oneOf("twist_type", ["reversal", "revelation", "betrayal", "complication"]),
@@ -70,7 +65,7 @@ export const questTwists = sqliteTable("quest_twists", {
 	creativePrompts: list("creative_prompts"),
 })
 
-export const questStages = sqliteTable("quest_stages", {
+export const questStages = pgTable("quest_stages", {
 	id: pk(),
 	questId: cascadeFk("quest_id", quests.id),
 	locationId: nullableFk("location_id", locations.id),
@@ -88,7 +83,7 @@ export const questStages = sqliteTable("quest_stages", {
 })
 
 // Stage decisions now directly connect stages together
-export const stageDecisions = sqliteTable(
+export const stageDecisions = pgTable(
 	"stage_decisions",
 	{
 		id: pk(),
@@ -128,29 +123,30 @@ export const stageDecisions = sqliteTable(
 	(t) => [unique().on(t.questId, t.fromStageId, t.toStageId)],
 )
 
-// Consequences are now linked to decisions instead of stages
-export const decisionConsequences = sqliteTable(
-	"decision_consequences",
+const outcomeTypes = [
+	"character_reaction",
+	"world_state_change",
+	"relationship_change",
+	"quest_availability",
+	"item_acquisition",
+	"reputation_change",
+] as const
+const outcomeSeverity = ["minor", "moderate", "major"] as const
+const outcomeVisibility = ["obvious", "subtle", "hidden"] as const
+const outcomeDelay = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
+
+export const decisionOutcomes = pgTable(
+	"decision_outcomes",
 	{
 		id: pk(),
-		decisionId: cascadeFk("decision_id", stageDecisions.id), // The decision that triggers this consequence
-		affectedStageId: nullableFk("affected_stage_id", questStages.id), // Which stage this consequence affects (can be different from toStageId)
-		consequence_type: oneOf("consequence_type", [
-			"character_reaction",
-			"world_state_change",
-			"relationship_change",
-			"quest_availability",
-			"item_acquisition",
-			"reputation_change",
-		]),
-		severity: oneOf("severity", ["minor", "moderate", "major"]),
-		visibility: oneOf("visibility", ["obvious", "subtle", "hidden"]),
-		// Consequence attributes
-		delay_factor: string("delay_factor"), // "immediate", "next session", "later in campaign"
-
-		// Consequence details
+		decisionId: cascadeFk("decision_id", stageDecisions.id),
+		affectedStageId: nullableFk("affected_stage_id", questStages.id),
+		outcomeType: oneOf("outcome_type", outcomeTypes), // Renamed from consequence_type
+		severity: oneOf("severity", outcomeSeverity),
+		visibility: oneOf("visibility", outcomeVisibility),
+		delayFactor: oneOf("delay_factor", outcomeDelay),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
-	(t) => [unique().on(t.consequence_type, t.decisionId)],
+	(t) => [unique().on(t.outcomeType, t.decisionId)],
 )

@@ -1,5 +1,5 @@
-import Database from "better-sqlite3"
-import { drizzle } from "drizzle-orm/better-sqlite3"
+import { drizzle } from "drizzle-orm/node-postgres"
+import { Pool } from "pg"
 import * as assocationRelations from "../schemas/associations/relations"
 import * as assocationTables from "../schemas/associations/tables"
 import * as factionRelations from "../schemas/factions/relations"
@@ -32,16 +32,20 @@ export const tables = {
 
 /**
  * Initialize the database connection and return operation adapters
- * @param dbPath Path to the SQLite database file
+ * @param connectionString Connection string for the PostgreSQL database
  * @returns Object containing adapters for database operations
  */
-export function initializeDatabase(dbPath: string) {
-	if (!dbPath) {
-		throw new Error("DB path is required")
+export function initializeDatabase(connectionString: string) {
+	if (!connectionString) {
+		throw new Error("Database connection string is required")
 	}
-	// Create SQLite connection
-	const sqlite = new Database(dbPath, {
-		readonly: false,
+
+	// Create PostgreSQL connection pool
+	const pool = new Pool({ connectionString })
+
+	// Initialize pgvector extension if it doesn't exist
+	pool.query("CREATE EXTENSION IF NOT EXISTS vector;").catch((err: Error) => {
+		console.warn("Vector extension initialization warning:", err.message)
 	})
 
 	const schema = {
@@ -58,10 +62,13 @@ export function initializeDatabase(dbPath: string) {
 	}
 
 	// Create Drizzle ORM instance with all schemas
-	return drizzle(sqlite, { schema })
+	return drizzle(pool, { schema })
 }
 
 export type DrizzleDb = ReturnType<typeof initializeDatabase>
 
-// Use the proper type from better-sqlite3
-export type RunResult = Database.RunResult
+// Use the proper type from pg
+export type RunResult = {
+	rowCount: number
+	rows: Record<string, unknown>[]
+}
