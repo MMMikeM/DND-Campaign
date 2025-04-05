@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
+import pgvector from "pgvector/pg"
 import * as assocationRelations from "../schemas/associations/relations"
 import * as assocationTables from "../schemas/associations/tables"
 import * as factionRelations from "../schemas/factions/relations"
@@ -42,6 +43,10 @@ export function initializeDatabase(connectionString: string) {
 
 	// Create PostgreSQL connection pool
 	const pool = new Pool({ connectionString })
+
+	pool.on("connect", async (client) => {
+		await pgvector.registerTypes(client)
+	})
 
 	// Initialize pgvector extension if it doesn't exist
 	pool.query("CREATE EXTENSION IF NOT EXISTS vector;").catch((err: Error) => {
