@@ -1,5 +1,4 @@
 import { defineConfig } from "drizzle-kit"
-import "dotenv/config"
 
 // Get database URL from environment variable or use default
 const dbUrl = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/dnd_campaign"

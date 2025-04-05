@@ -1,5 +1,5 @@
 {
-  "id": "df63023b-21a9-4d6d-8973-1f31f2372d85",
+  "id": "55f3d6b8-05f8-4c2a-a0b9-0efa011c121a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -67,6 +67,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -107,8 +113,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.location_relations": {
-      "name": "location_relations",
+    "public.location_links": {
+      "name": "location_links",
       "schema": "",
       "columns": {
         "id": {
@@ -141,18 +147,18 @@
           "primaryKey": false,
           "notNull": true
         },
-        "relation_type": {
-          "name": "relation_type",
+        "link_type": {
+          "name": "link_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "location_relations_location_id_locations_id_fk": {
-          "name": "location_relations_location_id_locations_id_fk",
-          "tableFrom": "location_relations",
+        "location_links_location_id_locations_id_fk": {
+          "name": "location_links_location_id_locations_id_fk",
+          "tableFrom": "location_links",
           "tableTo": "locations",
           "columnsFrom": [
             "location_id"
@@ -163,9 +169,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "location_relations_other_location_id_locations_id_fk": {
-          "name": "location_relations_other_location_id_locations_id_fk",
-          "tableFrom": "location_relations",
+        "location_links_other_location_id_locations_id_fk": {
+          "name": "location_links_other_location_id_locations_id_fk",
+          "tableFrom": "location_links",
           "tableTo": "locations",
           "columnsFrom": [
             "other_location_id"
@@ -179,8 +185,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "location_relations_location_id_other_location_id_unique": {
-          "name": "location_relations_location_id_other_location_id_unique",
+        "location_links_location_id_other_location_id_unique": {
+          "name": "location_links_location_id_other_location_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "location_id",
@@ -243,6 +249,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -378,6 +390,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -410,8 +428,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.region_relations": {
-      "name": "region_relations",
+    "public.region_connections": {
+      "name": "region_connections",
       "schema": "",
       "columns": {
         "id": {
@@ -432,11 +450,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "relation_type": {
-          "name": "relation_type",
+        "connection_type": {
+          "name": "connection_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -453,9 +471,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "region_relations_region_id_regions_id_fk": {
-          "name": "region_relations_region_id_regions_id_fk",
-          "tableFrom": "region_relations",
+        "region_connections_region_id_regions_id_fk": {
+          "name": "region_connections_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
           "tableTo": "regions",
           "columnsFrom": [
             "region_id"
@@ -466,9 +484,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "region_relations_other_region_id_regions_id_fk": {
-          "name": "region_relations_other_region_id_regions_id_fk",
-          "tableFrom": "region_relations",
+        "region_connections_other_region_id_regions_id_fk": {
+          "name": "region_connections_other_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
           "tableTo": "regions",
           "columnsFrom": [
             "other_region_id"
@@ -482,8 +500,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "region_relations_region_id_other_region_id_unique": {
-          "name": "region_relations_region_id_other_region_id_unique",
+        "region_connections_region_id_other_region_id_unique": {
+          "name": "region_connections_region_id_other_region_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "region_id",
@@ -588,6 +606,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -657,6 +681,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -682,6 +712,97 @@
           "nullsNotDistinct": false,
           "columns": [
             "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.faction_diplomacy": {
+      "name": "faction_diplomacy",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "other_faction_id": {
+          "name": "other_faction_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "strength": {
+          "name": "strength",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diplomatic_status": {
+          "name": "diplomatic_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faction_diplomacy_faction_id_factions_id_fk": {
+          "name": "faction_diplomacy_faction_id_factions_id_fk",
+          "tableFrom": "faction_diplomacy",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "faction_diplomacy_other_faction_id_factions_id_fk": {
+          "name": "faction_diplomacy_other_faction_id_factions_id_fk",
+          "tableFrom": "faction_diplomacy",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "other_faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faction_diplomacy_faction_id_other_faction_id_unique": {
+          "name": "faction_diplomacy_faction_id_other_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "other_faction_id"
           ]
         }
       },
@@ -843,6 +964,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -968,97 +1095,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.faction_relationships": {
-      "name": "faction_relationships",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "faction_id": {
-          "name": "faction_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "other_faction_id": {
-          "name": "other_faction_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "strength": {
-          "name": "strength",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "faction_relationships_faction_id_factions_id_fk": {
-          "name": "faction_relationships_faction_id_factions_id_fk",
-          "tableFrom": "faction_relationships",
-          "tableTo": "factions",
-          "columnsFrom": [
-            "faction_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "faction_relationships_other_faction_id_factions_id_fk": {
-          "name": "faction_relationships_other_faction_id_factions_id_fk",
-          "tableFrom": "faction_relationships",
-          "tableTo": "factions",
-          "columnsFrom": [
-            "other_faction_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "faction_relationships_faction_id_other_faction_id_unique": {
-          "name": "faction_relationships_faction_id_other_faction_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "faction_id",
-            "other_faction_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.factions": {
       "name": "factions",
       "schema": "",
@@ -1103,7 +1139,7 @@
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "public_goal": {
           "name": "public_goal",
@@ -1158,6 +1194,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1176,8 +1218,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.decision_consequences": {
-      "name": "decision_consequences",
+    "public.decision_outcomes": {
+      "name": "decision_outcomes",
       "schema": "",
       "columns": {
         "id": {
@@ -1198,8 +1240,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "consequence_type": {
-          "name": "consequence_type",
+        "outcome_type": {
+          "name": "outcome_type",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1220,7 +1262,7 @@
           "name": "delay_factor",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -1237,9 +1279,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "decision_consequences_decision_id_stage_decisions_id_fk": {
-          "name": "decision_consequences_decision_id_stage_decisions_id_fk",
-          "tableFrom": "decision_consequences",
+        "decision_outcomes_decision_id_stage_decisions_id_fk": {
+          "name": "decision_outcomes_decision_id_stage_decisions_id_fk",
+          "tableFrom": "decision_outcomes",
           "tableTo": "stage_decisions",
           "columnsFrom": [
             "decision_id"
@@ -1250,9 +1292,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "decision_consequences_affected_stage_id_quest_stages_id_fk": {
-          "name": "decision_consequences_affected_stage_id_quest_stages_id_fk",
-          "tableFrom": "decision_consequences",
+        "decision_outcomes_affected_stage_id_quest_stages_id_fk": {
+          "name": "decision_outcomes_affected_stage_id_quest_stages_id_fk",
+          "tableFrom": "decision_outcomes",
           "tableTo": "quest_stages",
           "columnsFrom": [
             "affected_stage_id"
@@ -1266,11 +1308,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "decision_consequences_consequence_type_decision_id_unique": {
-          "name": "decision_consequences_consequence_type_decision_id_unique",
+        "decision_outcomes_outcome_type_decision_id_unique": {
+          "name": "decision_outcomes_outcome_type_decision_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "consequence_type",
+            "outcome_type",
             "decision_id"
           ]
         }
@@ -1279,8 +1321,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.quest_relations": {
-      "name": "quest_relations",
+    "public.quest_dependencies": {
+      "name": "quest_dependencies",
       "schema": "",
       "columns": {
         "id": {
@@ -1301,8 +1343,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "relation_type": {
-          "name": "relation_type",
+        "dependency_type": {
+          "name": "dependency_type",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1322,9 +1364,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_relations_quest_id_quests_id_fk": {
-          "name": "quest_relations_quest_id_quests_id_fk",
-          "tableFrom": "quest_relations",
+        "quest_dependencies_quest_id_quests_id_fk": {
+          "name": "quest_dependencies_quest_id_quests_id_fk",
+          "tableFrom": "quest_dependencies",
           "tableTo": "quests",
           "columnsFrom": [
             "quest_id"
@@ -1335,9 +1377,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "quest_relations_related_quest_id_quests_id_fk": {
-          "name": "quest_relations_related_quest_id_quests_id_fk",
-          "tableFrom": "quest_relations",
+        "quest_dependencies_related_quest_id_quests_id_fk": {
+          "name": "quest_dependencies_related_quest_id_quests_id_fk",
+          "tableFrom": "quest_dependencies",
           "tableTo": "quests",
           "columnsFrom": [
             "related_quest_id"
@@ -1351,8 +1393,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "quest_relations_quest_id_related_quest_id_unique": {
-          "name": "quest_relations_quest_id_related_quest_id_unique",
+        "quest_dependencies_quest_id_related_quest_id_unique": {
+          "name": "quest_dependencies_quest_id_related_quest_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "quest_id",
@@ -1445,6 +1487,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1709,6 +1757,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1894,6 +1948,121 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.character_relationships": {
+      "name": "character_relationships",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "related_npc_id": {
+          "name": "related_npc_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strength": {
+          "name": "strength",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "history": {
+          "name": "history",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_tensions": {
+          "name": "narrative_tensions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shared_goals": {
+          "name": "shared_goals",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relationship_dynamics": {
+          "name": "relationship_dynamics",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "character_relationships_npc_id_npcs_id_fk": {
+          "name": "character_relationships_npc_id_npcs_id_fk",
+          "tableFrom": "character_relationships",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "character_relationships_related_npc_id_npcs_id_fk": {
+          "name": "character_relationships_related_npc_id_npcs_id_fk",
+          "tableFrom": "character_relationships",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "related_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "character_relationships_npc_id_related_npc_id_unique": {
+          "name": "character_relationships_npc_id_related_npc_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "related_npc_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.npc_factions": {
       "name": "npc_factions",
       "schema": "",
@@ -2063,127 +2232,6 @@
           "columns": [
             "npc_id",
             "location_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.npc_relationships": {
-      "name": "npc_relationships",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "npc_id": {
-          "name": "npc_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "related_npc_id": {
-          "name": "related_npc_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "relationship_strength": {
-          "name": "relationship_strength",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "strength": {
-          "name": "strength",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "history": {
-          "name": "history",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "narrative_tensions": {
-          "name": "narrative_tensions",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "shared_goals": {
-          "name": "shared_goals",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "relationship_dynamics": {
-          "name": "relationship_dynamics",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "npc_relationships_npc_id_npcs_id_fk": {
-          "name": "npc_relationships_npc_id_npcs_id_fk",
-          "tableFrom": "npc_relationships",
-          "tableTo": "npcs",
-          "columnsFrom": [
-            "npc_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "npc_relationships_related_npc_id_npcs_id_fk": {
-          "name": "npc_relationships_related_npc_id_npcs_id_fk",
-          "tableFrom": "npc_relationships",
-          "tableTo": "npcs",
-          "columnsFrom": [
-            "related_npc_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "npc_relationships_npc_id_related_npc_id_unique": {
-          "name": "npc_relationships_npc_id_related_npc_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "npc_id",
-            "related_npc_id"
           ]
         }
       },
@@ -2362,6 +2410,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -2437,6 +2491,12 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -2500,8 +2560,93 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.faction_influence": {
-      "name": "faction_influence",
+    "public.faction_quest_involvement": {
+      "name": "faction_quest_involvement",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interest": {
+          "name": "interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faction_quest_involvement_quest_id_quests_id_fk": {
+          "name": "faction_quest_involvement_quest_id_quests_id_fk",
+          "tableFrom": "faction_quest_involvement",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "faction_quest_involvement_faction_id_factions_id_fk": {
+          "name": "faction_quest_involvement_faction_id_factions_id_fk",
+          "tableFrom": "faction_quest_involvement",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faction_quest_involvement_quest_id_faction_id_unique": {
+          "name": "faction_quest_involvement_quest_id_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.faction_regional_power": {
+      "name": "faction_regional_power",
       "schema": "",
       "columns": {
         "id": {
@@ -2534,11 +2679,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "influence_level": {
-          "name": "influence_level",
+        "power_level": {
+          "name": "power_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -2555,9 +2700,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "faction_influence_faction_id_factions_id_fk": {
-          "name": "faction_influence_faction_id_factions_id_fk",
-          "tableFrom": "faction_influence",
+        "faction_regional_power_faction_id_factions_id_fk": {
+          "name": "faction_regional_power_faction_id_factions_id_fk",
+          "tableFrom": "faction_regional_power",
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
@@ -2568,9 +2713,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "faction_influence_quest_id_quests_id_fk": {
-          "name": "faction_influence_quest_id_quests_id_fk",
-          "tableFrom": "faction_influence",
+        "faction_regional_power_quest_id_quests_id_fk": {
+          "name": "faction_regional_power_quest_id_quests_id_fk",
+          "tableFrom": "faction_regional_power",
           "tableTo": "quests",
           "columnsFrom": [
             "quest_id"
@@ -2581,9 +2726,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "faction_influence_region_id_regions_id_fk": {
-          "name": "faction_influence_region_id_regions_id_fk",
-          "tableFrom": "faction_influence",
+        "faction_regional_power_region_id_regions_id_fk": {
+          "name": "faction_regional_power_region_id_regions_id_fk",
+          "tableFrom": "faction_regional_power",
           "tableTo": "regions",
           "columnsFrom": [
             "region_id"
@@ -2594,9 +2739,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "faction_influence_location_id_locations_id_fk": {
-          "name": "faction_influence_location_id_locations_id_fk",
-          "tableFrom": "faction_influence",
+        "faction_regional_power_location_id_locations_id_fk": {
+          "name": "faction_regional_power_location_id_locations_id_fk",
+          "tableFrom": "faction_regional_power",
           "tableTo": "locations",
           "columnsFrom": [
             "location_id"
@@ -2610,85 +2755,6 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.faction_quests": {
-      "name": "faction_quests",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "faction_id": {
-          "name": "faction_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "interest": {
-          "name": "interest",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "faction_quests_quest_id_quests_id_fk": {
-          "name": "faction_quests_quest_id_quests_id_fk",
-          "tableFrom": "faction_quests",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "faction_quests_faction_id_factions_id_fk": {
-          "name": "faction_quests_faction_id_factions_id_fk",
-          "tableFrom": "faction_quests",
-          "tableTo": "factions",
-          "columnsFrom": [
-            "faction_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "faction_quests_quest_id_faction_id_unique": {
-          "name": "faction_quests_quest_id_faction_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "quest_id",
-            "faction_id"
-          ]
-        }
-      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -2762,6 +2828,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -2846,6 +2918,110 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.npc_quest_roles": {
+      "name": "npc_quest_roles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "importance": {
+          "name": "importance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dramatic_moments": {
+          "name": "dramatic_moments",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden_aspects": {
+          "name": "hidden_aspects",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_quest_roles_npc_id_npcs_id_fk": {
+          "name": "npc_quest_roles_npc_id_npcs_id_fk",
+          "tableFrom": "npc_quest_roles",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_quest_roles_quest_id_quests_id_fk": {
+          "name": "npc_quest_roles_quest_id_quests_id_fk",
+          "tableFrom": "npc_quest_roles",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "npc_quest_roles_npc_id_quest_id_role_unique": {
+          "name": "npc_quest_roles_npc_id_quest_id_role_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "quest_id",
+            "role"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.quest_hook_npcs": {
       "name": "quest_hook_npcs",
       "schema": "",
@@ -2889,10 +3065,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_hook_npcs_hook_id_quest_hooks_id_fk": {
-          "name": "quest_hook_npcs_hook_id_quest_hooks_id_fk",
+        "quest_hook_npcs_hook_id_quest_introductions_id_fk": {
+          "name": "quest_hook_npcs_hook_id_quest_introductions_id_fk",
           "tableFrom": "quest_hook_npcs",
-          "tableTo": "quest_hooks",
+          "tableTo": "quest_introductions",
           "columnsFrom": [
             "hook_id"
           ],
@@ -2931,8 +3107,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.quest_hooks": {
-      "name": "quest_hooks",
+    "public.quest_introductions": {
+      "name": "quest_introductions",
       "schema": "",
       "columns": {
         "id": {
@@ -2989,14 +3165,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "hook_type": {
-          "name": "hook_type",
+        "introduction_type": {
+          "name": "introduction_type",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "presentation": {
-          "name": "presentation",
+        "presentation_style": {
+          "name": "presentation_style",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -3010,9 +3186,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_hooks_stage_id_quest_stages_id_fk": {
-          "name": "quest_hooks_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_hooks",
+        "quest_introductions_stage_id_quest_stages_id_fk": {
+          "name": "quest_introductions_stage_id_quest_stages_id_fk",
+          "tableFrom": "quest_introductions",
           "tableTo": "quest_stages",
           "columnsFrom": [
             "stage_id"
@@ -3023,9 +3199,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "quest_hooks_location_id_locations_id_fk": {
-          "name": "quest_hooks_location_id_locations_id_fk",
-          "tableFrom": "quest_hooks",
+        "quest_introductions_location_id_locations_id_fk": {
+          "name": "quest_introductions_location_id_locations_id_fk",
+          "tableFrom": "quest_introductions",
           "tableTo": "locations",
           "columnsFrom": [
             "location_id"
@@ -3036,9 +3212,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "quest_hooks_faction_id_factions_id_fk": {
-          "name": "quest_hooks_faction_id_factions_id_fk",
-          "tableFrom": "quest_hooks",
+        "quest_introductions_faction_id_factions_id_fk": {
+          "name": "quest_introductions_faction_id_factions_id_fk",
+          "tableFrom": "quest_introductions",
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
@@ -3049,9 +3225,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "quest_hooks_item_id_items_id_fk": {
-          "name": "quest_hooks_item_id_items_id_fk",
-          "tableFrom": "quest_hooks",
+        "quest_introductions_item_id_items_id_fk": {
+          "name": "quest_introductions_item_id_items_id_fk",
+          "tableFrom": "quest_introductions",
           "tableTo": "items",
           "columnsFrom": [
             "item_id"
@@ -3069,112 +3245,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.quest_npcs": {
-      "name": "quest_npcs",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "npc_id": {
-          "name": "npc_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "importance": {
-          "name": "importance",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "dramatic_moments": {
-          "name": "dramatic_moments",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "hidden_aspects": {
-          "name": "hidden_aspects",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_npcs_npc_id_npcs_id_fk": {
-          "name": "quest_npcs_npc_id_npcs_id_fk",
-          "tableFrom": "quest_npcs",
-          "tableTo": "npcs",
-          "columnsFrom": [
-            "npc_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "quest_npcs_quest_id_quests_id_fk": {
-          "name": "quest_npcs_quest_id_quests_id_fk",
-          "tableFrom": "quest_npcs",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "quest_npcs_npc_id_quest_id_role_unique": {
-          "name": "quest_npcs_npc_id_quest_id_role_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "npc_id",
-            "quest_id",
-            "role"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.region_connections": {
-      "name": "region_connections",
+    "public.region_connection_details": {
+      "name": "region_connection_details",
       "schema": "",
       "columns": {
         "id": {
@@ -3240,10 +3312,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "region_connections_relation_id_region_relations_id_fk": {
-          "name": "region_connections_relation_id_region_relations_id_fk",
-          "tableFrom": "region_connections",
-          "tableTo": "region_relations",
+        "region_connection_details_relation_id_region_connections_id_fk": {
+          "name": "region_connection_details_relation_id_region_connections_id_fk",
+          "tableFrom": "region_connection_details",
+          "tableTo": "region_connections",
           "columnsFrom": [
             "relation_id"
           ],
@@ -3253,9 +3325,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "region_connections_controlling_faction_factions_id_fk": {
-          "name": "region_connections_controlling_faction_factions_id_fk",
-          "tableFrom": "region_connections",
+        "region_connection_details_controlling_faction_factions_id_fk": {
+          "name": "region_connection_details_controlling_faction_factions_id_fk",
+          "tableFrom": "region_connection_details",
           "tableTo": "factions",
           "columnsFrom": [
             "controlling_faction"
@@ -3269,8 +3341,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "region_connections_relation_id_unique": {
-          "name": "region_connections_relation_id_unique",
+        "region_connection_details_relation_id_unique": {
+          "name": "region_connection_details_relation_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "relation_id"

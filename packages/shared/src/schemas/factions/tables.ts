@@ -1,6 +1,6 @@
 // factions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString } from "../../db/utils.js"
+import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString, embeddingVector } from "../../db/utils.js"
 import { locations, regions } from "../regions/tables.js"
 import { alignments, wealthLevels } from "../common.js"
 
@@ -37,6 +37,7 @@ export const factions = pgTable("factions", {
 	notes: list("notes"),
 	resources: list("resources"),
 	recruitment: list("recruitment").notNull(),
+	embedding: embeddingVector("sm"),
 })
 
 export const factionRegions = pgTable(
@@ -106,6 +107,7 @@ export const factionOperations = pgTable(
 		locations: list("locations"),
 		involved_npcs: list("involved_npcs"),
 		priority: oneOf("priority", ["low", "medium", "high"]),
+		embedding: embeddingVector("sm"),
 	},
 	(t) => [unique().on(t.factionId, t.name)],
 )
@@ -121,6 +123,7 @@ export const factionCulture = pgTable(
 		aesthetics: list("aesthetics"),
 		jargon: list("jargon"), // Special terms or phrases
 		recognitionSigns: list("recognition_signs"), // How members identify each other
+		embedding: embeddingVector("sm"),
 	},
 	(t) => [unique().on(t.factionId)],
 )

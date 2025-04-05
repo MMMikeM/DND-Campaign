@@ -2,15 +2,15 @@
 import { relations } from "drizzle-orm"
 import {
 	quests,
-	questRelations,
-	decisionConsequences,
+	questDependencies, // Corrected import
+	decisionOutcomes, // Corrected import
 	questStages,
 	stageDecisions,
 	questTwists,
 	questUnlockConditions,
 } from "./tables.js"
 import { locations, regions } from "../regions/tables.js"
-import { questNpcs, factionQuests, clues, items, factionInfluence } from "../associations/tables.js"
+import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js" // Corrected imports
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	// Parent region
@@ -24,11 +24,13 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	stages: many(questStages, { relationName: "questStages" }),
 	twists: many(questTwists, { relationName: "questTwists" }),
 
-	// Improved naming for quest relations
-	outgoingRelations: many(questRelations, {
+	// Corrected quest relations usage
+	outgoingRelations: many(questDependencies, {
+		// Corrected usage
 		relationName: "sourceQuests",
 	}),
-	incomingRelations: many(questRelations, {
+	incomingRelations: many(questDependencies, {
+		// Corrected usage
 		relationName: "targetQuests",
 	}),
 
@@ -36,23 +38,24 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 		relationName: "questUnlockConditions",
 	}),
 
-	// Associations with other entities
-	npcs: many(questNpcs, { relationName: "questNpcs" }),
-	factions: many(factionQuests, { relationName: "questFactions" }),
+	// Associations with other entities (Corrected usage)
+	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
+	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
 	items: many(items, { relationName: "questItems" }),
-	influence: many(factionInfluence, { relationName: "questInfluence" }),
+	influence: many(factionRegionalPower, { relationName: "questInfluence" }),
 }))
 
-export const questRelationsRelations = relations(questRelations, ({ one, many }) => ({
+// Renamed relation and corrected internal usage
+export const questDependenciesRelations = relations(questDependencies, ({ one, many }) => ({
 	// The source quest in the relationship
 	sourceQuest: one(quests, {
-		fields: [questRelations.questId],
+		fields: [questDependencies.questId],
 		references: [quests.id],
 		relationName: "sourceQuests",
 	}),
 	// The target quest in the relationship
 	targetQuest: one(quests, {
-		fields: [questRelations.relatedQuestId],
+		fields: [questDependencies.relatedQuestId],
 		references: [quests.id],
 		relationName: "targetQuests",
 	}),
@@ -92,7 +95,7 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	}),
 	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
 	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
-	incomingConsequences: many(decisionConsequences, { relationName: "affectedStage" }),
+	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }), // Corrected usage
 	clues: many(clues, { relationName: "stageClues" }),
 }))
 
@@ -112,17 +115,18 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		references: [questStages.id],
 		relationName: "toStage",
 	}),
-	consequences: many(decisionConsequences, { relationName: "decisionConsequences" }),
+	consequences: many(decisionOutcomes, { relationName: "decisionConsequences" }), // Corrected usage
 }))
 
-export const decisionConsequencesRelations = relations(decisionConsequences, ({ one }) => ({
+// Renamed relation and corrected internal usage
+export const decisionOutcomesRelations = relations(decisionOutcomes, ({ one }) => ({
 	decision: one(stageDecisions, {
-		fields: [decisionConsequences.decisionId],
+		fields: [decisionOutcomes.decisionId],
 		references: [stageDecisions.id],
 		relationName: "decisionConsequences",
 	}),
 	affectedStage: one(questStages, {
-		fields: [decisionConsequences.affectedStageId],
+		fields: [decisionOutcomes.affectedStageId],
 		references: [questStages.id],
 		relationName: "affectedStage",
 	}),
