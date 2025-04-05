@@ -1,54 +1,12 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1743109498712,
-      "tag": "0000_unusual_miss_america",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1743155390733,
-      "tag": "0001_solid_vivisector",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1743155400910,
-      "tag": "0002_outstanding_squadron_supreme",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1743325593434,
-      "tag": "0003_shiny_jamie_braddock",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1743326410928,
-      "tag": "0004_cultured_gorilla_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1743326978594,
-      "tag": "0005_salty_rhodey",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1743423325651,
-      "tag": "0006_redundant_synch",
+      "version": "7",
+      "when": 1743789775934,
+      "tag": "0000_sparkling_karen_page",
       "breakpoints": true
     }
   ]

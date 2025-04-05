@@ -1,100 +1,75 @@
 {
-  "version": "6",
-  "dialect": "sqlite",
-  "id": "f9988b1f-424a-4050-8038-4faff08f4496",
+  "id": "df63023b-21a9-4d6d-8973-1f31f2372d85",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "location_encounters": {
+    "public.location_encounters": {
       "name": "location_encounters",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "encounter_type": {
           "name": "encounter_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "danger_level": {
           "name": "danger_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "difficulty": {
           "name": "difficulty",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creatures": {
           "name": "creatures",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "treasure": {
           "name": "treasure",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "location_encounters_name_unique": {
-          "name": "location_encounters_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        },
-        "location_encounters_location_id_name_unique": {
-          "name": "location_encounters_location_id_name_unique",
-          "columns": [
-            "location_id",
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "location_encounters_location_id_locations_id_fk": {
           "name": "location_encounters_location_id_locations_id_fk",
@@ -111,65 +86,69 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "location_encounters_name_unique": {
+          "name": "location_encounters_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "location_encounters_location_id_name_unique": {
+          "name": "location_encounters_location_id_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "location_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "location_relations": {
+    "public.location_relations": {
       "name": "location_relations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "other_location_id": {
           "name": "other_location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "relation_type": {
           "name": "relation_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "location_relations_location_id_other_location_id_unique": {
-          "name": "location_relations_location_id_other_location_id_unique",
-          "columns": [
-            "location_id",
-            "other_location_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "location_relations_location_id_locations_id_fk": {
           "name": "location_relations_location_id_locations_id_fk",
@@ -199,67 +178,71 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "location_relations_location_id_other_location_id_unique": {
+          "name": "location_relations_location_id_other_location_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "location_id",
+            "other_location_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "location_secrets": {
+    "public.location_secrets": {
       "name": "location_secrets",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "secret_type": {
           "name": "secret_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "difficulty": {
           "name": "difficulty",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "discovery_method": {
           "name": "discovery_method",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "consequences": {
           "name": "consequences",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -280,147 +263,124 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "locations": {
+    "public.locations": {
       "name": "locations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "region_id": {
           "name": "region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "location_type": {
           "name": "location_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "terrain": {
           "name": "terrain",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "climate": {
           "name": "climate",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "mood": {
           "name": "mood",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "environment": {
           "name": "environment",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creatures": {
           "name": "creatures",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "features": {
           "name": "features",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "treasures": {
           "name": "treasures",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "lighting_description": {
           "name": "lighting_description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "soundscape": {
           "name": "soundscape",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "smells": {
           "name": "smells",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "weather": {
           "name": "weather",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "descriptors": {
           "name": "descriptors",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "locations_name_unique": {
-          "name": "locations_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "locations_region_id_regions_id_fk": {
           "name": "locations_region_id_regions_id_fk",
@@ -437,65 +397,61 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "locations_name_unique": {
+          "name": "locations_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "region_relations": {
+    "public.region_relations": {
       "name": "region_relations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "region_id": {
           "name": "region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "other_region_id": {
           "name": "other_region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "relation_type": {
           "name": "relation_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "region_relations_region_id_other_region_id_unique": {
-          "name": "region_relations_region_id_other_region_id_unique",
-          "columns": [
-            "region_id",
-            "other_region_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "region_relations_region_id_regions_id_fk": {
           "name": "region_relations_region_id_regions_id_fk",
@@ -525,201 +481,185 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "region_relations_region_id_other_region_id_unique": {
+          "name": "region_relations_region_id_other_region_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "region_id",
+            "other_region_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "regions": {
+    "public.regions": {
       "name": "regions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "danger_level": {
           "name": "danger_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "economy": {
           "name": "economy",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "history": {
           "name": "history",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "population": {
           "name": "population",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "cultural_notes": {
           "name": "cultural_notes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "hazards": {
           "name": "hazards",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "points_of_interest": {
           "name": "points_of_interest",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "rumors": {
           "name": "rumors",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "secrets": {
           "name": "secrets",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "defenses": {
           "name": "defenses",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "regions_name_unique": {
-          "name": "regions_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "regions_name_unique": {
+          "name": "regions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_culture": {
+    "public.faction_culture": {
       "name": "faction_culture",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "symbols": {
           "name": "symbols",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "rituals": {
           "name": "rituals",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "taboos": {
           "name": "taboos",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "aesthetics": {
           "name": "aesthetics",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "jargon": {
           "name": "jargon",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "recognition_signs": {
           "name": "recognition_signs",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "faction_culture_faction_id_unique": {
-          "name": "faction_culture_faction_id_unique",
-          "columns": [
-            "faction_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_culture_faction_id_factions_id_fk": {
           "name": "faction_culture_faction_id_factions_id_fk",
@@ -736,58 +676,55 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_culture_faction_id_unique": {
+          "name": "faction_culture_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_headquarters": {
+    "public.faction_headquarters": {
       "name": "faction_headquarters",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "faction_headquarters_faction_id_location_id_unique": {
-          "name": "faction_headquarters_faction_id_location_id_unique",
-          "columns": [
-            "faction_id",
-            "location_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_headquarters_faction_id_factions_id_fk": {
           "name": "faction_headquarters_faction_id_factions_id_fk",
@@ -812,119 +749,103 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_headquarters_faction_id_location_id_unique": {
+          "name": "faction_headquarters_faction_id_location_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "location_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_operations": {
+    "public.faction_operations": {
       "name": "faction_operations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "scale": {
           "name": "scale",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "status": {
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "objectives": {
           "name": "objectives",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "locations": {
           "name": "locations",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "involved_npcs": {
           "name": "involved_npcs",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "priority": {
           "name": "priority",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         }
       },
-      "indexes": {
-        "faction_operations_name_unique": {
-          "name": "faction_operations_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        },
-        "faction_operations_faction_id_name_unique": {
-          "name": "faction_operations_faction_id_name_unique",
-          "columns": [
-            "faction_id",
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_operations_faction_id_factions_id_fk": {
           "name": "faction_operations_faction_id_factions_id_fk",
@@ -941,65 +862,69 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_operations_name_unique": {
+          "name": "faction_operations_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "faction_operations_faction_id_name_unique": {
+          "name": "faction_operations_faction_id_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_regions": {
+    "public.faction_regions": {
       "name": "faction_regions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "region_id": {
           "name": "region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "control_level": {
           "name": "control_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "presence": {
           "name": "presence",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "priorities": {
           "name": "priorities",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "faction_regions_faction_id_region_id_unique": {
-          "name": "faction_regions_faction_id_region_id_unique",
-          "columns": [
-            "faction_id",
-            "region_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_regions_faction_id_factions_id_fk": {
           "name": "faction_regions_faction_id_factions_id_fk",
@@ -1029,72 +954,68 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_regions_faction_id_region_id_unique": {
+          "name": "faction_regions_faction_id_region_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "region_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_relationships": {
+    "public.faction_relationships": {
       "name": "faction_relationships",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "other_faction_id": {
           "name": "other_faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "strength": {
           "name": "strength",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "faction_relationships_faction_id_other_faction_id_unique": {
-          "name": "faction_relationships_faction_id_other_faction_id_unique",
-          "columns": [
-            "faction_id",
-            "other_faction_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_relationships_faction_id_factions_id_fk": {
           "name": "faction_relationships_faction_id_factions_id_fk",
@@ -1119,221 +1040,202 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_relationships_faction_id_other_faction_id_unique": {
+          "name": "faction_relationships_faction_id_other_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "other_faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "factions": {
+    "public.factions": {
       "name": "factions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "alignment": {
           "name": "alignment",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "size": {
           "name": "size",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "wealth": {
           "name": "wealth",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "reach": {
           "name": "reach",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "public_goal": {
           "name": "public_goal",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "public_perception": {
           "name": "public_perception",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "secret_goal": {
           "name": "secret_goal",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "values": {
           "name": "values",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "history": {
           "name": "history",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "notes": {
           "name": "notes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "resources": {
           "name": "resources",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "recruitment": {
           "name": "recruitment",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "factions_name_unique": {
-          "name": "factions_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "factions_name_unique": {
+          "name": "factions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "decision_consequences": {
+    "public.decision_consequences": {
       "name": "decision_consequences",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "decision_id": {
           "name": "decision_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "affected_stage_id": {
           "name": "affected_stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "consequence_type": {
           "name": "consequence_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "severity": {
           "name": "severity",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "visibility": {
           "name": "visibility",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "delay_factor": {
           "name": "delay_factor",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "decision_consequences_consequence_type_decision_id_unique": {
-          "name": "decision_consequences_consequence_type_decision_id_unique",
-          "columns": [
-            "consequence_type",
-            "decision_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "decision_consequences_decision_id_stage_decisions_id_fk": {
           "name": "decision_consequences_decision_id_stage_decisions_id_fk",
@@ -1363,117 +1265,62 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "quest_prerequisites": {
-      "name": "quest_prerequisites",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "relation_id": {
-          "name": "relation_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "prerequisite_type": {
-          "name": "prerequisite_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "unlock_condition": {
-          "name": "unlock_condition",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+      "uniqueConstraints": {
+        "decision_consequences_consequence_type_decision_id_unique": {
+          "name": "decision_consequences_consequence_type_decision_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "consequence_type",
+            "decision_id"
+          ]
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "quest_prerequisites_relation_id_quest_relations_id_fk": {
-          "name": "quest_prerequisites_relation_id_quest_relations_id_fk",
-          "tableFrom": "quest_prerequisites",
-          "tableTo": "quest_relations",
-          "columnsFrom": [
-            "relation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_relations": {
+    "public.quest_relations": {
       "name": "quest_relations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "related_quest_id": {
           "name": "related_quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "relation_type": {
           "name": "relation_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "quest_relations_quest_id_related_quest_id_unique": {
-          "name": "quest_relations_quest_id_related_quest_id_unique",
-          "columns": [
-            "quest_id",
-            "related_quest_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quest_relations_quest_id_quests_id_fk": {
           "name": "quest_relations_quest_id_quests_id_fk",
@@ -1503,113 +1350,104 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "quest_relations_quest_id_related_quest_id_unique": {
+          "name": "quest_relations_quest_id_related_quest_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "related_quest_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_stages": {
+    "public.quest_stages": {
       "name": "quest_stages",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "stage": {
           "name": "stage",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "dramatic_question": {
           "name": "dramatic_question",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "objectives": {
           "name": "objectives",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "completion_paths": {
           "name": "completion_paths",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "encounters": {
           "name": "encounters",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "dramatic_moments": {
           "name": "dramatic_moments",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "sensory_elements": {
           "name": "sensory_elements",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "quest_stages_name_unique": {
-          "name": "quest_stages_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quest_stages_quest_id_quests_id_fk": {
           "name": "quest_stages_quest_id_quests_id_fk",
@@ -1639,60 +1477,64 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "quest_stages_name_unique": {
+          "name": "quest_stages_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_twists": {
+    "public.quest_twists": {
       "name": "quest_twists",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "twist_type": {
           "name": "twist_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "impact": {
           "name": "impact",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "narrative_placement": {
           "name": "narrative_placement",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -1713,133 +1555,163 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quests": {
-      "name": "quests",
+    "public.quest_unlock_conditions": {
+      "name": "quest_unlock_conditions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "condition_type": {
+          "name": "condition_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "condition_details": {
+          "name": "condition_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "importance": {
+          "name": "importance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_unlock_conditions_quest_id_quests_id_fk": {
+          "name": "quest_unlock_conditions_quest_id_quests_id_fk",
+          "tableFrom": "quest_unlock_conditions",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quests": {
+      "name": "quests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "region_id": {
           "name": "region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "urgency": {
           "name": "urgency",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "visibility": {
           "name": "visibility",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "mood": {
           "name": "mood",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "failure_outcomes": {
           "name": "failure_outcomes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "success_outcomes": {
           "name": "success_outcomes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "objectives": {
           "name": "objectives",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "prerequisites": {
-          "name": "prerequisites",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "rewards": {
           "name": "rewards",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "themes": {
           "name": "themes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "inspirations": {
           "name": "inspirations",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "quests_name_unique": {
-          "name": "quests_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quests_region_id_regions_id_fk": {
           "name": "quests_region_id_regions_id_fk",
@@ -1856,129 +1728,115 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "quests_name_unique": {
+          "name": "quests_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "stage_decisions": {
+    "public.stage_decisions": {
       "name": "stage_decisions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "from_stage_id": {
           "name": "from_stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "to_stage_id": {
           "name": "to_stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "condition_type": {
           "name": "condition_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "decision_type": {
           "name": "decision_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "condition_value": {
           "name": "condition_value",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "success_description": {
           "name": "success_description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "failure_description": {
           "name": "failure_description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "narrative_transition": {
           "name": "narrative_transition",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "potential_player_reactions": {
           "name": "potential_player_reactions",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "options": {
           "name": "options",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "stage_decisions_quest_id_from_stage_id_to_stage_id_unique": {
-          "name": "stage_decisions_quest_id_from_stage_id_to_stage_id_unique",
-          "columns": [
-            "quest_id",
-            "from_stage_id",
-            "to_stage_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "stage_decisions_quest_id_quests_id_fk": {
           "name": "stage_decisions_quest_id_quests_id_fk",
@@ -2021,79 +1879,75 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "stage_decisions_quest_id_from_stage_id_to_stage_id_unique": {
+          "name": "stage_decisions_quest_id_from_stage_id_to_stage_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "from_stage_id",
+            "to_stage_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "npc_factions": {
+    "public.npc_factions": {
       "name": "npc_factions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "loyalty": {
           "name": "loyalty",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "justification": {
           "name": "justification",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "role": {
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "rank": {
           "name": "rank",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "secrets": {
           "name": "secrets",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "npc_factions_npc_id_faction_id_unique": {
-          "name": "npc_factions_npc_id_faction_id_unique",
-          "columns": [
-            "npc_id",
-            "faction_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "npc_factions_npc_id_npcs_id_fk": {
           "name": "npc_factions_npc_id_npcs_id_fk",
@@ -2123,58 +1977,56 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "npc_factions_npc_id_faction_id_unique": {
+          "name": "npc_factions_npc_id_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "npc_locations": {
+    "public.npc_locations": {
       "name": "npc_locations",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "npc_locations_npc_id_location_id_unique": {
-          "name": "npc_locations_npc_id_location_id_unique",
-          "columns": [
-            "npc_id",
-            "location_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "npc_locations_npc_id_npcs_id_fk": {
           "name": "npc_locations_npc_id_npcs_id_fk",
@@ -2204,107 +2056,98 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "npc_locations_npc_id_location_id_unique": {
+          "name": "npc_locations_npc_id_location_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "location_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "npc_relationships": {
+    "public.npc_relationships": {
       "name": "npc_relationships",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "related_npc_id": {
           "name": "related_npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "relationship_strength": {
           "name": "relationship_strength",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "strength": {
           "name": "strength",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "history": {
           "name": "history",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "narrative_tensions": {
           "name": "narrative_tensions",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "shared_goals": {
           "name": "shared_goals",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "relationship_dynamics": {
           "name": "relationship_dynamics",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "npc_relationships_npc_id_related_npc_id_unique": {
-          "name": "npc_relationships_npc_id_related_npc_id_unique",
-          "columns": [
-            "npc_id",
-            "related_npc_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "npc_relationships_npc_id_npcs_id_fk": {
           "name": "npc_relationships_npc_id_npcs_id_fk",
@@ -2334,288 +2177,266 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "npc_relationships_npc_id_related_npc_id_unique": {
+          "name": "npc_relationships_npc_id_related_npc_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "related_npc_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "npcs": {
+    "public.npcs": {
       "name": "npcs",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "alignment": {
           "name": "alignment",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "disposition": {
           "name": "disposition",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "gender": {
           "name": "gender",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "race": {
           "name": "race",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "trust_level": {
           "name": "trust_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "wealth": {
           "name": "wealth",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "adaptability": {
           "name": "adaptability",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "age": {
           "name": "age",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "attitude": {
           "name": "attitude",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "occupation": {
           "name": "occupation",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "quirk": {
           "name": "quirk",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "social_status": {
           "name": "social_status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "appearance": {
           "name": "appearance",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "avoid_topics": {
           "name": "avoid_topics",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "background": {
           "name": "background",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "biases": {
           "name": "biases",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "dialogue": {
           "name": "dialogue",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "drives": {
           "name": "drives",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "fears": {
           "name": "fears",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "knowledge": {
           "name": "knowledge",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "mannerisms": {
           "name": "mannerisms",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "personality_traits": {
           "name": "personality_traits",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "preferred_topics": {
           "name": "preferred_topics",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "rumours": {
           "name": "rumours",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "secrets": {
           "name": "secrets",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "voice_notes": {
           "name": "voice_notes",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "npcs_name_unique": {
-          "name": "npcs_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "npcs_name_unique": {
+          "name": "npcs_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "clues": {
+    "public.clues": {
       "name": "clues",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_stage_id": {
           "name": "quest_stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "discovery_condition": {
           "name": "discovery_condition",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "reveals": {
           "name": "reveals",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -2675,89 +2496,84 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_influence": {
+    "public.faction_influence": {
       "name": "faction_influence",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
         },
         "region_id": {
           "name": "region_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "influence_level": {
           "name": "influence_level",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "faction_influence_quest_id_quests_id_fk": {
-          "name": "faction_influence_quest_id_quests_id_fk",
-          "tableFrom": "faction_influence",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "faction_influence_faction_id_factions_id_fk": {
           "name": "faction_influence_faction_id_factions_id_fk",
           "tableFrom": "faction_influence",
           "tableTo": "factions",
           "columnsFrom": [
             "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "faction_influence_quest_id_quests_id_fk": {
+          "name": "faction_influence_quest_id_quests_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
           ],
           "columnsTo": [
             "id"
@@ -2794,57 +2610,46 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "faction_quests": {
+    "public.faction_quests": {
       "name": "faction_quests",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "role": {
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "interest": {
           "name": "interest",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "faction_quests_quest_id_faction_id_unique": {
-          "name": "faction_quests_quest_id_faction_id_unique",
-          "columns": [
-            "quest_id",
-            "faction_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "faction_quests_quest_id_quests_id_fk": {
           "name": "faction_quests_quest_id_quests_id_fk",
@@ -2874,99 +2679,92 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "faction_quests_quest_id_faction_id_unique": {
+          "name": "faction_quests_quest_id_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "items": {
+    "public.items": {
       "name": "items",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "location_id": {
           "name": "location_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "stage_id": {
           "name": "stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "significance": {
           "name": "significance",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "items_name_unique": {
-          "name": "items_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "items_npc_id_npcs_id_fk": {
           "name": "items_npc_id_npcs_id_fk",
@@ -3035,65 +2833,61 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "items_name_unique": {
+          "name": "items_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_hook_npcs": {
+    "public.quest_hook_npcs": {
       "name": "quest_hook_npcs",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "hook_id": {
           "name": "hook_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "relationship": {
           "name": "relationship",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "trust_required": {
           "name": "trust_required",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "dialogue_hint": {
           "name": "dialogue_hint",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "quest_hook_npcs_hook_id_npc_id_unique": {
-          "name": "quest_hook_npcs_hook_id_npc_id_unique",
-          "columns": [
-            "hook_id",
-            "npc_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quest_hook_npcs_hook_id_quest_hooks_id_fk": {
           "name": "quest_hook_npcs_hook_id_quest_hooks_id_fk",
@@ -3123,112 +2917,105 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "quest_hook_npcs_hook_id_npc_id_unique": {
+          "name": "quest_hook_npcs_hook_id_npc_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "hook_id",
+            "npc_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_hooks": {
+    "public.quest_hooks": {
       "name": "quest_hooks",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "location_id": {
-          "name": "location_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "stage_id": {
           "name": "stage_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
         },
         "faction_id": {
           "name": "faction_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "item_id": {
           "name": "item_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "source": {
           "name": "source",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "discovery_condition": {
           "name": "discovery_condition",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "hook_type": {
           "name": "hook_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "presentation": {
           "name": "presentation",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "hook_content": {
           "name": "hook_content",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_hooks_quest_id_quests_id_fk": {
-          "name": "quest_hooks_quest_id_quests_id_fk",
+        "quest_hooks_stage_id_quest_stages_id_fk": {
+          "name": "quest_hooks_stage_id_quest_stages_id_fk",
           "tableFrom": "quest_hooks",
-          "tableTo": "quests",
+          "tableTo": "quest_stages",
           "columnsFrom": [
-            "quest_id"
+            "stage_id"
           ],
           "columnsTo": [
             "id"
@@ -3249,19 +3036,6 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "quest_hooks_stage_id_quest_stages_id_fk": {
-          "name": "quest_hooks_stage_id_quest_stages_id_fk",
-          "tableFrom": "quest_hooks",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "quest_hooks_faction_id_factions_id_fk": {
           "name": "quest_hooks_faction_id_factions_id_fk",
           "tableFrom": "quest_hooks",
@@ -3275,10 +3049,10 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "quest_hooks_item_id_locations_id_fk": {
-          "name": "quest_hooks_item_id_locations_id_fk",
+        "quest_hooks_item_id_items_id_fk": {
+          "name": "quest_hooks_item_id_items_id_fk",
           "tableFrom": "quest_hooks",
-          "tableTo": "locations",
+          "tableTo": "items",
           "columnsFrom": [
             "item_id"
           ],
@@ -3291,86 +3065,70 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "quest_npcs": {
+    "public.quest_npcs": {
       "name": "quest_npcs",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "npc_id": {
           "name": "npc_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "quest_id": {
           "name": "quest_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "role": {
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "importance": {
           "name": "importance",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "dramatic_moments": {
           "name": "dramatic_moments",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "hidden_aspects": {
           "name": "hidden_aspects",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "quest_npcs_npc_id_quest_id_role_unique": {
-          "name": "quest_npcs_npc_id_quest_id_role_unique",
-          "columns": [
-            "npc_id",
-            "quest_id",
-            "role"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quest_npcs_npc_id_npcs_id_fk": {
           "name": "quest_npcs_npc_id_npcs_id_fk",
@@ -3400,92 +3158,87 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "quest_npcs_npc_id_quest_id_role_unique": {
+          "name": "quest_npcs_npc_id_quest_id_role_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "quest_id",
+            "role"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "region_connections": {
+    "public.region_connections": {
       "name": "region_connections",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
         },
         "relation_id": {
           "name": "relation_id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "route_type": {
           "name": "route_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "travel_difficulty": {
           "name": "travel_difficulty",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false
         },
         "travel_time": {
           "name": "travel_time",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "controlling_faction": {
           "name": "controlling_faction",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true
         },
         "travel_hazards": {
           "name": "travel_hazards",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "points_of_interest": {
           "name": "points_of_interest",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "creative_prompts": {
           "name": "creative_prompts",
-          "type": "text",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
-      "indexes": {
-        "region_connections_relation_id_unique": {
-          "name": "region_connections_relation_id_unique",
-          "columns": [
-            "relation_id"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "region_connections_relation_id_region_relations_id_fk": {
           "name": "region_connections_relation_id_region_relations_id_fk",
@@ -3515,18 +3268,29 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "region_connections_relation_id_unique": {
+          "name": "region_connections_relation_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "relation_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
-  "views": {},
   "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "indexes": {}
+    "tables": {}
   }
 }

@@ -1,23 +1,19 @@
-import { integer, type SQLiteColumn, text } from "drizzle-orm/sqlite-core"
+import { serial, type PgColumn, text } from "drizzle-orm/pg-core"
 
-// Create a custom JSON type for SQLite
-export const list = (description: string) =>
-	text(description, { mode: "json" }).$type<string[]>().notNull()
+// Create a text array type for PostgreSQL
+export const list = (description: string) => text(description).array().notNull()
 
-export const nullableFk = (description: string, id: SQLiteColumn) =>
-	integer(description).references(() => id, { onDelete: "set null" })
+export const nullableFk = (description: string, id: PgColumn) =>
+	serial(description).references(() => id, { onDelete: "set null" })
 
-export const cascadeFk = (description: string, id: SQLiteColumn) =>
-	integer(description)
-		.notNull()
-		.references(() => id, { onDelete: "cascade" })
+export const cascadeFk = (description: string, id: PgColumn) =>
+	serial(description).references(() => id, { onDelete: "cascade" })
 
-export const string = (description: string) =>
-	text(description).notNull()
+export const string = (description: string) => text(description).notNull()
 
-export const nullableString = (description: string) =>	
-	text(description)
+export const nullableString = (description: string) => text(description)
 
-export const oneOf = (description: string, options: readonly [string, ...string[]]) => text(description, { enum: options }).notNull()
+export const oneOf = (description: string, options: readonly [string, ...string[]]) =>
+	text(description, { enum: options })
 
-export const pk = () => (integer("id").primaryKey({ autoIncrement: true }))
+export const pk = () => serial("id").primaryKey()

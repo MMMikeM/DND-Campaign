@@ -1,11 +1,11 @@
 // npc/tables.ts
-import { sqliteTable, unique } from "drizzle-orm/sqlite-core"
+import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { alignments, genders, races, trustLevel, wealthLevels } from "../common"
 import { factions } from "../factions/tables"
 import { locations } from "../regions/tables"
 
-export const npcs = sqliteTable("npcs", {
+export const npcs = pgTable("npcs", {
 	id: pk(),
 	name: string("name").unique(),
 
@@ -16,7 +16,6 @@ export const npcs = sqliteTable("npcs", {
 	trustLevel: oneOf("trust_level", trustLevel),
 	wealth: oneOf("wealth", wealthLevels),
 	adaptability: oneOf("adaptability", ["rigid", "reluctant", "flexible", "opportunistic"]),
-	// Add to npcs table
 
 	age: string("age"),
 	attitude: string("attitude"),
@@ -40,7 +39,7 @@ export const npcs = sqliteTable("npcs", {
 	voiceNotes: list("voice_notes"),
 })
 
-export const npcLocations = sqliteTable(
+export const npcLocations = pgTable(
 	"npc_locations",
 	{
 		id: pk(),
@@ -52,7 +51,7 @@ export const npcLocations = sqliteTable(
 	(t) => [unique().on(t.npcId, t.locationId)],
 )
 
-export const npcFactions = sqliteTable(
+export const npcFactions = pgTable(
 	"npc_factions",
 	{
 		id: pk(),
@@ -69,21 +68,33 @@ export const npcFactions = sqliteTable(
 	(t) => [unique().on(t.npcId, t.factionId)],
 )
 
-export const npcRelationships = sqliteTable(
-	"npc_relationships",
+const relationshipTypes = ["ally", "enemy", "family", "rival", "mentor", "student", "friend", "contact"] as const
+const relationshipStrengths = [
+	"weak",
+	"moderate",
+	"friendly",
+	"strong",
+	"unbreakable",
+	"friction",
+	"cold",
+	"hostile",
+	"war",
+] as const
+
+export const characterRelationships = pgTable(
+	"character_relationships",
 	{
 		id: pk(),
 		npcId: cascadeFk("npc_id", npcs.id),
 		relatedNpcId: nullableFk("related_npc_id", npcs.id),
-		relationsshipStrength: oneOf("relationship_strength", ["weak", "moderate", "strong", "unbreakable"]),
-		type: string("type"),
-		strength: string("strength"),
+		type: oneOf("type", relationshipTypes),
+		strength: oneOf("strength", relationshipStrengths),
 		history: list("history"),
 		description: list("description"),
-		creativePrompts: list("creative_prompts"),
 		narrativeTensions: list("narrative_tensions"),
-		sharedViews: list("shared_goals"),
+		sharedGoals: list("shared_goals"),
 		relationshipDynamics: list("relationship_dynamics"),
+		creativePrompts: list("creative_prompts"),
 	},
 	(t) => [unique().on(t.npcId, t.relatedNpcId)],
 )
