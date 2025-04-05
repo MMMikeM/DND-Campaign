@@ -15,7 +15,7 @@ export const string = (description: string) => text(description).notNull()
 export const nullableString = (description: string) => text(description)
 
 export const oneOf = (description: string, options: readonly [string, ...string[]]) =>
-	text(description, { enum: options })
+	text(description, { enum: options }).notNull()
 
 export const pk = () => serial("id").primaryKey()
 

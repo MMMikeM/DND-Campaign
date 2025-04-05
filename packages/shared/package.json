@@ -31,13 +31,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "drizzle-orm": "^0.41.0",
-    "drizzle-zod": "^0.7.1",
+    "@google/generative-ai": "^0.24.0",
+    "drizzle-orm": "catalog:",
+    "drizzle-zod": "catalog:",
     "pg": "^8.14.1",
     "pgvector": "^0.2.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
-    "zod": "^3.24.2"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
