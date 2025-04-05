@@ -1,6 +1,6 @@
 // associations/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, nullableFk, list, pk, string, oneOf } from "../../db/utils.js"
+import { cascadeFk, nullableFk, list, pk, string, oneOf, embeddingVector } from "../../db/utils.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
@@ -53,6 +53,7 @@ export const items = pgTable("items", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	significance: string("significance"),
+	embedding: embeddingVector("sm"),
 })
 
 const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
@@ -96,6 +97,7 @@ export const clues = pgTable("clues", {
 	creativePrompts: list("creative_prompts"),
 	discoveryCondition: list("discovery_condition"),
 	reveals: list("reveals"),
+	embedding: embeddingVector("sm"),
 })
 
 const powerLevels = ["minor", "moderate", "strong", "dominant"] as const

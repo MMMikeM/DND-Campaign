@@ -1,6 +1,6 @@
 // regions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, oneOf, nullableFk, string, list, pk } from "../../db/utils.js"
+import { cascadeFk, oneOf, nullableFk, string, list, pk, embeddingVector } from "../../db/utils.js"
 
 const regionTypes = [
 	// Settlements
@@ -112,6 +112,7 @@ export const regions = pgTable("regions", {
 	rumors: list("rumors"),
 	secrets: list("secrets"),
 	security: list("defenses"),
+	embedding: embeddingVector("sm"),
 })
 
 const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
@@ -152,6 +153,7 @@ export const locations = pgTable("locations", {
 	smells: list("smells"),
 	weather: list("weather"),
 	descriptors: list("descriptors"), // Evocative adjectives for quick reference
+	embedding: embeddingVector("sm"),
 })
 
 const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
@@ -186,6 +188,7 @@ export const locationEncounters = pgTable(
 		creativePrompts: list("creative_prompts"),
 		creatures: list("creatures"),
 		treasure: list("treasure"),
+		embedding: embeddingVector("sm"),
 	},
 	(t) => [unique().on(t.locationId, t.name)],
 )
@@ -199,4 +202,5 @@ export const locationSecrets = pgTable("location_secrets", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	consequences: list("consequences"),
+	embedding: embeddingVector("sm"),
 })

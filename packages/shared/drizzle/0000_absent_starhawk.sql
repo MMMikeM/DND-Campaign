@@ -11,18 +11,19 @@ CREATE TABLE "location_encounters" (
 	"creative_prompts" text[] NOT NULL,
 	"creatures" text[] NOT NULL,
 	"treasure" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "location_encounters_name_unique" UNIQUE("name"),
 	CONSTRAINT "location_encounters_location_id_name_unique" UNIQUE("location_id","name")
 );
 --> statement-breakpoint
-CREATE TABLE "location_relations" (
+CREATE TABLE "location_links" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"location_id" serial NOT NULL,
 	"other_location_id" serial NOT NULL,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	"relation_type" text NOT NULL,
-	CONSTRAINT "location_relations_location_id_other_location_id_unique" UNIQUE("location_id","other_location_id")
+	"link_type" text,
+	CONSTRAINT "location_links_location_id_other_location_id_unique" UNIQUE("location_id","other_location_id")
 );
 --> statement-breakpoint
 CREATE TABLE "location_secrets" (
@@ -33,7 +34,8 @@ CREATE TABLE "location_secrets" (
 	"discovery_method" text[] NOT NULL,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	"consequences" text[] NOT NULL
+	"consequences" text[] NOT NULL,
+	"embedding" vector(768)
 );
 --> statement-breakpoint
 CREATE TABLE "locations" (
@@ -55,17 +57,18 @@ CREATE TABLE "locations" (
 	"smells" text[] NOT NULL,
 	"weather" text[] NOT NULL,
 	"descriptors" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "locations_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
-CREATE TABLE "region_relations" (
+CREATE TABLE "region_connections" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"region_id" serial NOT NULL,
 	"other_region_id" serial NOT NULL,
-	"relation_type" text NOT NULL,
+	"connection_type" text,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	CONSTRAINT "region_relations_region_id_other_region_id_unique" UNIQUE("region_id","other_region_id")
+	CONSTRAINT "region_connections_region_id_other_region_id_unique" UNIQUE("region_id","other_region_id")
 );
 --> statement-breakpoint
 CREATE TABLE "regions" (
@@ -84,6 +87,7 @@ CREATE TABLE "regions" (
 	"rumors" text[] NOT NULL,
 	"secrets" text[] NOT NULL,
 	"defenses" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "regions_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -96,7 +100,19 @@ CREATE TABLE "faction_culture" (
 	"aesthetics" text[] NOT NULL,
 	"jargon" text[] NOT NULL,
 	"recognition_signs" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "faction_culture_faction_id_unique" UNIQUE("faction_id")
+);
+--> statement-breakpoint
+CREATE TABLE "faction_diplomacy" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"faction_id" serial NOT NULL,
+	"other_faction_id" serial NOT NULL,
+	"strength" text,
+	"diplomatic_status" text,
+	"description" text[] NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	CONSTRAINT "faction_diplomacy_faction_id_other_faction_id_unique" UNIQUE("faction_id","other_faction_id")
 );
 --> statement-breakpoint
 CREATE TABLE "faction_headquarters" (
@@ -121,6 +137,7 @@ CREATE TABLE "faction_operations" (
 	"locations" text[] NOT NULL,
 	"involved_npcs" text[] NOT NULL,
 	"priority" text,
+	"embedding" vector(768),
 	CONSTRAINT "faction_operations_name_unique" UNIQUE("name"),
 	CONSTRAINT "faction_operations_faction_id_name_unique" UNIQUE("faction_id","name")
 );
@@ -135,17 +152,6 @@ CREATE TABLE "faction_regions" (
 	CONSTRAINT "faction_regions_faction_id_region_id_unique" UNIQUE("faction_id","region_id")
 );
 --> statement-breakpoint
-CREATE TABLE "faction_relationships" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"faction_id" serial NOT NULL,
-	"other_faction_id" serial NOT NULL,
-	"strength" text,
-	"type" text,
-	"description" text[] NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	CONSTRAINT "faction_relationships_faction_id_other_faction_id_unique" UNIQUE("faction_id","other_faction_id")
-);
---> statement-breakpoint
 CREATE TABLE "factions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -153,7 +159,7 @@ CREATE TABLE "factions" (
 	"size" text,
 	"wealth" text,
 	"reach" text,
-	"type" text NOT NULL,
+	"type" text,
 	"public_goal" text NOT NULL,
 	"public_perception" text NOT NULL,
 	"secret_goal" text,
@@ -163,30 +169,31 @@ CREATE TABLE "factions" (
 	"notes" text[] NOT NULL,
 	"resources" text[] NOT NULL,
 	"recruitment" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "factions_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
-CREATE TABLE "decision_consequences" (
+CREATE TABLE "decision_outcomes" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"decision_id" serial NOT NULL,
 	"affected_stage_id" serial NOT NULL,
-	"consequence_type" text,
+	"outcome_type" text,
 	"severity" text,
 	"visibility" text,
-	"delay_factor" text NOT NULL,
+	"delay_factor" text,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	CONSTRAINT "decision_consequences_consequence_type_decision_id_unique" UNIQUE("consequence_type","decision_id")
+	CONSTRAINT "decision_outcomes_outcome_type_decision_id_unique" UNIQUE("outcome_type","decision_id")
 );
 --> statement-breakpoint
-CREATE TABLE "quest_relations" (
+CREATE TABLE "quest_dependencies" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"quest_id" serial NOT NULL,
 	"related_quest_id" serial NOT NULL,
-	"relation_type" text,
+	"dependency_type" text,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	CONSTRAINT "quest_relations_quest_id_related_quest_id_unique" UNIQUE("quest_id","related_quest_id")
+	CONSTRAINT "quest_dependencies_quest_id_related_quest_id_unique" UNIQUE("quest_id","related_quest_id")
 );
 --> statement-breakpoint
 CREATE TABLE "quest_stages" (
@@ -203,6 +210,7 @@ CREATE TABLE "quest_stages" (
 	"encounters" text[] NOT NULL,
 	"dramatic_moments" text[] NOT NULL,
 	"sensory_elements" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "quest_stages_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -240,6 +248,7 @@ CREATE TABLE "quests" (
 	"rewards" text[] NOT NULL,
 	"themes" text[] NOT NULL,
 	"inspirations" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "quests_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -262,6 +271,21 @@ CREATE TABLE "stage_decisions" (
 	CONSTRAINT "stage_decisions_quest_id_from_stage_id_to_stage_id_unique" UNIQUE("quest_id","from_stage_id","to_stage_id")
 );
 --> statement-breakpoint
+CREATE TABLE "character_relationships" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"npc_id" serial NOT NULL,
+	"related_npc_id" serial NOT NULL,
+	"type" text,
+	"strength" text,
+	"history" text[] NOT NULL,
+	"description" text[] NOT NULL,
+	"narrative_tensions" text[] NOT NULL,
+	"shared_goals" text[] NOT NULL,
+	"relationship_dynamics" text[] NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	CONSTRAINT "character_relationships_npc_id_related_npc_id_unique" UNIQUE("npc_id","related_npc_id")
+);
+--> statement-breakpoint
 CREATE TABLE "npc_factions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"npc_id" serial NOT NULL,
@@ -281,22 +305,6 @@ CREATE TABLE "npc_locations" (
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	CONSTRAINT "npc_locations_npc_id_location_id_unique" UNIQUE("npc_id","location_id")
-);
---> statement-breakpoint
-CREATE TABLE "npc_relationships" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"npc_id" serial NOT NULL,
-	"related_npc_id" serial NOT NULL,
-	"relationship_strength" text,
-	"type" text NOT NULL,
-	"strength" text NOT NULL,
-	"history" text[] NOT NULL,
-	"description" text[] NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"narrative_tensions" text[] NOT NULL,
-	"shared_goals" text[] NOT NULL,
-	"relationship_dynamics" text[] NOT NULL,
-	CONSTRAINT "npc_relationships_npc_id_related_npc_id_unique" UNIQUE("npc_id","related_npc_id")
 );
 --> statement-breakpoint
 CREATE TABLE "npcs" (
@@ -328,6 +336,7 @@ CREATE TABLE "npcs" (
 	"rumours" text[] NOT NULL,
 	"secrets" text[] NOT NULL,
 	"voice_notes" text[] NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "npcs_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -340,27 +349,29 @@ CREATE TABLE "clues" (
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	"discovery_condition" text[] NOT NULL,
-	"reveals" text[] NOT NULL
+	"reveals" text[] NOT NULL,
+	"embedding" vector(768)
 );
 --> statement-breakpoint
-CREATE TABLE "faction_influence" (
+CREATE TABLE "faction_quest_involvement" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"quest_id" serial NOT NULL,
+	"faction_id" serial NOT NULL,
+	"role" text,
+	"interest" text[] NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	CONSTRAINT "faction_quest_involvement_quest_id_faction_id_unique" UNIQUE("quest_id","faction_id")
+);
+--> statement-breakpoint
+CREATE TABLE "faction_regional_power" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"faction_id" serial NOT NULL,
 	"quest_id" serial NOT NULL,
 	"region_id" serial NOT NULL,
 	"location_id" serial NOT NULL,
-	"influence_level" text NOT NULL,
+	"power_level" text,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "faction_quests" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"quest_id" serial NOT NULL,
-	"faction_id" serial NOT NULL,
-	"role" text NOT NULL,
-	"interest" text[] NOT NULL,
-	CONSTRAINT "faction_quests_quest_id_faction_id_unique" UNIQUE("quest_id","faction_id")
 );
 --> statement-breakpoint
 CREATE TABLE "items" (
@@ -375,7 +386,21 @@ CREATE TABLE "items" (
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	"significance" text NOT NULL,
+	"embedding" vector(768),
 	CONSTRAINT "items_name_unique" UNIQUE("name")
+);
+--> statement-breakpoint
+CREATE TABLE "npc_quest_roles" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"npc_id" serial NOT NULL,
+	"quest_id" serial NOT NULL,
+	"role" text,
+	"importance" text,
+	"description" text[] NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	"dramatic_moments" text[] NOT NULL,
+	"hidden_aspects" text[] NOT NULL,
+	CONSTRAINT "npc_quest_roles_npc_id_quest_id_role_unique" UNIQUE("npc_id","quest_id","role")
 );
 --> statement-breakpoint
 CREATE TABLE "quest_hook_npcs" (
@@ -388,7 +413,7 @@ CREATE TABLE "quest_hook_npcs" (
 	CONSTRAINT "quest_hook_npcs_hook_id_npc_id_unique" UNIQUE("hook_id","npc_id")
 );
 --> statement-breakpoint
-CREATE TABLE "quest_hooks" (
+CREATE TABLE "quest_introductions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"stage_id" serial NOT NULL,
 	"location_id" serial NOT NULL,
@@ -398,25 +423,12 @@ CREATE TABLE "quest_hooks" (
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	"discovery_condition" text[] NOT NULL,
-	"hook_type" text,
-	"presentation" text,
+	"introduction_type" text,
+	"presentation_style" text,
 	"hook_content" text[] NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "quest_npcs" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"npc_id" serial NOT NULL,
-	"quest_id" serial NOT NULL,
-	"role" text NOT NULL,
-	"importance" text,
-	"description" text[] NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"dramatic_moments" text[] NOT NULL,
-	"hidden_aspects" text[] NOT NULL,
-	CONSTRAINT "quest_npcs_npc_id_quest_id_role_unique" UNIQUE("npc_id","quest_id","role")
-);
---> statement-breakpoint
-CREATE TABLE "region_connections" (
+CREATE TABLE "region_connection_details" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"relation_id" serial NOT NULL,
 	"route_type" text,
@@ -427,28 +439,28 @@ CREATE TABLE "region_connections" (
 	"points_of_interest" text[] NOT NULL,
 	"description" text[] NOT NULL,
 	"creative_prompts" text[] NOT NULL,
-	CONSTRAINT "region_connections_relation_id_unique" UNIQUE("relation_id")
+	CONSTRAINT "region_connection_details_relation_id_unique" UNIQUE("relation_id")
 );
 --> statement-breakpoint
 ALTER TABLE "location_encounters" ADD CONSTRAINT "location_encounters_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "location_relations" ADD CONSTRAINT "location_relations_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "location_relations" ADD CONSTRAINT "location_relations_other_location_id_locations_id_fk" FOREIGN KEY ("other_location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "location_links" ADD CONSTRAINT "location_links_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "location_links" ADD CONSTRAINT "location_links_other_location_id_locations_id_fk" FOREIGN KEY ("other_location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "location_secrets" ADD CONSTRAINT "location_secrets_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "region_relations" ADD CONSTRAINT "region_relations_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "region_relations" ADD CONSTRAINT "region_relations_other_region_id_regions_id_fk" FOREIGN KEY ("other_region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "region_connections" ADD CONSTRAINT "region_connections_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "region_connections" ADD CONSTRAINT "region_connections_other_region_id_regions_id_fk" FOREIGN KEY ("other_region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_culture" ADD CONSTRAINT "faction_culture_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_diplomacy" ADD CONSTRAINT "faction_diplomacy_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_diplomacy" ADD CONSTRAINT "faction_diplomacy_other_faction_id_factions_id_fk" FOREIGN KEY ("other_faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_headquarters" ADD CONSTRAINT "faction_headquarters_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_headquarters" ADD CONSTRAINT "faction_headquarters_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_operations" ADD CONSTRAINT "faction_operations_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_regions" ADD CONSTRAINT "faction_regions_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_regions" ADD CONSTRAINT "faction_regions_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_relationships" ADD CONSTRAINT "faction_relationships_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_relationships" ADD CONSTRAINT "faction_relationships_other_faction_id_factions_id_fk" FOREIGN KEY ("other_faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "decision_consequences" ADD CONSTRAINT "decision_consequences_decision_id_stage_decisions_id_fk" FOREIGN KEY ("decision_id") REFERENCES "public"."stage_decisions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "decision_consequences" ADD CONSTRAINT "decision_consequences_affected_stage_id_quest_stages_id_fk" FOREIGN KEY ("affected_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_relations" ADD CONSTRAINT "quest_relations_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_relations" ADD CONSTRAINT "quest_relations_related_quest_id_quests_id_fk" FOREIGN KEY ("related_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "decision_outcomes" ADD CONSTRAINT "decision_outcomes_decision_id_stage_decisions_id_fk" FOREIGN KEY ("decision_id") REFERENCES "public"."stage_decisions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "decision_outcomes" ADD CONSTRAINT "decision_outcomes_affected_stage_id_quest_stages_id_fk" FOREIGN KEY ("affected_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_dependencies" ADD CONSTRAINT "quest_dependencies_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_dependencies" ADD CONSTRAINT "quest_dependencies_related_quest_id_quests_id_fk" FOREIGN KEY ("related_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_twists" ADD CONSTRAINT "quest_twists_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -457,34 +469,34 @@ ALTER TABLE "quests" ADD CONSTRAINT "quests_region_id_regions_id_fk" FOREIGN KEY
 ALTER TABLE "stage_decisions" ADD CONSTRAINT "stage_decisions_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stage_decisions" ADD CONSTRAINT "stage_decisions_from_stage_id_quest_stages_id_fk" FOREIGN KEY ("from_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stage_decisions" ADD CONSTRAINT "stage_decisions_to_stage_id_quest_stages_id_fk" FOREIGN KEY ("to_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "character_relationships" ADD CONSTRAINT "character_relationships_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "character_relationships" ADD CONSTRAINT "character_relationships_related_npc_id_npcs_id_fk" FOREIGN KEY ("related_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_factions" ADD CONSTRAINT "npc_factions_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_factions" ADD CONSTRAINT "npc_factions_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_locations" ADD CONSTRAINT "npc_locations_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_locations" ADD CONSTRAINT "npc_locations_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "npc_relationships" ADD CONSTRAINT "npc_relationships_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "npc_relationships" ADD CONSTRAINT "npc_relationships_related_npc_id_npcs_id_fk" FOREIGN KEY ("related_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "clues" ADD CONSTRAINT "clues_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "clues" ADD CONSTRAINT "clues_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "clues" ADD CONSTRAINT "clues_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "clues" ADD CONSTRAINT "clues_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_quests" ADD CONSTRAINT "faction_quests_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_quests" ADD CONSTRAINT "faction_quests_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_quest_involvement" ADD CONSTRAINT "faction_quest_involvement_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_quest_involvement" ADD CONSTRAINT "faction_quest_involvement_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_regional_power" ADD CONSTRAINT "faction_regional_power_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_regional_power" ADD CONSTRAINT "faction_regional_power_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_regional_power" ADD CONSTRAINT "faction_regional_power_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "faction_regional_power" ADD CONSTRAINT "faction_regional_power_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_stage_id_quest_stages_id_fk" FOREIGN KEY ("stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_hook_npcs" ADD CONSTRAINT "quest_hook_npcs_hook_id_quest_hooks_id_fk" FOREIGN KEY ("hook_id") REFERENCES "public"."quest_hooks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_quest_roles" ADD CONSTRAINT "npc_quest_roles_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_quest_roles" ADD CONSTRAINT "npc_quest_roles_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_hook_npcs" ADD CONSTRAINT "quest_hook_npcs_hook_id_quest_introductions_id_fk" FOREIGN KEY ("hook_id") REFERENCES "public"."quest_introductions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_hook_npcs" ADD CONSTRAINT "quest_hook_npcs_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_stage_id_quest_stages_id_fk" FOREIGN KEY ("stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_item_id_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_npcs" ADD CONSTRAINT "quest_npcs_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_npcs" ADD CONSTRAINT "quest_npcs_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "region_connections" ADD CONSTRAINT "region_connections_relation_id_region_relations_id_fk" FOREIGN KEY ("relation_id") REFERENCES "public"."region_relations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "region_connections" ADD CONSTRAINT "region_connections_controlling_faction_factions_id_fk" FOREIGN KEY ("controlling_faction") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "quest_introductions" ADD CONSTRAINT "quest_introductions_stage_id_quest_stages_id_fk" FOREIGN KEY ("stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_introductions" ADD CONSTRAINT "quest_introductions_location_id_locations_id_fk" FOREIGN KEY ("location_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_introductions" ADD CONSTRAINT "quest_introductions_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_introductions" ADD CONSTRAINT "quest_introductions_item_id_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "region_connection_details" ADD CONSTRAINT "region_connection_details_relation_id_region_connections_id_fk" FOREIGN KEY ("relation_id") REFERENCES "public"."region_connections"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "region_connection_details" ADD CONSTRAINT "region_connection_details_controlling_faction_factions_id_fk" FOREIGN KEY ("controlling_faction") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;

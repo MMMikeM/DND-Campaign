@@ -2,18 +2,31 @@
 import { relations } from "drizzle-orm"
 import {
 	clues,
-	factionQuests,
-	factionInfluence,
+	factionQuestInvolvement,
+	factionRegionalPower,
 	items,
-	questNpcs,
-	questHooks,
+	npcQuestRoles,
+	questIntroductions,
 	questHookNpcs,
-	regionConnections,
+	regionConnectionDetails,
 } from "./tables.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
-import { locations, regionRelations, regions } from "../regions/tables.js"
+import { locations, regionConnections, regions } from "../regions/tables.js"
+
+export const questNpcRelations = relations(npcQuestRoles, ({ one }) => ({
+	quest: one(quests, {
+		fields: [npcQuestRoles.questId],
+		references: [quests.id],
+		relationName: "questNpcs",
+	}),
+	npc: one(npcs, {
+		fields: [npcQuestRoles.npcId],
+		references: [npcs.id],
+		relationName: "npcQuests",
+	}),
+}))
 
 export const clueRelations = relations(clues, ({ one }) => ({
 	stage: one(questStages, {
@@ -38,37 +51,37 @@ export const clueRelations = relations(clues, ({ one }) => ({
 	}),
 }))
 
-export const factionQuestsRelations = relations(factionQuests, ({ one }) => ({
+export const factionQuestsRelations = relations(factionQuestInvolvement, ({ one }) => ({
 	faction: one(factions, {
-		fields: [factionQuests.factionId],
+		fields: [factionQuestInvolvement.factionId],
 		references: [factions.id],
 		relationName: "factionQuests",
 	}),
 	quest: one(quests, {
-		fields: [factionQuests.questId],
+		fields: [factionQuestInvolvement.questId],
 		references: [quests.id],
 		relationName: "questFactions",
 	}),
 }))
 
-export const factionInfluenceRelations = relations(factionInfluence, ({ one }) => ({
+export const factionInfluenceRelations = relations(factionRegionalPower, ({ one }) => ({
 	faction: one(factions, {
-		fields: [factionInfluence.factionId],
+		fields: [factionRegionalPower.factionId],
 		references: [factions.id],
 		relationName: "factionInfluence",
 	}),
 	quest: one(quests, {
-		fields: [factionInfluence.questId],
+		fields: [factionRegionalPower.questId],
 		references: [quests.id],
 		relationName: "questFactionInfluence",
 	}),
 	region: one(regions, {
-		fields: [factionInfluence.regionId],
+		fields: [factionRegionalPower.regionId],
 		references: [regions.id],
 		relationName: "regionFactionInfluence",
 	}),
 	location: one(locations, {
-		fields: [factionInfluence.locationId],
+		fields: [factionRegionalPower.locationId],
 		references: [locations.id],
 		relationName: "locationFactionInfluence",
 	}),
@@ -102,37 +115,24 @@ export const itemRelations = relations(items, ({ one }) => ({
 	}),
 }))
 
-export const questNpcRelations = relations(questNpcs, ({ one }) => ({
-	quest: one(quests, {
-		fields: [questNpcs.questId],
-		references: [quests.id],
-		relationName: "questNpcs",
-	}),
-	npc: one(npcs, {
-		fields: [questNpcs.npcId],
-		references: [npcs.id],
-		relationName: "npcQuests",
-	}),
-}))
-
-export const questHooksRelations = relations(questHooks, ({ one, many }) => ({
+export const questHooksRelations = relations(questIntroductions, ({ one, many }) => ({
 	quest: one(questStages, {
-		fields: [questHooks.stageId],
+		fields: [questIntroductions.stageId],
 		references: [questStages.id],
 		relationName: "questHooks",
 	}),
 	location: one(locations, {
-		fields: [questHooks.locationId],
+		fields: [questIntroductions.locationId],
 		references: [locations.id],
 		relationName: "locationHooks",
 	}),
 	stage: one(questStages, {
-		fields: [questHooks.stageId],
+		fields: [questIntroductions.stageId],
 		references: [questStages.id],
 		relationName: "stageHooks",
 	}),
 	faction: one(factions, {
-		fields: [questHooks.factionId],
+		fields: [questIntroductions.factionId],
 		references: [factions.id],
 		relationName: "factionHooks",
 	}),
@@ -140,9 +140,9 @@ export const questHooksRelations = relations(questHooks, ({ one, many }) => ({
 }))
 
 export const questHookNpcsRelations = relations(questHookNpcs, ({ one }) => ({
-	hook: one(questHooks, {
+	hook: one(questIntroductions, {
 		fields: [questHookNpcs.hookId],
-		references: [questHooks.id],
+		references: [questIntroductions.id],
 		relationName: "hookNpcs",
 	}),
 	npc: one(npcs, {
@@ -152,14 +152,15 @@ export const questHookNpcsRelations = relations(questHookNpcs, ({ one }) => ({
 	}),
 }))
 
-export const regionConnectionsRelations = relations(regionConnections, ({ one }) => ({
-	relation: one(regionRelations, {
-		fields: [regionConnections.relationId],
-		references: [regionRelations.id],
+export const regionConnectionsRelations = relations(regionConnectionDetails, ({ one }) => ({
+	relation: one(regionConnections, {
+		// Corrected table name
+		fields: [regionConnectionDetails.relationId],
+		references: [regionConnections.id], // Corrected reference
 		relationName: "relationConnections",
 	}),
 	controllingFaction: one(factions, {
-		fields: [regionConnections.controllingFaction],
+		fields: [regionConnectionDetails.controllingFaction], // Corrected field reference source
 		references: [factions.id],
 		relationName: "factionControlledRoutes",
 	}),

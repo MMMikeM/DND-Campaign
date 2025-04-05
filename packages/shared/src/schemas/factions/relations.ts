@@ -2,20 +2,20 @@
 import { relations } from "drizzle-orm"
 import {
 	factions,
-	factionRelationships,
+	factionDiplomacy, // Corrected import
 	factionRegions,
 	factionHeadquarters,
 	factionOperations,
 	factionCulture,
 } from "./tables.js"
 import { locations, regions } from "../regions/tables.js"
-import { factionInfluence, factionQuests } from "../associations/tables.js"
+import { factionRegionalPower, factionQuestInvolvement } from "../associations/tables.js"
 import { npcFactions } from "../npc/tables.js"
 
 export const factionsRelations = relations(factions, ({ many }) => ({
-	// Self-referencing relationship through factionRelationships
-	outgoingRelationships: many(factionRelationships, { relationName: "sourceFaction" }),
-	incomingRelationships: many(factionRelationships, { relationName: "targetFaction" }),
+	// Self-referencing relationship through factionDiplomacy
+	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }), // Corrected usage
+	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }), // Corrected usage
 
 	// Related entities
 	relatedRegions: many(factionRegions, { relationName: "factionRegions" }),
@@ -23,18 +23,19 @@ export const factionsRelations = relations(factions, ({ many }) => ({
 	operations: many(factionOperations, { relationName: "factionOperations" }),
 	culture: many(factionCulture, { relationName: "factionCulture" }),
 	members: many(npcFactions, { relationName: "factionMembers" }),
-	relatedQuests: many(factionQuests, { relationName: "factionQuests" }),
-	influence: many(factionInfluence, { relationName: "factionInfluence" }),
+	relatedQuests: many(factionQuestInvolvement, { relationName: "factionQuests" }),
+	influence: many(factionRegionalPower, { relationName: "factionInfluence" }),
 }))
 
-export const factionRelationshipsRelations = relations(factionRelationships, ({ one }) => ({
+// Renamed relation and corrected internal usage
+export const factionDiplomacyRelations = relations(factionDiplomacy, ({ one }) => ({
 	sourceFaction: one(factions, {
-		fields: [factionRelationships.factionId],
+		fields: [factionDiplomacy.factionId],
 		references: [factions.id],
 		relationName: "sourceFaction",
 	}),
 	targetFaction: one(factions, {
-		fields: [factionRelationships.otherFactionId],
+		fields: [factionDiplomacy.otherFactionId],
 		references: [factions.id],
 		relationName: "targetFaction",
 	}),

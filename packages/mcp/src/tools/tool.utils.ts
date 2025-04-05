@@ -5,6 +5,7 @@ import { z } from "zod"
 import { db, logger } from "../index"
 import zodToMCP from "../zodToMcp"
 import zodToJsonSchema from "zod-to-json-schema"
+import { PgTable } from "drizzle-orm/pg-core"
 
 export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
 
@@ -50,7 +51,7 @@ For parameter details and required fields, use help({tool: 'manage_${entity.repl
  * @returns A function that handles create, update, and delete operations
  */
 export const createEntityHandler = (
-	table: SQLiteTable,
+	table: PgTable,
 	schema: z.ZodType<any>,
 	entityName: string,
 ): ((args?: Record<string, unknown>) => Promise<any>) => {

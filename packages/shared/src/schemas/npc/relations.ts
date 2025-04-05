@@ -1,33 +1,34 @@
 // npc/relations.ts
 import { relations } from "drizzle-orm"
-import { npcs, npcRelationships, npcFactions, npcLocations } from "./tables.js"
-import { items, questNpcs, questHookNpcs, clues } from "../associations/tables.js"
+import { npcs, characterRelationships, npcFactions, npcLocations } from "./tables.js" // Corrected import
+import { items, npcQuestRoles, questHookNpcs, clues } from "../associations/tables.js" // Corrected import: questNpcs -> npcQuestRoles
 import { factions } from "../factions/tables.js"
 import { locations } from "../regions/tables.js"
 
 export const npcsRelations = relations(npcs, ({ many }) => ({
 	// Self-referencing relationships
-	outgoingRelationships: many(npcRelationships, { relationName: "sourceNpc" }),
-	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
+	outgoingRelationships: many(characterRelationships, { relationName: "sourceNpc" }), // Corrected usage
+	incomingRelationships: many(characterRelationships, { relationName: "targetNpc" }), // Corrected usage
 
 	// Related entities
 	relatedFactions: many(npcFactions, { relationName: "npcFactions" }),
 	relatedLocations: many(npcLocations, { relationName: "npcLocations" }),
 	// Association relationships
-	relatedQuests: many(questNpcs, { relationName: "npcQuests" }),
+	relatedQuests: many(npcQuestRoles, { relationName: "npcQuests" }), // Corrected usage: questNpcs -> npcQuestRoles
 	relatedItems: many(items, { relationName: "npcItems" }),
 	relatedQuestHooks: many(questHookNpcs, { relationName: "npcQuestHooks" }),
 	relatedClues: many(clues, { relationName: "npcClues" }),
 }))
 
-export const npcRelationshipsRelations = relations(npcRelationships, ({ one }) => ({
+// Renamed relation and corrected internal usage
+export const characterRelationshipsRelations = relations(characterRelationships, ({ one }) => ({
 	sourceNpc: one(npcs, {
-		fields: [npcRelationships.npcId],
+		fields: [characterRelationships.npcId],
 		references: [npcs.id],
 		relationName: "sourceNpc",
 	}),
 	targetNpc: one(npcs, {
-		fields: [npcRelationships.relatedNpcId],
+		fields: [characterRelationships.relatedNpcId],
 		references: [npcs.id],
 		relationName: "targetNpc",
 	}),
