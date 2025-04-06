@@ -1,11 +1,14 @@
 import { tables } from "@tome-master/shared"
-import { createEntityActionDescription, createEntityHandler, type ToolDefinition } from "./tool.utils"
+import { CamelToSnakeCase, createEntityActionDescription, createEntityHandler, type ToolDefinition } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
-import { schemas, type ConflictTools } from "./conflict-tools-schema"
+import { schemas } from "./conflict-tools-schema"
 
 const {
 	conflictTables: { majorConflicts, conflictParticipants, conflictProgression },
 } = tables
+
+type TableTools = `manage_${CamelToSnakeCase<keyof typeof tables.conflictTables>}`
+export type ConflictTools = TableTools
 
 export const conflictToolDefinitions: Record<ConflictTools, ToolDefinition> = {
 	manage_major_conflicts: {

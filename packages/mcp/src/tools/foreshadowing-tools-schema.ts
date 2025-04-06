@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils" // Assuming optionalId might be needed
+import { optionalId } from "./tool.utils"
 
 const {
 	foreshadowingTables: { narrativeForeshadowing },
@@ -12,30 +12,27 @@ export type ForeshadowingTools = "manage_narrative_foreshadowing"
 
 export const schemas = {
 	manage_narrative_foreshadowing: createInsertSchema(narrativeForeshadowing, {
-		id: optionalId.describe("The ID of the foreshadowing record to update (omit to create new)"),
-		questStageId: (s) => s.optional().describe("ID of the quest stage where this foreshadowing appears (if any)"),
-		siteId: (s) => s.optional().describe("ID of the site where this foreshadowing appears (if any)"),
-		npcId: (s) => s.optional().describe("ID of the NPC involved in this foreshadowing (if any)"),
-		factionId: (s) => s.optional().describe("ID of the faction involved in this foreshadowing (if any)"),
-		name: (s) =>
-			s.describe("A short, descriptive name for this foreshadowing hint (e.g., 'Mysterious Symbol on Wall')"),
-		type: (s) => s.describe("The form the foreshadowing takes (document, conversation, object, etc.)"),
-		description: (s) => s.describe("Detailed description of what the players observe or experience"),
-		discoveryCondition: (s) =>
-			s.describe("How players might discover this hint (e.g., 'Perception DC 15', 'Talk to Innkeeper')"),
-		subtlety: (s) => s.describe("How obvious or hidden the hint is (obvious, moderate, subtle, hidden)"),
-		narrativeWeight: (s) => s.describe("The importance of this hint to the story (minor, supporting, major, crucial)"),
-		foreshadowsQuestId: (s) => s.optional().describe("ID of the quest this hint foreshadows (if any)"),
-		foreshadowsTwistId: (s) => s.optional().describe("ID of the quest twist this hint foreshadows (if any)"),
-		foreshadowsNpcId: (s) => s.optional().describe("ID of the NPC this hint relates to (if any)"),
-		foreshadowsArcId: (s) => s.optional().describe("ID of the narrative arc this hint relates to (if any)"),
-		foreshadowsElement: (s) => s.describe("Specific event, character trait, or plot point being hinted at"),
-		discovered: (s) => s.optional().describe("Has this hint been discovered by the players yet? (Defaults to false)"),
-		grantedToPlayers: (s) =>
-			s.optional().describe("Timestamp when the hint was explicitly given to players (if applicable)"),
-		playerNotes: (s) => s.optional().describe("GM notes on player reactions or theories about this hint"),
-		gmNotes: (s) => s.optional().describe("General GM notes about this foreshadowing element"),
+		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"),
+		questStageId: (s) => s.optional().describe("ID of quest stage where this hint appears"),
+		siteId: (s) => s.optional().describe("ID of site where this hint is encountered"),
+		npcId: (s) => s.optional().describe("ID of NPC involved in delivering this hint"),
+		factionId: (s) => s.optional().describe("ID of faction connected to this hint"),
+		name: (s) => s.describe("Short, evocative title (e.g., 'Mysterious Symbol on Wall')"),
+		type: (s) => s.describe("Delivery method (document, conversation, object, environmental, vision)"),
+		description: (s) => s.describe("What players observe or experience when encountering this hint"),
+		discoveryCondition: (s) => s.describe("How players might find this hint (e.g., 'Perception DC 15')"),
+		subtlety: (s) => s.describe("How noticeable the hint is (obvious, moderate, subtle, hidden)"),
+		narrativeWeight: (s) => s.describe("Importance to the story (minor, supporting, major, crucial)"),
+		foreshadowsQuestId: (s) => s.optional().describe("ID of quest this hint points toward"),
+		foreshadowsTwistId: (s) => s.optional().describe("ID of quest twist this hint suggests"),
+		foreshadowsNpcId: (s) => s.optional().describe("ID of NPC this hint relates to"),
+		foreshadowsArcId: (s) => s.optional().describe("ID of narrative arc this hint connects to"),
+		foreshadowsElement: (s) => s.describe("Specific event, trait, or plot point being hinted at"),
+		discovered: (s) => s.optional().describe("Whether players have found this hint yet"),
+		grantedToPlayers: (s) => s.optional().describe("When the hint was explicitly given to players"),
+		playerNotes: (s) => s.optional().describe("Player reactions or theories about this hint"),
+		gmNotes: (s) => s.optional().describe("GM-only information about this foreshadowing element"),
 	})
 		.strict()
-		.describe("A hint or clue planted earlier in the narrative that suggests future events, twists, or revelations."),
+		.describe("Subtle clues that hint at future events, creating anticipation and narrative cohesion"),
 } satisfies Record<ForeshadowingTools, z.ZodSchema<unknown>>
