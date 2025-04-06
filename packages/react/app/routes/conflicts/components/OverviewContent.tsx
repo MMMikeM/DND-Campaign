@@ -39,16 +39,15 @@ export function OverviewContent({ conflict }: OverviewContentProps) {
 					icon={<Icons.ScrollText className="h-4 w-4 mr-2 text-blue-600" />}
 					emptyMessage="No description provided."
 				>
-					{description && description.length > 0 && <List items={description} spacing="sm" textColor="muted" />}
+					<List items={description} spacing="sm" textColor="muted" />
 				</InfoCard>
-
 
 				<InfoCard
 					title="Stakes"
 					icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-red-600" />}
 					emptyMessage="No stakes defined."
 				>
-					{stakes && stakes.length > 0 && <List items={stakes} spacing="sm" textColor="muted" />}
+					<List items={stakes} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
 
@@ -77,15 +76,12 @@ export function OverviewContent({ conflict }: OverviewContentProps) {
 					icon={<Icons.MapPin className="h-4 w-4 mr-2 text-purple-600" />}
 					emptyMessage="No primary region specified."
 				>
-					{primaryRegion ? (
-						<div className="p-4">
-							<Link href={`/regions/${primaryRegion.slug}`} className="text-primary hover:underline">
-								{primaryRegion.name}
-							</Link>
-						</div>
-					) : null}
+					<div className="p-4">
+						<Link href={`/regions/${primaryRegion.slug}`} className="text-primary hover:underline">
+							{primaryRegion.name}
+						</Link>
+					</div>
 				</InfoCard>
-
 			</div>
 		</div>
 	)

@@ -1,31 +1,25 @@
 import { getAllConflicts } from "~/lib/entities"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { NavLink } from "react-router" // Corrected import source
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getConflictStatusVariant } from "./utils"
-import type { Conflict } from "~/lib/entities"
 import type { Route } from "./+types/index"
 import { InfoCard } from "~/components/InfoCard"
 import * as Icons from "lucide-react"
+import { List } from "~/components/List"
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllConflicts()
 }
 
 export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
-	const allConflicts = loaderData ?? []
 	const [searchTerm, setSearchTerm] = useState("")
+	const allConflicts = loaderData ?? []
 
-	const filteredConflicts = allConflicts.filter((conflict) => {
-		const term = searchTerm.toLowerCase()
-		return (
-			conflict.name?.toLowerCase().includes(term) ||
-			conflict.scope?.toLowerCase().includes(term) ||
-			conflict.nature?.toLowerCase().includes(term)
-		)
-	})
+	const filteredConflicts = useSearchFilter(allConflicts, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6">
@@ -59,7 +53,7 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 
 			{filteredConflicts.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredConflicts.map((conflict: Conflict) => (
+					{filteredConflicts.map((conflict) => (
 						<NavLink key={conflict.id} to={`/conflicts/${conflict.slug}`} className="no-underline">
 							<InfoCard
 								title={conflict.name}
@@ -68,12 +62,7 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 							>
 								<div className="p-4">
 									<p className="text-sm text-muted-foreground mb-2">
-										Scope: {conflict.scope ?? "N/A"} | Nature: {conflict.nature ?? "N/A"}
-									</p>
-									<p className="text-sm line-clamp-3">
-										{Array.isArray(conflict.description) && conflict.description.length > 0
-											? conflict.description[0]
-											: "No description."}
+										<List items={conflict.description} spacing="sm" emptyText="No description." />
 									</p>
 								</div>
 								<div className="border-t p-4">

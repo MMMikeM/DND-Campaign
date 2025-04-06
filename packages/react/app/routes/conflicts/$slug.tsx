@@ -10,18 +10,9 @@ import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getConflictStatusVariant } from "./utils"
 import OverviewContent from "./components/OverviewContent"
 import ParticipantsContent from "./components/ParticipantsContent"
-
-
-// Placeholder for ProgressionContent until created
-const ProgressionContent = ({ conflict }: { conflict: Conflict }) => (
-	<div>Progression Content Placeholder for {conflict.name}</div>
-)
+import ProgressionContent from "./components/ProgressionContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
 	const conflict = await getConflict(params.slug)
 	if (!conflict) {
 		throw new Response("Conflict not found", { status: 404 })

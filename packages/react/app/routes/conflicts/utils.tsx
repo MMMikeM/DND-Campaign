@@ -17,3 +17,35 @@ export const getConflictStatusVariant = (status: string | null | undefined): Bad
 			return "secondary"
 	}
 }
+
+export const getParticipantRoleVariant = (role: string): "default" | "destructive" | "outline" | "secondary" => {
+	switch (role) {
+		case "instigator":
+		case "opponent":
+			return "destructive"
+		case "ally":
+			return "default"
+		case "mediator":
+			return "secondary"
+		case "beneficiary":
+			return "secondary"
+		case "neutral":
+		default:
+			return "outline"
+	}
+}
+
+export const getQuestImpactVariant = (impact: string): "default" | "destructive" | "outline" | "secondary" => {
+	switch (impact) {
+		case "escalates":
+			return "destructive"
+		case "deescalates":
+			return "default"
+		case "reveals_truth":
+		case "changes_sides":
+			return "secondary"
+		case "no_change":
+		default:
+			return "outline"
+	}
+}
