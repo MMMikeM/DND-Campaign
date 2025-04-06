@@ -13,10 +13,28 @@ const {
 		questHookNpcs,
 		questIntroductions,
 		regionConnectionDetails,
+		enums,
 	},
 } = tables
 
 export const schemas = {
+	get_association_entity: z // Renamed 'get_factien_ntity' to 'get_association_entity'
+		.object({
+			entity_type: z
+				.enum([
+					"clue",
+					"item",
+					"faction_quest_involvement",
+					"npc_quest_role",
+					"faction_regional_power",
+					"quest_hook_npc",
+					"quest_introduction",
+					"region_connection_detail",
+				])
+				.describe("Type of Association-related entity to retrieve"),
+			id: z.number().optional().describe("Optional ID of the specific entity to retrieve"),
+		})
+		.describe("Get an Association-related entity by type and optional ID"),
 	manage_clues: createInsertSchema(clues, {
 		id: (s) => s.optional().describe("ID of clue to manage (omit to create new, include alone to delete)"),
 		factionId: (s) => s.optional().describe("ID of faction connected to this clue"),
@@ -37,7 +55,9 @@ export const schemas = {
 		factionId: (s) => s.describe("ID of faction with stake in this quest"),
 		questId: (s) => s.describe("ID of quest the faction is involved with"),
 		interest: (s) => s.describe("Faction's goals and reasons for involvement in point form"),
-		role: (s) => s.describe("Faction's role (quest-giver, antagonist, ally, target, beneficiary, etc.)"),
+		role: z
+			.enum(enums.factionRoles)
+			.describe("Faction's role (quest-giver, antagonist, ally, target, beneficiary, etc.)"),
 		creativePrompts: (s) => s.describe("GM ideas for integrating faction actions into quest narrative"),
 	})
 		.strict()
@@ -68,8 +88,8 @@ export const schemas = {
 		description: (s) => s.describe("NPC's quest-specific behavior and appearance in point form"),
 		dramaticMoments: (s) => s.describe("Key scenes where this NPC influences the quest"),
 		hiddenAspects: (s) => s.describe("NPC's secret motives or knowledge in this quest"),
-		importance: (s) => s.describe("NPC's significance (minor, supporting, major, critical)"),
-		role: (s) => s.describe("NPC's function (quest-giver, ally, villain, informant, etc.)"),
+		importance: z.enum(enums.importanceLevels).describe("NPC's significance (minor, supporting, major, critical)"),
+		role: z.enum(enums.npcRoles).describe("NPC's function (quest-giver, ally, villain, informant, etc.)"),
 	})
 		.strict()
 		.describe("Defines how NPCs participate in quests, their narrative functions, and dramatic potential"),
@@ -109,8 +129,12 @@ export const schemas = {
 		creativePrompts: (s) => s.describe("GM ideas for naturally introducing this hook"),
 		discoveryCondition: (s) => s.describe("Circumstances needed for players to encounter this hook"),
 		hookContent: (s) => s.describe("Essential information conveyed by this hook"),
-		introductionType: (s) => s.describe("Method of delivery (rumor, npc_interaction, site_discovery)"),
-		presentationStyle: (s) => s.describe("Tone and approach (subtle, clear, urgent, mysterious)"),
+		introductionType: z
+			.enum(enums.introductionTypes)
+			.describe("Method of delivery (rumor, npc_interaction, site_discovery)"),
+		presentationStyle: z
+			.enum(enums.presentationStyles)
+			.describe("Tone and approach (subtle, clear, urgent, mysterious)"),
 		source: (s) => s.describe("Origin (tavern gossip, notice board, messenger, found object, etc.)"),
 	})
 		.strict()

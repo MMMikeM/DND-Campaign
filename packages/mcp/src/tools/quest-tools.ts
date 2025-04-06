@@ -1,15 +1,10 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
-import { db, logger } from "../index"
+import { db } from "../index"
 import zodToMCP from "../zodToMcp"
-import {
-	createEntityActionDescription,
-	createEntityHandler,
-	type CamelToSnakeCase,
-	type ToolDefinition,
-} from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
 import { schemas } from "./quest-tools-schema"
+import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
 const {
 	questTables: {
@@ -23,96 +18,105 @@ const {
 	},
 } = tables
 
-type TableTools = `manage_${CamelToSnakeCase<keyof typeof tables.questTables>}`
-export type QuestTools = TableTools | "get_all_quests" | "get_quest_by_id" | "get_quest_stages"
+export type QuestGetters = CreateEntityGetters<typeof tables.questTables>
+
+const entityGetters: QuestGetters = {
+	all_quests: () => db.query.quests.findMany({}),
+	all_quest_stages: () => db.query.questStages.findMany({}),
+	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
+	all_quest_dependencies: () => db.query.questDependencies.findMany({}),
+	all_quest_twists: () => db.query.questTwists.findMany({}),
+	all_decision_outcomes: () => db.query.decisionOutcomes.findMany({}),
+	all_quest_unlock_conditions: () => db.query.questUnlockConditions.findMany({}),
+
+	quest_by_id: (id: number) =>
+		db.query.quests.findFirst({
+			where: eq(quests.id, id),
+			with: {
+				influence: true,
+				factions: true,
+				npcs: true,
+				items: true,
+				stages: { with: { outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true } },
+				region: true,
+				incomingRelations: { with: { sourceQuest: true } },
+				outgoingRelations: { with: { targetQuest: true } },
+				unlockConditions: true,
+				twists: true,
+			},
+		}),
+	quest_stage_by_id: (id: number) =>
+		db.query.questStages.findFirst({
+			where: eq(questStages.id, id),
+			with: { quest: true, site: true, outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true },
+		}),
+	stage_decision_by_id: (id: number) =>
+		db.query.stageDecisions.findFirst({
+			where: eq(stageDecisions.id, id),
+			with: { quest: true, fromStage: true, toStage: true, consequences: true },
+		}),
+	quest_dependencie_by_id: (id: number) =>
+		db.query.questDependencies.findFirst({
+			where: eq(questDependencies.id, id),
+			with: { sourceQuest: true, targetQuest: true, unlockConditions: true },
+		}),
+	quest_twist_by_id: (id: number) =>
+		db.query.questTwists.findFirst({ where: eq(questTwists.id, id), with: { quest: true } }),
+	decision_outcome_by_id: (id: number) =>
+		db.query.decisionOutcomes.findFirst({
+			where: eq(decisionOutcomes.id, id),
+			with: { decision: true, affectedStage: true },
+		}),
+	quest_unlock_condition_by_id: (id: number) =>
+		db.query.questUnlockConditions.findFirst({ where: eq(questUnlockConditions.id, id), with: { quest: true } }),
+}
+
+export type QuestTools = CreateTableTools<typeof tables.questTables> | "get_quest_entity"
 
 export const questToolDefinitions: Record<QuestTools, ToolDefinition> = {
-	get_quest_stages: {
-		description: "Get all stages for a specific quest",
-		inputSchema: zodToMCP(schemas.get_quest_stages),
-		handler: async (args) => {
-			const parsed = schemas.get_quest_stages.parse(args)
-			logger.info("Getting quest stages by ID", { parsed })
-			return await db.query.questStages.findMany({ where: eq(questStages.questId, parsed.id) })
-		},
-	},
-	get_quest_by_id: {
-		description: "Get detailed information about a specific quest by ID, including all related entities",
-		inputSchema: zodToMCP(schemas.get_quest_by_id),
-		handler: async (args) => {
-			const parsed = schemas.get_quest_by_id.parse(args)
-			logger.info("Getting quest by ID", { parsed })
-			return (
-				(await db.query.quests.findFirst({
-					where: eq(quests.id, parsed.id),
-					with: {
-						influence: true,
-						factions: true,
-						npcs: true,
-						items: true,
-						stages: {
-							with: { outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true },
-						},
-						region: true,
-						incomingRelations: { with: { sourceQuest: true } },
-						outgoingRelations: { with: { targetQuest: true } },
-						unlockConditions: true,
-						twists: true,
-					},
-				})) ?? {
-					isError: true,
-					content: [{ type: "text", text: "Quest not found" }],
-				}
-			)
-		},
+	get_quest_entity: {
+		description: "Get Quest-related entity information by type and optional ID",
+		inputSchema: zodToMCP(schemas.get_quest_entity),
+		handler: createGetEntityHandler("quest", entityGetters),
 	},
 
-	get_all_quests: {
-		description: "Get all quests in the campaign",
-		inputSchema: zodToMCP(z.object({})),
-		handler: async () => {
-			logger.info("Getting all quests")
-			return await db.query.quests.findMany({})
-		},
-	},
 	manage_quests: {
-		description: createEntityActionDescription("a quest"),
+		description: createEntityActionDescription("quest"),
 		inputSchema: zodToMCP(schemas.manage_quests),
 		handler: createEntityHandler(quests, schemas.manage_quests, "quest"),
 	},
 	manage_quest_stages: {
-		description: createEntityActionDescription("a quest stage"),
+		description: createEntityActionDescription("quest stage"),
 		inputSchema: zodToMCP(schemas.manage_quest_stages),
-		handler: createEntityHandler(questStages, schemas.manage_quest_stages, "quest stage"),
+		handler: createEntityHandler(questStages, schemas.manage_quest_stages, "quest_stage"),
 	},
-
 	manage_stage_decisions: {
-		description: createEntityActionDescription("a quest decision point"),
+		description: createEntityActionDescription("stage decision"),
 		inputSchema: zodToMCP(schemas.manage_stage_decisions),
-		handler: createEntityHandler(stageDecisions, schemas.manage_stage_decisions, "quest decision"),
+		handler: createEntityHandler(stageDecisions, schemas.manage_stage_decisions, "stage_decision"),
 	},
 	manage_decision_outcomes: {
-		description: createEntityActionDescription("a quest consequence"),
+		description: createEntityActionDescription("decision outcome"),
 		inputSchema: zodToMCP(schemas.manage_decision_outcomes),
-		handler: createEntityHandler(decisionOutcomes, schemas.manage_decision_outcomes, "quest consequence"),
+		handler: createEntityHandler(decisionOutcomes, schemas.manage_decision_outcomes, "decision_outcome"),
 	},
 	manage_quest_dependencies: {
-		description: createEntityActionDescription("a quest relationship"),
+		description: createEntityActionDescription("quest dependency"),
 		inputSchema: zodToMCP(schemas.manage_quest_dependencies),
-		handler: createEntityHandler(questDependencies, schemas.manage_quest_dependencies, "quest relationship"),
+		handler: createEntityHandler(questDependencies, schemas.manage_quest_dependencies, "quest_dependency"),
 	},
 	manage_quest_unlock_conditions: {
-		description: createEntityActionDescription("a quest unlock condition"),
+		description: createEntityActionDescription("quest unlock condition"),
 		inputSchema: zodToMCP(schemas.manage_quest_unlock_conditions),
 		handler: createEntityHandler(
 			questUnlockConditions,
 			schemas.manage_quest_unlock_conditions,
-			"quest unlock condition",
+			"quest_unlock_condition",
 		),
 	},
 	manage_quest_twists: {
-		description: createEntityActionDescription("a quest twist"),
+		description: createEntityActionDescription("quest twist"),
 		inputSchema: zodToMCP(schemas.manage_quest_twists),
-		handler: createEntityHandler(questTwists, schemas.manage_quest_twists, "quest twist"),
+		handler: createEntityHandler(questTwists, schemas.manage_quest_twists, "quest_twist"),
 	},
 }

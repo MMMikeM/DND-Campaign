@@ -1,89 +1,84 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
-import { z } from "zod"
-import { db, logger } from "../index"
-import {
-	createEntityActionDescription,
-	createEntityHandler,
-	type CamelToSnakeCase,
-	type ToolDefinition,
-} from "./tool.utils"
+import { db } from "../index"
+import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
 import { schemas } from "./npc-tools-schema"
+import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
 const {
-	npcTables: { npcs, characterRelationships, npcFactions, npcLocations },
+	npcTables: { npcs, characterRelationships, npcFactions, npcSites },
 } = tables
 
-type TableTools = `manage_${CamelToSnakeCase<keyof typeof tables.npcTables>}`
-export type NpcTools = TableTools | "get_all_npcs" | "get_npc_by_id"
+export type NpcGetters = CreateEntityGetters<typeof tables.npcTables>
+
+const entityGetters: NpcGetters = {
+	all_npcs: () => db.query.npcs.findMany({}),
+	all_character_relationships: () => db.query.characterRelationships.findMany({}),
+	all_npc_factions: () => db.query.npcFactions.findMany({}),
+	all_npc_sites: () => db.query.npcSites.findMany({}),
+
+	npc_by_id: (id: number) =>
+		db.query.npcs.findFirst({
+			where: eq(npcs.id, id),
+			with: {
+				relatedFactions: true,
+				relatedClues: { with: { stage: true } },
+				relatedQuests: true,
+				relatedItems: true,
+				relatedSites: true,
+				relatedQuestHooks: { with: { hook: true } },
+				incomingRelationships: { with: { sourceNpc: true } },
+				outgoingRelationships: { with: { targetNpc: true } },
+			},
+		}),
+	character_relationship_by_id: (id: number) =>
+		db.query.characterRelationships.findFirst({
+			where: eq(characterRelationships.id, id),
+			with: { sourceNpc: true, targetNpc: true },
+		}),
+	npc_faction_by_id: (id: number) =>
+		db.query.npcFactions.findFirst({
+			where: eq(npcFactions.id, id),
+			with: { npc: true, faction: true },
+		}),
+	npc_site_by_id: (id: number) =>
+		db.query.npcSites.findFirst({
+			where: eq(npcSites.id, id),
+			with: { npc: true, site: true },
+		}),
+}
+
+export type NpcTools = CreateTableTools<typeof tables.npcTables> | "get_npc_entity"
 
 export const npcToolDefinitions: Record<NpcTools, ToolDefinition> = {
-	get_all_npcs: {
-		description: "Get all NPCs in the campaign world",
-		inputSchema: zodToMCP(z.object({})),
-		handler: async () => {
-			logger.info("Getting all NPCs")
-			const npcs = await db.query.npcs.findMany({})
-			logger.debug("Factions retrieved:", {
-				stringified: JSON.stringify(npcs),
-				type: typeof npcs,
-			})
-			return npcs
-		},
-	},
-	get_npc_by_id: {
-		description: "Get detailed information about a specific NPC by ID",
-		inputSchema: zodToMCP(schemas.get_npc_by_id),
-		handler: async (args) => {
-			const parsed = schemas.get_npc_by_id.parse(args)
-			logger.info("Getting NPC by ID", { parsed })
-			return (
-				(await db.query.npcs.findFirst({
-					where: eq(npcs.id, parsed.id),
-					with: {
-						relatedFactions: true,
-						relatedClues: { with: { stage: true } },
-						relatedQuests: true,
-						relatedItems: true,
-						relatedLocations: true,
-						relatedQuestHooks: { with: { hook: true } },
-						incomingRelationships: {
-							with: {
-								sourceNpc: true,
-							},
-						},
-						outgoingRelationships: {
-							with: {
-								targetNpc: true,
-							},
-						},
-					},
-				})) ?? {
-					isError: true,
-					content: [{ type: "text", text: "NPC not found" }],
-				}
-			)
-		},
+	get_npc_entity: {
+		description: "Get NPC-related entity information by type and optional ID",
+		inputSchema: zodToMCP(schemas.get_npc_entity),
+		handler: createGetEntityHandler("npc", entityGetters),
 	},
 	manage_npcs: {
 		description: createEntityActionDescription("NPC"),
 		inputSchema: zodToMCP(schemas.manage_npcs),
-		handler: createEntityHandler(npcs, schemas.manage_npcs, "NPC"),
+		handler: createEntityHandler(npcs, schemas.manage_npcs, "npc"),
 	},
 	manage_character_relationships: {
-		description: createEntityActionDescription("an NPC relationship"),
+		description: createEntityActionDescription("character relationship"),
 		inputSchema: zodToMCP(schemas.manage_character_relationships),
-		handler: createEntityHandler(characterRelationships, schemas.manage_character_relationships, "NPC relationship"),
+		handler: createEntityHandler(
+			characterRelationships,
+			schemas.manage_character_relationships,
+			"character_relationship",
+		),
 	},
 	manage_npc_factions: {
-		description: createEntityActionDescription("an NPC faction"),
+		description: createEntityActionDescription("NPC faction"),
 		inputSchema: zodToMCP(schemas.manage_npc_factions),
-		handler: createEntityHandler(npcFactions, schemas.manage_npc_factions, "NPC faction"),
+		handler: createEntityHandler(npcFactions, schemas.manage_npc_factions, "npc_faction"),
 	},
-	manage_npc_locations: {
-		description: createEntityActionDescription("an NPC location"),
-		inputSchema: zodToMCP(schemas.manage_npc_locations),
-		handler: createEntityHandler(npcLocations, schemas.manage_npc_locations, "NPC location"),
+	manage_npc_sites: {
+		description: createEntityActionDescription("NPC site"),
+		inputSchema: zodToMCP(schemas.manage_npc_sites),
+		handler: createEntityHandler(npcSites, schemas.manage_npc_sites, "npc_site"),
 	},
 }

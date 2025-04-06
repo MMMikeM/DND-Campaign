@@ -7,14 +7,14 @@ const embeddableEntityTypes = [
 	"quest",
 	"quest_stage",
 	"region",
-	"location",
-	"location_encounter",
-	"location_secret",
+	"site",
+	"site_encounter",
+	"site_secret",
 	"item",
 	"clue",
 ] as const
 
-const searchableEntityTypes = ["faction", "npc", "quest", "quest_stage", "region", "location"] as const
+const searchableEntityTypes = ["faction", "npc", "quest", "quest_stage", "region", "site"] as const
 
 export type EmbeddableEntityType = (typeof embeddableEntityTypes)[number]
 export type SearchableEntityType = (typeof searchableEntityTypes)[number]
