@@ -1,58 +1,54 @@
-import { createInsertSchema } from "drizzle-zod";
-import { tables } from "@tome-master/shared";
-import { z } from "zod";
-import { optionalId } from "./tool.utils"; // Assuming optionalId might be needed
+import { createInsertSchema } from "drizzle-zod"
+import { tables } from "@tome-master/shared"
+import { z } from "zod"
+import { optionalId } from "./tool.utils"
 
 const {
-  conflictTables: { majorConflicts, conflictParticipants, conflictProgression },
-} = tables;
+	conflictTables: { majorConflicts, conflictParticipants, conflictProgression },
+} = tables
 
 // Define ConflictTools type first
-export type ConflictTools =
-  | "manage_major_conflicts"
-  | "manage_conflict_participants"
-  | "manage_conflict_progression";
+export type ConflictTools = "manage_major_conflicts" | "manage_conflict_participants" | "manage_conflict_progression"
 
 export const schemas = {
-  manage_major_conflicts: createInsertSchema(majorConflicts, {
-    id: optionalId.describe("The ID of the conflict to update (omit to create new)"),
-    description: (s) => s.describe("Detailed narrative description of the conflict in point form"),
-    stakes: (s) => s.describe("What is at risk or could be gained/lost in this conflict"),
-    possibleOutcomes: (s) => s.describe("Potential resolutions or end states for the conflict"),
-    hiddenTruths: (s) => s.describe("Concealed facts or underlying realities about the conflict"),
-    creativePrompts: (s) => s.describe("Ideas for GMs to develop or integrate this conflict"),
-    name: (s) => s.describe("The unique identifying name of the major conflict"),
-    scope: (s) => s.describe("Geographical or influential reach (local, regional, global)"),
-    nature: (s) => s.describe("The primary domain of the conflict (political, military, mystical, etc.)"),
-    status: (s) => s.describe("Current state of the conflict (brewing, active, resolved, etc.)"),
-    cause: (s) => s.describe("The root cause or trigger event for the conflict"),
-    primaryRegionId: (s) => s.optional().describe("The ID of the main region affected by this conflict (if any)"),
-    moralDilemma: (s) => s.describe("The central ethical question or challenge posed by the conflict"),
-  })
-    .strict()
-    .describe("A large-scale struggle or dispute involving multiple factions or significant stakes"),
+	manage_major_conflicts: createInsertSchema(majorConflicts, {
+		id: optionalId.describe("ID of conflict to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("Core conflict elements and dynamics in point form"),
+		stakes: (s) => s.describe("What each side stands to gain or lose"),
+		possibleOutcomes: (s) => s.describe("Potential resolutions and their consequences"),
+		hiddenTruths: (s) => s.describe("Secret factors unknown to most participants"),
+		creativePrompts: (s) => s.describe("GM ideas for involving players in this conflict"),
+		name: (s) => s.describe("Distinctive title for this conflict"),
+		scope: (s) => s.describe("Geographic reach (local, regional, global)"),
+		nature: (s) => s.describe("Primary type (political, military, mystical, social, etc.)"),
+		status: (s) => s.describe("Current state (brewing, active, escalating, deescalating, resolved)"),
+		cause: (s) => s.describe("Root event or situation that triggered the conflict"),
+		primaryRegionId: (s) => s.optional().describe("ID of main region affected by this conflict"),
+		moralDilemma: (s) => s.describe("Central ethical question posed by the conflict"),
+	})
+		.strict()
+		.describe("Large-scale struggles between factions that shape the campaign world and provide complex moral choices"),
 
-  manage_conflict_participants: createInsertSchema(conflictParticipants, {
-    id: optionalId.describe("The ID of the participant record to update (omit to create new)"),
-    conflictId: (s) => s.describe("The ID of the major conflict this entity is participating in"),
-    factionId: (s) => s.describe("The ID of the faction involved in the conflict"),
-    role: (s) => s.describe("The faction's role in the conflict (instigator, opponent, ally, etc.)"),
-    motivation: (s) => s.describe("The reason or driving force behind this faction's involvement"),
-    publicStance: (s) => s.describe("The officially stated position or viewpoint of the faction"),
-    secretStance: (s) => s.optional().describe("The faction's true, hidden position or agenda (if different)"),
-    resources: (s) => s.describe("Assets, personnel, or influence the faction contributes or utilizes"),
-  })
-    .strict()
-    .describe("Defines a faction's involvement, role, and motivations within a major conflict"),
+	manage_conflict_participants: createInsertSchema(conflictParticipants, {
+		id: optionalId.describe("ID of participant record to manage (omit to create new, include alone to delete)"),
+		conflictId: (s) => s.describe("ID of the major conflict this faction is involved in"),
+		factionId: (s) => s.describe("ID of faction participating in the conflict"),
+		role: (s) => s.describe("Faction's position (instigator, opponent, ally, neutral, mediator)"),
+		motivation: (s) => s.describe("Faction's reason for involvement in this conflict"),
+		publicStance: (s) => s.describe("Officially stated position on the conflict"),
+		secretStance: (s) => s.optional().describe("True hidden agenda, if different from public stance"),
+		resources: (s) => s.describe("Assets and capabilities the faction commits to this conflict"),
+	})
+		.strict()
+		.describe("Defines how factions engage in conflicts, their allegiances, motivations, and committed resources"),
 
-  manage_conflict_progression: createInsertSchema(conflictProgression, {
-    id: optionalId.describe("The ID of the progression record to update (omit to create new)"),
-    conflictId: (s) => s.describe("The ID of the major conflict being affected"),
-    questId: (s) => s.describe("The ID of the quest that influences the conflict's progression"),
-    impact: (s) => s.describe("How the quest's outcome affects the conflict (escalates, deescalates, etc.)"),
-    notes: (s) => s.describe("GM notes detailing the connection and impact"),
-  })
-    .strict()
-    .describe("Links a quest to a major conflict, detailing how the quest impacts the conflict's progression"),
-
-} satisfies Record<ConflictTools, z.ZodSchema<unknown>>;
+	manage_conflict_progression: createInsertSchema(conflictProgression, {
+		id: optionalId.describe("ID of progression record to manage (omit to create new, include alone to delete)"),
+		conflictId: (s) => s.describe("ID of major conflict being affected"),
+		questId: (s) => s.describe("ID of quest that influences this conflict"),
+		impact: (s) => s.describe("Effect on conflict (escalates, deescalates, reveals_truth, changes_sides)"),
+		notes: (s) => s.describe("GM details on how quest outcomes affect conflict dynamics"),
+	})
+		.strict()
+		.describe("Links quests to conflicts, showing how player actions shift the balance of larger struggles"),
+} satisfies Record<ConflictTools, z.ZodSchema<unknown>>
