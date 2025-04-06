@@ -1,7 +1,8 @@
 import { tables } from "@tome-master/shared"
-import { createEntityActionDescription, createEntityHandler, type ToolDefinition } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
 import { schemas, type WorldTools } from "./world-tools-schema"
+import { ToolDefinition } from "./utils/types"
 
 const {
 	worldTables: { worldStateChanges },
