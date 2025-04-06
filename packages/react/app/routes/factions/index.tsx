@@ -3,9 +3,10 @@ import { NavLink } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { getAllFactions } from "~/lib/entities"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import type { Route } from "./+types/index"
 import { InfoCard } from "~/components/InfoCard"
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllFactions()
@@ -15,12 +16,7 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
 	const factions = loaderData
 
-	const filteredFactions = factions.filter(
-		(faction) =>
-			faction.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			faction.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			faction.publicGoal.toLowerCase().includes(searchTerm.toLowerCase()),
-	)
+	const filteredFactions = useSearchFilter(factions, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6">

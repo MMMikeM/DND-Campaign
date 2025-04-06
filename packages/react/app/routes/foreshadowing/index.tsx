@@ -8,30 +8,15 @@ import { getAllForeshadowing } from "~/lib/entities"
 import { getForeshadowingSubtletyVariant } from "./utils"
 import type { Route } from "./+types/index"
 import { List } from "~/components/List"
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const foreshadowingItems = await getAllForeshadowing()
-	if (!foreshadowingItems) {
-		console.warn("No foreshadowing items found or failed to load.")
-		return []
-	}
-	return foreshadowingItems
+	return await getAllForeshadowing()
 }
 
 export default function ForeshadowingIndex({ loaderData }: Route.ComponentProps) {
-	const allItems = loaderData ?? []
 	const [searchTerm, setSearchTerm] = useState("")
-
-	const filteredItems = useMemo(() => {
-		return allItems.filter((item) => {
-			const lowerSearchTerm = searchTerm.toLowerCase()
-			return (
-				item.name.toLowerCase().includes(lowerSearchTerm) ||
-				item.type.toLowerCase().includes(lowerSearchTerm) ||
-				item.description.join(" ").toLowerCase().includes(lowerSearchTerm)
-			)
-		})
-	}, [allItems, searchTerm])
+	const filteredItems = useSearchFilter(loaderData, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
