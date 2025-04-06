@@ -5,7 +5,8 @@ import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar"
 import { Link } from "~/components/ui/link"
 import { CategoryMenu, type MenuItem } from "./CategoryMenu"
 
-type Categories = "factions" | "npcs" | "regions" | "quests" | "conflicts" | "foreshadowing" | "narrative" | "world"
+
+type Categories = "factions" | "npcs" | "regions" | "areas" | "sites" | "quests" | "conflicts" | "foreshadowing" | "narrative" | "world"
 type ItemsData = Record<Categories, MenuItem[]>
 
 interface SidebarNavProps {
@@ -15,25 +16,30 @@ interface SidebarNavProps {
 export function SidebarNav({ menuData }: SidebarNavProps) {
 	const location = useLocation()
 
+	
 	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
 		factions: false,
 		npcs: false,
 		regions: false,
+		areas: false, 
+		sites: false, 
 		quests: false,
-		conflicts: false, // Added
-		foreshadowing: false, // Added
-		narrative: false, // Added
-		world: false, // Added
+		conflicts: false,
+		foreshadowing: false,
+		narrative: false,
+		world: false,
 	})
 
-	// Automatically expand the menu when the current route matches that category
+	
 	useEffect(() => {
 		const currentPath = location.pathname
-		// Include new categories
+		
 		const categories: Categories[] = [
 			"factions",
 			"npcs",
 			"regions",
+			"areas", 
+			"sites", 
 			"quests",
 			"conflicts",
 			"foreshadowing",
@@ -107,6 +113,26 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				onToggle={() => toggleMenu("regions")}
 				basePath="regions"
 				menuItems={menuData.regions}
+			/>
+
+			{/* Add Area Menu */}
+			<CategoryMenu
+				title="Areas"
+				icon={Icons.MapPin}
+				isExpanded={expandedMenus.areas}
+				onToggle={() => toggleMenu("areas")}
+				basePath="areas"
+				menuItems={menuData.areas}
+			/>
+
+			{/* Add Site Menu */}
+			<CategoryMenu
+				title="Sites"
+				icon={Icons.LocateFixed}
+				isExpanded={expandedMenus.sites}
+				onToggle={() => toggleMenu("sites")}
+				basePath="sites"
+				menuItems={menuData.sites}
 			/>
 
 			<CategoryMenu
