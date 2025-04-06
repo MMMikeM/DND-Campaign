@@ -1,30 +1,46 @@
-import fs from "node:fs"
+import pino from "pino"
 
 const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/server.log"
 
 export const createLogger = () => {
-	try {
-		console.error("Log file does not exist, creating it.")
-		fs.writeFileSync(LOG_FILE, "", { flag: "w" })
-	} catch (error) {
-		console.error("Error creating log file", { error })
-	}
+	const transport = pino.transport({
+		targets: [
+			// Pretty print to console only in development
+			...(process.env.NODE_ENV !== "production"
+				? [
+						{
+							target: "pino-pretty",
+							options: {
+								colorize: true,
+								ignore: "pid,hostname", // Optional: hide pid and hostname
+								translateTime: "SYS:standard", // Use system's standard time format
+							},
+							level: "debug", // Log level for console output
+						},
+					]
+				: []),
+			// Always write to the log file
+			{
+				target: "pino/file",
+				options: { destination: LOG_FILE, mkdir: true }, // mkdir: true ensures the directory exists
+				level: "info", // Log level for file output (adjust as needed)
+			},
+		],
+	})
 
-	type LogMeta = Record<string, unknown>
+	const logger = pino(
+		{
+			level: process.env.LOG_LEVEL || "info", // Default log level, can be overridden by env var
+			timestamp: pino.stdTimeFunctions.isoTime, // Use ISO time format
+		},
+		transport,
+	)
 
-	const log = (level: string, message: string, meta?: LogMeta) => {
-		const timestamp = new Date().toISOString()
-		const logMessage = `${timestamp} [${level}] ${message} ${meta ? JSON.stringify(meta) : ""}\n`
+	process.on("SIGINT", () => {
+		logger.info("SIGINT received")
+		process.exit(0)
+	})
+	logger.info("Logger initialized")
 
-		try {
-			fs.appendFileSync(LOG_FILE, logMessage)
-		} catch {}
-	}
-	return {
-		debug: (message: string, meta?: LogMeta) => log("DEBUG", message, meta),
-		info: (message: string, meta?: LogMeta) => log("INFO", message, meta),
-		warn: (message: string, meta?: LogMeta) => log("WARN", message, meta),
-		error: (message: string, meta?: LogMeta) => log("ERROR", message, meta),
-		fatal: (message: string, meta?: LogMeta) => log("FATAL", message, meta),
-	}
+	return logger
 }
