@@ -13,147 +13,150 @@ const {
 		questTwists,
 		decisionOutcomes,
 		questUnlockConditions,
+		enums,
 	},
 } = tables
 
 export const schemas = {
-	get_all_quests: z.object({}).describe("Get all quests"),
-	get_quest_by_id: z.object({ id: z.number().describe("Get a specific quest by ID") }),
-	get_quest_stages: z.object({ id: z.number().describe("Get all stages for a specific quest") }),
+	// Add generic get_entity schema
+	get_quest_entity: z // Renamed 's' back to 'get_entity'
+		.object({
+			entity_type: z
+				.enum([
+					"quest",
+					"quest_stage",
+					"stage_decision",
+					"quest_dependency",
+					"quest_twist",
+					"decision_outcome",
+					"quest_unlock_condition",
+				])
+				.describe("Type of Quest-related entity to retrieve"),
+			id: z.number().optional().describe("Optional ID of the specific entity to retrieve"),
+		})
+		.describe("Get a Quest-related entity by type and optional ID"),
+	// Remove old getter schemas
+	// get_all_quests: z.object({}).describe("Retrieves complete list of quests in the campaign"),
+	// get_quest_by_id: z.object({ id: z.number().describe("ID of quest to retrieve") }),
+	// get_quest_stages: z.object({ id: z.number().describe("ID of quest whose stages to retrieve") }),
 	manage_quests: createInsertSchema(quests, {
-		id: optionalId.describe("The ID of the quest to update (omit to create new)"),
-		description: (s) => s.describe("Core narrative elements, background context, and storyline in point form"),
-		creativePrompts: (s) =>
-			s.describe("Ideas for plot developments, player involvement opportunities, and adaptation suggestions"),
-		failureOutcomes: (s) =>
-			s.describe("Consequences, world changes, and follow-up events if players fail to complete the quest"),
-		successOutcomes: (s) =>
-			s.describe("Results, rewards, and world changes that occur when players successfully complete the quest"),
-		objectives: (s) => s.describe("Specific tasks, goals, and achievements players must accomplish to progress"),
-		rewards: (s) => s.describe("Items, currency, information, reputation, and other benefits for quest completion"),
-		themes: (s) => s.describe("Underlying motifs, concepts, and emotional elements explored in this narrative"),
-		inspirations: (s) =>
-			s.describe("Reference materials, tropes, or existing stories that influenced this quest design"),
-		regionId: (s) =>
-			s.optional().describe("The ID of the region where this quest primarily takes place (references regions.id)"),
-		name: (s) => s.describe("The title or identifier for this quest that may be revealed to players"),
-		mood: (s) => s.describe("The emotional tone and atmosphere this quest is designed to evoke"),
-		type: (s) =>
-			s.describe("The quest's significance to the overall campaign (main, side, faction, character, generic)"),
-		urgency: (s) => s.describe("Time pressure associated with the quest (background, developing, urgent, critical)"),
-		visibility: (s) =>
-			s.describe("How well-known this quest is to players and the world (hidden, rumored, known, featured)"),
+		id: optionalId.describe("ID of quest to manage (omit to create new, include alone to delete)"),
+		regionId: optionalId.describe("ID of region where quest primarily takes place"),
+		description: (s) => s.describe("Core narrative elements and storyline in point form"),
+		creativePrompts: (s) => s.describe("Ideas for plot developments and player involvement"),
+		failureOutcomes: (s) => s.describe("Consequences if players fail to complete the quest"),
+		successOutcomes: (s) => s.describe("Results and world changes upon successful completion"),
+		objectives: (s) => s.describe("Specific tasks players must accomplish to progress"),
+		rewards: (s) => s.describe("Items, reputation, and benefits for completion"),
+		themes: (s) => s.describe("Underlying motifs and emotional elements explored"),
+		inspirations: (s) => s.describe("Reference materials that influenced this quest design"),
+		name: (s) => s.describe("Title or identifier revealed to players"),
+		mood: (s) => s.describe("Emotional tone and atmosphere (tense, mysterious, celebratory, etc.)"),
+		type: z.enum(enums.questTypes).describe("Campaign significance (main, side, faction, character, generic)"),
+		urgency: z.enum(enums.urgencies).describe("Time pressure (background, developing, urgent, critical)"),
+		visibility: z.enum(enums.visibilities).describe("How known this quest is (hidden, rumored, known, featured)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A mission, storyline, or adventure with objectives for players to accomplish"),
+		.describe("Adventures with objectives, rewards, and narrative impact that drive the campaign forward"),
 
 	manage_quest_dependencies: createInsertSchema(questDependencies, {
-		id: optionalId.describe("The ID of the relationship to update (omit to create new)"),
-		description: (s) => s.describe("How these quests interconnect narratively and mechanically in point form"),
-		creativePrompts: (s) => s.describe("Ideas for emphasizing connections and transitions between these quests"),
-		questId: (s) => s.describe("The ID of the primary quest in this relationship (references quests.id)"),
-		relatedQuestId: (s) =>
-			s.optional().describe("The ID of the secondary quest in this relationship (references quests.id)"),
-		dependencyType: (s) =>
-			s.describe("How these quests connect (prerequisite, sequel, parallel, alternative, hidden_connection)"),
+		id: optionalId.describe("ID of dependency to manage (omit to create new, include alone to delete)"),
+		questId: optionalId.describe("ID of the primary quest in this relationship"),
+		description: (s) => s.describe("How these quests interconnect narratively in point form"),
+		creativePrompts: (s) => s.describe("Ideas for emphasizing connections between quests"),
+		relatedQuestId: (s) => s.optional().describe("ID of the secondary quest in this relationship"),
+		dependencyType: z
+			.enum(enums.dependencyTypes)
+			.describe("Connection type (prerequisite, sequel, parallel, alternative)"),
 	})
 		.strict()
-		.describe("A narrative or mechanical connection between two quests"),
+		.describe("Links between quests that create narrative sequences, alternative paths, or cause-effect relationships"),
 
 	manage_quest_unlock_conditions: createInsertSchema(questUnlockConditions, {
-		id: optionalId.describe("The ID of the unlock condition to update (omit to create new)"),
-		questId: (s) => s.describe("The ID of the quest this condition applies to (references quests.id)"),
-		conditionDetails: (s) => s.describe("Specific requirements, thresholds, or criteria that must be met"),
-		conditionType: (s) =>
-			s.describe(
-				"Category of prerequisite (item_possession, party_member, prior_decision, faction_reputation, character_attribute, skill_threshold, quest_outcome)",
-			),
-		importance: (s) => s.describe("Whether this condition is essential or optional (critical, recommended, optional)"),
+		id: optionalId.describe("ID of condition to manage (omit to create new, include alone to delete)"),
+		questId: optionalId.describe("ID of quest this condition applies to"),
+		conditionDetails: (s) => s.describe("Requirements that must be met to unlock quest"),
+		conditionType: z
+			.enum(enums.unlockConditionTypes)
+			.describe("Prerequisite category (item, faction, skill, decision, etc.)"),
+		importance: z.enum(enums.importance).describe("Requirement level (critical, recommended, optional)"),
 	})
 		.strict()
-		.describe("Requirements that must be met before a quest becomes available to players"),
+		.describe("Prerequisites that determine when quests become available to players based on their actions"),
 
 	manage_quest_stages: createInsertSchema(questStages, {
-		id: optionalId.describe("The ID of the quest stage to update (omit to create new)"),
-		description: (s) =>
-			s.describe("Key events, NPCs, and plot developments that occur during this segment in point form"),
-		creativePrompts: (s) =>
-			s.describe("Ideas for running this stage effectively or adapting it to different player approaches"),
-		objectives: (s) => s.describe("Specific goals or tasks players need to complete in this stage"),
-		completionPaths: (s) => s.describe("Different methods or approaches players might use to finish this stage"),
-		encounters: (s) => s.describe("Specific challenges, combats, or social interactions that occur in this stage"),
-		dramatic_moments: (s) => s.describe("Key emotional or high-tension scenes that define this stage of the quest"),
-		sensory_elements: (s) => s.describe("Descriptive details for sight, sound, smell, etc. to enhance immersion"),
-		questId: (s) => s.describe("The ID of the parent quest this stage belongs to (references quests.id)"),
-		stage: (s) => s.describe("The numerical order or sequence position of this stage within the quest"),
-		siteId: (s) => s.optional().describe("The ID of the site where this stage takes place (references sites.id)"),
-		dramatic_question: (s) => s.describe("The central conflict, mystery, or tension that drives this stage forward"),
-		name: (s) => s.describe("The title or identifier for this specific segment of the quest"),
+		id: optionalId.describe("ID of stage to manage (omit to create new, include alone to delete)"),
+		questId: optionalId.describe("ID of parent quest this stage belongs to"),
+		siteId: optionalId.describe("ID of site where this stage takes place"),
+		description: (s) => s.describe("Key events and plot developments in this segment in point form"),
+		creativePrompts: (s) => s.describe("Ideas for running this stage or adapting to player approaches"),
+		objectives: (s) => s.describe("Goals players need to complete in this stage"),
+		completionPaths: (s) => s.describe("Different approaches players might use to advance"),
+		encounters: (s) => s.describe("Challenges, combats, or social interactions in this stage"),
+		dramatic_moments: (s) => s.describe("Key emotional or high-tension scenes"),
+		sensory_elements: (s) => s.describe("Descriptive details for immersion (sights, sounds, smells)"),
+		stage: (s) => s.describe("Numerical order or sequence position within quest"),
+		dramatic_question: (s) => s.describe("Central conflict or tension driving this stage"),
+		name: (s) => s.describe("Title or identifier for this quest segment"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A discrete segment or chapter within a larger quest"),
+		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
 
 	manage_stage_decisions: createInsertSchema(stageDecisions, {
-		id: optionalId.describe("The ID of the decision point to update (omit to create new)"),
-		successDescription: (s) => s.describe("What happens when players succeed at the check or take the intended path"),
-		failureDescription: (s) => s.describe("Consequences when players fail a check or choose a different path"),
-		narrativeTransition: (s) => s.describe("How the story progresses based on this decision point"),
-		potential_player_reactions: (s) =>
-			s.describe("Likely player responses, questions, or emotional reactions to this moment"),
-		description: (s) => s.describe("The choice, challenge, or dilemma presented to players in point form"),
-		creativePrompts: (s) =>
-			s.describe("Ideas for presenting this decision dramatically or adapting to unexpected choices"),
-		options: (s) => s.describe("The explicit choices or paths available to players at this juncture"),
-		name: (s) => s.describe("An identifier or title for this pivotal moment"),
-		decision_type: (s) =>
-			s.describe(
-				"The nature of the choice (moral_choice, tactical_decision, resource_allocation, trust_test, sacrifice_opportunity, identity_question)",
-			),
-		questId: (s) => s.describe("The ID of the quest this decision belongs to (references quests.id)"),
-		fromStageId: (s) => s.describe("The ID of the stage where this decision occurs (references questStages.id)"),
-		toStageId: (s) =>
-			s.optional().describe("The ID of the stage this decision leads to if taken (references questStages.id)"),
-		conditionType: (s) =>
-			s.describe(
-				"What triggers or resolves this decision (choice, skill_check, item, npc_relation, faction, time, combat, custom_event)",
-			),
-		conditionValue: (s) => s.describe("Specific parameters, DCs, or requirements for this condition"),
+		id: optionalId.describe("ID of decision point to manage (omit to create new, include alone to delete)"),
+		successDescription: (s) => s.describe("What happens when players succeed or take intended path"),
+		failureDescription: (s) => s.describe("Consequences when players fail or choose differently"),
+		narrativeTransition: (s) => s.describe("How story progresses based on this decision"),
+		potential_player_reactions: (s) => s.describe("Likely player responses to this moment"),
+		description: (s) => s.describe("The choice or dilemma presented to players in point form"),
+		creativePrompts: (s) => s.describe("Ideas for presenting this dramatically or adapting to choices"),
+		options: (s) => s.describe("Explicit choices available to players"),
+		name: (s) => s.describe("Identifier for this pivotal moment"),
+		decisionType: z.enum(enums.decisionTypes).describe("Nature of choice (moral, tactical, resource, identity, etc.)"),
+		questId: (s) => s.describe("ID of quest this decision belongs to"),
+		fromStageId: (s) => s.describe("ID of stage where this decision occurs"),
+		toStageId: (s) => s.optional().describe("ID of stage this decision leads to if taken"),
+		conditionType: z
+			.enum(enums.conditionTypes)
+			.describe("Trigger type (choice, skill_check, item, npc, faction, etc.)"),
+		conditionValue: (s) => s.describe("Parameters, DCs, or requirements"),
 	})
 		.strict()
-		.describe("A choice, challenge, or branching point within a quest stage"),
+		.describe("Branching points where player choices affect the quest's direction, creating meaningful agency"),
 
 	manage_decision_outcomes: createInsertSchema(decisionOutcomes, {
-		id: optionalId.describe("The ID of the consequence to update (omit to create new)"),
-		description: (s) =>
-			s.describe("Detailed explanation of how this consequence manifests in the game world in point form"),
-		creativePrompts: (s) => s.describe("Ideas for representing this consequence meaningfully to players"),
-		outcomeType: (s) =>
-			s.describe(
-				"The nature of the effect (character_reaction, world_state_change, relationship_change, quest_availability, item_acquisition, reputation_change)",
-			),
-		delayFactor: (s) =>
-			s.describe("When this consequence occurs (immediate, next session, specific trigger, later in campaign)"),
-		affectedStageId: (s) =>
-			s.optional().describe("The ID of a quest stage impacted by this consequence (references questStages.id)"),
-		decisionId: (s) =>
-			s.describe("The ID of the decision that triggers this consequence (references stageDecisions.id)"),
-		severity: (s) => s.describe("The magnitude of the impact (minor, moderate, major)"),
-		visibility: (s) => s.describe("How apparent this consequence is to players (obvious, subtle, hidden)"),
+		id: optionalId.describe("ID of outcome to manage (omit to create new, include alone to delete)"),
+		decisionId: (s) => s.describe("ID of the decision that triggers this consequence"),
+		description: (s) => s.describe("How this consequence manifests in the world in point form"),
+		creativePrompts: (s) => s.describe("Ideas for representing this consequence meaningfully"),
+		outcomeType: z
+			.enum(enums.outcomeTypes)
+			.describe("Effect type (reaction, world_change, relationship, reputation, etc.)"),
+		delayFactor: z.enum(enums.outcomeDelay).describe("When this occurs (immediate, next session, later in campaign)"),
+		affectedStageId: (s) => s.optional().describe("ID of quest stage impacted by this consequence"),
+		severity: z.enum(enums.outcomeSeverity).describe("Impact magnitude (minor, moderate, major)"),
+		visibility: z
+			.enum(enums.outcomeVisibility)
+			.describe("How apparent this consequence is to players (obvious, subtle, hidden)"),
 	})
 		.strict()
-		.describe("A lasting effect or outcome resulting from a player decision"),
+		.describe("Long-term effects of player choices that shape the campaign world and future adventures"),
 
 	manage_quest_twists: createInsertSchema(questTwists, {
-		id: optionalId.describe("The ID of the twist to update (omit to create new)"),
-		description: (s) => s.describe("The revelation, surprise, or unexpected development in detail in point form"),
-		creativePrompts: (s) => s.describe("Ideas for foreshadowing, revealing, or maximizing the impact of this twist"),
-		questId: (s) => s.describe("The ID of the quest this twist belongs to (references quests.id)"),
-		impact: (s) => s.describe("How significantly this changes the quest narrative (minor, moderate, major)"),
-		narrative_placement: (s) => s.describe("When in the quest this twist occurs (early, middle, climax, denouement)"),
-		twist_type: (s) => s.describe("The nature of the surprise (reversal, revelation, betrayal, complication)"),
+		id: optionalId.describe("ID of twist to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("The revelation or unexpected development in detail in point form"),
+		creativePrompts: (s) => s.describe("Ideas for foreshadowing or maximizing impact"),
+		questId: (s) => s.describe("ID of quest this twist belongs to"),
+		impact: z
+			.enum(enums.impactSeverity)
+			.describe("How significantly this changes the narrative (minor, moderate, major)"),
+		narrativePlacement: z
+			.enum(enums.narrativePlacements)
+			.describe("When twist occurs (early, middle, climax, denouement)"),
+		twistType: z.enum(enums.twistTypes).describe("Nature of surprise (reversal, revelation, betrayal, complication)"),
 	})
 		.strict()
-		.describe("An unexpected development, revelation, or subversion within a quest"),
+		.describe("Surprising developments that subvert player expectations and add depth to quest narratives"),
 } satisfies Record<QuestTools, z.ZodSchema<unknown>>

@@ -1,151 +1,142 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { id, jsonArray } from "./tool.utils"
 import { RegionTools } from "./region-tools"
 
 const {
-	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets },
+	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets, enums },
 } = tables
 
 export const schemas = {
-	get_region_by_id: z.object({ id: id.describe("The unique identifier for the region to retrieve") }),
-	get_all_regions: z.object({}).describe("Retrieves all regions from the database"),
+	get_entity: z.object({
+		entity_type: z.enum([
+			"region",
+			"area",
+			"site",
+			"region_connection",
+			"site_link",
+			"site_encounter",
+			"site_secret"
+		]).describe("Type of entity to retrieve"),
+		id: z.number().optional().describe("Optional ID of the specific entity to retrieve")
+	}).describe("Get an entity by type and optional ID"),
 	manage_regions: createInsertSchema(regions, {
-		id: z.number().optional().describe("The ID of the region to update (omit to create new)"),
-		culturalNotes: jsonArray.describe(
-			"Distinctive traditions, customs, and social behaviors of the inhabitants in point form",
-		),
-		creativePrompts: jsonArray.describe("Adventure hooks, campaign ideas, and storytelling suggestions for GMs"),
-		description: jsonArray.describe("Physical characteristics, notable features, and general atmosphere in point form"),
-		hazards: jsonArray.describe(
-			"Environmental dangers, natural threats, and potential risks to travelers in point form",
-		),
-		pointsOfInterest: jsonArray.describe(
-			"Significant landmarks, natural wonders, and notable sites that aren't fully detailed sites",
-		),
-		rumors: jsonArray.describe("Gossip, hearsay, and stories circulating among locals and travelers about this region"),
-		secrets: jsonArray.describe(
-			"Hidden truths, concealed history, and undiscovered elements known only to select individuals",
-		),
-		security: jsonArray.describe(
-			"Military presence, law enforcement, defensive structures, and overall safety measures",
-		),
-		name: (s) => s.describe("The distinctive name by which this region is commonly known"),
-		history: (s) => s.describe("Major historical events, founding, conflicts, and development over time"),
-		dangerLevel: (s) => s.describe("Overall threat assessment (safe, low, moderate, high, deadly)"),
-		economy: (s) => s.describe("Primary industries, trade goods, and economic activities sustaining the region"),
-		population: (s) => s.describe("Approximate number of inhabitants and demographic makeup"),
-		type: (s) =>
-			s.describe(
-				"Geographic or settlement classification (city, town, village, coastal, desert, forest, mountain, ocean, river, swamp, wilderness, etc.)",
-			),
+		id: z.number().optional().describe("ID of region to manage (omit to create new, include alone to delete)"),
+		culturalNotes: (s) => s.describe("Traditions, customs, and social behaviors in point form"),
+		creativePrompts: (s) => s.describe("Adventure hooks and campaign ideas for this region"),
+		description: (s) => s.describe("Physical features and atmosphere in point form"),
+		hazards: (s) => s.describe("Environmental dangers and risks to travelers in point form"),
+		pointsOfInterest: (s) => s.describe("Landmarks and notable locations not detailed as full sites"),
+		rumors: (s) => s.describe("Gossip and stories circulating among locals and travelers"),
+		secrets: (s) => s.describe("Hidden truths and undiscovered elements known to few"),
+		security: (s) => s.describe("Military presence, law enforcement, and safety measures"),
+		name: (s) => s.describe("Distinctive name of this region"),
+		history: (s) => s.describe("Major historical events and developments"),
+		dangerLevel: z.enum(enums.dangerLevels).describe("Threat assessment (safe, low, moderate, high, deadly)"),
+		economy: (s) => s.describe("Industries, trade goods, and economic activities"),
+		population: (s) => s.describe("Approximate inhabitants and demographic makeup"),
+		type: z.enum(enums.regionTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A distinct geographic area with its own characteristics, culture, and points of interest"),
+		.describe("Major geographic areas that provide settings for adventures and define the campaign world"),
+
 	manage_areas: createInsertSchema(areas, {
-		id: z.number().optional().describe("The ID of the area to update (omit to create new)"),
-		regionId: (s) => s.describe("The ID of the region this area belongs to (references regions.id)"),
-		name: (s) => s.describe("The specific name of this area"),
-		description: jsonArray.describe("Physical characteristics, notable features, and general atmosphere in point form"),
+		id: z.number().optional().describe("ID of area to manage (omit to create new, include alone to delete)"),
+		regionId: (s) => s.describe("ID of region this area belongs to"),
+		name: (s) => s.describe("Specific name of this area"),
+		creativePrompts: (s) => s.describe("Adventure hooks and campaign ideas for this area"),
+		description: (s) => s.describe("Physical features and atmosphere in point form"),
+		hazards: (s) => s.describe("Environmental dangers and risks to travelers in point form"),
+		pointsOfInterest: (s) => s.describe("Landmarks and notable locations not detailed as full sites"),
+		rumors: (s) => s.describe("Gossip and stories circulating among locals and travelers"),
+		culturalNotes: (s) => s.describe("Traditions, customs, and social behaviors in point form"),
+		dangerLevel: (s) => s.describe("Threat assessment (safe, low, moderate, high, deadly)"),
+		population: (s) => s.describe("Approximate inhabitants and demographic makeup"),
+		primaryActivity: (s) => s.describe("Primary activity or focus of the area"),
+		leadership: (s) => s.describe("Rulers, authorities, or influential figures"),
+		defenses: (s) => s.describe("Defensive structures and security measures"),
+		type: z.enum(enums.areaTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A distinct geographic area with its own characteristics, culture, and points of interest"),
+		.describe("Subdivisions within regions that have distinct identities and adventure opportunities"),
 
 	manage_sites: createInsertSchema(sites, {
-		id: z.number().optional().describe("The ID of the site to update (omit to create new)"),
-		creativePrompts: jsonArray.describe("Scene-setting ideas, encounter suggestions, and narrative opportunities"),
-		creatures: jsonArray.describe("Typical inhabitants, wildlife, monsters, or other beings found here"),
-		description: jsonArray.describe("Visual details, spatial layout, and defining characteristics in point form"),
-		features: jsonArray.describe("Notable objects, architectural elements, or distinct aspects worth attention"),
-		treasures: jsonArray.describe("Valuables, rewards, and collectibles that might be discovered here"),
-		soundscape: jsonArray.describe("Characteristic noises, ambient sounds, and acoustic elements"),
-		smells: jsonArray.describe("Distinctive odors, scents, and olfactory experiences in this site"),
-		weather: jsonArray.describe("Typical or current meteorological conditions and their effects"),
-		descriptors: jsonArray.describe("Short, evocative adjectives for quick atmospheric reference during gameplay"),
-		lightingDescription: jsonArray.describe("Quality, sources, and characteristics of illumination or darkness"),
-		name: (s) => s.describe("The specific name of this place or site"),
-		areaId: (s) => s.describe("The ID of the area this site is situated within (references areas.id)"),
-		terrain: (s) => s.describe("The physical landscape or ground characteristics (rocky, forested, marshy, etc.)"),
-		climate: (s) =>
-			s.describe("Prevailing weather patterns and atmospheric conditions (temperate, tropical, arid, etc.)"),
-		environment: (s) => s.describe("The broader context of the setting (urban, rural, wilderness, underground, etc.)"),
-		siteType: (s) =>
-			s.describe(
-				"The category of site (building, fortress, castle, tower, temple, cave, clearing, ruins, road, bridge, etc.)",
-			),
-		mood: (s) =>
-			s.describe(
-				"The emotional atmosphere and feeling evoked (peaceful, tense, eerie, vibrant, desolate, chaotic, oppressive)",
-			),
+		id: z.number().optional().describe("ID of site to manage (omit to create new, include alone to delete)"),
+		creativePrompts: (s) => s.describe("Scene ideas and narrative opportunities"),
+		creatures: (s) => s.describe("Inhabitants, wildlife, and monsters found here"),
+		description: (s) => s.describe("Visual details and layout in point form"),
+		features: (s) => s.describe("Notable objects and distinct elements"),
+		treasures: (s) => s.describe("Valuables and collectibles that might be found"),
+		soundscape: (s) => s.describe("Characteristic sounds and acoustic elements"),
+		smells: (s) => s.describe("Distinctive odors and scents"),
+		weather: (s) => s.describe("Typical meteorological conditions and effects"),
+		descriptors: (s) => s.describe("Evocative adjectives for quick reference"),
+		lightingDescription: (s) => s.describe("Illumination quality and sources"),
+		name: (s) => s.describe("Specific name of this location"),
+		areaId: (s) => s.describe("ID of area this site is located within"),
+		terrain: (s) => s.describe("Physical landscape (rocky, forested, marshy, etc.)"),
+		climate: (s) => s.describe("Weather patterns (temperate, tropical, arid, etc.)"),
+		environment: (s) => s.describe("Setting context (urban, rural, wilderness, underground)"),
+		siteType: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
+		mood: (s) => s.describe("Emotional atmosphere (peaceful, tense, eerie, vibrant)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A specific place within a region where scenes, encounters, and adventures can occur"),
+		.describe("Specific locations where encounters, scenes, and adventures take place"),
 
 	manage_region_connections: createInsertSchema(regionConnections, {
-		id: z.number().optional().describe("The ID of the relation to update (omit to create new)"),
-		description: jsonArray.describe("Details about how these regions interact, shared history, and current dynamics"),
-		creativePrompts: jsonArray.describe("Adventure ideas involving travel or conflict between these regions"),
-		regionId: (s) => s.describe("The ID of the primary region in this relationship (references regions.id)"),
-		otherRegionId: (s) =>
-			s.optional().describe("The ID of the secondary region in this relationship (references regions.id)"),
-		connectionType: (s) =>
-			s.describe("The nature of their connection (allied, hostile, trade partners, political rivals, etc.)"),
+		id: z.number().optional().describe("ID of connection to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("How these regions interact and current dynamics"),
+		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
+		regionId: (s) => s.describe("ID of primary region in this relationship"),
+		otherRegionId: (s) => s.optional().describe("ID of secondary region in this relationship"),
+		connectionType: z.enum(enums.connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
 	})
 		.strict()
-		.describe("Defines how two geographic regions interact and relate to each other"),
+		.describe("Political, economic, and geographical relationships between different regions"),
 
 	manage_site_links: createInsertSchema(siteLinks, {
-		id: z.number().optional().describe("The ID of the relation to update (omit to create new)"),
-		description: jsonArray.describe("Physical connections, proximity, and relationship dynamics between sites"),
-		creativePrompts: jsonArray.describe(
-			"Story ideas involving travel between these sites or utilizing their relationship",
-		),
-		siteId: (s) => s.describe("The ID of the primary site in this relationship (references sites.id)"),
-		otherSiteId: (s) =>
-			s.optional().describe("The ID of the secondary site in this relationship (references sites.id)"),
-		linkType: (s) =>
-			s.describe(
-				"How these sites interact with each other (adjacent, connected, visible from, controls access to, etc.)",
-			),
+		id: z.number().optional().describe("ID of link to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("Physical connections and proximity between sites"),
+		creativePrompts: (s) => s.describe("Story ideas involving travel or interaction"),
+		siteId: (s) => s.describe("ID of primary site in this relationship"),
+		otherSiteId: (s) => s.optional().describe("ID of secondary site in this relationship"),
+		linkType: z.enum(enums.linkTypes).describe("Connection type (adjacent, connected, visible from)"),
 	})
 		.strict()
-		.describe("Defines how two specific sites relate to or connect with each other"),
+		.describe("Physical and narrative connections between locations that players can traverse"),
 
 	manage_site_encounters: createInsertSchema(siteEncounters, {
-		id: z.number().optional().describe("The ID of the encounter to update (omit to create new)"),
-		description: jsonArray.describe("Setup, progression, and possible outcomes of this encounter in point form"),
-		creatures: jsonArray.describe("Specific enemies, NPCs, or beings involved and their motivations"),
-		treasure: jsonArray.describe("Rewards, loot, and valuable items obtainable from this encounter"),
-		creativePrompts: jsonArray.describe(
-			"Variations, dramatic moments, and alternative approaches to running this encounter",
-		),
-		siteId: (s) => s.describe("The ID of the site where this encounter takes place (references sites.id)"),
-		name: (s) => s.describe("A distinctive title or identifier for this encounter"),
-		encounterType: (s) => s.describe("The primary interaction type (combat, social, puzzle, trap, environmental)"),
-		difficulty: (s) => s.describe("Challenge level for players (easy, medium, hard)"),
-		dangerLevel: (s) => s.describe("Potential threat to character survival (safe, low, moderate, high, deadly)"),
+		id: z.number().optional().describe("ID of encounter to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("Setup and possible outcomes in point form"),
+		creatures: (s) => s.describe("Enemies, NPCs, or beings involved"),
+		treasure: (s) => s.describe("Rewards and valuable items obtainable"),
+		creativePrompts: (s) => s.describe("Variations and alternative approaches"),
+		siteId: (s) => s.describe("ID of site where this encounter occurs"),
+		name: (s) => s.describe("Distinctive title for this encounter"),
+		encounterType: z.enum(enums.encounterTypes).describe("Interaction type (combat, social, puzzle, trap)"),
+		difficulty: z.enum(enums.difficultyLevels).describe("Challenge level (easy, medium, hard)"),
+		dangerLevel: z.enum(enums.dangerLevels).describe("Threat level (safe, low, moderate, high, deadly)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A planned interaction, challenge, or event that can occur at a specific site"),
+		.describe("Challenges, interactions, and events that players can experience at specific locations"),
 
 	manage_site_secrets: createInsertSchema(siteSecrets, {
-		id: z.number().optional().describe("The ID of the secret to update (omit to create new)"),
-		description: jsonArray.describe("What the secret entails, its significance, and potential impact in point form"),
-		consequences: jsonArray.describe("What happens when this secret is discovered, both immediate and long-term"),
-		creativePrompts: jsonArray.describe("Ways to foreshadow, reveal, or incorporate this secret into the narrative"),
-		discoveryMethod: jsonArray.describe("Specific actions, checks, or circumstances that could reveal this secret"),
-		siteId: (s) => s.describe("The ID of the site where this secret exists (references sites.id)"),
-		difficultyToDiscover: (s) =>
-			s.describe("How challenging it is to uncover (obvious, simple, moderate, challenging, nearly impossible)"),
-		secretType: (s) =>
-			s.describe("The category of revelation (historical, hidden area, concealed item, true purpose, connection)"),
+		id: z.number().optional().describe("ID of secret to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("What the secret entails and its significance in point form"),
+		consequences: (s) => s.describe("Immediate and long-term effects of discovery"),
+		creativePrompts: (s) => s.describe("Ways to foreshadow or reveal this secret"),
+		discoveryMethod: (s) => s.describe("Actions or checks that could reveal this secret"),
+		siteId: (s) => s.describe("ID of site where this secret exists"),
+		difficultyToDiscover: z
+			.enum(enums.difficultyLevels)
+			.describe("Discovery challenge (obvious through nearly impossible)"),
+		secretType: z.enum(enums.secretTypes).describe("Category (historical, hidden area, concealed item, true purpose)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("Hidden information, concealed areas, or unknown truths associated with a site"),
+		.describe("Hidden information and concealed areas that reward player exploration and investigation"),
 } satisfies Record<RegionTools, z.ZodSchema<unknown>>

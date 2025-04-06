@@ -2,19 +2,25 @@ import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
 import { optionalId } from "./tool.utils"
+import { NarrativeTools } from "./narrative-tools"
 
 const {
-	narrativeTables: { narrativeArcs, arcMembership },
+	narrativeTables: { narrativeArcs, arcMembership, enums },
 } = tables
 
-export type NarrativeTools = "manage_narrative_arcs" | "manage_arc_membership"
-
 export const schemas = {
+	get_narrative_entity: z
+		.object({
+			type: z.enum(["narrative_arc", "arc_membership"]).describe("Type of narrative entity to retrieve"),
+			id: optionalId.describe("ID of the entity to retrieve (optional)"),
+		})
+		.strict()
+		.describe("Retrieve information about narrative arcs and their membership"),
 	manage_narrative_arcs: createInsertSchema(narrativeArcs, {
 		id: optionalId.describe("ID of narrative arc to manage (omit to create new, include alone to delete)"),
 		name: (s) => s.describe("Distinctive identifying title for this storyline"),
-		type: (s) => s.describe("Category of arc (main, faction, character, side)"),
-		status: (s) => s.describe("Current progress (planned, active, completed, abandoned)"),
+		type: z.enum(enums.arcTypes).describe("Category of arc (main, faction, character, side)"),
+		status: z.enum(enums.arcStatuses).describe("Current progress (planned, active, completed, abandoned)"),
 		promise: (s) => s.describe("Initial hook or premise that engages players"),
 		payoff: (s) => s.describe("Intended climax or resolution that fulfills the promise"),
 		description: (s) => s.describe("Key plot points and narrative beats in point form"),
@@ -29,7 +35,7 @@ export const schemas = {
 		id: optionalId.describe("ID of membership record to manage (omit to create new, include alone to delete)"),
 		arcId: (s) => s.describe("ID of narrative arc this quest belongs to"),
 		questId: (s) => s.describe("ID of quest that forms part of this arc"),
-		role: (s) => s.describe("Quest's function in the arc (introduction, complication, climax, etc.)"),
+		role: z.enum(enums.questRoles).describe("Quest's function in the arc (introduction, complication, climax, etc.)"),
 		notes: (s) => s.optional().describe("How this quest connects to the arc's broader themes"),
 	})
 		.strict()

@@ -18,9 +18,9 @@ const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> =
 	quest: "quests",
 	quest_stage: "questStages",
 	region: "regions",
-	location: "locations",
-	location_encounter: "locationEncounters",
-	location_secret: "locationSecrets",
+	site: "sites",
+	site_encounter: "siteEncounters",
+	site_secret: "siteSecrets",
 	item: "items",
 	clue: "clues",
 }
@@ -34,12 +34,12 @@ const entityTableMap: Record<
 	quest: { table: tables.questTables.quests, nameColumn: tables.questTables.quests.name },
 	quest_stage: { table: tables.questTables.questStages, nameColumn: tables.questTables.questStages.name },
 	region: { table: tables.regionTables.regions, nameColumn: tables.regionTables.regions.name },
-	location: { table: tables.regionTables.sites, nameColumn: tables.regionTables.sites.name },
-	location_encounter: {
+	site: { table: tables.regionTables.sites, nameColumn: tables.regionTables.sites.name },
+	site_encounter: {
 		table: tables.regionTables.siteEncounters,
 		nameColumn: tables.regionTables.siteEncounters.name,
 	},
-	location_secret: { table: tables.regionTables.siteSecrets },
+	site_secret: { table: tables.regionTables.siteSecrets },
 	item: { table: tables.assocationTables.items, nameColumn: tables.assocationTables.items.name },
 	clue: { table: tables.assocationTables.clues },
 }
@@ -67,9 +67,9 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 			quest: db.query.quests,
 			quest_stage: db.query.questStages,
 			region: db.query.regions,
-			location: db.query.sites,
-			location_encounter: db.query.siteEncounters,
-			location_secret: db.query.siteSecrets,
+			site: db.query.sites,
+			site_encounter: db.query.siteEncounters,
+			site_secret: db.query.siteSecrets,
 			item: db.query.items,
 			clue: db.query.clues,
 		} satisfies Record<EmbeddableEntityType, unknown>
