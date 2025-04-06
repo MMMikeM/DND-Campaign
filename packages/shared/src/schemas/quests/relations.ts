@@ -1,4 +1,3 @@
-// quests/relations.ts
 import { relations } from "drizzle-orm"
 import {
 	quests,
@@ -9,18 +8,16 @@ import {
 	questTwists,
 	questUnlockConditions,
 } from "./tables.js"
-import { regions, areas, sites } from "../regions/tables.js" // Updated import
+import { regions, areas, sites } from "../regions/tables.js"
 import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
-	// Parent region
 	region: one(regions, {
 		fields: [quests.regionId],
 		references: [regions.id],
 		relationName: "regionQuests",
 	}),
 
-	// Quest components
 	stages: many(questStages, { relationName: "questStages" }),
 	twists: many(questTwists, { relationName: "questTwists" }),
 
@@ -35,7 +32,6 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 		relationName: "questUnlockConditions",
 	}),
 
-	// Associations with other entities
 	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
 	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
 	items: many(items, { relationName: "questItems" }),
@@ -43,20 +39,18 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 }))
 
 export const questDependenciesRelations = relations(questDependencies, ({ one, many }) => ({
-	// The source quest in the relationship
 	sourceQuest: one(quests, {
 		fields: [questDependencies.questId],
 		references: [quests.id],
 		relationName: "sourceQuests",
 	}),
-	// The target quest in the relationship
+
 	targetQuest: one(quests, {
 		fields: [questDependencies.relatedQuestId],
 		references: [quests.id],
 		relationName: "targetQuests",
 	}),
 
-	// Specific conditions for this relationship
 	unlockConditions: many(questUnlockConditions, {
 		relationName: "relationConditions",
 	}),
@@ -84,11 +78,11 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 		references: [quests.id],
 		relationName: "questStages",
 	}),
-	// Updated location to site
+
 	site: one(sites, {
-		fields: [questStages.siteId], // Field name changed from locationId to siteId
+		fields: [questStages.siteId],
 		references: [sites.id],
-		relationName: "stageSite", // Relation name updated
+		relationName: "stageSite",
 	}),
 	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
 	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),

@@ -4,7 +4,7 @@ import { narrativeForeshadowing } from "./tables.js"
 import { quests, questStages, questTwists } from "../quests/tables.js"
 import { npcs } from "../npc/tables.js"
 import { factions } from "../factions/tables.js"
-import { locations } from "../regions/tables.js"
+import { sites } from "../regions/tables.js"
 import { narrativeArcs } from "../narrative/tables.js"
 
 export const narrativeForeshadowingRelations = relations(narrativeForeshadowing, ({ one }) => ({
@@ -14,10 +14,10 @@ export const narrativeForeshadowingRelations = relations(narrativeForeshadowing,
 		references: [questStages.id],
 		relationName: "stageForeshadowing",
 	}),
-	sourceLocation: one(locations, {
-		fields: [narrativeForeshadowing.locationId],
-		references: [locations.id],
-		relationName: "locationForeshadowing",
+	sourceSite: one(sites, {
+		fields: [narrativeForeshadowing.siteId],
+		references: [sites.id],
+		relationName: "siteForeshadowing",
 	}),
 	sourceNpc: one(npcs, {
 		fields: [narrativeForeshadowing.npcId],

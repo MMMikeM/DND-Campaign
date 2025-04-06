@@ -4,8 +4,7 @@ import { list, pk, string, oneOf, nullableFk } from "../../db/utils"
 import { quests } from "../quests/tables"
 import { stageDecisions } from "../quests/tables"
 import { factions } from "../factions/tables"
-import { regions } from "../regions/tables"
-import { locations } from "../regions/tables"
+import { regions, sites, areas } from "../regions/tables"
 import { npcs } from "../npc/tables"
 import { majorConflicts } from "../conflict/tables"
 
@@ -28,7 +27,7 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	id: pk(),
 
 	// Basic information
-	title: string("title").unique(),
+	name: string("name").unique(),
 	description: list("description"),
 
 	// Characteristics
@@ -46,7 +45,8 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	// Affected entities
 	factionId: nullableFk("faction_id", factions.id),
 	regionId: nullableFk("region_id", regions.id),
-	locationId: nullableFk("location_id", locations.id),
+	areaId: nullableFk("area_id", areas.id),
+	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
 
 	// Follow-up tracking

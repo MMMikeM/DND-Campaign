@@ -40,8 +40,8 @@ export const npcs = pgTable("npcs", {
 	embedding: embeddingVector("embedding"),
 })
 
-export const npcLocations = pgTable(
-	"npc_locations",
+export const npcSites = pgTable(
+	"npc_sites",
 	{
 		id: pk(),
 		npcId: cascadeFk("npc_id", npcs.id),

@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm"
 import { worldStateChanges } from "./tables.js"
 import { quests, stageDecisions } from "../quests/tables.js"
 import { factions } from "../factions/tables.js"
-import { regions, locations } from "../regions/tables.js"
+import { regions, sites, areas } from "../regions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { majorConflicts } from "../conflict/tables.js"
 
@@ -36,10 +36,15 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 		references: [regions.id],
 		relationName: "regionWorldChanges",
 	}),
-	affectedLocation: one(locations, {
-		fields: [worldStateChanges.locationId],
-		references: [locations.id],
-		relationName: "locationWorldChanges",
+	affectedArea: one(areas, {
+		fields: [worldStateChanges.areaId],
+		references: [areas.id],
+		relationName: "areaWorldChanges",
+	}),
+	affectedSite: one(sites, {
+		fields: [worldStateChanges.siteId],
+		references: [sites.id],
+		relationName: "siteWorldChanges",
 	}),
 	affectedNpc: one(npcs, {
 		fields: [worldStateChanges.npcId],
