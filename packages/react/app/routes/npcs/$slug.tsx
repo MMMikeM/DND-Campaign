@@ -11,7 +11,6 @@ import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import SimpleCard from "~/components/SimpleCard"
 
-// Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
 		throw new Response("No slug provided", { status: 400 })
@@ -25,7 +24,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return npc
 }
 
-// Helper function to determine trust level badge variant
 const getTrustVariant = (trust: string): "default" | "destructive" | "outline" | "secondary" => {
 	switch (trust) {
 		case "high":
@@ -41,7 +39,6 @@ const getTrustVariant = (trust: string): "default" | "destructive" | "outline" |
 	}
 }
 
-// Helper function to determine adaptability badge variant
 const getAdaptabilityVariant = (adaptability: string): "default" | "destructive" | "outline" | "secondary" => {
 	switch (adaptability) {
 		case "opportunistic":
@@ -211,7 +208,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 										<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />
 										Background
 									</h3>
-									<List items={background} position="outside" spacing="sm" textColor="muted" />
+									<List items={background} spacing="sm" textColor="muted" />
 								</div>
 
 								<Separator />
@@ -221,7 +218,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 										<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />
 										Appearance
 									</h3>
-									<List items={appearance} position="outside" spacing="sm" textColor="muted" />
+									<List items={appearance} spacing="sm" textColor="muted" />
 								</div>
 
 								<Separator />
@@ -267,7 +264,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 					<SimpleCard
 						title="Notable Feature"
-						description="What makes this NPC unique"
 						icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-amber-500" />}
 					>
 						<div className="p-4 bg-muted rounded-md">
@@ -279,31 +275,31 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 				<TabsContent value="personality">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 						<SimpleCard title="Personality Traits" icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />}>
-							<List items={personalityTraits} position="outside" spacing="sm" />
+							<List items={personalityTraits} spacing="sm" />
 						</SimpleCard>
 
 						<SimpleCard title="Biases" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-amber-600" />}>
-							<List items={biases} position="outside" spacing="sm" />
+							<List items={biases} spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 						<SimpleCard title="Drives" icon={<Icons.Brain className="h-4 w-4 mr-2 text-purple-600" />}>
-							<List items={drives} position="outside" spacing="sm" />
+							<List items={drives} spacing="sm" />
 						</SimpleCard>
 
 						<SimpleCard title="Fears" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-red-500" />}>
-							<List items={fears} position="outside" spacing="sm" />
+							<List items={fears} spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<SimpleCard title="Mannerisms" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-blue-600" />}>
-							<List items={mannerisms} position="outside" spacing="sm" />
+							<List items={mannerisms} spacing="sm" />
 						</SimpleCard>
 
 						<SimpleCard title="Voice Notes" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-emerald-600" />}>
-							<List items={voiceNotes} position="outside" spacing="sm" />
+							<List items={voiceNotes} spacing="sm" />
 						</SimpleCard>
 					</div>
 				</TabsContent>
@@ -314,21 +310,21 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 							title="Dialogue Examples"
 							icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-indigo-600" />}
 						>
-							<List items={dialogue} position="outside" spacing="sm" className="italic" />
+							<List items={dialogue} spacing="sm" className="italic" />
 						</SimpleCard>
 
 						<SimpleCard title="Rumors & Gossip" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-purple-600" />}>
-							<List items={rumours} position="outside" spacing="sm" />
+							<List items={rumours} spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<SimpleCard title="Preferred Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-green-600" />}>
-							<List items={preferredTopics} position="outside" spacing="sm" />
+							<List items={preferredTopics} spacing="sm" />
 						</SimpleCard>
 
 						<SimpleCard title="Avoided Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-red-600" />}>
-							<List items={avoidTopics} position="outside" spacing="sm" />
+							<List items={avoidTopics} spacing="sm" />
 						</SimpleCard>
 					</div>
 				</TabsContent>
@@ -336,13 +332,13 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 				<TabsContent value="knowledge">
 					<div className="grid grid-cols-1 gap-6 mb-6">
 						<SimpleCard title="Knowledge" icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />}>
-							<List items={knowledge} position="outside" spacing="sm" />
+							<List items={knowledge} spacing="sm" />
 						</SimpleCard>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<SimpleCard title="Secrets" icon={<Icons.LockKeyhole className="h-4 w-4 mr-2 text-red-600" />}>
-							<List items={secrets} position="outside" spacing="sm" />
+							<List items={secrets} spacing="sm" />
 						</SimpleCard>
 					</div>
 				</TabsContent>
@@ -351,7 +347,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 						<SimpleCard
 							title="Relationships"
-							description={`Connections to other NPCs`}
 							icon={<Icons.Network className="h-4 w-4 mr-2 text-indigo-600" />}
 						>
 							{relations?.length > 0 ? (
@@ -364,7 +359,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 												</Link>
 											</div>
 											<BadgeWithTooltip className="capitalize" tooltipContent={`Relationship type - Strength`}>
-												{relationship.relationsshipStrength} - {relationship.type}
+												{relationship.strength} - {relationship.type}
 											</BadgeWithTooltip>
 
 											{relationship.description && relationship.description.length > 0 && (
@@ -372,11 +367,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 													<p className="text-sm font-medium mb-1">Dynamics:</p>
 													<List
 														items={relationship.description}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
@@ -389,11 +382,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 													</p>
 													<List
 														items={relationship.narrativeTensions}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
@@ -407,7 +398,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 						<SimpleCard
 							title="Faction Affiliations"
-							description={`Organizations ${name} is associated with`}
 							icon={<Icons.Flag className="h-4 w-4 mr-2" />}
 						>
 							{relatedFactions && relatedFactions.length > 0 ? (
@@ -459,11 +449,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 													</p>
 													<List
 														items={factionConnection.secrets}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
@@ -479,7 +467,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 						<SimpleCard
 							title="Associated Locations"
-							description={`Places where ${name} can be found`}
 							icon={<Icons.MapPin className="h-4 w-4 mr-2" />}
 						>
 							{relatedLocations && relatedLocations.length > 0 ? (
@@ -507,11 +494,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 												<div className="mt-2">
 													<List
 														items={locationConnection.description}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
@@ -525,7 +510,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 
 						<SimpleCard
 							title="Involved Quests"
-							description={`Quests where ${name} plays a role`}
 							icon={<Icons.Scroll className="h-4 w-4 mr-2" />}
 						>
 							{relatedQuests && relatedQuests.length > 0 ? (
@@ -563,11 +547,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 												<div className="mt-2">
 													<List
 														items={questConnection.description}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
@@ -580,11 +562,9 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 													</p>
 													<List
 														items={questConnection.hiddenAspects}
-														position="inside"
 														textSize="xs"
 														textColor="muted"
 														maxItems={2}
-														showMore={true}
 													/>
 												</div>
 											)}
