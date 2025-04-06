@@ -87,8 +87,7 @@ export const schemas = {
 		sensory_elements: (s) => s.describe("Descriptive details for sight, sound, smell, etc. to enhance immersion"),
 		questId: (s) => s.describe("The ID of the parent quest this stage belongs to (references quests.id)"),
 		stage: (s) => s.describe("The numerical order or sequence position of this stage within the quest"),
-		locationId: (s) =>
-			s.optional().describe("The ID of the location where this stage takes place (references locations.id)"),
+		siteId: (s) => s.optional().describe("The ID of the site where this stage takes place (references sites.id)"),
 		dramatic_question: (s) => s.describe("The central conflict, mystery, or tension that drives this stage forward"),
 		name: (s) => s.describe("The title or identifier for this specific segment of the quest"),
 	})

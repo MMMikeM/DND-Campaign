@@ -7,7 +7,6 @@ const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcLocations },
 } = tables
 
-
 export const schemas = {
 	get_all_npcs: z.object({}).describe("Get all NPCs"),
 	get_npc_by_id: z.object({ id: z.number().describe("Get a specific NPC by ID") }),
@@ -21,18 +20,23 @@ export const schemas = {
 		dialogue: (s) => s.describe("Characteristic phrases, speech patterns, and verbal quirks for roleplaying"),
 		drives: (s) => s.describe("Core motivations, ambitions, and desires that inspire this character's actions"),
 		fears: (s) => s.describe("Specific phobias, anxieties, and threats that frighten or concern this NPC"),
-		knowledge: (s) =>s.describe("Specific information, expertise, and secrets this NPC possesses that players might discover"),
+		knowledge: (s) =>
+			s.describe("Specific information, expertise, and secrets this NPC possesses that players might discover"),
 		mannerisms: (s) => s.describe("Distinctive gestures, habits, and behavioral quirks that make this NPC memorable"),
 		personalityTraits: (s) => s.describe("Key character aspects, temperament, and psychological characteristics"),
 		preferredTopics: (s) => s.describe("Subjects this NPC is passionate about, knowledgeable in, or eager to discuss"),
 		rumours: (s) => s.describe("Gossip, hearsay, and stories others tell about this character"),
 		secrets: (s) => s.describe("Hidden information, concealed plans, or private matters unknown to most others"),
 		voiceNotes: (s) => s.describe("Vocal qualities, accent, cadence, and speech characteristics for roleplaying"),
-		adaptability: (s) =>s.describe("How they respond to unexpected situations (rigid, reluctant, flexible, opportunistic)"),
+		adaptability: (s) =>
+			s.describe("How they respond to unexpected situations (rigid, reluctant, flexible, opportunistic)"),
 		attitude: (s) => s.describe("General outlook and typical emotional state when encountered"),
 		wealth: (s) => s.describe("Economic status and available resources (destitute, poor, moderate, rich, wealthy)"),
 		age: (s) => s.describe("Approximate age or age range, whether in years or descriptive terms"),
-		alignment: (s) =>s.describe("Moral and ethical positioning (lawful good, neutral good, chaotic good, lawful neutral, true neutral, chaotic neutral, lawful evil, neutral evil, chaotic evil)",),
+		alignment: (s) =>
+			s.describe(
+				"Moral and ethical positioning (lawful good, neutral good, chaotic good, lawful neutral, true neutral, chaotic neutral, lawful evil, neutral evil, chaotic evil)",
+			),
 		disposition: (s) => s.describe("Default attitude toward strangers and general sociability"),
 		gender: (s) => s.describe("Gender identity of the NPC (male, female, non-humanoid)"),
 		name: (s) => s.describe("The NPC's full name or primary identifier"),
@@ -44,7 +48,8 @@ export const schemas = {
 			),
 		socialStatus: (s) => s.describe("Position within local social hierarchy and how others regard them"),
 		trustLevel: (s) => s.describe("Willingness to trust others with information or tasks (none, low, medium, high)"),
-	}).omit({embedding: true})
+	})
+		.omit({ embedding: true })
 		.strict()
 		.describe("A non-player character with a distinct personality who can interact with players"),
 
@@ -70,7 +75,7 @@ export const schemas = {
 			s.describe("Details about how and why the NPC frequents this location and their typical activities there"),
 		id: (s) => s.optional().describe("The ID of this NPC-location relationship to update (omit to create new)"),
 		npcId: (s) => s.describe("The ID of the NPC who can be found here (references npcs.id)"),
-		locationId: (s) => s.describe("The ID of the location where this NPC can be found (references locations.id)"),
+		siteId: (s) => s.describe("The ID of the site where this NPC can be found (references sites.id)"),
 	})
 		.strict()
 		.describe("Places where an NPC can be encountered, including their routine and purpose there"),

@@ -88,8 +88,8 @@ export const schemas = {
 		id: optionalId.describe("The ID of the headquarters to update (omit to create new)"),
 		factionId: (s) =>
 			optionalId.describe("The ID of the faction this headquarters belongs to (references factions.id)"),
-		locationId: (s) =>
-			optionalId.describe("The ID of the location where this headquarters is situated (references locations.id)"),
+		siteId: (s) =>
+			optionalId.describe("The ID of the location where this headquarters is situated (references sites.id)"),
 		creativePrompts: (s) =>
 			s.describe("Story hooks, encounter ideas, and adventure seeds centered around this location"),
 		description: (s) => s.describe("Physical characteristics, notable rooms, defenses, and atmosphere in point form"),
