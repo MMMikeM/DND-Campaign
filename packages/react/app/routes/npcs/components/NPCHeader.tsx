@@ -10,9 +10,6 @@ interface NPCHeaderProps {
 	npc: NPC
 }
 
-/**
- * Header component for NPC detail page with name and badges
- */
 export function NPCHeader({ npc }: NPCHeaderProps) {
 	const { name, race, age, disposition, wealth, gender, trustLevel, adaptability, occupation, alignment, slug } = npc
 

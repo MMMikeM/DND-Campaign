@@ -8,9 +8,6 @@ interface SocialContentProps {
 	npc: NPC
 }
 
-/**
- * Social tab content for NPC detail page
- */
 export function SocialContent({ npc }: SocialContentProps) {
 	const { dialogue, rumours, preferredTopics, avoidTopics } = npc
 
