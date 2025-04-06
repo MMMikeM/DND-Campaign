@@ -1,16 +1,16 @@
+import { initializeDatabase } from "@tome-master/shared"
+
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
-import { initializeDatabase } from "@tome-master/shared"
 import { createLogger } from "./logger.js"
 import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { createServer } from "node:http"
-import { addPrompts } from "./prompts/index.js"
 import { registerToolHandlers } from "./tools/tools.js"
+import { registerPromptHandlers } from "./prompts/index.js"
 
 export const logger = createLogger()
 
-// Debug: Log environment variables
-logger.debug("Environment variables", {
+logger.info("Environment variables", {
 	MCP_PORT: process.env.MCP_PORT,
 	MCP_TRANSPORT: process.env.MCP_TRANSPORT,
 	DB_PATH: process.env.DB_PATH,
@@ -21,9 +21,10 @@ logger.debug("Environment variables", {
 
 // Initialize database
 logger.info("Initializing database...")
-const dbPath = "/Users/mikemurray/Development/DND-Campaign/dnddb.sqlite"
+const dbPath = "postgres://postgres:postgres@localhost:5432/dnd_campaign"
 logger.info(`Using database at: ${dbPath}`)
 export const db: ReturnType<typeof initializeDatabase> = initializeDatabase(dbPath)
+
 logger.info("Database initialized successfully")
 
 // Create MCP Server
@@ -44,12 +45,16 @@ const mcpServer = new Server(
 	},
 )
 
-registerToolHandlers(mcpServer)
+logger.info("Registering tool handlers")
 
-addPrompts(mcpServer)
+registerToolHandlers(mcpServer)
+logger.info("Tool handlers registered")
+
+registerPromptHandlers(mcpServer)
+logger.info("Prompts added")
 
 async function startServer() {
-	console.error("Starting server...")
+	logger.info("Starting server...")
 	logger.info("Initializing server...")
 	logger.debug("Server configuration", {
 		port: process.env.MCP_PORT,
@@ -60,11 +65,11 @@ async function startServer() {
 	let transport: StdioServerTransport | SSEServerTransport
 
 	if (process.env.MCP_TRANSPORT === "sse") {
-		console.error("Starting server with SSE transport...")
+		logger.info("Starting server with SSE transport...")
 
 		// Create HTTP server for SSE
 		const httpServer = createServer(async (req, res) => {
-			logger.info("Received request", {
+			logger.debug("Received request", {
 				url: req.url,
 				method: req.method,
 				headers: req.headers,
@@ -104,8 +109,7 @@ async function startServer() {
 			})
 		})
 	} else {
-		console.error("Starting server with stdio transport...")
-		logger.info("Starting server with stdio transport")
+		logger.info("Starting server with stdio transport...")
 		// Default to stdio transport
 		transport = new StdioServerTransport()
 		await mcpServer.connect(transport)
@@ -114,8 +118,9 @@ async function startServer() {
 }
 
 startServer().catch((err) => {
-	console.error(err)
+	logger.fatal({ err }, "Unhandled error during server startup")
 	logger.fatal("Unhandled error", {
+		// Keep original fatal log for detailed error info
 		error: err instanceof Error ? err.message : String(err),
 		stack: err instanceof Error ? err.stack : undefined,
 	})

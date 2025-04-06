@@ -13,16 +13,11 @@ export function zodToMCP<T extends z.ZodTypeAny>(schema: T) {
 
 	// Post-process the schema to handle descriptions correctly
 	const properties = jsonSchema.properties
-	const required = jsonSchema.required || []
 
 	for (const [key, prop] of Object.entries(properties)) {
-		// Check if field is required
-		const isRequired = required.includes(key)
 
 		// Handle descriptions for parameters
 		if ("type" in prop && prop.description) {
-			// Add (Required) or (Optional) suffix to description
-			prop.description = prop.description + (isRequired ? " (Required)" : " (Optional)")
 
 			// Handle array types with proper min/max items
 			if (prop.type === "array") {
