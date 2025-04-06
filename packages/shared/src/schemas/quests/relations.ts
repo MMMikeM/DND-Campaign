@@ -2,15 +2,15 @@
 import { relations } from "drizzle-orm"
 import {
 	quests,
-	questDependencies, // Corrected import
-	decisionOutcomes, // Corrected import
+	questDependencies,
+	decisionOutcomes,
 	questStages,
 	stageDecisions,
 	questTwists,
 	questUnlockConditions,
 } from "./tables.js"
-import { locations, regions } from "../regions/tables.js"
-import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js" // Corrected imports
+import { regions, areas, sites } from "../regions/tables.js" // Updated import
+import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	// Parent region
@@ -24,13 +24,10 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	stages: many(questStages, { relationName: "questStages" }),
 	twists: many(questTwists, { relationName: "questTwists" }),
 
-	// Corrected quest relations usage
 	outgoingRelations: many(questDependencies, {
-		// Corrected usage
 		relationName: "sourceQuests",
 	}),
 	incomingRelations: many(questDependencies, {
-		// Corrected usage
 		relationName: "targetQuests",
 	}),
 
@@ -38,14 +35,13 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 		relationName: "questUnlockConditions",
 	}),
 
-	// Associations with other entities (Corrected usage)
+	// Associations with other entities
 	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
 	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
 	items: many(items, { relationName: "questItems" }),
 	influence: many(factionRegionalPower, { relationName: "questInfluence" }),
 }))
 
-// Renamed relation and corrected internal usage
 export const questDependenciesRelations = relations(questDependencies, ({ one, many }) => ({
 	// The source quest in the relationship
 	sourceQuest: one(quests, {
@@ -88,14 +84,15 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 		references: [quests.id],
 		relationName: "questStages",
 	}),
-	location: one(locations, {
-		fields: [questStages.locationId],
-		references: [locations.id],
-		relationName: "stageLocation",
+	// Updated location to site
+	site: one(sites, {
+		fields: [questStages.siteId], // Field name changed from locationId to siteId
+		references: [sites.id],
+		relationName: "stageSite", // Relation name updated
 	}),
 	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
 	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
-	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }), // Corrected usage
+	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }),
 	clues: many(clues, { relationName: "stageClues" }),
 }))
 
@@ -115,10 +112,9 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		references: [questStages.id],
 		relationName: "toStage",
 	}),
-	consequences: many(decisionOutcomes, { relationName: "decisionConsequences" }), // Corrected usage
+	consequences: many(decisionOutcomes, { relationName: "decisionConsequences" }),
 }))
 
-// Renamed relation and corrected internal usage
 export const decisionOutcomesRelations = relations(decisionOutcomes, ({ one }) => ({
 	decision: one(stageDecisions, {
 		fields: [decisionOutcomes.decisionId],

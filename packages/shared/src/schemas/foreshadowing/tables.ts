@@ -4,7 +4,9 @@ import { list, pk, string, oneOf, nullableFk } from "../../db/utils"
 import { quests, questStages, questTwists } from "../quests/tables"
 import { npcs } from "../npc/tables"
 import { factions } from "../factions/tables"
-import { locations } from "../regions/tables"
+import { sites
+
+ } from "../regions/tables"
 import { narrativeArcs } from "../narrative/tables"
 
 const foreshadowingSubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
@@ -16,7 +18,7 @@ export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 
 	// Where this foreshadowing appears
 	questStageId: nullableFk("quest_stage_id", questStages.id),
-	locationId: nullableFk("location_id", locations.id),
+	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
 	factionId: nullableFk("faction_id", factions.id),
 

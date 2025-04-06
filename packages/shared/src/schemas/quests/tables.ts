@@ -1,7 +1,7 @@
 // quests/tables/ts
 import { pgTable, unique, integer } from "drizzle-orm/pg-core"
 import { cascadeFk, nullableFk, list, oneOf, pk, string, embeddingVector } from "../../db/utils"
-import { locations, regions } from "../regions/tables"
+import { regions, sites } from "../regions/tables"
 
 const questTypes = ["main", "side", "faction", "character", "generic"] as const
 
@@ -22,7 +22,7 @@ export const quests = pgTable("quests", {
 	rewards: list("rewards"),
 	themes: list("themes"),
 	inspirations: list("inspirations"),
-	embedding: embeddingVector("sm"),
+	embedding: embeddingVector("embedding"),
 })
 
 const dependencyTypes = ["prerequisite", "sequel", "parallel", "alternative", "hidden_connection"] as const
@@ -69,7 +69,7 @@ export const questTwists = pgTable("quest_twists", {
 export const questStages = pgTable("quest_stages", {
 	id: pk(),
 	questId: cascadeFk("quest_id", quests.id),
-	locationId: nullableFk("location_id", locations.id),
+	siteId: nullableFk("site_id", sites.id),
 	stage: integer("stage").notNull(),
 	name: string("name").unique(),
 	dramatic_question: string("dramatic_question"),
@@ -81,7 +81,7 @@ export const questStages = pgTable("quest_stages", {
 	encounters: list("encounters"),
 	dramatic_moments: list("dramatic_moments"),
 	sensory_elements: list("sensory_elements"),
-	embedding: embeddingVector("sm"),
+	embedding: embeddingVector("embedding"),
 })
 
 // Stage decisions now directly connect stages together
