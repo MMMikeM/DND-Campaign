@@ -1,37 +1,42 @@
-import React from "react";
-import * as Icons from "lucide-react";
-import { InfoCard } from "~/components/InfoCard";
-import { Link } from "~/components/ui/link";
-import type { WorldChange } from "~/lib/entities"; // Use the type from index.tsx
+import React from "react"
+import * as Icons from "lucide-react"
+import { InfoCard } from "~/components/InfoCard"
+import { Link } from "~/components/ui/link"
+import type { WorldChange } from "~/lib/entities"
 
 interface ConnectionsContentProps {
-	change: WorldChange;
+	change: WorldChange
 }
 
 export function ConnectionsContent({ change }: ConnectionsContentProps) {
-	const {
-		sourceQuest,
-		sourceDecision, // Assuming this might just be an ID or basic info, not linkable yet
-		sourceConflict,
-		leadsToQuest,
-		sourceType, // Use sourceType to determine which source link to show
-		// Add other relevant connection fields if necessary
-	} = change;
+	const { sourceQuest, sourceDecision, sourceConflict, leadsToQuest, sourceType } = change
 
-	// Determine the primary source link based on sourceType
-	let sourceLink = null;
-	if (sourceType === 'quest' && sourceQuest) {
-		sourceLink = { href: `/quests/${sourceQuest.slug}`, name: sourceQuest.name, icon: <Icons.Scroll className="h-4 w-4 text-gray-500" /> };
-	} else if (sourceType === 'conflict' && sourceConflict) {
-		sourceLink = { href: `/conflicts/${sourceConflict.slug}`, name: sourceConflict.name, icon: <Icons.Swords className="h-4 w-4 text-gray-500" /> };
-	} else if (sourceType === 'decision' && sourceDecision) {
-		// Assuming sourceDecision might not have a slug/dedicated page yet
-		sourceLink = { href: null, name: `Decision ID: ${sourceDecision.id}`, icon: <Icons.GitBranch className="h-4 w-4 text-gray-500" /> };
+	let sourceLink = null
+	if (sourceType === "quest" && sourceQuest) {
+		sourceLink = {
+			href: `/quests/${sourceQuest.slug}`,
+			name: sourceQuest.name,
+			icon: <Icons.Scroll className="h-4 w-4 text-gray-500" />,
+		}
+	} else if (sourceType === "conflict" && sourceConflict) {
+		sourceLink = {
+			href: `/conflicts/${sourceConflict.slug}`,
+			name: sourceConflict.name,
+			icon: <Icons.Swords className="h-4 w-4 text-gray-500" />,
+		}
+	} else if (sourceType === "decision" && sourceDecision) {
+		sourceLink = {
+			href: null,
+			name: `Decision ID: ${sourceDecision.id}`,
+			icon: <Icons.GitBranch className="h-4 w-4 text-gray-500" />,
+		}
 	} else if (sourceType) {
-        // Fallback if sourceType is set but the related object isn't loaded/available
-        sourceLink = { href: null, name: `Type: ${sourceType}`, icon: <Icons.HelpCircle className="h-4 w-4 text-gray-500" /> };
-    }
-
+		sourceLink = {
+			href: null,
+			name: `Type: ${sourceType}`,
+			icon: <Icons.HelpCircle className="h-4 w-4 text-gray-500" />,
+		}
+	}
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -74,7 +79,7 @@ export function ConnectionsContent({ change }: ConnectionsContentProps) {
 				) : null}
 			</InfoCard>
 		</div>
-	);
+	)
 }
 
-export default ConnectionsContent;
+export default ConnectionsContent
