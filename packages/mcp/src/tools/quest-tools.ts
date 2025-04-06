@@ -33,7 +33,7 @@ export const questToolDefinitions: Record<QuestTools, ToolDefinition> = {
 		handler: async (args) => {
 			const parsed = schemas.get_quest_stages.parse(args)
 			logger.info("Getting quest stages by ID", { parsed })
-			return await db.query.questStages.findMany({ where: eq(questStages.questId, parsed) })
+			return await db.query.questStages.findMany({ where: eq(questStages.questId, parsed.id) })
 		},
 	},
 	get_quest_by_id: {
@@ -44,8 +44,9 @@ export const questToolDefinitions: Record<QuestTools, ToolDefinition> = {
 			logger.info("Getting quest by ID", { parsed })
 			return (
 				(await db.query.quests.findFirst({
-					where: eq(quests.id, parsed),
+					where: eq(quests.id, parsed.id),
 					with: {
+						influence: true,
 						factions: true,
 						npcs: true,
 						items: true,
