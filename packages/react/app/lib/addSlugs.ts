@@ -55,17 +55,37 @@ export const createSlug = (text: string): Slug => {
 }
 
 /**
- * Type for objects with name and id that should receive a slug
+ * Base type for objects with an ID.
  */
-export interface Sluggable {
-	name: string
+interface Identifiable {
 	id: number
 }
 
 /**
- * Type with slug added
+ * Type for objects sluggable by name.
  */
-export type WithSlug<T extends Sluggable> = T & { slug: Slug }
+interface SluggableByName extends Identifiable {
+	name: string
+	title?: never // Ensure title is not present if name is
+}
+
+/**
+ * Type for objects sluggable by title.
+ */
+interface SluggableByTitle extends Identifiable {
+	name?: never // Ensure name is not present if title is
+	title: string
+}
+
+/**
+ * Union type for objects that should receive a slug (either by name or title).
+ */
+export type Sluggable = SluggableByName | SluggableByTitle
+
+/**
+ * Type with slug added to an identifiable object.
+ */
+export type WithSlug<T extends Identifiable> = T & { slug: Slug }
 
 /**
  * Check if an object is a plain object (not null, not array, not Date, etc.)
@@ -75,24 +95,27 @@ const isPlainObject = (item: unknown): item is Record<string, unknown> => {
 }
 
 /**
- * Type guard to check if an object should receive a slug
+ * Type guard to check if an object should receive a slug (has id and either name or title).
  */
 function isSluggable(obj: Record<string, unknown>): obj is Sluggable & Record<string, unknown> {
-	return "name" in obj && typeof obj.name === "string" && "id" in obj && typeof obj.id === "number"
+	const hasId = "id" in obj && typeof obj.id === "number"
+	const hasName = "name" in obj && typeof obj.name === "string"
+	const hasTitle = "title" in obj && typeof obj.title === "string"
+	return hasId && (hasName || hasTitle)
 }
 
 /**
  * Helper for recursively applying the WithSlugsAdded transformation
  */
 type RecursivelyWithSlugsAdded<T> = T extends null | undefined
-	? T
-	: T extends Array<infer U>
+	? T // Handle null/undefined
+	: T extends Array<infer U> // Handle arrays
 		? Array<RecursivelyWithSlugsAdded<U>>
-		: T extends object
-			? T extends Sluggable
-				? { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> } & { slug: Slug }
-				: { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> }
-			: T
+		: T extends Sluggable // Handle objects that are sluggable
+			? { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> } & { slug: Slug }
+			: T extends object // Handle other objects
+				? { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> }
+				: T // Handle primitives
 
 /**
  * Type that represents the result of adding slugs to objects
@@ -119,7 +142,12 @@ export function addSlugsRecursively<T>(data: T): WithSlugsAdded<T> {
 
 		// Add slug if conditions are met
 		if (isSluggable(result)) {
-			result.slug = createSlug(result.name)
+			// Use name if available, otherwise use title
+			const slugSource = result.name ?? result.title
+			if (slugSource) {
+				// We already checked slugSource is string via isSluggable
+				result.slug = createSlug(slugSource as string)
+			}
 		}
 
 		// Process all properties recursively
