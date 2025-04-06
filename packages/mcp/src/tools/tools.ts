@@ -1,15 +1,20 @@
 import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import { helpTool, helpToolHandler } from "./tool.help"
+import { helpToolDefinitions } from "./tool.help"
 import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 
 // Import tool definitions instead of pre-extracted tools and handlers
-import { factionToolDefinitions } from "./tool.factions"
-import { locationToolDefinitions } from "./tool.locations"
-import { npcToolDefinitions } from "./tool.npcs"
-import { questToolDefinitions } from "./tool.quests"
-import { associationToolDefinitions } from "./tool.associations"
+import { factionToolDefinitions } from "./faction-tools" // Updated path
+import { regionToolDefinitions } from "./region-tools" // Updated path and assumed variable name
+import { npcToolDefinitions } from "./npc-tools"
+import { questToolDefinitions } from "./quest-tools"
+import { associationToolDefinitions } from "./association-tools"
+import { conflictToolDefinitions } from "./conflict-tools" // Import conflict definitions
+import { foreshadowingToolDefinitions } from "./foreshadowing-tools" // Import foreshadowing definitions
+import { narrativeToolDefinitions } from "./narrative-tools" // Import narrative definitions
+import { worldToolDefinitions } from "./world-tools" // Import world definitions
+import { embeddingToolDefinitions } from "./embedding-tools" // Import new definitions
 import type { ToolDefinition, ToolHandlerReturn } from "./tool.utils"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
@@ -30,40 +35,49 @@ function extractToolsAndHandlers<T extends string>(definitions: Record<string, T
 	return { tools, handlers }
 }
 
-// Extract tools and handlers for each category
 export const factions = extractToolsAndHandlers(factionToolDefinitions)
-export const locations = extractToolsAndHandlers(locationToolDefinitions)
+export const regions = extractToolsAndHandlers(regionToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
 export const associations = extractToolsAndHandlers(associationToolDefinitions)
+export const conflicts = extractToolsAndHandlers(conflictToolDefinitions) // Extract conflict tools
+export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions) // Extract foreshadowing tools
+export const narrative = extractToolsAndHandlers(narrativeToolDefinitions) // Extract narrative tools
+export const world = extractToolsAndHandlers(worldToolDefinitions) // Extract world tools
+export const embeddings = extractToolsAndHandlers(embeddingToolDefinitions)
+export const help = extractToolsAndHandlers(helpToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
-	// Helper function to extract tools and handlers from definitions
-
-	// Combine all tools
-	const allTools = [
+	const tools = [
 		...factions.tools,
-		...locations.tools,
+		...regions.tools,
 		...npcs.tools,
 		...quests.tools,
 		...associations.tools,
-		helpTool,
+		...conflicts.tools, // Add conflict tools
+		...foreshadowing.tools, // Add foreshadowing tools
+		...narrative.tools, // Add narrative tools
+		...world.tools, // Add world tools
+		...embeddings.tools,
+		...help.tools,
 	]
 
-	// Combined tool handlers
 	const allToolHandlers = {
 		...factions.handlers,
-		...locations.handlers,
+		...regions.handlers,
 		...npcs.handlers,
 		...quests.handlers,
 		...associations.handlers,
-		helpToolHandler,
+		...conflicts.handlers, // Add conflict handlers
+		...foreshadowing.handlers, // Add foreshadowing handlers
+		...narrative.handlers, // Add narrative handlers
+		...world.handlers, // Add world handlers
+		...embeddings.handlers,
+		...help.handlers,
 	}
 
-	// Register tools list handler
-	server.setRequestHandler(ListToolsRequestSchema, async () => {
-		return { tools: allTools }
-	})
+	// Register tools lit handler
+	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
 
 	// Register tool call handler
 	server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -98,6 +112,5 @@ export function registerToolHandlers(server: Server) {
 		}
 	})
 
-	// Log that tools are registered
 	logger.info("MCP Tool handlers registered")
 }
