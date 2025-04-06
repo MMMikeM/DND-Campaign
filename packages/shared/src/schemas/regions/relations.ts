@@ -28,7 +28,9 @@ export const regionConnectionsRelations = relations(regionConnections, ({ one, m
 		relationName: "targetRegion",
 	}),
 
-	connections: many(regionConnectionDetails, { relationName: "relationConnections" }),
+	details: many(regionConnectionDetails, {
+		relationName: "connectionDetails",
+	}),
 }))
 
 export const areasRelations = relations(areas, ({ one, many }) => ({
@@ -39,7 +41,6 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 	}),
 
 	sites: many(sites, { relationName: "areaSites" }),
-	quests: many(quests, { relationName: "areaQuests" }),
 	influence: many(factionRegionalPower, { relationName: "areaFactionInfluence" }),
 }))
 

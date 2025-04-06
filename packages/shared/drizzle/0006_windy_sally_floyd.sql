@@ -1,0 +1,2 @@
+ALTER TABLE "world_state_changes" ADD COLUMN "arc_id" serial NOT NULL;--> statement-breakpoint
+ALTER TABLE "world_state_changes" ADD CONSTRAINT "world_state_changes_arc_id_narrative_arcs_id_fk" FOREIGN KEY ("arc_id") REFERENCES "public"."narrative_arcs"("id") ON DELETE set null ON UPDATE no action;

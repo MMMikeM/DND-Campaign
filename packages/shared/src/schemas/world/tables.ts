@@ -7,6 +7,7 @@ import { factions } from "../factions/tables"
 import { regions, sites, areas } from "../regions/tables"
 import { npcs } from "../npc/tables"
 import { majorConflicts } from "../conflict/tables"
+import { narrativeArcs } from "../narrative/tables"
 
 const changeSeverity = ["minor", "moderate", "major", "campaign-defining"] as const
 const changeTypes = [
@@ -48,6 +49,7 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	areaId: nullableFk("area_id", areas.id),
 	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
+	arcId: nullableFk("arc_id", narrativeArcs.id),
 
 	// Follow-up tracking
 	recordedDate: timestamp("recorded_date").defaultNow(),
@@ -58,3 +60,11 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	creativePrompts: list("creative_prompts"), // Ideas for showing this change
 	gmNotes: list("gm_notes"),
 })
+
+export const enums = {
+	changeSeverity,
+	changeTypes,
+	changeVisibility,
+	changeTimeframe,
+	sourcesOfChange,
+}

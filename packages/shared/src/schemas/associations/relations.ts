@@ -157,11 +157,11 @@ export const questHookNpcsRelations = relations(questHookNpcs, ({ one }) => ({
 	}),
 }))
 
-export const regionConnectionsRelations = relations(regionConnectionDetails, ({ one }) => ({
-	relation: one(regionConnections, {
+export const regionConnectionDetailsRelations = relations(regionConnectionDetails, ({ one }) => ({
+	connection: one(regionConnections, {
 		fields: [regionConnectionDetails.relationId],
 		references: [regionConnections.id],
-		relationName: "relationConnections",
+		relationName: "connectionDetails", // Match name from above
 	}),
 	controllingFaction: one(factions, {
 		fields: [regionConnectionDetails.controllingFaction],

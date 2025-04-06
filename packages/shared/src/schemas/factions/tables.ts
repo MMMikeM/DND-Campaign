@@ -2,11 +2,16 @@
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString, embeddingVector } from "../../db/utils.js"
 import { sites, regions } from "../regions/tables.js"
-import { alignments, wealthLevels } from "../common.js"
+import { alignments, relationshipStrengths, wealthLevels } from "../common.js"
 
 const sizeTypes = ["tiny", "small", "medium", "large", "massive"] as const
 const reachLevels = ["local", "regional", "national", "continental", "global"] as const
-
+const diplomaticTypes = ["ally", "enemy", "neutral", "vassal", "suzerain", "rival", "trade"] as const
+const controlLevels = ["contested", "influenced", "controlled", "dominated"] as const
+const factionOperationTypes = ["economic", "military", "diplomatic", "espionage", "public works", "research"] as const
+const factionOperationStatuses = ["planning", "initial", "ongoing", "concluding", "completed"] as const
+const factionOperationScales = ["minor", "moderate", "major", "massive"] as const
+const factionPriorities = ["low", "medium", "high"] as const
 const factionTypes = [
 	"guild",
 	"cult",
@@ -46,7 +51,7 @@ export const factionRegions = pgTable(
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
 		regionId: nullableFk("region_id", regions.id),
-		controlLevel: oneOf("control_level", ["contested", "influenced", "controlled", "dominated"]),
+		controlLevel: oneOf("control_level", controlLevels),
 		presence: list("presence"), // How they manifest in the area
 		priorities: list("priorities"), // What they care about here
 	},
@@ -64,19 +69,6 @@ export const factionHeadquarters = pgTable(
 	},
 	(t) => [unique().on(t.factionId, t.siteId)],
 )
-
-const diplomaticTypes = ["ally", "enemy", "neutral", "vassal", "suzerain", "rival", "trade"] as const
-const relationshipStrengths = [
-	"weak",
-	"moderate",
-	"friendly",
-	"strong",
-	"unbreakable",
-	"friction",
-	"cold",
-	"hostile",
-	"war",
-] as const
 
 export const factionDiplomacy = pgTable(
 	"faction_diplomacy",
@@ -98,15 +90,15 @@ export const factionOperations = pgTable(
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
 		name: string("name").unique(),
-		type: oneOf("type", ["economic", "military", "diplomatic", "espionage", "public works", "research"]),
-		scale: oneOf("scale", ["minor", "moderate", "major", "massive"]),
-		status: oneOf("status", ["planning", "initial", "ongoing", "concluding", "completed"]),
+		type: oneOf("type", factionOperationTypes),
+		scale: oneOf("scale", factionOperationScales),
+		status: oneOf("status", factionOperationStatuses),
+		priority: oneOf("priority", factionPriorities),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 		objectives: list("objectives"),
 		site: list("site"),
 		involved_npcs: list("involved_npcs"),
-		priority: oneOf("priority", ["low", "medium", "high"]),
 		embedding: embeddingVector("embedding"),
 	},
 	(t) => [unique().on(t.factionId, t.name)],
@@ -127,3 +119,18 @@ export const factionCulture = pgTable(
 	},
 	(t) => [unique().on(t.factionId)],
 )
+
+export const enums = {
+	controlLevels,
+	diplomaticTypes,
+	relationshipStrengths,
+	sizeTypes,
+	reachLevels,
+	factionTypes,
+	wealthLevels,
+	alignments,
+	factionOperationTypes,
+	factionOperationStatuses,
+	factionOperationScales,
+	factionPriorities,
+}

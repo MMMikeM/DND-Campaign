@@ -5,10 +5,16 @@ import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
 import { sites, regionConnections, regions, areas } from "../regions/tables.js"
-import { trustLevel } from "../common.js"
 
-const npcRoles = ["quest_giver", "ally", "antagonist", "guide", "bystander", "target", "victim", "resource"] as const
 const importanceLevels = ["minor", "supporting", "major", "critical"] as const
+const factionRoles = ["quest_giver", "antagonist", "ally", "target", "beneficiary", "obstacle", "resource"] as const
+const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
+const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
+const powerLevels = ["minor", "moderate", "strong", "dominant"] as const
+const routeTypes = ["road", "river", "mountain pass", "sea route", "portal", "wilderness"] as const
+const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
+const trustLevel = ["none", "low", "medium", "high"] as const
+const npcRoles = ["quest_giver", "ally", "antagonist", "guide", "bystander", "target", "victim", "resource"] as const
 
 export const npcQuestRoles = pgTable(
 	"npc_quest_roles",
@@ -25,8 +31,6 @@ export const npcQuestRoles = pgTable(
 	},
 	(t) => [unique().on(t.npcId, t.questId, t.role)],
 )
-
-const factionRoles = ["quest_giver", "antagonist", "ally", "target", "beneficiary", "obstacle", "resource"] as const
 
 export const factionQuestInvolvement = pgTable(
 	"faction_quest_involvement",
@@ -54,10 +58,8 @@ export const items = pgTable("items", {
 	creativePrompts: list("creative_prompts"),
 	significance: string("significance"),
 	embedding: embeddingVector("embedding"),
-})
-
-const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
-const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
+}
+)
 
 export const questIntroductions = pgTable("quest_introductions", {
 	id: pk(),
@@ -72,7 +74,9 @@ export const questIntroductions = pgTable("quest_introductions", {
 	introductionType: oneOf("introduction_type", introductionTypes),
 	presentationStyle: oneOf("presentation_style", presentationStyles),
 	hookContent: list("hook_content"),
-})
+},
+(t) => [unique().on(t.stageId, t.siteId, t.factionId, t.itemId)],
+)
 
 export const questHookNpcs = pgTable(
 	"quest_hook_npcs",
@@ -100,25 +104,27 @@ export const clues = pgTable("clues", {
 	embedding: embeddingVector("embedding"),
 })
 
-const powerLevels = ["minor", "moderate", "strong", "dominant"] as const
-
-export const factionRegionalPower = pgTable("faction_regional_power", {
-	id: pk(),
-	factionId: cascadeFk("faction_id", factions.id),
-	questId: nullableFk("quest_id", quests.id),
-	regionId: nullableFk("region_id", regions.id),
-	areaId: nullableFk("area_id", areas.id),
-	siteId: nullableFk("site_id", sites.id),
-	powerLevel: oneOf("power_level", powerLevels),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-})
+export const factionRegionalPower = pgTable(
+	"faction_regional_power",
+	{
+		id: pk(),
+		factionId: cascadeFk("faction_id", factions.id),
+		questId: nullableFk("quest_id", quests.id),
+		regionId: nullableFk("region_id", regions.id),
+		areaId: nullableFk("area_id", areas.id),
+		siteId: nullableFk("site_id", sites.id),
+		powerLevel: oneOf("power_level", powerLevels),
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+	},
+	(t) => [unique().on(t.factionId, t.questId, t.regionId, t.areaId, t.siteId)],
+)
 
 export const regionConnectionDetails = pgTable("region_connection_details", {
 	id: pk(),
 	relationId: cascadeFk("relation_id", regionConnections.id).unique(),
-	routeType: oneOf("route_type", ["road", "river", "mountain pass", "sea route", "portal", "wilderness"]),
-	travelDifficulty: oneOf("travel_difficulty", ["trivial", "easy", "moderate", "difficult", "treacherous"]),
+	routeType: oneOf("route_type", routeTypes),
+	travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
 	travelTime: string("travel_time"),
 	controllingFaction: nullableFk("controlling_faction", factions.id),
 	travelHazards: list("travel_hazards"),
@@ -126,3 +132,15 @@ export const regionConnectionDetails = pgTable("region_connection_details", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 })
+
+export const enums = {
+	factionRoles,
+	importanceLevels,
+	introductionTypes,
+	npcRoles,
+	powerLevels,
+	presentationStyles,
+	routeTypes,
+	travelDifficulties,
+	trustLevel,
+}

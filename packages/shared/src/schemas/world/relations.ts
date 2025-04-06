@@ -6,6 +6,7 @@ import { factions } from "../factions/tables.js"
 import { regions, sites, areas } from "../regions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { majorConflicts } from "../conflict/tables.js"
+import { narrativeArcs } from "../narrative/tables.js"
 
 export const worldStateChangesRelations = relations(worldStateChanges, ({ one }) => ({
 	// Source of the change
@@ -23,6 +24,12 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 		fields: [worldStateChanges.conflictId],
 		references: [majorConflicts.id],
 		relationName: "conflictWorldChanges",
+	}),
+
+	relatedArc: one(narrativeArcs, {
+		fields: [worldStateChanges.arcId],
+		references: [narrativeArcs.id],
+		relationName: "arcWorldChanges",
 	}),
 
 	// Affected entities

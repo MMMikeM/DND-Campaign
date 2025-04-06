@@ -1,4 +1,3 @@
-// narrative/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
 import { list, pk, string, oneOf, cascadeFk } from "../../db/utils"
 import { quests } from "../quests/tables"
@@ -13,14 +12,12 @@ export const narrativeArcs = pgTable("narrative_arcs", {
 	type: oneOf("type", arcTypes),
 	status: oneOf("status", arcStatuses).default("planned"),
 
-	// Sanderson storytelling elements
-	promise: string("promise").notNull(), // The initial hook or premise
-	payoff: string("payoff").notNull(), // The intended climax or resolution
+	promise: string("promise").notNull(),
+	payoff: string("payoff").notNull(),
 
-	// Rich content fields
 	description: list("description"),
-	themes: list("themes"), // Major themes explored
-	foreshadowingElements: list("foreshadowing_elements"), // Elements to plant early
+	themes: list("themes"),
+	foreshadowingElements: list("foreshadowing_elements"),
 	creativePrompts: list("creative_prompts"),
 })
 
@@ -29,9 +26,13 @@ export const arcMembership = pgTable("arc_membership", {
 	arcId: cascadeFk("arc_id", narrativeArcs.id),
 	questId: cascadeFk("quest_id", quests.id),
 
-	// Quest's narrative function within this arc
 	role: oneOf("role", questRoles),
 
-	// Optional additional context
 	notes: list("notes"),
 })
+
+export const enums = {
+	arcTypes,
+	arcStatuses,
+	questRoles,
+}

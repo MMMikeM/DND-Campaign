@@ -1,9 +1,41 @@
 // npc/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string, embeddingVector } from "../../db/utils"
-import { alignments, genders, races, trustLevel, wealthLevels } from "../common"
+import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
+
+const genders = ["male", "female", "non-humanoid"] as const
+const relationshipTypes = ["ally", "enemy", "family", "rival", "mentor", "student", "friend", "contact"] as const
+const adaptability = ["rigid", "reluctant", "flexible", "opportunistic"] as const
+const npcFactionRoles = [
+	"leader", // Ultimate authority figure
+	"lieutenant", // Second-in-command or high officer
+	"advisor", // Strategic counsel or specialist
+	"enforcer", // Implements faction will through force
+	"agent", // Field operative or representative
+	"member", // Regular rank-and-file participant
+	"recruit", // New or probationary member
+	"elder", // Experienced, respected veteran
+	"spy", // Covert intelligence gatherer
+	"figurehead", // Symbolic leader with limited actual power
+	"financier", // Provider of funds or resources
+	"deserter", // Former member who abandoned the faction
+	"traitor", // Member secretly working against faction
+	"exile", // Forcibly removed former member
+] as const
+const races = [
+	"human",
+	"elf",
+	"dwarf",
+	"halfling",
+	"gnome",
+	"half-elf",
+	"half-orc",
+	"tiefling",
+	"dragonborn",
+	"other",
+] as const
 
 export const npcs = pgTable("npcs", {
 	id: pk(),
@@ -15,7 +47,7 @@ export const npcs = pgTable("npcs", {
 	race: oneOf("race", races),
 	trustLevel: oneOf("trust_level", trustLevel),
 	wealth: oneOf("wealth", wealthLevels),
-	adaptability: oneOf("adaptability", ["rigid", "reluctant", "flexible", "opportunistic"]),
+	adaptability: oneOf("adaptability", adaptability),
 
 	age: string("age"),
 	attitude: string("attitude"),
@@ -61,26 +93,13 @@ export const npcFactions = pgTable(
 		loyalty: oneOf("loyalty", trustLevel),
 
 		justification: string("justification"),
-		role: string("role"),
+		role: oneOf("role", npcFactionRoles),
 		rank: string("rank"),
 
 		secrets: list("secrets"),
 	},
 	(t) => [unique().on(t.npcId, t.factionId)],
 )
-
-const relationshipTypes = ["ally", "enemy", "family", "rival", "mentor", "student", "friend", "contact"] as const
-const relationshipStrengths = [
-	"weak",
-	"moderate",
-	"friendly",
-	"strong",
-	"unbreakable",
-	"friction",
-	"cold",
-	"hostile",
-	"war",
-] as const
 
 export const characterRelationships = pgTable(
 	"character_relationships",
@@ -99,3 +118,15 @@ export const characterRelationships = pgTable(
 	},
 	(t) => [unique().on(t.npcId, t.relatedNpcId)],
 )
+
+export const enums = {
+	adaptability,
+	alignments,
+	genders,
+	races,
+	relationshipStrengths,
+	relationshipTypes,
+	trustLevel,
+	wealthLevels,
+	npcFactionRoles,
+}

@@ -79,9 +79,13 @@ const siteTypes = [
 	"crossroads",
 	"trail",
 ] as const
+const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
 
 const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
 const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] as const
+const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
+const difficultyLevels = ["easy", "medium", "hard"] as const
+const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
 
 export const regions = pgTable("regions", {
 	id: pk(),
@@ -126,8 +130,6 @@ export const areas = pgTable("areas", {
 	embedding: embeddingVector("embedding"),
 })
 
-const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
-
 export const regionConnections = pgTable(
 	"region_connections",
 	{
@@ -166,8 +168,6 @@ export const sites = pgTable("sites", {
 	embedding: embeddingVector("embedding"),
 })
 
-const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
-
 export const siteLinks = pgTable(
 	"site_links",
 	{
@@ -191,7 +191,7 @@ export const siteEncounters = pgTable(
 
 		encounterType: oneOf("encounter_type", encounterTypes),
 		dangerLevel: oneOf("danger_level", dangerLevels),
-		difficulty: oneOf("difficulty", ["easy", "medium", "hard"]),
+		difficulty: oneOf("difficulty", difficultyLevels),
 
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
@@ -205,11 +205,23 @@ export const siteEncounters = pgTable(
 export const siteSecrets = pgTable("site_secrets", {
 	id: pk(),
 	siteId: cascadeFk("site_id", sites.id),
-	secretType: oneOf("secret_type", ["historical", "hidden area", "concealed item", "true purpose", "connection"]),
-	difficultyToDiscover: oneOf("difficulty", ["obvious", "simple", "moderate", "challenging", "nearly impossible"]),
+	secretType: oneOf("secret_type", secretTypes),
+	difficultyToDiscover: oneOf("difficulty", difficultyLevels),
 	discoveryMethod: list("discovery_method"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	consequences: list("consequences"),
 	embedding: embeddingVector("embedding"),
 })
+
+export const enums = {
+	areaTypes,
+	connectionTypes,
+	dangerLevels,
+	difficultyLevels,
+	encounterTypes,
+	linkTypes,
+	regionTypes,
+	secretTypes,
+	siteTypes,
+}
