@@ -1,13 +1,12 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils" // Assuming optionalId might be needed
+import { optionalId } from "./tool.utils"
 
 const {
 	narrativeTables: { narrativeArcs, arcMembership },
 } = tables
 
-// Define NarrativeTools type first
 export type NarrativeTools = "manage_narrative_arcs" | "manage_arc_membership"
 
 export const schemas = {

@@ -14,7 +14,7 @@ export const schemas = {
 	manage_narrative_foreshadowing: createInsertSchema(narrativeForeshadowing, {
 		id: optionalId.describe("The ID of the foreshadowing record to update (omit to create new)"),
 		questStageId: (s) => s.optional().describe("ID of the quest stage where this foreshadowing appears (if any)"),
-		locationId: (s) => s.optional().describe("ID of the location where this foreshadowing appears (if any)"),
+		siteId: (s) => s.optional().describe("ID of the site where this foreshadowing appears (if any)"),
 		npcId: (s) => s.optional().describe("ID of the NPC involved in this foreshadowing (if any)"),
 		factionId: (s) => s.optional().describe("ID of the faction involved in this foreshadowing (if any)"),
 		name: (s) =>
