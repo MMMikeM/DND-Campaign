@@ -3,7 +3,7 @@ import * as Icons from "lucide-react"
 import { NavLink, Outlet } from "react-router"
 import { InfoCard } from "~/components/InfoCard"
 import StageTreeViewer from "~/components/StageTreeViewer"
-import type { Quest, QuestStage } from "~/lib/entities"
+import type { Quest } from "~/lib/entities"
 
 interface StagesContentProps {
 	quest: Quest
@@ -20,7 +20,6 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 	onStageSelect,
 	stageTab = "overview",
 }) => {
-	// Find the selected stage
 	const selectedStage = selectedStageId ? quest.stages.find((stage) => stage.id === selectedStageId) : quest.stages[0]
 
 	if (!selectedStage) {
@@ -35,7 +34,6 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 
 	return (
 		<div className="space-y-6">
-			{/* Navigation Breadcrumbs */}
 			<div className="flex items-center text-sm text-muted-foreground">
 				<NavLink to={`/quests/${quest.slug}`} className="hover:text-foreground transition-colors">
 					{quest.name}
@@ -55,7 +53,6 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 				)}
 			</div>
 
-			{/* Stage Tree Viewer - Full Width at Top */}
 			<div className="w-full">
 				<p className="text-sm text-muted-foreground mb-4">Progression of stages</p>
 				{stages?.stages ? (
@@ -67,7 +64,6 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 				)}
 			</div>
 
-			{/* Stage Header - Full Width */}
 			<InfoCard title={selectedStage.name} icon={<Icons.Milestone className="h-5 w-5 mr-2 text-primary" />}>
 				<div>
 					<div className="flex justify-between items-start">

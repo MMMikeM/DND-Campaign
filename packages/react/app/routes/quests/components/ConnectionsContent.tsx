@@ -13,18 +13,16 @@ interface ConnectionsContentProps {
 export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest }) => {
 	const { factions, npcs, relations } = quest
 
-	// Split related quests into "precedes" and "follows" categories
 	const precedes =
-		relations?.filter((rel) => rel.relationType === "prerequisite" || rel.relationType === "hidden_connection") || []
+		relations?.filter((rel) => rel.dependencyType === "prerequisite" || rel.dependencyType === "hidden_connection") || []
 
 	const follows =
 		relations?.filter(
-			(rel) => rel.relationType === "sequel" || rel.relationType === "parallel" || rel.relationType === "alternative",
+			(rel) => rel.dependencyType === "sequel" || rel.dependencyType === "parallel" || rel.dependencyType === "alternative",
 		) || []
 
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-			{/* Factions */}
 			<InfoCard
 				title="Related Factions"
 				icon={<Icons.Flag className="h-4 w-4 mr-2 text-primary" />}
@@ -65,7 +63,6 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				</div>
 			</InfoCard>
 
-			{/* NPCs */}
 			<InfoCard
 				title="Related NPCs"
 				icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-primary" />}
@@ -126,7 +123,6 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				</div>
 			</InfoCard>
 
-			{/* Related Quests */}
 			<InfoCard
 				title="Quest Connections"
 				icon={<Icons.GitBranch className="h-4 w-4 mr-2 text-primary" />}
@@ -134,7 +130,6 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				className="lg:col-span-2"
 			>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					{/* Quests that follow this one */}
 					<div>
 						<h3 className="text-sm font-medium mb-3 flex items-center">
 							<Icons.ArrowRightCircle className="h-4 w-4 mr-2 text-green-500" />
@@ -143,7 +138,7 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 
 						{precedes.length > 0 ? (
 							<div className="space-y-4">
-								{precedes.map(({ creativePrompts, description, quest, relationType, id }) => {
+								{precedes.map(({ creativePrompts, description, quest, dependencyType, id }) => {
 									if (!quest) return null
 									return (
 										<div key={`follows-${id}`} className="border-b pb-3 last:border-0">
@@ -154,12 +149,12 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 												variant="outline"
 												className="ml-2"
 												tooltipContent={
-													relationType === "prerequisite"
+													dependencyType === "prerequisite"
 														? "This quest must be completed before the linked quest"
 														: "Hidden connection to this quest"
 												}
 											>
-												{relationType.replace("_", " ")}
+												{dependencyType.replace("_", " ")}
 											</BadgeWithTooltip>
 											<List
 												items={creativePrompts}
@@ -183,7 +178,6 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 						)}
 					</div>
 
-					{/* Quests that this one follows */}
 					<div>
 						<h3 className="text-sm font-medium mb-3 flex items-center">
 							<Icons.ArrowLeftCircle className="h-4 w-4 mr-2 text-blue-500" />
@@ -192,7 +186,7 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 
 						{follows.length > 0 ? (
 							<div className="space-y-4">
-								{follows.map(({ creativePrompts, description, quest, relationType, id }) => {
+								{follows.map(({ creativePrompts, description, quest, dependencyType, id }) => {
 									if (!quest) return null
 
 									return (
@@ -204,14 +198,14 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 												variant="outline"
 												className="ml-2"
 												tooltipContent={
-													relationType === "sequel"
+													dependencyType === "sequel"
 														? "This quest follows the linked quest"
-														: relationType === "parallel"
+														: dependencyType === "parallel"
 															? "This quest runs alongside the linked quest"
 															: "Alternative path to the linked quest"
 												}
 											>
-												{relationType.replace("_", " ")}
+												{dependencyType.replace("_", " ")}
 											</BadgeWithTooltip>
 
 											<List
