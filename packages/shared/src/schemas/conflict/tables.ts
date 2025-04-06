@@ -57,3 +57,11 @@ export const conflictProgression = pgTable("conflict_progression", {
 	// Additional context
 	notes: list("notes"),
 })
+
+export const enums = {
+	conflictScopes,
+	conflictNatures,
+	conflictStatuses,
+	factionRoles,
+	questImpacts,
+}

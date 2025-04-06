@@ -4,9 +4,7 @@ import { list, pk, string, oneOf, nullableFk } from "../../db/utils"
 import { quests, questStages, questTwists } from "../quests/tables"
 import { npcs } from "../npc/tables"
 import { factions } from "../factions/tables"
-import { sites
-
- } from "../regions/tables"
+import { sites } from "../regions/tables"
 import { narrativeArcs } from "../narrative/tables"
 
 const foreshadowingSubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
@@ -45,3 +43,9 @@ export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 	playerNotes: list("player_notes"), // Record player theories/reactions
 	gmNotes: list("gm_notes"),
 })
+
+export const enums = {
+	foreshadowingSubtlety,
+	narrativeWeight,
+	foreshadowingTypes,
+}

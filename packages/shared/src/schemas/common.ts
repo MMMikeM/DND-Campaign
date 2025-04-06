@@ -12,19 +12,16 @@ export const alignments = [
 
 export const wealthLevels = ["destitute", "poor", "moderate", "rich", "wealthy"] as const
 
-export const trustLevel = ["none", "low", "medium", "high"] as const
-
-export const races = [
-	"human",
-	"elf",
-	"dwarf",
-	"halfling",
-	"gnome",
-	"half-elf",
-	"half-orc",
-	"tiefling",
-	"dragonborn",
-	"other",
+export const relationshipStrengths = [
+	"weak",
+	"moderate",
+	"friendly",
+	"strong",
+	"unbreakable",
+	"friction",
+	"cold",
+	"hostile",
+	"war",
 ] as const
 
-export const genders = ["male", "female", "non-humanoid"] as const
+export const trustLevel = ["none", "low", "medium", "high"] as const

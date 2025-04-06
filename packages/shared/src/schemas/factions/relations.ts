@@ -13,11 +13,9 @@ import { factionRegionalPower, factionQuestInvolvement } from "../associations/t
 import { npcFactions } from "../npc/tables.js"
 
 export const factionsRelations = relations(factions, ({ many }) => ({
-	// Self-referencing relationship through factionDiplomacy
 	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }), // Corrected usage
 	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }), // Corrected usage
 
-	// Related entities
 	relatedRegions: many(factionRegions, { relationName: "factionRegions" }),
 	headquarters: many(factionHeadquarters, { relationName: "factionHeadquarters" }),
 	operations: many(factionOperations, { relationName: "factionOperations" }),
@@ -25,9 +23,10 @@ export const factionsRelations = relations(factions, ({ many }) => ({
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(factionQuestInvolvement, { relationName: "factionQuests" }),
 	influence: many(factionRegionalPower, { relationName: "factionInfluence" }),
+
+	alliances: many(factionDiplomacy, { relationName: "factionAlliances" }),
 }))
 
-// Renamed relation and corrected internal usage
 export const factionDiplomacyRelations = relations(factionDiplomacy, ({ one }) => ({
 	sourceFaction: one(factions, {
 		fields: [factionDiplomacy.factionId],
