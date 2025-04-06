@@ -32,16 +32,7 @@ const ConnectionLink = ({
 }
 
 export function ConnectionsContent({ item }: ConnectionsContentProps) {
-	const {
-		sourceStage,
-		sourceLocation,
-		sourceNpc,
-		sourceFaction,
-		targetQuest,
-		targetTwist, // Note: targetTwist might just have ID/type, not name/slug
-		targetNpc,
-		targetArc,
-	} = item
+	const { sourceStage, sourceNpc, sourceFaction, targetQuest, targetTwist, targetNpc, targetArc } = item
 
 	const source = sourceStage
 		? {
@@ -50,28 +41,21 @@ export function ConnectionsContent({ item }: ConnectionsContentProps) {
 				name: `${sourceStage.quest?.name} - ${sourceStage.name}`,
 				icon: <Icons.Milestone className="h-4 w-4 text-gray-500" />,
 			}
-		: sourceLocation
+		: sourceNpc
 			? {
-					type: "Location",
-					href: `/locations/${sourceLocation.slug}`,
-					name: sourceLocation.name,
-					icon: <Icons.MapPin className="h-4 w-4 text-gray-500" />,
+					type: "NPC",
+					href: `/npcs/${sourceNpc.slug}`,
+					name: sourceNpc.name,
+					icon: <Icons.User className="h-4 w-4 text-gray-500" />,
 				}
-			: sourceNpc
+			: sourceFaction
 				? {
-						type: "NPC",
-						href: `/npcs/${sourceNpc.slug}`,
-						name: sourceNpc.name,
-						icon: <Icons.User className="h-4 w-4 text-gray-500" />,
+						type: "Faction",
+						href: `/factions/${sourceFaction.slug}`,
+						name: sourceFaction.name,
+						icon: <Icons.Flag className="h-4 w-4 text-gray-500" />,
 					}
-				: sourceFaction
-					? {
-							type: "Faction",
-							href: `/factions/${sourceFaction.slug}`,
-							name: sourceFaction.name,
-							icon: <Icons.Flag className="h-4 w-4 text-gray-500" />,
-						}
-					: null
+				: null
 
 	const target = targetQuest
 		? {
