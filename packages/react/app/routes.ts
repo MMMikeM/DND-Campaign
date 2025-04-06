@@ -22,6 +22,18 @@ export default [
 		route("quests/:slug/:tab?", "./routes/quests/$slug.tsx", [
 			route("stages/:stageSlug/:stageTab?", "./routes/quests/stages/stageTabs/$stageTab.tsx"),
 		]),
+		// Routes for conflicts
+		route("conflicts", "./routes/conflicts/index.tsx"),
+		route("conflicts/:slug/:tab?", "./routes/conflicts/$slug.tsx"),
+		// Routes for foreshadowing
+		route("foreshadowing", "./routes/foreshadowing/index.tsx"),
+		route("foreshadowing/:slug/:tab?", "./routes/foreshadowing/$slug.tsx"),
+		// Routes for narrative arcs
+		route("narrative", "./routes/narrative/index.tsx"),
+		route("narrative/:slug/:tab?", "./routes/narrative/$slug.tsx"),
+		// Routes for world changes
+		route("world", "./routes/world/index.tsx"),
+		route("world/:slug/:tab?", "./routes/world/$slug.tsx"),
 	]),
 	route("api/items", "./routes/api/items.ts"),
 ] satisfies RouteConfig
