@@ -15,7 +15,6 @@ import { foreshadowingToolDefinitions } from "./foreshadowing-tools" // Import f
 import { narrativeToolDefinitions } from "./narrative-tools" // Import narrative definitions
 import { worldToolDefinitions } from "./world-tools" // Import world definitions
 import { embeddingToolDefinitions } from "./embedding-tools" // Import new definitions
-import type { ToolDefinition, ToolHandlerReturn } from "./tool.utils"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
