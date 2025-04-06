@@ -25,14 +25,7 @@ const getNarrativeWeightVariant = (weight: string): "default" | "destructive" | 
 }
 
 export function DetailsContent({ item }: DetailsContentProps) {
-	const {
-		description,
-		discoveryCondition,
-		subtlety,
-		narrativeWeight,
-		foreshadowsElement,
-		type,
-	} = item
+	const { description, discoveryCondition, subtlety, narrativeWeight, foreshadowsElement, type } = item
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,7 +35,7 @@ export function DetailsContent({ item }: DetailsContentProps) {
 					icon={<Icons.ScrollText className="h-4 w-4 mr-2 text-blue-600" />}
 					emptyMessage="No description provided."
 				>
-					{description && description.length > 0 && <List items={description} spacing="sm" textColor="muted" />}
+					<List items={description} spacing="sm" textColor="muted" />
 				</InfoCard>
 
 				<InfoCard
@@ -50,9 +43,7 @@ export function DetailsContent({ item }: DetailsContentProps) {
 					icon={<Icons.Search className="h-4 w-4 mr-2 text-green-600" />}
 					emptyMessage="No specific discovery conditions listed."
 				>
-					{discoveryCondition && discoveryCondition.length > 0 && (
-						<List items={discoveryCondition} spacing="sm" textColor="muted" />
-					)}
+					<List items={discoveryCondition} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
 
@@ -91,11 +82,9 @@ export function DetailsContent({ item }: DetailsContentProps) {
 					icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-yellow-600" />}
 					emptyMessage="The specific element being foreshadowed is not defined."
 				>
-					{foreshadowsElement && (
-						<div className="p-4">
-							<p className="text-sm text-muted-foreground">{foreshadowsElement}</p>
-						</div>
-					)}
+					<div className="p-4">
+						<p className="text-sm text-muted-foreground">{foreshadowsElement}</p>
+					</div>
 				</InfoCard>
 			</div>
 		</div>
