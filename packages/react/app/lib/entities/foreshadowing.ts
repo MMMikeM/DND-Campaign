@@ -20,27 +20,7 @@ const foreshadowingConfig = {
 				targetArc: { columns: { name: true, id: true } },
 			},
 		}),
-	getAll: () =>
-		db.query.narrativeForeshadowing.findMany({
-			columns: {
-				id: true,
-				name: true,
-				type: true,
-				subtlety: true,
-				narrativeWeight: true,
-				discovered: true,
-				description: true,
-			},
-			with: {
-				sourceStage: { columns: { name: true }, with: { quest: { columns: { name: true } } } },
-				sourceSite: { columns: { name: true } },
-				sourceNpc: { columns: { name: true } },
-				sourceFaction: { columns: { name: true } },
-				targetQuest: { columns: { name: true } },
-				targetNpc: { columns: { name: true } },
-				targetArc: { columns: { name: true } },
-			},
-		}),
+	getAll: () => db.query.narrativeForeshadowing.findMany({}),
 	getNamesAndIds: () =>
 		db.query.narrativeForeshadowing.findMany({
 			columns: {

@@ -21,7 +21,7 @@ const npcConfig = {
 						},
 					},
 				},
-				relatedLocations: {
+				relatedSites: {
 					with: {
 						site: {
 							columns: { name: true, id: true },
@@ -44,16 +44,7 @@ const npcConfig = {
 			},
 		}),
 
-	getAll: () =>
-		db.query.npcs.findMany({
-			columns: {
-				id: true,
-				name: true,
-				alignment: true,
-				race: true,
-				occupation: true,
-			},
-		}),
+	getAll: () => db.query.npcs.findMany({}),
 	getNamesAndIds: () =>
 		db.query.npcs.findMany({
 			columns: {

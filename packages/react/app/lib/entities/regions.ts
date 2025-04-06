@@ -11,13 +11,13 @@ const regionConfig = {
 				incomingRelations: {
 					with: {
 						sourceRegion: { columns: { name: true, id: true } },
-						connections: true,
+						details: true,
 					},
 				},
 				outgoingRelations: {
 					with: {
 						targetRegion: { columns: { name: true, id: true } },
-						connections: true,
+						details: true,
 					},
 				},
 				areas: {
@@ -37,22 +37,7 @@ const regionConfig = {
 				},
 			},
 		}),
-	getAll: () =>
-		db.query.regions.findMany({
-			columns: {
-				id: true,
-				name: true,
-				type: true,
-				dangerLevel: true,
-				population: true,
-				economy: true,
-				description: true,
-				hazards: true,
-				pointsOfInterest: true,
-				rumors: true,
-				secrets: true,
-			},
-		}),
+	getAll: () => db.query.regions.findMany({}),
 	getNamesAndIds: () =>
 		db.query.regions.findMany({
 			columns: {

@@ -8,6 +8,8 @@ const narrativeConfig = {
 		db.query.narrativeArcs.findFirst({
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
+				foreshadowing: true,
+				worldChanges: true,
 				members: { with: { quest: { columns: { name: true, id: true } } } },
 			},
 		}),

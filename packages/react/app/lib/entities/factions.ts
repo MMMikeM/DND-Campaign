@@ -9,7 +9,7 @@ const factionConfig = {
 			where: (factions, { eq }) => eq(factions.id, id),
 			with: {
 				members: { with: { npc: { columns: { name: true, id: true } } } },
-				headquarters: { with: { location: { columns: { name: true, id: true } } } },
+				headquarters: { with: { site: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
