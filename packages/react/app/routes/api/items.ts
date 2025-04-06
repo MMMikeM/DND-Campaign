@@ -12,19 +12,38 @@ import {
 } from "~/lib/entities"
 import type { Route } from "./+types/items"
 
-export async function loader(_: Route.LoaderArgs) {
-	const [factions, npcs, quests, regions] = await Promise.all([
-		(await getAllFactions()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllNpcs()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllQuests()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllRegions()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllSites()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllAreas()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllConflicts()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllForeshadowing()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllNarrativeArcs()).map(({ name, id, slug }) => ({ name, id, slug })),
-		(await getAllWorldChanges()).map(({ name, id, slug }) => ({ name, id, slug })),
-	])
-
-	return Response.json({ factions, npcs, quests, regions })
+const fetchData = async () => {
+	const [factions, npcs, quests, regions, sites, areas, conflicts, foreshadowing, narrativeArcs, worldChanges] =
+		await Promise.all([
+			getAllFactions(),
+			getAllNpcs(),
+			getAllQuests(),
+			getAllRegions(),
+			getAllSites(),
+			getAllAreas(),
+			getAllConflicts(),
+			getAllForeshadowing(),
+			getAllNarrativeArcs(),
+			getAllWorldChanges(),
+		])
+	return {
+		factions,
+		npcs,
+		quests,
+		regions,
+		sites,
+		areas,
+		conflicts,
+		foreshadowing,
+		narrativeArcs,
+		worldChanges,
+	}
 }
+
+export async function loader(_: Route.LoaderArgs) {
+	const fetchedData = await fetchData()
+
+	return Response.json(fetchedData)
+}
+
+export type Items = Awaited<ReturnType<typeof fetchData>>

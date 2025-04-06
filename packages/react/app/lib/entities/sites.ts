@@ -8,43 +8,17 @@ const siteConfig = {
 		db.query.sites.findFirst({
 			where: (sites, { eq }) => eq(sites.id, id),
 			with: {
-				area: {
-					columns: { id: true, name: true },
-					with: {
-						region: { columns: { id: true, name: true } },
-					},
-				},
+				area: { columns: { id: true, name: true }, with: { region: { columns: { id: true, name: true } } } },
 				encounters: true,
 				secrets: true,
 				incomingRelations: { with: { sourceSite: { columns: { id: true, name: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { id: true, name: true } } } },
 				items: true,
 				npcs: { with: { npc: { columns: { name: true, id: true } } } },
-				influence: {
-					with: {
-						faction: { columns: { name: true, id: true } },
-					},
-				},
+				influence: { with: { faction: { columns: { name: true, id: true } } } },
 			},
 		}),
-	getAll: () =>
-		db.query.sites.findMany({
-			columns: {
-				id: true,
-				name: true,
-				siteType: true,
-				areaId: true,
-				description: true,
-			},
-			with: {
-				area: {
-					columns: { name: true },
-					with: {
-						region: { columns: { name: true } },
-					},
-				},
-			},
-		}),
+	getAll: () => db.query.sites.findMany({}),
 	getNamesAndIds: () =>
 		db.query.sites.findMany({
 			columns: {

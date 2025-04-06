@@ -17,23 +17,9 @@ const areaConfig = {
 						faction: { columns: { name: true, id: true } },
 					},
 				},
-				quests: { columns: { id: true, name: true } },
 			},
 		}),
-	getAll: () =>
-		db.query.areas.findMany({
-			columns: {
-				id: true,
-				name: true,
-				type: true,
-				dangerLevel: true,
-				regionId: true,
-				description: true,
-			},
-			with: {
-				region: { columns: { name: true } },
-			},
-		}),
+	getAll: () => db.query.areas.findMany({ with: { region: { columns: { id: true, name: true } } } }),
 	getNamesAndIds: () =>
 		db.query.areas.findMany({
 			columns: {
@@ -52,7 +38,8 @@ export const getAllAreas = async () => {
 export type Area = Awaited<ReturnType<typeof getArea>>
 
 export const getArea = async (slug: string) => {
-	const selectedArea = await areaConfig.getNamesAndIds()
+	const selectedArea = await areaConfig
+		.getNamesAndIds()
 		.then(addSlugs)
 		.then((areas) => areas.find((area) => area.slug === slug))
 

@@ -10,6 +10,7 @@ const worldConfig = {
 				sourceQuest: { columns: { name: true, id: true } },
 				sourceDecision: { columns: { name: true, id: true } },
 				sourceConflict: { columns: { name: true, id: true } },
+				relatedArc: { columns: { name: true, id: true } },
 				affectedFaction: { columns: { name: true, id: true } },
 				affectedRegion: { columns: { name: true, id: true } },
 				affectedArea: { columns: { name: true, id: true } },
