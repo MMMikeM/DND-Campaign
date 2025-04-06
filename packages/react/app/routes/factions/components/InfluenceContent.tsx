@@ -55,7 +55,6 @@ const InfluenceTitle = ({ item }: { item: Faction["influence"][number] }) => {
 	)
 }
 
-// Internal component for displaying faction influence
 function FactionInfluenceInfo({ faction }: { faction: Faction }) {
 	return (
 		<InfoCard
@@ -71,7 +70,7 @@ function FactionInfluenceInfo({ faction }: { faction: Faction }) {
 								<div className="flex items-center justify-between mb-3">
 									<InfluenceTitle item={item} />
 									<BadgeWithTooltip variant="default" tooltipContent="Influence Level">
-										{item.influenceLevel}
+										{item.powerLevel}
 									</BadgeWithTooltip>
 								</div>
 
@@ -87,7 +86,6 @@ function FactionInfluenceInfo({ faction }: { faction: Faction }) {
 	)
 }
 
-// Internal component for regional influence
 function RegionInfluenceCard({ faction }: { faction: Faction }) {
 	return (
 		<InfoCard
@@ -147,7 +145,6 @@ function RegionInfluenceCard({ faction }: { faction: Faction }) {
 	)
 }
 
-// Internal component for faction relationships
 function FactionRelationsCard({ faction }: { faction: Faction }) {
 	return (
 		<InfoCard
@@ -169,11 +166,11 @@ function FactionRelationsCard({ faction }: { faction: Faction }) {
 								</h4>
 								<BadgeWithTooltip
 									variant={
-										relation.type === "ally" ? "default" : relation.type === "enemy" ? "destructive" : "secondary"
+										relation.diplomaticStatus === "ally" ? "default" : relation.diplomaticStatus === "enemy" ? "destructive" : "secondary"
 									}
 									tooltipContent="Political standing between factions"
 								>
-									{relation.type} ({relation.strength})
+									{relation.diplomaticStatus} ({relation.strength})
 								</BadgeWithTooltip>
 							</div>
 
