@@ -10,7 +10,6 @@ import type { Route } from "./+types/index"
 import { InfoCard } from "~/components/InfoCard"
 import { getTypeVariant, getUrgencyVariant } from "./utils"
 
-// Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
 	const quests = await getAllQuests()
 	if (!quests) {
