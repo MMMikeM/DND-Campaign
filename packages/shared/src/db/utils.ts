@@ -7,7 +7,9 @@ export const nullableFk = (description: string, id: PgColumn) =>
 	integer(description).references(() => id, { onDelete: "set null" })
 
 export const cascadeFk = (description: string, id: PgColumn) =>
-	integer(description).references(() => id, { onDelete: "cascade" })
+	integer(description)
+		.references(() => id, { onDelete: "cascade" })
+		.notNull()
 
 export const string = (description: string) => text(description).notNull()
 
