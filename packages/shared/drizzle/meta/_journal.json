@@ -8,6 +8,20 @@
       "when": 1743826199974,
       "tag": "0000_absent_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743839570931,
+      "tag": "0001_early_komodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743918702548,
+      "tag": "0002_mushy_shocker",
+      "breakpoints": true
     }
   ]
 }

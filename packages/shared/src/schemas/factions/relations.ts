@@ -8,7 +8,8 @@ import {
 	factionOperations,
 	factionCulture,
 } from "./tables.js"
-import { locations, regions } from "../regions/tables.js"
+import { sites
+	, regions } from "../regions/tables.js"
 import { factionRegionalPower, factionQuestInvolvement } from "../associations/tables.js"
 import { npcFactions } from "../npc/tables.js"
 
@@ -60,9 +61,10 @@ export const factionHeadquartersRelations = relations(factionHeadquarters, ({ on
 		references: [factions.id],
 		relationName: "factionHeadquarters",
 	}),
-	location: one(locations, {
-		fields: [factionHeadquarters.locationId],
-		references: [locations.id],
+	location: one(sites, {
+		fields: [factionHeadquarters.siteId
+		],
+		references: [sites.id],
 		relationName: "headquartersLocation",
 	}),
 }))
