@@ -3,7 +3,7 @@ import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string, embeddingVector } from "../../db/utils"
 import { alignments, genders, races, trustLevel, wealthLevels } from "../common"
 import { factions } from "../factions/tables"
-import { locations } from "../regions/tables"
+import { sites } from "../regions/tables"
 
 export const npcs = pgTable("npcs", {
 	id: pk(),
@@ -37,7 +37,7 @@ export const npcs = pgTable("npcs", {
 	rumours: list("rumours"),
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
-	embedding: embeddingVector("sm"),
+	embedding: embeddingVector("embedding"),
 })
 
 export const npcLocations = pgTable(
@@ -45,11 +45,11 @@ export const npcLocations = pgTable(
 	{
 		id: pk(),
 		npcId: cascadeFk("npc_id", npcs.id),
-		locationId: nullableFk("location_id", locations.id),
+		siteId: nullableFk("site_id", sites.id),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
-	(t) => [unique().on(t.npcId, t.locationId)],
+	(t) => [unique().on(t.npcId, t.siteId)],
 )
 
 export const npcFactions = pgTable(

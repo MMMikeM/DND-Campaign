@@ -50,6 +50,8 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 
 	try {
 		// logger.info(`Generating embedding for text starting with: "${trimmedText.substring(0, 50)}..."`); // Reduce log verbosity
+		// Using gemini-embedding-exp-03-07 which outputs 3072 dimensions.
+		// The SDK call likely only takes the text content.
 		const result = await embeddingModel.embedContent(trimmedText)
 		const embedding = result.embedding
 		if (!embedding || !embedding.values) {
@@ -88,112 +90,158 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 
 	// logger.debug(`Generating text for entity type: ${entityName}`, { recordId: record?.id }); // Reduce log verbosity
 
+	// Helper to add prefixed fields
+	const addPrefixedField = (prefix: string, fieldValue: unknown) => {
+		if (typeof fieldValue === "string" && fieldValue.trim()) {
+			combinedText += `${prefix}: ${fieldValue.trim()}. `
+		} else if (Array.isArray(fieldValue)) {
+			// Filter for non-empty strings after trimming
+			const stringArray = fieldValue.filter((item): item is string => typeof item === "string" && item.trim() !== "")
+			if (stringArray.length > 0) {
+				combinedText += `${prefix}: ${stringArray.join(". ")}. `
+			}
+		}
+	}
+
 	switch (entityName) {
 		case "npcs":
-			addField(record.name)
-			addField(record.race)
-			addField(record.occupation)
-			addField(record.disposition)
-			addField(record.attitude)
-			addField(record.personalityTraits)
-			addField(record.drives)
-			addField(record.fears)
-			addField(record.background)
-			addField(record.knowledge)
-			addField(record.secrets)
-			addField(record.quirk)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Race", record.race)
+			addPrefixedField("Gender", record.gender)
+			addPrefixedField("Age", record.age)
+			addPrefixedField("Occupation", record.occupation)
+			addPrefixedField("Alignment", record.alignment)
+			addPrefixedField("Disposition", record.disposition)
+			addPrefixedField("Attitude", record.attitude)
+			addPrefixedField("Personality Traits", record.personalityTraits)
+			addPrefixedField("Drives", record.drives)
+			addPrefixedField("Fears", record.fears)
+			addPrefixedField("Background", record.background)
+			addPrefixedField("Knowledge", record.knowledge)
+			addPrefixedField("Secrets", record.secrets)
+			addPrefixedField("Quirk", record.quirk)
+			addPrefixedField("Appearance", record.appearance)
+			addPrefixedField("Mannerisms", record.mannerisms)
+			addPrefixedField("Biases", record.biases)
+			addPrefixedField("Social Status", record.socialStatus)
+			addPrefixedField("Wealth", record.wealth)
+			addPrefixedField("Voice Notes", record.voiceNotes)
+			// Consider adding related info like faction role or key relationships if needed later
 			break
 		case "quests":
-			addField(record.name)
-			addField(record.type)
-			addField(record.description)
-			addField(record.objectives)
-			addField(record.themes)
-			addField(record.mood)
-			addField(record.successOutcomes)
-			addField(record.failureOutcomes)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.type)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Objectives", record.objectives)
+			addPrefixedField("Themes", record.themes)
+			addPrefixedField("Mood", record.mood)
+			addPrefixedField("Urgency", record.urgency)
+			addPrefixedField("Visibility", record.visibility)
+			addPrefixedField("Success Outcomes", record.successOutcomes)
+			addPrefixedField("Failure Outcomes", record.failureOutcomes)
+			addPrefixedField("Rewards", record.rewards)
+			addPrefixedField("Inspirations", record.inspirations)
+			// Consider adding summaries of key twists or dependencies
 			break
 		case "questStages":
-			addField(record.name)
-			addField(record.description)
-			addField(record.objectives)
-			addField(record.dramatic_question)
-			addField(record.completionPaths)
-			addField(record.dramatic_moments)
-			addField(record.sensory_elements)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Objectives", record.objectives)
+			addPrefixedField("Dramatic Question", record.dramatic_question)
+			addPrefixedField("Completion Paths", record.completionPaths)
+			addPrefixedField("Encounters", record.encounters)
+			addPrefixedField("Dramatic Moments", record.dramatic_moments)
+			addPrefixedField("Sensory Elements", record.sensory_elements)
+			// Consider adding summaries of key decisions/outcomes originating from this stage
 			break
 		case "locations":
-			addField(record.name)
-			addField(record.locationType)
-			addField(record.description)
-			addField(record.terrain)
-			addField(record.climate)
-			addField(record.mood)
-			addField(record.environment)
-			addField(record.features)
-			addField(record.soundscape)
-			addField(record.smells)
-			addField(record.descriptors)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.locationType)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Terrain", record.terrain)
+			addPrefixedField("Climate", record.climate)
+			addPrefixedField("Mood", record.mood)
+			addPrefixedField("Environment", record.environment)
+			addPrefixedField("Features", record.features)
+			addPrefixedField("Soundscape", record.soundscape)
+			addPrefixedField("Smells", record.smells)
+			addPrefixedField("Lighting", record.lightingDescription)
+			addPrefixedField("Weather", record.weather)
+			addPrefixedField("Descriptors", record.descriptors)
+			addPrefixedField("Creatures", record.creatures)
+			addPrefixedField("Treasures", record.treasures)
+			// Consider adding summaries of key encounters or secrets
 			break
 		case "regions":
-			addField(record.name)
-			addField(record.type)
-			addField(record.description)
-			addField(record.history)
-			addField(record.culturalNotes)
-			addField(record.pointsOfInterest)
-			addField(record.rumors)
-			addField(record.secrets)
-			addField(record.economy)
-			addField(record.population)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.type)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("History", record.history)
+			addPrefixedField("Cultural Notes", record.culturalNotes)
+			addPrefixedField("Points of Interest", record.pointsOfInterest)
+			addPrefixedField("Rumors", record.rumors)
+			addPrefixedField("Secrets", record.secrets)
+			addPrefixedField("Economy", record.economy)
+			addPrefixedField("Population", record.population)
+			addPrefixedField("Hazards", record.hazards)
+			addPrefixedField("Security/Defenses", record.security)
+			addPrefixedField("Danger Level", record.dangerLevel)
 			break
 		case "factions":
-			addField(record.name)
-			addField(record.type)
-			addField(record.description)
-			addField(record.values)
-			addField(record.history)
-			addField(record.publicGoal)
-			addField(record.secretGoal)
-			addField(record.publicPerception)
-			addField(record.resources)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.type)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Values", record.values)
+			addPrefixedField("History", record.history)
+			addPrefixedField("Public Goal", record.publicGoal)
+			addPrefixedField("Secret Goal", record.secretGoal)
+			addPrefixedField("Public Perception", record.publicPerception)
+			addPrefixedField("Resources", record.resources)
+			// Consider adding summaries of key operations or culture elements
 			break
 		case "factionOperations":
-			addField(record.name)
-			addField(record.type)
-			addField(record.description)
-			addField(record.objectives)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.type)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Objectives", record.objectives)
 			break
 		case "factionCulture":
-			addField(record.symbols)
-			addField(record.rituals)
-			addField(record.taboos)
-			addField(record.aesthetics)
-			addField(record.jargon)
+			addPrefixedField("Symbols", record.symbols)
+			addPrefixedField("Rituals", record.rituals)
+			addPrefixedField("Taboos", record.taboos)
+			addPrefixedField("Aesthetics", record.aesthetics)
+			addPrefixedField("Jargon", record.jargon)
 			break
-		case "items":
-			addField(record.name)
-			addField(record.type)
-			addField(record.description)
-			addField(record.significance)
+		case "items": // Assuming 'items' table exists based on EmbeddedEntityName
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Type", record.type)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Significance", record.significance)
+			// Add other relevant item fields if they exist (e.g., history, powers)
 			break
-		case "clues":
-			addField(record.description)
-			addField(record.reveals)
+		case "clues": // Assuming 'clues' table exists
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Reveals", record.reveals)
+			// Add other relevant clue fields
 			break
 		case "locationEncounters":
-			addField(record.name)
-			addField(record.description)
-			addField(record.creatures)
+			addPrefixedField("Name", record.name)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Creatures", record.creatures)
+			addPrefixedField("Encounter Type", record.encounterType)
+			addPrefixedField("Danger Level", record.dangerLevel)
+			addPrefixedField("Treasure", record.treasure)
 			break
 		case "locationSecrets":
-			addField(record.secretType)
-			addField(record.description)
-			addField(record.discoveryMethod)
-			addField(record.consequences)
+			addPrefixedField("Type", record.secretType)
+			addPrefixedField("Description", record.description)
+			addPrefixedField("Discovery Method", record.discoveryMethod)
+			addPrefixedField("Consequences", record.consequences)
+			addPrefixedField("Difficulty", record.difficultyToDiscover)
 			break
 		default:
-			logger.warn(`No specific text generation logic defined for entity name: ${entityName}`)
+			// Fallback: try to add all string/string array fields without prefix
+			logger.warn(`No specific text generation logic defined for entity name: ${entityName}. Using generic approach.`)
 			for (const key in record) {
 				if (typeof record[key] === "string" || Array.isArray(record[key])) {
 					addField(record[key])

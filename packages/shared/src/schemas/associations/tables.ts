@@ -4,7 +4,7 @@ import { cascadeFk, nullableFk, list, pk, string, oneOf, embeddingVector } from 
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
-import { locations, regionConnections, regions } from "../regions/tables.js"
+import { sites, regionConnections, regions, areas } from "../regions/tables.js"
 import { trustLevel } from "../common.js"
 
 const npcRoles = ["quest_giver", "ally", "antagonist", "guide", "bystander", "target", "victim", "resource"] as const
@@ -46,14 +46,14 @@ export const items = pgTable("items", {
 	name: string("name").unique(),
 	npcId: nullableFk("npc_id", npcs.id),
 	factionId: nullableFk("faction_id", factions.id),
-	locationId: nullableFk("location_id", locations.id),
+	siteId: nullableFk("site_id", sites.id),
 	questId: nullableFk("quest_id", quests.id),
 	stageId: nullableFk("stage_id", questStages.id),
 	type: string("type"),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	significance: string("significance"),
-	embedding: embeddingVector("sm"),
+	embedding: embeddingVector("embedding"),
 })
 
 const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
@@ -62,7 +62,7 @@ const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
 export const questIntroductions = pgTable("quest_introductions", {
 	id: pk(),
 	stageId: cascadeFk("stage_id", questStages.id),
-	locationId: nullableFk("location_id", locations.id),
+	siteId: nullableFk("site_id", sites.id),
 	factionId: nullableFk("faction_id", factions.id),
 	itemId: nullableFk("item_id", items.id),
 	source: string("source"),
@@ -91,13 +91,13 @@ export const clues = pgTable("clues", {
 	id: pk(),
 	questStageId: cascadeFk("quest_stage_id", questStages.id),
 	factionId: nullableFk("faction_id", factions.id),
-	locationId: nullableFk("location_id", locations.id),
+	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	discoveryCondition: list("discovery_condition"),
 	reveals: list("reveals"),
-	embedding: embeddingVector("sm"),
+	embedding: embeddingVector("embedding"),
 })
 
 const powerLevels = ["minor", "moderate", "strong", "dominant"] as const
@@ -107,7 +107,8 @@ export const factionRegionalPower = pgTable("faction_regional_power", {
 	factionId: cascadeFk("faction_id", factions.id),
 	questId: nullableFk("quest_id", quests.id),
 	regionId: nullableFk("region_id", regions.id),
-	locationId: nullableFk("location_id", locations.id),
+	areaId: nullableFk("area_id", areas.id),
+	siteId: nullableFk("site_id", sites.id),
 	powerLevel: oneOf("power_level", powerLevels),
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),

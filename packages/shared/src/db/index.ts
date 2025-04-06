@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres"
-import { Pool } from "pg"
+import pg from "pg"
 import pgvector from "pgvector/pg"
 import * as assocationRelations from "../schemas/associations/relations"
 import * as assocationTables from "../schemas/associations/tables"
@@ -11,6 +11,14 @@ import * as questRelations from "../schemas/quests/relations"
 import * as questTables from "../schemas/quests/tables"
 import * as regionRelations from "../schemas/regions/relations"
 import * as regionTables from "../schemas/regions/tables"
+import * as conflictRelations from "../schemas/conflict/relations"
+import * as conflictTables from "../schemas/conflict/tables"
+import * as worldRelations from "../schemas/world/relations"
+import * as worldTables from "../schemas/world/tables"
+import * as foreshadowingRelations from "../schemas/foreshadowing/relations"
+import * as foreshadowingTables from "../schemas/foreshadowing/tables"
+import * as narrativeRelations from "../schemas/narrative/relations"
+import * as narrativeTables from "../schemas/narrative/tables"
 
 export const relations = {
 	assocationRelations,
@@ -18,6 +26,10 @@ export const relations = {
 	npcRelations,
 	questRelations,
 	regionRelations,
+	conflictRelations,
+	worldRelations,
+	foreshadowingRelations,
+	narrativeRelations,
 }
 
 export const tables = {
@@ -26,6 +38,10 @@ export const tables = {
 	npcTables,
 	questTables,
 	regionTables,
+	conflictTables,
+	worldTables,
+	foreshadowingTables,
+	narrativeTables,
 }
 
 // export const getDbPath = () =>
@@ -41,8 +57,9 @@ export function initializeDatabase(connectionString: string) {
 		throw new Error("Database connection string is required")
 	}
 
-	// Create PostgreSQL connection pool
-	const pool = new Pool({ connectionString })
+	const pool = new pg.Pool({
+		connectionString,
+	})
 
 	pool.on("connect", async (client) => {
 		await pgvector.registerTypes(client)
@@ -55,19 +72,27 @@ export function initializeDatabase(connectionString: string) {
 
 	const schema = {
 		...assocationRelations,
-		...factionRelations,
-		...npcRelations,
-		...questRelations,
-		...regionRelations,
 		...assocationTables,
+		...conflictRelations,
+		...conflictTables,
+		...factionRelations,
 		...factionTables,
+		...foreshadowingRelations,
+		...foreshadowingTables,
+		...narrativeRelations,
+		...narrativeTables,
+		...npcRelations,
 		...npcTables,
+		...questRelations,
 		...questTables,
+		...regionRelations,
 		...regionTables,
+		...worldRelations,
+		...worldTables,
 	}
 
 	// Create Drizzle ORM instance with all schemas
-	return drizzle(pool, { schema })
+	return drizzle(pool, { schema, logger: false })
 }
 
 export type DrizzleDb = ReturnType<typeof initializeDatabase>

@@ -19,17 +19,6 @@ export const oneOf = (description: string, options: readonly [string, ...string[
 
 export const pk = () => serial("id").primaryKey()
 
-type EmbeddingSize = "sm" | "md" | "lg"
-const dimensionsMap: Record<EmbeddingSize, number> = {
-	sm: 768,
-	md: 1536,
-	lg: 3072,
-}
-
-export const embeddingVector = (size: EmbeddingSize = "sm", name: string = "embedding") => {
-	const dimensions = dimensionsMap[size]
-	if (!dimensions) {
-		throw new Error(`Invalid embedding size: ${size}. Valid sizes are 'sm', 'md', 'lg'.`)
-	}
-	return vector(name, { dimensions })
+export const embeddingVector = (name: string = "embedding") => {
+	return vector(name, { dimensions: 3072 })
 }

@@ -13,7 +13,7 @@ import {
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
-import { locations, regionConnections, regions } from "../regions/tables.js"
+import { sites, regionConnections, regions, areas } from "../regions/tables.js"
 
 export const questNpcRelations = relations(npcQuestRoles, ({ one }) => ({
 	quest: one(quests, {
@@ -34,10 +34,10 @@ export const clueRelations = relations(clues, ({ one }) => ({
 		references: [questStages.id],
 		relationName: "stageClues",
 	}),
-	location: one(locations, {
-		fields: [clues.locationId],
-		references: [locations.id],
-		relationName: "locationClues",
+	site: one(sites, {
+		fields: [clues.siteId],
+		references: [sites.id],
+		relationName: "siteClues",
 	}),
 	npc: one(npcs, {
 		fields: [clues.npcId],
@@ -80,9 +80,14 @@ export const factionInfluenceRelations = relations(factionRegionalPower, ({ one 
 		references: [regions.id],
 		relationName: "regionFactionInfluence",
 	}),
-	location: one(locations, {
-		fields: [factionRegionalPower.locationId],
-		references: [locations.id],
+	area: one(areas, {
+		fields: [factionRegionalPower.areaId],
+		references: [areas.id],
+		relationName: "areaFactionInfluence",
+	}),
+	site: one(sites, {
+		fields: [factionRegionalPower.siteId],
+		references: [sites.id],
 		relationName: "locationFactionInfluence",
 	}),
 }))
@@ -103,9 +108,9 @@ export const itemRelations = relations(items, ({ one }) => ({
 		references: [quests.id],
 		relationName: "questItems",
 	}),
-	location: one(locations, {
-		fields: [items.locationId],
-		references: [locations.id],
+	site: one(sites, {
+		fields: [items.siteId],
+		references: [sites.id],
 		relationName: "locationItems",
 	}),
 	stage: one(questStages, {
@@ -121,9 +126,10 @@ export const questHooksRelations = relations(questIntroductions, ({ one, many })
 		references: [questStages.id],
 		relationName: "questHooks",
 	}),
-	location: one(locations, {
-		fields: [questIntroductions.locationId],
-		references: [locations.id],
+	site: one(sites, {
+		fields: [questIntroductions.siteId
+		],
+		references: [sites.id],
 		relationName: "locationHooks",
 	}),
 	stage: one(questStages, {
@@ -154,13 +160,12 @@ export const questHookNpcsRelations = relations(questHookNpcs, ({ one }) => ({
 
 export const regionConnectionsRelations = relations(regionConnectionDetails, ({ one }) => ({
 	relation: one(regionConnections, {
-		// Corrected table name
 		fields: [regionConnectionDetails.relationId],
-		references: [regionConnections.id], // Corrected reference
+		references: [regionConnections.id],
 		relationName: "relationConnections",
 	}),
 	controllingFaction: one(factions, {
-		fields: [regionConnectionDetails.controllingFaction], // Corrected field reference source
+		fields: [regionConnectionDetails.controllingFaction],
 		references: [factions.id],
 		relationName: "factionControlledRoutes",
 	}),

@@ -2,31 +2,31 @@
 import { relations } from "drizzle-orm"
 import {
 	regions,
-	regionConnections, // Corrected import
-	locations,
-	locationLinks, // Corrected import
-	locationEncounters,
-	locationSecrets,
+	regionConnections,
+	areas, // New import
+	sites, // Renamed from locations
+	siteLinks, // Renamed from locationLinks
+	siteEncounters, // Renamed from locationEncounters
+	siteSecrets, // Renamed from locationSecrets
 } from "./tables.js"
 // Import quests for direct region reference
 import { quests } from "../quests/tables.js"
-import { npcLocations } from "../npc/tables.js"
-import { factionRegionalPower, items, regionConnectionDetails } from "../associations/tables.js" // Corrected imports
+import { npcLocations } from "../npc/tables.js" // This will need to be updated in npc/tables.js
+import { factionRegionalPower, items, regionConnectionDetails } from "../associations/tables.js"
 import { factionRegions } from "../factions/tables.js"
 
 export const regionsRelations = relations(regions, ({ many }) => ({
 	// Self-referencing relationships
-	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }), // Corrected usage
-	incomingRelations: many(regionConnections, { relationName: "targetRegion" }), // Corrected usage
+	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
+	incomingRelations: many(regionConnections, { relationName: "targetRegion" }),
 
 	// Child entities
-	locations: many(locations, { relationName: "regionLocations" }),
+	areas: many(areas, { relationName: "regionAreas" }), // Updated to link to areas instead of locations
 	quests: many(quests, { relationName: "regionQuests" }),
 	factions: many(factionRegions, { relationName: "regionFactions" }),
-	influence: many(factionRegionalPower, { relationName: "regionFactionInfluence" }), // Corrected usage
+	influence: many(factionRegionalPower, { relationName: "regionFactionInfluence" }),
 }))
 
-// Renamed relation and corrected internal usage
 export const regionConnectionsRelations = relations(regionConnections, ({ one, many }) => ({
 	sourceRegion: one(regions, {
 		fields: [regionConnections.regionId],
@@ -39,55 +39,69 @@ export const regionConnectionsRelations = relations(regionConnections, ({ one, m
 		relationName: "targetRegion",
 	}),
 	// Add relation to connection details
-	connections: many(regionConnectionDetails, { relationName: "relationConnections" }), // Corrected usage
+	connections: many(regionConnectionDetails, { relationName: "relationConnections" }),
 }))
 
-export const locationsRelations = relations(locations, ({ one, many }) => ({
+// New relation for areas (middle tier)
+export const areasRelations = relations(areas, ({ one, many }) => ({
 	// Parent region
 	region: one(regions, {
-		fields: [locations.regionId],
+		fields: [areas.regionId],
 		references: [regions.id],
-		relationName: "regionLocations",
+		relationName: "regionAreas",
+	}),
+    
+	// Child entities
+	sites: many(sites, { relationName: "areaSites" }),
+	quests: many(quests, { relationName: "areaQuests" }),
+	influence: many(factionRegionalPower, { relationName: "areaFactionInfluence" }),
+}))
+
+export const sitesRelations = relations(sites, ({ one, many }) => ({
+	// Parent area
+	area: one(areas, {
+		fields: [sites.areaId],
+		references: [areas.id],
+		relationName: "areaSites",
 	}),
 
 	// Self-referencing relationships
-	outgoingRelations: many(locationLinks, { relationName: "sourceLocation" }), // Corrected usage
-	incomingRelations: many(locationLinks, { relationName: "targetLocation" }), // Corrected usage
+	outgoingRelations: many(siteLinks, { relationName: "sourceSite" }),
+	incomingRelations: many(siteLinks, { relationName: "targetSite" }),
 
 	// Child entities
-	encounters: many(locationEncounters, { relationName: "locationEncounters" }),
-	secrets: many(locationSecrets, { relationName: "locationSecrets" }),
-	npcs: many(npcLocations, { relationName: "locationNpcs" }),
-	items: many(items, { relationName: "locationItems" }),
-	influence: many(factionRegionalPower, { relationName: "locationFactionInfluence" }), // Corrected usage
+	encounters: many(siteEncounters, { relationName: "siteEncounters" }),
+	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
+	npcs: many(npcLocations, { relationName: "siteNpcs" }), // This will need updating in npc/tables.js
+	items: many(items, { relationName: "siteItems" }),
+	influence: many(factionRegionalPower, { relationName: "siteFactionInfluence" }),
 }))
 
-// Renamed relation and corrected internal usage
-export const locationLinksRelations = relations(locationLinks, ({ one }) => ({
-	sourceLocation: one(locations, {
-		fields: [locationLinks.locationId],
-		references: [locations.id],
-		relationName: "sourceLocation",
+export const siteLinksRelations = relations(siteLinks, ({ one }) => ({
+	sourceSite: one(sites, {
+		fields: [siteLinks.siteId],
+		references: [sites.id],
+		relationName: "sourceSite",
 	}),
-	targetLocation: one(locations, {
-		fields: [locationLinks.otherLocationId],
-		references: [locations.id],
-		relationName: "targetLocation",
-	}),
-}))
-
-export const locationEncountersRelations = relations(locationEncounters, ({ one }) => ({
-	location: one(locations, {
-		fields: [locationEncounters.locationId],
-		references: [locations.id],
-		relationName: "locationEncounters",
+	targetSite: one(sites, {
+		fields: [siteLinks.otherSiteId],
+		references: [sites.id],
+		relationName: "targetSite",
 	}),
 }))
 
-export const locationSecretsRelations = relations(locationSecrets, ({ one }) => ({
-	location: one(locations, {
-		fields: [locationSecrets.locationId],
-		references: [locations.id],
-		relationName: "locationSecrets",
+export const siteEncountersRelations = relations(siteEncounters, ({ one }) => ({
+	site: one(sites, {
+		fields: [siteEncounters.siteId],
+		references: [sites.id],
+		relationName: "siteEncounters",
+	}),
+}))
+
+export const siteSecretsRelations = relations(siteSecrets, ({ one }) => ({
+	site: one(sites, {
+		fields: [siteSecrets.siteId],
+		references: [sites.id],
+		relationName: "siteSecrets",
 	}),
 }))
