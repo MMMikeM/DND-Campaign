@@ -104,7 +104,7 @@ export const factionOperations = pgTable(
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 		objectives: list("objectives"),
-		locations: list("locations"),
+		site: list("site"),
 		involved_npcs: list("involved_npcs"),
 		priority: oneOf("priority", ["low", "medium", "high"]),
 		embedding: embeddingVector("embedding"),
