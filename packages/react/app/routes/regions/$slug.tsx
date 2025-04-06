@@ -8,11 +8,10 @@ import { getDangerVariant } from "./utils"
 import { RegionHeader } from "./components/RegionHeader"
 import { OverviewContent } from "./components/OverviewContent"
 import { DetailsContent } from "./components/DetailsContent"
-import { LocationsContent } from "./components/LocationsContent"
+import { AreasContent } from "./components/AreasContent" // Renamed import
 import { LoreContent } from "./components/LoreContent"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 
-// Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
 		throw new Response("No slug provided", { status: 400 })
@@ -70,7 +69,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				<TabsList className="grid grid-cols-5 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
 					<TabsTrigger value="details">Details</TabsTrigger>
-					<TabsTrigger value="locations">Locations</TabsTrigger>
+					<TabsTrigger value="areas">Areas</TabsTrigger> {/* Changed value and label */}
 					<TabsTrigger value="lore">Lore</TabsTrigger>
 					<TabsTrigger value="connections">Connections</TabsTrigger>
 				</TabsList>
@@ -83,8 +82,10 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 					<DetailsContent region={region} />
 				</TabsContent>
 
-				<TabsContent value="locations">
-					<LocationsContent region={region} />
+				{/* Changed value */}
+				<TabsContent value="areas">
+					{/* Use renamed component */}
+					<AreasContent region={region} />
 				</TabsContent>
 
 				<TabsContent value="lore">
