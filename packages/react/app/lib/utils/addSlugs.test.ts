@@ -1,7 +1,7 @@
 import { describe, it, expect, expectTypeOf } from "vitest"
 import addSlugs, { createSlug } from "./addSlugs"
 import type { Slug, Sluggable, WithSlug, WithSlugsAdded } from "./addSlugs"
-import { testData } from "./addSlugs.test.data"
+import { testData } from "../addSlugs.test.data"
 
 // Type tests
 describe("Type tests for addSlugs", () => {
