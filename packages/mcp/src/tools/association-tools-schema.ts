@@ -18,120 +18,116 @@ const {
 
 export const schemas = {
 	manage_clues: createInsertSchema(clues, {
-		id: (s) => s.optional().describe("The ID of the clue to update (omit to create new)"),
-		factionId: (s) => s.optional().describe("The ID of the faction connected to this clue (if any)"),
-		siteId: (s) => s.optional().describe("The ID of the site where this clue can be found (if any)"),
-		npcId: (s) => s.optional().describe("The ID of the NPC who provides or is connected to this clue (if any)"),
-		questStageId: (s) => s.describe("The ID of the quest stage this clue is relevant to"),
-		description: (s) =>
-			s.describe("Detailed narrative description of the clue, its appearance, and context in point form"),
-		reveals: (s) => s.describe("Specific information or plot points revealed when players discover this clue"),
-		discoveryCondition: (s) =>
-			s.describe(
-				"Requirements or actions needed for players to discover this clue (perception checks, specific interactions, etc.)",
-			),
-		creativePrompts: (s) => s.describe("Ideas for GMs to expand upon or incorporate this clue into their campaign"),
+		id: (s) => s.optional().describe("ID of clue to manage (omit to create new, include alone to delete)"),
+		factionId: (s) => s.optional().describe("ID of faction connected to this clue"),
+		siteId: (s) => s.optional().describe("ID of site where players can find this clue"),
+		npcId: (s) => s.optional().describe("ID of NPC who provides this clue"),
+		questStageId: (s) => s.describe("ID of quest stage where this clue is relevant"),
+		description: (s) => s.describe("Visual and contextual details of the clue in point form"),
+		reveals: (s) => s.describe("Key information this clue provides when discovered"),
+		discoveryCondition: (s) => s.describe("How players can find this clue (skill checks, actions, etc.)"),
+		creativePrompts: (s) => s.describe("GM ideas for presenting and integrating this clue"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A piece of information or evidence that players can discover during their adventure"),
+		.describe("Discoverable evidence that reveals plot information and advances quest objectives"),
 
 	manage_faction_quest_involvement: createInsertSchema(factionQuestInvolvement, {
-		id: (s) => s.optional().describe("The ID of the faction-quest relationship to update (omit to create new)"),
-		factionId: (s) => s.describe("The ID of the faction involved with the quest"),
-		questId: (s) => s.describe("The ID of the quest the faction is associated with"),
-		interest: (s) => s.describe("The faction's motivations and objectives regarding this quest in point form"),
-		role: (s) =>
-			s.describe("The faction's specific role in the quest (e.g., benefactor, adversary, ally, manipulator)"),
-		creativePrompts: (s) => s.describe("Ideas for GMs to roleplay this faction's involvement in the quest"),
+		id: (s) => s.optional().describe("ID of relationship to manage (omit to create new, include alone to delete)"),
+		factionId: (s) => s.describe("ID of faction with stake in this quest"),
+		questId: (s) => s.describe("ID of quest the faction is involved with"),
+		interest: (s) => s.describe("Faction's goals and reasons for involvement in point form"),
+		role: (s) => s.describe("Faction's role (quest-giver, antagonist, ally, target, beneficiary, etc.)"),
+		creativePrompts: (s) => s.describe("GM ideas for integrating faction actions into quest narrative"),
 	})
 		.strict()
-		.describe("The relationship between a faction and a quest, detailing their involvement and interests"),
+		.describe("Links factions to quests, defining their motivations, roles, and narrative potential"),
 
 	manage_items: createInsertSchema(items, {
-		id: (s) => s.optional().describe("The ID of the item to update (omit to create new)"),
-		siteId: (s) => s.optional().describe("The ID of the site where this item can be found (if any)"),
-		questId: (s) => s.optional().describe("The ID of the quest this item is relevant to (if any)"),
-		factionId: (s) => s.optional().describe("The ID of the faction that owns or seeks this item (if any)"),
-		npcId: (s) => s.optional().describe("The ID of the NPC who possesses or is connected to this item (if any)"),
-		stageId: (s) => s.optional().describe("The ID of the quest stage where this item becomes relevant (if any)"),
-		description: (s) =>
-			s.describe(
-				"Detailed physical description of the item including appearance, properties, and history in point form",
-			),
-		creativePrompts: (s) => s.describe("Ideas for GMs to incorporate this item meaningfully into their campaign"),
-		name: (s) => s.describe("The name or title of the item"),
-		type: (s) => s.describe("The category of item (weapon, armor, magical artifact, quest item, tool, etc.)"),
-		significance: (s) => s.describe("The narrative importance of the item to the story or campaign"),
+		id: (s) => s.optional().describe("ID of item to manage (omit to create new, include alone to delete)"),
+		siteId: (s) => s.optional().describe("ID of site where this item can be found"),
+		questId: (s) => s.optional().describe("ID of quest this item is important to"),
+		factionId: (s) => s.optional().describe("ID of faction that values or controls this item"),
+		npcId: (s) => s.optional().describe("ID of NPC who possesses or seeks this item"),
+		stageId: (s) => s.optional().describe("ID of quest stage where this item becomes relevant"),
+		description: (s) => s.describe("Physical attributes, history, and properties in point form"),
+		creativePrompts: (s) => s.describe("GM ideas for using this item as a narrative element"),
+		name: (s) => s.describe("Distinctive name or title of the item"),
+		type: (s) => s.describe("Item category (weapon, armor, artifact, key item, tool, etc.)"),
+		significance: (s) => s.describe("Item's importance to the plot or world lore"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("An object or entity that players can interact with, use, or acquire during their adventure"),
+		.describe("Interactive objects that players can acquire, use, and leverage in the narrative"),
 
 	manage_npc_quest_roles: createInsertSchema(npcQuestRoles, {
-		id: (s) => s.optional().describe("The ID of the quest-NPC relationship to update (omit to create new)"),
-		npcId: (s) => s.describe("The ID of the NPC involved in the quest"),
-		questId: (s) => s.optional().describe("The ID of the quest the NPC is involved with"),
-		creativePrompts: (s) => s.describe("Ideas for GMs to roleplay this NPC within the context of the quest"),
-		description: (s) => s.describe("The NPC's appearance, demeanor, and behavior specific to this quest in point form"),
-		dramaticMoments: (s) =>
-			s.describe("Key scenes or interactions where this NPC plays a significant role in the quest"),
-		hiddenAspects: (s) => s.describe("Secret motivations, knowledge, or traits the NPC conceals from players"),
-		importance: (s) => s.describe("The significance of the NPC to the quest (minor, supporting, major, critical)"),
-		role: (s) => s.describe("The NPC's specific function in the quest (questgiver, ally, villain, informant, etc.)"),
-	}).strict(),
+		id: (s) => s.optional().describe("ID of role to manage (omit to create new, include alone to delete)"),
+		npcId: (s) => s.describe("ID of NPC involved in the quest"),
+		questId: (s) => s.optional().describe("ID of quest the NPC participates in"),
+		creativePrompts: (s) => s.describe("GM ideas for portraying this NPC within the quest"),
+		description: (s) => s.describe("NPC's quest-specific behavior and appearance in point form"),
+		dramaticMoments: (s) => s.describe("Key scenes where this NPC influences the quest"),
+		hiddenAspects: (s) => s.describe("NPC's secret motives or knowledge in this quest"),
+		importance: (s) => s.describe("NPC's significance (minor, supporting, major, critical)"),
+		role: (s) => s.describe("NPC's function (quest-giver, ally, villain, informant, etc.)"),
+	})
+		.strict()
+		.describe("Defines how NPCs participate in quests, their narrative functions, and dramatic potential"),
 
 	manage_faction_regional_power: createInsertSchema(factionRegionalPower, {
-		id: (s) => s.optional().describe("The ID of the faction influence record to update (omit to create new)"),
-		factionId: (s) => s.describe("The ID of the faction exerting influence"),
-		questId: (s) => s.optional().describe("The ID of the quest affected by this faction's influence (if any)"),
-		regionId: (s) => s.optional().describe("The ID of the region where this faction exerts influence (if any)"),
-		areaId: (s) => s.optional().describe("The ID of the area where this faction exerts influence (if any)"),
-		siteId: (s) => s.optional().describe("The ID of the specific site affected by this faction's influence (if any)"),
-		description: (s) => s.describe("How the faction exerts its influence and what effects this has in point form"),
-		creativePrompts: (s) => s.describe("Ideas for GMs to demonstrate this faction's influence in gameplay"),
-		powerLevel: (s) => s.describe("The strength and scope of influence (e.g., minor, moderate, major, dominant)"),
-	}).strict(),
+		id: (s) => s.optional().describe("ID of power record to manage (omit to create new, include alone to delete)"),
+		factionId: (s) => s.describe("ID of faction exerting influence"),
+		questId: (s) => s.optional().describe("ID of quest connected to this power dynamic"),
+		regionId: (s) => s.optional().describe("ID of region where influence is exerted"),
+		areaId: (s) => s.optional().describe("ID of area where influence is exerted"),
+		siteId: (s) => s.optional().describe("ID of site where influence is exerted"),
+		description: (s) => s.describe("How the faction exercises power in this location in point form"),
+		creativePrompts: (s) => s.describe("GM ideas for demonstrating faction influence in gameplay"),
+		powerLevel: (s) => s.describe("Extent of control (minor, moderate, strong, dominant)"),
+	})
+		.strict()
+		.describe("Maps faction influence across locations, creating power dynamics that affect player actions"),
 
 	manage_quest_hook_npcs: createInsertSchema(questHookNpcs, {
-		id: (s) => s.optional().describe("The ID of the hook-NPC relationship to update (omit to create new)"),
-		npcId: (s) => s.describe("The ID of the NPC who delivers or is connected to this quest hook"),
-		dialogueHint: (s) => s.describe("Sample dialogue or conversation cues the NPC might use to introduce the quest"),
-		hookId: (s) => s.describe("The ID of the quest hook this NPC is connected to"),
-		relationship: (s) => s.describe("The NPC's connection to the quest hook (witness, participant, messenger, etc.)"),
-		trustRequired: (s) =>
-			s.describe("Level of trust players must establish with this NPC to access the hook (none, low, medium, high)"),
-	}).strict(),
+		id: (s) => s.optional().describe("ID of relationship to manage (omit to create new, include alone to delete)"),
+		npcId: (s) => s.describe("ID of NPC who presents the quest hook"),
+		dialogueHint: (s) => s.describe("Example conversation that introduces the quest"),
+		hookId: (s) => s.describe("ID of quest hook this NPC delivers"),
+		relationship: (s) => s.describe("NPC's connection to the quest (witness, messenger, victim, etc.)"),
+		trustRequired: (s) => s.describe("Trust players need from NPC (none, low, medium, high)"),
+	})
+		.strict()
+		.describe("Links NPCs to quest hooks, defining how characters introduce adventures to players"),
 
 	manage_quest_introductions: createInsertSchema(questIntroductions, {
-		id: (s) => s.optional().describe("The ID of the quest hook to update (omit to create new)"),
-		stageId: (s) => s.describe("The ID of the quest stage this hook leads to"),
-		factionId: (s) => s.optional().describe("The ID of the faction involved with this hook (if any)"),
-		siteId: (s) => s.optional().describe("The ID of the site where this hook can be found (if any)"),
-		itemId: (s) => s.optional().describe("The ID of an item that serves as or connects to this hook (if any)"),
-		description: (s) => s.describe("Detailed narrative of how this hook introduces the quest to players in point form"),
-		creativePrompts: (s) => s.describe("Ideas for GMs to introduce this hook organically into their campaign"),
-		discoveryCondition: (s) => s.describe("Circumstances or requirements for players to encounter this hook"),
-		hookContent: (s) => s.describe("Specific information or clues provided by this hook about the quest"),
-		introductionType: (s) => s.describe("The category of hook (rumor, npc_interaction, site_discovery)"),
-		presentationStyle: (s) => s.describe("How the hook is presented to players (subtle, clear, urgent, mysterious)"),
-		source: (s) => s.describe("Origin of the hook (tavern rumor, posted notice, messenger, found item, etc.)"),
-	}).strict(),
+		id: (s) => s.optional().describe("ID of hook to manage (omit to create new, include alone to delete)"),
+		stageId: (s) => s.describe("ID of quest stage this hook initiates"),
+		factionId: (s) => s.optional().describe("ID of faction connected to this hook"),
+		siteId: (s) => s.optional().describe("ID of site where this hook can be encountered"),
+		itemId: (s) => s.optional().describe("ID of item that serves as or connects to this hook"),
+		description: (s) => s.describe("How players encounter this quest hook in point form"),
+		creativePrompts: (s) => s.describe("GM ideas for naturally introducing this hook"),
+		discoveryCondition: (s) => s.describe("Circumstances needed for players to encounter this hook"),
+		hookContent: (s) => s.describe("Essential information conveyed by this hook"),
+		introductionType: (s) => s.describe("Method of delivery (rumor, npc_interaction, site_discovery)"),
+		presentationStyle: (s) => s.describe("Tone and approach (subtle, clear, urgent, mysterious)"),
+		source: (s) => s.describe("Origin (tavern gossip, notice board, messenger, found object, etc.)"),
+	})
+		.strict()
+		.describe("Entry points that draw players into quests through rumors, encounters, or discoveries"),
 
 	manage_region_connection_details: createInsertSchema(regionConnectionDetails, {
-		id: (s) => s.optional().describe("The ID of the region connection to update (omit to create new)"),
-		relationId: (s) => s.describe("The ID of the region relation this connection represents"),
-		description: (s) =>
-			s.describe("Detailed narrative description of the route's appearance and features in point form"),
-		creativePrompts: (s) => s.describe("Ideas for GMs to make travel along this route interesting"),
-		travelHazards: (s) => s.describe("Dangers or challenges travelers might face along this route"),
-		pointsOfInterest: (s) => s.describe("Notable landmarks or sites along the route"),
-		controllingFaction: (s) =>
-			s.optional().describe("The ID of the faction that controls or patrols this route (if any)"),
-		routeType: (s) =>
-			s.describe("The physical nature of the route (road, river, mountain pass, sea route, portal, wilderness)"),
-		travelDifficulty: (s) =>
-			s.describe("How challenging the route is to traverse (trivial, easy, moderate, difficult, treacherous)"),
-		travelTime: (s) => s.describe("Typical duration required to travel this route (hours, days, weeks)"),
-	}).strict(),
+		id: (s) => s.optional().describe("ID of connection to manage (omit to create new, include alone to delete)"),
+		relationId: (s) => s.describe("ID of region relation this route connects"),
+		description: (s) => s.describe("Physical features and atmosphere of the route in point form"),
+		creativePrompts: (s) => s.describe("GM ideas for travel encounters and challenges"),
+		travelHazards: (s) => s.describe("Dangers and obstacles faced during travel"),
+		pointsOfInterest: (s) => s.describe("Notable landmarks or features along the route"),
+		controllingFaction: (s) => s.optional().describe("ID of faction that controls this route"),
+		routeType: (s) => s.describe("Path type (road, river, mountain pass, sea route, portal, etc.)"),
+		travelDifficulty: (s) => s.describe("Challenge level (trivial, easy, moderate, difficult, treacherous)"),
+		travelTime: (s) => s.describe("Time required to traverse (hours, days, weeks)"),
+	})
+		.strict()
+		.describe("Travel paths between regions with hazards, features, and narrative opportunities"),
 } satisfies Record<AssociationTools, z.ZodSchema<unknown>>

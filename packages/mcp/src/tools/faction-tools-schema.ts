@@ -9,124 +9,97 @@ const {
 } = tables
 
 export const idSchema = z.object({
-	id: z.number().describe("Unique identifier for factions"),
+	id: z.coerce.number().describe("ID of faction to retrieve"),
 })
 
 export const schemas = {
 	manage_factions: createInsertSchema(factions, {
-		id: optionalId.describe("The ID of the faction to manage (Optional)"),
-		description: (s) =>
-			s.describe(
-				"Key characteristics of the faction including structure, notable features, and public activities in point form",
-			),
-		notes: (s) => s.describe("GM-specific information and plot hooks related to this faction"),
-		resources: (s) =>
-			s.describe("Assets, facilities, wealth sources, and special resources the faction controls or has access to"),
-		recruitment: (s) => s.describe("Methods, criteria, and processes by which the faction brings in new members"),
-		values: (s) => s.describe("Core beliefs, principles, and ideological positions that drive faction decisions"),
-		name: (s) => s.describe("The unique identifying name of the faction"),
-		type: (s) =>
-			s.describe(
-				"Category of organization (guild, government, religious order, mercenary company, criminal syndicate, etc.)",
-			),
-		alignment: (s) =>
-			s.describe(
-				"The moral and ethical stance (lawful good, neutral good, chaotic good, lawful neutral, true neutral, chaotic neutral, lawful evil, neutral evil, chaotic evil)",
-			),
-		publicGoal: (s) =>
-			s.describe("Officially stated purpose or mission the faction acknowledges to the general populace"),
-		history: (s) => s.describe("The faction's origin story, key historical events, and evolution over time"),
-		publicPerception: (s) => s.describe("How the general population views and interacts with this faction"),
-		reach: (s) => s.describe("Geographical scope of influence (local, regional, national, continental, global)"),
-		secretGoal: (s) =>
-			s.optional().describe("Hidden agenda or true objective known only to inner circle members (optional)"),
-		size: (s) => s.describe("Scale of membership and operations (tiny, small, medium, large, massive)"),
-		wealth: (s) =>
-			s.describe("Economic status and available financial resources (destitute, poor, moderate, rich, wealthy)"),
+		id: optionalId.describe("ID of faction to manage (omit to create new, include alone to delete)"),
+		description: (s) => s.describe("Key characteristics, structure, and public activities in point form"),
+		notes: (s) => s.describe("GM-only information and potential plot hooks"),
+		resources: (s) => s.describe("Assets, facilities, and special resources under faction control"),
+		recruitment: (s) => s.describe("Methods and criteria for bringing in new members"),
+		values: (s) => s.describe("Core beliefs and principles driving faction decisions"),
+		name: (s) => s.describe("Distinctive identifying name"),
+		type: (s) => s.describe("Organization category (guild, religious, military, criminal, etc.)"),
+		alignment: (s) => s.describe("Moral and ethical stance (lawful good through chaotic evil)"),
+		publicGoal: (s) => s.describe("Officially stated purpose acknowledged to the general populace"),
+		history: (s) => s.describe("Origin story and key historical developments"),
+		publicPerception: (s) => s.describe("How the general population views this faction"),
+		reach: (s) => s.describe("Geographic influence scope (local, regional, national, continental, global)"),
+		secretGoal: (s) => s.optional().describe("Hidden agenda known only to inner circle members"),
+		size: (s) => s.describe("Membership scale (tiny, small, medium, large, massive)"),
+		wealth: (s) => s.describe("Economic status (destitute, poor, moderate, rich, wealthy)"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("A political, social, or ideological group with shared goals and identity"),
+		.describe("Organized groups with shared goals that act as allies, enemies, or complex forces in the campaign"),
 
 	manage_faction_diplomacy: createInsertSchema(factionDiplomacy, {
-		id: optionalId.describe("The ID of the diplomacy record to update (omit to create new)"),
-		factionId: optionalId.describe("The ID of the primary faction in this relationship (references factions.id)"),
-		otherFactionId: optionalId.describe(
-			"The ID of the secondary faction in this diplomatic relation (references factions.id)",
-		),
-		description: (s) =>
-			s.describe(
-				"Details about how these factions interact, shared history, and current diplomatic dynamics in point form",
-			),
-		creativePrompts: (s) => s.describe("Story hooks and campaign ideas involving this inter-faction relationship"),
-		diplomaticStatus: (s) =>
-			s.describe("Diplomatic status between the factions (ally, enemy, neutral, vassal, suzerain, rival, trade)"),
-		strength: (s) =>
-			s.describe(
-				"Intensity of the diplomatic relation (weak, moderate, friendly, strong, unbreakable, friction, cold, hostile, war)",
-			),
+		id: optionalId.describe("ID of diplomacy record to manage (omit to create new, include alone to delete)"),
+		factionId: optionalId.describe("ID of primary faction in this relationship"),
+		otherFactionId: optionalId.describe("ID of secondary faction in this diplomatic relation"),
+		description: (s) => s.describe("Interaction details, shared history, and current dynamics in point form"),
+		creativePrompts: (s) => s.describe("Story hooks involving this inter-faction relationship"),
+		diplomaticStatus: (s) => s.describe("Relationship type (ally, enemy, neutral, vassal, suzerain, rival, trade)"),
+		strength: (s) => s.describe("Intensity level (weak, moderate, friendly, strong, unbreakable, hostile, war)"),
 	})
 		.strict()
-		.describe("Defines the diplomatic relationship between two factions"),
+		.describe("Defines relationships between factions, creating political dynamics that players can navigate"),
 
 	manage_faction_culture: createInsertSchema(factionCulture, {
-		id: optionalId.describe("The ID of the culture to update (omit to create new)"),
-		factionId: optionalId.describe("The ID of the faction this culture belongs to (references factions.id)"),
-		jargon: (s) =>
-			s.describe("Specialized terminology, slang, code words and unique expressions used by faction members"),
-		recognitionSigns: (s) => s.describe("Secret handshakes, passwords, or signals members use to identify each other"),
-		symbols: (s) => s.describe("Emblems, insignia, banners, and visual identifiers associated with this faction"),
-		rituals: (s) => s.describe("Ceremonies, traditions, and practices regularly performed by members"),
-		taboos: (s) => s.describe("Actions or topics forbidden or strongly discouraged within the faction"),
-		aesthetics: (s) => s.describe("Visual design, architectural preferences, fashion, and artistic style"),
+		id: optionalId.describe("ID of culture record to manage (omit to create new, include alone to delete)"),
+		factionId: optionalId.describe("ID of faction this culture belongs to"),
+		jargon: (s) => s.describe("Specialized terminology and slang used by members"),
+		recognitionSigns: (s) => s.describe("Secret signals members use to identify each other"),
+		symbols: (s) => s.describe("Emblems, insignia, and visual identifiers of this faction"),
+		rituals: (s) => s.describe("Ceremonies and traditions performed by members"),
+		taboos: (s) => s.describe("Forbidden actions or topics within the faction"),
+		aesthetics: (s) => s.describe("Visual design, architecture, fashion, and artistic preferences"),
 	})
 		.omit({ embedding: true })
 		.strict()
-		.describe("The distinctive customs, practices, and identity markers of a faction"),
+		.describe("Cultural elements that give factions distinct identities, behaviors, and recognition features"),
 
 	manage_faction_headquarters: createInsertSchema(factionHeadquarters, {
-		id: optionalId.describe("The ID of the headquarters to update (omit to create new)"),
-		factionId: (s) =>
-			optionalId.describe("The ID of the faction this headquarters belongs to (references factions.id)"),
-		siteId: (s) =>
-			optionalId.describe("The ID of the location where this headquarters is situated (references sites.id)"),
-		creativePrompts: (s) =>
-			s.describe("Story hooks, encounter ideas, and adventure seeds centered around this location"),
-		description: (s) => s.describe("Physical characteristics, notable rooms, defenses, and atmosphere in point form"),
+		id: optionalId.describe("ID of headquarters to manage (omit to create new, include alone to delete)"),
+		factionId: (s) => optionalId.describe("ID of faction this headquarters belongs to"),
+		siteId: (s) => optionalId.describe("ID of location where headquarters is situated"),
+		creativePrompts: (s) => s.describe("Adventure hooks and encounter ideas for this location"),
+		description: (s) => s.describe("Physical features, notable rooms, and defenses in point form"),
 	})
 		.strict()
-		.describe("The primary base of operations for a faction"),
+		.describe("Key locations that serve as faction bases, providing adventure sites and strategic targets"),
 
 	manage_faction_operations: createInsertSchema(factionOperations, {
-		id: optionalId.describe("The ID of the operation to update (omit to create new)"),
-		factionId: optionalId.describe("The ID of the faction conducting this operation (references factions.id)"),
-		description: (s) => s.describe("Goals, methods, participants, and timeline of the operation in point form"),
-		creativePrompts: (s) => s.describe("Story hooks, player involvement opportunities, and potential complications"),
-		objectives: (s) => s.describe("Specific outcomes and achievements the faction aims to accomplish"),
-		locations: (s) => s.describe("Key sites where the operation takes place or affects"),
-		involved_npcs: (s) => s.describe("Named individuals participating in or targeted by this operation"),
-		name: (s) => s.describe("The code name or identifier for this operation"),
-		type: (s) => s.describe("Category of activity (economic, military, diplomatic, espionage, public works, research)"),
-		scale: (s) => s.describe("Scope and magnitude of the operation (minor, moderate, major, massive)"),
-		status: (s) => s.describe("Current phase of execution (planning, initial, ongoing, concluding, completed)"),
-		priority: (s) => s.describe("Importance to the faction's goals (low, medium, high)"),
+		id: optionalId.describe("ID of operation to manage (omit to create new, include alone to delete)"),
+		factionId: optionalId.describe("ID of faction conducting this operation"),
+		description: (s) => s.describe("Methods, participants, and timeline in point form"),
+		creativePrompts: (s) => s.describe("Story hooks and player involvement opportunities"),
+		objectives: (s) => s.describe("Specific outcomes the faction aims to accomplish"),
+		locations: (s) => s.describe("Key sites where operation takes place"),
+		involved_npcs: (s) => s.describe("Named individuals participating or targeted"),
+		name: (s) => s.describe("Operation code name or identifier"),
+		type: (s) => s.describe("Activity category (economic, military, diplomatic, espionage, etc.)"),
+		scale: (s) => s.describe("Scope and magnitude (minor, moderate, major, massive)"),
+		status: (s) => s.describe("Current phase (planning, initial, ongoing, concluding, completed)"),
+		priority: (s) => s.describe("Importance to faction goals (low, medium, high)"),
 	})
-
 		.omit({ embedding: true })
 		.strict()
-		.describe("A coordinated activity or mission conducted by a faction"),
+		.describe("Active missions and plots that factions undertake, creating opportunities for player intervention"),
 
 	manage_faction_regions: createInsertSchema(factionRegions, {
-		id: optionalId.describe("The ID of the region association to update (omit to create new)"),
-		factionId: optionalId.describe("The ID of the faction with presence in this region (references factions.id)"),
-		regionId: optionalId.describe("The ID of the region where the faction is active (references regions.id)"),
-		presence: (s) =>
-			s.describe("Visible manifestations of the faction in this area (outposts, patrols, agents, symbols)"),
-		priorities: (s) => s.describe("Specific interests, resources, or strategic value the faction seeks in this region"),
-		controlLevel: (s) => s.describe("Degree of influence and authority (contested, influenced, controlled, dominated)"),
+		id: optionalId.describe("ID of region association to manage (omit to create new, include alone to delete)"),
+		factionId: optionalId.describe("ID of faction with presence in this region"),
+		regionId: optionalId.describe("ID of region where faction is active"),
+		presence: (s) => s.describe("Visible manifestations (outposts, patrols, agents, symbols)"),
+		priorities: (s) => s.describe("Specific interests or resources the faction seeks here"),
+		controlLevel: (s) => s.describe("Authority level (contested, influenced, controlled, dominated)"),
 	})
 		.strict()
-		.describe("Represents a faction's presence, interests and impact in a geographical region"),
-	get_all_factions: z.object({}).describe("Get all factions in the campaign world"),
-	get_faction_by_id: idSchema.describe("Get a faction by its ID"),
+		.describe("Maps faction territorial influence, showing where power struggles occur in the campaign world"),
+
+	get_all_factions: z.object({}).describe("Retrieves complete list of factions in the campaign world"),
+	get_faction_by_id: idSchema.describe("Retrieves detailed information about a specific faction"),
 } satisfies Record<FactionTools, z.ZodSchema<unknown>>
