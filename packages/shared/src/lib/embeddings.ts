@@ -9,15 +9,15 @@ export type EmbeddedEntityName =
 	| "npcs"
 	| "quests"
 	| "questStages"
-	| "locations"
+	| "sites"
 	| "regions"
 	| "factions"
 	| "factionOperations"
 	| "factionCulture"
 	| "items"
 	| "clues"
-	| "locationEncounters"
-	| "locationSecrets"
+	| "siteEncounters"
+	| "siteSecrets"
 // Add other entity names as needed
 
 // Load API Key from environment
@@ -154,9 +154,9 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 			addPrefixedField("Sensory Elements", record.sensory_elements)
 			// Consider adding summaries of key decisions/outcomes originating from this stage
 			break
-		case "locations":
+		case "sites":
 			addPrefixedField("Name", record.name)
-			addPrefixedField("Type", record.locationType)
+			addPrefixedField("Type", record.siteType)
 			addPrefixedField("Description", record.description)
 			addPrefixedField("Terrain", record.terrain)
 			addPrefixedField("Climate", record.climate)
@@ -224,7 +224,7 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 			addPrefixedField("Reveals", record.reveals)
 			// Add other relevant clue fields
 			break
-		case "locationEncounters":
+		case "siteEncounters":
 			addPrefixedField("Name", record.name)
 			addPrefixedField("Description", record.description)
 			addPrefixedField("Creatures", record.creatures)
@@ -232,7 +232,7 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 			addPrefixedField("Danger Level", record.dangerLevel)
 			addPrefixedField("Treasure", record.treasure)
 			break
-		case "locationSecrets":
+		case "siteSecrets":
 			addPrefixedField("Type", record.secretType)
 			addPrefixedField("Description", record.description)
 			addPrefixedField("Discovery Method", record.discoveryMethod)

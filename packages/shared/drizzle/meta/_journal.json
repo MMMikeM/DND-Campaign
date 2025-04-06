@@ -22,6 +22,27 @@
       "when": 1743918702548,
       "tag": "0002_mushy_shocker",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1743919456851,
+      "tag": "0003_broad_kid_colt",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1743923435221,
+      "tag": "0004_dizzy_echo",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1743929199822,
+      "tag": "0005_brown_banshee",
+      "breakpoints": true
     }
   ]
 }

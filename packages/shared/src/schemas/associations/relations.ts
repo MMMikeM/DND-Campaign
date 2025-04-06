@@ -88,7 +88,7 @@ export const factionInfluenceRelations = relations(factionRegionalPower, ({ one 
 	site: one(sites, {
 		fields: [factionRegionalPower.siteId],
 		references: [sites.id],
-		relationName: "locationFactionInfluence",
+		relationName: "siteFactionInfluence",
 	}),
 }))
 
@@ -111,7 +111,7 @@ export const itemRelations = relations(items, ({ one }) => ({
 	site: one(sites, {
 		fields: [items.siteId],
 		references: [sites.id],
-		relationName: "locationItems",
+		relationName: "siteItems",
 	}),
 	stage: one(questStages, {
 		fields: [items.stageId],
@@ -127,10 +127,9 @@ export const questHooksRelations = relations(questIntroductions, ({ one, many })
 		relationName: "questHooks",
 	}),
 	site: one(sites, {
-		fields: [questIntroductions.siteId
-		],
+		fields: [questIntroductions.siteId],
 		references: [sites.id],
-		relationName: "locationHooks",
+		relationName: "siteHooks",
 	}),
 	stage: one(questStages, {
 		fields: [questIntroductions.stageId],
