@@ -1,49 +1,33 @@
-import type { Tool } from "@modelcontextprotocol/sdk/types.js"
-import { associations, factions, locations, npcs, quests } from "./tools"
+import { associations, factions, regions, npcs, quests, conflicts, narrative, world, foreshadowing } from "./tools"
+import { logger } from ".."
+import { z } from "zod"
+import { zodToMCP } from "../zodToMcp"
+import { ToolDefinition } from "./tool.utils"
 
-/**
- * Safely check if a property is an array with specified methods
- */
 function isStringArray(value: unknown): value is string[] {
 	return Array.isArray(value)
 }
 
-export const helpTool: Tool = {
-	name: "help",
-	description: "Get help with available tools, organized by category or detailed info about a specific tool",
-	inputSchema: {
-		type: "object",
-		properties: {
-			category: {
-				type: "string",
-				description: "Optional category to filter tools (npcs, factions, locations, quests, associations)",
-			},
-			tool: {
-				type: "string",
-				description: "Optional specific tool name to get detailed parameter information",
-			},
-		},
-	},
-}
-
-// Handler for the help tool
-export const helpToolHandler = async (allTools: Tool[], args?: Record<string, unknown>) => {
+const handler = async (args?: Record<string, unknown>) => {
 	const category = args?.category as string | undefined
 	const toolName = args?.tool as string | undefined
 
-	// Organize all tools by category
 	const categories = {
 		npcs: npcs.tools,
 		factions: factions.tools,
-		locations: locations.tools,
+		regions: regions.tools,
 		quests: quests.tools,
 		associations: associations.tools,
-		utility: [helpTool], // Include self-reference
+		conflicts: conflicts.tools,
+		narrative: narrative.tools,
+		world: world.tools,
+		foreshadowing: foreshadowing.tools,
 	}
 
-	// If a specific tool is requested, find and return detailed information about it
+	logger.info("Categories", categories)
+	logger.info("Args", args)
+
 	if (toolName) {
-		// Find the tool across all categories
 		const allToolsFlat = Object.values(categories).flat()
 		const tool = allToolsFlat.find((t) => t.name === toolName)
 
@@ -86,11 +70,7 @@ export const helpToolHandler = async (allTools: Tool[], args?: Record<string, un
 
 		// Examples section for common operations
 		let examples = ""
-		if (
-			tool.name.startsWith("manage_") ||
-			tool.name.startsWith("create_") ||
-			tool.name.startsWith("update_")
-		) {
+		if (tool.name.startsWith("manage_") || tool.name.startsWith("create_") || tool.name.startsWith("update_")) {
 			examples = `
 \n\n**Examples:**
 
@@ -143,9 +123,7 @@ ${tool.name}({
 									: ""
 							return `- **${t.name}**: ${t.description}${requiredParams}`
 						})
-						.join(
-							"\n",
-						)}\n\nFor detailed parameter info on a specific tool, use \`help({tool: 'tool_name'})\``,
+						.join("\n")}\n\nFor detailed parameter info on a specific tool, use \`help({tool: 'tool_name'})\``,
 				},
 			],
 		}
@@ -176,4 +154,25 @@ ${tool.name}({
 			},
 		],
 	}
+}
+
+const toolSchema = zodToMCP(
+	z
+		.object({
+			category: z
+				.enum(["npcs", "factions", "regions", "quests", "associations"])
+				.optional()
+				.describe("Optional category to filter tools"),
+			tool: z.string().optional().describe("Optional specific tool name to get detailed parameter information"),
+		})
+		.strict()
+		.describe("Get help with available tools, organized by category or detailed info about a specific tool"),
+)
+
+export const helpToolDefinitions: Record<string, ToolDefinition> = {
+	help: {
+		description: "Get help with available tools, organized by category or detailed info about a specific tool",
+		inputSchema: toolSchema,
+		handler,
+	},
 }
