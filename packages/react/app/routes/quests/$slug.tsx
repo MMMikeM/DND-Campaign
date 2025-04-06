@@ -34,37 +34,29 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	const { quest, stages } = loaderData
 	const { tab, stageSlug, stageTab } = useParams()
 
-	// If we are on a stage-specific route, force the active tab to be "stages"
 	const activeTab = stageSlug ? "stages" : tab || "overview"
 	const navigate = useNavigate()
 
-	// Find the selected stage by slug if present, otherwise use first stage
 	const selectedStage = stageSlug ? quest.stages.find((stage) => stage.slug === stageSlug) : quest.stages[0] || null
 
-	// Keep track of selected stage ID for compatibility with existing components
 	const selectedStageId = selectedStage?.id || null
 
 	const { name, slug } = quest
 
 	const handleTabChange = (value: string) => {
 		if (value === "stages" && selectedStage) {
-			// If switching to stages tab and we have a selected stage, navigate to the stage route
 			navigate(`/quests/${slug}/stages/${selectedStage.slug}`)
 		} else {
-			// Otherwise navigate to the basic tab route
 			navigate(`/quests/${slug}/${value === "overview" ? "" : value}`)
 		}
 	}
 
 	const handleStageSelect = (stageId: number) => {
-		// Find the stage by ID to get its slug
 		const stage = quest.stages.find((s) => s.id === stageId)
 		if (stage) {
 			if (stageTab) {
-				// When selecting a stage, navigate to the stage route using the slug
 				navigate(`/quests/${slug}/stages/${stage.slug}/${stageTab}`)
 			} else {
-				// When selecting a stage, navigate to the stage route using the slug
 				navigate(`/quests/${slug}/stages/${stage.slug}`)
 			}
 		}
