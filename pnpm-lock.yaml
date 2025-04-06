@@ -75,9 +75,6 @@ importers:
 
   packages/mcp:
     dependencies:
-      '@google/generative-ai':
-        specifier: ^0.24.0
-        version: 0.24.0
       '@modelcontextprotocol/sdk':
         specifier: ^1.8.0
         version: 1.8.0
@@ -93,6 +90,12 @@ importers:
       drizzle-zod:
         specifier: 'catalog:'
         version: 0.7.1(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.14.1)(postgres@3.4.5))(zod@3.24.2)
+      pino:
+        specifier: ^9.6.0
+        version: 9.6.0
+      pino-pretty:
+        specifier: ^13.0.0
+        version: 13.0.0
       zod:
         specifier: 'catalog:'
         version: 3.24.2
@@ -329,6 +332,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@google/generative-ai':
+        specifier: ^0.24.0
+        version: 0.24.0
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.41.0(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.11.11)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.14.1)(postgres@3.4.5)
