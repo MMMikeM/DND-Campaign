@@ -13,9 +13,6 @@ interface FactionSummaryCardProps {
 	}
 }
 
-/**
- * Component to display a faction summary in a card format
- */
 export function FactionSummaryCard({ faction }: FactionSummaryCardProps) {
 	if (!faction) {
 		return null

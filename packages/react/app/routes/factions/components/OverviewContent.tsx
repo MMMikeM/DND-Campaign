@@ -6,7 +6,6 @@ import type { Faction } from "~/lib/entities"
 import { List } from "~/components/List"
 import { AlignmentBadge } from "~/components/alignment-badge"
 
-// Badge styling utility functions
 const getSizeBadgeClasses = (size: string) => {
 	const classes = {
 		massive: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
@@ -43,7 +42,6 @@ const getReachBadgeClasses = (reach: string) => {
 export function OverviewContent(faction: Faction) {
 	return (
 		<div className="space-y-6">
-			{/* Top section: Faction profile and key statistics */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<InfoCard
 					title="Faction Stats"
