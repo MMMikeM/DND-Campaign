@@ -66,21 +66,12 @@ interface Identifiable {
  */
 interface SluggableByName extends Identifiable {
 	name: string
-	title?: never // Ensure title is not present if name is
 }
 
 /**
- * Type for objects sluggable by title.
+ * Type for objects that should receive a slug (only by name).
  */
-interface SluggableByTitle extends Identifiable {
-	name?: never // Ensure name is not present if title is
-	title: string
-}
-
-/**
- * Union type for objects that should receive a slug (either by name or title).
- */
-export type Sluggable = SluggableByName | SluggableByTitle
+export type Sluggable = SluggableByName
 
 /**
  * Type with slug added to an identifiable object.
@@ -100,8 +91,8 @@ const isPlainObject = (item: unknown): item is Record<string, unknown> => {
 function isSluggable(obj: Record<string, unknown>): obj is Sluggable & Record<string, unknown> {
 	const hasId = "id" in obj && typeof obj.id === "number"
 	const hasName = "name" in obj && typeof obj.name === "string"
-	const hasTitle = "title" in obj && typeof obj.title === "string"
-	return hasId && (hasName || hasTitle)
+	// Only check for name now
+	return hasId && hasName
 }
 
 /**
@@ -140,13 +131,12 @@ export function addSlugsRecursively<T>(data: T): WithSlugsAdded<T> {
 	if (isPlainObject(data)) {
 		const result = { ...data } as Record<string, unknown>
 
-		// Add slug if conditions are met
+		// Add slug if conditions are met (has id and name)
 		if (isSluggable(result)) {
-			// Use name if available, otherwise use title
-			const slugSource = result.name ?? result.title
+			// Use name for slug source
+			const slugSource = result.name
 			if (slugSource) {
-				// We already checked slugSource is string via isSluggable
-				result.slug = createSlug(slugSource as string)
+				result.slug = createSlug(slugSource)
 			}
 		}
 
