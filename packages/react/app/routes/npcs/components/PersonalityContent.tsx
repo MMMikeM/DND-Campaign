@@ -8,9 +8,6 @@ interface PersonalityContentProps {
 	npc: NPC
 }
 
-/**
- * Personality tab content for NPC detail page
- */
 export function PersonalityContent({ npc }: PersonalityContentProps) {
 	const { personalityTraits, biases, drives, fears, mannerisms, voiceNotes } = npc
 

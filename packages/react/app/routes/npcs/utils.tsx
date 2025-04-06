@@ -1,4 +1,3 @@
-// Helper functions for badge variants
 export const getTrustLevelVariant = (level: string) => {
 	switch (level) {
 		case "high":

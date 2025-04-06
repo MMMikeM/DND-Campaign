@@ -11,9 +11,6 @@ interface ConnectionsContentProps {
 	npc: NPC
 }
 
-/**
- * Connections tab content for NPC detail page
- */
 export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 	const { name, relations, relatedFactions, relatedLocations, relatedQuests } = npc
 
@@ -39,11 +36,11 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 											</Link>
 										</div>
 										<BadgeWithTooltip
-											variant={getRelationshipStrengthVariant(relationship.relationsshipStrength)}
+											variant={getRelationshipStrengthVariant(relationship.strength)}
 											className="capitalize"
 											tooltipContent={`Relationship type - Strength`}
 										>
-											{relationship.relationsshipStrength} - {relationship.type}
+											{relationship.strength} - {relationship.type}
 										</BadgeWithTooltip>
 
 										{relationship.description && relationship.description.length > 0 && (
@@ -55,7 +52,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}
@@ -72,7 +68,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}
@@ -144,7 +139,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}
@@ -194,7 +188,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}
@@ -253,7 +246,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}
@@ -270,7 +262,6 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 													textColor="muted"
 													textSize="xs"
 													maxItems={2}
-													showMore={true}
 												/>
 											</div>
 										)}

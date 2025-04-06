@@ -10,9 +10,6 @@ interface OverviewContentProps {
 	npc: NPC
 }
 
-/**
- * Overview tab content for NPC detail page
- */
 export function OverviewContent({ npc }: OverviewContentProps) {
 	const { name, appearance, background, alignment, attitude, occupation, socialStatus, age, quirk } = npc
 

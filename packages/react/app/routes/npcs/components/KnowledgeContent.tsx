@@ -8,9 +8,6 @@ interface KnowledgeContentProps {
 	npc: NPC
 }
 
-/**
- * Knowledge tab content for NPC detail page
- */
 export function KnowledgeContent({ npc }: KnowledgeContentProps) {
 	const { knowledge, secrets } = npc
 
