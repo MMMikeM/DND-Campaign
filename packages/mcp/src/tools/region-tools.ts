@@ -14,9 +14,9 @@ export type RegionTools = CreateTableTools<typeof tables.regionTables>
 export type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
 export const entityGetters: RegionGetters = {
-	all_regions: () => db.query.regions.findMany({ columns: { embedding: false } }),
-	all_areas: () => db.query.areas.findMany({ columns: { embedding: false } }),
-	all_sites: () => db.query.sites.findMany({ columns: { embedding: false } }),
+	all_regions: () => db.query.regions.findMany({}),
+	all_areas: () => db.query.areas.findMany({}),
+	all_sites: () => db.query.sites.findMany({}),
 	all_region_connections: () =>
 		db.query.regionConnections.findMany({
 			with: {

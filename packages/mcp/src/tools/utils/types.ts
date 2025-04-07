@@ -1,3 +1,6 @@
+import { RunResult } from "@tome-master/shared"
+import type { zodToJsonSchema } from "zod-to-json-schema"
+
 export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
 
 export type ToolDefinition = {
@@ -20,9 +23,9 @@ export type CreateTableTools<T extends Record<string, unknown>> =
 	`manage_${CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>}`
 
 export type CreateEntityGetters<T extends Record<string, unknown>> = {
-	[K in `all_${CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>}`]: () => Promise<any[]>
+	[K in `all_${CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>}`]: () => Promise<unknown[]>
 } & {
 	[K in `${DropTrailingS<CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>>}_by_id`]: (
 		id: number,
-	) => Promise<any>
+	) => Promise<unknown>
 }

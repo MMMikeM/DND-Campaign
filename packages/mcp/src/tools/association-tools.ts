@@ -7,7 +7,7 @@ import { schemas } from "./association-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
 const {
-	assocationTables: {
+	associationTables: {
 		clues,
 		items,
 		factionQuestInvolvement,
@@ -19,11 +19,11 @@ const {
 	},
 } = tables
 
-export type AssociationGetters = CreateEntityGetters<typeof tables.assocationTables>
+export type AssociationGetters = CreateEntityGetters<typeof tables.associationTables>
 
 export const entityGetters: AssociationGetters = {
-	all_clues: () => db.query.clues.findMany({ columns: { embedding: false } }),
-	all_items: () => db.query.items.findMany({ columns: { embedding: false } }),
+	all_clues: () => db.query.clues.findMany({}),
+	all_items: () => db.query.items.findMany({}),
 	all_faction_quest_involvement: () => db.query.factionQuestInvolvement.findMany({}),
 	all_npc_quest_roles: () => db.query.npcQuestRoles.findMany({}),
 	all_faction_regional_power: () => db.query.factionRegionalPower.findMany({}),
@@ -35,49 +35,49 @@ export const entityGetters: AssociationGetters = {
 		db.query.clues.findFirst({
 			where: eq(clues.id, id),
 			with: {
-				faction: { columns: { embedding: false } },
-				npc: { columns: { embedding: false } },
-				site: { columns: { embedding: false } },
-				stage: { columns: { embedding: false } },
+				faction: { columns: { name: true, id: true } },
+				npc: { columns: { name: true, id: true } },
+				site: { columns: { name: true, id: true } },
+				stage: { columns: { name: true, id: true } },
 			},
 		}),
 	item_by_id: (id: number) =>
 		db.query.items.findFirst({
 			where: eq(items.id, id),
 			with: {
-				faction: { columns: { embedding: false } },
-				npc: { columns: { embedding: false } },
-				site: { columns: { embedding: false } },
-				quest: { columns: { embedding: false } },
-				stage: { columns: { embedding: false } },
+				faction: { columns: { name: true, id: true } },
+				npc: { columns: { name: true, id: true } },
+				site: { columns: { name: true, id: true } },
+				quest: { columns: { name: true, id: true } },
+				stage: { columns: { name: true, id: true } },
 			},
 		}),
 	faction_quest_involvement_by_id: (id: number) =>
 		db.query.factionQuestInvolvement.findFirst({
 			where: eq(factionQuestInvolvement.id, id),
-			with: { faction: { columns: { embedding: false } }, quest: { columns: { embedding: false } } },
+			with: { faction: true, quest: true },
 		}),
 	npc_quest_role_by_id: (id: number) =>
 		db.query.npcQuestRoles.findFirst({
 			where: eq(npcQuestRoles.id, id),
-			with: { npc: { columns: { embedding: false } }, quest: { columns: { embedding: false } } },
+			with: { npc: true, quest: true },
 		}),
 	faction_regional_power_by_id: (id: number) =>
 		db.query.factionRegionalPower.findFirst({
 			where: eq(factionRegionalPower.id, id),
 			with: {
-				faction: { columns: { embedding: false } },
-				region: { columns: { embedding: false } },
-				quest: { columns: { embedding: false } },
-				area: { columns: { embedding: false } },
-				site: { columns: { embedding: false } },
+				faction: true,
+				region: true,
+				quest: true,
+				area: true,
+				site: true,
 			},
 		}),
 	quest_hook_npc_by_id: (id: number) =>
 		db.query.questHookNpcs.findFirst({
 			where: eq(questHookNpcs.id, id),
 			with: {
-				npc: { columns: { embedding: false } },
+				npc: true,
 				hook: true,
 			},
 		}),
@@ -85,11 +85,11 @@ export const entityGetters: AssociationGetters = {
 		db.query.questIntroductions.findFirst({
 			where: eq(questIntroductions.id, id),
 			with: {
-				quest: { columns: { embedding: false } },
-				faction: { columns: { embedding: false } },
+				quest: true,
+				faction: true,
 				npcs: true,
-				site: { columns: { embedding: false } },
-				stage: { columns: { embedding: false } },
+				site: true,
+				stage: true,
 			},
 		}),
 	region_connection_detail_by_id: (id: number) =>
@@ -99,7 +99,7 @@ export const entityGetters: AssociationGetters = {
 		}),
 }
 
-export type AssociationTools = CreateTableTools<typeof tables.assocationTables>
+export type AssociationTools = CreateTableTools<typeof tables.associationTables>
 
 export const associationToolDefinitions: Record<AssociationTools, ToolDefinition> = {
 	manage_clues: {

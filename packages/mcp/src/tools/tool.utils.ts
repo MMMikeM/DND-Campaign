@@ -1,11 +1,9 @@
 import type { EmbeddedEntityName } from "@tome-master/shared"
-import { cosineDistance, eq, isNotNull, type SQL } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { z } from "zod"
 import { db, logger } from "../index"
-import { PgTable, PgColumn } from "drizzle-orm/pg-core"
+import { PgTable } from "drizzle-orm/pg-core"
 import { ToolHandler, ToolHandlerReturn } from "./utils/types"
-import { getGeminiEmbedding, getTextForEntity } from "@tome-master/shared"
-import { type ColumnBaseConfig, type ColumnDataType } from "drizzle-orm"
 
 type EmbeddingConfig = {
 	entityNameForEmbedding: EmbeddedEntityName
@@ -54,37 +52,7 @@ export const createEntityHandler = (
 	table: PgTable,
 	schema: z.ZodObject<z.ZodRawShape>,
 	entityName: string,
-	embeddingConfig?: EmbeddingConfig,
 ): ToolHandler => {
-	const generateEmbedding = async (data: Record<string, unknown>): Promise<{ embedding?: number[] }> => {
-		if (!embeddingConfig || process.env[embeddingConfig.enabledEnvVar] !== "true") {
-			return {}
-		}
-
-		try {
-			logger.info(`Generating embedding for ${entityName} ID: ${data.id ?? "(new)"}`)
-
-			const textToEmbed = getTextForEntity(embeddingConfig.entityNameForEmbedding, data)
-			if (!textToEmbed) {
-				logger.warn(`No text content for ${entityName} ID: ${data.id ?? "(new)"}. Skipping embedding.`)
-				return {}
-			}
-
-			const embeddingVector = await getGeminiEmbedding(textToEmbed)
-			logger.info(`Embedding generated for ${entityName} ID: ${data.id ?? "(new)"}`)
-
-			return { embedding: embeddingVector }
-		} catch (error) {
-			if (error instanceof Error) {
-				logger.error(`Failed to generate embedding for ${entityName} ID ${data.id ?? "(new)"}:`, {
-					message: error.message,
-					stack: error.stack,
-				})
-			}
-			return {}
-		}
-	}
-
 	const deleteRecord = async (id: number): Promise<ToolHandlerReturn> => {
 		if (!id) {
 			return createErrorResponse("Error: Valid ID is required for delete operations.")
@@ -125,9 +93,7 @@ export const createEntityHandler = (
 			const operation = parsedData.id ? "Updating" : "Creating"
 			logger.info(`${operation} ${entityName}`, { args: parsedData })
 
-			const embeddingData = await generateEmbedding(parsedData)
-
-			const dataToSave: Record<string, unknown> = { ...parsedData, ...embeddingData }
+			const dataToSave: Record<string, unknown> = { ...parsedData }
 
 			if (parsedData.id) {
 				const result = await db
@@ -266,128 +232,6 @@ export const createEntityQueryHandler = (entityMap: EntityMapping, schema: z.Zod
 					{
 						type: "text",
 						text: `Error querying entity: ${error instanceof Error ? error.message : String(error)}`,
-					},
-				],
-			}
-		}
-	}
-}
-
-const embeddingIdSchema = z.object({
-	id: z.number().describe("The ID of the entity to generate the embedding for."),
-})
-
-type GenerateAndSaveEmbeddingCallback = (id: number) => Promise<string>
-
-export const createEmbeddingGenerationHandler = (
-	entityName: string,
-	generateAndSaveEmbeddingCallback: GenerateAndSaveEmbeddingCallback,
-): ToolHandler => {
-	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		const parseResult = embeddingIdSchema.safeParse(args)
-		if (!parseResult.success) {
-			const toolName = `generate_${entityName.toLowerCase().replace(/ /g, "_")}_embedding`
-			logger.error(`Invalid arguments for ${toolName}`, { errors: parseResult.error.flatten() })
-			return {
-				isError: true,
-				content: [{ type: "text", text: `Invalid arguments: ${parseResult.error.message}` }],
-			}
-		}
-		const { id } = parseResult.data
-
-		try {
-			logger.info(`Attempting to generate embedding for ${entityName} ID: ${id}`)
-
-			const successMessage = await generateAndSaveEmbeddingCallback(id)
-
-			logger.info(`Successfully generated and saved embedding for ${entityName} ID: ${id}`)
-			return { content: [{ type: "text", text: successMessage }] }
-		} catch (error) {
-			logger.error(`Error during embedding generation for ${entityName} ID ${id}:`, {
-				error: error instanceof Error ? error.message : String(error),
-				stack: error instanceof Error ? error.stack : undefined,
-			})
-			return {
-				isError: true,
-				content: [
-					{
-						type: "text",
-						text: `Failed to generate embedding for ${entityName} ID ${id}: ${error instanceof Error ? error.message : String(error)}`,
-					},
-				],
-			}
-		}
-	}
-}
-
-export const similaritySearchSchema = z.object({
-	query: z.string().describe("Text to search for similar items"),
-	limit: z.number().int().positive().optional().default(5).describe("Maximum number of results to return (default 5)"),
-})
-
-export const createSimilaritySearchHandler = (
-	table: PgTable & { embedding?: PgColumn<ColumnBaseConfig<ColumnDataType, string>, object, object> },
-	entityName: string,
-	selectColumns: Record<string, PgColumn | SQL<unknown>>,
-): ToolHandler => {
-	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		const parseResult = similaritySearchSchema.safeParse(args)
-		if (!parseResult.success) {
-			logger.error(`Invalid arguments for ${entityName} similarity search`, { errors: parseResult.error.flatten() })
-			return {
-				isError: true,
-				content: [{ type: "text", text: `Invalid arguments: ${parseResult.error.message}` }],
-			}
-		}
-
-		if (!table.embedding) {
-			logger.error(`Similarity search not supported for ${entityName} without embedding column`)
-			return {
-				isError: true,
-				content: [{ type: "text", text: `Similarity search not supported for ${entityName} without embedding column` }],
-			}
-		}
-
-		const { query, limit } = parseResult.data
-
-		try {
-			logger.info(`Searching for ${entityName}s similar to query: "${query}" (limit: ${limit})`)
-
-			const queryEmbedding = await getGeminiEmbedding(query)
-
-			const columnsToSelect = {
-				...selectColumns,
-				...(!("similarity" in selectColumns)
-					? {
-							similarity: cosineDistance(table.embedding, queryEmbedding),
-						}
-					: {}),
-			}
-
-			const results = await db
-				.select(columnsToSelect)
-				.from(table)
-				.where(isNotNull(table.embedding))
-				.orderBy(cosineDistance(table.embedding, queryEmbedding))
-				.limit(limit)
-
-			logger.info(`Found ${results.length} similar ${entityName}(s) for query: "${query}"`)
-			if (results.length === 0) {
-				return { content: [{ type: "text", text: `No similar ${entityName}s found for query: "${query}"` }] }
-			}
-
-			return results
-		} catch (error) {
-			logger.error(`Error during ${entityName} similarity search for query "${query}":`, {
-				error: error instanceof Error ? error.message : String(error),
-				stack: error instanceof Error ? error.stack : undefined,
-			})
-			return {
-				isError: true,
-				content: [
-					{
-						type: "text",
-						text: `Failed to perform similarity search for ${entityName}s: ${error instanceof Error ? error.message : String(error)}`,
 					},
 				],
 			}
