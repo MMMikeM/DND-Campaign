@@ -12,7 +12,7 @@ const {
 		items,
 		factionQuestInvolvement,
 		npcQuestRoles,
-		factionRegionalPower,
+		factionTerritorialControl,
 		questHookNpcs,
 		questIntroductions,
 		regionConnectionDetails,
@@ -26,7 +26,7 @@ export const entityGetters: AssociationGetters = {
 	all_items: () => db.query.items.findMany({}),
 	all_faction_quest_involvement: () => db.query.factionQuestInvolvement.findMany({}),
 	all_npc_quest_roles: () => db.query.npcQuestRoles.findMany({}),
-	all_faction_regional_power: () => db.query.factionRegionalPower.findMany({}),
+	all_faction_territorial_control: () => db.query.factionTerritorialControl.findMany({}),
 	all_quest_hook_npcs: () => db.query.questHookNpcs.findMany({}),
 	all_quest_introductions: () => db.query.questIntroductions.findMany({}),
 	all_region_connection_details: () => db.query.regionConnectionDetails.findMany({}),
@@ -62,13 +62,12 @@ export const entityGetters: AssociationGetters = {
 			where: eq(npcQuestRoles.id, id),
 			with: { npc: true, quest: true },
 		}),
-	faction_regional_power_by_id: (id: number) =>
-		db.query.factionRegionalPower.findFirst({
-			where: eq(factionRegionalPower.id, id),
+	faction_territorial_control_by_id: (id: number) =>
+		db.query.factionTerritorialControl.findFirst({
+			where: eq(factionTerritorialControl.id, id),
 			with: {
 				faction: true,
 				region: true,
-				quest: true,
 				area: true,
 				site: true,
 			},
@@ -126,10 +125,14 @@ export const associationToolDefinitions: Record<AssociationTools, ToolDefinition
 		inputSchema: zodToMCP(schemas.manage_npc_quest_roles),
 		handler: createEntityHandler(npcQuestRoles, schemas.manage_npc_quest_roles, "npc_quest_role"),
 	},
-	manage_faction_regional_power: {
-		description: createEntityActionDescription("faction regional power"),
-		inputSchema: zodToMCP(schemas.manage_faction_regional_power),
-		handler: createEntityHandler(factionRegionalPower, schemas.manage_faction_regional_power, "faction_regional_power"),
+	manage_faction_territorial_control: {
+		description: createEntityActionDescription("faction territorial control"),
+		inputSchema: zodToMCP(schemas.manage_faction_territorial_control),
+		handler: createEntityHandler(
+			factionTerritorialControl,
+			schemas.manage_faction_territorial_control,
+			"faction_territorial_control",
+		),
 	},
 	manage_quest_hook_npcs: {
 		description: createEntityActionDescription("quest hook NPC"),

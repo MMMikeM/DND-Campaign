@@ -5,12 +5,12 @@ import { AssociationTools } from "./association-tools"
 import { id, optionalId } from "./tool.utils"
 
 const {
-	assocationTables: {
+	associationTables: {
 		clues,
 		items,
 		factionQuestInvolvement,
 		npcQuestRoles,
-		factionRegionalPower,
+		factionTerritorialControl,
 		questHookNpcs,
 		questIntroductions,
 		regionConnectionDetails,
@@ -30,7 +30,6 @@ export const schemas = {
 		discoveryCondition: (s) => s.describe("How players can find this clue (skill checks, actions, etc.)"),
 		creativePrompts: (s) => s.describe("GM ideas for presenting and integrating this clue"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Discoverable evidence that reveals plot information and advances quest objectives"),
 
@@ -60,7 +59,6 @@ export const schemas = {
 		type: (s) => s.describe("Item category (weapon, armor, artifact, key item, tool, etc.)"),
 		significance: (s) => s.describe("Item's importance to the plot or world lore"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Interactive objects that players can acquire, use, and leverage in the narrative"),
 
@@ -78,16 +76,17 @@ export const schemas = {
 		.strict()
 		.describe("Defines how NPCs participate in quests, their narrative functions, and dramatic potential"),
 
-	manage_faction_regional_power: createInsertSchema(factionRegionalPower, {
+	manage_faction_territorial_control: createInsertSchema(factionTerritorialControl, {
 		id: optionalId.describe("ID of power record to manage (omit to create new, include alone to delete)"),
 		factionId: id.describe("ID of faction exerting influence"),
-		questId: optionalId.describe("ID of quest connected to this power dynamic"),
 		regionId: optionalId.describe("ID of region where influence is exerted"),
 		areaId: optionalId.describe("ID of area where influence is exerted"),
 		siteId: optionalId.describe("ID of site where influence is exerted"),
 		description: (s) => s.describe("How the faction exercises power in this location in point form"),
 		creativePrompts: (s) => s.describe("GM ideas for demonstrating faction influence in gameplay"),
-		powerLevel: (s) => s.describe("Extent of control (minor, moderate, strong, dominant)"),
+		influenceLevel: (s) => s.describe("Extent of control (minor, moderate, strong, dominant)"),
+		presence: (s) => s.describe("Visibility and activity in the area"),
+		priorities: (s) => s.describe("Goals and interests in this location"),
 	})
 		.strict()
 		.describe("Maps faction influence across locations, creating power dynamics that affect player actions"),

@@ -13,7 +13,9 @@ import { cosineDistance, eq } from "drizzle-orm"
 import type { PgTable, PgColumn } from "drizzle-orm/pg-core"
 import { ToolDefinition, ToolHandler } from "./utils/types"
 
-const { embeddings } = tables.embeddingTables
+const {
+	embeddingTables: { embeddings },
+} = tables
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
 	faction: "factions",

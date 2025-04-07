@@ -41,7 +41,6 @@ export const schemas = {
 		gender: z.enum(enums.genders).describe("Gender identity (male, female, non-binary, non-humanoid)"),
 		trustLevel: z.enum(enums.trustLevel).describe("Willingness to trust others (none, low, medium, high)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Characters with distinct personalities who interact with players as allies, enemies, or contacts"),
 

@@ -35,7 +35,6 @@ export const schemas = {
 		urgency: z.enum(enums.urgencies).describe("Time pressure (background, developing, urgent, critical)"),
 		visibility: z.enum(enums.visibilities).describe("How known this quest is (hidden, rumored, known, featured)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Adventures with objectives, rewards, and narrative impact that drive the campaign forward"),
 
@@ -79,7 +78,6 @@ export const schemas = {
 		dramatic_question: (s) => s.describe("Central conflict or tension driving this stage"),
 		name: (s) => s.describe("Title or identifier for this quest segment"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
 

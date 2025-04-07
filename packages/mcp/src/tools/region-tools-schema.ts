@@ -26,7 +26,6 @@ export const schemas = {
 		dangerLevel: z.enum(enums.dangerLevels).describe("Threat assessment (safe, low, moderate, high, deadly)"),
 		type: z.enum(enums.regionTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Major geographic areas that provide settings for adventures and define the campaign world"),
 
@@ -47,7 +46,6 @@ export const schemas = {
 		defenses: (s) => s.describe("Defensive structures and security measures"),
 		type: z.enum(enums.areaTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Subdivisions within regions that have distinct identities and adventure opportunities"),
 
@@ -71,7 +69,6 @@ export const schemas = {
 		mood: (s) => s.describe("Emotional atmosphere (peaceful, tense, eerie, vibrant)"),
 		siteType: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Specific locations where encounters, scenes, and adventures take place"),
 
@@ -108,9 +105,7 @@ export const schemas = {
 		encounterType: z.enum(enums.encounterTypes).describe("Interaction type (combat, social, puzzle, trap)"),
 		difficulty: z.enum(enums.difficultyLevels).describe("Challenge level (easy, medium, hard)"),
 		dangerLevel: z.enum(enums.dangerLevels).describe("Threat level (safe, low, moderate, high, deadly)"),
-	})
-		.omit({ embedding: true })
-		.strict()
+	}).strict()
 		.describe("Challenges, interactions, and events that players can experience at specific locations"),
 
 	manage_site_secrets: createInsertSchema(siteSecrets, {
@@ -125,7 +120,6 @@ export const schemas = {
 			.describe("Discovery challenge (obvious through nearly impossible)"),
 		secretType: z.enum(enums.secretTypes).describe("Category (historical, hidden area, concealed item, true purpose)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Hidden information and concealed areas that reward player exploration and investigation"),
 } satisfies Record<RegionTools, z.ZodSchema<unknown>>

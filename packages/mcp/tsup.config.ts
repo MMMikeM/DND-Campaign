@@ -8,5 +8,5 @@ export default defineConfig({
 	env: {
 		NODE_ENV: "production",
 	},
-	external: ["drizzle-orm", "drizzle-zod", "@swc/helpers"],
+	external: ["drizzle-orm", "drizzle-zod", "@swc/helpers", "@tome-master/shared"], // Add shared package
 })

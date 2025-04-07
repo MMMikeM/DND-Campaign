@@ -1,5 +1,5 @@
 import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
+import { eq, name } from "drizzle-orm"
 import { db } from "../index"
 import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
@@ -14,9 +14,53 @@ export type RegionTools = CreateTableTools<typeof tables.regionTables>
 export type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
 export const entityGetters: RegionGetters = {
-	all_regions: () => db.query.regions.findMany({}),
-	all_areas: () => db.query.areas.findMany({}),
-	all_sites: () => db.query.sites.findMany({}),
+	all_regions: () =>
+		db.query.regions.findMany({
+			columns: {
+				name: true,
+				id: true,
+				description: true,
+			},
+			with: {
+				areas: {
+					columns: { name: true, id: true },
+					with: {
+						sites: { columns: { name: true, id: true } },
+					},
+				},
+				quests: { columns: { name: true, id: true } },
+				influence: { with: { faction: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
+			},
+		}),
+	all_areas: () =>
+		db.query.areas.findMany({
+			columns: {
+				name: true,
+				id: true,
+				description: true,
+			},
+			with: {
+				influence: true,
+				region: { columns: { name: true, id: true } },
+				sites: { columns: { name: true, id: true } },
+			},
+		}),
+	all_sites: () =>
+		db.query.sites.findMany({
+			columns: {
+				name: true,
+				id: true,
+				description: true,
+			},
+			with: {
+				area: { columns: { name: true, id: true } },
+				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
+				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+			},
+		}),
 	all_region_connections: () =>
 		db.query.regionConnections.findMany({
 			with: {
@@ -48,7 +92,6 @@ export const entityGetters: RegionGetters = {
 		db.query.regions.findFirst({
 			where: eq(regions.id, id),
 			with: {
-				factions: { with: { faction: { columns: { name: true, id: true } } } },
 				influence: { with: { faction: { columns: { name: true, id: true } } } },
 				quests: { columns: { name: true, id: true } },
 				areas: { columns: { id: true, name: true } },

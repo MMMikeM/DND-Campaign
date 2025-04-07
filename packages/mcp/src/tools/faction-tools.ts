@@ -7,7 +7,7 @@ import { schemas } from "./faction-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
 const {
-	factionTables: { factions, factionDiplomacy, factionRegions, factionHeadquarters, factionCulture, factionOperations },
+	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas },
 } = tables
 
 export type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
@@ -15,10 +15,9 @@ export type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
 export const entityGetters: FactionGetters = {
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
-	all_faction_regions: () => db.query.factionRegions.findMany({}),
 	all_faction_headquarters: () => db.query.factionHeadquarters.findMany({}),
 	all_faction_culture: () => db.query.factionCulture.findMany({}),
-	all_faction_operations: () => db.query.factionOperations.findMany({}),
+	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
 
 	faction_by_id: (id: number) =>
 		db.query.factions.findFirst({
@@ -27,12 +26,13 @@ export const entityGetters: FactionGetters = {
 				headquarters: { with: { site: true } },
 				members: { with: { npc: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
-				relatedRegions: { with: { region: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
-				operations: true,
+
 				culture: true,
 				influence: true,
+				alliances: { with: { targetFaction: { columns: { name: true, id: true } } } },
+
 			},
 		}),
 	faction_diplomacy_by_id: (id: number) =>
@@ -41,14 +41,6 @@ export const entityGetters: FactionGetters = {
 			with: {
 				sourceFaction: { columns: { name: true, id: true } },
 				targetFaction: { columns: { name: true, id: true } },
-			},
-		}),
-	faction_region_by_id: (id: number) =>
-		db.query.factionRegions.findFirst({
-			where: eq(factionRegions.id, id),
-			with: {
-				faction: { columns: { name: true, id: true } },
-				region: { columns: { name: true, id: true } },
 			},
 		}),
 	faction_headquarter_by_id: (id: number) =>
@@ -64,9 +56,9 @@ export const entityGetters: FactionGetters = {
 			where: eq(factionCulture.id, id),
 			with: { faction: { columns: { name: true, id: true } } },
 		}),
-	faction_operation_by_id: (id: number) =>
-		db.query.factionOperations.findFirst({
-			where: eq(factionOperations.id, id),
+	faction_agenda_by_id: (id: number) =>
+		db.query.factionAgendas.findFirst({
+			where: eq(factionAgendas.id, id),
 			with: { faction: { columns: { name: true, id: true } } },
 		}),
 }
@@ -84,20 +76,15 @@ export const factionToolDefinitions: Record<FactionTools, ToolDefinition> = {
 		inputSchema: zodToMCP(schemas.manage_faction_diplomacy),
 		handler: createEntityHandler(factionDiplomacy, schemas.manage_faction_diplomacy, "faction_diplomacy"),
 	},
-	manage_faction_regions: {
-		description: createEntityActionDescription("faction region"),
-		inputSchema: zodToMCP(schemas.manage_faction_regions),
-		handler: createEntityHandler(factionRegions, schemas.manage_faction_regions, "faction_region"),
-	},
 	manage_faction_culture: {
 		description: createEntityActionDescription("faction culture"),
 		inputSchema: zodToMCP(schemas.manage_faction_culture),
 		handler: createEntityHandler(factionCulture, schemas.manage_faction_culture, "faction_culture"),
 	},
-	manage_faction_operations: {
-		description: createEntityActionDescription("faction operation"),
-		inputSchema: zodToMCP(schemas.manage_faction_operations),
-		handler: createEntityHandler(factionOperations, schemas.manage_faction_operations, "faction_operation"),
+	manage_faction_agendas: {
+		description: createEntityActionDescription("faction agenda"),
+		inputSchema: zodToMCP(schemas.manage_faction_agendas),
+		handler: createEntityHandler(factionAgendas, schemas.manage_faction_agendas, "faction_agenda"),
 	},
 	manage_faction_headquarters: {
 		description: createEntityActionDescription("faction headquarters"),
