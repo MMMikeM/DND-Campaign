@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { optionalId } from "./tool.utils"
+import { id, optionalId } from "./tool.utils" // Added id import
 import { QuestTools } from "./quest-tools"
 
 const {
@@ -32,7 +32,7 @@ export const schemas = {
 					"quest_unlock_condition",
 				])
 				.describe("Type of Quest-related entity to retrieve"),
-			id: z.number().optional().describe("Optional ID of the specific entity to retrieve"),
+			id: optionalId.describe("Optional ID of the specific entity to retrieve"), // Changed z.number().optional()
 		})
 		.describe("Get a Quest-related entity by type and optional ID"),
 	// Remove old getter schemas
@@ -62,10 +62,10 @@ export const schemas = {
 
 	manage_quest_dependencies: createInsertSchema(questDependencies, {
 		id: optionalId.describe("ID of dependency to manage (omit to create new, include alone to delete)"),
-		questId: optionalId.describe("ID of the primary quest in this relationship"),
+		questId: id.describe("ID of the primary quest in this relationship"),
 		description: (s) => s.describe("How these quests interconnect narratively in point form"),
 		creativePrompts: (s) => s.describe("Ideas for emphasizing connections between quests"),
-		relatedQuestId: (s) => s.optional().describe("ID of the secondary quest in this relationship"),
+		relatedQuestId: id.describe("ID of the secondary quest in this relationship"), // Changed (s) => s.optional()
 		dependencyType: z
 			.enum(enums.dependencyTypes)
 			.describe("Connection type (prerequisite, sequel, parallel, alternative)"),
@@ -75,7 +75,7 @@ export const schemas = {
 
 	manage_quest_unlock_conditions: createInsertSchema(questUnlockConditions, {
 		id: optionalId.describe("ID of condition to manage (omit to create new, include alone to delete)"),
-		questId: optionalId.describe("ID of quest this condition applies to"),
+		questId: id.describe("ID of quest this condition applies to"),
 		conditionDetails: (s) => s.describe("Requirements that must be met to unlock quest"),
 		conditionType: z
 			.enum(enums.unlockConditionTypes)
@@ -87,7 +87,7 @@ export const schemas = {
 
 	manage_quest_stages: createInsertSchema(questStages, {
 		id: optionalId.describe("ID of stage to manage (omit to create new, include alone to delete)"),
-		questId: optionalId.describe("ID of parent quest this stage belongs to"),
+		questId: id.describe("ID of parent quest this stage belongs to"),
 		siteId: optionalId.describe("ID of site where this stage takes place"),
 		description: (s) => s.describe("Key events and plot developments in this segment in point form"),
 		creativePrompts: (s) => s.describe("Ideas for running this stage or adapting to player approaches"),
@@ -115,9 +115,9 @@ export const schemas = {
 		options: (s) => s.describe("Explicit choices available to players"),
 		name: (s) => s.describe("Identifier for this pivotal moment"),
 		decisionType: z.enum(enums.decisionTypes).describe("Nature of choice (moral, tactical, resource, identity, etc.)"),
-		questId: (s) => s.describe("ID of quest this decision belongs to"),
-		fromStageId: (s) => s.describe("ID of stage where this decision occurs"),
-		toStageId: (s) => s.optional().describe("ID of stage this decision leads to if taken"),
+		questId: id.describe("ID of quest this decision belongs to"), // Changed required ID
+		fromStageId: id.describe("ID of stage where this decision occurs"), // Changed required ID
+		toStageId: optionalId.describe("ID of stage this decision leads to if taken"), // Changed optional ID
 		conditionType: z
 			.enum(enums.conditionTypes)
 			.describe("Trigger type (choice, skill_check, item, npc, faction, etc.)"),
@@ -128,14 +128,14 @@ export const schemas = {
 
 	manage_decision_outcomes: createInsertSchema(decisionOutcomes, {
 		id: optionalId.describe("ID of outcome to manage (omit to create new, include alone to delete)"),
-		decisionId: (s) => s.describe("ID of the decision that triggers this consequence"),
+		decisionId: id.describe("ID of the decision that triggers this consequence"), // Changed required ID
 		description: (s) => s.describe("How this consequence manifests in the world in point form"),
 		creativePrompts: (s) => s.describe("Ideas for representing this consequence meaningfully"),
 		outcomeType: z
 			.enum(enums.outcomeTypes)
 			.describe("Effect type (reaction, world_change, relationship, reputation, etc.)"),
 		delayFactor: z.enum(enums.outcomeDelay).describe("When this occurs (immediate, next session, later in campaign)"),
-		affectedStageId: (s) => s.optional().describe("ID of quest stage impacted by this consequence"),
+		affectedStageId: optionalId.describe("ID of quest stage impacted by this consequence"), // Changed optional ID
 		severity: z.enum(enums.outcomeSeverity).describe("Impact magnitude (minor, moderate, major)"),
 		visibility: z
 			.enum(enums.outcomeVisibility)
@@ -148,7 +148,7 @@ export const schemas = {
 		id: optionalId.describe("ID of twist to manage (omit to create new, include alone to delete)"),
 		description: (s) => s.describe("The revelation or unexpected development in detail in point form"),
 		creativePrompts: (s) => s.describe("Ideas for foreshadowing or maximizing impact"),
-		questId: (s) => s.describe("ID of quest this twist belongs to"),
+		questId: id.describe("ID of quest this twist belongs to"), // Changed required ID
 		impact: z
 			.enum(enums.impactSeverity)
 			.describe("How significantly this changes the narrative (minor, moderate, major)"),

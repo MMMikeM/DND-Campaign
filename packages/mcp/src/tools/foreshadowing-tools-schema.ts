@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils"
+import { id, optionalId } from "./tool.utils" // Added id import
 import { ForeshadowingTools } from "./foreshadowing-tools"
 
 const {
@@ -17,11 +17,11 @@ export const schemas = {
 		.strict()
 		.describe("Retrieve information about narrative foreshadowing hints"),
 	manage_narrative_foreshadowing: createInsertSchema(narrativeForeshadowing, {
-		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"),
-		questStageId: (s) => s.optional().describe("ID of quest stage where this hint appears"),
-		siteId: (s) => s.optional().describe("ID of site where this hint is encountered"),
-		npcId: (s) => s.optional().describe("ID of NPC involved in delivering this hint"),
-		factionId: (s) => s.optional().describe("ID of faction connected to this hint"),
+		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"), // Already correct
+		questStageId: optionalId.describe("ID of quest stage where this hint appears"),
+		siteId: optionalId.describe("ID of site where this hint is encountered"),
+		npcId: optionalId.describe("ID of NPC involved in delivering this hint"),
+		factionId: optionalId.describe("ID of faction connected to this hint"),
 		name: (s) => s.describe("Short, evocative title (e.g., 'Mysterious Symbol on Wall')"),
 		type: z
 			.enum(enums.foreshadowingTypes)
@@ -34,10 +34,10 @@ export const schemas = {
 		narrativeWeight: z
 			.enum(enums.narrativeWeight)
 			.describe("Importance to the story (minor, supporting, major, crucial)"),
-		foreshadowsQuestId: (s) => s.optional().describe("ID of quest this hint points toward"),
-		foreshadowsTwistId: (s) => s.optional().describe("ID of quest twist this hint suggests"),
-		foreshadowsNpcId: (s) => s.optional().describe("ID of NPC this hint relates to"),
-		foreshadowsArcId: (s) => s.optional().describe("ID of narrative arc this hint connects to"),
+		foreshadowsQuestId: optionalId.describe("ID of quest this hint points toward"),
+		foreshadowsTwistId: optionalId.describe("ID of quest twist this hint suggests"),
+		foreshadowsNpcId: optionalId.describe("ID of NPC this hint relates to"),
+		foreshadowsArcId: optionalId.describe("ID of narrative arc this hint connects to"),
 		foreshadowsElement: (s) => s.describe("Specific event, trait, or plot point being hinted at"),
 		discovered: (s) => s.optional().describe("Whether players have found this hint yet"),
 		grantedToPlayers: (s) => s.optional().describe("When the hint was explicitly given to players"),

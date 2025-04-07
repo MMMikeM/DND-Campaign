@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { similaritySearchSchema } from "./tool.utils"
+import { id, optionalId, similaritySearchSchema } from "./tool.utils" // Added id, optionalId
 
 const embeddableEntityTypes = [
 	"faction",
@@ -23,7 +23,7 @@ export const schemas = {
 	generate_embedding: z
 		.object({
 			entity_type: z.enum(embeddableEntityTypes).describe("The type of entity to generate the embedding for."),
-			id: z.number().int().positive().describe("The unique ID of the entity record."),
+			id: id.describe("The unique ID of the entity record."), // Changed to use id
 		})
 		.strict()
 		.describe("Generate and save the vector embedding for a specific entity based on its combined text fields."),

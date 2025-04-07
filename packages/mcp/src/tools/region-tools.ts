@@ -33,16 +33,7 @@ const entityGetters: RegionGetters = {
 				outgoingRelations: { with: { targetRegion: true, details: true } },
 				areas: {
 					with: {
-						sites: {
-							with: {
-								encounters: true,
-								secrets: true,
-								incomingRelations: true,
-								outgoingRelations: true,
-								items: true,
-								npcs: true,
-							},
-						},
+						sites: true,
 					},
 				},
 			},
@@ -52,12 +43,7 @@ const entityGetters: RegionGetters = {
 			where: eq(areas.id, id),
 			with: {
 				region: true,
-				sites: {
-					with: {
-						encounters: true,
-						secrets: true,
-					},
-				},
+				sites: true,
 			},
 		}),
 	site_by_id: (id: number) =>
@@ -83,7 +69,7 @@ const entityGetters: RegionGetters = {
 export const regionToolDefinitions: Record<RegionTools, ToolDefinition> = {
 	get_region_entity: {
 		description: "Get region information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_entity),
+		inputSchema: zodToMCP(schemas.get_region_entity),
 		handler: createGetEntityHandler("region", entityGetters),
 	},
 	manage_regions: {
