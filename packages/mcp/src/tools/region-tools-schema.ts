@@ -9,14 +9,6 @@ const {
 } = tables
 
 export const schemas = {
-	get_region_entity: z
-		.object({
-			entity_type: z
-				.enum(["region", "area", "site", "region_connection", "site_link", "site_encounter", "site_secret"])
-				.describe("Type of entity to retrieve"),
-			id: optionalId.describe("Optional ID of the specific entity to retrieve"),
-		})
-		.describe("Get an entity by type and optional ID"),
 	manage_regions: createInsertSchema(regions, {
 		id: optionalId.describe("ID of region to manage (omit to create new, include alone to delete)"),
 		culturalNotes: (s) => s.describe("Traditions, customs, and social behaviors in point form"),

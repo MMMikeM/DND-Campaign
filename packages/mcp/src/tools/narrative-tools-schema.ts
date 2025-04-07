@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils" // Added id import
+import { id, optionalId } from "./tool.utils"
 import { NarrativeTools } from "./narrative-tools"
 
 const {
@@ -9,13 +9,6 @@ const {
 } = tables
 
 export const schemas = {
-	get_narrative_entity: z
-		.object({
-			type: z.enum(["narrative_arc", "arc_membership"]).describe("Type of narrative entity to retrieve"),
-			id: optionalId.describe("ID of the entity to retrieve (optional)"),
-		})
-		.strict()
-		.describe("Retrieve information about narrative arcs and their membership"),
 	manage_narrative_arcs: createInsertSchema(narrativeArcs, {
 		id: optionalId.describe("ID of narrative arc to manage (omit to create new, include alone to delete)"),
 		name: (s) => s.describe("Distinctive identifying title for this storyline"),

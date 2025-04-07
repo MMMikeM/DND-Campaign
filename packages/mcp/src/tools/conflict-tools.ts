@@ -2,7 +2,7 @@ import { tables } from "@tome-master/shared"
 import { zodToMCP } from "../zodToMcp"
 import { schemas } from "./conflict-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
-import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { db } from ".."
 import { eq } from "drizzle-orm"
 
@@ -11,9 +11,9 @@ const {
 } = tables
 
 type ConflictGetters = CreateEntityGetters<typeof tables.conflictTables>
-export type ConflictTools = CreateTableTools<typeof tables.conflictTables> | "get_conflict_entity"
+export type ConflictTools = CreateTableTools<typeof tables.conflictTables>
 
-const entityGetters: ConflictGetters = {
+export const entityGetters: ConflictGetters = {
 	all_major_conflicts: () => db.query.majorConflicts.findMany(),
 	all_conflict_participants: () => db.query.conflictParticipants.findMany(),
 	all_conflict_progression: () => db.query.conflictProgression.findMany(),
@@ -31,7 +31,7 @@ const entityGetters: ConflictGetters = {
 			where: eq(conflictParticipants.id, id),
 			with: {
 				conflict: true,
-				faction: true,
+				faction: { columns: { embedding: false } },
 			},
 		}),
 
@@ -46,11 +46,6 @@ const entityGetters: ConflictGetters = {
 }
 
 export const conflictToolDefinitions: Record<ConflictTools, ToolDefinition> = {
-	get_conflict_entity: {
-		description: "Get conflict-related entity information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_conflict_entity),
-		handler: createGetEntityHandler("conflict", entityGetters),
-	},
 	manage_major_conflicts: {
 		description: createEntityActionDescription("major conflict"),
 		inputSchema: zodToMCP(schemas.manage_major_conflicts),

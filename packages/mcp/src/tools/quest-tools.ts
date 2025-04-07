@@ -2,7 +2,7 @@ import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
 import zodToMCP from "../zodToMcp"
-import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { schemas } from "./quest-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
@@ -20,7 +20,7 @@ const {
 
 export type QuestGetters = CreateEntityGetters<typeof tables.questTables>
 
-const entityGetters: QuestGetters = {
+export const entityGetters: QuestGetters = {
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
@@ -34,59 +34,77 @@ const entityGetters: QuestGetters = {
 			where: eq(quests.id, id),
 			with: {
 				influence: true,
-				factions: true,
-				npcs: true,
 				items: true,
 				stages: true,
-				region: true,
-				incomingRelations: { with: { sourceQuest: true } },
-				outgoingRelations: { with: { targetQuest: true } },
 				unlockConditions: true,
 				twists: true,
+				region: { columns: { name: true, id: true } },
+				factions: { with: { faction: { columns: { name: true, id: true } } } },
+				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
 			},
 		}),
 	quest_stage_by_id: (id: number) =>
 		db.query.questStages.findFirst({
 			where: eq(questStages.id, id),
 			with: {
-				quest: true,
-				site: { with: { area: true, encounters: true, items: true, secrets: true, npcs: true } },
-				outgoingDecisions: { with: { toStage: true, consequences: true } },
-				incomingDecisions: { with: { fromStage: true, consequences: true } },
-				incomingConsequences: { with: { affectedStage: true, decision: true } },
+				quest: { columns: { name: true, id: true } },
+				site: {
+					with: {
+						area: { columns: { name: true, id: true } },
+						encounters: { columns: { name: true, id: true } },
+						items: { columns: { name: true, id: true } },
+						secrets: true,
+						influence: true,
+						npcs: { with: { npc: { columns: { name: true, id: true } } } },
+					},
+				},
+				outgoingDecisions: { with: { toStage: { columns: { name: true, id: true } }, consequences: true } },
+				incomingDecisions: { with: { fromStage: { columns: { name: true, id: true } }, consequences: true } },
+				incomingConsequences: { with: { affectedStage: { columns: { name: true, id: true } }, decision: true } },
 				clues: true,
 			},
 		}),
 	stage_decision_by_id: (id: number) =>
 		db.query.stageDecisions.findFirst({
 			where: eq(stageDecisions.id, id),
-			with: { quest: true, fromStage: true, toStage: true, consequences: true },
+			with: {
+				quest: { columns: { name: true, id: true } },
+				fromStage: { columns: { name: true, id: true } },
+				toStage: { columns: { name: true, id: true } },
+				consequences: true,
+			},
 		}),
 	quest_dependencie_by_id: (id: number) =>
 		db.query.questDependencies.findFirst({
 			where: eq(questDependencies.id, id),
-			with: { sourceQuest: true, targetQuest: true, unlockConditions: true },
+			with: {
+				sourceQuest: { columns: { name: true, id: true } },
+				targetQuest: { columns: { name: true, id: true } },
+				unlockConditions: true,
+			},
 		}),
 	quest_twist_by_id: (id: number) =>
-		db.query.questTwists.findFirst({ where: eq(questTwists.id, id), with: { quest: true } }),
+		db.query.questTwists.findFirst({
+			where: eq(questTwists.id, id),
+			with: { quest: { columns: { name: true, id: true } } },
+		}),
 	decision_outcome_by_id: (id: number) =>
 		db.query.decisionOutcomes.findFirst({
 			where: eq(decisionOutcomes.id, id),
 			with: { decision: true, affectedStage: true },
 		}),
 	quest_unlock_condition_by_id: (id: number) =>
-		db.query.questUnlockConditions.findFirst({ where: eq(questUnlockConditions.id, id), with: { quest: true } }),
+		db.query.questUnlockConditions.findFirst({
+			where: eq(questUnlockConditions.id, id),
+			with: { quest: { columns: { name: true, id: true } } },
+		}),
 }
 
-export type QuestTools = CreateTableTools<typeof tables.questTables> | "get_quest_entity"
+export type QuestTools = CreateTableTools<typeof tables.questTables>
 
 export const questToolDefinitions: Record<QuestTools, ToolDefinition> = {
-	get_quest_entity: {
-		description: "Get Quest-related entity information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_quest_entity),
-		handler: createGetEntityHandler("quest", entityGetters),
-	},
-
 	manage_quests: {
 		description: createEntityActionDescription("quest"),
 		inputSchema: zodToMCP(schemas.manage_quests),

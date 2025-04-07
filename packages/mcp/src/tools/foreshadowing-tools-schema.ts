@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils" // Added id import
+import { id, optionalId } from "./tool.utils"
 import { ForeshadowingTools } from "./foreshadowing-tools"
 
 const {
@@ -9,15 +9,8 @@ const {
 } = tables
 
 export const schemas = {
-	get_foreshadowing_entity: z
-		.object({
-			type: z.enum(["narrative_foreshadowing"]).describe("Type of foreshadowing entity to retrieve"),
-			id: optionalId.describe("ID of the entity to retrieve (optional)"),
-		})
-		.strict()
-		.describe("Retrieve information about narrative foreshadowing hints"),
 	manage_narrative_foreshadowing: createInsertSchema(narrativeForeshadowing, {
-		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"), // Already correct
+		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"),
 		questStageId: optionalId.describe("ID of quest stage where this hint appears"),
 		siteId: optionalId.describe("ID of site where this hint is encountered"),
 		npcId: optionalId.describe("ID of NPC involved in delivering this hint"),

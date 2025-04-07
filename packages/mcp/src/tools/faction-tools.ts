@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
 import { schemas } from "./faction-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
@@ -12,7 +12,7 @@ const {
 
 export type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
 
-const entityGetters: FactionGetters = {
+export const entityGetters: FactionGetters = {
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
 	all_faction_regions: () => db.query.factionRegions.findMany({}),
@@ -24,12 +24,12 @@ const entityGetters: FactionGetters = {
 		db.query.factions.findFirst({
 			where: eq(factions.id, id),
 			with: {
-				members: { with: { npc: true } },
 				headquarters: { with: { site: true } },
-				relatedQuests: { with: { quest: true } },
-				relatedRegions: { with: { region: true } },
-				incomingRelationships: { with: { sourceFaction: true } },
-				outgoingRelationships: { with: { targetFaction: true } },
+				members: { with: { npc: { columns: { name: true, id: true } } } },
+				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
+				relatedRegions: { with: { region: { columns: { name: true, id: true } } } },
+				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
+				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
 				operations: true,
 				culture: true,
 				influence: true,
@@ -38,38 +38,36 @@ const entityGetters: FactionGetters = {
 	faction_diplomacy_by_id: (id: number) =>
 		db.query.factionDiplomacy.findFirst({
 			where: eq(factionDiplomacy.id, id),
-			with: { sourceFaction: true, targetFaction: true }, // Corrected relation names
+			with: {
+				sourceFaction: { columns: { name: true, id: true } },
+				targetFaction: { columns: { name: true, id: true } },
+			},
 		}),
 	faction_region_by_id: (id: number) =>
 		db.query.factionRegions.findFirst({
 			where: eq(factionRegions.id, id),
-			with: { faction: true, region: true },
+			with: { faction: { columns: { name: true, id: true } }, region: { columns: { name: true, id: true } } },
 		}),
 	faction_headquarter_by_id: (id: number) =>
 		db.query.factionHeadquarters.findFirst({
 			where: eq(factionHeadquarters.id, id),
-			with: { faction: true, site: true },
+			with: { faction: { columns: { name: true, id: true } }, site: { columns: { name: true, id: true } } },
 		}),
 	faction_culture_by_id: (id: number) =>
 		db.query.factionCulture.findFirst({
 			where: eq(factionCulture.id, id),
-			with: { faction: true },
+			with: { faction: { columns: { name: true, id: true } } },
 		}),
 	faction_operation_by_id: (id: number) =>
 		db.query.factionOperations.findFirst({
 			where: eq(factionOperations.id, id),
-			with: { faction: true },
+			with: { faction: { columns: { name: true, id: true } } },
 		}),
 }
 
-export type FactionTools = CreateTableTools<typeof tables.factionTables> | "get_faction_entity"
+export type FactionTools = CreateTableTools<typeof tables.factionTables>
 
 export const factionToolDefinitions: Record<FactionTools, ToolDefinition> = {
-	get_faction_entity: {
-		description: "Get Faction-related entity information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_faction_entity),
-		handler: createGetEntityHandler("faction", entityGetters),
-	},
 	manage_factions: {
 		description: createEntityActionDescription("faction"),
 		inputSchema: zodToMCP(schemas.manage_factions),
