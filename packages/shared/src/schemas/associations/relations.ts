@@ -3,14 +3,14 @@ import { relations } from "drizzle-orm"
 import {
 	clues,
 	factionQuestInvolvement,
-	factionRegionalPower,
+	factionTerritorialControl,
 	items,
 	npcQuestRoles,
 	questIntroductions,
 	questHookNpcs,
 	regionConnectionDetails,
 } from "./tables.js"
-import { embeddings } from "../embeddings/tables.js" // Import embeddings table
+import { embeddings } from "../embeddings/tables.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
@@ -70,29 +70,24 @@ export const factionQuestsRelations = relations(factionQuestInvolvement, ({ one 
 	}),
 }))
 
-export const factionInfluenceRelations = relations(factionRegionalPower, ({ one }) => ({
+export const factionTerritorialControlRelations = relations(factionTerritorialControl, ({ one }) => ({
 	faction: one(factions, {
-		fields: [factionRegionalPower.factionId],
+		fields: [factionTerritorialControl.factionId],
 		references: [factions.id],
 		relationName: "factionInfluence",
 	}),
-	quest: one(quests, {
-		fields: [factionRegionalPower.questId],
-		references: [quests.id],
-		relationName: "questFactionInfluence",
-	}),
 	region: one(regions, {
-		fields: [factionRegionalPower.regionId],
+		fields: [factionTerritorialControl.regionId],
 		references: [regions.id],
 		relationName: "regionFactionInfluence",
 	}),
 	area: one(areas, {
-		fields: [factionRegionalPower.areaId],
+		fields: [factionTerritorialControl.areaId],
 		references: [areas.id],
 		relationName: "areaFactionInfluence",
 	}),
 	site: one(sites, {
-		fields: [factionRegionalPower.siteId],
+		fields: [factionTerritorialControl.siteId],
 		references: [sites.id],
 		relationName: "siteFactionInfluence",
 	}),
@@ -125,7 +120,6 @@ export const itemRelations = relations(items, ({ one }) => ({
 		relationName: "stageItems",
 	}),
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [items.embeddingId],
 		references: [embeddings.id],
 	}),
@@ -172,7 +166,7 @@ export const regionConnectionDetailsRelations = relations(regionConnectionDetail
 	connection: one(regionConnections, {
 		fields: [regionConnectionDetails.relationId],
 		references: [regionConnections.id],
-		relationName: "connectionDetails", // Match name from above
+		relationName: "connectionDetails",
 	}),
 	controllingFaction: one(factions, {
 		fields: [regionConnectionDetails.controllingFaction],

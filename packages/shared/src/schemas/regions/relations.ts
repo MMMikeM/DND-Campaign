@@ -1,11 +1,10 @@
 import { relations } from "drizzle-orm"
 import { regions, regionConnections, areas, sites, siteLinks, siteEncounters, siteSecrets } from "./tables.js"
-import { embeddings } from "../embeddings/tables.js" // Import embeddings table
+import { embeddings } from "../embeddings/tables.js"
 
 import { quests } from "../quests/tables.js"
 import { npcSites } from "../npc/tables.js"
-import { factionRegionalPower, items, regionConnectionDetails } from "../associations/tables.js"
-import { factionRegions } from "../factions/tables.js"
+import { factionTerritorialControl, items, regionConnectionDetails } from "../associations/tables.js"
 
 export const regionsRelations = relations(regions, ({ many, one }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
@@ -13,11 +12,9 @@ export const regionsRelations = relations(regions, ({ many, one }) => ({
 
 	areas: many(areas, { relationName: "regionAreas" }),
 	quests: many(quests, { relationName: "regionQuests" }),
-	factions: many(factionRegions, { relationName: "regionFactions" }),
-	influence: many(factionRegionalPower, { relationName: "regionFactionInfluence" }),
+	influence: many(factionTerritorialControl, { relationName: "factionTerritorialControl" }),
 
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [regions.embeddingId],
 		references: [embeddings.id],
 	}),
@@ -31,10 +28,9 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 	}),
 
 	sites: many(sites, { relationName: "areaSites" }),
-	influence: many(factionRegionalPower, { relationName: "areaFactionInfluence" }),
+	influence: many(factionTerritorialControl, { relationName: "factionTerritorialControl" }),
 
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [areas.embeddingId],
 		references: [embeddings.id],
 	}),
@@ -54,10 +50,9 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
 	npcs: many(npcSites, { relationName: "siteNpcs" }),
 	items: many(items, { relationName: "siteItems" }),
-	influence: many(factionRegionalPower, { relationName: "siteFactionInfluence" }),
+	influence: many(factionTerritorialControl, { relationName: "factionTerritorialControl" }),
 
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [sites.embeddingId],
 		references: [embeddings.id],
 	}),
@@ -98,7 +93,6 @@ export const siteEncountersRelations = relations(siteEncounters, ({ one }) => ({
 		relationName: "siteEncounters",
 	}),
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [siteEncounters.embeddingId],
 		references: [embeddings.id],
 	}),

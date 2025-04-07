@@ -10,34 +10,23 @@ import {
 } from "./tables.js"
 import { embeddings } from "../embeddings/tables.js"
 import { regions, sites } from "../regions/tables.js"
-import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js"
+import { npcQuestRoles, factionQuestInvolvement, clues, items } from "../associations/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
+	outgoingRelations: many(questDependencies, { relationName: "sourceQuests" }),
+	incomingRelations: many(questDependencies, { relationName: "targetQuests" }),
+	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
+	items: many(items, { relationName: "questItems" }),
+	stages: many(questStages, { relationName: "questStages" }),
+	twists: many(questTwists, { relationName: "questTwists" }),
+	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
+	unlockConditions: many(questUnlockConditions, { relationName: "questUnlockConditions" }),
+
 	region: one(regions, {
 		fields: [quests.regionId],
 		references: [regions.id],
 		relationName: "regionQuests",
 	}),
-
-	stages: many(questStages, { relationName: "questStages" }),
-	twists: many(questTwists, { relationName: "questTwists" }),
-
-	outgoingRelations: many(questDependencies, {
-		relationName: "sourceQuests",
-	}),
-	incomingRelations: many(questDependencies, {
-		relationName: "targetQuests",
-	}),
-
-	unlockConditions: many(questUnlockConditions, {
-		relationName: "questUnlockConditions",
-	}),
-
-	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
-	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
-	items: many(items, { relationName: "questItems" }),
-	influence: many(factionRegionalPower, { relationName: "questFactionInfluence" }),
-
 	embedding: one(embeddings, {
 		fields: [quests.embeddingId],
 		references: [embeddings.id],
@@ -79,6 +68,11 @@ export const questTwistsRelations = relations(questTwists, ({ one }) => ({
 }))
 
 export const questStagesRelations = relations(questStages, ({ one, many }) => ({
+	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
+	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
+	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }),
+	clues: many(clues, { relationName: "stageClues" }),
+
 	quest: one(quests, {
 		fields: [questStages.questId],
 		references: [quests.id],
@@ -90,10 +84,6 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 		references: [sites.id],
 		relationName: "stageSite",
 	}),
-	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
-	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
-	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }),
-	clues: many(clues, { relationName: "stageClues" }),
 
 	embedding: one(embeddings, {
 		fields: [questStages.embeddingId],

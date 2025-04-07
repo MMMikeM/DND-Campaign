@@ -1,18 +1,16 @@
 // factions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString, embeddingVector } from "../../db/utils.js"
-import { embeddings } from "../embeddings/tables.js" // Import embeddings table
-import { sites, regions } from "../regions/tables.js"
+import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString } from "../../db/utils.js"
+import { embeddings } from "../embeddings/tables.js"
+import { sites } from "../regions/tables.js"
 import { alignments, relationshipStrengths, wealthLevels } from "../common.js"
 
 const sizeTypes = ["tiny", "small", "medium", "large", "massive"] as const
 const reachLevels = ["local", "regional", "national", "continental", "global"] as const
 const diplomaticTypes = ["ally", "enemy", "neutral", "vassal", "suzerain", "rival", "trade"] as const
-const controlLevels = ["contested", "influenced", "controlled", "dominated"] as const
-const factionOperationTypes = ["economic", "military", "diplomatic", "espionage", "public works", "research"] as const
-const factionOperationStatuses = ["planning", "initial", "ongoing", "concluding", "completed"] as const
-const factionOperationScales = ["minor", "moderate", "major", "massive"] as const
-const factionPriorities = ["low", "medium", "high"] as const
+const factionAgendaTypes = ["economic", "military", "political", "social", "occult", "technological"] as const
+const factionAgendaStage = ["preparatory", "active", "concluding", "resolved"] as const
+const factionAgendaImportance = ["peripheral", "significant", "central"] as const
 const factionTypes = [
 	"guild",
 	"cult",
@@ -43,22 +41,8 @@ export const factions = pgTable("factions", {
 	notes: list("notes"),
 	resources: list("resources"),
 	recruitment: list("recruitment").notNull(),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
-
-export const factionRegions = pgTable(
-	"faction_regions",
-	{
-		id: pk(),
-		factionId: cascadeFk("faction_id", factions.id),
-		regionId: nullableFk("region_id", regions.id),
-		controlLevel: oneOf("control_level", controlLevels),
-		presence: list("presence"), // How they manifest in the area
-		priorities: list("priorities"), // What they care about here
-	},
-	(t) => [unique().on(t.factionId, t.regionId)],
-)
 
 export const factionHeadquarters = pgTable(
 	"faction_headquarters",
@@ -86,23 +70,28 @@ export const factionDiplomacy = pgTable(
 	(t) => [unique().on(t.factionId, t.otherFactionId)],
 )
 
-export const factionOperations = pgTable(
-	"faction_operations",
+export const factionAgendas = pgTable(
+	"faction_agendas",
 	{
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
 		name: string("name").unique(),
-		type: oneOf("type", factionOperationTypes),
-		scale: oneOf("scale", factionOperationScales),
-		status: oneOf("status", factionOperationStatuses),
-		priority: oneOf("priority", factionPriorities),
+		agendaType: oneOf("agenda_type", factionAgendaTypes),
+		currentStage: oneOf("current_stage", factionAgendaStage),
+		importance: oneOf("importance", factionAgendaImportance),
+
+		ultimateAim: string("ultimate_aim"),
+		moralAmbiguity: string("moral_ambiguity"),
+
 		description: list("description"),
+		hiddenCosts: list("hidden_costs"),
+		keyOpponents: list("key_opponents"),
+		internalConflicts: list("internal_conflicts"),
+		approach: list("approach"),
+		publicImage: list("public_image"),
+		personalStakes: list("personal_stakes"),
+		storyHooks: list("story_hooks"),
 		creativePrompts: list("creative_prompts"),
-		objectives: list("objectives"),
-		site: list("site"),
-		involved_npcs: list("involved_npcs"),
-		embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-		// embedding: embeddingVector("embedding"), // Remove old column
 	},
 	(t) => [unique().on(t.factionId, t.name)],
 )
@@ -116,16 +105,14 @@ export const factionCulture = pgTable(
 		rituals: list("rituals"),
 		taboos: list("taboos"),
 		aesthetics: list("aesthetics"),
-		jargon: list("jargon"), // Special terms or phrases
-		recognitionSigns: list("recognition_signs"), // How members identify each other
-		embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-		// embedding: embeddingVector("embedding"), // Remove old column
+		jargon: list("jargon"),
+		recognitionSigns: list("recognition_signs"),
+		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [unique().on(t.factionId)],
 )
 
 export const enums = {
-	controlLevels,
 	diplomaticTypes,
 	relationshipStrengths,
 	sizeTypes,
@@ -133,8 +120,7 @@ export const enums = {
 	factionTypes,
 	wealthLevels,
 	alignments,
-	factionOperationTypes,
-	factionOperationStatuses,
-	factionOperationScales,
-	factionPriorities,
+	factionAgendaTypes,
+	factionAgendaStage,
+	factionAgendaImportance,
 }

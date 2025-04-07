@@ -10,7 +10,7 @@ const importanceLevels = ["minor", "supporting", "major", "critical"] as const
 const factionRoles = ["quest_giver", "antagonist", "ally", "target", "beneficiary", "obstacle", "resource"] as const
 const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
 const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
-const powerLevels = ["minor", "moderate", "strong", "dominant"] as const
+const influenceLevels = ["contested", "minor", "influenced", "moderate", "strong", "controlled", "dominated"] as const
 const routeTypes = ["road", "river", "mountain pass", "sea route", "portal", "wilderness"] as const
 const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
 const trustLevel = ["none", "low", "medium", "high"] as const
@@ -105,20 +105,21 @@ export const clues = pgTable("clues", {
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-export const factionRegionalPower = pgTable(
-	"faction_regional_power",
+export const factionTerritorialControl = pgTable(
+	"faction_territorial_control",
 	{
 		id: pk(),
 		factionId: cascadeFk("faction_id", factions.id),
-		questId: nullableFk("quest_id", quests.id),
 		regionId: nullableFk("region_id", regions.id),
 		areaId: nullableFk("area_id", areas.id),
 		siteId: nullableFk("site_id", sites.id),
-		powerLevel: oneOf("power_level", powerLevels),
+		influenceLevel: oneOf("influence_level", influenceLevels),
+		presence: list("presence"),
+		priorities: list("priorities"),
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 	},
-	(t) => [unique().on(t.factionId, t.questId, t.regionId, t.areaId, t.siteId)],
+	(t) => [unique().on(t.factionId, t.regionId, t.areaId, t.siteId)],
 )
 
 export const regionConnectionDetails = pgTable("region_connection_details", {
@@ -137,9 +138,9 @@ export const regionConnectionDetails = pgTable("region_connection_details", {
 export const enums = {
 	factionRoles,
 	importanceLevels,
+	influenceLevels,
 	introductionTypes,
 	npcRoles,
-	powerLevels,
 	presentationStyles,
 	routeTypes,
 	travelDifficulties,
