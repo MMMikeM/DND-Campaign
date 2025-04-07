@@ -1,8 +1,8 @@
 // conflict/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
-import { list, pk, string, oneOf, nullableFk, cascadeFk } from "../../db/utils"
-import { quests } from "../quests/tables"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
+import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 
 const conflictScopes = ["local", "regional", "global"] as const

@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm"
-import { npcs, characterRelationships, npcFactions, npcSites } from "./tables.js"
+import { clues, items, npcQuestRoles, questHookNpcs } from "../associations/tables.js"
 import { embeddings } from "../embeddings/tables.js"
-import { items, npcQuestRoles, questHookNpcs, clues } from "../associations/tables.js"
 import { factions } from "../factions/tables.js"
 import { sites } from "../regions/tables.js"
+import { characterRelationships, npcFactions, npcSites, npcs } from "./tables.js"
 
 export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	outgoingRelationships: many(characterRelationships, { relationName: "sourceNpc" }),

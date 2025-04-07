@@ -1,13 +1,12 @@
 // world/tables.ts
-import { pgTable, timestamp, boolean } from "drizzle-orm/pg-core"
-import { list, pk, string, oneOf, nullableFk } from "../../db/utils"
-import { quests } from "../quests/tables"
-import { stageDecisions } from "../quests/tables"
-import { factions } from "../factions/tables"
-import { regions, sites, areas } from "../regions/tables"
-import { npcs } from "../npc/tables"
+import { boolean, pgTable, timestamp } from "drizzle-orm/pg-core"
+import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { majorConflicts } from "../conflict/tables"
+import { factions } from "../factions/tables"
 import { narrativeArcs } from "../narrative/tables"
+import { npcs } from "../npc/tables"
+import { quests, stageDecisions } from "../quests/tables"
+import { areas, regions, sites } from "../regions/tables"
 
 const changeSeverity = ["minor", "moderate", "major", "campaign-defining"] as const
 const changeTypes = [

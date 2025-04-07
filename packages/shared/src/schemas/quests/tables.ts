@@ -1,6 +1,6 @@
 // quests/tables.ts
-import { pgTable, unique, integer } from "drizzle-orm/pg-core"
-import { cascadeFk, nullableFk, list, oneOf, pk, string } from "../../db/utils"
+import { integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables.js"
 import { regions, sites } from "../regions/tables"
 
@@ -117,9 +117,8 @@ export const questStages = pgTable("quest_stages", {
 	encounters: list("encounters"),
 	dramatic_moments: list("dramatic_moments"),
 	sensory_elements: list("sensory_elements"),
-	embeddingId: nullableFk("embedding_id", embeddings.id)
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
-
 
 export const stageDecisions = pgTable(
 	"stage_decisions",
