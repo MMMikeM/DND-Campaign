@@ -1,0 +1,2 @@
+ALTER TABLE "faction_agendas" ADD COLUMN "embedding_id" integer;--> statement-breakpoint
+ALTER TABLE "faction_agendas" ADD CONSTRAINT "faction_agendas_embedding_id_embeddings_id_fk" FOREIGN KEY ("embedding_id") REFERENCES "public"."embeddings"("id") ON DELETE set null ON UPDATE no action;

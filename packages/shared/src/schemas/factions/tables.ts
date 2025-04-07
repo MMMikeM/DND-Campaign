@@ -79,10 +79,8 @@ export const factionAgendas = pgTable(
 		agendaType: oneOf("agenda_type", factionAgendaTypes),
 		currentStage: oneOf("current_stage", factionAgendaStage),
 		importance: oneOf("importance", factionAgendaImportance),
-
 		ultimateAim: string("ultimate_aim"),
 		moralAmbiguity: string("moral_ambiguity"),
-
 		description: list("description"),
 		hiddenCosts: list("hidden_costs"),
 		keyOpponents: list("key_opponents"),
@@ -92,6 +90,7 @@ export const factionAgendas = pgTable(
 		personalStakes: list("personal_stakes"),
 		storyHooks: list("story_hooks"),
 		creativePrompts: list("creative_prompts"),
+		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [unique().on(t.factionId, t.name)],
 )
