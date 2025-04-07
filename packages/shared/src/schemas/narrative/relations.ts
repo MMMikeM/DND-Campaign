@@ -15,7 +15,7 @@ export const narrativeArcsRelations = relations(narrativeArcs, ({ many }) => ({
 	}),
 
 	worldChanges: many(worldStateChanges, {
-		relationName: "arcWorldChanges",
+		relationName: "worldChangesByArc",
 	}),
 }))
 

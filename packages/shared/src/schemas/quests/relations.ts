@@ -1,3 +1,4 @@
+// quests/relations.ts
 import { relations } from "drizzle-orm"
 import {
 	quests,
@@ -11,6 +12,7 @@ import {
 import { embeddings } from "../embeddings/tables.js"
 import { regions, sites } from "../regions/tables.js"
 import { npcQuestRoles, factionQuestInvolvement, clues, items } from "../associations/tables.js"
+import { worldStateChanges } from "../world/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	outgoingRelations: many(questDependencies, { relationName: "sourceQuests" }),
@@ -21,6 +23,8 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	twists: many(questTwists, { relationName: "questTwists" }),
 	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
 	unlockConditions: many(questUnlockConditions, { relationName: "questUnlockConditions" }),
+	worldChanges: many(worldStateChanges, { relationName: "worldChangesByQuest" }),
+	futureTriggers: many(worldStateChanges, { relationName: "worldChangeLeadsToQuest" }),
 
 	region: one(regions, {
 		fields: [quests.regionId],
@@ -33,21 +37,16 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	}),
 }))
 
-export const questDependenciesRelations = relations(questDependencies, ({ one, many }) => ({
+export const questDependenciesRelations = relations(questDependencies, ({ one }) => ({
 	sourceQuest: one(quests, {
 		fields: [questDependencies.questId],
 		references: [quests.id],
 		relationName: "sourceQuests",
 	}),
-
 	targetQuest: one(quests, {
 		fields: [questDependencies.relatedQuestId],
 		references: [quests.id],
 		relationName: "targetQuests",
-	}),
-
-	unlockConditions: many(questUnlockConditions, {
-		relationName: "relationConditions",
 	}),
 }))
 
@@ -108,6 +107,7 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		relationName: "toStage",
 	}),
 	consequences: many(decisionOutcomes, { relationName: "decisionConsequences" }),
+	worldChanges: many(worldStateChanges, { relationName: "worldChangesByDecision" }),
 }))
 
 export const decisionOutcomesRelations = relations(decisionOutcomes, ({ one }) => ({

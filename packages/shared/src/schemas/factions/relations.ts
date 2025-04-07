@@ -1,9 +1,13 @@
+// factions/relations.ts
 import { relations } from "drizzle-orm"
 import { factions, factionDiplomacy, factionHeadquarters, factionAgendas, factionCulture } from "./tables.js"
 import { embeddings } from "../embeddings/tables.js"
-import { sites, regions } from "../regions/tables.js"
-import { factionTerritorialControl, factionQuestInvolvement } from "../associations/tables.js"
+import { sites } from "../regions/tables.js"
+import { factionTerritorialControl, factionQuestInvolvement, clues } from "../associations/tables.js"
 import { npcFactions } from "../npc/tables.js"
+import { worldStateChanges } from "../world/tables.js"
+import { conflictParticipants } from "../conflict/tables.js"
+import { regionConnectionDetails } from "../associations/tables.js"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
 	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),
@@ -15,8 +19,10 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(factionQuestInvolvement, { relationName: "factionQuests" }),
 	influence: many(factionTerritorialControl, { relationName: "factionInfluence" }),
-
-	alliances: many(factionDiplomacy, { relationName: "factionAlliances" }),
+	controlledRoutes: many(regionConnectionDetails, { relationName: "factionControlledRoutes" }),
+	clues: many(clues, { relationName: "factionClues" }),
+	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
+	worldChanges: many(worldStateChanges, { relationName: "worldChangesAffectingFaction" }),
 
 	embedding: one(embeddings, {
 		fields: [factions.embeddingId],

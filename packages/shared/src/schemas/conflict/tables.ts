@@ -13,23 +13,19 @@ const questImpacts = ["escalates", "deescalates", "reveals_truth", "changes_side
 
 export const majorConflicts = pgTable("major_conflicts", {
 	id: pk(),
+	primaryRegionId: nullableFk("primary_region_id", regions.id),
 	name: string("name").unique(),
 	scope: oneOf("scope", conflictScopes),
 	nature: oneOf("nature", conflictNatures),
 	status: oneOf("status", conflictStatuses).default("active"),
 
-	// Core details
-	cause: string("cause").notNull(), // Root cause or trigger
+	cause: string("cause"),
 	description: list("description"),
-	stakes: list("stakes"), // What's at risk
+	stakes: list("stakes"),
 
-	// Regional focus
-	primaryRegionId: nullableFk("primary_region_id", regions.id),
-
-	// Story elements
-	moralDilemma: string("moral_dilemma"), // Central ethical question
+	moralDilemma: string("moral_dilemma"),
 	possibleOutcomes: list("possible_outcomes"),
-	hiddenTruths: list("hidden_truths"), // Facts unknown to most participants
+	hiddenTruths: list("hidden_truths"),
 	creativePrompts: list("creative_prompts"),
 })
 
@@ -39,11 +35,10 @@ export const conflictParticipants = pgTable("conflict_participants", {
 	factionId: cascadeFk("faction_id", factions.id),
 	role: oneOf("role", factionRoles),
 
-	// Additional context
-	motivation: string("motivation").notNull(), // Why they're involved
-	publicStance: string("public_stance"), // What they claim publicly
-	secretStance: string("secret_stance"), // Their true position (if different)
-	resources: list("resources"), // What they're contributing
+	motivation: string("motivation"),
+	publicStance: string("public_stance"),
+	secretStance: string("secret_stance"),
+	resources: list("resources"),
 })
 
 export const conflictProgression = pgTable("conflict_progression", {
@@ -51,10 +46,8 @@ export const conflictProgression = pgTable("conflict_progression", {
 	conflictId: cascadeFk("conflict_id", majorConflicts.id),
 	questId: cascadeFk("quest_id", quests.id),
 
-	// How the quest affects the conflict
 	impact: oneOf("impact", questImpacts).default("no_change"),
 
-	// Additional context
 	notes: list("notes"),
 })
 

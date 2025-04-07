@@ -14,33 +14,27 @@ const foreshadowingTypes = ["document", "conversation", "object", "environmental
 export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 	id: pk(),
 
-	// Where this foreshadowing appears
 	questStageId: nullableFk("quest_stage_id", questStages.id),
 	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
 	factionId: nullableFk("faction_id", factions.id),
 
-	// Foreshadowing content
-	name: string("name").notNull(), // Identifier (e.g., "Bloody Dagger in Baron's Study")
-	type: oneOf("type", foreshadowingTypes), // Form of the foreshadowing
-	description: list("description").notNull(), // What players observe
-
-	// Discovery information
-	discoveryCondition: list("discovery_condition"), // How players find it
+	name: string("name"),
+	type: oneOf("type", foreshadowingTypes),
+	description: list("description"),
+	discoveryCondition: list("discovery_condition"),
 	subtlety: oneOf("subtlety", foreshadowingSubtlety).default("moderate"),
 	narrativeWeight: oneOf("narrative_weight", narrativeWeight).default("supporting"),
 
-	// What this foreshadows
 	foreshadowsQuestId: nullableFk("foreshadows_quest_id", quests.id),
 	foreshadowsTwistId: nullableFk("foreshadows_twist_id", questTwists.id),
 	foreshadowsNpcId: nullableFk("foreshadows_npc_id", npcs.id),
 	foreshadowsArcId: nullableFk("foreshadows_arc_id", narrativeArcs.id),
-	foreshadowsElement: string("foreshadows_element"), // What this hints at (e.g., "Baron's secret identity")
+	foreshadowsElement: string("foreshadows_element"),
 
-	// GM tracking
 	discovered: boolean("discovered").default(false),
 	grantedToPlayers: timestamp("granted_to_players"),
-	playerNotes: list("player_notes"), // Record player theories/reactions
+	playerNotes: list("player_notes"),
 	gmNotes: list("gm_notes"),
 })
 

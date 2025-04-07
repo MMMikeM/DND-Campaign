@@ -13,56 +13,56 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 	sourceQuest: one(quests, {
 		fields: [worldStateChanges.questId],
 		references: [quests.id],
-		relationName: "questWorldChanges",
+		relationName: "worldChangesByQuest", // Changed to match questsRelations
 	}),
 	sourceDecision: one(stageDecisions, {
 		fields: [worldStateChanges.decisionId],
 		references: [stageDecisions.id],
-		relationName: "decisionWorldChanges",
+		relationName: "worldChangesByDecision", // Changed to match stageDecisionsRelations
 	}),
 	sourceConflict: one(majorConflicts, {
 		fields: [worldStateChanges.conflictId],
 		references: [majorConflicts.id],
-		relationName: "conflictWorldChanges",
+		relationName: "worldChangesByConflict",
 	}),
 
 	relatedArc: one(narrativeArcs, {
 		fields: [worldStateChanges.arcId],
 		references: [narrativeArcs.id],
-		relationName: "arcWorldChanges",
+		relationName: "worldChangesByArc", // Changed to match narrativeArcsRelations
 	}),
 
 	// Affected entities
 	affectedFaction: one(factions, {
 		fields: [worldStateChanges.factionId],
 		references: [factions.id],
-		relationName: "factionWorldChanges",
+		relationName: "worldChangesAffectingFaction",
 	}),
 	affectedRegion: one(regions, {
 		fields: [worldStateChanges.regionId],
 		references: [regions.id],
-		relationName: "regionWorldChanges",
+		relationName: "worldChangesAffectingRegion",
 	}),
 	affectedArea: one(areas, {
 		fields: [worldStateChanges.areaId],
 		references: [areas.id],
-		relationName: "areaWorldChanges",
+		relationName: "worldChangesAffectingArea",
 	}),
 	affectedSite: one(sites, {
 		fields: [worldStateChanges.siteId],
 		references: [sites.id],
-		relationName: "siteWorldChanges",
+		relationName: "worldChangesAffectingSite",
 	}),
 	affectedNpc: one(npcs, {
 		fields: [worldStateChanges.npcId],
 		references: [npcs.id],
-		relationName: "npcWorldChanges",
+		relationName: "worldChangesAffectingNpc",
 	}),
 
 	// Potential future impact
 	leadsToQuest: one(quests, {
 		fields: [worldStateChanges.futureQuestId],
 		references: [quests.id],
-		relationName: "worldChangeLeadsToQuest", // Unique relation name
+		relationName: "worldChangeLeadsToQuest",
 	}),
 }))

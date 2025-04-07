@@ -27,23 +27,19 @@ const sourcesOfChange = ["decision", "quest_completion", "world_event", "player_
 export const worldStateChanges = pgTable("world_state_changes", {
 	id: pk(),
 
-	// Basic information
 	name: string("name").unique(),
 	description: list("description"),
 
-	// Characteristics
 	changeType: oneOf("change_type", changeTypes),
 	severity: oneOf("severity", changeSeverity).default("moderate"),
 	visibility: oneOf("visibility", changeVisibility).default("obvious"),
 	timeframe: oneOf("timeframe", changeTimeframe).default("immediate"),
 	sourceType: oneOf("source_type", sourcesOfChange),
 
-	// What triggered this change
 	questId: nullableFk("quest_id", quests.id),
 	decisionId: nullableFk("decision_id", stageDecisions.id),
 	conflictId: nullableFk("conflict_id", majorConflicts.id),
 
-	// Affected entities
 	factionId: nullableFk("faction_id", factions.id),
 	regionId: nullableFk("region_id", regions.id),
 	areaId: nullableFk("area_id", areas.id),
@@ -51,13 +47,11 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	npcId: nullableFk("npc_id", npcs.id),
 	arcId: nullableFk("arc_id", narrativeArcs.id),
 
-	// Follow-up tracking
 	recordedDate: timestamp("recorded_date").defaultNow(),
 	futureQuestId: nullableFk("future_quest_id", quests.id),
 	isResolved: boolean("is_resolved").default(false),
 
-	// GM planning tools
-	creativePrompts: list("creative_prompts"), // Ideas for showing this change
+	creativePrompts: list("creative_prompts"),
 	gmNotes: list("gm_notes"),
 })
 

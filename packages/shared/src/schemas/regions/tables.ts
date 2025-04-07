@@ -1,6 +1,7 @@
+// regions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, oneOf, nullableFk, string, list, pk, embeddingVector } from "../../db/utils.js"
-import { embeddings } from "../embeddings/tables.js" // Import embeddings table
+import { cascadeFk, oneOf, nullableFk, string, list, pk } from "../../db/utils.js"
+import { embeddings } from "../embeddings/tables.js"
 
 const regionTypes = [
 	"coastal",
@@ -107,8 +108,7 @@ export const regions = pgTable("regions", {
 	rumors: list("rumors"),
 	secrets: list("secrets"),
 	security: list("defenses"),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const areas = pgTable("areas", {
@@ -129,8 +129,7 @@ export const areas = pgTable("areas", {
 	pointsOfInterest: list("points_of_interest"),
 	rumors: list("rumors"),
 	defenses: list("defenses"),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const regionConnections = pgTable(
@@ -168,8 +167,7 @@ export const sites = pgTable("sites", {
 	smells: list("smells"),
 	weather: list("weather"),
 	descriptors: list("descriptors"),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const siteLinks = pgTable(
@@ -201,8 +199,7 @@ export const siteEncounters = pgTable(
 		creativePrompts: list("creative_prompts"),
 		creatures: list("creatures"),
 		treasure: list("treasure"),
-		embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-		// embedding: embeddingVector("embedding"), // Remove old column
+		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [unique().on(t.siteId, t.name)],
 )
@@ -216,8 +213,7 @@ export const siteSecrets = pgTable("site_secrets", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	consequences: list("consequences"),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const enums = {

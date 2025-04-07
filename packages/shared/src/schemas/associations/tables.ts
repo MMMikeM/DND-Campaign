@@ -1,5 +1,6 @@
+// associations/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, nullableFk, list, pk, string, oneOf, embeddingVector } from "../../db/utils.js"
+import { cascadeFk, nullableFk, list, pk, string, oneOf } from "../../db/utils.js"
 import { embeddings } from "../embeddings/tables.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
