@@ -1,6 +1,6 @@
 // narrative/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
-import { list, pk, string, oneOf, cascadeFk } from "../../db/utils"
+import { cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 import { quests } from "../quests/tables"
 
 const arcTypes = ["main", "faction", "character", "side"] as const

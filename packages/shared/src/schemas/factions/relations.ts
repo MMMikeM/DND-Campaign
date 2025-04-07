@@ -1,20 +1,24 @@
 // factions/relations.ts
 import { relations } from "drizzle-orm"
-import { factions, factionDiplomacy, factionHeadquarters, factionAgendas, factionCulture } from "./tables.js"
-import { embeddings } from "../embeddings/tables.js"
-import { sites } from "../regions/tables.js"
-import { factionTerritorialControl, factionQuestInvolvement, clues } from "../associations/tables.js"
-import { npcFactions } from "../npc/tables.js"
-import { worldStateChanges } from "../world/tables.js"
+import {
+	clues,
+	factionQuestInvolvement,
+	factionTerritorialControl,
+	regionConnectionDetails,
+} from "../associations/tables.js"
 import { conflictParticipants } from "../conflict/tables.js"
-import { regionConnectionDetails } from "../associations/tables.js"
+import { embeddings } from "../embeddings/tables.js"
+import { npcFactions } from "../npc/tables.js"
+import { sites } from "../regions/tables.js"
+import { worldStateChanges } from "../world/tables.js"
+import { factionAgendas, factionCulture, factionDiplomacy, factionHeadquarters, factions } from "./tables.js"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
 	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),
 	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }),
 
 	headquarters: many(factionHeadquarters, { relationName: "factionHeadquarters" }),
-	operations: many(factionAgendas, { relationName: "factionOperations" }),
+	agendas: many(factionAgendas, { relationName: "factionAgendas" }),
 	culture: many(factionCulture, { relationName: "factionCulture" }),
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(factionQuestInvolvement, { relationName: "factionQuests" }),
@@ -56,11 +60,11 @@ export const factionHeadquartersRelations = relations(factionHeadquarters, ({ on
 	}),
 }))
 
-export const factionOperationsRelations = relations(factionAgendas, ({ one }) => ({
+export const factionAgendaRelations = relations(factionAgendas, ({ one }) => ({
 	faction: one(factions, {
 		fields: [factionAgendas.factionId],
 		references: [factions.id],
-		relationName: "factionOperations",
+		relationName: "factionAgendas",
 	}),
 	embedding: one(embeddings, {
 		fields: [factionAgendas.embeddingId],

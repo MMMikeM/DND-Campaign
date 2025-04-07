@@ -1,11 +1,11 @@
 // foreshadowing/tables.ts
 import { boolean, pgTable, timestamp } from "drizzle-orm/pg-core"
-import { list, pk, string, oneOf, nullableFk } from "../../db/utils"
-import { quests, questStages, questTwists } from "../quests/tables"
-import { npcs } from "../npc/tables"
+import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
-import { sites } from "../regions/tables"
 import { narrativeArcs } from "../narrative/tables"
+import { npcs } from "../npc/tables"
+import { quests, questStages, questTwists } from "../quests/tables"
+import { sites } from "../regions/tables"
 
 const foreshadowingSubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
 const narrativeWeight = ["minor", "supporting", "major", "crucial"] as const

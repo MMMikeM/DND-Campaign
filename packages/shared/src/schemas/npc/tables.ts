@@ -1,8 +1,8 @@
 // npc/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables.js"
 import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
+import { embeddings } from "../embeddings/tables.js"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
 

@@ -1,9 +1,9 @@
 // narrative/relations.ts
 import { relations } from "drizzle-orm"
-import { narrativeArcs, arcMembership } from "./tables.js"
-import { quests } from "../quests/tables.js"
 import { narrativeForeshadowing } from "../foreshadowing/tables.js"
+import { quests } from "../quests/tables.js"
 import { worldStateChanges } from "../world/tables.js"
+import { arcMembership, narrativeArcs } from "./tables.js"
 
 export const narrativeArcsRelations = relations(narrativeArcs, ({ many }) => ({
 	members: many(arcMembership, {

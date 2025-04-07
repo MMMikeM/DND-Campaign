@@ -1,11 +1,11 @@
 // associations/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, nullableFk, list, pk, string, oneOf } from "../../db/utils.js"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils.js"
 import { embeddings } from "../embeddings/tables.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
-import { quests, questStages } from "../quests/tables.js"
-import { sites, regionConnections, regions, areas } from "../regions/tables.js"
+import { questStages, quests } from "../quests/tables.js"
+import { areas, regionConnections, regions, sites } from "../regions/tables.js"
 
 const importanceLevels = ["minor", "supporting", "major", "critical"] as const
 const factionRoles = ["quest_giver", "antagonist", "ally", "target", "beneficiary", "obstacle", "resource"] as const

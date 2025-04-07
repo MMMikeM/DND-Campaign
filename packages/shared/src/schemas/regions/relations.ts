@@ -1,11 +1,11 @@
 // regions/relations.ts
 import { relations } from "drizzle-orm"
-import { regions, regionConnections, areas, sites, siteLinks, siteEncounters, siteSecrets } from "./tables.js"
-import { embeddings } from "../embeddings/tables.js"
-import { quests } from "../quests/tables.js"
-import { npcSites } from "../npc/tables.js"
 import { factionTerritorialControl, items, regionConnectionDetails } from "../associations/tables.js"
+import { embeddings } from "../embeddings/tables.js"
+import { npcSites } from "../npc/tables.js"
+import { quests } from "../quests/tables.js"
 import { worldStateChanges } from "../world/tables.js"
+import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables.js"
 
 export const regionsRelations = relations(regions, ({ many, one }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
@@ -13,7 +13,7 @@ export const regionsRelations = relations(regions, ({ many, one }) => ({
 
 	areas: many(areas, { relationName: "regionAreas" }),
 	quests: many(quests, { relationName: "regionQuests" }),
-	influence: many(factionTerritorialControl, { relationName: "regionFactionInfluence" }),
+	territorialControl: many(factionTerritorialControl, { relationName: "regionFactionInfluence" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesAffectingRegion" }),
 
 	embedding: one(embeddings, {
@@ -30,7 +30,7 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 	}),
 
 	sites: many(sites, { relationName: "areaSites" }),
-	influence: many(factionTerritorialControl, { relationName: "areaFactionInfluence" }),
+	territorialControl: many(factionTerritorialControl, { relationName: "areaFactionInfluence" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesAffectingArea" }),
 
 	embedding: one(embeddings, {
@@ -53,7 +53,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
 	npcs: many(npcSites, { relationName: "siteNpcs" }),
 	items: many(items, { relationName: "siteItems" }),
-	influence: many(factionTerritorialControl, { relationName: "siteFactionInfluence" }),
+	territorialControl: many(factionTerritorialControl, { relationName: "siteFactionInfluence" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesAffectingSite" }),
 
 	embedding: one(embeddings, {

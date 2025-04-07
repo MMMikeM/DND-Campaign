@@ -1,20 +1,20 @@
 // associations/relations.ts
 import { relations } from "drizzle-orm"
+import { embeddings } from "../embeddings/tables.js"
+import { factions } from "../factions/tables.js"
+import { npcs } from "../npc/tables.js"
+import { questStages, quests } from "../quests/tables.js"
+import { areas, regionConnections, regions, sites } from "../regions/tables.js"
 import {
 	clues,
 	factionQuestInvolvement,
 	factionTerritorialControl,
 	items,
 	npcQuestRoles,
-	questIntroductions,
 	questHookNpcs,
+	questIntroductions,
 	regionConnectionDetails,
 } from "./tables.js"
-import { embeddings } from "../embeddings/tables.js"
-import { factions } from "../factions/tables.js"
-import { npcs } from "../npc/tables.js"
-import { quests, questStages } from "../quests/tables.js"
-import { sites, regionConnections, regions, areas } from "../regions/tables.js"
 
 export const questNpcRelations = relations(npcQuestRoles, ({ one }) => ({
 	quest: one(quests, {
