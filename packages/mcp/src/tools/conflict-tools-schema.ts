@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils"
+import { id, optionalId } from "./tool.utils" // Added id import
 import { ConflictTools } from "./conflict-tools"
 
 const {
@@ -19,7 +19,7 @@ export const schemas = {
 		.strict()
 		.describe("Retrieve information about major conflicts, participants, or progression"),
 	manage_major_conflicts: createInsertSchema(majorConflicts, {
-		id: optionalId.describe("ID of conflict to manage (omit to create new, include alone to delete)"),
+		id: optionalId.describe("ID of conflict to manage (omit to create new, include alone to delete)"), // Already correct
 		description: (s) => s.describe("Core conflict elements and dynamics in point form"),
 		stakes: (s) => s.describe("What each side stands to gain or lose"),
 		possibleOutcomes: (s) => s.describe("Potential resolutions and their consequences"),
@@ -32,16 +32,16 @@ export const schemas = {
 			.enum(enums.conflictStatuses)
 			.describe("Current state (brewing, active, escalating, deescalating, resolved)"),
 		cause: (s) => s.describe("Root event or situation that triggered the conflict"),
-		primaryRegionId: (s) => s.optional().describe("ID of main region affected by this conflict"),
+		primaryRegionId: id.describe("ID of main region affected by this conflict"),
 		moralDilemma: (s) => s.describe("Central ethical question posed by the conflict"),
 	})
 		.strict()
 		.describe("Large-scale struggles between factions that shape the campaign world and provide complex moral choices"),
 
 	manage_conflict_participants: createInsertSchema(conflictParticipants, {
-		id: optionalId.describe("ID of participant record to manage (omit to create new, include alone to delete)"),
-		conflictId: (s) => s.describe("ID of the major conflict this faction is involved in"),
-		factionId: (s) => s.describe("ID of faction participating in the conflict"),
+		id: optionalId.describe("ID of participant record to manage (omit to create new, include alone to delete)"), // Already correct
+		conflictId: id.describe("ID of the major conflict this faction is involved in"),
+		factionId: id.describe("ID of faction participating in the conflict"),
 		role: z.enum(enums.factionRoles).describe("Faction's position (instigator, opponent, ally, neutral, mediator)"),
 		motivation: (s) => s.describe("Faction's reason for involvement in this conflict"),
 		publicStance: (s) => s.describe("Officially stated position on the conflict"),
@@ -52,9 +52,9 @@ export const schemas = {
 		.describe("Defines how factions engage in conflicts, their allegiances, motivations, and committed resources"),
 
 	manage_conflict_progression: createInsertSchema(conflictProgression, {
-		id: optionalId.describe("ID of progression record to manage (omit to create new, include alone to delete)"),
-		conflictId: (s) => s.describe("ID of major conflict being affected"),
-		questId: (s) => s.describe("ID of quest that influences this conflict"),
+		id: optionalId.describe("ID of progression record to manage (omit to create new, include alone to delete)"), // Already correct
+		conflictId: id.describe("ID of major conflict being affected"),
+		questId: id.describe("ID of quest that influences this conflict"),
 		impact: z
 			.enum(enums.questImpacts)
 			.describe("Effect on conflict (escalates, deescalates, reveals_truth, changes_sides)"),

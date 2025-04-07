@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils"
+import { id, optionalId } from "./tool.utils" // Added id import
 import { NarrativeTools } from "./narrative-tools"
 
 const {
@@ -32,9 +32,9 @@ export const schemas = {
 		.describe("Major storylines that span multiple quests, providing campaign structure and thematic depth"),
 
 	manage_arc_membership: createInsertSchema(arcMembership, {
-		id: optionalId.describe("ID of membership record to manage (omit to create new, include alone to delete)"),
-		arcId: (s) => s.describe("ID of narrative arc this quest belongs to"),
-		questId: (s) => s.describe("ID of quest that forms part of this arc"),
+		id: optionalId.describe("ID of membership record to manage (omit to create new, include alone to delete)"), // Already correct
+		arcId: id.describe("ID of narrative arc this quest belongs to"),
+		questId: id.describe("ID of quest that forms part of this arc"),
 		role: z.enum(enums.questRoles).describe("Quest's function in the arc (introduction, complication, climax, etc.)"),
 		notes: (s) => s.optional().describe("How this quest connects to the arc's broader themes"),
 	})

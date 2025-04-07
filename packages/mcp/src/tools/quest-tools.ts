@@ -37,7 +37,7 @@ const entityGetters: QuestGetters = {
 				factions: true,
 				npcs: true,
 				items: true,
-				stages: { with: { outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true } },
+				stages: true,
 				region: true,
 				incomingRelations: { with: { sourceQuest: true } },
 				outgoingRelations: { with: { targetQuest: true } },
@@ -48,7 +48,14 @@ const entityGetters: QuestGetters = {
 	quest_stage_by_id: (id: number) =>
 		db.query.questStages.findFirst({
 			where: eq(questStages.id, id),
-			with: { quest: true, site: true, outgoingDecisions: true, incomingDecisions: true, incomingConsequences: true },
+			with: {
+				quest: true,
+				site: { with: { area: true, encounters: true, items: true, secrets: true, npcs: true } },
+				outgoingDecisions: { with: { toStage: true, consequences: true } },
+				incomingDecisions: { with: { fromStage: true, consequences: true } },
+				incomingConsequences: { with: { affectedStage: true, decision: true } },
+				clues: true,
+			},
 		}),
 	stage_decision_by_id: (id: number) =>
 		db.query.stageDecisions.findFirst({

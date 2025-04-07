@@ -2,6 +2,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
 import { NpcTools } from "./npc-tools"
+import { id, optionalId } from "./tool.utils" // Added import
 
 const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites, enums },
@@ -13,11 +14,11 @@ export const schemas = {
 			entity_type: z
 				.enum(["npc", "character_relationship", "npc_faction", "npc_site"])
 				.describe("Type of NPC-related entity to retrieve"),
-			id: z.number().optional().describe("Optional ID of the specific entity to retrieve"),
+			id: optionalId.describe("Optional ID of the specific entity to retrieve"),
 		})
 		.describe("Get an NPC-related entity by type and optional ID"),
 	manage_npcs: createInsertSchema(npcs, {
-		id: (s) => s.optional().describe("ID of NPC to manage (omit to create new, include alone to delete)"),
+		id: optionalId.describe("ID of NPC to manage (omit to create new, include alone to delete)"),
 		appearance: (s) => s.describe("Physical traits, clothing, and distinctive features in point form"),
 		avoidTopics: (s) => s.describe("Subjects that make this NPC uncomfortable or defensive"),
 		background: (s) => s.describe("Life history and formative experiences"),
@@ -54,10 +55,9 @@ export const schemas = {
 
 	manage_npc_factions: createInsertSchema(npcFactions, {
 		secrets: (s) => s.describe("Hidden information about their faction involvement"),
-		id: (s) =>
-			s.optional().describe("ID of NPC-faction relationship to manage (omit to create new, include alone to delete)"),
-		npcId: (s) => s.describe("ID of the NPC in this relationship"),
-		factionId: (s) => s.optional().describe("ID of the faction this NPC belongs to"),
+		id: optionalId.describe("ID of NPC-faction relationship to manage (omit to create new, include alone to delete)"),
+		npcId: id.describe("ID of the NPC in this relationship"),
+		factionId: id.describe("ID of the faction this NPC belongs to"), // Corrected: Should be required for membership
 		justification: (s) => s.describe("Reason for allegiance (belief, gain, blackmail, family ties)"),
 		rank: (s) => s.describe("Formal title or hierarchical position"),
 		loyalty: z.enum(enums.trustLevel).describe("Dedication level to faction's interests (0-4: none to high)"),
@@ -67,26 +67,25 @@ export const schemas = {
 		.describe("Establishes NPC membership in factions, creating loyalties that influence their actions"),
 
 	manage_npc_sites: createInsertSchema(npcSites, {
-		id: (s) =>
-			s.optional().describe("ID of NPC-site relationship to manage (omit to create new, include alone to delete)"),
+		id: optionalId.describe("ID of NPC-site relationship to manage (omit to create new, include alone to delete)"),
 		creativePrompts: (s) => s.describe("Story hooks involving this NPC at this site"),
 		description: (s) => s.describe("How and why the NPC frequents this place and their activities"),
-		npcId: (s) => s.describe("ID of the NPC who can be found here"),
-		siteId: (s) => s.describe("ID of the site where this NPC can be encountered"),
+		npcId: id.describe("ID of the NPC who can be found here"),
+		siteId: id.describe("ID of the site where this NPC can be encountered"),
 	})
 		.strict()
 		.describe("Maps where NPCs can be encountered, helping GMs place characters consistently in the world"),
 
 	manage_character_relationships: createInsertSchema(characterRelationships, {
-		id: (s) => s.optional().describe("ID of relationship to manage (omit to create new, include alone to delete)"),
+		id: optionalId.describe("ID of relationship to manage (omit to create new, include alone to delete)"),
 		history: (s) => s.describe("Past interactions and shared experiences"),
 		description: (s) => s.describe("Current relationship status and visible dynamics"),
 		creativePrompts: (s) => s.describe("Story possibilities involving both NPCs"),
 		narrativeTensions: (s) => s.describe("Points of conflict or dramatic potential"),
 		sharedGoals: (s) => s.describe("Common objectives uniting these NPCs"),
 		relationshipDynamics: (s) => s.describe("How these NPCs typically interact with each other"),
-		npcId: (s) => s.describe("ID of the primary NPC in this relationship"),
-		relatedNpcId: (s) => s.describe("ID of the secondary NPC in this relationship"),
+		npcId: id.describe("ID of the primary NPC in this relationship"),
+		relatedNpcId: id.describe("ID of the secondary NPC in this relationship"),
 		type: z.enum(enums.relationshipTypes).describe("Connection type (family, friend, rival, mentor, enemy, lover)"),
 		strength: z
 			.enum(enums.relationshipStrengths)

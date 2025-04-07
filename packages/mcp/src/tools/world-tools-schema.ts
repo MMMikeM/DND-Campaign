@@ -1,7 +1,7 @@
 import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
-import { optionalId } from "./tool.utils"
+import { id, optionalId } from "./tool.utils" // Added id import
 
 const {
 	worldTables: { worldStateChanges, enums },
@@ -12,25 +12,22 @@ export type WorldTools = "manage_world_state_changes"
 
 export const schemas = {
 	manage_world_state_changes: createInsertSchema(worldStateChanges, {
-		id: optionalId.describe("The ID of the world state change record to update (omit to create new)"),
+		id: optionalId.describe("The ID of the world state change record to update (omit to create new)"), // Already correct
 		name: (s) => s.describe("A unique, descriptive title for this world state change"),
 		description: (s) => s.describe("Detailed description of the change and its immediate effects in point form"),
-
-		questId: (s) => s.optional().describe("ID of the quest that triggered this change (if applicable)"),
-		decisionId: (s) => s.optional().describe("ID of the stage decision that triggered this change (if applicable)"),
-		conflictId: (s) => s.optional().describe("ID of the major conflict related to this change (if applicable)"),
-		factionId: (s) => s.optional().describe("ID of the primary faction affected by this change (if any)"),
-		regionId: (s) => s.optional().describe("ID of the primary region affected by this change (if any)"),
-		areaId: (s) => s.optional().describe("ID of the primary area affected by this change (if any)"),
-		siteId: (s) => s.optional().describe("ID of the primary site affected by this change (if any)"),
-		npcId: (s) => s.optional().describe("ID of the primary NPC affected by this change (if any)"),
+		questId: optionalId.describe("ID of the quest that triggered this change (if applicable)"),
+		decisionId: optionalId.describe("ID of the stage decision that triggered this change (if applicable)"),
+		conflictId: optionalId.describe("ID of the major conflict related to this change (if applicable)"),
+		factionId: optionalId.describe("ID of the primary faction affected by this change (if any)"),
+		regionId: optionalId.describe("ID of the primary region affected by this change (if any)"),
+		areaId: optionalId.describe("ID of the primary area affected by this change (if any)"),
+		siteId: optionalId.describe("ID of the primary site affected by this change (if any)"),
+		npcId: optionalId.describe("ID of the primary NPC affected by this change (if any)"),
+		futureQuestId: optionalId.describe("ID of a future quest planned as a consequence of this change (if any)"),
 		recordedDate: (s) => s.optional().describe("Timestamp when this change was recorded (defaults to now)"),
-		futureQuestId: (s) =>
-			s.optional().describe("ID of a future quest planned as a consequence of this change (if any)"),
-		isResolved: optionalId.describe(
-			"Has the impact of this change been fully addressed or concluded? (Defaults to false)",
-		),
-		creativePrompts: (s) => s.optional().describe("Ideas for GMs on how to showcase or follow up on this change"),
+		isResolved: (s) =>
+			s.describe("Has the impact of this change been fully addressed or concluded? (Defaults to false)"),
+		creativePrompts: (s) => s.describe("Ideas for GMs on how to showcase or follow up on this change"),
 		gmNotes: (s) => s.optional().describe("General GM notes about this world state change"),
 		changeType: z
 			.enum(enums.changeTypes)
