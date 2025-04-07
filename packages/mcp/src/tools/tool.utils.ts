@@ -80,6 +80,8 @@ export const createEntityHandler = (
 
 			logger.info(`Managing ${entityName}`, args)
 
+			logger.info(schema._def.shape)
+
 			if (Object.keys(args).length === 1 && "id" in args) {
 				return await deleteRecord(args.id as number)
 			}

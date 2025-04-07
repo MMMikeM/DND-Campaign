@@ -33,14 +33,13 @@ export const entityGetters: QuestGetters = {
 		db.query.quests.findFirst({
 			where: eq(quests.id, id),
 			with: {
-				influence: true,
 				items: true,
-				stages: true,
 				unlockConditions: true,
 				twists: true,
+				stages: { columns: { name: true, id: true } },
 				region: { columns: { name: true, id: true } },
-				factions: { with: { faction: { columns: { name: true, id: true } } } },
 				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+				factions: { with: { faction: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
 			},

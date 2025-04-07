@@ -3,7 +3,7 @@ import { tables } from "@tome-master/shared"
 import { optionalId, camelToSnakeCase } from "./tool.utils" // Import camelToSnakeCase
 
 const allTables = {
-	...tables.assocationTables,
+	...tables.associationTables,
 	...tables.conflictTables,
 	...tables.factionTables,
 	...tables.foreshadowingTables,

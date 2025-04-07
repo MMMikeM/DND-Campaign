@@ -5,15 +5,7 @@ import { id, optionalId } from "./tool.utils"
 import { FactionTools } from "./faction-tools"
 
 const {
-	factionTables: {
-		factions,
-		factionDiplomacy,
-		factionRegions,
-		factionHeadquarters,
-		factionCulture,
-		factionOperations,
-		enums,
-	},
+	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas, enums },
 } = tables
 
 export const schemas = {
@@ -37,7 +29,6 @@ export const schemas = {
 		size: z.enum(enums.sizeTypes).describe("Membership scale (tiny, small, medium, large, massive)"),
 		wealth: z.enum(enums.wealthLevels).describe("Economic status (destitute, poor, moderate, rich, wealthy)"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Organized groups with shared goals that act as allies, enemies, or complex forces in the campaign"),
 
@@ -67,7 +58,6 @@ export const schemas = {
 		taboos: (s) => s.describe("Forbidden actions or topics within the faction"),
 		aesthetics: (s) => s.describe("Visual design, architecture, fashion, and artistic preferences"),
 	})
-		.omit({ embedding: true })
 		.strict()
 		.describe("Cultural elements that give factions distinct identities, behaviors, and recognition features"),
 
@@ -81,38 +71,29 @@ export const schemas = {
 		.strict()
 		.describe("Key sites that serve as faction bases, providing adventure sites and strategic targets"),
 
-	manage_faction_operations: createInsertSchema(factionOperations, {
-		id: optionalId.describe("ID of operation to manage (omit to create new, include alone to delete)"),
-		factionId: id.describe("ID of faction conducting this operation"),
-		description: (s) => s.describe("Methods, participants, and timeline in point form"),
-		creativePrompts: (s) => s.describe("Story hooks and player involvement opportunities"),
-		objectives: (s) => s.describe("Specific outcomes the faction aims to accomplish"),
-		site: (s) => s.describe("Key sites where operation takes place"),
-		involved_npcs: (s) => s.describe("Named individuals participating or targeted"),
-		name: (s) => s.describe("Operation code name or identifier"),
-		type: z
-			.enum(enums.factionOperationTypes)
-			.describe("Activity category (economic, military, diplomatic, espionage, etc.)"),
-		scale: z.enum(enums.factionOperationScales).describe("Scope and magnitude (minor, moderate, major, massive)"),
-		status: z
-			.enum(enums.factionOperationStatuses)
-			.describe("Current phase (planning, initial, ongoing, concluding, completed)"),
-		priority: z.enum(enums.factionPriorities).describe("Importance to faction goals (low, medium, high)"),
-	})
-		.omit({ embedding: true })
-		.strict()
-		.describe("Active missions and plots that factions undertake, creating opportunities for player intervention"),
-
-	manage_faction_regions: createInsertSchema(factionRegions, {
-		id: optionalId.describe("ID of region association to manage (omit to create new, include alone to delete)"),
-		factionId: id.describe("ID of faction with presence in this region"),
-		regionId: id.describe("ID of region where faction is active"),
-		presence: (s) => s.describe("Visible manifestations (outposts, patrols, agents, symbols)"),
-		priorities: (s) => s.describe("Specific interests or resources the faction seeks here"),
-		controlLevel: z
-			.enum(enums.controlLevels)
-			.describe("Authority level (contested, influenced, controlled, dominated)"),
+	manage_faction_agendas: createInsertSchema(factionAgendas, {
+		id: optionalId.describe("ID of agenda to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of faction this agenda belongs to"),
+		name: (s) => s.describe("Name or designation of this agenda"),
+		ultimateAim: (s) => s.describe("The long-term goal or desired outcome the faction seeks to achieve"),
+		description: (s) => s.describe("Key components and nature of this agenda in point form"),
+		agendaType: z.enum(enums.factionAgendaTypes).describe("Category of this agenda's primary focus"),
+		currentStage: z.enum(enums.factionAgendaStage).describe("Current phase in the progression of this agenda"),
+		importance: z
+			.enum(enums.factionAgendaImportance)
+			.describe("How central this agenda is to the faction's overall goals"),
+		moralAmbiguity: (s) => s.describe("Ethical complexities and moral questions raised by this agenda"),
+		hiddenCosts: (s) => s.describe("Unintended consequences or concealed prices of pursuing this agenda"),
+		keyOpponents: (s) => s.describe("Major individuals, factions, or forces working against this agenda"),
+		internalConflicts: (s) => s.describe("Disagreements or tensions within the faction regarding this agenda"),
+		approach: (s) => s.describe("Strategies, tactics, and methodologies employed to advance this agenda"),
+		publicImage: (s) => s.describe("How this agenda appears to outsiders or is presented to the public"),
+		personalStakes: (s) => s.describe("How individuals within the faction are personally invested in this agenda"),
+		storyHooks: (s) => s.describe("Potential quest hooks and adventure ideas related to this agenda"),
+		creativePrompts: (s) => s.describe("Ideas for incorporating this agenda into campaign storylines"),
 	})
 		.strict()
-		.describe("Maps faction territorial influence, showing where power struggles occur in the campaign world"),
+		.describe(
+			"Major objectives, schemes, and narrative drivers that define a faction's purpose and activities in the world",
+		),
 } satisfies Record<FactionTools, z.ZodSchema<unknown>>

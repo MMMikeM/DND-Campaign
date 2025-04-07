@@ -23,7 +23,6 @@ const handler = async (args?: Record<string, unknown>) => {
 	const category = args?.category as string | undefined
 	const toolName = args?.tool as string | undefined
 
-	// Define categories *without* the old get_* tools (they were removed in previous steps)
 	const categories = {
 		npcs: npcs.tools,
 		factions: factions.tools,
@@ -34,8 +33,6 @@ const handler = async (args?: Record<string, unknown>) => {
 		narrative: narrative.tools,
 		world: world.tools,
 		foreshadowing: foreshadowing.tools,
-		// Note: get_entity isn't strictly in a category, but could be listed under a 'general' or similar category if desired.
-		// For now, it will appear in the full list and be searchable by name.
 	}
 
 	// Add get_entity separately for searching by name
