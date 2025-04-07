@@ -1,6 +1,7 @@
 // factions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { list, nullableFk, cascadeFk, pk, oneOf, string, nullableString, embeddingVector } from "../../db/utils.js"
+import { embeddings } from "../embeddings/tables.js" // Import embeddings table
 import { sites, regions } from "../regions/tables.js"
 import { alignments, relationshipStrengths, wealthLevels } from "../common.js"
 
@@ -42,7 +43,8 @@ export const factions = pgTable("factions", {
 	notes: list("notes"),
 	resources: list("resources"),
 	recruitment: list("recruitment").notNull(),
-	embedding: embeddingVector("embedding"),
+	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
+	// embedding: embeddingVector("embedding"), // Remove old column
 })
 
 export const factionRegions = pgTable(
@@ -99,7 +101,8 @@ export const factionOperations = pgTable(
 		objectives: list("objectives"),
 		site: list("site"),
 		involved_npcs: list("involved_npcs"),
-		embedding: embeddingVector("embedding"),
+		embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
+		// embedding: embeddingVector("embedding"), // Remove old column
 	},
 	(t) => [unique().on(t.factionId, t.name)],
 )
@@ -115,7 +118,8 @@ export const factionCulture = pgTable(
 		aesthetics: list("aesthetics"),
 		jargon: list("jargon"), // Special terms or phrases
 		recognitionSigns: list("recognition_signs"), // How members identify each other
-		embedding: embeddingVector("embedding"),
+		embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
+		// embedding: embeddingVector("embedding"), // Remove old column
 	},
 	(t) => [unique().on(t.factionId)],
 )

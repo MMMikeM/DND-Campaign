@@ -1,10 +1,11 @@
 import { relations } from "drizzle-orm"
 import { npcs, characterRelationships, npcFactions, npcSites } from "./tables.js"
+import { embeddings } from "../embeddings/tables.js"
 import { items, npcQuestRoles, questHookNpcs, clues } from "../associations/tables.js"
 import { factions } from "../factions/tables.js"
 import { sites } from "../regions/tables.js"
 
-export const npcsRelations = relations(npcs, ({ many }) => ({
+export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	outgoingRelationships: many(characterRelationships, { relationName: "sourceNpc" }),
 	incomingRelationships: many(characterRelationships, { relationName: "targetNpc" }),
 
@@ -15,6 +16,11 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	relatedItems: many(items, { relationName: "npcItems" }),
 	relatedQuestHooks: many(questHookNpcs, { relationName: "npcQuestHooks" }),
 	relatedClues: many(clues, { relationName: "npcClues" }),
+
+	embedding: one(embeddings, {
+		fields: [npcs.embeddingId],
+		references: [embeddings.id],
+	}),
 }))
 
 export const characterRelationshipsRelations = relations(characterRelationships, ({ one }) => ({

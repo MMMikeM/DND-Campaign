@@ -1,6 +1,6 @@
-// associations/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, nullableFk, list, pk, string, oneOf, embeddingVector } from "../../db/utils.js"
+import { embeddings } from "../embeddings/tables.js"
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
@@ -57,25 +57,26 @@ export const items = pgTable("items", {
 	description: list("description"),
 	creativePrompts: list("creative_prompts"),
 	significance: string("significance"),
-	embedding: embeddingVector("embedding"),
-}
-)
+	embeddingId: nullableFk("embedding_id", embeddings.id),
+})
 
-export const questIntroductions = pgTable("quest_introductions", {
-	id: pk(),
-	stageId: cascadeFk("stage_id", questStages.id),
-	siteId: nullableFk("site_id", sites.id),
-	factionId: nullableFk("faction_id", factions.id),
-	itemId: nullableFk("item_id", items.id),
-	source: string("source"),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-	discoveryCondition: list("discovery_condition"),
-	introductionType: oneOf("introduction_type", introductionTypes),
-	presentationStyle: oneOf("presentation_style", presentationStyles),
-	hookContent: list("hook_content"),
-},
-(t) => [unique().on(t.stageId, t.siteId, t.factionId, t.itemId)],
+export const questIntroductions = pgTable(
+	"quest_introductions",
+	{
+		id: pk(),
+		stageId: cascadeFk("stage_id", questStages.id),
+		siteId: nullableFk("site_id", sites.id),
+		factionId: nullableFk("faction_id", factions.id),
+		itemId: nullableFk("item_id", items.id),
+		source: string("source"),
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+		discoveryCondition: list("discovery_condition"),
+		introductionType: oneOf("introduction_type", introductionTypes),
+		presentationStyle: oneOf("presentation_style", presentationStyles),
+		hookContent: list("hook_content"),
+	},
+	(t) => [unique().on(t.stageId, t.siteId, t.factionId, t.itemId)],
 )
 
 export const questHookNpcs = pgTable(
@@ -101,7 +102,7 @@ export const clues = pgTable("clues", {
 	creativePrompts: list("creative_prompts"),
 	discoveryCondition: list("discovery_condition"),
 	reveals: list("reveals"),
-	embedding: embeddingVector("embedding"),
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const factionRegionalPower = pgTable(

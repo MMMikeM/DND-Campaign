@@ -1,20 +1,20 @@
-// factions/relations.ts
 import { relations } from "drizzle-orm"
 import {
 	factions,
-	factionDiplomacy, // Corrected import
+	factionDiplomacy,
 	factionRegions,
 	factionHeadquarters,
 	factionOperations,
 	factionCulture,
 } from "./tables.js"
+import { embeddings } from "../embeddings/tables.js"
 import { sites, regions } from "../regions/tables.js"
 import { factionRegionalPower, factionQuestInvolvement } from "../associations/tables.js"
 import { npcFactions } from "../npc/tables.js"
 
-export const factionsRelations = relations(factions, ({ many }) => ({
-	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }), // Corrected usage
-	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }), // Corrected usage
+export const factionsRelations = relations(factions, ({ many, one }) => ({
+	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),
+	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }),
 
 	relatedRegions: many(factionRegions, { relationName: "factionRegions" }),
 	headquarters: many(factionHeadquarters, { relationName: "factionHeadquarters" }),
@@ -25,6 +25,11 @@ export const factionsRelations = relations(factions, ({ many }) => ({
 	influence: many(factionRegionalPower, { relationName: "factionInfluence" }),
 
 	alliances: many(factionDiplomacy, { relationName: "factionAlliances" }),
+
+	embedding: one(embeddings, {
+		fields: [factions.embeddingId],
+		references: [embeddings.id],
+	}),
 }))
 
 export const factionDiplomacyRelations = relations(factionDiplomacy, ({ one }) => ({
@@ -72,6 +77,10 @@ export const factionOperationsRelations = relations(factionOperations, ({ one })
 		references: [factions.id],
 		relationName: "factionOperations",
 	}),
+	embedding: one(embeddings, {
+		fields: [factionOperations.embeddingId],
+		references: [embeddings.id],
+	}),
 }))
 
 export const factionCultureRelations = relations(factionCulture, ({ one }) => ({
@@ -79,5 +88,9 @@ export const factionCultureRelations = relations(factionCulture, ({ one }) => ({
 		fields: [factionCulture.factionId],
 		references: [factions.id],
 		relationName: "factionCulture",
+	}),
+	embedding: one(embeddings, {
+		fields: [factionCulture.embeddingId],
+		references: [embeddings.id],
 	}),
 }))
