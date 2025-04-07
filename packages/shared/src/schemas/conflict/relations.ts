@@ -4,6 +4,7 @@ import { majorConflicts, conflictParticipants, conflictProgression } from "./tab
 import { factions } from "../factions/tables.js"
 import { quests } from "../quests/tables.js"
 import { regions } from "../regions/tables.js"
+import { worldStateChanges } from "../world/tables.js"
 
 export const majorConflictsRelations = relations(majorConflicts, ({ one, many }) => ({
 	primaryRegion: one(regions, {
@@ -13,6 +14,7 @@ export const majorConflictsRelations = relations(majorConflicts, ({ one, many })
 	}),
 	participants: many(conflictParticipants, { relationName: "conflictParticipants" }),
 	progression: many(conflictProgression, { relationName: "conflictProgression" }),
+	worldChanges: many(worldStateChanges, { relationName: "worldChangesByConflict" }),
 }))
 
 export const conflictParticipantsRelations = relations(conflictParticipants, ({ one }) => ({

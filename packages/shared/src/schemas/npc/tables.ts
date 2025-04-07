@@ -1,7 +1,7 @@
 // npc/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string, embeddingVector } from "../../db/utils"
-import { embeddings } from "../embeddings/tables.js" // Import embeddings table
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { embeddings } from "../embeddings/tables.js"
 import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
@@ -10,20 +10,20 @@ const genders = ["male", "female", "non-humanoid"] as const
 const relationshipTypes = ["ally", "enemy", "family", "rival", "mentor", "student", "friend", "contact"] as const
 const adaptability = ["rigid", "reluctant", "flexible", "opportunistic"] as const
 const npcFactionRoles = [
-	"leader", // Ultimate authority figure
-	"lieutenant", // Second-in-command or high officer
-	"advisor", // Strategic counsel or specialist
-	"enforcer", // Implements faction will through force
-	"agent", // Field operative or representative
-	"member", // Regular rank-and-file participant
-	"recruit", // New or probationary member
-	"elder", // Experienced, respected veteran
-	"spy", // Covert intelligence gatherer
-	"figurehead", // Symbolic leader with limited actual power
-	"financier", // Provider of funds or resources
-	"deserter", // Former member who abandoned the faction
-	"traitor", // Member secretly working against faction
-	"exile", // Forcibly removed former member
+	"leader",
+	"lieutenant",
+	"advisor",
+	"enforcer",
+	"agent",
+	"member",
+	"recruit",
+	"elder",
+	"spy",
+	"figurehead",
+	"financier",
+	"deserter",
+	"traitor",
+	"exile",
 ] as const
 const races = [
 	"human",
@@ -70,8 +70,7 @@ export const npcs = pgTable("npcs", {
 	rumours: list("rumours"),
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
-	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
-	// embedding: embeddingVector("embedding"), // Remove old column
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const npcSites = pgTable(

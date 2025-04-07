@@ -8,7 +8,6 @@ import { sites } from "../regions/tables.js"
 import { narrativeArcs } from "../narrative/tables.js"
 
 export const narrativeForeshadowingRelations = relations(narrativeForeshadowing, ({ one }) => ({
-	// Source of the foreshadowing
 	sourceStage: one(questStages, {
 		fields: [narrativeForeshadowing.questStageId],
 		references: [questStages.id],
@@ -30,25 +29,24 @@ export const narrativeForeshadowingRelations = relations(narrativeForeshadowing,
 		relationName: "factionForeshadowingSource",
 	}),
 
-	// Target of the foreshadowing
 	targetQuest: one(quests, {
 		fields: [narrativeForeshadowing.foreshadowsQuestId],
 		references: [quests.id],
-		relationName: "questForeshadowedBy",
+		relationName: "questForeshadowing",
 	}),
 	targetTwist: one(questTwists, {
 		fields: [narrativeForeshadowing.foreshadowsTwistId],
 		references: [questTwists.id],
-		relationName: "twistForeshadowedBy",
+		relationName: "twistForeshadowing",
 	}),
 	targetNpc: one(npcs, {
 		fields: [narrativeForeshadowing.foreshadowsNpcId],
 		references: [npcs.id],
-		relationName: "npcForeshadowedBy",
+		relationName: "npcForeshadowing",
 	}),
 	targetArc: one(narrativeArcs, {
 		fields: [narrativeForeshadowing.foreshadowsArcId],
 		references: [narrativeArcs.id],
-		relationName: "arcForeshadowing", // Matches relation in narrative/relations.ts
+		relationName: "arcForeshadowing",
 	}),
 }))

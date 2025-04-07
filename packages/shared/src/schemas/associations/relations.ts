@@ -51,7 +51,6 @@ export const clueRelations = relations(clues, ({ one }) => ({
 		relationName: "factionClues",
 	}),
 	embedding: one(embeddings, {
-		// Add embedding relation
 		fields: [clues.embeddingId],
 		references: [embeddings.id],
 	}),
