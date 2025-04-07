@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils" // Added id import
+import { id, optionalId } from "./tool.utils"
 import { FactionTools } from "./faction-tools"
 
 const {
@@ -16,25 +16,7 @@ const {
 	},
 } = tables
 
-// Removed idSchema export
-
 export const schemas = {
-	// Add generic get_entity schema
-	get_faction_entity: z
-		.object({
-			entity_type: z
-				.enum([
-					"faction",
-					"faction_diplomacy",
-					"faction_region",
-					"faction_headquarter", // Note: singular form derived from table name
-					"faction_culture",
-					"faction_operation", // Note: singular form derived from table name
-				])
-				.describe("Type of Faction-related entity to retrieve"),
-			id: optionalId.describe("Optional ID of the specific entity to retrieve"), // Correct: was optional
-		})
-		.describe("Get a Faction-related entity by type and optional ID"),
 	manage_factions: createInsertSchema(factions, {
 		id: optionalId.describe("ID of faction to manage (omit to create new, include alone to delete)"),
 		description: (s) => s.describe("Key characteristics, structure, and public activities in point form"),
@@ -60,9 +42,9 @@ export const schemas = {
 		.describe("Organized groups with shared goals that act as allies, enemies, or complex forces in the campaign"),
 
 	manage_faction_diplomacy: createInsertSchema(factionDiplomacy, {
-		id: optionalId.describe("ID of diplomacy record to manage (omit to create new, include alone to delete)"), // Correct: was optional
-		factionId: id.describe("ID of primary faction in this relationship"), // Corrected: should be required
-		otherFactionId: id.describe("ID of secondary faction in this diplomatic relation"), // Corrected: should be required
+		id: optionalId.describe("ID of diplomacy record to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of primary faction in this relationship"),
+		otherFactionId: id.describe("ID of secondary faction in this diplomatic relation"),
 		description: (s) => s.describe("Interaction details, shared history, and current dynamics in point form"),
 		creativePrompts: (s) => s.describe("Story hooks involving this inter-faction relationship"),
 		diplomaticStatus: z
@@ -76,8 +58,8 @@ export const schemas = {
 		.describe("Defines relationships between factions, creating political dynamics that players can navigate"),
 
 	manage_faction_culture: createInsertSchema(factionCulture, {
-		id: optionalId.describe("ID of culture record to manage (omit to create new, include alone to delete)"), // Correct: was optional
-		factionId: id.describe("ID of faction this culture belongs to"), // Corrected: should be required
+		id: optionalId.describe("ID of culture record to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of faction this culture belongs to"),
 		jargon: (s) => s.describe("Specialized terminology and slang used by members"),
 		recognitionSigns: (s) => s.describe("Secret signals members use to identify each other"),
 		symbols: (s) => s.describe("Emblems, insignia, and visual identifiers of this faction"),
@@ -90,9 +72,9 @@ export const schemas = {
 		.describe("Cultural elements that give factions distinct identities, behaviors, and recognition features"),
 
 	manage_faction_headquarters: createInsertSchema(factionHeadquarters, {
-		id: optionalId.describe("ID of headquarters to manage (omit to create new, include alone to delete)"), // Correct: was optional
-		factionId: id.describe("ID of faction this headquarters belongs to"), // Corrected: should be required
-		siteId: id.describe("ID of site where headquarters is situated"), // Corrected: should be required
+		id: optionalId.describe("ID of headquarters to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of faction this headquarters belongs to"),
+		siteId: id.describe("ID of site where headquarters is situated"),
 		creativePrompts: (s) => s.describe("Adventure hooks and encounter ideas for this site"),
 		description: (s) => s.describe("Physical features, notable rooms, and defenses in point form"),
 	})
@@ -100,8 +82,8 @@ export const schemas = {
 		.describe("Key sites that serve as faction bases, providing adventure sites and strategic targets"),
 
 	manage_faction_operations: createInsertSchema(factionOperations, {
-		id: optionalId.describe("ID of operation to manage (omit to create new, include alone to delete)"), // Correct: was optional
-		factionId: id.describe("ID of faction conducting this operation"), // Corrected: should be required
+		id: optionalId.describe("ID of operation to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of faction conducting this operation"),
 		description: (s) => s.describe("Methods, participants, and timeline in point form"),
 		creativePrompts: (s) => s.describe("Story hooks and player involvement opportunities"),
 		objectives: (s) => s.describe("Specific outcomes the faction aims to accomplish"),
@@ -122,9 +104,9 @@ export const schemas = {
 		.describe("Active missions and plots that factions undertake, creating opportunities for player intervention"),
 
 	manage_faction_regions: createInsertSchema(factionRegions, {
-		id: optionalId.describe("ID of region association to manage (omit to create new, include alone to delete)"), // Correct: was optional
-		factionId: id.describe("ID of faction with presence in this region"), // Corrected: should be required
-		regionId: id.describe("ID of region where faction is active"), // Corrected: should be required
+		id: optionalId.describe("ID of region association to manage (omit to create new, include alone to delete)"),
+		factionId: id.describe("ID of faction with presence in this region"),
+		regionId: id.describe("ID of region where faction is active"),
 		presence: (s) => s.describe("Visible manifestations (outposts, patrols, agents, symbols)"),
 		priorities: (s) => s.describe("Specific interests or resources the faction seeks here"),
 		controlLevel: z

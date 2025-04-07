@@ -2,21 +2,13 @@ import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
 import { z } from "zod"
 import { NpcTools } from "./npc-tools"
-import { id, optionalId } from "./tool.utils" // Added import
+import { id, optionalId } from "./tool.utils"
 
 const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites, enums },
 } = tables
 
 export const schemas = {
-	get_npc_entity: z
-		.object({
-			entity_type: z
-				.enum(["npc", "character_relationship", "npc_faction", "npc_site"])
-				.describe("Type of NPC-related entity to retrieve"),
-			id: optionalId.describe("Optional ID of the specific entity to retrieve"),
-		})
-		.describe("Get an NPC-related entity by type and optional ID"),
 	manage_npcs: createInsertSchema(npcs, {
 		id: optionalId.describe("ID of NPC to manage (omit to create new, include alone to delete)"),
 		appearance: (s) => s.describe("Physical traits, clothing, and distinctive features in point form"),
@@ -57,7 +49,7 @@ export const schemas = {
 		secrets: (s) => s.describe("Hidden information about their faction involvement"),
 		id: optionalId.describe("ID of NPC-faction relationship to manage (omit to create new, include alone to delete)"),
 		npcId: id.describe("ID of the NPC in this relationship"),
-		factionId: id.describe("ID of the faction this NPC belongs to"), // Corrected: Should be required for membership
+		factionId: id.describe("ID of the faction this NPC belongs to"),
 		justification: (s) => s.describe("Reason for allegiance (belief, gain, blackmail, family ties)"),
 		rank: (s) => s.describe("Formal title or hierarchical position"),
 		loyalty: z.enum(enums.trustLevel).describe("Dedication level to faction's interests (0-4: none to high)"),

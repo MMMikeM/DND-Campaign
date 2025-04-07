@@ -19,23 +19,6 @@ const {
 } = tables
 
 export const schemas = {
-	get_association_entity: z // Renamed 'get_factien_ntity' to 'get_association_entity'
-		.object({
-			entity_type: z
-				.enum([
-					"clue",
-					"item",
-					"faction_quest_involvement",
-					"npc_quest_role",
-					"faction_regional_power",
-					"quest_hook_npc",
-					"quest_introduction",
-					"region_connection_detail",
-				])
-				.describe("Type of Association-related entity to retrieve"),
-			id: optionalId.describe("Optional ID of the specific entity to retrieve"),
-		})
-		.describe("Get an Association-related entity by type and optional ID"),
 	manage_clues: createInsertSchema(clues, {
 		id: optionalId.describe("ID of clue to manage (omit to create new, include alone to delete)"),
 		factionId: optionalId.describe("ID of faction connected to this clue"),

@@ -4,7 +4,7 @@ import { schemas } from "./foreshadowing-tools-schema"
 import { eq } from "drizzle-orm"
 
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
-import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { db } from ".."
 
 const {
@@ -12,22 +12,27 @@ const {
 } = tables
 
 type ForeshadowingGetters = CreateEntityGetters<typeof tables.foreshadowingTables>
-export type ForeshadowingTools = CreateTableTools<typeof tables.foreshadowingTables> | "get_foreshadowing_entity"
+export type ForeshadowingTools = CreateTableTools<typeof tables.foreshadowingTables>
 
-const entityGetters: ForeshadowingGetters = {
+export const entityGetters: ForeshadowingGetters = {
 	all_narrative_foreshadowing: () => db.query.narrativeForeshadowing.findMany(),
 	narrative_foreshadowing_by_id: (id: number) =>
 		db.query.narrativeForeshadowing.findFirst({
 			where: eq(narrativeForeshadowing.id, id),
+			with: {
+				sourceFaction: { columns: { name: true, id: true } },
+				sourceNpc: { columns: { name: true, id: true } },
+				sourceSite: { columns: { name: true, id: true } },
+				sourceStage: { columns: { name: true, id: true } },
+				targetArc: true,
+				targetNpc: { columns: { name: true, id: true } },
+				targetQuest: { columns: { name: true, id: true } },
+				targetTwist: true,
+			},
 		}),
 }
 
 export const foreshadowingToolDefinitions: Record<ForeshadowingTools, ToolDefinition> = {
-	get_foreshadowing_entity: {
-		description: "Get foreshadowing-related entity information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_foreshadowing_entity),
-		handler: createGetEntityHandler("foreshadowing", entityGetters),
-	},
 	manage_narrative_foreshadowing: {
 		description: createEntityActionDescription("narrative foreshadowing hint"),
 		inputSchema: zodToMCP(schemas.manage_narrative_foreshadowing),

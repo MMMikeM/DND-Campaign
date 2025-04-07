@@ -1,8 +1,19 @@
-import { associations, factions, regions, npcs, quests, conflicts, narrative, world, foreshadowing } from "./tools"
+import {
+	associations,
+	factions,
+	regions,
+	npcs,
+	quests,
+	conflicts,
+	narrative,
+	world,
+	foreshadowing,
+	getEntity,
+} from "./tools" // Added getEntity
 import { logger } from ".."
 import { z } from "zod"
 import { zodToMCP } from "../zodToMcp"
-import { ToolDefinition } from "./tool.utils"
+import type { ToolDefinition } from "./utils/types" // Corrected import path
 
 function isStringArray(value: unknown): value is string[] {
 	return Array.isArray(value)
@@ -12,6 +23,7 @@ const handler = async (args?: Record<string, unknown>) => {
 	const category = args?.category as string | undefined
 	const toolName = args?.tool as string | undefined
 
+	// Define categories *without* the old get_* tools (they were removed in previous steps)
 	const categories = {
 		npcs: npcs.tools,
 		factions: factions.tools,
@@ -22,14 +34,18 @@ const handler = async (args?: Record<string, unknown>) => {
 		narrative: narrative.tools,
 		world: world.tools,
 		foreshadowing: foreshadowing.tools,
+		// Note: get_entity isn't strictly in a category, but could be listed under a 'general' or similar category if desired.
+		// For now, it will appear in the full list and be searchable by name.
 	}
+
+	// Add get_entity separately for searching by name
+	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]
 
 	logger.info("Categories", categories)
 	logger.info("Args", args)
 
 	if (toolName) {
-		const allToolsFlat = Object.values(categories).flat()
-		const tool = allToolsFlat.find((t) => t.name === toolName)
+		const tool = allToolsList.find((t) => t.name === toolName) // Search the combined list
 
 		if (!tool) {
 			return {
@@ -150,19 +166,33 @@ ${tool.name}({
 					)
 					.join(
 						"\n\n",
-					)}\n\nFor category details: \`help({category: 'category_name'})\`\nFor tool details: \`help({tool: 'tool_name'})\``,
+					)}\n\n## General Tools\n- **get_entity**: ${getEntity.tools[0]?.description ?? "Get any entity by type and optional ID"} (Required: entity_type)\n\nFor category details: \`help({category: 'category_name'})\`\nFor tool details: \`help({tool: 'tool_name'})\``, // Added get_entity to general list with optional chaining
 			},
 		],
 	}
 }
 
+// Update enum to include all categories that *have* tools
+const categoryEnum = z
+	.enum([
+		"npcs",
+		"factions",
+		"regions",
+		"quests",
+		"associations",
+		"conflicts",
+		"narrative",
+		"world",
+		"foreshadowing",
+		// Add other categories if they have tools defined
+	])
+	.optional()
+	.describe("Optional category to filter tools")
+
 const toolSchema = zodToMCP(
 	z
 		.object({
-			category: z
-				.enum(["npcs", "factions", "regions", "quests", "associations"])
-				.optional()
-				.describe("Optional category to filter tools"),
+			category: categoryEnum,
 			tool: z.string().optional().describe("Optional specific tool name to get detailed parameter information"),
 		})
 		.strict()

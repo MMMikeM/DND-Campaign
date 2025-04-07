@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler, createGetEntityHandler } from "./tool.utils"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
 import { schemas } from "./region-tools-schema"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
@@ -10,68 +10,102 @@ const {
 	regionTables: { sites, areas, regions, regionConnections, siteEncounters, siteLinks, siteSecrets },
 } = tables
 
-export type RegionTools = CreateTableTools<typeof tables.regionTables> | "get_region_entity"
+export type RegionTools = CreateTableTools<typeof tables.regionTables>
 export type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
-const entityGetters: RegionGetters = {
-	all_regions: () => db.query.regions.findMany(),
-	all_areas: () => db.query.areas.findMany(),
-	all_sites: () => db.query.sites.findMany(),
-	all_region_connections: () => db.query.regionConnections.findMany(),
-	all_site_encounters: () => db.query.siteEncounters.findMany(),
-	all_site_links: () => db.query.siteLinks.findMany(),
-	all_site_secrets: () => db.query.siteSecrets.findMany(),
+export const entityGetters: RegionGetters = {
+	all_regions: () => db.query.regions.findMany({ columns: { embedding: false } }),
+	all_areas: () => db.query.areas.findMany({ columns: { embedding: false } }),
+	all_sites: () => db.query.sites.findMany({ columns: { embedding: false } }),
+	all_region_connections: () =>
+		db.query.regionConnections.findMany({
+			with: {
+				sourceRegion: { columns: { name: true, id: true } },
+				targetRegion: { columns: { name: true, id: true } },
+			},
+		}),
+	all_site_encounters: () =>
+		db.query.siteEncounters.findMany({
+			with: {
+				site: { columns: { name: true, id: true } },
+			},
+		}),
+	all_site_links: () =>
+		db.query.siteLinks.findMany({
+			with: {
+				sourceSite: { columns: { name: true, id: true } },
+				targetSite: { columns: { name: true, id: true } },
+			},
+		}),
+	all_site_secrets: () =>
+		db.query.siteSecrets.findMany({
+			with: {
+				site: { columns: { name: true, id: true } },
+			},
+		}),
 
 	region_by_id: (id: number) =>
 		db.query.regions.findFirst({
 			where: eq(regions.id, id),
 			with: {
-				factions: true,
-				influence: true,
-				quests: true,
-				incomingRelations: { with: { sourceRegion: true, details: true } },
-				outgoingRelations: { with: { targetRegion: true, details: true } },
-				areas: {
-					with: {
-						sites: true,
-					},
-				},
+				factions: { with: { faction: { columns: { name: true, id: true } } } },
+				influence: { with: { faction: { columns: { name: true, id: true } } } },
+				quests: { columns: { name: true, id: true } },
+				areas: { columns: { id: true, name: true } },
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
 			},
 		}),
 	area_by_id: (id: number) =>
 		db.query.areas.findFirst({
 			where: eq(areas.id, id),
 			with: {
-				region: true,
-				sites: true,
+				influence: { with: { faction: { columns: { name: true, id: true } } } },
+				region: { columns: { name: true, id: true } },
+				sites: { columns: { id: true, name: true } },
 			},
 		}),
 	site_by_id: (id: number) =>
 		db.query.sites.findFirst({
 			where: eq(sites.id, id),
 			with: {
-				area: true,
+				area: { columns: { id: true, name: true } },
 				encounters: true,
 				secrets: true,
-				incomingRelations: true,
-				outgoingRelations: true,
 				items: true,
-				npcs: true,
+				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
 			},
 		}),
 	region_connection_by_id: (id: number) =>
-		db.query.regionConnections.findFirst({ where: eq(regionConnections.id, id) }),
-	site_encounter_by_id: (id: number) => db.query.siteEncounters.findFirst({ where: eq(siteEncounters.id, id) }),
-	site_link_by_id: (id: number) => db.query.siteLinks.findFirst({ where: eq(siteLinks.id, id) }),
-	site_secret_by_id: (id: number) => db.query.siteSecrets.findFirst({ where: eq(siteSecrets.id, id) }),
+		db.query.regionConnections.findFirst({
+			where: eq(regionConnections.id, id),
+			with: {
+				details: true,
+				sourceRegion: {
+					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } } },
+				},
+				targetRegion: {
+					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } } },
+				},
+			},
+		}),
+	site_link_by_id: (id: number) =>
+		db.query.siteLinks.findFirst({
+			where: eq(siteLinks.id, id),
+			with: {
+				targetSite: { with: { outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } } } },
+				sourceSite: { with: { incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } } } },
+			},
+		}),
+	site_encounter_by_id: (id: number) =>
+		db.query.siteEncounters.findFirst({ where: eq(siteEncounters.id, id), with: { site: true } }),
+	site_secret_by_id: (id: number) =>
+		db.query.siteSecrets.findFirst({ where: eq(siteSecrets.id, id), with: { site: true } }),
 }
 
 export const regionToolDefinitions: Record<RegionTools, ToolDefinition> = {
-	get_region_entity: {
-		description: "Get region information by type and optional ID",
-		inputSchema: zodToMCP(schemas.get_region_entity),
-		handler: createGetEntityHandler("region", entityGetters),
-	},
 	manage_regions: {
 		description:
 			createEntityActionDescription("region") +
