@@ -36,24 +36,24 @@ export const entityGetters: NpcGetters = {
 		db.query.characterRelationships.findFirst({
 			where: eq(characterRelationships.id, id),
 			with: {
-				sourceNpc: { columns: { embedding: false } },
-				targetNpc: { columns: { embedding: false } },
+				sourceNpc: true,
+				targetNpc: true,
 			},
 		}),
 	npc_faction_by_id: (id: number) =>
 		db.query.npcFactions.findFirst({
 			where: eq(npcFactions.id, id),
 			with: {
-				npc: { columns: { embedding: false } },
-				faction: { columns: { embedding: false } },
+				npc: true,
+				faction: true,
 			},
 		}),
 	npc_site_by_id: (id: number) =>
 		db.query.npcSites.findFirst({
 			where: eq(npcSites.id, id),
 			with: {
-				npc: { columns: { embedding: false } },
-				site: { columns: { embedding: false } },
+				npc: true,
+				site: true,
 			},
 		}),
 }

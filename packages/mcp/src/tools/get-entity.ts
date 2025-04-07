@@ -32,6 +32,7 @@ const formatResponse = (message: string, isError = false): ToolHandlerReturn => 
 })
 
 export const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => {
+	logger.info(`Received arguments for get_entity: ${JSON.stringify(args)}`)
 	const parseResult = getEntitySchema.safeParse(args)
 	if (!parseResult.success) {
 		logger.error(`Invalid arguments for get_entity`, { errors: parseResult.error.flatten() })
@@ -43,26 +44,34 @@ export const getEntityHandler: ToolHandler = async (args?: Record<string, unknow
 	let getterArgs: unknown[] = []
 
 	try {
+		// entity_type comes in as plural snake_case (e.g., "regions") based on the schema
+		let singularEntityType: string
+		let attemptedKey: string
+
 		if (id !== undefined) {
-			logger.info(`Attempting to get ${entity_type} by ID: ${id}`)
-			getterKey = `${entity_type}_by_id`
+			// For _by_id lookups, we need the singular form (e.g., "region")
+			// Simple approach: remove trailing 's'. Assumes standard English plurals.
+			singularEntityType = entity_type.endsWith("s") ? entity_type.slice(0, -1) : entity_type
+			logger.info(`Attempting to get ${singularEntityType} (from ${entity_type}) by ID: ${id}`)
+			getterKey = `${singularEntityType}_by_id` // e.g., region_by_id
 			getterArgs = [id]
+			attemptedKey = getterKey
 		} else {
-			logger.info(`Attempting to get all ${entity_type}s`)
-			getterKey = `all_${entity_type}`
-			if (!(getterKey in combinedGetters)) {
-				const pluralKey = `all_${entity_type}s`
-				if (pluralKey in combinedGetters) {
-					getterKey = pluralKey
-				} else {
-					getterKey = undefined
-				}
-			}
+			// For 'all_' lookups, use the plural form directly from input
+			logger.info(`Attempting to get all ${entity_type}`)
+			// Per CreateEntityGetters type, 'all_' getters use the plural form.
+			getterKey = `all_${entity_type}` // e.g., all_regions
+			getterArgs = []
+			attemptedKey = getterKey
 		}
 
 		if (!getterKey || !(getterKey in combinedGetters)) {
-			logger.warn(`No valid getter found for entity type: ${entity_type} (tried key: ${getterKey})`)
-			return formatResponse(`Invalid entity type or getter not found: ${entity_type}`, true)
+			logger.warn(
+				`No valid getter found for entity type: ${entity_type} (tried key based on convention: ${attemptedKey})`,
+			)
+			logger.warn(`Available getters: ${Object.keys(combinedGetters).join(", ")}`)
+			// Return the key that was actually attempted in the error message for clarity
+			return formatResponse(`Getter not found for key: ${attemptedKey}`, true)
 		}
 
 		// @ts-ignore - We've checked the key exists, but TS can't infer the function signature dynamically

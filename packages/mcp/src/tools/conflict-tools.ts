@@ -14,9 +14,9 @@ type ConflictGetters = CreateEntityGetters<typeof tables.conflictTables>
 export type ConflictTools = CreateTableTools<typeof tables.conflictTables>
 
 export const entityGetters: ConflictGetters = {
-	all_major_conflicts: () => db.query.majorConflicts.findMany(),
-	all_conflict_participants: () => db.query.conflictParticipants.findMany(),
-	all_conflict_progression: () => db.query.conflictProgression.findMany(),
+	all_major_conflicts: () => db.query.majorConflicts.findMany({}),
+	all_conflict_participants: () => db.query.conflictParticipants.findMany({}),
+	all_conflict_progression: () => db.query.conflictProgression.findMany({}),
 	major_conflict_by_id: (id: number) =>
 		db.query.majorConflicts.findFirst({
 			where: eq(majorConflicts.id, id),
@@ -31,7 +31,7 @@ export const entityGetters: ConflictGetters = {
 			where: eq(conflictParticipants.id, id),
 			with: {
 				conflict: true,
-				faction: { columns: { embedding: false } },
+				faction: true,
 			},
 		}),
 

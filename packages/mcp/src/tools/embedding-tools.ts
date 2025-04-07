@@ -1,16 +1,19 @@
 import { z } from "zod"
 import { db, logger } from ".."
 import { zodToMCP } from "../zodToMcp"
+import { inArray } from "drizzle-orm"
 import {
 	type EmbeddableEntityType,
 	type EmbeddingTools,
 	type SearchableEntityType,
 	schemas,
 } from "./embedding-tools-schema"
-import { type ToolDefinition, type ToolHandler } from "./tool.utils"
 import { getGeminiEmbedding, getTextForEntity, tables, type EmbeddedEntityName } from "@tome-master/shared"
-import { cosineDistance, eq, isNotNull, type SQL } from "drizzle-orm"
+import { cosineDistance, eq } from "drizzle-orm"
 import type { PgTable, PgColumn } from "drizzle-orm/pg-core"
+import { ToolDefinition, ToolHandler } from "./utils/types"
+
+const { embeddings } = tables.embeddingTables
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
 	faction: "factions",
@@ -25,26 +28,39 @@ const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> =
 	clue: "clues",
 }
 
-const entityTableMap: Record<
-	EmbeddableEntityType | SearchableEntityType,
-	{ table: PgTable & { id: PgColumn; embedding: PgColumn }; nameColumn?: PgColumn }
-> = {
-	faction: { table: tables.factionTables.factions, nameColumn: tables.factionTables.factions.name },
-	npc: { table: tables.npcTables.npcs, nameColumn: tables.npcTables.npcs.name },
-	quest: { table: tables.questTables.quests, nameColumn: tables.questTables.quests.name },
-	quest_stage: { table: tables.questTables.questStages, nameColumn: tables.questTables.questStages.name },
-	region: { table: tables.regionTables.regions, nameColumn: tables.regionTables.regions.name },
-	site: { table: tables.regionTables.sites, nameColumn: tables.regionTables.sites.name },
+type EntityTableConfig = {
+	table: PgTable & { id: PgColumn; embeddingId: PgColumn | null }
+	nameColumn?: PgColumn
+}
+
+const entityTableMap: Record<EmbeddableEntityType | SearchableEntityType, EntityTableConfig> = {
+	faction: {
+		table: tables.factionTables.factions as EntityTableConfig["table"],
+		nameColumn: tables.factionTables.factions.name,
+	},
+	npc: { table: tables.npcTables.npcs as EntityTableConfig["table"], nameColumn: tables.npcTables.npcs.name },
+	quest: { table: tables.questTables.quests as EntityTableConfig["table"], nameColumn: tables.questTables.quests.name },
+	quest_stage: {
+		table: tables.questTables.questStages as EntityTableConfig["table"],
+		nameColumn: tables.questTables.questStages.name,
+	},
+	region: {
+		table: tables.regionTables.regions as EntityTableConfig["table"],
+		nameColumn: tables.regionTables.regions.name,
+	},
+	site: { table: tables.regionTables.sites as EntityTableConfig["table"], nameColumn: tables.regionTables.sites.name },
 	site_encounter: {
-		table: tables.regionTables.siteEncounters,
+		table: tables.regionTables.siteEncounters as EntityTableConfig["table"],
 		nameColumn: tables.regionTables.siteEncounters.name,
 	},
-	site_secret: { table: tables.regionTables.siteSecrets },
-	item: { table: tables.assocationTables.items, nameColumn: tables.assocationTables.items.name },
-	clue: { table: tables.assocationTables.clues },
+	site_secret: { table: tables.regionTables.siteSecrets as EntityTableConfig["table"] },
+	item: {
+		table: tables.associationTables.items as EntityTableConfig["table"],
+		nameColumn: tables.associationTables.items.name,
+	},
+	clue: { table: tables.associationTables.clues as EntityTableConfig["table"] },
 }
-// Helper for consistent response formatting
-// Define response formatter at module level
+
 const formatResponse = (message: string, isError = false) => ({
 	isError,
 	content: [{ type: "text", text: message }],
@@ -52,7 +68,6 @@ const formatResponse = (message: string, isError = false) => ({
 
 const generateEmbeddingHandler: ToolHandler = async (args) => {
 	try {
-		// 1. Validate input using parse to handle validation errors in catch block
 		const { entity_type, id } = schemas.generate_embedding.parse(args)
 
 		const entityConfig = entityTableMap[entity_type]
@@ -60,7 +75,6 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 			return formatResponse(`Unsupported entity_type: ${entity_type}`, true)
 		}
 
-		// Define query map inside the function to ensure db is instantiated
 		const queryMap = {
 			faction: db.query.factions,
 			npc: db.query.npcs,
@@ -72,7 +86,7 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 			site_secret: db.query.siteSecrets,
 			item: db.query.items,
 			clue: db.query.clues,
-		} satisfies Record<EmbeddableEntityType, unknown>
+		} satisfies Record<EmbeddableEntityType, any>
 
 		const { table } = entityConfig
 		const textKey = entityNameToTextKeyMap[entity_type]
@@ -84,26 +98,40 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 
 		logger.info(`Generating embedding for ${entity_type} ID: ${id}`)
 
-		// 2. Fetch the record
-		// @ts-ignore
 		const record = await queryRunner.findFirst({ where: eq(table.id, id) })
 		if (!record) {
 			return formatResponse(`${entity_type} with ID ${id} not found.`, true)
 		}
 
-		// 3. Extract text and generate embedding
 		const combinedText = getTextForEntity(textKey, record as Record<string, unknown>)
 		if (!combinedText) {
 			return formatResponse(`No text content found for ${entity_type} ID ${id}.`)
 		}
-		logger.debug(`Text content for ${entity_type} ID ${id}: "${combinedText.substring(0, 100)}..."`) // Log start of text
+		logger.debug(`Text content for ${entity_type} ID ${id}: "${combinedText.substring(0, 100)}..."`)
 
-		const embedding = await getGeminiEmbedding(combinedText)
+		const embeddingVector = await getGeminiEmbedding(combinedText)
 
-		// 4. Update the record with new embedding
-		await db.update(table).set({ embedding }).where(eq(table.id, id))
+		let embeddingIdToLink: number | undefined = record.embeddingId ?? undefined
 
-		logger.info(`Successfully generated embedding for ${entity_type} ID: ${id}`)
+		if (embeddingIdToLink) {
+			logger.debug(`Updating existing embedding ID: ${embeddingIdToLink} for ${entity_type} ID: ${id}`)
+			await db.update(embeddings).set({ embedding: embeddingVector }).where(eq(embeddings.id, embeddingIdToLink))
+		} else {
+			logger.debug(`Inserting new embedding for ${entity_type} ID: ${id}`)
+			const [newEmbedding] = await db
+				.insert(embeddings)
+				.values({ embedding: embeddingVector })
+				.returning({ id: embeddings.id })
+			if (!newEmbedding?.id) {
+				throw new Error("Failed to insert new embedding record.")
+			}
+			embeddingIdToLink = newEmbedding.id
+			logger.debug(`New embedding ID: ${embeddingIdToLink}. Linking to ${entity_type} ID: ${id}`)
+
+			await db.update(table).set({ embeddingId: embeddingIdToLink }).where(eq(table.id, id))
+		}
+
+		logger.info(`Successfully generated and linked embedding for ${entity_type} ID: ${id}`)
 		return formatResponse(`Embedding generated successfully for ${entity_type} ID: ${id}`)
 	} catch (error) {
 		let errorMessage: string
@@ -141,36 +169,52 @@ const searchBySimilarityHandler: ToolHandler = async (args) => {
 	try {
 		logger.info(`Searching for ${entity_type}s similar to query: "${query}" (limit: ${limit})`)
 
-		// 1. Generate embedding for the query
 		const queryEmbedding = await getGeminiEmbedding(query)
 
-		const columnsToSelect: Record<string, PgColumn | SQL<unknown>> = {
-			id: table.id,
-			similarity: cosineDistance(table.embedding, queryEmbedding),
-		}
-		if (nameColumn) {
-			columnsToSelect.name = nameColumn
-		}
-
-		// 3. Perform the similarity search
-		const results = await db
-			.select(columnsToSelect)
-			.from(table)
-			.where(isNotNull(table.embedding))
-			.orderBy(cosineDistance(table.embedding, queryEmbedding))
+		const embeddingResults = await db
+			.select({
+				id: embeddings.id,
+				similarity: cosineDistance(embeddings.embedding, queryEmbedding),
+			})
+			.from(embeddings)
+			.orderBy(cosineDistance(embeddings.embedding, queryEmbedding))
 			.limit(limit)
 
-		logger.info(`Found ${results.length} similar ${entity_type}(s) for query: "${query}"`)
-		if (results.length === 0) {
+		if (embeddingResults.length === 0) {
+			logger.info(`No similar embeddings found for query: "${query}"`)
 			return { content: [{ type: "text", text: `No similar ${entity_type}s found for query: "${query}"` }] }
 		}
 
-		// Log the results at debug level
+		const embeddingIds = embeddingResults.map((r) => r.id)
+		const similarityMap = new Map(embeddingResults.map((r) => [r.id, r.similarity]))
+
+		logger.debug(`Found ${embeddingIds.length} similar embedding IDs:`, embeddingIds)
+
+		const entityResults = await db
+			.select({
+				id: table.id,
+				...(nameColumn && { name: nameColumn }),
+				embeddingId: table.embeddingId,
+			})
+			.from(table)
+			.where(inArray(table.embeddingId, embeddingIds))
+
+		const finalResults = entityResults
+			.map((entity) => {
+				const similarity = entity.embeddingId ? similarityMap.get(entity.embeddingId) : null
+				return {
+					...entity,
+					similarity: similarity,
+				}
+			})
+			.sort((a, b) => (a.similarity ?? 1) - (b.similarity ?? 1))
+
+		logger.info(`Found ${finalResults.length} similar ${entity_type}(s) for query: "${query}"`)
 		logger.debug(`Similarity search results for "${query}":`, {
-			results: results.map((r) => ({ id: r.id, similarity: r.similarity })), // Log only ID and similarity
+			results: finalResults.map((r) => ({ id: r.id, name: r.name, similarity: r.similarity })),
 		})
 
-		return results
+		return finalResults.map(({ embeddingId, ...rest }) => rest)
 	} catch (error) {
 		logger.error(`Error during ${entity_type} similarity search for query "${query}":`, {
 			error: error instanceof Error ? error.message : String(error),

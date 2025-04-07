@@ -46,12 +46,18 @@ export const entityGetters: FactionGetters = {
 	faction_region_by_id: (id: number) =>
 		db.query.factionRegions.findFirst({
 			where: eq(factionRegions.id, id),
-			with: { faction: { columns: { name: true, id: true } }, region: { columns: { name: true, id: true } } },
+			with: {
+				faction: { columns: { name: true, id: true } },
+				region: { columns: { name: true, id: true } },
+			},
 		}),
 	faction_headquarter_by_id: (id: number) =>
 		db.query.factionHeadquarters.findFirst({
 			where: eq(factionHeadquarters.id, id),
-			with: { faction: { columns: { name: true, id: true } }, site: { columns: { name: true, id: true } } },
+			with: {
+				faction: { columns: { name: true, id: true } },
+				site: { columns: { name: true, id: true } },
+			},
 		}),
 	faction_culture_by_id: (id: number) =>
 		db.query.factionCulture.findFirst({
