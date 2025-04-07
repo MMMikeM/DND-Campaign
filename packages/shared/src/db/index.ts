@@ -1,51 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
 import pgvector from "pgvector/pg"
-import * as assocationRelations from "../schemas/associations/relations"
-import * as assocationTables from "../schemas/associations/tables"
-import * as factionRelations from "../schemas/factions/relations"
-import * as factionTables from "../schemas/factions/tables"
-import * as npcRelations from "../schemas/npc/relations"
-import * as npcTables from "../schemas/npc/tables"
-import * as questRelations from "../schemas/quests/relations"
-import * as questTables from "../schemas/quests/tables"
-import * as regionRelations from "../schemas/regions/relations"
-import * as regionTables from "../schemas/regions/tables"
-import * as conflictRelations from "../schemas/conflict/relations"
-import * as conflictTables from "../schemas/conflict/tables"
-import * as worldRelations from "../schemas/world/relations"
-import * as worldTables from "../schemas/world/tables"
-import * as foreshadowingRelations from "../schemas/foreshadowing/relations"
-import * as foreshadowingTables from "../schemas/foreshadowing/tables"
-import * as narrativeRelations from "../schemas/narrative/relations"
-import * as narrativeTables from "../schemas/narrative/tables"
+import { relations, tables } from "../schemas"
 
-export const relations = {
-	assocationRelations,
-	factionRelations,
-	npcRelations,
-	questRelations,
-	regionRelations,
-	conflictRelations,
-	worldRelations,
-	foreshadowingRelations,
-	narrativeRelations,
-}
-
-export const tables = {
-	assocationTables,
-	factionTables,
-	npcTables,
-	questTables,
-	regionTables,
-	conflictTables,
-	worldTables,
-	foreshadowingTables,
-	narrativeTables,
-}
-
-// export const getDbPath = () =>
-// 	path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../"), "dnddb.sqlite")
+export { relations, tables } from "../schemas"
 
 /**
  * Initialize the database connection and return operation adapters
@@ -71,24 +29,25 @@ export function initializeDatabase(connectionString: string) {
 	})
 
 	const schema = {
-		...assocationRelations,
-		...assocationTables,
-		...conflictRelations,
-		...conflictTables,
-		...factionRelations,
-		...factionTables,
-		...foreshadowingRelations,
-		...foreshadowingTables,
-		...narrativeRelations,
-		...narrativeTables,
-		...npcRelations,
-		...npcTables,
-		...questRelations,
-		...questTables,
-		...regionRelations,
-		...regionTables,
-		...worldRelations,
-		...worldTables,
+		...tables.associationTables,
+		...relations.associationRelations,
+		...tables.associationTables,
+		...relations.conflictRelations,
+		...tables.conflictTables,
+		...relations.factionRelations,
+		...tables.factionTables,
+		...relations.foreshadowingRelations,
+		...tables.foreshadowingTables,
+		...relations.narrativeRelations,
+		...tables.narrativeTables,
+		...relations.npcRelations,
+		...tables.npcTables,
+		...relations.questRelations,
+		...tables.questTables,
+		...relations.regionRelations,
+		...tables.regionTables,
+		...relations.worldRelations,
+		...tables.worldTables,
 	}
 
 	// Create Drizzle ORM instance with all schemas
