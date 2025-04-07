@@ -1,6 +1,7 @@
 // npc/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string, embeddingVector } from "../../db/utils"
+import { embeddings } from "../embeddings/tables.js" // Import embeddings table
 import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
@@ -69,7 +70,8 @@ export const npcs = pgTable("npcs", {
 	rumours: list("rumours"),
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
-	embedding: embeddingVector("embedding"),
+	embeddingId: nullableFk("embedding_id", embeddings.id), // Add FK
+	// embedding: embeddingVector("embedding"), // Remove old column
 })
 
 export const npcSites = pgTable(

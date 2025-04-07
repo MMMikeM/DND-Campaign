@@ -10,6 +10,7 @@ import {
 	questHookNpcs,
 	regionConnectionDetails,
 } from "./tables.js"
+import { embeddings } from "../embeddings/tables.js" // Import embeddings table
 import { factions } from "../factions/tables.js"
 import { npcs } from "../npc/tables.js"
 import { quests, questStages } from "../quests/tables.js"
@@ -48,6 +49,11 @@ export const clueRelations = relations(clues, ({ one }) => ({
 		fields: [clues.factionId],
 		references: [factions.id],
 		relationName: "factionClues",
+	}),
+	embedding: one(embeddings, {
+		// Add embedding relation
+		fields: [clues.embeddingId],
+		references: [embeddings.id],
 	}),
 }))
 
@@ -117,6 +123,11 @@ export const itemRelations = relations(items, ({ one }) => ({
 		fields: [items.stageId],
 		references: [questStages.id],
 		relationName: "stageItems",
+	}),
+	embedding: one(embeddings, {
+		// Add embedding relation
+		fields: [items.embeddingId],
+		references: [embeddings.id],
 	}),
 }))
 

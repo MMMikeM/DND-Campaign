@@ -8,7 +8,8 @@ import {
 	questTwists,
 	questUnlockConditions,
 } from "./tables.js"
-import { regions, areas, sites } from "../regions/tables.js"
+import { embeddings } from "../embeddings/tables.js"
+import { regions, sites } from "../regions/tables.js"
 import { npcQuestRoles, factionQuestInvolvement, clues, items, factionRegionalPower } from "../associations/tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
@@ -35,7 +36,12 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
 	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
 	items: many(items, { relationName: "questItems" }),
-	influence: many(factionRegionalPower, { relationName: "questInfluence" }),
+	influence: many(factionRegionalPower, { relationName: "questFactionInfluence" }),
+
+	embedding: one(embeddings, {
+		fields: [quests.embeddingId],
+		references: [embeddings.id],
+	}),
 }))
 
 export const questDependenciesRelations = relations(questDependencies, ({ one, many }) => ({
@@ -88,6 +94,11 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
 	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }),
 	clues: many(clues, { relationName: "stageClues" }),
+
+	embedding: one(embeddings, {
+		fields: [questStages.embeddingId],
+		references: [embeddings.id],
+	}),
 }))
 
 export const stageDecisionsRelations = relations(stageDecisions, ({ one, many }) => ({
