@@ -73,7 +73,7 @@ export const factionTerritorialControlRelations = relations(factionTerritorialCo
 	faction: one(factions, {
 		fields: [factionTerritorialControl.factionId],
 		references: [factions.id],
-		relationName: "factionInfluence",
+		relationName: "factionTerritorialControl",
 	}),
 	region: one(regions, {
 		fields: [factionTerritorialControl.regionId],

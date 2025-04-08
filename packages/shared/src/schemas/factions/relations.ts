@@ -22,7 +22,7 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	culture: many(factionCulture, { relationName: "factionCulture" }),
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(factionQuestInvolvement, { relationName: "factionQuests" }),
-	influence: many(factionTerritorialControl, { relationName: "factionInfluence" }),
+	territorialControl: many(factionTerritorialControl, { relationName: "factionTerritorialControl" }),
 	controlledRoutes: many(regionConnectionDetails, { relationName: "factionControlledRoutes" }),
 	clues: many(clues, { relationName: "factionClues" }),
 	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
