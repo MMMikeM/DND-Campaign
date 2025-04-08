@@ -1,12 +1,11 @@
-import { initializeDatabase } from "@tome-master/shared"
-
+import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
-import { createLogger } from "./logger.js"
-import { Server } from "@modelcontextprotocol/sdk/server/index.js"
+import { initializeDatabase } from "@tome-master/shared"
 import { createServer } from "node:http"
-import { registerToolHandlers } from "./tools/tools.js"
+import { createLogger } from "./logger.js"
 import { registerPromptHandlers } from "./prompts/index.js"
+import { registerToolHandlers } from "./tools/tools.js"
 
 export const logger = createLogger()
 
@@ -64,7 +63,7 @@ async function startServer() {
 	const port = process.env.MCP_PORT ? Number(process.env.MCP_PORT) : 3100
 	let transport: StdioServerTransport | SSEServerTransport
 
-	if (process.env.MCP_TRANSPORT === "sse") {
+	if (process.env.MCP_TRANSPORT! === "sse") {
 		logger.info("Starting server with SSE transport...")
 
 		// Create HTTP server for SSE

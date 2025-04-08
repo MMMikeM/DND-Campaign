@@ -1,9 +1,9 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { zodToMCP } from "../zodToMcp"
 import { schemas } from "./faction-tools-schema"
+import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
 import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
 
 const {
@@ -28,11 +28,14 @@ export const entityGetters: FactionGetters = {
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
-
+				agendas: true,
 				culture: true,
 				influence: true,
-				alliances: { with: { targetFaction: { columns: { name: true, id: true } } } },
-
+				clues: true,
+				conflicts: true,
+				controlledRoutes: true,
+				embedding: true,
+				worldChanges: true,
 			},
 		}),
 	faction_diplomacy_by_id: (id: number) =>

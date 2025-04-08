@@ -22,7 +22,7 @@ export const createLogger = () => {
 			// Always write to the log file
 			{
 				target: "pino/file",
-				options: { destination: LOG_FILE, mkdir: true }, // mkdir: true ensures the directory exists
+				options: { destination: LOG_FILE, mkdir: true, ignore: "pid,hostname" }, // mkdir: true ensures the directory exists
 				level: "info", // Log level for file output (adjust as needed)
 			},
 		],
@@ -30,7 +30,7 @@ export const createLogger = () => {
 
 	const logger = pino(
 		{
-			level: process.env.LOG_LEVEL || "info", // Default log level, can be overridden by env var
+			level: process.env.LOG_LEVEL || "debug", // Default log level, can be overridden by env var
 			timestamp: pino.stdTimeFunctions.isoTime, // Use ISO time format
 		},
 		transport,

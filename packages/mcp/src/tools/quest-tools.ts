@@ -33,6 +33,8 @@ export const entityGetters: QuestGetters = {
 		db.query.quests.findFirst({
 			where: eq(quests.id, id),
 			with: {
+				futureTriggers: true,
+				worldChanges: true,
 				items: true,
 				unlockConditions: true,
 				twists: true,
@@ -51,18 +53,17 @@ export const entityGetters: QuestGetters = {
 				quest: { columns: { name: true, id: true } },
 				site: {
 					with: {
+						secrets: true,
+						territorialControl: true,
 						area: { columns: { name: true, id: true } },
 						encounters: { columns: { name: true, id: true } },
 						items: { columns: { name: true, id: true } },
-						secrets: true,
-						influence: true,
 						npcs: { with: { npc: { columns: { name: true, id: true } } } },
 					},
 				},
 				outgoingDecisions: { with: { toStage: { columns: { name: true, id: true } }, consequences: true } },
 				incomingDecisions: { with: { fromStage: { columns: { name: true, id: true } }, consequences: true } },
 				incomingConsequences: { with: { affectedStage: { columns: { name: true, id: true } }, decision: true } },
-				clues: true,
 			},
 		}),
 	stage_decision_by_id: (id: number) =>
@@ -81,7 +82,6 @@ export const entityGetters: QuestGetters = {
 			with: {
 				sourceQuest: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
-				unlockConditions: true,
 			},
 		}),
 	quest_twist_by_id: (id: number) =>

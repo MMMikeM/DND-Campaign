@@ -90,6 +90,7 @@ export const getEntityHandler: ToolHandler = async (args?: Record<string, unknow
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error)
 		logger.error(`Error fetching ${entity_type}${id ? ` by ID ${id}` : "s"} using key ${getterKey}:`, error)
+		logger.error(error)
 		return formatResponse(
 			id
 				? `Error fetching ${entity_type} by ID ${id}: ${errorMessage}`
