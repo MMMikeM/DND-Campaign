@@ -106,6 +106,13 @@
       "when": 1744119039402,
       "tag": "0014_text_search",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1744122453747,
+      "tag": "0015_search_function",
+      "breakpoints": true
     }
   ]
 }
