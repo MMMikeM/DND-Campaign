@@ -5,14 +5,10 @@ import { useEffect } from "react"
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent } from "./ui/sidebar"
 import type { Route } from "../routes/api/+types/items"
 import { SidebarNav } from "./sidebar/SidebarNav"
-import type { MenuItem } from "./sidebar/CategoryMenu"
-
-type ItemsInList = "name" | "id" | "slug"
-type Categories = "factions" | "npcs" | "regions" | "quests"
-type ItemsData = Record<Categories, Record<ItemsInList, string>[]>
+import type { Items } from "~/routes/api/items"
 
 export function MainLayout({ loaderData }: Route.ComponentProps) {
-	const fetcher = useFetcher<ItemsData>()
+	const fetcher = useFetcher<Items>()
 
 	useEffect(() => {
 		if (fetcher.state === "idle" && fetcher.data == null) {
@@ -20,12 +16,18 @@ export function MainLayout({ loaderData }: Route.ComponentProps) {
 		}
 	}, [fetcher])
 
-	// Format data to match MenuItem structure
-	const formattedData: Record<Categories, MenuItem[]> = {
-		factions: fetcher.data?.factions ?? [],
-		npcs: fetcher.data?.npcs ?? [],
-		regions: fetcher.data?.regions ?? [],
-		quests: fetcher.data?.quests ?? [],
+	console.log(fetcher.data)
+	const formattedData = {
+		factions: fetcher.data?.factions,
+		npcs: fetcher.data?.npcs,
+		regions: fetcher.data?.regions,
+		areas: fetcher.data?.areas,
+		sites: fetcher.data?.sites,
+		quests: fetcher.data?.quests,
+		conflicts: fetcher.data?.conflicts,
+		foreshadowing: fetcher.data?.foreshadowing,
+		narrativeArcs: fetcher.data?.narrativeArcs,
+		worldChanges: fetcher.data?.worldChanges,
 	}
 
 	return (

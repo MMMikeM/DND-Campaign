@@ -29,7 +29,7 @@ export default function WorldChangesIndex({ loaderData }: Route.ComponentProps) 
 			<div className="flex justify-between items-center mb-6">
 				<div>
 					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-1 flex items-center">
-						<Icons.Globe className="h-6 w-6 mr-2 text-primary" /> {/* Changed icon */}
+						<Icons.Globe className="h-6 w-6 mr-2 text-primary" />
 						World State Changes
 					</h1>
 					<p className="text-muted-foreground">Significant events altering the state of the world.</p>

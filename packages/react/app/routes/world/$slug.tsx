@@ -73,10 +73,6 @@ export default function WorldChangeDetail({ loaderData }: Route.ComponentProps) 
 		navigate(`/world/${change.slug}/${value === "details" ? "" : value}`)
 	}
 
-	if (!change) {
-		return <div>Error: World State Change data could not be loaded.</div>
-	}
-
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
 			<div className="flex justify-between items-center mb-6">

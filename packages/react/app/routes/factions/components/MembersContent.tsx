@@ -1,20 +1,20 @@
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Faction } from "~/lib/entities"
 
-export function MembersContent(faction: Faction) {
+export function MembersContent({ name, members }: Faction) {
 	return (
 		<InfoCard
 			title="Members"
 			icon={<Icons.Users className="h-5 w-5 mr-2 text-blue-500" />}
-			emptyMessage={`No known members of ${faction.name}`}
+			emptyMessage={`No known members of ${name}`}
 		>
-			{faction.members && faction.members.length > 0 ? (
+			{members && members.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-					{faction.members.map((npcInfo) => (
+					{members.map((npcInfo) => (
 						<div key={`npc-${npcInfo.id}`} className="border rounded p-4">
 							<div className="flex items-center justify-between">
 								<h4 className="font-medium">

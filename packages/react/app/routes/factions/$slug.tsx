@@ -1,19 +1,17 @@
 import * as Icons from "lucide-react"
-import React from "react"
 import { useNavigate, useParams } from "react-router"
 import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import type { Faction as FactionType } from "~/lib/entities"
 import { getFaction } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-
-import { OverviewContent } from "./components/OverviewContent"
-import { DetailsContent } from "./components/DetailsContent"
+import { AgendasContent } from "./components/AgendasContent"
 import { CultureContent } from "./components/CultureContent"
-import { OperationsContent } from "./components/OperationsContent"
+import { DetailsContent } from "./components/DetailsContent"
 import { InfluenceContent } from "./components/InfluenceContent"
-import { QuestsContent } from "./components/QuestsContent"
 import { MembersContent } from "./components/MembersContent"
-import type { Faction as FactionType } from "~/lib/entities"
+import { OverviewContent } from "./components/OverviewContent"
+import { QuestsContent } from "./components/QuestsContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -95,7 +93,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 					</TabsContent>
 
 					<TabsContent value="operations" className="space-y-6 animate-in fade-in-50 duration-300">
-						<OperationsContent operations={faction.operations} />
+						<AgendasContent {...faction} />
 					</TabsContent>
 
 					<TabsContent value="influence" className="space-y-6 animate-in fade-in-50 duration-300">

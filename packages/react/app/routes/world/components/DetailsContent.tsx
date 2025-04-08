@@ -6,10 +6,6 @@ import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getChangeSeverityVariant } from "../utils"
 import type { WorldChange } from "~/lib/entities"
 
-interface DetailsContentProps {
-	change: WorldChange
-}
-
 const getVisibilityVariant = (visibility: string): "default" | "destructive" | "outline" | "secondary" => {
 	switch (visibility) {
 		case "public":
@@ -22,7 +18,7 @@ const getVisibilityVariant = (visibility: string): "default" | "destructive" | "
 	}
 }
 
-export function DetailsContent({ change }: DetailsContentProps) {
+export function DetailsContent({ change }: { change: WorldChange }) {
 	const { description, changeType, severity, visibility, sourceType, timeframe } = change
 
 	return (

@@ -1,8 +1,7 @@
-import React from "react"
 import * as Icons from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { List } from "~/components/List"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Link } from "~/components/ui/link"
 import type { NPC } from "~/lib/entities"
 import { getRelationshipStrengthVariant } from "../utils"
@@ -12,7 +11,9 @@ interface ConnectionsContentProps {
 }
 
 export function ConnectionsContent({ npc }: ConnectionsContentProps) {
-	const { name, relations, relatedFactions, relatedLocations, relatedQuests } = npc
+	const { name, relations, relatedFactions, relatedSites, relatedQuests } = npc
+
+	console.log(relations)
 
 	return (
 		<>
@@ -28,51 +29,52 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 					<CardContent>
 						{relations?.length > 0 ? (
 							<div className="space-y-4">
-								{relations.map((relationship) => (
-									<div key={`relationship-${relationship.id}`} className="border rounded p-3">
-										<div className="flex justify-between">
-											<Link href={`/npcs/${relationship.npc?.slug}`}>
-												<h4 className="font-medium">{relationship.npc?.name}</h4>
-											</Link>
+								{relations.map(
+									({
+										id,
+										creativePrompts,
+										description,
+										history,
+										narrativeTensions,
+										npc,
+										relationshipDynamics,
+										sharedGoals,
+										strength,
+										type,
+									}) => (
+										<div key={`relationship-${id}`} className="border rounded p-3">
+											<div className="flex justify-between">
+												<Link href={`/npcs/${npc?.slug}`}>
+													<h4 className="font-medium">{npc?.name}</h4>
+												</Link>
+											</div>
+											<BadgeWithTooltip
+												variant={getRelationshipStrengthVariant(strength)}
+												className="capitalize"
+												tooltipContent={`Relationship type - Strength`}
+											>
+												{strength} - {type}
+											</BadgeWithTooltip>
+
+											{description && description.length > 0 && (
+												<div className="mt-2">
+													<p className="text-sm font-medium mb-1">Dynamics:</p>
+													<List items={description} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
+												</div>
+											)}
+
+											{narrativeTensions && narrativeTensions.length > 0 && (
+												<div className="mt-2">
+													<p className="text-sm font-medium mb-1 flex items-center">
+														<Icons.AlertTriangle className="h-3 w-3 mr-1 text-amber-500" />
+														Tensions:
+													</p>
+													<List items={narrativeTensions} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
+												</div>
+											)}
 										</div>
-										<BadgeWithTooltip
-											variant={getRelationshipStrengthVariant(relationship.strength)}
-											className="capitalize"
-											tooltipContent={`Relationship type - Strength`}
-										>
-											{relationship.strength} - {relationship.type}
-										</BadgeWithTooltip>
-
-										{relationship.description && relationship.description.length > 0 && (
-											<div className="mt-2">
-												<p className="text-sm font-medium mb-1">Dynamics:</p>
-												<List
-													items={relationship.description}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
-											</div>
-										)}
-
-										{relationship.narrativeTensions && relationship.narrativeTensions.length > 0 && (
-											<div className="mt-2">
-												<p className="text-sm font-medium mb-1 flex items-center">
-													<Icons.AlertTriangle className="h-3 w-3 mr-1 text-amber-500" />
-													Tensions:
-												</p>
-												<List
-													items={relationship.narrativeTensions}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
-											</div>
-										)}
-									</div>
-								))}
+									),
+								)}
 							</div>
 						) : (
 							<p className="text-muted-foreground">No known relationships for this NPC</p>
@@ -91,55 +93,45 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 					<CardContent>
 						{relatedFactions && relatedFactions.length > 0 ? (
 							<div className="space-y-4">
-								{relatedFactions.map((factionConnection) => (
-									<div key={`faction-${factionConnection.id}`} className="border rounded p-3">
+								{relatedFactions.map(({ id, faction, justification, loyalty, rank, role, secrets }) => (
+									<div key={`faction-${id}`} className="border rounded p-3">
 										<div className="flex justify-between">
 											<h4 className="font-medium">
-												{factionConnection.faction && (
-													<Link href={`/factions/${factionConnection.faction.slug}`}>
-														{factionConnection.faction.name}
-													</Link>
-												)}
+												{faction && <Link href={`/factions/${faction.slug}`}>{faction.name}</Link>}
 											</h4>
 											<BadgeWithTooltip
 												variant={
-													factionConnection.loyalty === "high"
+													loyalty === "high"
 														? "default"
-														: factionConnection.loyalty === "medium"
+														: loyalty === "medium"
 															? "secondary"
-															: factionConnection.loyalty === "low"
+															: loyalty === "low"
 																? "outline"
 																: "destructive"
 												}
-												tooltipContent={`Loyalty level: ${factionConnection.loyalty} - How loyal this NPC is to the faction`}
+												tooltipContent={`Loyalty level: ${loyalty} - How loyal this NPC is to the faction`}
 											>
-												{factionConnection.loyalty} loyalty
+												{loyalty} loyalty
 											</BadgeWithTooltip>
 										</div>
 										<div className="mt-2 text-sm">
 											<div className="flex">
 												<span className="font-medium mr-2">Role:</span>
-												<span className="text-muted-foreground">{factionConnection.role}</span>
+												<span className="text-muted-foreground">{role}</span>
 											</div>
 											<div className="flex mt-1">
 												<span className="font-medium mr-2">Rank:</span>
-												<span className="text-muted-foreground">{factionConnection.rank}</span>
+												<span className="text-muted-foreground">{rank}</span>
 											</div>
 										</div>
 
-										{factionConnection.secrets && factionConnection.secrets.length > 0 && (
+										{secrets && secrets.length > 0 && (
 											<div className="mt-3 pt-2 border-t">
 												<p className="text-xs font-medium text-red-500 flex items-center">
 													<Icons.Lock className="h-3 w-3 mr-1" />
 													Secrets:
 												</p>
-												<List
-													items={factionConnection.secrets}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
+												<List items={secrets} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
 											</div>
 										)}
 									</div>
@@ -162,33 +154,23 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 						<CardDescription>Places where {name} can be found</CardDescription>
 					</CardHeader>
 					<CardContent>
-						{relatedLocations && relatedLocations.length > 0 ? (
+						{relatedSites && relatedSites.length > 0 ? (
 							<div className="space-y-4">
-								{relatedLocations.map((locationConnection) => (
-									<div key={`location-${locationConnection.id}`} className="border rounded p-3">
+								{relatedSites.map(({ id, creativePrompts, description, site }) => (
+									<div key={`location-${id}`} className="border rounded p-3">
 										<div className="flex justify-between">
 											<h4 className="font-medium">
-												{locationConnection.location && (
-													<Link href={`/locations/${locationConnection.location.slug}`}>
-														{locationConnection.location.name}
-													</Link>
-												)}
-												{!locationConnection.location && <span>Unnamed Location</span>}
+												{site && <Link href={`/sites/${site.slug}`}>{site.name}</Link>}
+												{!site && <span>Unnamed Location</span>}
 											</h4>
 											<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
 												Location
 											</BadgeWithTooltip>
 										</div>
 
-										{locationConnection.description && locationConnection.description.length > 0 && (
+										{description && description.length > 0 && (
 											<div className="mt-2">
-												<List
-													items={locationConnection.description}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
+												<List items={description} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
 											</div>
 										)}
 									</div>
@@ -211,62 +193,50 @@ export function ConnectionsContent({ npc }: ConnectionsContentProps) {
 					<CardContent>
 						{relatedQuests && relatedQuests.length > 0 ? (
 							<div className="space-y-4">
-								{relatedQuests.map((questConnection) => (
-									<div key={`quest-${questConnection.id}`} className="border rounded p-3">
-										<div className="flex justify-between">
-											<h4 className="font-medium">
-												{questConnection.quest && (
-													<Link href={`/quests/${questConnection.quest.slug}`}>{questConnection.quest.name}</Link>
-												)}
-											</h4>
-											<BadgeWithTooltip
-												variant={
-													questConnection.importance === "critical"
-														? "destructive"
-														: questConnection.importance === "major"
-															? "default"
-															: questConnection.importance === "supporting"
-																? "secondary"
-																: "outline"
-												}
-												tooltipContent={`Importance: ${questConnection.importance} - How important this NPC is to the quest`}
-											>
-												{questConnection.importance}
-											</BadgeWithTooltip>
+								{relatedQuests.map(
+									({ id, quest, importance, description, hiddenAspects, creativePrompts, dramaticMoments, role }) => (
+										<div key={`quest-${id}`} className="border rounded p-3">
+											<div className="flex justify-between">
+												<h4 className="font-medium">
+													{quest && <Link href={`/quests/${quest.slug}`}>{quest.name}</Link>}
+												</h4>
+												<BadgeWithTooltip
+													variant={
+														importance === "critical"
+															? "destructive"
+															: importance === "major"
+																? "default"
+																: importance === "supporting"
+																	? "secondary"
+																	: "outline"
+													}
+													tooltipContent={`Importance: ${importance} - How important this NPC is to the quest`}
+												>
+													{importance}
+												</BadgeWithTooltip>
+											</div>
+											<p className="text-sm mt-1">
+												<span className="font-medium">Role:</span> {role}
+											</p>
+
+											{description && description.length > 0 && (
+												<div className="mt-2">
+													<List items={description} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
+												</div>
+											)}
+
+											{hiddenAspects && hiddenAspects.length > 0 && (
+												<div className="mt-2 pt-2 border-t">
+													<p className="text-xs font-medium text-red-500 flex items-center mb-2">
+														<Icons.Lock className="h-3 w-3 mr-1" />
+														Hidden aspects:
+													</p>
+													<List items={hiddenAspects} spacing="sm" textColor="muted" textSize="xs" maxItems={2} />
+												</div>
+											)}
 										</div>
-										<p className="text-sm mt-1">
-											<span className="font-medium">Role:</span> {questConnection.role}
-										</p>
-
-										{questConnection.description && questConnection.description.length > 0 && (
-											<div className="mt-2">
-												<List
-													items={questConnection.description}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
-											</div>
-										)}
-
-										{questConnection.hiddenAspects && questConnection.hiddenAspects.length > 0 && (
-											<div className="mt-2 pt-2 border-t">
-												<p className="text-xs font-medium text-red-500 flex items-center mb-2">
-													<Icons.Lock className="h-3 w-3 mr-1" />
-													Hidden aspects:
-												</p>
-												<List
-													items={questConnection.hiddenAspects}
-													spacing="sm"
-													textColor="muted"
-													textSize="xs"
-													maxItems={2}
-												/>
-											</div>
-										)}
-									</div>
-								))}
+									),
+								)}
 							</div>
 						) : (
 							<p className="text-muted-foreground">No quests involve this NPC</p>

@@ -5,9 +5,18 @@ import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar"
 import { Link } from "~/components/ui/link"
 import { CategoryMenu, type MenuItem } from "./CategoryMenu"
 
-
-type Categories = "factions" | "npcs" | "regions" | "areas" | "sites" | "quests" | "conflicts" | "foreshadowing" | "narrative" | "world"
-type ItemsData = Record<Categories, MenuItem[]>
+type Categories =
+	| "factions"
+	| "npcs"
+	| "regions"
+	| "areas"
+	| "sites"
+	| "quests"
+	| "conflicts"
+	| "foreshadowing"
+	| "narrativeArcs"
+	| "worldChanges"
+export type ItemsData = Record<Categories, MenuItem[] | undefined>
 
 interface SidebarNavProps {
 	menuData: ItemsData
@@ -16,13 +25,12 @@ interface SidebarNavProps {
 export function SidebarNav({ menuData }: SidebarNavProps) {
 	const location = useLocation()
 
-	
 	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
 		factions: false,
 		npcs: false,
 		regions: false,
-		areas: false, 
-		sites: false, 
+		areas: false,
+		sites: false,
 		quests: false,
 		conflicts: false,
 		foreshadowing: false,
@@ -30,21 +38,20 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 		world: false,
 	})
 
-	
 	useEffect(() => {
 		const currentPath = location.pathname
-		
+
 		const categories: Categories[] = [
 			"factions",
 			"npcs",
 			"regions",
-			"areas", 
-			"sites", 
+			"areas",
+			"sites",
 			"quests",
 			"conflicts",
 			"foreshadowing",
-			"narrative",
-			"world",
+			"narrativeArcs",
+			"worldChanges",
 		]
 
 		categories.forEach((category) => {
@@ -83,103 +90,122 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				</SidebarMenuButton>
 			</SidebarMenuItem>
 
-			{/* Category header */}
 			<div className="mt-8 mb-3 px-4">
 				<h3 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">World Elements</h3>
 			</div>
 
-			<CategoryMenu
-				title="Factions"
-				icon={Icons.Users}
-				isExpanded={expandedMenus.factions}
-				onToggle={() => toggleMenu("factions")}
-				basePath="factions"
-				menuItems={menuData.factions}
-			/>
 
-			<CategoryMenu
-				title="NPCs"
-				icon={Icons.User}
-				isExpanded={expandedMenus.npcs}
-				onToggle={() => toggleMenu("npcs")}
-				basePath="npcs"
-				menuItems={menuData.npcs}
-			/>
+				{menuData.factions && (
+					<CategoryMenu
+						title="Factions"
+						icon={Icons.Users}
+						isExpanded={expandedMenus.factions}
+						onToggle={() => toggleMenu("factions")}
+						basePath="factions"
+						menuItems={menuData.factions}
+					/>
+				)}
 
-			<CategoryMenu
-				title="Regions"
-				icon={Icons.Map}
-				isExpanded={expandedMenus.regions}
-				onToggle={() => toggleMenu("regions")}
-				basePath="regions"
-				menuItems={menuData.regions}
-			/>
 
-			{/* Add Area Menu */}
-			<CategoryMenu
-				title="Areas"
-				icon={Icons.MapPin}
-				isExpanded={expandedMenus.areas}
-				onToggle={() => toggleMenu("areas")}
-				basePath="areas"
-				menuItems={menuData.areas}
-			/>
 
-			{/* Add Site Menu */}
-			<CategoryMenu
-				title="Sites"
-				icon={Icons.LocateFixed}
-				isExpanded={expandedMenus.sites}
-				onToggle={() => toggleMenu("sites")}
-				basePath="sites"
-				menuItems={menuData.sites}
-			/>
+			{menuData.npcs && (
+				<CategoryMenu
+					title="NPCs"
+					icon={Icons.User}
+					isExpanded={expandedMenus.npcs}
+					onToggle={() => toggleMenu("npcs")}
+					basePath="npcs"
+					menuItems={menuData.npcs}
+				/>
+			)}
 
-			<CategoryMenu
-				title="Quests"
-				icon={Icons.Scroll}
-				isExpanded={expandedMenus.quests}
-				onToggle={() => toggleMenu("quests")}
-				basePath="quests"
-				menuItems={menuData.quests}
-			/>
+			{menuData.regions && (
+				<CategoryMenu
+					title="Regions"
+					icon={Icons.Map}
+					isExpanded={expandedMenus.regions}
+					onToggle={() => toggleMenu("regions")}
+					basePath="regions"
+					menuItems={menuData.regions}
+				/>
+			)}
 
-			{/* New Category Menus */}
-			<CategoryMenu
-				title="Conflicts"
-				icon={Icons.Swords}
-				isExpanded={expandedMenus.conflicts}
-				onToggle={() => toggleMenu("conflicts")}
-				basePath="conflicts"
-				menuItems={menuData.conflicts}
-			/>
+			{menuData.areas && (
+				<CategoryMenu
+					title="Areas"
+					icon={Icons.MapPin}
+					isExpanded={expandedMenus.areas}
+					onToggle={() => toggleMenu("areas")}
+					basePath="areas"
+					menuItems={menuData.areas}
+				/>
+			)}
 
-			<CategoryMenu
-				title="Foreshadowing"
-				icon={Icons.Eye}
-				isExpanded={expandedMenus.foreshadowing}
-				onToggle={() => toggleMenu("foreshadowing")}
-				basePath="foreshadowing"
-				menuItems={menuData.foreshadowing}
-			/>
+			{menuData.sites && (
+				<CategoryMenu
+					title="Sites"
+					icon={Icons.LocateFixed}
+					isExpanded={expandedMenus.sites}
+					onToggle={() => toggleMenu("sites")}
+					basePath="sites"
+					menuItems={menuData.sites}
+				/>
+			)}
 
-			<CategoryMenu
-				title="Narrative Arcs"
-				icon={Icons.Milestone}
-				isExpanded={expandedMenus.narrative}
-				onToggle={() => toggleMenu("narrative")}
-				basePath="narrative"
-				menuItems={menuData.narrative}
-			/>
+			{menuData.quests && (
+				<CategoryMenu
+					title="Quests"
+					icon={Icons.Scroll}
+					isExpanded={expandedMenus.quests}
+					onToggle={() => toggleMenu("quests")}
+					basePath="quests"
+					menuItems={menuData.quests}
+				/>
+			)}
 
-			<CategoryMenu
-				title="World Changes"
-				icon={Icons.Globe}
-				isExpanded={expandedMenus.world}
-				onToggle={() => toggleMenu("world")}
-				basePath="world"
-				menuItems={menuData.world}
-			/>
+			{menuData.conflicts && (
+				<CategoryMenu
+					title="Conflicts"
+					icon={Icons.Swords}
+					isExpanded={expandedMenus.conflicts}
+					onToggle={() => toggleMenu("conflicts")}
+					basePath="conflicts"
+					menuItems={menuData.conflicts}
+				/>
+			)}
+
+			{menuData.foreshadowing && (
+				<CategoryMenu
+					title="Foreshadowing"
+					icon={Icons.Eye}
+					isExpanded={expandedMenus.foreshadowing}
+					onToggle={() => toggleMenu("foreshadowing")}
+					basePath="foreshadowing"
+					menuItems={menuData.foreshadowing}
+				/>
+			)}
+
+			{menuData.narrativeArcs && (
+				<CategoryMenu
+					title="Narrative Arcs"
+					icon={Icons.Milestone}
+					isExpanded={expandedMenus.narrative}
+					onToggle={() => toggleMenu("narrative")}
+					basePath="narrative"
+					menuItems={menuData.narrativeArcs}
+				/>
+			)}
+
+			{menuData.worldChanges && (
+				<CategoryMenu
+					title="World Changes"
+					icon={Icons.Globe}
+					isExpanded={expandedMenus.world}
+					onToggle={() => toggleMenu("world")}
+					basePath="world"
+					menuItems={menuData.worldChanges}
+				/>
+			)}
 		</SidebarMenu>
 	)
 }

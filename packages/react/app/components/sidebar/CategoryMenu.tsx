@@ -36,7 +36,7 @@ const chevronVariants = {
 }
 
 export type MenuItem = {
-	id: string
+	id: string | number
 	name: string
 	slug: string
 }
@@ -50,14 +50,7 @@ interface CategoryMenuProps {
 	menuItems: MenuItem[]
 }
 
-export function CategoryMenu({
-	title,
-	icon: Icon,
-	isExpanded,
-	onToggle,
-	basePath,
-	menuItems,
-}: CategoryMenuProps) {
+export function CategoryMenu({ title, icon: Icon, isExpanded, onToggle, basePath, menuItems }: CategoryMenuProps) {
 	const location = useLocation()
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,11 +76,7 @@ export function CategoryMenu({
 					</div>
 					<span>{title}</span>
 				</div>
-				<motion.div
-					animate={isExpanded ? "open" : "closed"}
-					variants={chevronVariants}
-					transition={{ duration: 0.2 }}
-				>
+				<motion.div animate={isExpanded ? "open" : "closed"} variants={chevronVariants} transition={{ duration: 0.2 }}>
 					<Icons.ChevronDown className="h-4 w-4" />
 				</motion.div>
 			</button>

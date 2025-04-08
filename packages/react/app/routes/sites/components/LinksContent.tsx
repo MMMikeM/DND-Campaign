@@ -11,10 +11,8 @@ interface LinksContentProps {
 }
 
 export const LinksContent: React.FC<LinksContentProps> = ({ site }) => {
-	// Destructure relations (assuming unification happened in getSite)
 	const { relations } = site
 
-	// Filter for site relations specifically if the relations array contains other types
 	const siteLinks = relations?.filter((relation) => relation.site) || []
 
 	return (

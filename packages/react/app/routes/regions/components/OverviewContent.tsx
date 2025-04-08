@@ -1,30 +1,23 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getDangerVariant } from "../utils"
 import type { Region } from "~/lib/entities"
+import { getDangerVariant } from "../utils"
 
-interface OverviewContentProps {
-	region: Region
-}
-
-export const OverviewContent: React.FC<OverviewContentProps> = ({ region }) => {
-	const {
-		name,
-		history,
-		description,
-		culturalNotes,
-		type,
-		dangerLevel,
-		population,
-		economy,
-		locations,
-		factions,
-		quests,
-	} = region
-
+export const OverviewContent: React.FC<Region> = ({
+	name,
+	history,
+	description,
+	culturalNotes,
+	type,
+	dangerLevel,
+	population,
+	economy,
+	quests,
+	areas,
+}) => {
 	return (
 		<>
 			<InfoCard title="Overview" icon={<Icons.Info className="h-4 w-4 mr-2 text-primary" />} className="mb-6">
@@ -99,18 +92,6 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ region }) => {
 						<div className="flex items-center justify-between">
 							<span className="font-medium">Economy:</span>
 							<span>{economy}</span>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-medium">Locations:</span>
-							<BadgeWithTooltip variant="outline" tooltipContent={`Locations`}>
-								{locations.length}
-							</BadgeWithTooltip>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-medium">Factions:</span>
-							<BadgeWithTooltip variant="outline" tooltipContent={`Factions operate in this region`}>
-								{factions.length}
-							</BadgeWithTooltip>
 						</div>
 						<div className="flex items-center justify-between">
 							<span className="font-medium">Active Quests:</span>

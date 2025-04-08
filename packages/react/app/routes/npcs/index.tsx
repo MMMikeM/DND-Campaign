@@ -8,6 +8,7 @@ import { Input } from "~/components/ui/input"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getAllNpcs } from "~/lib/entities"
 import type { Route } from "./+types/index"
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllNpcs()
@@ -15,14 +16,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function NpcsIndexPage({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
-	const npcs = loaderData
 
-	const filteredNpcs = npcs.filter(
-		(npc) =>
-			npc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			npc.race.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			npc.occupation.toLowerCase().includes(searchTerm.toLowerCase()),
-	)
+	const filteredNpcs = useSearchFilter(loaderData, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6">
