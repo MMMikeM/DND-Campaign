@@ -1,20 +1,20 @@
-import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js"
-import { logger } from ".."
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import { helpToolDefinitions } from "./tool.help"
 import type { Tool } from "@modelcontextprotocol/sdk/types.js"
-import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
-import { factionToolDefinitions } from "./faction-tools"
-import { regionToolDefinitions } from "./region-tools"
-import { npcToolDefinitions } from "./npc-tools"
-import { questToolDefinitions } from "./quest-tools"
+import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
+import { logger } from ".."
 import { associationToolDefinitions } from "./association-tools"
 import { conflictToolDefinitions } from "./conflict-tools"
-import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
-import { narrativeToolDefinitions } from "./narrative-tools"
-import { worldToolDefinitions } from "./world-tools"
 import { embeddingToolDefinitions } from "./embedding-tools"
+import { factionToolDefinitions } from "./faction-tools"
+import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { getEntityToolDefinition } from "./get-entity"
+import { narrativeToolDefinitions } from "./narrative-tools"
+import { npcToolDefinitions } from "./npc-tools"
+import { questToolDefinitions } from "./quest-tools"
+import { regionToolDefinitions } from "./region-tools"
+import { helpToolDefinitions } from "./tool.help"
+import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
+import { worldToolDefinitions } from "./world-tools"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
@@ -49,6 +49,8 @@ export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
 
 export function registerToolHandlers(server: Server) {
 	const tools = [
+		...help.tools,
+		...getEntity.tools,
 		...factions.tools,
 		...regions.tools,
 		...npcs.tools,
@@ -59,11 +61,11 @@ export function registerToolHandlers(server: Server) {
 		...narrative.tools,
 		...world.tools,
 		...embeddings.tools,
-		...help.tools,
-		...getEntity.tools,
 	]
 
 	const allToolHandlers = {
+		...help.handlers,
+		...getEntity.handlers,
 		...factions.handlers,
 		...regions.handlers,
 		...npcs.handlers,
@@ -74,8 +76,6 @@ export function registerToolHandlers(server: Server) {
 		...narrative.handlers,
 		...world.handlers,
 		...embeddings.handlers,
-		...help.handlers,
-		...getEntity.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
