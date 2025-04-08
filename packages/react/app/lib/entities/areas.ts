@@ -1,7 +1,6 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
-
 import { EntityNotFoundError } from "../errors" // Import custom error
+import addSlugs from "../utils/addSlugs"
 
 const areaConfig = {
 	findById: (id: number) =>
@@ -12,11 +11,12 @@ const areaConfig = {
 				sites: {
 					columns: { id: true, name: true, siteType: true },
 				},
-				influence: {
+				territorialControl: {
 					with: {
 						faction: { columns: { name: true, id: true } },
 					},
 				},
+				worldChanges: { columns: { id: true, name: true } },
 			},
 		}),
 	getAll: () => db.query.areas.findMany({ with: { region: { columns: { id: true, name: true } } } }),

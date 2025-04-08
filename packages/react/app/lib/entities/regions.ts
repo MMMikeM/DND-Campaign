@@ -1,13 +1,19 @@
 import { db } from "../db"
+import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { EntityNotFoundError } from "../errors"
 
 const regionConfig = {
 	findById: (id: number) =>
 		db.query.regions.findFirst({
 			where: (regions, { eq }) => eq(regions.id, id),
 			with: {
+				territorialControl: {
+					with: {
+						faction: { columns: { name: true, id: true } },
+					},
+				},
+				worldChanges: { columns: { id: true, name: true } },
 				incomingRelations: {
 					with: {
 						sourceRegion: { columns: { name: true, id: true } },
@@ -29,12 +35,6 @@ const regionConfig = {
 					},
 				},
 				quests: { columns: { id: true, name: true } },
-				factions: { with: { faction: { columns: { name: true, id: true } } } },
-				influence: {
-					with: {
-						faction: { columns: { name: true, id: true } },
-					},
-				},
 			},
 		}),
 	getAll: () => db.query.regions.findMany({}),

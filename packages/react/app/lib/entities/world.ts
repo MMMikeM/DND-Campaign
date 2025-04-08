@@ -1,6 +1,6 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
 import { EntityNotFoundError } from "../errors"
+import addSlugs from "../utils/addSlugs"
 
 const worldConfig = {
 	findById: (id: number) =>

@@ -1,6 +1,6 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
 import { EntityNotFoundError } from "../errors"
+import addSlugs from "../utils/addSlugs"
 
 const foreshadowingConfig = {
 	findById: (id: number) =>
@@ -15,7 +15,7 @@ const foreshadowingConfig = {
 				sourceNpc: { columns: { name: true, id: true } },
 				sourceFaction: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
-				targetTwist: { columns: { twist_type: true, id: true } },
+				targetTwist: { columns: { twistType: true, id: true } },
 				targetNpc: { columns: { name: true, id: true } },
 				targetArc: { columns: { name: true, id: true } },
 			},

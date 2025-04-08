@@ -1,18 +1,18 @@
 import { db } from "../db"
+import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { EntityNotFoundError } from "../errors"
 
 const npcConfig = {
 	findById: (id: number) =>
 		db.query.npcs.findFirst({
 			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
+				relatedItems: true,
 				relatedFactions: { with: { faction: { columns: { name: true, id: true } } } },
+				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceNpc: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetNpc: { columns: { name: true, id: true } } } },
-				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
-				relatedItems: true,
 				relatedClues: {
 					with: {
 						stage: {

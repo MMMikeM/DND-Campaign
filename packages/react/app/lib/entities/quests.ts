@@ -1,7 +1,7 @@
 import { db } from "../db"
+import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { EntityNotFoundError } from "../errors"
 
 const getRawQuestStages = async (id: number) => {
 	return await db.query.questStages.findMany({
@@ -92,11 +92,14 @@ const questConfig = {
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
 				items: true,
-				region: { columns: { name: true, id: true } },
-				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
 				unlockConditions: true,
 				twists: true,
+				futureTriggers: true,
+				region: { columns: { name: true, id: true } },
+				stages: { columns: { id: true, name: true } },
+				worldChanges: { columns: { id: true, name: true } },
+				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
 				factions: {
 					with: {
 						faction: {
