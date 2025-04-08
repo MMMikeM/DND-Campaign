@@ -1,21 +1,26 @@
 import { db } from "../db"
+import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { EntityNotFoundError } from "../errors"
 
 const siteConfig = {
 	findById: (id: number) =>
 		db.query.sites.findFirst({
 			where: (sites, { eq }) => eq(sites.id, id),
 			with: {
-				area: { columns: { id: true, name: true }, with: { region: { columns: { id: true, name: true } } } },
 				encounters: true,
 				secrets: true,
+				items: true,
+				worldChanges: { columns: { id: true, name: true } },
+				territorialControl: {
+					with: {
+						faction: { columns: { name: true, id: true } },
+					},
+				},
+				area: { columns: { id: true, name: true }, with: { region: { columns: { id: true, name: true } } } },
 				incomingRelations: { with: { sourceSite: { columns: { id: true, name: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { id: true, name: true } } } },
-				items: true,
 				npcs: { with: { npc: { columns: { name: true, id: true } } } },
-				influence: { with: { faction: { columns: { name: true, id: true } } } },
 			},
 		}),
 	getAll: () => db.query.sites.findMany({}),

@@ -1,6 +1,6 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
 import { EntityNotFoundError } from "../errors"
+import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const factionConfig = {
@@ -8,17 +8,19 @@ const factionConfig = {
 		db.query.factions.findFirst({
 			where: (factions, { eq }) => eq(factions.id, id),
 			with: {
+				culture: true,
+				agendas: true,
+				clues: true,
+				conflicts: true,
+				controlledRoutes: true,
+				worldChanges: { columns: { id: true, name: true } },
 				members: { with: { npc: { columns: { name: true, id: true } } } },
 				headquarters: { with: { site: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
-				relatedRegions: { with: { region: { columns: { name: true, id: true } } } },
-				operations: true,
-				culture: true,
 				influence: {
 					with: {
-						quest: { columns: { name: true, id: true } },
 						region: { columns: { name: true, id: true } },
 						area: { columns: { name: true, id: true } },
 						site: { columns: { name: true, id: true } },

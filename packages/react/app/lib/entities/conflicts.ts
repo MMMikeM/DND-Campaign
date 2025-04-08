@@ -1,13 +1,13 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
-
 import { EntityNotFoundError } from "../errors"
+import addSlugs from "../utils/addSlugs"
 
 const conflictConfig = {
 	findById: (id: number) =>
 		db.query.majorConflicts.findFirst({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
+				worldChanges: { columns: { id: true, name: true } },
 				participants: { with: { faction: { columns: { name: true, id: true } } } },
 				progression: {
 					with: {
@@ -19,13 +19,6 @@ const conflictConfig = {
 		}),
 	getAll: () =>
 		db.query.majorConflicts.findMany({
-			columns: {
-				id: true,
-				name: true,
-				status: true,
-				primaryRegionId: true,
-				description: true,
-			},
 			with: {
 				primaryRegion: { columns: { name: true } },
 			},

@@ -1,7 +1,6 @@
 import { db } from "../db"
-import addSlugs from "../utils/addSlugs"
-
 import { EntityNotFoundError } from "../errors"
+import addSlugs from "../utils/addSlugs"
 
 const narrativeConfig = {
 	findById: (id: number) =>
@@ -9,7 +8,7 @@ const narrativeConfig = {
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
 				foreshadowing: true,
-				worldChanges: true,
+				worldChanges: { columns: { id: true, name: true } },
 				members: { with: { quest: { columns: { name: true, id: true } } } },
 			},
 		}),
