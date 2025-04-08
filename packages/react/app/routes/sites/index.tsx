@@ -2,14 +2,12 @@ import { useState } from "react"
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
 
-import { Button } from "~/components/ui/button"
 import { InfoCard } from "~/components/InfoCard"
 import { Input } from "~/components/ui/input"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getAllSites, type Site } from "~/lib/entities" 
-import type { Route } from "./+types/index" 
+import { getAllSites } from "~/lib/entities"
+import type { Route } from "./+types/index"
 import { List } from "~/components/List"
-
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllSites()
@@ -17,19 +15,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
-	
-	const sites = loaderData 
 
-	const filteredSites = sites.filter(
-		(site) => { 
-			const nameMatch = site.name.toLowerCase().includes(searchTerm.toLowerCase());
-			const typeMatch = site.siteType.toLowerCase().includes(searchTerm.toLowerCase());
-			const areaMatch = site.area.name.toLowerCase().includes(searchTerm.toLowerCase());
-			const regionMatch = site.area.region.name.toLowerCase().includes(searchTerm.toLowerCase());
-			const descriptionMatch = site.description.join(" ").toLowerCase().includes(searchTerm.toLowerCase());
-			return !!(nameMatch || typeMatch || areaMatch || regionMatch || descriptionMatch);
-		}
-	)
+	const filteredSites = useSearchFilter(loaderData, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6">
@@ -60,16 +47,28 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{filteredSites.map((site) => { 
+				{filteredSites.map((site) => {
 					const {
 						id,
 						name,
 						siteType,
-						area,
 						slug,
 						description,
 						areaId,
-
+						climate,
+						creativePrompts,
+						creatures,
+						descriptors,
+						embedding,
+						environment,
+						features,
+						lightingDescription,
+						mood,
+						smells,
+						soundscape,
+						terrain,
+						treasures,
+						weather,
 					} = site
 
 					const icon = <Icons.LocateFixed className="h-4 w-4 text-primary" />
@@ -77,7 +76,7 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 					return (
 						<NavLink key={id} to={`/sites/${slug}`}>
 							<InfoCard title={name} icon={icon} className="h-full hover:shadow-md transition-shadow">
-							<List items={description} spacing="sm" emptyText="No description" />
+								<List items={description} spacing="sm" emptyText="No description" />
 							</InfoCard>
 						</NavLink>
 					)

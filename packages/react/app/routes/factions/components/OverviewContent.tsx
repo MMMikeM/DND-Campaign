@@ -123,52 +123,34 @@ export function OverviewContent(faction: Faction) {
 			</div>
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				{/* <InfoCard
+				<InfoCard
           title="Headquarters"
           icon={<Icons.Home className="h-5 w-5 mr-2 text-orange-500" />}
           emptyMessage={`No headquarters information for ${faction.name}`}
         >
           {faction.headquarters && faction.headquarters.length > 0 && (
             <div className="divide-y divide-slate-200 dark:divide-slate-700">
-              {faction.headquarters.map((hq) => (
-                <div key={hq.id} className="p-5">
-                  {hq.location && (
+              {faction.headquarters.map(({creativePrompts, description, site, id}) => (
+                <div key={id} className="p-5">
+                  {site && (
                     <div className="mb-4">
                       <Link 
-                        href={`/locations/${hq.location.slug}`} 
+                        href={`/locations/${site.slug}`} 
                         className="text-lg font-medium text-slate-900 dark:text-slate-100 hover:text-primary transition-colors flex items-center"
                       >
                         <Icons.MapPin className="h-4 w-4 mr-2 text-rose-500" />
-                        {hq.location.name}
+                        {site.name}
                       </Link>
                     </div>
                   )}
                   
-                  {hq.description && hq.description.length > 0 && (
-                    <div className="space-y-2 mb-4">
-                      {hq.description.map((desc, i) => (
-                        <p key={i} className="text-slate-700 dark:text-slate-300">
-                          {desc}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {hq.creativePrompts && hq.creativePrompts.length > 0 && (
-                    <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 italic">Adventure Hooks:</p>
-                      <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                        {hq.creativePrompts.map((prompt, i) => (
-                          <li key={i}>{prompt}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  <List items={description} className="mb-4" heading="Description" />
+                  <List items={creativePrompts} className="mb-4" heading="Creative Prompts"/>
                 </div>
               ))}
             </div>
           )}
-        </InfoCard> */}
+        </InfoCard>
 
 				<InfoCard
 					title="Description"

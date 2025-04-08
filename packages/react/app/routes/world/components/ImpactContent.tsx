@@ -4,10 +4,6 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { WorldChange } from "~/lib/entities"
 
-interface ImpactContentProps {
-	change: WorldChange
-}
-
 const AffectedList = ({
 	title,
 	icon,
@@ -30,7 +26,7 @@ const AffectedList = ({
 	)
 }
 
-export function ImpactContent({ change }: ImpactContentProps) {
+export function ImpactContent({ change }: { change: WorldChange }) {
 	const { affectedFaction, affectedRegion, affectedArea, affectedSite, affectedNpc } = change
 
 	return (

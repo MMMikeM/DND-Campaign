@@ -38,46 +38,37 @@ export const TwistsContent: React.FC<TwistsContentProps> = ({ quest }) => {
 	}
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-			{twists.map((twist) => (
-				<InfoCard
-					key={twist.id}
-					title={twist.twist_type.charAt(0).toUpperCase() + twist.twist_type.slice(1)}
-					icon={getTwistTypeIcon(twist.twist_type)}
-					className="h-full"
-				>
+		<div className="grid grid-cols-1 gap-6 ">
+			{twists.map(({ twistType, creativePrompts, description, impact, narrativePlacement, id }) => (
+				<InfoCard key={id} title={twistType} icon={getTwistTypeIcon(twistType)} className="h-full">
 					<div>
 						<div className="flex justify-end mb-3">
 							<div className="flex gap-2">
-								<Badge
-									variant={
-										twist.impact === "major" ? "destructive" : twist.impact === "moderate" ? "default" : "outline"
-									}
-								>
-									{twist.impact}
+								<Badge variant={impact === "major" ? "destructive" : impact === "moderate" ? "default" : "outline"}>
+									{impact}
 								</Badge>
-								<Badge variant="secondary">{twist.narrative_placement}</Badge>
+								<Badge variant="secondary">{narrativePlacement}</Badge>
 							</div>
 						</div>
 
 						<p className="text-sm text-muted-foreground mb-4">
-							{twist.impact === "major"
+							{impact === "major"
 								? "Game-changing plot twist"
-								: twist.impact === "moderate"
+								: impact === "moderate"
 									? "Significant development"
 									: "Minor story twist"}
 						</p>
 
 						<List
-							items={twist.description}
+							items={description}
 							spacing="sm"
 							textColor="default"
 							bulletColor={
-								twist.twist_type === "betrayal"
+								twistType === "betrayal"
 									? "red"
-									: twist.twist_type === "revelation"
+									: twistType === "revelation"
 										? "blue"
-										: twist.twist_type === "reversal"
+										: twistType === "reversal"
 											? "amber"
 											: "purple"
 							}
@@ -86,7 +77,7 @@ export const TwistsContent: React.FC<TwistsContentProps> = ({ quest }) => {
 						<div className="mt-4 pt-2 border-t">
 							<h4 className="text-xs font-medium text-muted-foreground mb-2">GM Notes:</h4>
 							<List
-								items={twist.creativePrompts}
+								items={creativePrompts}
 								spacing="sm"
 								textColor="muted"
 								icon={<Icons.Lightbulb className="h-4 w-4 mr-2 text-amber-500" />}

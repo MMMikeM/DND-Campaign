@@ -12,14 +12,14 @@ const factionConfig = {
 				agendas: true,
 				clues: true,
 				conflicts: true,
-				controlledRoutes: true,
+
 				worldChanges: { columns: { id: true, name: true } },
 				members: { with: { npc: { columns: { name: true, id: true } } } },
 				headquarters: { with: { site: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
-				influence: {
+				territorialControl: {
 					with: {
 						region: { columns: { name: true, id: true } },
 						area: { columns: { name: true, id: true } },

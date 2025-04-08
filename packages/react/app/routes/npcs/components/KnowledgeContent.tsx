@@ -1,16 +1,9 @@
-import React from "react"
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-interface KnowledgeContentProps {
-	npc: NPC
-}
-
-export function KnowledgeContent({ npc }: KnowledgeContentProps) {
-	const { knowledge, secrets } = npc
-
+export function KnowledgeContent({ knowledge, secrets }: NPC) {
 	return (
 		<>
 			<InfoCard

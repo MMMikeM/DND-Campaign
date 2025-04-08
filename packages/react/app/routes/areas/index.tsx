@@ -41,7 +41,27 @@ export default function AreasIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredAreas.map((area) => {
-					const { id, name, type, dangerLevel, region, slug, description } = area
+					const {
+						id,
+						name,
+						type,
+						dangerLevel,
+						slug,
+						description,
+						creativePrompts,
+						culturalNotes,
+						defenses,
+						embedding,
+						hazards,
+						leadership,
+						pointsOfInterest,
+						population,
+						primaryActivity,
+
+						region,
+						regionId,
+						rumors,
+					} = area
 
 					return (
 						<NavLink key={id} to={`/areas/${slug}`}>

@@ -1,8 +1,8 @@
-import { cn } from "../lib/utils"
-import React, { useState } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { ChevronDown, ChevronUp, Info } from "lucide-react"
-import { motion, AnimatePresence, m } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
+import React, { useEffect, useRef, useState } from "react"
+import { cn } from "../lib/utils"
 
 const listVariants = cva("", {
 	variants: {
@@ -35,21 +35,37 @@ const listVariants = cva("", {
 	},
 })
 
-export interface ListProps extends VariantProps<typeof listVariants> {
+// Base props without heading-related props
+interface BaseListProps extends VariantProps<typeof listVariants> {
 	items?: string[]
 	emptyText?: string
-	maxItems?: 2 | 3 | 4 | 5
-	heading?: string
-	icon?: React.ReactNode
 	bulletColor?: "amber" | "red" | "green" | "blue" | "purple" | "gray"
 	className?: string
 }
+
+// Props for list without heading (non-collapsible)
+interface ListWithoutHeadingProps extends BaseListProps {
+	heading?: never
+	icon?: never
+	initialCollapsed?: never
+	collapsible?: never
+}
+
+// Props for list with heading (collapsible by default)
+interface ListWithHeadingProps extends BaseListProps {
+	heading: string
+	icon?: React.ReactNode
+	initialCollapsed?: boolean
+	collapsible?: boolean
+}
+
+// Union type to ensure either all heading-related props are provided or none are
+export type ListProps = ListWithoutHeadingProps | ListWithHeadingProps
 
 export function List({
 	items,
 	className,
 	emptyText = "No items to display",
-	maxItems,
 	heading,
 	icon = <Info className="h-4 w-4 mr-2" />,
 	listStyle,
@@ -57,88 +73,74 @@ export function List({
 	textSize,
 	textColor,
 	bulletColor = "gray",
+	initialCollapsed,
 	...props
 }: ListProps) {
-	const [displayMore, setDisplayMore] = useState(false)
+	// Make collapsed true by default for collapsible lists
+	const collapsible = !!(props.collapsible !== false && heading)
+	const defaultCollapsed = initialCollapsed !== undefined ? initialCollapsed : collapsible
+	const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
+	const isFirstRender = useRef(true)
+
+	const animationSpeed = 0.3
+	const isCollapsibleHeading = heading && collapsible
+
+	// Skip the initial animation on mount
+	useEffect(() => {
+		if (isFirstRender.current) {
+			isFirstRender.current = false
+		}
+	}, [])
 
 	// If there are no items, display the empty text
 	if (!items || items.length === 0) {
 		return (
 			<div {...props}>
-				{heading && (
-					<h3 className="font-medium mb-2 flex items-center">
-						{icon}
-						{heading}
-					</h3>
+				{renderHeading(heading, icon, Boolean(isCollapsibleHeading), isCollapsed, setIsCollapsed)}
+				{!isCollapsed && (
+					<ul className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}>
+						<li className="text-muted-foreground">{emptyText}</li>
+					</ul>
 				)}
-				<ul className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}>
-					<li className="text-muted-foreground">{emptyText}</li>
-				</ul>
 			</div>
 		)
 	}
 
-	// Split items into display and more items
-	const displayItems = maxItems ? items.slice(0, maxItems) : items
-	const moreItems = maxItems ? items.slice(maxItems) : []
-	const animationSpeed = 0.1
-
 	return (
 		<div {...props}>
-			{heading && (
-				<h3 className="font-medium mb-2 flex items-center">
-					{icon}
-					{heading}
-				</h3>
-			)}
-			<ul className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}>
-				{displayItems.map((item, index) => (
-					<li
-						key={`${item.substring(0, 20)}-${index}`}
-						className={cn(
-							textColor === "muted" ? "text-muted-foreground" : "",
-							bulletColor && "flex items-start justify-start",
-						)}
-					>
-						{bulletColor && (
-							<div className={`flex-shrink-0 mr-3 mt-2`}>
-								<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
-							</div>
-						)}
-						<span className="text-slate-700 dark:text-slate-300">{item}</span>
-					</li>
-				))}
+			{renderHeading(heading, icon, Boolean(isCollapsibleHeading), isCollapsed, setIsCollapsed)}
 
-				<AnimatePresence>
-					{displayMore && (
-						<motion.div
-							className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}
-							style={{ overflow: "hidden" }}
-							initial={maxItems ? { height: 0 } : { height: "auto" }}
-							animate={{
-								height: "auto",
-								transition: {
-									duration: moreItems.length * animationSpeed,
-									ease: "easeOut",
-								},
-							}}
-							exit={{
-								height: 0,
-								transition: {
-									duration: moreItems.length * animationSpeed,
-									ease: "easeInOut",
-									delay: animationSpeed,
-								},
-							}}
-						>
-							{moreItems.map((item, index) => (
+			<AnimatePresence initial={false}>
+				{!isCollapsed && (
+					<motion.div
+						className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}
+						style={{ overflow: "hidden" }}
+						initial={isFirstRender.current ? false : { height: 0 }}
+						animate={{
+							height: "auto",
+							transition: {
+								duration: items.length * animationSpeed,
+								ease: "easeOut",
+							},
+						}}
+						exit={{
+							height: 0,
+							transition: {
+								duration: items.length * animationSpeed,
+								ease: "easeInOut",
+								delay: animationSpeed,
+							},
+						}}
+					>
+						<ul>
+							{items.map((item, index) => (
 								<motion.li
-									key={`${item.substring(0, 20)}-${index + displayItems.length}`}
+									key={`${item.substring(0, 20)}-${index}`}
 									className={cn(
 										textColor === "muted" ? "text-muted-foreground" : "",
 										bulletColor && "flex items-start justify-start",
 									)}
-									initial={{ opacity: 0 }}
+									initial={isFirstRender.current ? false : { opacity: 0 }}
 									animate={{
 										opacity: 1,
 										transition: {
@@ -149,46 +151,76 @@ export function List({
 									exit={{
 										opacity: 0,
 										transition: {
-											delay: animationSpeed * (moreItems.length - index - 1),
+											delay: animationSpeed * (items.length - index - 1),
 											duration: animationSpeed,
 										},
 									}}
 									style={{ transformOrigin: "top" }}
 								>
-									{bulletColor && (
-										<div className={`flex-shrink-0 mr-3 mt-2`}>
-											<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
-										</div>
-									)}
+									{renderBullet(bulletColor)}
 									<span className="text-slate-700 dark:text-slate-300">{item}</span>
 								</motion.li>
 							))}
-						</motion.div>
-					)}
-				</AnimatePresence>
-
-				{moreItems.length > 0 && (
-					<motion.li className="flex justify-end">
-						<button
-							type="button"
-							onClick={() => setDisplayMore(!displayMore)}
-							className="flex items-center text-xs text-indigo-500 hover:text-indigo-600 transition-colors"
-						>
-							{displayMore ? (
-								<>
-									<ChevronUp className="h-3 w-3 mr-1" />
-									Show less
-								</>
-							) : (
-								<>
-									<ChevronDown className="h-3 w-3 mr-1" />
-									Show {moreItems.length} more
-								</>
-							)}
-						</button>
-					</motion.li>
+						</ul>
+					</motion.div>
 				)}
-			</ul>
+			</AnimatePresence>
+		</div>
+	)
+}
+
+// Helper function to render the heading with collapse functionality
+function renderHeading(
+	heading?: string,
+	icon?: React.ReactNode,
+	collapsible?: boolean,
+	isCollapsed?: boolean,
+	setIsCollapsed?: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+	if (!heading) return null
+
+	const toggleCollapse = () => setIsCollapsed?.(!isCollapsed)
+
+	return (
+		<h3
+			className={cn("font-medium mb-2 flex items-center", collapsible && "cursor-pointer")}
+			onClick={collapsible ? toggleCollapse : undefined}
+			onKeyDown={
+				collapsible
+					? (e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault()
+								toggleCollapse()
+							}
+						}
+					: undefined
+			}
+			tabIndex={collapsible ? 0 : undefined}
+			role={collapsible ? "button" : undefined}
+			aria-expanded={collapsible ? !isCollapsed : undefined}
+		>
+			{icon}
+			{heading}
+			{collapsible && (
+				<div className="ml-auto">
+					{isCollapsed ? (
+						<ChevronDown className="h-4 w-4 text-muted-foreground" />
+					) : (
+						<ChevronUp className="h-4 w-4 text-muted-foreground" />
+					)}
+				</div>
+			)}
+		</h3>
+	)
+}
+
+// Helper function to render bullet point
+function renderBullet(bulletColor?: string) {
+	if (!bulletColor) return null
+
+	return (
+		<div className="flex-shrink-0 mr-3 mt-2">
+			<div className={`h-2 w-2 rounded-full bg-${bulletColor}-500`} />
 		</div>
 	)
 }

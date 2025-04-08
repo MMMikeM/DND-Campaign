@@ -1,16 +1,15 @@
-import { NavLink, useParams, useNavigate } from "react-router"
 import * as Icons from "lucide-react"
+import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import { getDangerVariant } from "./utils"
-import { RegionHeader } from "./components/RegionHeader"
-import { OverviewContent } from "./components/OverviewContent"
-import { DetailsContent } from "./components/DetailsContent"
-import { AreasContent } from "./components/AreasContent" // Renamed import
-import { LoreContent } from "./components/LoreContent"
+import { AreasContent } from "./components/AreasContent"
 import { ConnectionsContent } from "./components/ConnectionsContent"
+import { DetailsContent } from "./components/DetailsContent"
+import { LoreContent } from "./components/LoreContent"
+import { OverviewContent } from "./components/OverviewContent"
+import { RegionHeader } from "./components/RegionHeader"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -75,7 +74,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent region={region} />
+					<OverviewContent {...region} />
 				</TabsContent>
 
 				<TabsContent value="details">
