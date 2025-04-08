@@ -13,12 +13,12 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 	sourceQuest: one(quests, {
 		fields: [worldStateChanges.questId],
 		references: [quests.id],
-		relationName: "worldChangesByQuest", // Changed to match questsRelations
+		relationName: "worldChangesByQuest",
 	}),
 	sourceDecision: one(stageDecisions, {
 		fields: [worldStateChanges.decisionId],
 		references: [stageDecisions.id],
-		relationName: "worldChangesByDecision", // Changed to match stageDecisionsRelations
+		relationName: "worldChangesByDecision",
 	}),
 	sourceConflict: one(majorConflicts, {
 		fields: [worldStateChanges.conflictId],
@@ -29,7 +29,7 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 	relatedArc: one(narrativeArcs, {
 		fields: [worldStateChanges.arcId],
 		references: [narrativeArcs.id],
-		relationName: "worldChangesByArc", // Changed to match narrativeArcsRelations
+		relationName: "worldChangesByArc",
 	}),
 
 	// Affected entities
