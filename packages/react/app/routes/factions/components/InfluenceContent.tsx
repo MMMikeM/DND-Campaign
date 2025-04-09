@@ -71,24 +71,23 @@ function FactionterritorialControlInfo({ territorialControl }: { territorialCont
 			title={`Sphere of territorialControl`}
 			icon={<Icons.Globe className="h-5 w-5 mr-2 text-primary" />}
 			emptyMessage={`No territorialControl information available`}
+			contentClassName="space-y-4"
 		>
 			{territorialControl.map(
 				({ id, area, creativePrompts, description, influenceLevel, presence, priorities, region, site }) => (
 					<div key={id} className="overflow-hidden border-b">
-						<div className="p-4 ">
-							<div className="flex items-center justify-between mb-3">
-								<TerritorialControlTitle site={site} area={area} region={region} />
-								<BadgeWithTooltip variant="default" tooltipContent="territorialControl Level">
-									{influenceLevel}
-								</BadgeWithTooltip>
-							</div>
+						<div className="flex items-center justify-between mb-3">
+							<TerritorialControlTitle site={site} area={area} region={region} />
+							<BadgeWithTooltip variant="default" tooltipContent="territorialControl Level">
+								{influenceLevel}
+							</BadgeWithTooltip>
+						</div>
 
-							<div className="space-y-3 mb-4">
-								<List items={presence} className="text-sm" maxItems={2} heading="Presence" />
-								<List items={priorities} className="text-sm" maxItems={2} heading="Priorities" />
-								<List items={description} className="text-sm" maxItems={2} heading="Description" />
-								<List items={creativePrompts} className="text-sm" maxItems={2} heading="Creative Prompts" />
-							</div>
+						<div className="mb-4 space-y-4">
+							<List items={presence} className="text-sm" initialCollapsed heading="Presence" />
+							<List items={priorities} className="text-sm" initialCollapsed heading="Priorities" />
+							<List items={description} className="text-sm" initialCollapsed heading="Description" />
+							<List items={creativePrompts} className="text-sm" initialCollapsed heading="Creative Prompts" />
 						</div>
 					</div>
 				),
@@ -103,35 +102,30 @@ function FactionRelationsCard({ relations }: { relations: Faction["relations"] }
 			title="Relations"
 			icon={<Icons.Network className="h-5 w-5 mr-2" />}
 			emptyMessage="No relations with other factions established."
+			contentClassName="grid grid-cols-1 md:grid-cols-2 gap-4"
 		>
-			{relations && relations.length > 0 ? (
-				<div className="space-y-4 p-4">
-					{relations.map(({ creativePrompts, description, diplomaticStatus, faction, id, strength }) => (
-						<div key={`relation-${id}`} className="border-b border-slate-200 pb-4">
-							<div className="flex justify-between">
-								<h4 className="font-medium">
-									{faction && (
-										<Link href={`/factions/${faction.slug}`} className="hover:text-indigo-500">
-											{faction.name}
-										</Link>
-									)}
-								</h4>
-								<BadgeWithTooltip
-									variant={
-										diplomaticStatus === "ally" ? "default" : diplomaticStatus === "enemy" ? "destructive" : "secondary"
-									}
-									tooltipContent="Political standing between factions"
-								>
-									{diplomaticStatus} ({strength})
-								</BadgeWithTooltip>
-							</div>
+			{relations.map(({ creativePrompts, description, diplomaticStatus, faction, id, strength }) => (
+				<div key={`relation-${id}`} className="border-b border-slate-200 pb-4 space-y-4">
+					<div className="flex justify-between mb-2">
+						{faction && (
+							<Link href={`/factions/${faction.slug}`} className="hover:text-indigo-500">
+								<h4 className="text-lg font-semibold">{faction.name}</h4>
+							</Link>
+						)}
+						<BadgeWithTooltip
+							variant={
+								diplomaticStatus === "ally" ? "default" : diplomaticStatus === "enemy" ? "destructive" : "secondary"
+							}
+							tooltipContent="Political standing between factions"
+						>
+							{diplomaticStatus} ({strength})
+						</BadgeWithTooltip>
+					</div>
 
-							<List items={description} heading="Description" maxItems={2} />
-							<List items={creativePrompts} heading="Creative Prompts" maxItems={2} />
-						</div>
-					))}
+					<List items={description} heading="Description" initialCollapsed />
+					<List items={creativePrompts} heading="Creative Prompts" initialCollapsed />
 				</div>
-			) : (
+			)) ?? (
 				<div className="py-8 text-center">
 					<Icons.AlertCircle className="h-10 w-10 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
 					<p className="text-muted-foreground">No relations with other factions established.</p>
