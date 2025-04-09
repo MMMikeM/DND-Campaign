@@ -1,7 +1,7 @@
-import * as React from "react"
-import { Badge } from "~/components/ui/badge"
-import { cn } from "~/lib/utils"
 import * as Icons from "lucide-react"
+import * as React from "react"
+import { cn } from "~/lib/utils"
+import { BadgeWithTooltip } from "./badge-with-tooltip"
 
 export const alignments = [
 	"lawful good",
@@ -17,7 +17,7 @@ export const alignments = [
 
 export type Alignment = (typeof alignments)[number]
 
-const alignmentConfig: Record<Alignment, { icon: React.ReactNode; color: string }> = {
+export const alignmentConfig: Record<Alignment, { icon: React.ReactNode; color: string }> = {
 	"lawful good": {
 		icon: <Icons.Sun className="!size-4" />,
 		color: "bg-blue-100 text-blue-900 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-900",
@@ -67,12 +67,12 @@ export function AlignmentBadge({ alignment, className }: AlignmentBadgeProps) {
 	const config = alignmentConfig[alignment]
 
 	return (
-		<Badge
-			variant="outline"
+		<BadgeWithTooltip
+			tooltipContent={alignment}
 			className={cn("capitalize flex items-center gap-1.5 px-2 py-0.5", config.color, className)}
 		>
 			{config.icon}
 			{alignment}
-		</Badge>
+		</BadgeWithTooltip>
 	)
 }

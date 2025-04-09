@@ -1,7 +1,8 @@
+import type { VariantProps } from "class-variance-authority"
 import * as React from "react"
 import { Badge, badgeVariants } from "~/components/ui/badge"
-import { Tooltip, TooltipTrigger, TooltipContent } from "~/components/ui/tooltip"
-import type { VariantProps } from "class-variance-authority"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { cn } from "~/lib/utils"
 
 type BadgeWithTooltipProps = React.ComponentProps<typeof Badge> &
 	VariantProps<typeof badgeVariants> & {
@@ -15,16 +16,21 @@ export function BadgeWithTooltip({
 	tooltipContent,
 	tooltipSide = "top",
 	tooltipAlign = "center",
+	className,
 	...badgeProps
 }: BadgeWithTooltipProps) {
 	return (
-		<Tooltip>
-			<TooltipTrigger asChild>
-				<Badge {...badgeProps}>{children}</Badge>
-			</TooltipTrigger>
-			<TooltipContent side={tooltipSide} align={tooltipAlign}>
-				{tooltipContent}
-			</TooltipContent>
-		</Tooltip>
+		<div className="inline-flex h-fit">
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Badge className={cn("grow-0 shrink-0 capitalize", className)} {...badgeProps}>
+						{children}
+					</Badge>
+				</TooltipTrigger>
+				<TooltipContent side={tooltipSide} align={tooltipAlign}>
+					{tooltipContent}
+				</TooltipContent>
+			</Tooltip>
+		</div>
 	)
 }

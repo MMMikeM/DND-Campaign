@@ -1,6 +1,6 @@
-import * as React from "react"
 import * as Icons from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import * as React from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { cn } from "~/lib/utils"
 
 interface InfoCardProps {
@@ -9,6 +9,8 @@ interface InfoCardProps {
 	children?: React.ReactNode
 	className?: string
 	emptyMessage?: string
+	contentClassName?: string
+	description?: string
 }
 
 /**
@@ -19,7 +21,9 @@ export function InfoCard({
 	icon,
 	children,
 	className,
+	contentClassName,
 	emptyMessage = `No ${title?.toLowerCase?.() || "information"} available.`,
+	description,
 }: InfoCardProps) {
 	return (
 		<Card className={cn("overflow-hidden", className)}>
@@ -28,8 +32,9 @@ export function InfoCard({
 					{icon}
 					{title}
 				</CardTitle>
+				{description && <CardDescription className="text-sm text-muted-foreground">{description}</CardDescription>}
 			</CardHeader>
-			<CardContent className={cn("px-6 py-4")}>
+			<CardContent className={cn("px-6 py-4", contentClassName)}>
 				{children ?? (
 					<div className={cn("text-muted-foreground py-8 flex flex-col items-center justify-center")}>
 						<Icons.AlertCircle className="h-10 w-10 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
