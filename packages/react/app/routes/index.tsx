@@ -1,8 +1,8 @@
-import { NavLink } from "react-router"
 import * as Icons from "lucide-react"
+import { NavLink } from "react-router"
+import { Search } from "~/components/Search"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 
-// Define sections statically as this doesn't need loader data
 const sections = [
 	{
 		title: "Factions",
@@ -30,15 +30,18 @@ const sections = [
 	},
 ]
 
-// Export a component without a loader since one isn't needed
 export default function IndexPage() {
+
+	
 	return (
 		<div className="container mx-auto py-8">
-			<div className="text-center mb-12">
+			<div className="text-center mb-8">
 				<h1 className="text-4xl font-bold mb-4">Campaign Manager</h1>
-				<p className="text-xl text-muted-foreground">
+				<p className="text-xl text-muted-foreground mb-6">
 					Manage your D&D campaign world and keep track of everything
 				</p>
+
+				<Search />
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
