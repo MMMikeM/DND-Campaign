@@ -1,11 +1,10 @@
-import { Outlet, useFetcher } from "react-router"
 import * as Icons from "lucide-react"
 import { useEffect } from "react"
-
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent } from "./ui/sidebar"
+import { Outlet, useFetcher } from "react-router"
+import type { Items } from "~/routes/api/items"
 import type { Route } from "../routes/api/+types/items"
 import { SidebarNav } from "./sidebar/SidebarNav"
-import type { Items } from "~/routes/api/items"
+import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider } from "./ui/sidebar"
 
 export function MainLayout({ loaderData }: Route.ComponentProps) {
 	const fetcher = useFetcher<Items>()
@@ -16,7 +15,6 @@ export function MainLayout({ loaderData }: Route.ComponentProps) {
 		}
 	}, [fetcher])
 
-	console.log(fetcher.data)
 	const formattedData = {
 		factions: fetcher.data?.factions,
 		npcs: fetcher.data?.npcs,

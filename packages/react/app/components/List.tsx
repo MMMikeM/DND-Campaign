@@ -29,7 +29,7 @@ const listVariants = cva("", {
 		},
 	},
 	defaultVariants: {
-		spacing: "sm",
+		spacing: "md",
 		textSize: "base",
 		textColor: "default",
 	},
@@ -47,20 +47,28 @@ interface BaseListProps extends VariantProps<typeof listVariants> {
 interface ListWithoutHeadingProps extends BaseListProps {
 	heading?: never
 	icon?: never
-	initialCollapsed?: never
 	collapsible?: never
+	initialCollapsed?: never
 }
 
-// Props for list with heading (collapsible by default)
-interface ListWithHeadingProps extends BaseListProps {
+// Props for non-collapsible list with heading
+interface ListWithHeadingNonCollapsibleProps extends BaseListProps {
 	heading: string
 	icon?: React.ReactNode
-	initialCollapsed?: boolean
-	collapsible?: boolean
+	collapsible: false
+	initialCollapsed?: never
 }
 
-// Union type to ensure either all heading-related props are provided or none are
-export type ListProps = ListWithoutHeadingProps | ListWithHeadingProps
+// Props for collapsible list with heading
+interface ListWithHeadingCollapsibleProps extends BaseListProps {
+	heading: string
+	icon?: React.ReactNode
+	collapsible?: true
+	initialCollapsed?: boolean
+}
+
+// Union type to ensure proper prop combinations
+export type ListProps = ListWithoutHeadingProps | ListWithHeadingNonCollapsibleProps | ListWithHeadingCollapsibleProps
 
 export function List({
 	items,
@@ -78,11 +86,11 @@ export function List({
 }: ListProps) {
 	// Make collapsed true by default for collapsible lists
 	const collapsible = !!(props.collapsible !== false && heading)
-	const defaultCollapsed = initialCollapsed !== undefined ? initialCollapsed : collapsible
+	const defaultCollapsed = collapsible && initialCollapsed !== undefined ? initialCollapsed : collapsible
 	const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
 	const isFirstRender = useRef(true)
 
-	const animationSpeed = 0.3
+	const animationSpeed = 0.5 / 10
 	const isCollapsibleHeading = heading && collapsible
 
 	// Skip the initial animation on mount
@@ -113,7 +121,6 @@ export function List({
 			<AnimatePresence initial={false}>
 				{!isCollapsed && (
 					<motion.div
-						className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}
 						style={{ overflow: "hidden" }}
 						initial={isFirstRender.current ? false : { height: 0 }}
 						animate={{
@@ -132,7 +139,7 @@ export function List({
 							},
 						}}
 					>
-						<ul>
+						<ul className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}>
 							{items.map((item, index) => (
 								<motion.li
 									key={`${item.substring(0, 20)}-${index}`}
