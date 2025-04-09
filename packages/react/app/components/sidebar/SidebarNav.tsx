@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react"
-import { useLocation } from "react-router"
 import * as Icons from "lucide-react"
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar"
+import { useEffect, useState } from "react"
+import { useLocation } from "react-router"
 import { Link } from "~/components/ui/link"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 import { CategoryMenu, type MenuItem } from "./CategoryMenu"
 
 type Categories =
@@ -25,18 +25,7 @@ interface SidebarNavProps {
 export function SidebarNav({ menuData }: SidebarNavProps) {
 	const location = useLocation()
 
-	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
-		factions: false,
-		npcs: false,
-		regions: false,
-		areas: false,
-		sites: false,
-		quests: false,
-		conflicts: false,
-		foreshadowing: false,
-		narrative: false,
-		world: false,
-	})
+	const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
 	useEffect(() => {
 		const currentPath = location.pathname
@@ -54,21 +43,17 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 			"worldChanges",
 		]
 
-		categories.forEach((category) => {
+		// Find if the current path matches any category and set that as the active menu
+		for (const category of categories) {
 			if (currentPath.startsWith(`/${category}`)) {
-				setExpandedMenus((prev) => ({
-					...prev,
-					[category]: true,
-				}))
+				setActiveMenu(category)
+				break
 			}
-		})
+		}
 	}, [location.pathname])
 
 	const toggleMenu = (menu: string) => {
-		setExpandedMenus((prev) => ({
-			...prev,
-			[menu]: !prev[menu],
-		}))
+		setActiveMenu(prev => prev === menu ? null : menu)
 	}
 
 	return (
@@ -99,7 +84,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 					<CategoryMenu
 						title="Factions"
 						icon={Icons.Users}
-						isExpanded={expandedMenus.factions}
+						isExpanded={activeMenu === "factions"}
 						onToggle={() => toggleMenu("factions")}
 						basePath="factions"
 						menuItems={menuData.factions}
@@ -112,7 +97,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="NPCs"
 					icon={Icons.User}
-					isExpanded={expandedMenus.npcs}
+					isExpanded={activeMenu === "npcs"}
 					onToggle={() => toggleMenu("npcs")}
 					basePath="npcs"
 					menuItems={menuData.npcs}
@@ -123,7 +108,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Regions"
 					icon={Icons.Map}
-					isExpanded={expandedMenus.regions}
+					isExpanded={activeMenu === "regions"}
 					onToggle={() => toggleMenu("regions")}
 					basePath="regions"
 					menuItems={menuData.regions}
@@ -134,7 +119,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Areas"
 					icon={Icons.MapPin}
-					isExpanded={expandedMenus.areas}
+					isExpanded={activeMenu === "areas"}
 					onToggle={() => toggleMenu("areas")}
 					basePath="areas"
 					menuItems={menuData.areas}
@@ -145,7 +130,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Sites"
 					icon={Icons.LocateFixed}
-					isExpanded={expandedMenus.sites}
+					isExpanded={activeMenu === "sites"}
 					onToggle={() => toggleMenu("sites")}
 					basePath="sites"
 					menuItems={menuData.sites}
@@ -156,7 +141,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Quests"
 					icon={Icons.Scroll}
-					isExpanded={expandedMenus.quests}
+					isExpanded={activeMenu === "quests"}
 					onToggle={() => toggleMenu("quests")}
 					basePath="quests"
 					menuItems={menuData.quests}
@@ -167,7 +152,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Conflicts"
 					icon={Icons.Swords}
-					isExpanded={expandedMenus.conflicts}
+					isExpanded={activeMenu === "conflicts"}
 					onToggle={() => toggleMenu("conflicts")}
 					basePath="conflicts"
 					menuItems={menuData.conflicts}
@@ -178,7 +163,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Foreshadowing"
 					icon={Icons.Eye}
-					isExpanded={expandedMenus.foreshadowing}
+					isExpanded={activeMenu === "foreshadowing"}
 					onToggle={() => toggleMenu("foreshadowing")}
 					basePath="foreshadowing"
 					menuItems={menuData.foreshadowing}
@@ -189,8 +174,8 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="Narrative Arcs"
 					icon={Icons.Milestone}
-					isExpanded={expandedMenus.narrative}
-					onToggle={() => toggleMenu("narrative")}
+					isExpanded={activeMenu === "narrativeArcs"}
+					onToggle={() => toggleMenu("narrativeArcs")}
 					basePath="narrative"
 					menuItems={menuData.narrativeArcs}
 				/>
@@ -200,8 +185,8 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<CategoryMenu
 					title="World Changes"
 					icon={Icons.Globe}
-					isExpanded={expandedMenus.world}
-					onToggle={() => toggleMenu("world")}
+					isExpanded={activeMenu === "worldChanges"}
+					onToggle={() => toggleMenu("worldChanges")}
 					basePath="world"
 					menuItems={menuData.worldChanges}
 				/>
