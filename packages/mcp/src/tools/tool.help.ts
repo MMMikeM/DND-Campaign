@@ -1,18 +1,19 @@
+import { search } from "fast-fuzzy" // Added fast-fuzzy import
+import { z } from "zod"
+import { logger } from ".."
+import { zodToMCP } from "../zodToMcp"
 import {
 	associations,
-	factions,
-	regions,
-	npcs,
-	quests,
 	conflicts,
-	narrative,
-	world,
+	factions,
 	foreshadowing,
 	getEntity,
+	narrative,
+	npcs,
+	quests,
+	regions,
+	world,
 } from "./tools" // Added getEntity
-import { logger } from ".."
-import { z } from "zod"
-import { zodToMCP } from "../zodToMcp"
 import type { ToolDefinition } from "./utils/types" // Corrected import path
 
 function isStringArray(value: unknown): value is string[] {
@@ -35,14 +36,14 @@ const handler = async (args?: Record<string, unknown>) => {
 		foreshadowing: foreshadowing.tools,
 	}
 
-	// Add get_entity separately for searching by name
 	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]
 
 	logger.info("Categories", categories)
 	logger.info("Args", args)
 
 	if (toolName) {
-		const tool = allToolsList.find((t) => t.name === toolName) // Search the combined list
+		const results = search(toolName, allToolsList, { keySelector: (t) => t.name })
+		const tool = results.length > 0 ? results[0] : undefined // Take the best match
 
 		if (!tool) {
 			return {
