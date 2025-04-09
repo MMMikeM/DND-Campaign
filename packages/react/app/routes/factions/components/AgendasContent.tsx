@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Badge } from "~/components/ui/badge"
 import type { Faction } from "~/lib/entities"
 
 export function AgendasContent({ agendas }: Faction) {
@@ -14,35 +14,36 @@ export function AgendasContent({ agendas }: Faction) {
 					icon={<Icons.Briefcase className="h-5 w-5 mr-2 text-blue-500" />}
 				>
 					<div className="flex flex-wrap gap-2 mb-4">
-						<Badge variant="outline" className="flex items-center gap-1">
+						<BadgeWithTooltip tooltipContent={"Type of agenda"}>
 							<Icons.Target className="h-3 w-3" />
 							{agenda.agendaType}
-						</Badge>
+						</BadgeWithTooltip>
 
-						<Badge variant="outline">{agenda.currentStage}</Badge>
+						<BadgeWithTooltip tooltipContent={"Current stage of agenda"}>
+							<Icons.Target className="h-3 w-3" />
+							{agenda.currentStage}
+						</BadgeWithTooltip>
 
-						<Badge
-							variant={
-								agenda.importance === "high" ? "destructive" : agenda.importance === "medium" ? "default" : "secondary"
-							}
-						>
+						<BadgeWithTooltip tooltipContent={"Importance of agenda"}>
+							<Icons.Target className="h-3 w-3" />
 							{agenda.importance}
-						</Badge>
-
-						<Badge variant="outline">{agenda.ultimateAim}</Badge>
+						</BadgeWithTooltip>
 					</div>
 
-					<List items={agenda.description} listStyle="none" spacing="md" />
+					<p>Objective: {agenda.ultimateAim}</p>
+					<List
+						icon={<Icons.Info className="h-4 w-4 mr-2" />}
+						heading="Description"
+						items={agenda.description}
+						initialCollapsed={true}
+					/>
 
-					<div className="mb-4">
-						<h4 className="text-sm font-medium mb-2 flex items-center">
-							<Icons.CheckCircle className="h-4 w-4 mr-1 text-green-500" />
-							Objectives
-						</h4>
-						<List items={agenda.storyHooks} spacing="sm" />
-					</div>
-
-					<List items={agenda.creativePrompts} spacing="sm" textColor="muted" textSize="sm" />
+					<List
+						icon={<Icons.Info className="h-4 w-4 mr-2" />}
+						heading="Story Hooks"
+						items={agenda.storyHooks}
+						initialCollapsed={true}
+					/>
 				</InfoCard>
 			)) ?? (
 				<div className="col-span-full py-12 text-center border rounded-lg bg-slate-50 dark:bg-slate-900">
