@@ -1,5 +1,7 @@
 import * as Icons from "lucide-react"
 import { useNavigate, useParams } from "react-router"
+import { AlignmentBadge } from "~/components/alignment-badge"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Faction as FactionType } from "~/lib/entities"
@@ -60,11 +62,8 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 						<TabsTrigger value="culture" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
 							Culture
 						</TabsTrigger>
-						<TabsTrigger
-							value="operations"
-							className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900"
-						>
-							Operations
+						<TabsTrigger value="agendas" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
+							Agendas
 						</TabsTrigger>
 						<TabsTrigger
 							value="influence"
@@ -92,7 +91,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 						<CultureContent {...faction} />
 					</TabsContent>
 
-					<TabsContent value="operations" className="space-y-6 animate-in fade-in-50 duration-300">
+					<TabsContent value="agendas" className="space-y-6 animate-in fade-in-50 duration-300">
 						<AgendasContent {...faction} />
 					</TabsContent>
 
@@ -113,24 +112,67 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 	)
 }
 
-interface FactionHeaderProps extends Pick<FactionType, "name" | "type"> {
-	className?: string
-}
-
-export function Header({ name, type, className }: FactionHeaderProps) {
+export function Header({ name, type, alignment, size, wealth, reach }: FactionType) {
 	return (
-		<div className={className}>
+		<div className="flex flex-col items-start  gap-2">
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
 				<Icons.Flag className="h-6 w-6 mr-2 text-primary" />
 				{name}
 			</h1>
 
-			{type && (
-				<p className="text-slate-600 dark:text-slate-400">
-					<Icons.Briefcase className="h-4 w-4 inline-block mr-1" />
+			<div className="flex items-center gap-2">
+				<BadgeWithTooltip tooltipContent={"Type"} className={getSizeBadgeClasses(type)}>
 					{type}
-				</p>
-			)}
+				</BadgeWithTooltip>
+
+				<AlignmentBadge alignment={alignment} />
+				<BadgeWithTooltip tooltipContent={"Size"} className={getSizeBadgeClasses(size)}>
+					{size}
+				</BadgeWithTooltip>
+
+				<BadgeWithTooltip tooltipContent={"Wealth"} className={getWealthBadgeClasses(wealth)}>
+					{wealth}
+				</BadgeWithTooltip>
+
+				<BadgeWithTooltip tooltipContent={"Reach"} className={getReachBadgeClasses(reach)}>
+					{reach}
+				</BadgeWithTooltip>
+
+				<BadgeWithTooltip tooltipContent={"Type"}>{type}</BadgeWithTooltip>
+			</div>
 		</div>
 	)
+}
+
+const getSizeBadgeClasses = (size: string) => {
+	const classes = {
+		massive: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+		large: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+		medium: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+		small: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+		tiny: "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300",
+	}
+	return classes[size as keyof typeof classes] || classes.tiny
+}
+
+const getWealthBadgeClasses = (wealth: string) => {
+	const classes = {
+		wealthy: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+		rich: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+		moderate: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+		poor: "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300",
+		destitute: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+	}
+	return classes[wealth as keyof typeof classes] || classes.poor
+}
+
+const getReachBadgeClasses = (reach: string) => {
+	const classes = {
+		global: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
+		continental: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
+		national: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+		regional: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+		local: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+	}
+	return classes[reach as keyof typeof classes] || classes.local
 }
