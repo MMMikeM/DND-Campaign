@@ -1,15 +1,15 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { InfoCard } from "~/components/InfoCard"
-import { List } from "~/components/List"
 import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
-import { Link } from "~/components/ui/link"
-import { Separator } from "~/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getNpc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
+import { ConnectionsContent } from "./components/ConnectionsContent"
+import { KnowledgeContent } from "./components/KnowledgeContent"
+import { OverviewContent } from "./components/OverviewContent"
+import { PersonalityContent } from "./components/PersonalityContent"
+import { SocialContent } from "./components/SocialContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -179,10 +179,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						<Icons.Sparkles className="h-3.5 w-3.5 mr-1" />
 						{adaptability}
 					</BadgeWithTooltip>
-					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Role in society">
-						<Icons.Briefcase className="h-3.5 w-3.5 mr-1" />
-						{occupation}
-					</BadgeWithTooltip>
 				</div>
 			</div>
 
@@ -196,335 +192,23 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<Card className="mb-6">
-						<CardHeader>
-							<CardTitle className="text-xl">Overview</CardTitle>
-							<CardDescription>Essential information about {name}</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<div className="space-y-4">
-								<div>
-									<h3 className="font-medium mb-2 flex items-center">
-										<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />
-										Background
-									</h3>
-									<List items={background} spacing="sm" textColor="muted" />
-								</div>
-
-								<Separator />
-
-								<div>
-									<h3 className="font-medium mb-2 flex items-center">
-										<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />
-										Appearance
-									</h3>
-									<List items={appearance} spacing="sm" textColor="muted" />
-								</div>
-
-								<Separator />
-
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div>
-										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Heart className="h-4 w-4 mr-2 text-red-500" />
-											Alignment
-										</h3>
-										<p className="text-muted-foreground">{alignment}</p>
-									</div>
-									<div>
-										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Smile className="h-4 w-4 mr-2 text-amber-500" />
-											Attitude
-										</h3>
-										<p className="text-muted-foreground">{attitude}</p>
-									</div>
-								</div>
-
-								<Separator />
-
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<div>
-										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Briefcase className="h-4 w-4 mr-2 text-emerald-600" />
-											Occupation
-										</h3>
-										<p className="text-muted-foreground">{occupation}</p>
-									</div>
-									<div>
-										<h3 className="font-medium mb-2 flex items-center">
-											<Icons.Users className="h-4 w-4 mr-2 text-purple-600" />
-											Social Status
-										</h3>
-										<p className="text-muted-foreground">{socialStatus}</p>
-									</div>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
-
-					<InfoCard title="Notable Feature" icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-amber-500" />}>
-						<div className="p-4 bg-muted rounded-md">
-							<p className="text-lg italic">{quirk}</p>
-						</div>
-					</InfoCard>
+					<OverviewContent {...npc} />
 				</TabsContent>
 
 				<TabsContent value="personality">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<InfoCard title="Personality Traits" icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />}>
-							<List items={personalityTraits} spacing="sm" />
-						</InfoCard>
-
-						<InfoCard title="Biases" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-amber-600" />}>
-							<List items={biases} spacing="sm" />
-						</InfoCard>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<InfoCard title="Drives" icon={<Icons.Brain className="h-4 w-4 mr-2 text-purple-600" />}>
-							<List items={drives} spacing="sm" />
-						</InfoCard>
-
-						<InfoCard title="Fears" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-red-500" />}>
-							<List items={fears} spacing="sm" />
-						</InfoCard>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<InfoCard title="Mannerisms" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-blue-600" />}>
-							<List items={mannerisms} spacing="sm" />
-						</InfoCard>
-
-						<InfoCard title="Voice Notes" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-emerald-600" />}>
-							<List items={voiceNotes} spacing="sm" />
-						</InfoCard>
-					</div>
+					<PersonalityContent {...npc} />
 				</TabsContent>
 
 				<TabsContent value="social">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<InfoCard title="Dialogue Examples" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-indigo-600" />}>
-							<List items={dialogue} spacing="sm" className="italic" />
-						</InfoCard>
-
-						<InfoCard title="Rumors & Gossip" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-purple-600" />}>
-							<List items={rumours} spacing="sm" />
-						</InfoCard>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<InfoCard title="Preferred Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-green-600" />}>
-							<List items={preferredTopics} spacing="sm" />
-						</InfoCard>
-
-						<InfoCard title="Avoided Topics" icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-red-600" />}>
-							<List items={avoidTopics} spacing="sm" />
-						</InfoCard>
-					</div>
+					<SocialContent {...npc} />
 				</TabsContent>
 
 				<TabsContent value="knowledge">
-					<div className="grid grid-cols-1 gap-6 mb-6">
-						<InfoCard title="Knowledge" icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-blue-600" />}>
-							<List items={knowledge} spacing="sm" />
-						</InfoCard>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<InfoCard title="Secrets" icon={<Icons.LockKeyhole className="h-4 w-4 mr-2 text-red-600" />}>
-							<List items={secrets} spacing="sm" />
-						</InfoCard>
-					</div>
+					<KnowledgeContent {...npc} />
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<InfoCard title="Relationships" icon={<Icons.Network className="h-4 w-4 mr-2 text-indigo-600" />}>
-							{relations?.length > 0 ? (
-								<div className="space-y-4">
-									{relations.map((relationship) => (
-										<div key={`relationship-${relationship.id}`} className="border rounded p-3">
-											<div className="flex justify-between">
-												<Link href={`/npcs/${relationship.npc?.slug}`}>
-													<h4 className="font-medium">{relationship.npc?.name}</h4>
-												</Link>
-											</div>
-											<BadgeWithTooltip className="capitalize" tooltipContent={`Relationship type - Strength`}>
-												{relationship.strength} - {relationship.type}
-											</BadgeWithTooltip>
-
-											{relationship.description && relationship.description.length > 0 && (
-												<div className="mt-2">
-													<p className="text-sm font-medium mb-1">Dynamics:</p>
-													<List items={relationship.description} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-
-											{relationship.narrativeTensions && relationship.narrativeTensions.length > 0 && (
-												<div className="mt-2">
-													<p className="text-sm font-medium mb-1 flex items-center">
-														<Icons.AlertTriangle className="h-3 w-3 mr-1 text-amber-500" />
-														Tensions:
-													</p>
-													<List items={relationship.narrativeTensions} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-										</div>
-									))}
-								</div>
-							) : (
-								<p className="text-muted-foreground">No known relationships for this NPC</p>
-							)}
-						</InfoCard>
-
-						<InfoCard title="Faction Affiliations" icon={<Icons.Flag className="h-4 w-4 mr-2" />}>
-							{relatedFactions && relatedFactions.length > 0 ? (
-								<div className="space-y-4">
-									{relatedFactions.map((factionConnection) => (
-										<div key={`faction-${factionConnection.id}`} className="border rounded p-3">
-											<div className="flex justify-between">
-												<h4 className="font-medium">
-													{factionConnection.faction && (
-														<NavLink
-															to={`/factions/${factionConnection.faction.slug}`}
-															className="hover:text-indigo-500"
-														>
-															{factionConnection.faction.name}
-														</NavLink>
-													)}
-												</h4>
-												<BadgeWithTooltip
-													variant={
-														factionConnection.loyalty === "high"
-															? "default"
-															: factionConnection.loyalty === "medium"
-																? "default"
-																: factionConnection.loyalty === "low"
-																	? "secondary"
-																	: "outline"
-													}
-													tooltipContent={`Loyalty level: ${factionConnection.loyalty} - How loyal this NPC is to the faction`}
-												>
-													{factionConnection.loyalty} loyalty
-												</BadgeWithTooltip>
-											</div>
-											<div className="mt-2 text-sm">
-												<div className="flex">
-													<span className="font-medium mr-2">Role:</span>
-													<span className="text-muted-foreground">{factionConnection.role}</span>
-												</div>
-												<div className="flex mt-1">
-													<span className="font-medium mr-2">Rank:</span>
-													<span className="text-muted-foreground">{factionConnection.rank}</span>
-												</div>
-											</div>
-
-											{factionConnection.secrets && factionConnection.secrets.length > 0 && (
-												<div className="mt-3 pt-2 border-t">
-													<p className="text-xs font-medium text-red-500 flex items-center">
-														<Icons.Lock className="h-3 w-3 mr-1" />
-														Secrets:
-													</p>
-													<List items={factionConnection.secrets} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-										</div>
-									))}
-								</div>
-							) : (
-								<p className="text-muted-foreground">No faction affiliations for this NPC</p>
-							)}
-						</InfoCard>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-						<InfoCard title="Associated Locations" icon={<Icons.MapPin className="h-4 w-4 mr-2" />}>
-							{relatedSites && relatedSites.length > 0 ? (
-								<div className="space-y-4">
-									{relatedSites.map(({ creativePrompts, description, site, id }) => (
-										<div key={`location-${id}`} className="border rounded p-3">
-											<div className="flex justify-between">
-												<h4 className="font-medium">
-													{site && (
-														<NavLink to={`/sites/${site.slug}`} className="hover:text-indigo-500">
-															{site.name}
-														</NavLink>
-													)}
-													{!site && <span>Unnamed Location</span>}
-												</h4>
-												<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
-													Location
-												</BadgeWithTooltip>
-											</div>
-
-											{description && description.length > 0 && (
-												<div className="mt-2">
-													<List items={description} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-										</div>
-									))}
-								</div>
-							) : (
-								<p className="text-muted-foreground">No associated locations for this NPC</p>
-							)}
-						</InfoCard>
-
-						<InfoCard title="Involved Quests" icon={<Icons.Scroll className="h-4 w-4 mr-2" />}>
-							{relatedQuests && relatedQuests.length > 0 ? (
-								<div className="space-y-4">
-									{relatedQuests.map((questConnection) => (
-										<div key={`quest-${questConnection.id}`} className="border rounded p-3">
-											<div className="flex justify-between">
-												<h4 className="font-medium">
-													{questConnection.quest && (
-														<NavLink to={`/quests/${questConnection.quest.slug}`} className="hover:text-indigo-500">
-															{questConnection.quest.name}
-														</NavLink>
-													)}
-												</h4>
-												<BadgeWithTooltip
-													variant={
-														questConnection.importance === "critical"
-															? "destructive"
-															: questConnection.importance === "major"
-																? "default"
-																: questConnection.importance === "supporting"
-																	? "secondary"
-																	: "outline"
-													}
-													tooltipContent={`Importance: ${questConnection.importance} - How important this NPC is to the quest`}
-												>
-													{questConnection.importance}
-												</BadgeWithTooltip>
-											</div>
-											<p className="text-sm mt-1">
-												<span className="font-medium">Role:</span> {questConnection.role}
-											</p>
-
-											{questConnection.description && questConnection.description.length > 0 && (
-												<div className="mt-2">
-													<List items={questConnection.description} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-
-											{questConnection.hiddenAspects && questConnection.hiddenAspects.length > 0 && (
-												<div className="mt-2 pt-2 border-t">
-													<p className="text-xs font-medium text-red-500 flex items-center mb-2">
-														<Icons.Lock className="h-3 w-3 mr-1" />
-														Hidden aspects:
-													</p>
-													<List items={questConnection.hiddenAspects} textSize="xs" textColor="muted" maxItems={2} />
-												</div>
-											)}
-										</div>
-									))}
-								</div>
-							) : (
-								<p className="text-muted-foreground">No quests involve this NPC</p>
-							)}
-						</InfoCard>
-					</div>
+					<ConnectionsContent {...npc} />
 				</TabsContent>
 			</Tabs>
 		</div>
