@@ -1,12 +1,34 @@
 // Re-export all entity logic, types, and shared utils
 
-export * from "./npcs"
-export * from "./factions"
-export * from "./regions"
+import { sql } from "@tome-master/shared"
+import { db } from "../db"
+
 export * from "./areas"
-export * from "./sites"
-export * from "./quests"
 export * from "./conflicts"
+export * from "./factions"
 export * from "./foreshadowing"
 export * from "./narrative"
+export * from "./npcs"
+export * from "./quests"
+export * from "./regions"
+export * from "./sites"
 export * from "./world"
+
+export const updateMaterializedView = async () => await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
+
+export const searchBySimilarity = async (
+	searchTerm: string,
+  fuzzyWeight = 1.0,
+	similarityThreshold = 0.3,
+	maxLevenshtein = 2,
+	phoneticStrength = 4,
+) =>
+	await db.execute(sql`
+    SELECT * FROM search_fuzzy_combined(
+      ${searchTerm},
+      ${fuzzyWeight},
+      ${similarityThreshold},
+      ${maxLevenshtein},
+      ${phoneticStrength}
+    )
+  `)

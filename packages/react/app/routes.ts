@@ -1,4 +1,4 @@
-import { route, index, type RouteConfig } from "@react-router/dev/routes"
+import { index, route, type RouteConfig } from "@react-router/dev/routes"
 
 export default [
 	route("/", "./components/MainLayout.tsx", [
@@ -23,7 +23,9 @@ export default [
 		route("npcs/:slug/:tab?", "./routes/npcs/$slug.tsx"),
 
 		route("quests", "./routes/quests/index.tsx"),
-		route("quests/:slug/:tab?", "./routes/quests/$slug.tsx", [route("stages/:stageSlug/:stageTab?", "./routes/quests/stages/stageTabs/$stageTab.tsx"),]),
+		route("quests/:slug/:tab?", "./routes/quests/$slug.tsx", [
+			route("stages/:stageSlug/:stageTab?", "./routes/quests/stages/stageTabs/$stageTab.tsx"),
+		]),
 
 		route("regions", "./routes/regions/index.tsx"),
 		route("regions/:regionSlug/locations/:locationSlug/:tab?", "./routes/regions/locations/$locationSlug.tsx"),
@@ -36,4 +38,5 @@ export default [
 		route("world/:slug/:tab?", "./routes/world/$slug.tsx"),
 	]),
 	route("api/items", "./routes/api/items.ts"),
+	route("api/search", "./routes/api/search.ts"),
 ] satisfies RouteConfig
