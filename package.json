@@ -26,16 +26,16 @@
 	"dependencies": {
 		"@swc/helpers": "^0.5.15",
 		"drizzle-orm": "^0.40.1",
-		"drizzle-zod": "^0.7.0",
-		"pg": "^8.11.3",
+		"drizzle-zod": "^0.7.1",
+		"pg": "^8.14.1",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.0-beta.1",
 		"@types/node": "catalog:",
-		"@types/pg": "^8.11.0",
+		"@types/pg": "^8.11.11",
 		"tsup": "catalog:",
-		"turbo": "^2.4.4",
+		"turbo": "^2.5.0",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
 	},
