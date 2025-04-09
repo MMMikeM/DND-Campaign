@@ -3,6 +3,7 @@ import pg from "pg"
 import pgvector from "pgvector/pg"
 import { relations, tables } from "../schemas"
 
+export { sql } from "drizzle-orm"
 export { relations, tables } from "../schemas"
 
 /**
