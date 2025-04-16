@@ -1,5 +1,5 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Quest } from "~/lib/entities"
@@ -18,38 +18,38 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 				icon={<Icons.Info className="h-4 w-4 mr-2 text-primary" />}
 				className="lg:col-span-4 row-span-2"
 			>
-				<div>
-					<p className="text-sm text-muted-foreground mb-4">Essential information about {name}</p>
-					<div className="space-y-4">
-						<div>
-							<List
-								heading="Description"
-								items={description}
-								spacing="sm"
-								textColor="muted"
-								icon={<Icons.Info className="h-4 w-4 mr-2" />}
-							/>
-						</div>
+				<div className="space-y-4">
+					<div>
+						<List
+							heading="Description"
+							items={description}
+							spacing="sm"
+							textColor="muted"
+							icon={<Icons.Info className="h-4 w-4 mr-2" />}
+							collapsible={false}
+						/>
+					</div>
 
-						<div className="border-t pt-4">
-							<List
-								heading="Themes"
-								items={themes}
-								spacing="sm"
-								textColor="muted"
-								icon={<Icons.Layers className="h-4 w-4 mr-2" />}
-							/>
-						</div>
+					<div className="border-t pt-4">
+						<List
+							heading="Themes"
+							items={themes}
+							spacing="sm"
+							textColor="muted"
+							icon={<Icons.Layers className="h-4 w-4 mr-2" />}
+							collapsible={false}
+						/>
+					</div>
 
-						<div className="border-t pt-4">
-							<List
-								heading="Inspirations"
-								items={inspirations}
-								spacing="sm"
-								textColor="muted"
-								icon={<Icons.Lightbulb className="h-4 w-4 mr-2" />}
-							/>
-						</div>
+					<div className="border-t pt-4">
+						<List
+							heading="Inspirations"
+							items={inspirations}
+							spacing="sm"
+							textColor="muted"
+							icon={<Icons.Lightbulb className="h-4 w-4 mr-2" />}
+							collapsible={false}
+						/>
 					</div>
 				</div>
 			</InfoCard>
@@ -74,14 +74,14 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 			>
 				<div>
 					<p className="text-sm text-muted-foreground mb-4">What players can gain from this quest</p>
-					{rewards && rewards.length > 0 && (
-						<List
-							items={rewards}
-							spacing="sm"
-							textColor="default"
-							icon={<Icons.Trophy className="h-4 w-4 mr-2 text-amber-500" />}
-						/>
-					)}
+					<List
+						heading="Rewards"
+						items={rewards}
+						spacing="sm"
+						textColor="default"
+						icon={<Icons.Trophy className="h-4 w-4 mr-2 text-amber-500" />}
+						collapsible={false}
+					/>
 				</div>
 			</InfoCard>
 
@@ -100,6 +100,7 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 								spacing="sm"
 								textColor="default"
 								icon={<Icons.ThumbsUp className="h-4 w-4 mr-2 text-green-500" />}
+								collapsible={false}
 							/>
 						</div>
 
@@ -110,6 +111,7 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 								spacing="sm"
 								textColor="default"
 								icon={<Icons.ThumbsDown className="h-4 w-4 mr-2 text-red-500" />}
+								collapsible={false}
 							/>
 						</div>
 					</div>
