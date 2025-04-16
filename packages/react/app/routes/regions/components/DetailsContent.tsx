@@ -1,16 +1,12 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Region } from "~/lib/entities"
 
-interface DetailsContentProps {
-	region: Region
-}
+type DetailsContentProps = Pick<Region, "hazards" | "pointsOfInterest" | "security" | "rumors">
 
-export const DetailsContent: React.FC<DetailsContentProps> = ({ region }) => {
-	const { hazards, pointsOfInterest, security, rumors } = region
-
+export const DetailsContent: React.FC<DetailsContentProps> = ({ hazards, pointsOfInterest, security, rumors }) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<InfoCard
