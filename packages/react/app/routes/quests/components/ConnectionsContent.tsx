@@ -1,10 +1,10 @@
-import React from "react"
 import * as Icons from "lucide-react"
-import { Link } from "~/components/ui/link"
-import { InfoCard } from "~/components/InfoCard"
+import React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import type { Quest } from "~/lib/entities"
+import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { Link } from "~/components/ui/link"
+import type { Quest } from "~/lib/entities"
 
 interface ConnectionsContentProps {
 	quest: Quest
@@ -14,11 +14,13 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 	const { factions, npcs, relations } = quest
 
 	const precedes =
-		relations?.filter((rel) => rel.dependencyType === "prerequisite" || rel.dependencyType === "hidden_connection") || []
+		relations?.filter((rel) => rel.dependencyType === "prerequisite" || rel.dependencyType === "hidden_connection") ||
+		[]
 
 	const follows =
 		relations?.filter(
-			(rel) => rel.dependencyType === "sequel" || rel.dependencyType === "parallel" || rel.dependencyType === "alternative",
+			(rel) =>
+				rel.dependencyType === "sequel" || rel.dependencyType === "parallel" || rel.dependencyType === "alternative",
 		) || []
 
 	return (
@@ -28,39 +30,27 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				icon={<Icons.Flag className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No related factions"
 			>
-				<div className="space-y-4">
-					{factions && factions.length > 0 ? (
-						factions.map((factionRel, index) => {
-							if (!factionRel.faction) return null
+				{factions.map(({ faction, role, interest, creativePrompts }) => {
+					return (
+						<div key={`faction-${faction?.id}`} className="border-b pb-4 last:border-0">
+							<div className="flex justify-between items-center mb-2">
+								<Link href={`/factions/${faction?.slug}`} className="font-medium hover:text-primary flex items-center">
+									<Icons.Users className="h-4 w-4 mr-2" />
+									{faction?.name}
+								</Link>
+								<BadgeWithTooltip variant="outline" tooltipContent={`Role in this quest`}>
+									{role}
+								</BadgeWithTooltip>
+							</div>
 
-							const { faction, role, interest } = factionRel
-							return (
-								<div key={`faction-${faction.id}`} className="border-b pb-4 last:border-0">
-									<div className="flex justify-between items-center mb-2">
-										<Link
-											href={`/factions/${faction.slug}`}
-											className="font-medium hover:text-primary flex items-center"
-										>
-											<Icons.Users className="h-4 w-4 mr-2" />
-											{faction.name}
-										</Link>
-										<BadgeWithTooltip variant="outline" tooltipContent={`Role in this quest`}>
-											{role}
-										</BadgeWithTooltip>
-									</div>
-
-									<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
-										{interest?.map((item, i) => (
-											<li key={`interest-${faction.id}-${i}`}>{item}</li>
-										))}
-									</ul>
-								</div>
-							)
-						})
-					) : (
-						<p className="text-muted-foreground text-sm italic">No factions associated with this quest</p>
-					)}
-				</div>
+							<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
+								{interest?.map((item, i) => (
+									<li key={`interest-${faction?.id}-${i}`}>{item}</li>
+								))}
+							</ul>
+						</div>
+					)
+				})}
 			</InfoCard>
 
 			<InfoCard
@@ -68,59 +58,53 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No related NPCs"
 			>
-				<div className="space-y-4">
-					{npcs && npcs.length > 0 ? (
-						npcs.map((npcRel) => {
-							if (!npcRel.npc) return null
+				{npcs.map((npcRel) => {
+					if (!npcRel.npc) return null
 
-							const { npc, role, importance, dramaticMoments } = npcRel
-							return (
-								<div key={`npc-${npc.id}`} className="border-b pb-4 last:border-0">
-									<div className="flex justify-between items-center mb-2">
-										<Link href={`/npcs/${npc.slug}`} className="font-medium hover:text-primary flex items-center">
-											<Icons.User className="h-4 w-4 mr-2" />
-											{npc.name}
-										</Link>
+					const { npc, role, importance, dramaticMoments } = npcRel
+					return (
+						<div key={`npc-${npc.id}`} className="border-b pb-4 last:border-0">
+							<div className="flex justify-between items-center mb-2">
+								<Link href={`/npcs/${npc.slug}`} className="font-medium hover:text-primary flex items-center">
+									<Icons.User className="h-4 w-4 mr-2" />
+									{npc.name}
+								</Link>
 
-										<div className="flex items-center gap-2">
-											<BadgeWithTooltip
-												variant={
-													importance === "critical"
-														? "destructive"
-														: importance === "major"
-															? "default"
-															: importance === "supporting"
-																? "secondary"
-																: "outline"
-												}
-												tooltipContent="Importance to quest"
-											>
-												{importance}
-											</BadgeWithTooltip>
+								<div className="flex items-center gap-2">
+									<BadgeWithTooltip
+										variant={
+											importance === "critical"
+												? "destructive"
+												: importance === "major"
+													? "default"
+													: importance === "supporting"
+														? "secondary"
+														: "outline"
+										}
+										tooltipContent="Importance to quest"
+									>
+										{importance}
+									</BadgeWithTooltip>
 
-											<BadgeWithTooltip variant="outline" tooltipContent="Role in quest">
-												{role}
-											</BadgeWithTooltip>
-										</div>
-									</div>
-
-									{dramaticMoments && dramaticMoments.length > 0 && (
-										<div className="mt-2">
-											<h4 className="text-xs font-medium text-muted-foreground mb-1">Key Scenes:</h4>
-											<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
-												{dramaticMoments.map((moment, idx) => (
-													<li key={`moment-${npc.id}-${idx}`}>{moment}</li>
-												))}
-											</ul>
-										</div>
-									)}
+									<BadgeWithTooltip variant="outline" tooltipContent="Role in quest">
+										{role}
+									</BadgeWithTooltip>
 								</div>
-							)
-						})
-					) : (
-						<p className="text-muted-foreground text-sm italic">No NPCs associated with this quest</p>
-					)}
-				</div>
+							</div>
+
+							{dramaticMoments && dramaticMoments.length > 0 && (
+								<div className="mt-2">
+									<h4 className="text-xs font-medium text-muted-foreground mb-1">Key Scenes:</h4>
+									<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
+										{dramaticMoments.map((moment, idx) => (
+											<li key={`moment-${npc.id}-${idx}`}>{moment}</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</div>
+					)
+				})}
 			</InfoCard>
 
 			<InfoCard
@@ -138,10 +122,10 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 
 						{precedes.length > 0 ? (
 							<div className="space-y-4">
-								{precedes.map(({ creativePrompts, description, quest, dependencyType, id }) => {
+								{precedes.map(({ creativePrompts, description, quest, dependencyType }) => {
 									if (!quest) return null
 									return (
-										<div key={`follows-${id}`} className="border-b pb-3 last:border-0">
+										<div key={`follows-${quest.id}`} className="border-b pb-3 last:border-0">
 											<Link href={`/quests/${quest.slug}`} className="font-medium hover:text-primary">
 												{quest.name}
 											</Link>
@@ -156,18 +140,20 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 											>
 												{dependencyType.replace("_", " ")}
 											</BadgeWithTooltip>
-											<List
-												items={creativePrompts}
-												spacing="sm"
-												textColor="muted"
-												icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
-											/>
 
 											<List
+												heading="Description"
 												items={description}
 												spacing="sm"
 												textColor="muted"
 												icon={<Icons.Info className="h-4 w-4 mr-2" />}
+											/>
+											<List
+												heading="Creative Prompts"
+												items={creativePrompts}
+												spacing="sm"
+												textColor="muted"
+												icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
 											/>
 										</div>
 									)
@@ -186,13 +172,11 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 
 						{follows.length > 0 ? (
 							<div className="space-y-4">
-								{follows.map(({ creativePrompts, description, quest, dependencyType, id }) => {
-									if (!quest) return null
-
+								{follows.map(({ creativePrompts, description, quest, dependencyType }) => {
 									return (
-										<div key={`precedes-${id}`} className="border-b pb-3 last:border-0">
-											<Link href={`/quests/${quest.slug}`} className="font-medium hover:text-primary">
-												{quest.name}
+										<div key={`precedes-${quest?.id}`} className="border-b pb-3 last:border-0">
+											<Link href={`/quests/${quest?.slug}`} className="font-medium hover:text-primary">
+												{quest?.name}
 											</Link>
 											<BadgeWithTooltip
 												variant="outline"
@@ -209,10 +193,18 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 											</BadgeWithTooltip>
 
 											<List
+												heading="Description"
 												items={description}
 												spacing="sm"
 												textColor="muted"
 												icon={<Icons.Info className="h-4 w-4 mr-2" />}
+											/>
+											<List
+												heading="Creative Prompts"
+												items={creativePrompts}
+												spacing="sm"
+												textColor="muted"
+												icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
 											/>
 										</div>
 									)
