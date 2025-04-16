@@ -16,8 +16,8 @@ export default [
 		route("foreshadowing", "./routes/foreshadowing/index.tsx"),
 		route("foreshadowing/:slug/:tab?", "./routes/foreshadowing/$slug.tsx"),
 
-		route("narrative", "./routes/narrative/index.tsx"),
-		route("narrative/:slug/:tab?", "./routes/narrative/$slug.tsx"),
+		route("narrative-arcs", "./routes/narrative-arcs/index.tsx"),
+		route("narrative-arcs/:slug/:tab?", "./routes/narrative-arcs/$slug.tsx"),
 
 		route("npcs", "./routes/npcs/index.tsx"),
 		route("npcs/:slug/:tab?", "./routes/npcs/$slug.tsx"),
