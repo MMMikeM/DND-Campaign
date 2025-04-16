@@ -1,15 +1,14 @@
 import * as Icons from "lucide-react"
-import { useNavigate, useParams, NavLink } from "react-router"
+import { NavLink, useNavigate, useParams } from "react-router"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getNarrativeArc } from "~/lib/entities"
 import type { NarrativeArc } from "~/lib/entities"
+import { getNarrativeArc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getArcStatusVariant } from "./utils"
-
 import OverviewContent from "./components/OverviewContent"
 import QuestsContent from "./components/QuestsContent"
+import { getArcStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -17,6 +16,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 
 	const arc = await getNarrativeArc(params.slug)
+	console.log(JSON.stringify(arc, null, 2))
 	if (!arc) {
 		throw new Response("Narrative Arc not found", { status: 404 })
 	}
@@ -60,7 +60,7 @@ export default function NarrativeArcDetail({ loaderData }: Route.ComponentProps)
 	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
-		navigate(`/narrative/${arc.slug}/${value === "overview" ? "" : value}`)
+		navigate(`/narrative-arcs/${arc.slug}/${value === "overview" ? "" : value}`)
 	}
 
 	if (!arc) {
