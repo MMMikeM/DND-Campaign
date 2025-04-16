@@ -8,22 +8,24 @@ const factionConfig = {
 		db.query.factions.findFirst({
 			where: (factions, { eq }) => eq(factions.id, id),
 			with: {
-				culture: true,
-				agendas: true,
 				clues: true,
+				agendas: true,
+				culture: true,
 				conflicts: true,
-
-				worldChanges: { columns: { id: true, name: true } },
+				embedding: true,
+				worldChanges: true,
+				controlledRoutes: true,
+				headquarters: { with: { site: true } },
 				members: { with: { npc: { columns: { name: true, id: true } } } },
-				headquarters: { with: { site: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
 				territorialControl: {
 					with: {
-						region: { columns: { name: true, id: true } },
 						area: { columns: { name: true, id: true } },
 						site: { columns: { name: true, id: true } },
+						region: { columns: { name: true, id: true } },
+						faction: { columns: { name: true, id: true } },
 					},
 				},
 			},
