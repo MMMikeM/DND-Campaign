@@ -1,22 +1,23 @@
 import * as Icons from "lucide-react"
-import React from "react"
-import { useNavigate, useParams, NavLink } from "react-router"
+import { NavLink, useNavigate, useParams } from "react-router"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getConflict } from "~/lib/entities"
 import type { Conflict } from "~/lib/entities"
+import { getConflict } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getConflictStatusVariant } from "./utils"
 import OverviewContent from "./components/OverviewContent"
 import ParticipantsContent from "./components/ParticipantsContent"
 import ProgressionContent from "./components/ProgressionContent"
+import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const conflict = await getConflict(params.slug)
 	if (!conflict) {
 		throw new Response("Conflict not found", { status: 404 })
 	}
+
+	console.log(JSON.stringify(conflict, null, 2))
 
 	return conflict
 }
@@ -59,10 +60,24 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 	const handleTabChange = (value: string) => {
 		navigate(`/conflicts/${conflict.slug}/${value === "overview" ? "" : value}`)
 	}
-
-	if (!conflict) {
-		return <div>Error: Conflict data could not be loaded.</div>
-	}
+	const {
+		participants,
+		progression,
+		cause,
+		creativePrompts,
+		description,
+		hiddenTruths,
+		moralDilemma,
+		name,
+		nature,
+		scope,
+		stakes,
+		status,
+		possibleOutcomes,
+		primaryRegion,
+		slug,
+		worldChanges,
+	} = conflict
 
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
