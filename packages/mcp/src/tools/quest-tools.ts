@@ -1,10 +1,9 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import zodToMCP from "../zodToMcp"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { schemas } from "./quest-tools-schema"
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./quest-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	questTables: {
@@ -33,12 +32,12 @@ export const entityGetters: QuestGetters = {
 		db.query.quests.findFirst({
 			where: eq(quests.id, id),
 			with: {
-				futureTriggers: true,
-				worldChanges: true,
 				items: true,
-				unlockConditions: true,
 				twists: true,
-				stages: { columns: { name: true, id: true } },
+				stages: true,
+				worldChanges: true,
+				futureTriggers: true,
+				unlockConditions: true,
 				region: { columns: { name: true, id: true } },
 				npcs: { with: { npc: { columns: { name: true, id: true } } } },
 				factions: { with: { faction: { columns: { name: true, id: true } } } },
@@ -50,14 +49,15 @@ export const entityGetters: QuestGetters = {
 		db.query.questStages.findFirst({
 			where: eq(questStages.id, id),
 			with: {
+				clues: true,
 				quest: { columns: { name: true, id: true } },
 				site: {
 					with: {
 						secrets: true,
 						territorialControl: true,
 						area: { columns: { name: true, id: true } },
-						encounters: { columns: { name: true, id: true } },
 						items: { columns: { name: true, id: true } },
+						encounters: { columns: { name: true, id: true } },
 						npcs: { with: { npc: { columns: { name: true, id: true } } } },
 					},
 				},
@@ -101,46 +101,10 @@ export const entityGetters: QuestGetters = {
 		}),
 }
 
-export type QuestTools = CreateTableTools<typeof tables.questTables>
-
-export const questToolDefinitions: Record<QuestTools, ToolDefinition> = {
-	manage_quests: {
-		description: createEntityActionDescription("quest"),
-		inputSchema: zodToMCP(schemas.manage_quests),
-		handler: createEntityHandler(quests, schemas.manage_quests, "quest"),
-	},
-	manage_quest_stages: {
-		description: createEntityActionDescription("quest stage"),
-		inputSchema: zodToMCP(schemas.manage_quest_stages),
-		handler: createEntityHandler(questStages, schemas.manage_quest_stages, "quest_stage"),
-	},
-	manage_stage_decisions: {
-		description: createEntityActionDescription("stage decision"),
-		inputSchema: zodToMCP(schemas.manage_stage_decisions),
-		handler: createEntityHandler(stageDecisions, schemas.manage_stage_decisions, "stage_decision"),
-	},
-	manage_decision_outcomes: {
-		description: createEntityActionDescription("decision outcome"),
-		inputSchema: zodToMCP(schemas.manage_decision_outcomes),
-		handler: createEntityHandler(decisionOutcomes, schemas.manage_decision_outcomes, "decision_outcome"),
-	},
-	manage_quest_dependencies: {
-		description: createEntityActionDescription("quest dependency"),
-		inputSchema: zodToMCP(schemas.manage_quest_dependencies),
-		handler: createEntityHandler(questDependencies, schemas.manage_quest_dependencies, "quest_dependency"),
-	},
-	manage_quest_unlock_conditions: {
-		description: createEntityActionDescription("quest unlock condition"),
-		inputSchema: zodToMCP(schemas.manage_quest_unlock_conditions),
-		handler: createEntityHandler(
-			questUnlockConditions,
-			schemas.manage_quest_unlock_conditions,
-			"quest_unlock_condition",
-		),
-	},
-	manage_quest_twists: {
-		description: createEntityActionDescription("quest twist"),
-		inputSchema: zodToMCP(schemas.manage_quest_twists),
-		handler: createEntityHandler(questTwists, schemas.manage_quest_twists, "quest_twist"),
+export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
+	manage_quest: {
+		description: "Manage quest-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_quest", tables.questTables, tableEnum, schemas),
 	},
 }

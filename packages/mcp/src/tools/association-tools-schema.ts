@@ -1,8 +1,7 @@
-import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
+import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { AssociationTools } from "./association-tools"
-import { id, optionalId } from "./tool.utils"
+import { CreateTableNames, id, optionalId, Schema } from "./tool.utils"
 
 const {
 	associationTables: {
@@ -18,9 +17,21 @@ const {
 	},
 } = tables
 
+export type TableNames = CreateTableNames<typeof tables.associationTables>
+
+export const tableEnum = [
+	"clues",
+	"factionQuestInvolvement",
+	"factionTerritorialControl",
+	"items",
+	"npcQuestRoles",
+	"questHookNpcs",
+	"questIntroductions",
+] as const satisfies TableNames
+
 export const schemas = {
-	manage_clues: createInsertSchema(clues, {
-		id: optionalId.describe("ID of clue to manage (omit to create new, include alone to delete)"),
+	clues: createInsertSchema(clues, {
+		id: id.describe("ID of clue to update"),
 		factionId: optionalId.describe("ID of faction connected to this clue"),
 		siteId: optionalId.describe("ID of site where players can find this clue"),
 		npcId: optionalId.describe("ID of NPC who provides this clue"),
@@ -30,11 +41,12 @@ export const schemas = {
 		discoveryCondition: (s) => s.describe("How players can find this clue (skill checks, actions, etc.)"),
 		creativePrompts: (s) => s.describe("GM ideas for presenting and integrating this clue"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Discoverable evidence that reveals plot information and advances quest objectives"),
 
-	manage_faction_quest_involvement: createInsertSchema(factionQuestInvolvement, {
-		id: optionalId.describe("ID of relationship to manage (omit to create new, include alone to delete)"),
+	factionQuestInvolvement: createInsertSchema(factionQuestInvolvement, {
+		id: id.describe("ID of relationship to update"),
 		factionId: id.describe("ID of faction with stake in this quest"),
 		questId: id.describe("ID of quest the faction is involved with"),
 		interest: (s) => s.describe("Faction's goals and reasons for involvement in point form"),
@@ -43,11 +55,12 @@ export const schemas = {
 			.describe("Faction's role (quest-giver, antagonist, ally, target, beneficiary, etc.)"),
 		creativePrompts: (s) => s.describe("GM ideas for integrating faction actions into quest narrative"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Links factions to quests, defining their motivations, roles, and narrative potential"),
 
-	manage_items: createInsertSchema(items, {
-		id: optionalId.describe("ID of item to manage (omit to create new, include alone to delete)"),
+	items: createInsertSchema(items, {
+		id: id.describe("ID of item to update"),
 		siteId: optionalId.describe("ID of site where this item can be found"),
 		questId: optionalId.describe("ID of quest this item is important to"),
 		factionId: optionalId.describe("ID of faction that values or controls this item"),
@@ -59,11 +72,12 @@ export const schemas = {
 		type: (s) => s.describe("Item category (weapon, armor, artifact, key item, tool, etc.)"),
 		significance: (s) => s.describe("Item's importance to the plot or world lore"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Interactive objects that players can acquire, use, and leverage in the narrative"),
 
-	manage_npc_quest_roles: createInsertSchema(npcQuestRoles, {
-		id: optionalId.describe("ID of role to manage (omit to create new, include alone to delete)"),
+	npcQuestRoles: createInsertSchema(npcQuestRoles, {
+		id: id.describe("ID of role to update"),
 		npcId: id.describe("ID of NPC involved in the quest"),
 		questId: id.describe("ID of quest the NPC participates in"),
 		creativePrompts: (s) => s.describe("GM ideas for portraying this NPC within the quest"),
@@ -73,11 +87,12 @@ export const schemas = {
 		importance: z.enum(enums.importanceLevels).describe("NPC's significance (minor, supporting, major, critical)"),
 		role: z.enum(enums.npcRoles).describe("NPC's function (quest-giver, ally, villain, informant, etc.)"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Defines how NPCs participate in quests, their narrative functions, and dramatic potential"),
 
-	manage_faction_territorial_control: createInsertSchema(factionTerritorialControl, {
-		id: optionalId.describe("ID of power record to manage (omit to create new, include alone to delete)"),
+	factionTerritorialControl: createInsertSchema(factionTerritorialControl, {
+		id: id.describe("ID of power record to update"),
 		factionId: id.describe("ID of faction exerting influence"),
 		regionId: optionalId.describe("ID of region where influence is exerted"),
 		areaId: optionalId.describe("ID of area where influence is exerted"),
@@ -88,22 +103,24 @@ export const schemas = {
 		presence: (s) => s.describe("Visibility and activity in the area"),
 		priorities: (s) => s.describe("Goals and interests in this location"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Maps faction influence across locations, creating power dynamics that affect player actions"),
 
-	manage_quest_hook_npcs: createInsertSchema(questHookNpcs, {
-		id: optionalId.describe("ID of relationship to manage (omit to create new, include alone to delete)"),
+	questHookNpcs: createInsertSchema(questHookNpcs, {
+		id: id.describe("ID of relationship to update"),
 		npcId: id.describe("ID of NPC who presents the quest hook"),
 		hookId: id.describe("ID of quest hook this NPC delivers"),
 		dialogueHint: (s) => s.describe("Example conversation that introduces the quest"),
 		relationship: (s) => s.describe("NPC's connection to the quest (witness, messenger, victim, etc.)"),
 		trustRequired: (s) => s.describe("Trust players need from NPC (none, low, medium, high)"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Links NPCs to quest hooks, defining how characters introduce adventures to players"),
 
-	manage_quest_introductions: createInsertSchema(questIntroductions, {
-		id: optionalId.describe("ID of hook to manage (omit to create new, include alone to delete)"),
+	questIntroductions: createInsertSchema(questIntroductions, {
+		id: id.describe("ID of hook to update"),
 		stageId: id.describe("ID of quest stage this hook initiates"),
 		factionId: optionalId.describe("ID of faction connected to this hook"),
 		siteId: optionalId.describe("ID of site where this hook can be encountered"),
@@ -120,11 +137,11 @@ export const schemas = {
 			.describe("Tone and approach (subtle, clear, urgent, mysterious)"),
 		source: (s) => s.describe("Origin (tavern gossip, notice board, messenger, found object, etc.)"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Entry points that draw players into quests through rumors, encounters, or discoveries"),
 
-	manage_region_connection_details: createInsertSchema(regionConnectionDetails, {
-		id: optionalId.describe("ID of connection to manage (omit to create new, include alone to delete)"),
+	regionConnectionDetails: createInsertSchema(regionConnectionDetails, {
 		relationId: id.describe("ID of region relation this route connects"),
 		description: (s) => s.describe("Physical features and atmosphere of the route in point form"),
 		creativePrompts: (s) => s.describe("GM ideas for travel encounters and challenges"),
@@ -135,6 +152,7 @@ export const schemas = {
 		travelDifficulty: (s) => s.describe("Challenge level (trivial, easy, moderate, difficult, treacherous)"),
 		travelTime: (s) => s.describe("Time required to traverse (hours, days, weeks)"),
 	})
+		.omit({ id: true })
 		.strict()
-		.describe("Travel paths between regions with hazards, features, and narrative opportunities"),
-} satisfies Record<AssociationTools, z.ZodSchema<unknown>>
+		.describe("Maps routes between regions, defining travel paths and challenges"),
+} as const satisfies Schema<TableNames[number]>

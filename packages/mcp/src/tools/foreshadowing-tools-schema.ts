@@ -1,16 +1,19 @@
-import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
+import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils"
-import { ForeshadowingTools } from "./foreshadowing-tools"
+import { CreateTableNames, id, optionalId, Schema } from "./tool.utils"
 
 const {
 	foreshadowingTables: { narrativeForeshadowing, enums },
 } = tables
 
+export type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
+
+export const tableEnum = ["narrativeForeshadowing"] as const satisfies TableNames
+
 export const schemas = {
-	manage_narrative_foreshadowing: createInsertSchema(narrativeForeshadowing, {
-		id: optionalId.describe("ID of foreshadowing hint to manage (omit to create new, include alone to delete)"),
+	narrativeForeshadowing: createInsertSchema(narrativeForeshadowing, {
+		id: id.describe("ID of foreshadowing hint to update"),
 		questStageId: optionalId.describe("ID of quest stage where this hint appears"),
 		siteId: optionalId.describe("ID of site where this hint is encountered"),
 		npcId: optionalId.describe("ID of NPC involved in delivering this hint"),
@@ -37,6 +40,7 @@ export const schemas = {
 		playerNotes: (s) => s.optional().describe("Player reactions or theories about this hint"),
 		gmNotes: (s) => s.optional().describe("GM-only information about this foreshadowing element"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Subtle clues that hint at future events, creating anticipation and narrative cohesion"),
-} satisfies Record<ForeshadowingTools, z.ZodSchema<unknown>>
+} as const satisfies Schema<TableNames[number]>

@@ -1,17 +1,15 @@
 import { tables } from "@tome-master/shared"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./conflict-tools-schema"
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { db } from ".."
 import { eq } from "drizzle-orm"
+import { db } from "../index"
+import { schemas, tableEnum } from "./conflict-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	conflictTables: { majorConflicts, conflictParticipants, conflictProgression },
 } = tables
 
 type ConflictGetters = CreateEntityGetters<typeof tables.conflictTables>
-export type ConflictTools = CreateTableTools<typeof tables.conflictTables>
 
 export const entityGetters: ConflictGetters = {
 	all_major_conflicts: () => db.query.majorConflicts.findMany({}),
@@ -24,6 +22,7 @@ export const entityGetters: ConflictGetters = {
 				participants: true,
 				primaryRegion: true,
 				progression: true,
+				worldChanges: true,
 			},
 		}),
 	conflict_participant_by_id: (id: number) =>
@@ -45,24 +44,10 @@ export const entityGetters: ConflictGetters = {
 		}),
 }
 
-export const conflictToolDefinitions: Record<ConflictTools, ToolDefinition> = {
-	manage_major_conflicts: {
-		description: createEntityActionDescription("major conflict"),
-		inputSchema: zodToMCP(schemas.manage_major_conflicts),
-		handler: createEntityHandler(majorConflicts, schemas.manage_major_conflicts, "major conflict"),
-	},
-	manage_conflict_participants: {
-		description: createEntityActionDescription("conflict participant"),
-		inputSchema: zodToMCP(schemas.manage_conflict_participants),
-		handler: createEntityHandler(conflictParticipants, schemas.manage_conflict_participants, "conflict participant"),
-	},
-	manage_conflict_progression: {
-		description: createEntityActionDescription("conflict progression record"),
-		inputSchema: zodToMCP(schemas.manage_conflict_progression),
-		handler: createEntityHandler(
-			conflictProgression,
-			schemas.manage_conflict_progression,
-			"conflict progression record",
-		),
+export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> = {
+	manage_conflict: {
+		description: "Manage conflict-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_conflict", tables.conflictTables, tableEnum, schemas),
 	},
 }

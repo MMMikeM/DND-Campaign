@@ -1,16 +1,14 @@
 import { tables } from "@tome-master/shared"
-import { eq, name } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./region-tools-schema"
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./region-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	regionTables: { sites, areas, regions, regionConnections, siteEncounters, siteLinks, siteSecrets },
 } = tables
 
-export type RegionTools = CreateTableTools<typeof tables.regionTables>
 export type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
 export const entityGetters: RegionGetters = {
@@ -31,8 +29,8 @@ export const entityGetters: RegionGetters = {
 				quests: { columns: { name: true, id: true } },
 				worldChanges: { columns: { name: true, id: true } },
 				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } },
 			},
 		}),
 	all_areas: () =>
@@ -94,32 +92,32 @@ export const entityGetters: RegionGetters = {
 		db.query.regions.findFirst({
 			where: eq(regions.id, id),
 			with: {
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				worldChanges: { columns: { name: true, id: true } },
+				areas: true,
 				quests: { columns: { name: true, id: true } },
-				areas: { columns: { id: true, name: true } },
-				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
+				worldChanges: { columns: { name: true, id: true } },
+				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } },
 			},
 		}),
 	area_by_id: (id: number) =>
 		db.query.areas.findFirst({
 			where: eq(areas.id, id),
 			with: {
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				worldChanges: { columns: { name: true, id: true } },
+				sites: true,
 				region: { columns: { name: true, id: true } },
-				sites: { columns: { id: true, name: true } },
+				worldChanges: { columns: { name: true, id: true } },
+				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
 			},
 		}),
 	site_by_id: (id: number) =>
 		db.query.sites.findFirst({
 			where: eq(sites.id, id),
 			with: {
-				area: { columns: { id: true, name: true } },
-				encounters: true,
-				secrets: true,
 				items: true,
+				secrets: true,
+				encounters: true,
+				area: { columns: { id: true, name: true } },
 				npcs: { with: { npc: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
@@ -131,10 +129,10 @@ export const entityGetters: RegionGetters = {
 			with: {
 				details: true,
 				sourceRegion: {
-					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } } },
+					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } } },
 				},
 				targetRegion: {
-					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } } },
+					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } } },
 				},
 			},
 		}),
@@ -152,42 +150,10 @@ export const entityGetters: RegionGetters = {
 		db.query.siteSecrets.findFirst({ where: eq(siteSecrets.id, id), with: { site: true } }),
 }
 
-export const regionToolDefinitions: Record<RegionTools, ToolDefinition> = {
-	manage_regions: {
-		description:
-			createEntityActionDescription("region") +
-			"A region represents an geographic region containing multiple areas, e.g. A province.",
-		inputSchema: zodToMCP(schemas.manage_regions),
-		handler: createEntityHandler(regions, schemas.manage_regions, "region"),
-	},
-	manage_areas: {
-		description: createEntityActionDescription("area") + "An area is a specific place within a region, e.g. A town.",
-		inputSchema: zodToMCP(schemas.manage_areas),
-		handler: createEntityHandler(areas, schemas.manage_areas, "area"),
-	},
-	manage_sites: {
-		description: createEntityActionDescription("site") + "A site is a specific place within an area, e.g. A tavern.",
-		inputSchema: zodToMCP(schemas.manage_sites),
-		handler: createEntityHandler(sites, schemas.manage_sites, "site"),
-	},
-	manage_region_connections: {
-		description: createEntityActionDescription("region relation"),
-		inputSchema: zodToMCP(schemas.manage_region_connections),
-		handler: createEntityHandler(regionConnections, schemas.manage_region_connections, "region relation"),
-	},
-	manage_site_links: {
-		description: createEntityActionDescription("site relation"),
-		inputSchema: zodToMCP(schemas.manage_site_links),
-		handler: createEntityHandler(siteLinks, schemas.manage_site_links, "site relation"),
-	},
-	manage_site_encounters: {
-		description: createEntityActionDescription("site encounter"),
-		inputSchema: zodToMCP(schemas.manage_site_encounters),
-		handler: createEntityHandler(siteEncounters, schemas.manage_site_encounters, "site encounter"),
-	},
-	manage_site_secrets: {
-		description: createEntityActionDescription("site secret"),
-		inputSchema: zodToMCP(schemas.manage_site_secrets),
-		handler: createEntityHandler(siteSecrets, schemas.manage_site_secrets, "site secret"),
+export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
+	manage_region: {
+		description: "Manage region-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_region", tables.regionTables, tableEnum, schemas),
 	},
 }

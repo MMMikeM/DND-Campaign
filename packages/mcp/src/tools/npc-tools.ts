@@ -1,10 +1,9 @@
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./npc-tools-schema"
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./npc-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites },
@@ -58,31 +57,10 @@ export const entityGetters: NpcGetters = {
 		}),
 }
 
-export type NpcTools = CreateTableTools<typeof tables.npcTables>
-
-export const npcToolDefinitions: Record<NpcTools, ToolDefinition> = {
-	manage_npcs: {
-		description: createEntityActionDescription("NPC"),
-		inputSchema: zodToMCP(schemas.manage_npcs),
-		handler: createEntityHandler(npcs, schemas.manage_npcs, "npc"),
-	},
-	manage_character_relationships: {
-		description: createEntityActionDescription("character relationship"),
-		inputSchema: zodToMCP(schemas.manage_character_relationships),
-		handler: createEntityHandler(
-			characterRelationships,
-			schemas.manage_character_relationships,
-			"character_relationship",
-		),
-	},
-	manage_npc_factions: {
-		description: createEntityActionDescription("NPC faction"),
-		inputSchema: zodToMCP(schemas.manage_npc_factions),
-		handler: createEntityHandler(npcFactions, schemas.manage_npc_factions, "npc_faction"),
-	},
-	manage_npc_sites: {
-		description: createEntityActionDescription("NPC site"),
-		inputSchema: zodToMCP(schemas.manage_npc_sites),
-		handler: createEntityHandler(npcSites, schemas.manage_npc_sites, "npc_site"),
+export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
+	manage_npc: {
+		description: "Manage NPC-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_npc", tables.npcTables, tableEnum, schemas),
 	},
 }
