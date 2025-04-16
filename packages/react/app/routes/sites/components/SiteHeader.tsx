@@ -1,18 +1,10 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { NavLink } from "react-router"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 // import { getSiteTypeIcon } from "../utils" // Import utils if needed
 import type { Site } from "~/lib/entities" // Import the Site type
 
-interface SiteHeaderProps {
-	site: Site // Use the specific Site type
-}
-
-export const SiteHeader: React.FC<SiteHeaderProps> = ({ site }) => {
-	// Destructure relevant fields from the site object
-	const { name, siteType, area, terrain, climate, mood, environment } = site
-
+export const SiteHeader: React.FC<Site> = ({ name, siteType, area, terrain, climate, mood, environment }) => {
 	return (
 		<div className="p-4 mb-6 border rounded bg-card text-card-foreground shadow-sm">
 			<div className="flex justify-between items-start mb-2">
