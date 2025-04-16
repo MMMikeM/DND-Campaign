@@ -1,13 +1,13 @@
 import * as Icons from "lucide-react"
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 import { NavLink } from "react-router" // Use react-router based on previous corrections
-import { Input } from "~/components/ui/input"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getAllNarrativeArcs } from "~/lib/entities"
+import { InfoCard } from "~/components/InfoCard"
+import { Input } from "~/components/ui/input"
 import type { NarrativeArc } from "~/lib/entities"
-import { getArcStatusVariant } from "./utils"
+import { getAllNarrativeArcs } from "~/lib/entities"
 import type { Route } from "./+types/index"
+import { getArcStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs): Promise<NarrativeArc[]> {
 	const arcs = await getAllNarrativeArcs()
@@ -62,7 +62,7 @@ export default function NarrativeArcsIndex({ loaderData }: Route.ComponentProps)
 			{filteredArcs.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 					{filteredArcs.map((arc: NarrativeArc) => (
-						<NavLink key={arc.id} to={`/narrative/${arc.slug}`} className="no-underline">
+						<NavLink key={arc.id} to={`/narrative-arcs/${arc.slug}`} className="no-underline">
 							<InfoCard
 								title={arc.name}
 								icon={<Icons.Workflow className="h-5 w-5 mr-2 text-purple-500" />}
@@ -70,9 +70,7 @@ export default function NarrativeArcsIndex({ loaderData }: Route.ComponentProps)
 							>
 								<div className="p-4">
 									<p className="text-sm text-muted-foreground mb-2">Type: {arc.type ?? "N/A"}</p>
-									<p className="text-sm line-clamp-3">
-										Promise: {arc.promise || "No goal specified."}
-									</p>
+									<p className="text-sm line-clamp-3">Promise: {arc.promise || "No goal specified."}</p>
 								</div>
 								<div className="border-t p-4">
 									<BadgeWithTooltip

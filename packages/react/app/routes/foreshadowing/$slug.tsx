@@ -1,15 +1,48 @@
 import * as Icons from "lucide-react"
-import React from "react"
-import { useNavigate, useParams, NavLink } from "react-router"
-import { Button } from "~/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getForeshadowing, type Foreshadowing } from "~/lib/entities"
-import type { Route } from "./+types/$slug"
+import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { InfoCard } from "~/components/InfoCard"
+import { List } from "~/components/List"
+import { Button } from "~/components/ui/button"
+import { Link } from "~/components/ui/link"
+import { type Foreshadowing, getForeshadowing } from "~/lib/entities"
+import type { Route } from "./+types/$slug"
 import { getForeshadowingSubtletyVariant } from "./utils"
 
-import DetailsContent from "./components/DetailsContent"
-import ConnectionsContent from "./components/ConnectionsContent"
+// --- Types and Interfaces ---
+
+interface DetailsContentProps {
+	item: Foreshadowing
+}
+
+interface ConnectionsContentProps {
+	item: Foreshadowing
+}
+
+interface SourceTargetInfo {
+	type: string
+	href: string | null
+	name: string
+	icon: React.ReactNode
+}
+
+// --- Helper Functions ---
+
+const getNarrativeWeightVariant = (weight: string): "default" | "destructive" | "outline" | "secondary" => {
+	switch (weight) {
+		case "crucial":
+			return "destructive"
+		case "major":
+			return "default"
+		case "supporting":
+			return "secondary"
+		case "minor":
+		default:
+			return "outline"
+	}
+}
+
+// --- Loader ---
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -23,6 +56,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	return item
 }
+
+// --- Component Parts ---
 
 export function Header({ name, type, subtlety }: Foreshadowing) {
 	return (
@@ -49,6 +84,167 @@ export function Header({ name, type, subtlety }: Foreshadowing) {
 	)
 }
 
+function DetailsContent({ item }: DetailsContentProps) {
+	const { description, discoveryCondition, subtlety, narrativeWeight, foreshadowsElement, type } = item
+
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<div className="space-y-6">
+				<InfoCard
+					title="Description"
+					icon={<Icons.ScrollText className="h-4 w-4 mr-2 text-blue-600" />}
+					emptyMessage="No description provided."
+				>
+					<List items={description} spacing="sm" textColor="muted" />
+				</InfoCard>
+
+				<InfoCard
+					title="Discovery Conditions"
+					icon={<Icons.Search className="h-4 w-4 mr-2 text-green-600" />}
+					emptyMessage="No specific discovery conditions listed."
+				>
+					<List items={discoveryCondition} spacing="sm" textColor="muted" />
+				</InfoCard>
+			</div>
+
+			<div className="space-y-6">
+				<InfoCard title="Attributes" icon={<Icons.Info className="h-4 w-4 mr-2 text-indigo-600" />}>
+					<div className="space-y-3 p-4">
+						<div className="flex justify-between items-center">
+							<span className="font-medium text-sm">Type</span>
+							<span className="text-muted-foreground text-sm capitalize">{type}</span>
+						</div>
+						<div className="flex justify-between items-center">
+							<span className="font-medium text-sm">Subtlety</span>
+							<BadgeWithTooltip
+								variant={getForeshadowingSubtletyVariant(subtlety)}
+								tooltipContent={`Subtlety: ${subtlety}`}
+								className="capitalize"
+							>
+								{subtlety}
+							</BadgeWithTooltip>
+						</div>
+						<div className="flex justify-between items-center">
+							<span className="font-medium text-sm">Narrative Weight</span>
+							<BadgeWithTooltip
+								variant={getNarrativeWeightVariant(narrativeWeight)}
+								tooltipContent={`Narrative Weight: ${narrativeWeight}`}
+								className="capitalize"
+							>
+								{narrativeWeight}
+							</BadgeWithTooltip>
+						</div>
+					</div>
+				</InfoCard>
+
+				<InfoCard
+					title="Foreshadowed Element"
+					icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-yellow-600" />}
+					emptyMessage="The specific element being foreshadowed is not defined."
+				>
+					<div className="p-4">
+						<p className="text-sm text-muted-foreground">{foreshadowsElement}</p>
+					</div>
+				</InfoCard>
+			</div>
+		</div>
+	)
+}
+
+function ConnectionsContent({ item }: ConnectionsContentProps) {
+	const { sourceStage, sourceNpc, sourceFaction, targetQuest, targetTwist, targetNpc, targetArc } = item
+
+	const source: SourceTargetInfo | null = sourceStage
+		? {
+				type: "Quest Stage",
+				href: `/quests/${sourceStage.quest?.slug}/stages/${sourceStage.slug}`,
+				name: `${sourceStage.quest?.name} - ${sourceStage.name}`,
+				icon: <Icons.Milestone className="h-4 w-4 text-gray-500" />,
+			}
+		: sourceNpc
+			? {
+					type: "NPC",
+					href: `/npcs/${sourceNpc.slug}`,
+					name: sourceNpc.name,
+					icon: <Icons.User className="h-4 w-4 text-gray-500" />,
+				}
+			: sourceFaction
+				? {
+						type: "Faction",
+						href: `/factions/${sourceFaction.slug}`,
+						name: sourceFaction.name,
+						icon: <Icons.Flag className="h-4 w-4 text-gray-500" />,
+					}
+				: null
+
+	const target: SourceTargetInfo | null = targetQuest
+		? {
+				type: "Quest",
+				href: `/quests/${targetQuest.slug}`,
+				name: targetQuest.name,
+				icon: <Icons.Scroll className="h-4 w-4 text-gray-500" />,
+			}
+		: targetTwist
+			? {
+					type: "Quest Twist",
+					href: null,
+					name: `Twist ID: ${targetTwist.id} (${targetTwist.twistType})`,
+					icon: <Icons.GitBranch className="h-4 w-4 text-gray-500" />,
+				}
+			: targetNpc
+				? {
+						type: "NPC",
+						href: `/npcs/${targetNpc.slug}`,
+						name: targetNpc.name,
+						icon: <Icons.User className="h-4 w-4 text-gray-500" />,
+					}
+				: targetArc
+					? {
+							type: "Narrative Arc",
+							href: `/narrative/${targetArc.slug}`,
+							name: targetArc.name,
+							icon: <Icons.Workflow className="h-4 w-4 text-gray-500" />,
+						}
+					: null
+
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+			{source ? (
+				<div className="p-4 space-y-2">
+					<div className="flex items-center space-x-2">
+						<span className="font-medium text-sm">Source:</span> {source.icon}
+						{source.href ? (
+							<Link href={source.href} className="text-primary hover:underline text-sm">
+								{source.type} - {source.name}
+							</Link>
+						) : (
+							<span className="text-muted-foreground text-sm">{source.name}</span>
+						)}
+					</div>
+				</div>
+			) : null}
+
+			{target ? (
+				<div className="p-4 space-y-2">
+					<div className="flex items-center space-x-2">
+						<span className="font-medium text-sm"> Target: </span>
+						{target.icon}
+						{target.href ? (
+							<Link href={target.href} className="text-primary hover:underline text-sm">
+								{target.type} - {target.name}
+							</Link>
+						) : (
+							<span className="text-muted-foreground text-sm">{target.name}</span>
+						)}
+					</div>
+				</div>
+			) : null}
+		</div>
+	)
+}
+
+// --- Main Component ---
+
 export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps) {
 	const item = loaderData
 	const { tab } = useParams()
@@ -64,7 +260,7 @@ export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps
 	}
 
 	return (
-		<div className="container mx-auto py-6 px-4 sm:px-6">
+		<div className="container mx-auto py-6 px-4 sm:px-6 space-y-6">
 			<div className="flex justify-between items-center mb-6">
 				<Button variant="outline" size="sm" asChild>
 					<NavLink to="/foreshadowing" className="flex items-center">
@@ -74,27 +270,8 @@ export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps
 				</Button>
 			</div>
 			<Header {...item} />
-			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
-				<TabsList className="grid grid-cols-2 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
-					<TabsTrigger value="details" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
-						Details
-					</TabsTrigger>
-					<TabsTrigger
-						value="connections"
-						className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900"
-					>
-						Connections
-					</TabsTrigger>
-				</TabsList>
-
-				<TabsContent value="details" className="space-y-6 animate-in fade-in-50 duration-300">
-					<DetailsContent item={item} />
-				</TabsContent>
-
-				<TabsContent value="connections" className="animate-in fade-in-50 duration-300">
-					<ConnectionsContent item={item} />
-				</TabsContent>
-			</Tabs>
+			<ConnectionsContent item={item} />
+			<DetailsContent item={item} />
 		</div>
 	)
 }
