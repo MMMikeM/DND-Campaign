@@ -1,12 +1,10 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Area } from "~/lib/entities"
 
-export const DetailsContent: React.FC<{ area: Area }> = ({ area }) => {
-	const { hazards, defenses, rumors, creativePrompts } = area
-
+export const DetailsContent: React.FC<Area> = ({ hazards, defenses, rumors, creativePrompts }) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<InfoCard title="Hazards" icon={<Icons.AlertTriangle className="h-4 w-4 text-primary" />}>
