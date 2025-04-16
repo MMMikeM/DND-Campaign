@@ -80,9 +80,6 @@ Each Spell is presented in a standard format, detailing its core function before
   - **Concentration:** Requires concentration following standard 5e rules.
   - **Ritual:** Can optionally be cast over 10 minutes longer without spending SP.
 
-You are correct to double-check Section 3.4. Based on all the revisions and consolidations we've made, the list of Core Spells and some of their Basic Effects are indeed **out of date**.
-
-Here is the revised and updated Section 3.4, reflecting the merged spells (`Arcane Sight`), the replacement (`Conduit`), the updated mechanics (`Strike`, `Heal`), and removing the now-obsolete concept of the "Standard Activation Enhancement":
 
 ---
 
@@ -1041,13 +1038,19 @@ At 1st level (or when you first gain access to Spells through your class), you *
 
 ### **7.3 Class Descriptions**
 
-> *(Standard starting equipment will be determined later or chosen based on background/class combination)*
+The following classes represent broad archetypes defined by their primary ability score. Each description offers a theme and typical expressions of power, but these are merely suggestions – a foundation upon which to build *your* unique character. Use your choice of **Spells**, **Essences**, and **Enhancements** to bring your specific concept to life. How your character embodies their class is entirely up to you.
 
-#### **7.3.1 Warden (Strength)**
+#### **7.3.1 Champion (Strength)**
 
-- **Core Ability Score:** Strength
-- **Concept:** A stalwart protector and powerful combatant who channels raw strength into potent physical effects and commands presence through might.
-- **Hit Dice:** 1d10 per Warden level
+- **Core Ability:** Strength
+- **Concept:** Champions harness raw physical power, translating overwhelming Strength into tangible magical effects. They dominate the battlefield through might, protect allies with unwavering resolve, and their force of will can manifest as physical **Barriers** (`Barrier`) just as readily as devastating enhanced **Strikes** (`Strike`). This framework is a starting point; your Champion's power comes from within – define what drives yours.
+- **What could your Champion be?**
+  - A determined protector whose conviction creates shields of shimmering force.
+  - A tribal warrior who commands earth to rise as protective walls through stomps or gestures.
+  - A disciplined combatant whose powerful stance establishes zones of defense.
+  - A resolute individual whose sheer stubbornness materializes as physical obstacles.
+- **How does your strength manifest?** Through roaring battle cries that bolster defenses? Precise martial technique that shatters enemy guards? Sheer unstoppable will that imposes itself on the physical world?
+- **Hit Dice:** 1d10 per Champion level
 - **Proficiencies:**
   - **Armor:** Light armor, medium armor, heavy armor, shields
   - **Weapons:** Simple weapons, martial weapons
@@ -1057,18 +1060,24 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** `Strike`
   - **Unique Thematic Spell:** `Barrier`
   - **Choice Spells (Choose 2 from list below):**
-    - `Blast`
-    - `Debilitate`
-    - `Defend`
-    - `Empower/Enfeeble`
-    - `Heal`
-    - `Zone`
+    - Blast
+    - Debilitate
+    - Defend
+    - Empower/Enfeeble
+    - Heal
+    - Zone`
 
-#### **7.3.2 Shadow (Dexterity)**
+#### **7.3.2 Trickster (Dexterity)**
 
-- **Core Ability Score:** Dexterity
-- **Concept:** An agile and precise operative, excelling at evasion, infiltration, and striking vulnerable points using subtle magic.
-- **Hit Dice:** 1d8 per Shadow level
+- **Core Ability:** Dexterity
+- **Concept:** Tricksters excel through speed, precision, and cunning, their enhanced agility allowing them to **Move** (`Move`) with supernatural grace. They might use magically guided attacks (`Strike`/`Bolt`), misdirection (`Illusion`), or sheer nimbleness to confound foes and navigate danger. This is just a template; your Trickster's style is yours to define.
+- **What could your Trickster be?**
+  - A shadow dancer who blinks short distances between attacks.
+  - A seemingly luck-touched gambler whose throws always hit their mark.
+  - A battlefield acrobat whose dazzling movements confound opponents.
+  - A silent hunter who seems to glide through any environment unseen.
+- **How does your dexterity express itself?** Is it subtle and secretive, focused on remaining unseen? Flamboyant and showy, drawing attention while setting up a ruse? Methodical and precise, exploiting every small advantage?
+- **Hit Dice:** 1d8 per Trickster level
 - **Proficiencies:**
   - **Armor:** Light armor
   - **Weapons:** Simple weapons, hand crossbows, longswords, rapiers, shortswords, shortbows
@@ -1078,18 +1087,24 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** Choose `Strike` OR `Bolt`
   - **Unique Thematic Spell:** `Move`
   - **Choice Spells (Choose 2 from list below):**
-    - `Blast`
-    - `Communicate`
-    - `Conduit`
-    - `Debilitate`
-    - `Defend`
-    - `Illusion`
+    - Blast
+    - Communicate
+    - Conduit
+    - Debilitate
+    - Defend
+    - Illusion`
 
-#### **7.3.3 Metamorph (Constitution)**
+#### **7.3.3 Adapter (Constitution)**
 
-- **Core Ability Score:** Constitution
-- **Concept:** A resilient and adaptable being whose very form is mutable, drawing power from their life force and endurance.
-- **Hit Dice:** 1d10 per Metamorph level
+- **Core Ability:** Constitution
+- **Concept:** Adapters draw power from their remarkable resilience and life force, their bodies capable of extraordinary transformation (**Adapt Self**). They endure, evolve, and overcome challenges by altering their very form, making their body both weapon (`Strike`/`Bolt`) and shield (`Defend`). But the specifics are yours to create; the Adapter's power is personal.
+- **What could your Adapter be?**
+  - A shapeshifter whose limbs become claws, wings, or fins as needed.
+  - A stoic warrior whose skin temporarily hardens like stone or bark against attacks.
+  - A survivor whose wounds close with unnatural speed (`Heal`).
+  - A symbiotic host sharing consciousness and physical traits with another entity.
+- **How does your body change?** Is it a controlled, deliberate evolution? An instinctive, primal response to threats? The result of ancient magic in your bloodline or strange experimentation?
+- **Hit Dice:** 1d10 per Adapter level
 - **Proficiencies:**
   - **Armor:** Light armor, medium armor, shields
   - **Weapons:** Simple weapons
@@ -1099,18 +1114,24 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** Choose `Strike` OR `Bolt`
   - **Unique Thematic Spell:** `Adapt Self`
   - **Choice Spells (Choose 2 from list below):**
-    - `Blast`
-    - `Debilitate`
-    - `Defend`
-    - `Heal`
-    - `Summon`
-    - `Zone`
+    - Blast
+    - Debilitate
+    - Defend
+    - Heal
+    - Summon
+    - Zone`
 
-#### **7.3.4 Savant (Intelligence)**
+#### **7.3.4 Scholar (Intelligence)**
 
-- **Core Ability Score:** Intelligence
-- **Concept:** A master of arcane knowledge and intricate magical manipulation, using intellect to control reality and unleash precise effects.
-- **Hit Dice:** 1d6 per Savant level
+- **Core Ability:** Intelligence
+- **Concept:** Scholars reshape reality through careful study, pattern recognition, and the precise application of knowledge. Their intellect allows them to affect the world, often from afar, whether through direct force (`Bolt`), intricate control over objects and energy (**Manipulate**), or understanding the underlying principles of magic and nature. This archetype is broad; the Scholar's power comes from understanding – what do *you* seek to comprehend?
+- **What could your Scholar be?**
+  - A traditional arcanist translating ancient formulae into tangible effects.
+  - An inventor whose calculated understanding allows for precise telekinetic control.
+  - A battlefield tactician who redirects energy and subtly alters terrain (`Zone`).
+  - A researcher who perceives and interacts with the hidden connections between all things.
+- **What knowledge drives you?** Forbidden texts? Scientific inquiry? Mathematical patterns? The intricate laws of magic or the natural world?
+- **Hit Dice:** 1d6 per Scholar level
 - **Proficiencies:**
   - **Armor:** None
   - **Weapons:** Daggers, darts, slings, quarterstaffs, light crossbows
@@ -1120,18 +1141,24 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** `Bolt`
   - **Unique Thematic Spell:** `Manipulate`
   - **Choice Spells (Choose 2 from list below):**
-    - `Blast`
-    - `Communicate`
-    - `Debilitate`
-    - `Defend`
-    - `Illusion`
-    - `Zone`
+    - Blast
+    - Communicate
+    - Debilitate
+    - Defend
+    - Illusion
+    - Zone`
 
-#### **7.3.5 Mystic (Wisdom)**
+#### **7.3.5 Sage (Wisdom)**
 
-- **Core Ability Score:** Wisdom
-- **Concept:** Connected to the world, spirits, or divine forces through intuition and insight, channeling this connection for perception, restoration, and guidance.
-- **Hit Dice:** 1d8 per Mystic level
+- **Core Ability:** Wisdom
+- **Concept:** Sages perceive what others cannot, drawing on intuition, experience, and a connection to the world around them to see hidden truths (**Arcane Sight**). Their wisdom often allows them to heal (`Heal`), guide (`Communicate`), protect (`Defend`), and understand deeper patterns, sometimes drawing on forces larger than themselves (`Summon`/`Zone`). The Sage's insight is unique – what informs yours?
+- **What could your Sage be?**
+  - A nature-connected guide who communes with animal spirits or channels natural energies.
+  - A temple guardian sensing disturbances in spiritual harmony or reading auras.
+  - A battlefield medic whose intuitive understanding of life force saves lives.
+  - A keen investigator who notices the smallest details and understands underlying motives.
+- **What guides your perception?** A connection to spirits or divinity? Deep practical experience and observation? Strong emotional intuition and empathy?
+- **Hit Dice:** 1d8 per Sage level
 - **Proficiencies:**
   - **Armor:** Light armor, medium armor, shields
   - **Weapons:** Simple weapons
@@ -1141,18 +1168,24 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** Choose `Strike` OR `Bolt`
   - **Unique Thematic Spell:** `Arcane Sight`
   - **Choice Spells (Choose 2 from list below):**
-    - `Communicate`
-    - `Conduit`
-    - `Defend`
-    - `Heal`
-    - `Summon`
-    - `Zone`
+    - Communicate
+    - Conduit
+    - Defend
+    - Heal
+    - Summon
+    - Zone`
 
-#### **7.3.6 Luminary (Charisma)**
+#### **7.3.6 Orator (Charisma)**
 
-- **Core Ability Score:** Charisma
-- **Concept:** A force of personality whose innate magical talent or bargained power shapes the world through sheer presence, influence, and emotional command.
-- **Hit Dice:** 1d8 per Luminary level
+- **Core Ability:** Charisma
+- **Concept:** Orators command attention and shape reality through sheer force of personality, their presence allowing them to **Influence** (`Influence`) minds, emotions, and even the flow of magic itself. Their power might erupt as spectacular displays (`Blast`/`Bolt`), subtle manipulations (`Illusion`), compelling commands (`Communicate`), or pact-bound abilities (`Summon`). The Orator's power reflects their unique character – how does yours shine?
+- **What could your Orator be?**
+  - An innately powerful individual whose strong emotions manifest as magical effects.
+  - A pact-bound intermediary channeling otherworldly power through carefully worded agreements.
+  - A stirring leader whose inspiring words literally empower allies (`Empower`).
+  - A silver-tongued negotiator whose bargains and pronouncements hold magical weight.
+- **How does your personality affect the world?** Through captivating performance? Resolute command? Subtle manipulation and charm? Unfiltered emotional expression?
+- **Hit Dice:** 1d8 per Orator level
 - **Proficiencies:**
   - **Armor:** Light armor
   - **Weapons:** Simple weapons, hand crossbows, rapiers, shortswords
@@ -1162,9 +1195,9 @@ At 1st level (or when you first gain access to Spells through your class), you *
   - **Core Attack Spell:** `Bolt`
   - **Unique Thematic Spell:** `Influence`
   - **Choice Spells (Choose 2 from list below):**
-    - `Blast`
-    - `Communicate`
-    - `Debilitate`
-    - `Empower/Enfeeble`
-    - `Illusion`
-    - `Summon`
+    - Blast
+    - Communicate
+    - Debilitate
+    - Empower/Enfeeble
+    - Illusion
+    - Summon`
