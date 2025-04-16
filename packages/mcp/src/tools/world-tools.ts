@@ -1,10 +1,9 @@
 import { tables } from "@tome-master/shared"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { zodToMCP } from "../zodToMcp"
-import { schemas, type WorldTools } from "./world-tools-schema"
-import { CreateEntityGetters, ToolDefinition } from "./utils/types"
-import { db } from ".."
 import { eq } from "drizzle-orm"
+import { db } from "../index"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./world-tools-schema"
 
 const {
 	worldTables: { worldStateChanges },
@@ -32,10 +31,10 @@ export const entityGetters: WorldGetters = {
 		}),
 }
 
-export const worldToolDefinitions: Record<WorldTools, ToolDefinition> = {
-	manage_world_state_changes: {
-		description: createEntityActionDescription("world state change record"),
-		inputSchema: zodToMCP(schemas.manage_world_state_changes),
-		handler: createEntityHandler(worldStateChanges, schemas.manage_world_state_changes, "world state change record"),
+export const worldToolDefinitions: Record<"manage_world", ToolDefinition> = {
+	manage_world: {
+		description: "Manage world-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_world", tables.worldTables, tableEnum, schemas),
 	},
 }

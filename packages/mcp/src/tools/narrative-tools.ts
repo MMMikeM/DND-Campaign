@@ -1,15 +1,15 @@
 import { tables } from "@tome-master/shared"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./narrative-tools-schema"
 import { eq } from "drizzle-orm"
-import { db } from ".."
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { CreateTableTools, CreateEntityGetters, ToolDefinition } from "./utils/types"
-import { z } from "zod"
+import { db } from "../index"
+import { schemas, tableEnum } from "./narrative-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	narrativeTables: { narrativeArcs, arcMembership },
 } = tables
+
+export type NarrativeGetters = CreateEntityGetters<typeof tables.narrativeTables>
 
 export const entityGetters: NarrativeGetters = {
 	all_narrative_arcs: () => db.query.narrativeArcs.findMany({}),
@@ -32,23 +32,11 @@ export const entityGetters: NarrativeGetters = {
 			},
 		}),
 }
-export type NarrativeTools = CreateTableTools<typeof tables.narrativeTables>
-export type NarrativeGetters = CreateEntityGetters<typeof tables.narrativeTables>
 
-const getEntitySchema = z.object({
-	entity_type: z.enum(["narrative_arcs", "arc_membership"]),
-	entity_id: z.number().optional(),
-})
-
-export const narrativeToolDefinitions: Record<NarrativeTools, ToolDefinition> = {
-	manage_narrative_arcs: {
-		description: createEntityActionDescription("narrative arc"),
-		inputSchema: zodToMCP(schemas.manage_narrative_arcs),
-		handler: createEntityHandler(narrativeArcs, schemas.manage_narrative_arcs, "narrative arc"),
-	},
-	manage_arc_membership: {
-		description: createEntityActionDescription("arc membership record"),
-		inputSchema: zodToMCP(schemas.manage_arc_membership),
-		handler: createEntityHandler(arcMembership, schemas.manage_arc_membership, "arc membership record"),
+export const narrativeToolDefinitions: Record<"manage_narrative", ToolDefinition> = {
+	manage_narrative: {
+		description: "Manage narrative-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_narrative", tables.narrativeTables, tableEnum, schemas),
 	},
 }

@@ -1,18 +1,15 @@
 import { tables } from "@tome-master/shared"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./foreshadowing-tools-schema"
 import { eq } from "drizzle-orm"
-
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { db } from ".."
+import { db } from "../index"
+import { schemas, tableEnum } from "./foreshadowing-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	foreshadowingTables: { narrativeForeshadowing },
 } = tables
 
 type ForeshadowingGetters = CreateEntityGetters<typeof tables.foreshadowingTables>
-export type ForeshadowingTools = CreateTableTools<typeof tables.foreshadowingTables>
 
 export const entityGetters: ForeshadowingGetters = {
 	all_narrative_foreshadowing: () => db.query.narrativeForeshadowing.findMany(),
@@ -32,14 +29,10 @@ export const entityGetters: ForeshadowingGetters = {
 		}),
 }
 
-export const foreshadowingToolDefinitions: Record<ForeshadowingTools, ToolDefinition> = {
-	manage_narrative_foreshadowing: {
-		description: createEntityActionDescription("narrative foreshadowing hint"),
-		inputSchema: zodToMCP(schemas.manage_narrative_foreshadowing),
-		handler: createEntityHandler(
-			narrativeForeshadowing,
-			schemas.manage_narrative_foreshadowing,
-			"narrative foreshadowing hint",
-		),
+export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDefinition> = {
+	manage_foreshadowing: {
+		description: "Manage foreshadowing-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_foreshadowing", tables.foreshadowingTables, tableEnum, schemas),
 	},
 }

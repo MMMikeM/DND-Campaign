@@ -1,16 +1,25 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils"
-import { FactionTools } from "./faction-tools"
+import { CreateTableNames, id, Schema } from "./tool.utils"
 
 const {
 	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas, enums },
 } = tables
 
+export type TableNames = CreateTableNames<typeof tables.factionTables>
+
+export const tableEnum = [
+	"factions",
+	"factionDiplomacy",
+	"factionCulture",
+	"factionHeadquarters",
+	"factionAgendas",
+] as const satisfies TableNames
+
 export const schemas = {
-	manage_factions: createInsertSchema(factions, {
-		id: optionalId.describe("ID of faction to manage (omit to create new, include alone to delete)"),
+	factions: createInsertSchema(factions, {
+		id: id.describe("ID of faction to manage (omit to create new, include alone to delete)"),
 		description: (s) => s.describe("Key characteristics, structure, and public activities in point form"),
 		notes: (s) => s.describe("GM-only information and potential plot hooks"),
 		resources: (s) => s.describe("Assets, facilities, and special resources under faction control"),
@@ -29,11 +38,12 @@ export const schemas = {
 		size: z.enum(enums.sizeTypes).describe("Membership scale (tiny, small, medium, large, massive)"),
 		wealth: z.enum(enums.wealthLevels).describe("Economic status (destitute, poor, moderate, rich, wealthy)"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Organized groups with shared goals that act as allies, enemies, or complex forces in the campaign"),
 
-	manage_faction_diplomacy: createInsertSchema(factionDiplomacy, {
-		id: optionalId.describe("ID of diplomacy record to manage (omit to create new, include alone to delete)"),
+	factionDiplomacy: createInsertSchema(factionDiplomacy, {
+		id: id.describe("ID of diplomacy record to manage (omit to create new, include alone to delete)"),
 		factionId: id.describe("ID of primary faction in this relationship"),
 		otherFactionId: id.describe("ID of secondary faction in this diplomatic relation"),
 		description: (s) => s.describe("Interaction details, shared history, and current dynamics in point form"),
@@ -45,11 +55,12 @@ export const schemas = {
 			.enum(enums.relationshipStrengths)
 			.describe("Intensity level (weak, moderate, friendly, strong, unbreakable, hostile, war)"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Defines relationships between factions, creating political dynamics that players can navigate"),
 
-	manage_faction_culture: createInsertSchema(factionCulture, {
-		id: optionalId.describe("ID of culture record to manage (omit to create new, include alone to delete)"),
+	factionCulture: createInsertSchema(factionCulture, {
+		id: id.describe("ID of culture record to manage (omit to create new, include alone to delete)"),
 		factionId: id.describe("ID of faction this culture belongs to"),
 		jargon: (s) => s.describe("Specialized terminology and slang used by members"),
 		recognitionSigns: (s) => s.describe("Secret signals members use to identify each other"),
@@ -58,21 +69,23 @@ export const schemas = {
 		taboos: (s) => s.describe("Forbidden actions or topics within the faction"),
 		aesthetics: (s) => s.describe("Visual design, architecture, fashion, and artistic preferences"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Cultural elements that give factions distinct identities, behaviors, and recognition features"),
 
-	manage_faction_headquarters: createInsertSchema(factionHeadquarters, {
-		id: optionalId.describe("ID of headquarters to manage (omit to create new, include alone to delete)"),
+	factionHeadquarters: createInsertSchema(factionHeadquarters, {
+		id: id.describe("ID of headquarters to manage (omit to create new, include alone to delete)"),
 		factionId: id.describe("ID of faction this headquarters belongs to"),
 		siteId: id.describe("ID of site where headquarters is situated"),
 		creativePrompts: (s) => s.describe("Adventure hooks and encounter ideas for this site"),
 		description: (s) => s.describe("Physical features, notable rooms, and defenses in point form"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Key sites that serve as faction bases, providing adventure sites and strategic targets"),
 
-	manage_faction_agendas: createInsertSchema(factionAgendas, {
-		id: optionalId.describe("ID of agenda to manage (omit to create new, include alone to delete)"),
+	factionAgendas: createInsertSchema(factionAgendas, {
+		id: id.describe("ID of agenda to manage (omit to create new, include alone to delete)"),
 		factionId: id.describe("ID of faction this agenda belongs to"),
 		name: (s) => s.describe("Name or designation of this agenda"),
 		ultimateAim: (s) => s.describe("The long-term goal or desired outcome the faction seeks to achieve"),
@@ -92,8 +105,9 @@ export const schemas = {
 		storyHooks: (s) => s.describe("Potential quest hooks and adventure ideas related to this agenda"),
 		creativePrompts: (s) => s.describe("Ideas for incorporating this agenda into campaign storylines"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe(
 			"Major objectives, schemes, and narrative drivers that define a faction's purpose and activities in the world",
 		),
-} satisfies Record<FactionTools, z.ZodSchema<unknown>>
+} as const satisfies Schema<TableNames[number]>

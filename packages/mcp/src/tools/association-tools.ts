@@ -1,10 +1,9 @@
+import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
-import { createEntityActionDescription, createEntityHandler } from "./tool.utils"
-import { tables } from "@tome-master/shared"
-import { zodToMCP } from "../zodToMcp"
-import { schemas } from "./association-tools-schema"
-import { CreateEntityGetters, CreateTableTools, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./association-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	associationTables: {
@@ -35,21 +34,21 @@ export const entityGetters: AssociationGetters = {
 		db.query.clues.findFirst({
 			where: eq(clues.id, id),
 			with: {
-				faction: { columns: { name: true, id: true } },
+				stage: true,
 				npc: { columns: { name: true, id: true } },
 				site: { columns: { name: true, id: true } },
-				stage: { columns: { name: true, id: true } },
+				faction: { columns: { name: true, id: true } },
 			},
 		}),
 	item_by_id: (id: number) =>
 		db.query.items.findFirst({
 			where: eq(items.id, id),
 			with: {
-				faction: { columns: { name: true, id: true } },
 				npc: { columns: { name: true, id: true } },
 				site: { columns: { name: true, id: true } },
 				quest: { columns: { name: true, id: true } },
 				stage: { columns: { name: true, id: true } },
+				faction: { columns: { name: true, id: true } },
 			},
 		}),
 	faction_quest_involvement_by_id: (id: number) =>
@@ -94,63 +93,17 @@ export const entityGetters: AssociationGetters = {
 	region_connection_detail_by_id: (id: number) =>
 		db.query.regionConnectionDetails.findFirst({
 			where: eq(regionConnectionDetails.id, id),
-			with: { connection: true },
+			with: {
+				connection: { with: { details: true, sourceRegion: true, targetRegion: true } },
+				controllingFaction: true,
+			},
 		}),
 }
 
-export type AssociationTools = CreateTableTools<typeof tables.associationTables>
-
-export const associationToolDefinitions: Record<AssociationTools, ToolDefinition> = {
-	manage_clues: {
-		description: createEntityActionDescription("clue"),
-		inputSchema: zodToMCP(schemas.manage_clues),
-		handler: createEntityHandler(clues, schemas.manage_clues, "clue"),
-	},
-	manage_faction_quest_involvement: {
-		description: createEntityActionDescription("faction quest involvement"),
-		inputSchema: zodToMCP(schemas.manage_faction_quest_involvement),
-		handler: createEntityHandler(
-			factionQuestInvolvement,
-			schemas.manage_faction_quest_involvement,
-			"faction_quest_involvement",
-		),
-	},
-	manage_items: {
-		description: createEntityActionDescription("item"),
-		inputSchema: zodToMCP(schemas.manage_items),
-		handler: createEntityHandler(items, schemas.manage_items, "item"),
-	},
-	manage_npc_quest_roles: {
-		description: createEntityActionDescription("NPC quest role"),
-		inputSchema: zodToMCP(schemas.manage_npc_quest_roles),
-		handler: createEntityHandler(npcQuestRoles, schemas.manage_npc_quest_roles, "npc_quest_role"),
-	},
-	manage_faction_territorial_control: {
-		description: createEntityActionDescription("faction territorial control"),
-		inputSchema: zodToMCP(schemas.manage_faction_territorial_control),
-		handler: createEntityHandler(
-			factionTerritorialControl,
-			schemas.manage_faction_territorial_control,
-			"faction_territorial_control",
-		),
-	},
-	manage_quest_hook_npcs: {
-		description: createEntityActionDescription("quest hook NPC"),
-		inputSchema: zodToMCP(schemas.manage_quest_hook_npcs),
-		handler: createEntityHandler(questHookNpcs, schemas.manage_quest_hook_npcs, "quest_hook_npc"),
-	},
-	manage_quest_introductions: {
-		description: createEntityActionDescription("quest introduction"),
-		inputSchema: zodToMCP(schemas.manage_quest_introductions),
-		handler: createEntityHandler(questIntroductions, schemas.manage_quest_introductions, "quest_introduction"),
-	},
-	manage_region_connection_details: {
-		description: createEntityActionDescription("region connection detail"),
-		inputSchema: zodToMCP(schemas.manage_region_connection_details),
-		handler: createEntityHandler(
-			regionConnectionDetails,
-			schemas.manage_region_connection_details,
-			"region_connection_detail",
-		),
+export const associationToolDefinitions: Record<"manage_association", ToolDefinition> = {
+	manage_association: {
+		description: "Manage association-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_association", tables.associationTables, tableEnum, schemas),
 	},
 }

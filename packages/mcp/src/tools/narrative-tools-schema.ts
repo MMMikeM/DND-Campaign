@@ -1,16 +1,19 @@
-import { createInsertSchema } from "drizzle-zod"
 import { tables } from "@tome-master/shared"
+import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
-import { id, optionalId } from "./tool.utils"
-import { NarrativeTools } from "./narrative-tools"
+import { CreateTableNames, id, Schema } from "./tool.utils"
 
 const {
 	narrativeTables: { narrativeArcs, arcMembership, enums },
 } = tables
 
+export type TableNames = CreateTableNames<typeof tables.narrativeTables>
+
+export const tableEnum = ["narrativeArcs", "arcMembership"] as const satisfies TableNames
+
 export const schemas = {
-	manage_narrative_arcs: createInsertSchema(narrativeArcs, {
-		id: optionalId.describe("ID of narrative arc to manage (omit to create new, include alone to delete)"),
+	narrativeArcs: createInsertSchema(narrativeArcs, {
+		id: id.describe("ID of narrative arc to manage (omit to create new, include alone to delete)"),
 		name: (s) => s.describe("Distinctive identifying title for this storyline"),
 		type: z.enum(enums.arcTypes).describe("Category of arc (main, faction, character, side)"),
 		status: z.enum(enums.arcStatuses).describe("Current progress (planned, active, completed, abandoned)"),
@@ -21,16 +24,18 @@ export const schemas = {
 		foreshadowingElements: (s) => s.describe("Hints and clues to plant early in the campaign"),
 		creativePrompts: (s) => s.describe("Ideas for developing and integrating this arc"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Major storylines that span multiple quests, providing campaign structure and thematic depth"),
 
-	manage_arc_membership: createInsertSchema(arcMembership, {
-		id: optionalId.describe("ID of membership record to manage (omit to create new, include alone to delete)"), // Already correct
+	arcMembership: createInsertSchema(arcMembership, {
+		id: id.describe("ID of membership record to manage (omit to create new, include alone to delete)"),
 		arcId: id.describe("ID of narrative arc this quest belongs to"),
 		questId: id.describe("ID of quest that forms part of this arc"),
 		role: z.enum(enums.questRoles).describe("Quest's function in the arc (introduction, complication, climax, etc.)"),
 		notes: (s) => s.optional().describe("How this quest connects to the arc's broader themes"),
 	})
+		.omit({ id: true })
 		.strict()
 		.describe("Links quests to narrative arcs, defining how individual adventures build toward larger stories"),
-} satisfies Record<NarrativeTools, z.ZodSchema<unknown>>
+} as const satisfies Schema<TableNames[number]>
