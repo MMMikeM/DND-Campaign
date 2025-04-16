@@ -1,5 +1,5 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { WorldChange } from "~/lib/entities"
@@ -12,9 +12,13 @@ const AffectedList = ({
 }: {
 	title: string
 	icon: React.ReactNode
-	item: { id: number; name: string; slug: string }
+	item: { id: number; name: string; slug: string } | null
 	basePath: string
 }) => {
+	if (!item) {
+		return null
+	}
+
 	return (
 		<InfoCard title={title} icon={icon} emptyMessage={`No ${title.toLowerCase()} affected.`}>
 			<div className="space-y-2 p-4">
