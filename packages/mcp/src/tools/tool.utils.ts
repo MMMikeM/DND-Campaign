@@ -1,242 +1,131 @@
-import type { EmbeddedEntityName } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 import { db, logger } from "../index"
-import { PgTable } from "drizzle-orm/pg-core"
-import { ToolHandler, ToolHandlerReturn } from "./utils/types"
+import zodToMCP from "../zodToMcp"
+import { PgTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
 
-type EmbeddingConfig = {
-	entityNameForEmbedding: EmbeddedEntityName
-	enabledEnvVar: string
-}
+export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
+export type Schema<T extends string> = Record<T, z.ZodObject<z.ZodRawShape, "strict", z.ZodTypeAny, unknown, unknown>>
 
-// Utility function to convert camelCase to snake_case
 export const camelToSnakeCase = (str: string) => str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
 
 export const id = z.coerce.number()
 export const optionalId = z.coerce.number().optional()
 
-export const createEntityActionDescription = (entity: string): string =>
-	`
-Manage ${entity} entities through create, update, or delete operations.
+// --- Response Helpers ---
 
-OPERATIONS:
-- CREATE: Omit the 'id' field to create a new ${entity}
-- UPDATE: Include 'id' and fields to update an existing ${entity}
-- DELETE: Include ONLY the 'id' field to delete an ${entity}
-
-For parameter details and required fields, use help({tool: 'manage_${entity.replace(/-/g, "_")}'})
-`.trim()
-
-const createErrorResponse = (message: string): ToolHandlerReturn => ({
+export const createErrorResponse = (message: string): ToolHandlerReturn => ({
 	isError: true,
 	content: [{ type: "text", text: message }],
 })
 
-const createResponse = (message: string): ToolHandlerReturn => ({
+export const createResponse = (message: string): ToolHandlerReturn => ({
 	content: [{ type: "text", text: message }],
 })
 
-const formatZodErrors = (error: z.ZodError, entityName: string, args: Record<string, unknown>): ToolHandlerReturn => {
+export const formatZodErrors = (
+	error: z.ZodError,
+	entityName: string,
+	args: Record<string, unknown>,
+): ToolHandlerReturn => {
 	const errors = error.errors.map((err) => `- '${err.path.join(".")}': ${err.message}`).join("\n")
 
-	const operation = "id" in args ? "update" : "create"
-	logger.error(`Validation error ${operation}ing ${entityName}:`, { errors })
+	const operation = "operation" in args ? args.operation : "id" in args ? "update/delete" : "create"
+	logger.error(`Validation error during ${operation} ${entityName}:`, {
+		errors,
+	})
 
 	return createErrorResponse(
-		`Error ${operation}ing ${entityName}:\n${errors}\n\nUse help({tool: 'manage_${entityName.replace(/-/g, "_")}'}) for details on required parameters.`,
+		`Error during ${operation} ${entityName}:\n${errors}\n\nUse help({tool: 'relevant_tool_name'}) for details.`, // Update tool name dynamically later if needed
 	)
 }
 
-export const createEntityHandler = (
-	table: PgTable,
-	schema: z.ZodObject<z.ZodRawShape>,
-	entityName: string,
-): ToolHandler => {
-	const deleteRecord = async (id: number): Promise<ToolHandlerReturn> => {
-		if (!id) {
-			return createErrorResponse("Error: Valid ID is required for delete operations.")
+export function createManageEntityHandler<TS extends Schema<TK[number]>, TK extends readonly [string, ...string[]]>(
+	categoryToolName: string,
+	tables: Record<TK[number], PgTableWithId>,
+	tableEnum: TK,
+	schemas: TS,
+): ToolHandler {
+	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
+		if (!args) {
+			logger.error(`No arguments provided to ${categoryToolName} handler.`)
+			return createErrorResponse(`Aguments provided to ${categoryToolName} are malformed`)
 		}
 
-		logger.info(`Deleting ${entityName} with id ${id}`)
+		const tableName = z.enum(tableEnum).safeParse(args?.table)
 
-		// @ts-ignore - table structure is dynamic, assume 'id' column exists
-		const result = await db.delete(table).where(eq(table.id, id)).returning({ deletedId: table.id })
+		if (!tableName.success) {
+			return createErrorResponse(`Invalid table name '${args?.table}' provided to ${categoryToolName} handler.`)
+		}
 
-		return createResponse(
-			result.length > 0 ? `Successfully deleted ${entityName} with ID: ${id}` : `No ${entityName} found with ID: ${id}`,
-		)
-	}
+		const table = tables[tableName.data]
 
-	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		try {
-			logger.info(`Received request to manage ${entityName} witth ${JSON.stringify(args)}`)
+		const operation = z.enum(["create", "update", "delete"]).safeParse(args?.operation)
 
-			if (!args) {
-				return createResponse(
-					`Please provide parameters to manage ${entityName}. Use help({tool: 'manage_${entityName.replace(/-/g, "_")}'}) for details.`,
-				)
+		if (!operation.success) {
+			return createErrorResponse(`Invalid operation '${args?.operation}' provided to ${categoryToolName} handler.`)
+		}
+
+		if (operation.data === "delete") {
+			const deleteId = z.coerce.number().safeParse(args?.id)
+
+			if (!deleteId.success) {
+				return createErrorResponse(`Invalid id '${args?.id}' provided to ${categoryToolName} handler.`)
 			}
-
-			logger.info(`Managing ${entityName}`, args)
-
-			logger.info(schema._def.shape)
-
-			if (Object.keys(args).length === 1 && "id" in args) {
-				return await deleteRecord(args.id as number)
-			}
-
-			const parsedResult = schema.safeParse(args)
-			if (!parsedResult.success) {
-				return formatZodErrors(parsedResult.error, entityName, args)
-			}
-
-			const parsedData = parsedResult.data as { id?: number; [key: string]: unknown }
-			const operation = parsedData.id ? "Updating" : "Creating"
-			logger.info(`${operation} ${entityName}`, { args: parsedData })
-
-			const dataToSave: Record<string, unknown> = { ...parsedData }
-
-			if (parsedData.id) {
-				const result = await db
-					.update(table)
-					.set(dataToSave)
-					// @ts-ignore - table structure is dynamic, assume 'id' column exists
-					.where(eq(table.id, parsedData.id))
-					// @ts-ignore - table structure is dynamic, assume 'id' column exists
-					.returning({ successfullyUpdated: table.id })
-
-				return createResponse(
-					result.length > 0
-						? `Successfully updated ${entityName} with ID: ${parsedData.id}`
-						: `No ${entityName} found with ID: ${parsedData.id}`,
-				)
-			} else {
-				logger.debug(`Creating new ${entityName}`, { data: dataToSave })
-
-				const { id, ...insertData } = dataToSave
-
-				// @ts-ignore - table structure is dynamic, assume 'id' column exists
-				const result = await db.insert(table).values(insertData).returning({ successfullyCreated: table.id })
-
-				// @ts-ignore - result structure depends on returning clause
-				const newId = result[0]?.successfullyCreated
-				return createResponse(`Successfully created new ${entityName} with ID: ${newId}`)
-			}
-		} catch (error) {
-			logger.error(`Error in ${entityName} handler with args:`, args, error)
-
-			if (error instanceof z.ZodError) {
-				return formatZodErrors(error, entityName, args || {})
-			}
-
-			return createErrorResponse(
-				`Error processing ${entityName}: ${error instanceof Error ? error.message : String(error)}\n\nUse help({tool: 'manage_${entityName.replace(/-/g, "_")}'}) for usage details.`,
+			logger.info(`Deleting ${tableName} (via ${categoryToolName}) with id ${deleteId}`)
+			const result = await db.delete(table).where(eq(table.id, deleteId)).returning({ deletedId: table.id })
+			return createResponse(
+				result.length > 0
+					? `Successfully deleted ${tableName} with ID: ${deleteId}`
+					: `No ${tableName} found with ID: ${deleteId}`,
 			)
 		}
-	}
-}
 
-export type EntityRelationConfig = {
-	[key: string]: boolean | EntityRelationConfig
-}
+		if (operation.data === "create") {
+			const createData = schemas[tableName.data].safeParse(args?.data)
 
-export type EntityMapping = {
-	[entityType: string]: {
-		table: PgTable
-		queryName: string
-
-		relations?: EntityRelationConfig
-	}
-}
-
-export const createEntityQueryHandler = (entityMap: EntityMapping, schema: z.ZodObject<z.ZodRawShape>): ToolHandler => {
-	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		try {
-			if (!args) {
-				return {
-					isError: true,
-					content: [
-						{
-							type: "text",
-							text: "Please provide entity type to query.",
-						},
-					],
-				}
+			if (!createData.success) {
+				return createErrorResponse(`Invalid data '${args?.data}' provided to ${categoryToolName} handler.`)
 			}
 
-			const parseResult = schema.safeParse(args)
-			if (!parseResult.success) {
-				return {
-					isError: true,
-					content: [
-						{
-							type: "text",
-							text: `Invalid query parameters: ${parseResult.error.message}`,
-						},
-					],
-				}
-			}
-
-			const { entity_type, id } = parseResult.data
-
-			logger.info(`Getting ${entity_type}${id ? ` by ID: ${id}` : "s"}`)
-
-			const entityInfo = entityMap[entity_type]
-
-			if (!entityInfo) {
-				return {
-					isError: true,
-					content: [{ type: "text", text: `Invalid entity type: ${entity_type}` }],
-				}
-			}
-
-			if (id) {
-				// @ts-ignore - table structure is dynamic, assume 'id' column exists
-				const tableIdColumn = entityInfo.table.id
-				if (entityInfo.relations) {
-					const queryTable = entityInfo.queryName as keyof typeof db.query
-					const queryRunner = db.query[queryTable]
-					return (
-						// @ts-ignore - query runner type is dynamic
-						(await queryRunner.findFirst({
-							where: eq(tableIdColumn, id),
-							with: entityInfo.relations,
-						})) ?? {
-							isError: true,
-							content: [{ type: "text", text: `${entity_type} not found` }],
-						}
-					)
-				}
-
-				const queryTable = entityInfo.queryName as keyof typeof db.query
-				const queryRunner = db.query[queryTable]
-				return (
-					// @ts-ignore - query runner type is dynamic
-					(await queryRunner.findFirst({
-						where: eq(tableIdColumn, id),
-					})) ?? {
-						isError: true,
-						content: [{ type: "text", text: `${entity_type} not found` }],
-					}
-				)
-			}
-
-			const queryTable = entityInfo.queryName as keyof typeof db.query
-			const queryRunner = db.query[queryTable]
-			// @ts-ignore - query runner type is dynamic
-			return await queryRunner.findMany()
-		} catch (error) {
-			logger.error(`Error in entity query handler:`, error instanceof Error ? error.message : error)
-			return {
-				isError: true,
-				content: [
-					{
-						type: "text",
-						text: `Error querying entity: ${error instanceof Error ? error.message : String(error)}`,
-					},
-				],
-			}
+			logger.info(`Creating ${tableName} (via ${categoryToolName}) with data ${createData.data}`)
+			// @ts-expect-error
+			const result = await db.insert(table).values(createData.data).returning({ successfullyCreated: table.id })
+			return createResponse(`Successfully created new ${tableName} with ID: ${result[0]?.successfullyCreated}`)
 		}
+
+		if (operation.data === "update") {
+			const updateData = schemas[tableName.data].partial().safeParse(args?.data)
+
+			if (!updateData.success) {
+				return createErrorResponse(`Invalid data '${args?.data}' provided to ${categoryToolName} handler.`)
+			}
+
+			logger.info(`Updating ${tableName} (via ${categoryToolName}) with data ${updateData.data}`)
+			const result = await db
+				.update(table)
+				.set(updateData.data)
+				.where(eq(table.id, updateData.data.id))
+				.returning({ successfullyUpdated: table.id })
+			return createResponse(`Successfully updated ${tableName} with ID: ${result[0]?.successfullyUpdated}`)
+		}
+		return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)
 	}
 }
+
+export const createManageSchema = (
+	schemaObject: Record<string, z.AnyZodObject>,
+	tableEnum: readonly [string, ...string[]],
+) =>
+	zodToMCP(
+		z.object({
+			table: z.enum(tableEnum),
+			action: z.enum(["create", "update", "delete"]),
+			id: z.coerce.number().optional().describe("Required for 'update' and 'delete' operations, exclude to create"),
+			data: z
+				.object(schemaObject)
+				.partial()
+				.describe("Provide only one of the following fields to create or update an entity. Update accepsts a partial")
+				.refine((data) => Object.keys(data).length === 1),
+		}),
+	)
