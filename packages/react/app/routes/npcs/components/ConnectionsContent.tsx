@@ -63,6 +63,38 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 									textColor="muted"
 									textSize="xs"
 								/>
+								<List
+									heading="Shared Goals"
+									icon={<Icons.Info className="h-3 w-3 mr-1" />}
+									items={sharedGoals}
+									spacing="sm"
+									textColor="muted"
+									textSize="xs"
+								/>
+								<List
+									heading="Relationship Dynamics"
+									icon={<Icons.Info className="h-3 w-3 mr-1" />}
+									items={relationshipDynamics}
+									spacing="sm"
+									textColor="muted"
+									textSize="xs"
+								/>
+								<List
+									heading="Creative Prompts"
+									icon={<Icons.Info className="h-3 w-3 mr-1" />}
+									items={creativePrompts}
+									spacing="sm"
+									textColor="muted"
+									textSize="xs"
+								/>
+								<List
+									heading="History"
+									icon={<Icons.Info className="h-3 w-3 mr-1" />}
+									items={history}
+									spacing="sm"
+									textColor="muted"
+									textSize="xs"
+								/>
 							</div>
 						),
 					)}
