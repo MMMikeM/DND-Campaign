@@ -1,18 +1,12 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import type { Site } from "~/lib/entities"
 // import { getDifficultyVariant } from "../utils" // Assuming utils will have this
 
-interface SecretsContentProps {
-	site: Site
-}
-
-export const SecretsContent: React.FC<SecretsContentProps> = ({ site }) => {
-	const { secrets } = site
-
+export const SecretsContent: React.FC<Site> = ({ secrets }) => {
 	// Placeholder difficulty variant function (move to utils)
 	const getDifficultyVariant = (level: string | null | undefined) => {
 		switch (level) {
@@ -53,35 +47,24 @@ export const SecretsContent: React.FC<SecretsContentProps> = ({ site }) => {
 			icon={<Icons.Key className="h-4 w-4 mr-2 text-primary" />}
 			emptyMessage="No known secrets at this site."
 		>
-			{secrets && secrets.length > 0 ? (
-				<div className="space-y-4">
-					{secrets.map((secret) => (
-						<div key={`secret-${secret.id}`} className="border rounded p-4">
-							<div className="flex justify-between items-start mb-1">
-								<h4 className="font-medium flex items-center">{secret.secretType} Secret</h4>
-								<BadgeWithTooltip
-									variant={getDifficultyVariant(secret.difficultyToDiscover)}
-									tooltipContent={getDifficultyTooltip(secret.difficultyToDiscover)}
-									className="capitalize text-xs"
-								>
-									{secret.difficultyToDiscover} Difficulty
-								</BadgeWithTooltip>
-							</div>
-							<List items={secret.description} spacing="sm" emptyText="No description." className="mb-2 text-sm" />
+			{secrets.map((secret) => (
+				<div key={`secret-${secret.id}`} className="border rounded p-4">
+					<div className="flex justify-between items-start mb-1">
+						<h4 className="font-medium flex items-center">{secret.secretType} Secret</h4>
+						<BadgeWithTooltip
+							variant={getDifficultyVariant(secret.difficultyToDiscover)}
+							tooltipContent={getDifficultyTooltip(secret.difficultyToDiscover)}
+							className="capitalize text-xs"
+						>
+							{secret.difficultyToDiscover} Difficulty
+						</BadgeWithTooltip>
+					</div>
+					<List items={secret.description} spacing="sm" emptyText="No description." className="mb-2 text-sm" />
 
-							<List
-								items={secret.discoveryMethod}
-								spacing="sm"
-								emptyText="No discovery method."
-								className="mb-2 text-sm"
-							/>
-							<List items={secret.consequences} spacing="sm" emptyText="No consequences." className="mb-2 text-sm" />
-						</div>
-					))}
+					<List items={secret.discoveryMethod} spacing="sm" emptyText="No discovery method." className="mb-2 text-sm" />
+					<List items={secret.consequences} spacing="sm" emptyText="No consequences." className="mb-2 text-sm" />
 				</div>
-			) : (
-				<p className="text-muted-foreground">No known secrets at this site.</p>
-			)}
+			))}
 		</InfoCard>
 	)
 }
