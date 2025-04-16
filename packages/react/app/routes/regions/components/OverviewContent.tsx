@@ -6,9 +6,12 @@ import { List } from "~/components/List"
 import type { Region } from "~/lib/entities"
 import { getDangerVariant } from "../utils"
 
-export const OverviewContent: React.FC<Region> = ({
-	name,
-	history,
+type OverviewContentProps = Pick<
+	Region,
+	"description" | "culturalNotes" | "type" | "dangerLevel" | "population" | "economy" | "quests" | "areas"
+>
+
+export const OverviewContent: React.FC<OverviewContentProps> = ({
 	description,
 	culturalNotes,
 	type,
@@ -16,27 +19,19 @@ export const OverviewContent: React.FC<Region> = ({
 	population,
 	economy,
 	quests,
-	areas,
 }) => {
 	return (
 		<>
 			<InfoCard title="Overview" icon={<Icons.Info className="h-4 w-4 mr-2 text-primary" />} className="mb-6">
 				<div className="space-y-4">
-					<div>
-						<h3 className="font-medium mb-2 flex items-center">
-							<Icons.BookOpen className="h-4 w-4 mr-2" />
-							History
-						</h3>
-						<p className="text-muted-foreground">{history}</p>
-					</div>
-
-					<div className="border-t pt-4">
+					<div className="pt-4">
 						<List
 							heading="Description"
 							items={description}
 							spacing="sm"
 							textColor="muted"
 							icon={<Icons.Info className="h-4 w-4 mr-2" />}
+							collapsible={false}
 						/>
 					</div>
 
@@ -47,6 +42,7 @@ export const OverviewContent: React.FC<Region> = ({
 							spacing="sm"
 							textColor="muted"
 							icon={<Icons.Building className="h-4 w-4 mr-2" />}
+							collapsible={false}
 						/>
 					</div>
 				</div>
@@ -85,16 +81,16 @@ export const OverviewContent: React.FC<Region> = ({
 				{/* Key Stats Card */}
 				<InfoCard title="Key Stats" icon={<Icons.NetworkIcon className="h-4 w-4 mr-2 text-primary" />}>
 					<div className="space-y-2">
-						<div className="flex items-center justify-between">
-							<span className="font-medium">Population:</span>
-							<span>{population}</span>
+						<div className="">
+							<div className="font-medium">Population:</div>
+							<div>{population}</div>
+						</div>
+						<div className="">
+							<div className="font-medium">Economy:</div>
+							<div>{economy}</div>
 						</div>
 						<div className="flex items-center justify-between">
-							<span className="font-medium">Economy:</span>
-							<span>{economy}</span>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-medium">Active Quests:</span>
+							<div className="font-medium">Active Quests:</div>
 							<BadgeWithTooltip variant="outline" tooltipContent={`Quests in this region`}>
 								{quests.length}
 							</BadgeWithTooltip>

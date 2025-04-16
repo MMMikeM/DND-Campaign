@@ -1,18 +1,14 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import type { Region } from "~/lib/entities"
 
-interface AreasContentProps {
-	region: Region
-}
+type AreasContentProps = Pick<Region, "areas" | "slug" | "economy" | "population" | "creativePrompts">
 
-export const AreasContent: React.FC<AreasContentProps> = ({ region }) => {
-	const { areas, slug, economy, population, creativePrompts } = region
-
+export const AreasContent: React.FC<AreasContentProps> = ({ areas, slug, economy, population, creativePrompts }) => {
 	return (
 		<>
 			<div className="grid grid-cols-1 gap-6 mb-6">
