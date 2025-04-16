@@ -82,11 +82,12 @@ export function List({
 	textColor,
 	bulletColor = "gray",
 	initialCollapsed,
+	collapsible = true,
 	...props
 }: ListProps) {
 	// Make collapsed true by default for collapsible lists
-	const collapsible = !!(props.collapsible !== false && heading)
-	const defaultCollapsed = collapsible && initialCollapsed !== undefined ? initialCollapsed : collapsible
+	const isCollapsible = !!(collapsible !== false && heading)
+	const defaultCollapsed = isCollapsible && initialCollapsed !== undefined ? initialCollapsed : isCollapsible
 	const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
 	const isFirstRender = useRef(true)
 

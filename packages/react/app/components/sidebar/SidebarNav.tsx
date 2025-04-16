@@ -53,7 +53,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 	}, [location.pathname])
 
 	const toggleMenu = (menu: string) => {
-		setActiveMenu(prev => prev === menu ? null : menu)
+		setActiveMenu((prev) => (prev === menu ? null : menu))
 	}
 
 	return (
@@ -79,19 +79,16 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 				<h3 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">World Elements</h3>
 			</div>
 
-
-				{menuData.factions && (
-					<CategoryMenu
-						title="Factions"
-						icon={Icons.Users}
-						isExpanded={activeMenu === "factions"}
-						onToggle={() => toggleMenu("factions")}
-						basePath="factions"
-						menuItems={menuData.factions}
-					/>
-				)}
-
-
+			{menuData.factions && (
+				<CategoryMenu
+					title="Factions"
+					icon={Icons.Users}
+					isExpanded={activeMenu === "factions"}
+					onToggle={() => toggleMenu("factions")}
+					basePath="factions"
+					menuItems={menuData.factions}
+				/>
+			)}
 
 			{menuData.npcs && (
 				<CategoryMenu
@@ -176,7 +173,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 					icon={Icons.Milestone}
 					isExpanded={activeMenu === "narrativeArcs"}
 					onToggle={() => toggleMenu("narrativeArcs")}
-					basePath="narrative"
+					basePath="narrative-arcs"
 					menuItems={menuData.narrativeArcs}
 				/>
 			)}
