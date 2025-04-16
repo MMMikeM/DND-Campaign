@@ -1,9 +1,12 @@
-import { NavLink, useParams, useNavigate } from "react-router"
 import * as Icons from "lucide-react"
+import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
+import DetailsContent from "./components/DetailsContent"
+import { OverviewContent } from "./components/OverviewContent"
+import SitesContent from "./components/SitesContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -30,22 +33,20 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 		dangerLevel,
 		defenses,
 		description,
-		embedding,
 		hazards,
 		id,
-		influence,
 		leadership,
 		name,
 		pointsOfInterest,
 		region,
 		population,
 		primaryActivity,
-		quests,
-		regionId,
 		rumors,
 		sites,
 		slug,
 		type,
+		territorialControl,
+		worldChanges,
 	} = area
 
 	const handleTabChange = (value: string) => {
@@ -100,15 +101,15 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<p>Overview content for {name} goes here.</p>
+					<OverviewContent {...area} />
 				</TabsContent>
 
 				<TabsContent value="details">
-					<p>Details content for {name} goes here.</p>
+					<DetailsContent {...area} />
 				</TabsContent>
 
 				<TabsContent value="sites">
-					<p>Sites list for {name} goes here.</p>
+					<SitesContent {...area} />
 				</TabsContent>
 			</Tabs>
 		</div>

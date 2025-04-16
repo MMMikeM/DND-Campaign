@@ -1,12 +1,17 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Area } from "~/lib/entities"
 
-export const OverviewContent: React.FC<{ area: Area }> = ({ area }) => {
-	const { description, culturalNotes, pointsOfInterest, leadership, population, primaryActivity } = area
-
+export const OverviewContent: React.FC<Area> = ({
+	description,
+	culturalNotes,
+	pointsOfInterest,
+	leadership,
+	population,
+	primaryActivity,
+}) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<InfoCard title="Description" icon={<Icons.FileText className="h-4 w-4 text-primary" />}>
