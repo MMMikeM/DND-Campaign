@@ -1,5 +1,11 @@
-import { RunResult } from "@tome-master/shared"
+import { type RunResult } from "@tome-master/shared"
+import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import type { zodToJsonSchema } from "zod-to-json-schema"
+
+// Shared type for Drizzle tables assumed to have an 'id' column
+export type PgTableWithId = PgTable & {
+	id: PgColumn
+}
 
 export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
 

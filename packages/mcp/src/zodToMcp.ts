@@ -11,21 +11,6 @@ export function zodToMCP<T extends z.ZodTypeAny>(schema: T) {
 		required: string[]
 	}
 
-	// Post-process the schema to handle descriptions correctly
-	const properties = jsonSchema.properties
-
-	for (const [key, prop] of Object.entries(properties)) {
-		// Handle descriptions for parameters
-		if ("type" in prop && prop.description) {
-			// Handle array types with proper min/max items
-			if (prop.type === "array") {
-				// Add minItems/maxItems settings for array types if not already present
-				if (!prop.minItems) prop.minItems = 1
-				if (!prop.maxItems) prop.maxItems = 5
-			}
-		}
-	}
-
 	return jsonSchema
 }
 
