@@ -17,13 +17,13 @@ const regionConfig = {
 				incomingRelations: {
 					with: {
 						sourceRegion: { columns: { name: true, id: true } },
-						details: true,
+						details: { with: { controllingFaction: { columns: { name: true, id: true } } } },
 					},
 				},
 				outgoingRelations: {
 					with: {
 						targetRegion: { columns: { name: true, id: true } },
-						details: true,
+						details: { with: { controllingFaction: { columns: { name: true, id: true } } } },
 					},
 				},
 				areas: {
