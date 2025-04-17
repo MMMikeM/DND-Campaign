@@ -80,7 +80,6 @@ Each Spell is presented in a standard format, detailing its core function before
   - **Concentration:** Requires concentration following standard 5e rules.
   - **Ritual:** Can optionally be cast over 10 minutes longer without spending SP.
 
-
 ---
 
 ### **3.4 Core Spells**
@@ -146,7 +145,7 @@ Default V (Verbal) and M (Focus) components are assumed unless S (Somatic) or co
 11. **Heal**
     - **Basic Effect:**
         - Casting Time: 1 Action | Range: Touch | Duration: Instantaneous
-        - Effect: A creature you touch regains hit points equal to **1d4** OR becomes stabilized if dying.
+        - Effect: A creature you touch regains hit points equal to **1d4** + spellcasting ability modifier OR gains 1 HP if downed.
 
 12. **Illusion**
     - **Basic Effect:**
@@ -231,79 +230,22 @@ While primarily descriptive, Essences have key mechanical implications:
 
 ### **4.5 Essence Descriptors**
 
-These represent fundamental energy or substance types used to shape magical effects. Damage dealt by Spells uses the name of the applied Essence as its type (unless using the optional 5e mapping). Each is linked to a specific **composite status effect**, detailed below. Enhancements may allow applying these effects (typically requiring a saving throw from the target). Unless otherwise noted, an effect imposed by an Enhancement lasts until the start of the caster's next turn or requires Concentration as specified by the Enhancement.
+These represent fundamental energy or substance types used to shape magical effects. Damage dealt by Spells uses the name of the applied Essence as its type (unless using the optional 5e mapping). Each is linked to a specific **composite status effect**, detailed below. Enhancements may allow applying these effects (typically requiring a saving throw from the target). Unless otherwise noted, an effect imposed by an Enhancement lasts until the start of the caster's next turn or requires Concentration as specified by the Enhancement. *Apply ONE Essence each time you cast a spell.  The Essence decides the spell’s damage type **and** inflicts the status shown below when you use a Status‑granting Enhancement.*
 
-1. **Fire - Ignited:**
-    - **(P1) Attack Disadvantage**
-    - **(S6) Opposing Damage Vulnerability (Cold)**
-    - **(M2) Sensory Nuisance** (Sheds dim light)
-    - *Result: Disadv on Attacks, Vulnerability to Cold damage, sheds dim light.*
-
-2. **Cold - Frozen:**
-    - **(P4) Almost Stuck** (Speed 5ft)
-    - **(S6) Opposing Damage Vulnerability (Fire)**
-    - **(M1) Skill Disadvantage (Athletics)**
-    - *Result: Speed becomes 5ft, Vulnerability to Fire damage, Disadv on Athletics checks.*
-
-3. **Life - Overgrown:**
-    - **(P4) Almost Stuck** (Speed 5ft)
-    - **(S3) Advantage Against Target**
-    - **(M4) Weakened Grip**
-    - *Result: Speed becomes 5ft, attacks vs target have Adv, Disadv on grapple/disarm checks.*
-
-4. **Necrotic - Withered:**
-    - **(P1) Attack Disadvantage**
-    - **(S1) Save Disadvantage (Con)**
-    - **(M1) Skill Disadvantage (Strength checks)**
-    - *Result: Disadv on Attacks, Con Saves, & Str checks.*
-
-5. **Light - Dazzled:**
-    - **(P1) Attack Disadvantage**
-    - **(S1) Save Disadvantage (Wis)**
-    - **(M5) No Cover Bonus (vs Caster)**
-    - *Result: Disadv on Attacks & Wis saves, target gets no cover bonus vs caster.*
-
-6. **Shadow - Shrouded:**
-    - **(P3) AC Penalty (-2)**
-    - **(S3) Advantage Against Target**
-    - **(M1) Skill Disadvantage (Perception checks relying on sight)**
-    - *Result: -2 AC, attacks vs target have Adv, Disadv on visual Perception.*
-
-7. **Lightning - Conductive:**
-    - **(P1) Attack Disadvantage**
-    - **(S4) Damage Rider**
-    - **(M1) Skill Disadvantage (Dexterity checks)**
-    - *Result: Disadv on Attacks, takes Spell Mod extra damage first time hit per turn, Disadv on Dex checks.*
-
-8. **Earth - Weighted:**
-    - **(P3) AC Penalty (-2)**
-    - **(S5) Hindered Movement** (Speed -10ft, disadv vs prone/move)
-    - **(M4) Weakened Grip**
-    - *Result: -2 AC, Speed -10ft, disadv vs prone/movement, Disadv on grapple/disarm checks.*
-
-9. **Psychic - Scrambled:**
-    - **(P2) Save Disadvantage (Broad)**
-    - **(S2) Concentration Disadvantage**
-    - **(M1) Skill Disadvantage (Insight checks)**
-    - *Result: Disadv on all Saves & Conc. saves, Disadv on Insight checks.*
-
-10. **Force - Unstable:**
-    - **(P3) AC Penalty (-2)**
-    - **(S5) Hindered Movement** (Speed -10ft, disadv vs prone/move)
-    - **(M3) Opportune Push**
-    - *Result: -2 AC, Speed -10ft, disadv vs prone/movement, moved extra 5ft when pushed/pulled.*
-
-11. **Sound - Deafened:**
-    - **(P2) Save Disadvantage (Broad)**
-    - **(S2) Concentration Disadvantage**
-    - **(M6) Casting Interference**
-    - *Result: Disadv on all Saves & Conc. saves, must make DC 10 Con check to cast V spells.*
-
-12. **Toxic - Enfeebled:**
-    - **(P1) Attack Disadvantage**
-    - **(S1) Save Disadvantage (Con)**
-    - **(M1) Skill Disadvantage (Constitution checks)**
-    - *Result: Disadv on Attacks, Con Saves, & Con checks.*
+| # | Essence  | Status Name | What happens to the target? *(all last until start of your next turn unless noted)* |
+|---|----------|-------------|--------------------------------------------------------------------------------------------------------------------|
+| 1 | **Fire** | **Ignited** | • Disadvantage on all attack rolls  ⟡ Takes **double damage from Cold**  ⟡ Glows faintly (sheds dim light) |
+| 2 | **Cold** | **Frozen** | • Speed drops to **5 ft**  ⟡ Takes **double damage from Fire**  ⟡ Disadvantage on **Athletics** checks |
+| 3 | **Life** | **Overgrown** | • Speed drops to **5 ft**  ⟡ Attacks **against** the target have **advantage**  ⟡ Disadvantage on grapple/disarm attempts |
+| 4 | **Necrotic** | **Withered** | • Disadvantage on all attack rolls  ⟡ Disadvantage on **Constitution saves**  ⟡ Disadvantage on **Strength** checks |
+| 5 | **Light** | **Dazzled** | • Disadvantage on all attack rolls  ⟡ Disadvantage on **Wisdom saves**  ⟡ Cannot benefit from half or three‑quarters cover vs you |
+| 6 | **Shadow** | **Shrouded** | • Armor Class −2  ⟡ Takes **extra damage = your Spell Mod** the **first time** it is hit each turn  ⟡ Disadvantage on sight‑based **Perception** |
+| 7 | **Lightning** | **Conductive** | • Disadvantage on all attack rolls  ⟡ Takes **extra damage = your Spell Mod** the **first time** it is hit each turn  ⟡ Disadvantage on **Dexterity** checks |
+| 8 | **Earth** | **Weighted** | • Armor Class −2  ⟡ Takes **extra damage = your Spell Mod** the **first time** it is hit each turn  ⟡ Disadvantage on grapple/disarm attempts |
+| 9 | **Psychic** | **Scrambled** | • Disadvantage on **all saving throws**  ⟡ Speed −10 ft & disadvantage vs being pushed or knocked prone  ⟡ Disadvantage on **Insight** checks |
+|10 | **Force** | **Unstable** | • Armor Class −2  ⟡ Attacks **against** the target have **advantage**  ⟡ When pushed or pulled, it moves **+5 ft** farther |
+|11 | **Sound** | **Deafened** | • Disadvantage on **all saving throws**  ⟡ Attacks **against** the target have **advantage**  ⟡ Must pass **DC 10 Con** check to cast spells with a verbal component |
+|12 | **Toxic** | **Enfeebled** | • Disadvantage on all attack rolls  ⟡ Disadvantage on **Constitution saves**  ⟡ Disadvantage on **Constitution** checks |
 
 ## Section 5: Enhancements
 
@@ -665,7 +607,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
     - *Effect:* Replaces Basic Effect. Your base AC becomes **13 + your Dexterity modifier**. No Concentration.
     - **Unique Enhancements for this Mode:**
       - *Armour Other:* **+2 SP** Target becomes one willing creature touched instead of Self.
-      - *Greater Armor:* **+2 SP** The AC formula becomes 14 + Dex Mod (max +2 from Dex). (Total cost 2 SP+). Requires separate learning.
+      - *Greater Armor:* **+2 SP** The AC formula becomes 14 + Dex Mod. (Total cost 2 SP+). Requires separate learning.
 
 - **General Enhancements (Add SP cost to applicable Mode's cost):**
   - *Sustain Ward:* **+1 SP per step.** (Essence Ward only). Increases Concentration duration step (1 min -> 10 min -> 1 hour).
@@ -711,7 +653,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 
 ### **5.4.11 Heal Enhancements**
 
-> *Basic Effect Refresher: 0 SP, 1 Action, Touch. Target regains **1d4** hit points OR becomes stabilized if dying.*
+> *Basic Effect Refresher: 0 SP, 1 Action, Touch. Target regains **1d4** + spellcasting ability modifier hit points OR becomes stabilized if dying.*
 
 - **Modes (Choose one when casting):**
 
