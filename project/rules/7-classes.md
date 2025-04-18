@@ -50,7 +50,6 @@ Champions harness raw physical power, translating overwhelming Strength into tan
 
 | Spell Category           | Details                                                 |
 |:-------------------------|:--------------------------------------------------------|
-| **Total Known**          | 4                                                       |
 | Core Attack              | `Strike`                                                |
 | Unique Thematic          | `Barrier`                                               |
 | Choice Spells (Choose 2) | Blast, Debilitate, Defend, Empower/Enfeeble, Heal, Zone |
@@ -82,7 +81,6 @@ Tricksters excel through speed, precision, and cunning, their enhanced agility a
 
 | Spell Category           | Details                                                   |
 |:-------------------------|:----------------------------------------------------------|
-| **Total Known**          | 4                                                         |
 | Core Attack              | Choose `Strike` OR `Bolt`                                 |
 | Unique Thematic          | `Move`                                                    |
 | Choice Spells (Choose 2) | Blast, Communicate, Conduit, Debilitate, Defend, Illusion |
@@ -114,7 +112,6 @@ Adapters draw power from their remarkable resilience and life force, their bodie
 
 | Spell Category           | Details                                       |
 |:-------------------------|:----------------------------------------------|
-| **Total Known**          | 4                                             |
 | Core Attack              | Choose `Strike` OR `Bolt`                     |
 | Unique Thematic          | `Adapt Self`                                  |
 | Choice Spells (Choose 2) | Blast, Debilitate, Defend, Heal, Summon, Zone |
@@ -146,7 +143,6 @@ Scholars reshape reality through careful study, pattern recognition, and the pre
 
 | Spell Category           | Details                                                |
 |:-------------------------|:-------------------------------------------------------|
-| **Total Known**          | 4                                                      |
 | Core Attack              | `Bolt`                                                 |
 | Unique Thematic          | `Manipulate`                                           |
 | Choice Spells (Choose 2) | Blast, Communicate, Debilitate, Defend, Illusion, Zone |
@@ -178,7 +174,6 @@ Sages perceive what others cannot, drawing on intuition, experience, and a conne
 
 | Spell Category           | Details                                          |
 |:-------------------------|:-------------------------------------------------|
-| **Total Known**          | 4                                                |
 | Core Attack              | Choose `Strike` OR `Bolt`                        |
 | Unique Thematic          | `Arcane Sight`                                   |
 | Choice Spells (Choose 2) | Communicate, Conduit, Defend, Heal, Summon, Zone |
@@ -210,7 +205,6 @@ Orators command attention and shape reality through sheer force of personality, 
 
 | Spell Category           | Details                                                            |
 |:-------------------------|:-------------------------------------------------------------------|
-| **Total Known**          | 4                                                                  |
 | Core Attack              | `Bolt`                                                             |
 | Unique Thematic          | `Influence`                                                        |
 | Choice Spells (Choose 2) | Blast, Communicate, Debilitate, Empower/Enfeeble, Illusion, Summon |
