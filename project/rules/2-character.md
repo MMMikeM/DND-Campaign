@@ -11,63 +11,51 @@ Before touching dice or numbers, envision who your character is at their core. W
 - **What's their approach to problems?** Bold confrontation? Clever misdirection? Careful observation? Inspiring leadership?
 - **What sets them apart?** Unusual talents? A distinctive appearance? A unique perspective shaped by their past?
 
-> **Quick Concept Builder**: Pick one trait from each column (Or roll a d6 for each) to jumpstart your character concept:
->
-Background
+> **Quick Concept Builder**: Pick one option from each table (or roll a d6 for each) to jumpstart your character concept:
 
-    Disgraced noble
+**Table 1: Background**
 
-    Former cultist
+| d6 | Background            |
+|:--:|:----------------------|
+| 1  | Disgraced noble       |
+| 2  | Former cultist        |
+| 3  | Wilderness survivor   |
+| 4  | Guild‑trained artisan |
+| 5  | Street criminal       |
+| 6  | Accidental hero       |
 
-    Wilderness survivor
+**Table 2: Motivation**
 
-    Guild‑trained artisan
+| d6 | Motivation |
+|:--:|:-----------|
+| 1  | Revenge    |
+| 2  | Redemption |
+| 3  | Discovery  |
+| 4  | Protection |
+| 5  | Ambition   |
+| 6  | Legacy     |
 
-    Street criminal
+**Table 3: Temperament**
 
-    Accidental hero
+| d6 | Temperament |
+|:--:|:------------|
+| 1  | Calculated  |
+| 2  | Impulsive   |
+| 3  | Stoic       |
+| 4  | Curious     |
+| 5  | Passionate  |
+| 6  | Cautious    |
 
-Motivation
+**Table 4: Approach**
 
-    Revenge
-
-    Redemption
-
-    Greed
-
-    Escape
-
-    Power
-
-    Love
-
-Fatal Flaw
-
-    Pride
-
-    Addiction
-
-    Paranoia
-
-    Cowardice
-
-    Arrogance
-
-    Jealousy
-
-Hidden Strength
-
-    Unexpected empathy
-
-    Strategic brilliance
-
-    Unwavering loyalty
-
-    Brutal pragmatism
-
-    Selective morality
-
-    Unflinching resolve
+| d6 | Approach               |
+|:--:|:-----------------------|
+| 1  | Scholarly analysis     |
+| 2  | Brute force            |
+| 3  | Social manipulation    |
+| 4  | Intuitive instinct     |
+| 5  | Adaptive improvisation |
+| 6  | Meticulous planning    |
 
 ### 2.2 Defining Capabilities: Ability Scores
 
@@ -166,11 +154,11 @@ Compelling heroes have flaws. Your hindrance is a significant weakness or compli
 
 When your hindrance meaningfully complicates things during play or inspires a creative narrative, the GM may award a **Fate Undo Token** (typically when the hindrance creates a genuine obstacle).
 
-**Fate Undo Tokens** represent your character's ability to persevere despite their limitations and allow you to
+**Fate Undo Tokens** represent your character's ability to persevere despite their limitations and allow you to:
 
-- Undo a your last roll
+- Undo your last roll
 - Undo a roll against you
-- Undo a your last narrative action
+- Undo your last narrative action
 
 Create your own hindrance or use these as inspiration:
 
