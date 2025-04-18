@@ -13,7 +13,7 @@ Before touching dice or numbers, envision who your character is at their core. W
 
 > **Quick Concept Builder**: Pick one option from each table (or roll a d6 for each) to jumpstart your character concept:
 
-**Table 1: Background**
+#### **Table 1: Background**
 
 | d6 | Background            |
 |:--:|:----------------------|
@@ -24,7 +24,7 @@ Before touching dice or numbers, envision who your character is at their core. W
 | 5  | Street criminal       |
 | 6  | Accidental hero       |
 
-**Table 2: Motivation**
+#### **Table 2: Motivation**
 
 | d6 | Motivation |
 |:--:|:-----------|
@@ -35,7 +35,7 @@ Before touching dice or numbers, envision who your character is at their core. W
 | 5  | Ambition   |
 | 6  | Legacy     |
 
-**Table 3: Temperament**
+#### **Table 3: Temperament**
 
 | d6 | Temperament |
 |:--:|:------------|
@@ -46,7 +46,7 @@ Before touching dice or numbers, envision who your character is at their core. W
 | 5  | Passionate  |
 | 6  | Cautious    |
 
-**Table 4: Approach**
+#### **Table 4: Approach**
 
 | d6 | Approach               |
 |:--:|:-----------------------|
