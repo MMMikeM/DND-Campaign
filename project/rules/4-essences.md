@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD041 -->
 ## 4: Essences
 
 ### **4.1 Defining Essences**
