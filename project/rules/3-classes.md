@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 ## **3. Classes**
 
-This section details the core classes available in Mike's TTRPG Rules. Each class is tied to one of the six core ability scores and provides a unique thematic and mechanical framework. Your class determines your starting hit points, proficiencies, class features gained at higher levels, and your access to **Spells**.
+This section details the core classes available in Mike's TTRPG Rules. Each class is tied to one of the six core ability scores and provides a unique and mechanical framework. Your class determines your starting hit points, proficiencies, class features gained at higher levels, and your access to **Spells**.
 
 ### **3.1 Gaining Class Features**
 
@@ -12,7 +12,7 @@ As you gain levels in a class, you will unlock new features, including potential
 At 1st level (or when you first gain access to Spells through your class), you **know** a total of **four Spells**. The specific spells are determined as follows:
 
 1. **Core Attack Spell:** Your class grants you knowledge of either `Strike` or `Bolt`, or allows you to choose one of them.
-2. **Unique Thematic Spell:** Your class grants you knowledge of a specific mandatory Spell that embodies its core concept.
+2. **Unique Spell:** Your class grants you knowledge of a specific mandatory Spell that embodies its core concept.
 3. **Choice Spells (Choose 2):** You choose two additional Spells from your class's specific **Available Spells** list.
 
 ### **3.3 Class Descriptions**
@@ -51,7 +51,7 @@ Champions harness raw physical power, translating overwhelming Strength into tan
 | Spell Category           | Details                                                 |
 |:-------------------------|:--------------------------------------------------------|
 | Core Attack              | `Strike`                                                |
-| Unique Thematic          | `Barrier`                                               |
+| Unique                   | `Barrier`                                               |
 | Choice Spells (Choose 2) | Blast, Debilitate, Defend, Empower/Enfeeble, Heal, Zone |
 
 ---
@@ -82,7 +82,7 @@ Tricksters excel through speed, precision, and cunning, their enhanced agility a
 | Spell Category           | Details                                                   |
 |:-------------------------|:----------------------------------------------------------|
 | Core Attack              | Choose `Strike` OR `Bolt`                                 |
-| Unique Thematic          | `Move`                                                    |
+| Unique                   | `Move`                                                    |
 | Choice Spells (Choose 2) | Blast, Communicate, Conduit, Debilitate, Defend, Illusion |
 
 ---
@@ -113,7 +113,7 @@ Adapters draw power from their remarkable resilience and life force, their bodie
 | Spell Category           | Details                                       |
 |:-------------------------|:----------------------------------------------|
 | Core Attack              | Choose `Strike` OR `Bolt`                     |
-| Unique Thematic          | `Adapt Self`                                  |
+| Unique                   | `Adapt Self`                                  |
 | Choice Spells (Choose 2) | Blast, Debilitate, Defend, Heal, Summon, Zone |
 
 ---
@@ -144,7 +144,7 @@ Scholars reshape reality through careful study, pattern recognition, and the pre
 | Spell Category           | Details                                                |
 |:-------------------------|:-------------------------------------------------------|
 | Core Attack              | `Bolt`                                                 |
-| Unique Thematic          | `Manipulate`                                           |
+| Unique                   | `Manipulate`                                           |
 | Choice Spells (Choose 2) | Blast, Communicate, Debilitate, Defend, Illusion, Zone |
 
 ---
@@ -175,7 +175,7 @@ Sages perceive what others cannot, drawing on intuition, experience, and a conne
 | Spell Category           | Details                                          |
 |:-------------------------|:-------------------------------------------------|
 | Core Attack              | Choose `Strike` OR `Bolt`                        |
-| Unique Thematic          | `Arcane Sight`                                   |
+| Unique                   | `Arcane Sight`                                   |
 | Choice Spells (Choose 2) | Communicate, Conduit, Defend, Heal, Summon, Zone |
 
 ---
@@ -206,7 +206,7 @@ Orators command attention and shape reality through sheer force of personality, 
 | Spell Category           | Details                                                            |
 |:-------------------------|:-------------------------------------------------------------------|
 | Core Attack              | `Bolt`                                                             |
-| Unique Thematic          | `Influence`                                                        |
+| Unique                   | `Influence`                                                        |
 | Choice Spells (Choose 2) | Blast, Communicate, Debilitate, Empower/Enfeeble, Illusion, Summon |
 
 ---

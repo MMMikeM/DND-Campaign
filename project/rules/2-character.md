@@ -7,17 +7,18 @@ Character creation isn't about filling out a form—it's about crafting someone 
 
 Before touching dice or numbers, envision who your character is at their core. What drives them? What makes them memorable? Consider:
 
-- **What's their story?** A village healer who whispers to spirits? A former soldier whose scars glow when danger approaches? A street-smart hustler who learned magic by accident?
-- **How does their magic *feel*?** (We'll define the specifics later with Essences). Is it controlled and precise? Wild and raw? Ancient and solemn? Born of emotion?
+- **What's their story?** A village healer who whispers to spirits? A former soldier with nothing else to live for? A street-smart hustler who learned magic by accident?
 - **What's their approach to problems?** Bold confrontation? Clever misdirection? Careful observation? Inspiring leadership?
 
 > **Quick Concept Builder**: Pick one trait from each: [determined/curious/cautious] + [protector/seeker/rebel/survivor] + [disciplined/instinctive/scholarly/charismatic]
 
 ### 2.2 Defining Capabilities: Ability Scores
 
-Your character's natural talents are represented by six core abilities. These modifiers will affect nearly every roll you make. Assign each modifier from this set to one ability score:
+Your character's natural talents are represented by six core abilities. 
+These modifiers will affect nearly every roll you make. 
+Assign each modifier from this set to one ability score:
 
-**+3, +2, +2, +1, +1, +0**
+**+3, +2, +1, +0, +0, -1**
 
 - **Strength (Str)**: Physical power and athletic capability
 - **Dexterity (Dex)**: Agility, reflexes, and coordination
@@ -33,26 +34,35 @@ Think about your Concept. Which ability best represents their primary strength? 
 
 Your background is who you were *before* adventure called. It shaped your skills and connections. Instead of rigid categories, define your background by selecting:
 
-1. **Two Skill Proficiencies:** Choose **two** skills from the standard list (Acrobatics, Animal Handling, Arcana, Athletics, Deception, History, Insight, Intimidation, Investigation, Medicine, Nature, Perception, Performance, Persuasion, Religion, Sleight of Hand, Stealth, Survival). Proficiency means you add your Proficiency Bonus (+2 at 1st level) to checks made with that skill. Choose skills that reflect your past experiences.
+1. **Two Skill Proficiencies:** Choose **two** skills from the standard list, to gain +3 to checks made with that skill. Choose skills that reflect your past experiences.
 2. **A Story Hook:** Create a connection to the world that your GM can use to draw you into adventures. This is a narrative benefit, not a mechanical one. Examples:
+  
     - "I have contacts in the thieves' guild who still owe me favors."
     - "The remote monastery where I trained still seeks my counsel."
     - "My family name opens doors in certain noble circles."
     - "I know secret routes through the wilderness few others have mapped."
-3. **(Optional) Tool or Language Proficiency:** You may gain proficiency with a specific tool (like thieves' tools, an artisan's kit) or learn an additional language relevant to your concept. Discuss with your GM.
+
+Skill Proficiencies:
+
+| Str        | Dex            | Con          | Int          | Wis             | Cha          |
+| :--------- | :------------- | :----------- | :----------- | :-------------- | :----------- |
+| Athletics  | Acrobatics     | *(None)*     | Arcana       | Animal Handling | Deception    |
+|            | Sleight of Hand|              | History      | Insight         | Intimidation |
+|            | Stealth        |              | Investigation| Medicine        | Performance  |
+|            |                |              | Nature       | Perception      | Persuasion   |
+|            |                |              | Religion     | Survival        |              |
+
 
 ### 2.4 Defining Your Path: Choose Your Class
 
 Your Class defines *how* your character channels magical power and approaches challenges in the present. It provides your core archetype and mechanical framework.
 
-1. **Review the Classes:** Read through the descriptions in **Section 7: Classes**. Pay attention to the **Core Ability** score for each class – ideally, this should match the ability where you placed your +3 modifier in Step 2.2. Choose the Class that best fits your Character Concept.
+1. **Review the Classes:** Read through the descriptions in **Section 7: Classes**. Pay attention to the **Unique Spell** and **Key Ability** score for each class – ideally, this should match the ability where you placed your +3 modifier in Step 2.2. Choose the Class that best fits your Character Concept.
 2. **Note Your Class Benefits:** Your chosen class determines several key things:
-    - One **Core Spell**, unique to your class.
+    - One **Unique Spell**, that is unique to your chosen class.
     - What your **Key Attribute** is.
-    - Your **Proficiencies:** Armor, weapons, saving throws.
+    - Your armor, weapon and saving throw **Proficiencies** are.
     - Your **Health Points** (used for Hit Points in Step 2.8).
-
-Record these benefits on your character sheet.
 
 ### 2.5 Shaping Your Magic: Choose Essences
 
@@ -65,13 +75,12 @@ Record these benefits on your character sheet.
   - A Sage attuned to nature might choose **Life** and **Earth**.
 - **Remember Their Use:** When you activate a Spell (Step 2.6), you'll choose *one* of your known Essences to apply, determining its damage type (if any) and providing the descriptive flavor. Enhancements (Step 2.9) may later allow you to add the Essence's associated status effect.
 
-Record your two chosen Essences.
 
 ### 2.6 Mastering Effects: Selecting Spells
 
-Your Class (Step 6.4) grants you access to **Spells** – the fundamental templates for your magical effects. At 1st level, you **know four Spells**. You do not need to prepare them daily.
+Your Class (Step 2.4) grants you access to **Spells** – the fundamental templates for your magical effects. At 1st level, you **know four Spells**. You do not need to prepare them daily.
 
-Refer to your chosen Class description in **Section 7.3** and the general spell rules in **Section 3: Spells** to determine your starting spells:
+Refer to your chosen Class description in **Section 2.3** and the general spell rules in **Section 3: Spells** to determine your starting spells:
 
 1. **Core Attack Spell:** Your class grants you knowledge of `Strike`, `Bolt`, or lets you choose one. Note this spell.
 2. **Unique Thematic Spell:** Your class grants you knowledge of a specific mandatory Spell central to its theme (e.g., `Barrier` for Champion, `Move` for Trickster). Note this spell.
@@ -83,7 +92,7 @@ You now know your four starting Spells. Familiarize yourself with their **Basic 
 
 Compelling heroes have flaws. Your hindrance is a significant weakness or complication that occasionally creates trouble—but also adds depth and roleplaying opportunities.
 
-When your hindrance meaningfully complicates things during play, the GM might award **Inspiration** (advantage on a crucial roll when you need it most).
+When your hindrance meaningfully complicates things during play, the GM might award **Fate Undo Tokens** (advantage on a crucial roll when you need it most).
 
 Create your own hindrance or use these as inspiration:
 
@@ -94,7 +103,6 @@ Create your own hindrance or use these as inspiration:
 - **Skeptical**: You distrust what others accept, sometimes to your detriment.
 - **Stubbornly Independent**: You refuse help even when you need it.
 
-Record your Hindrance.
 
 ### 6.8 Calculating Vitality: Hit Points (HP)
 
@@ -102,18 +110,11 @@ Your Hit Points determine how much punishment you can take before falling uncons
 
 - **Starting HP at 1st Level:** `Maximum value of your Class Hit Die + your Constitution modifier` (from Step 6.2).
   - *Example:* A Champion (d10 Hit Die) with a +2 Constitution modifier starts with 10 + 2 = 12 HP.
-- **HP Gain on Level Up:** When you gain a level after 1st, you gain additional HP. Consult your GM on whether you roll or take the average: `Roll your Class Hit Die + Con modifier` OR `Take the average roll rounded up (d6=4, d8=5, d10=6, d12=7) + Con modifier`.
+- **HP Gain on Level Up:** When you gain a level after 1st, you gain additional HP. `Take the half your class hit die rounded up (d6=4, d8=5, d10=6, d12=7) + Con modifier`.
 
 Record your starting HP.
 
-### 6.9 Future Growth: Understanding Enhancements & Spell Points
-
-As you adventure, you'll gain power and learn to augment your Spells using **Enhancements**, fueled by **Spell Points (SP)**.
-
-- **Spell Points (SP):** This is your pool of magical energy. You spend SP to activate potent **Modes** of your Spells (beyond the 0 SP Basic Effect) and add **Enhancements**. Your maximum SP is determined by your level (Level 1 = 10 SP). You regain all SP on a Long Rest. See **Section 2: Spell Points** for full details, including the Maximum SP you can spend per activation. Note your starting SP (10) and Max SP per Activation (3) on your sheet.
-- **Enhancements:** These are specific modifications you learn for your Spells as you level up, allowing you to increase damage, add effects, change targets, and more. **You do not choose Enhancements at 1st level.** They represent your character refining their magical techniques over time. Refer to **Section 5: Enhancements** to see the kinds of options that will become available later.
-
-### 6.10 The Final Flourishes
+### 6.9 The Final Flourishes
 
 Fill in the remaining details that bring your character fully to life:
 
@@ -122,8 +123,7 @@ Fill in the remaining details that bring your character fully to life:
 - **Personality:** Briefly note key traits, ideals, bonds, and how your Hindrance manifests.
 - **Anchor**: What keeps you grounded? (A memento? A promise? A person?)
 - **Question**: What mystery or unresolved question drives you forward?
-- **Alignment (Optional):** If your game uses it, note your character's general moral/ethical outlook (e.g., Lawful Good, Chaotic Neutral).
 
 ---
 
-Remember, characters evolve through play. You don't need to have everything perfect now—the most memorable character developments often emerge organically from shared adventures! You're ready to begin!
+Remember, characters evolve. You don't need to have everything perfect to start having fun; the most memorable character developments often emerge organically from shared adventures and improvisation! You're ready to begin!
