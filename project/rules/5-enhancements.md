@@ -44,8 +44,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Duration** | Concentration, up to 10 min                                                                                                                       |
 | **Effect**   | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration. (Base cost includes their SP cost). |
 
----
-
 ### Mode: Beast Shape ✦ 5 SP
 
 | Property     | Value                                                                                                                                                                                                                                               |
@@ -56,8 +54,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Effect**   | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), +2 AC, Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
 | **Limits**   | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion).                                                                                                                         |
 
----
-
 ### Mode: Elemental Body ✦ 5 SP
 
 | Property     | Value                                                                                                                                                                                                                                                                                        |
@@ -67,8 +63,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Duration** | Concentration, up to 10 min                                                                                                                                                                                                                                                                  |
 | **Effect**   | Body partially transforms into Essence type. Gain: Resistance to Essence damage type, Unarmed strikes deal 1d10 magical Essence damage, Move through 1-inch spaces without squeezing, Ignore non-magical difficult terrain, Retaliation damage (Spell Mod Essence) on melee hit within 5 ft. |
 | **Limits**   | Minor environmental interactions (ignite, freeze, dim light) based on Essence (GM discretion). May appear obviously magical.                                                                                                                                                                 |
-
----
 
 ### General Enhancements (Adapt Self)
 
@@ -93,8 +87,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, 1 Action, Self (30ft), Instantaneous): Briefly sense presence/direction of active magic OR make check DC 10 to suppress lowest-level magic effect on target until start of your next turn.
 
----
-
 ### Mode: Detect Magic ✦ 2 SP
 
 | Property     | Value                                                                                                                                             |
@@ -115,8 +107,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Sustain Detection    | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours).                                                                     |
 | Persistent Detection | +3 SP        | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                               |
 
----
-
 ### Mode: Dispel Magic ✦ 4 SP
 
 | Property     | Value                                                                                                                                           |
@@ -134,8 +124,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Area Dispel           | +3 SP   | Affects 10-ft radius sphere. Attempt dispel on *one* effect (lowest SP or targeted) on each target. Rolls separate. (Total 7 SP+). |
 | Lingering Suppression | +1 SP   | If check fails, target effect suppressed (inactive) until end of **your** next turn. (Total 5 SP+).                                |
 
----
-
 ### Mode: Counterspell ✦ 4 SP
 
 | Property     | Value                                                                                                                              |
@@ -150,8 +138,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Enhancement            | SP Cost | Effect                                     |
 |:-----------------------|:--------|:-------------------------------------------|
 | Extended Counter Range | +1 SP   | Increase range to 120 feet. (Total 5 SP+). |
-
----
 
 ### General Enhancements (Arcane Sight)
 
@@ -169,8 +155,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): 5x5 plane, half cover (+2 AC/+2 Dex), 5 HP.
 
----
-
 ### Mode: Standard Barrier ✦ 3 SP
 
 | Property     | Value                                                                                                                                                            |
@@ -179,8 +163,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Range**    | 60 ft                                                                                                                                                            |
 | **Duration** | Concentration, up to 10 min                                                                                                                                      |
 | **Effect**   | Creates flat, vertical, opaque barrier (up to 10x10 ft plane OR 5-ft radius sphere/hemisphere). Provides total cover. AC 10, HP 15. Collapses at 0 HP. Anchored. |
-
----
 
 ### Mode: Shaped Barrier ✦ 4 SP (Simple) / 5 SP (Complex)
 
@@ -191,8 +173,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Duration** | Concentration, up to 10 min                                                                                                               |
 | **Effect**   | As Standard Barrier, but allows creating specific forms (e.g., 10x10x10 ft cube, 30 ft long bridge) within overall size limits. Anchored. |
 
----
-
 ### Mode: Mobile Barrier ✦ 5 SP
 
 | Property     | Value                                                                                             |
@@ -201,8 +181,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Range**    | 60 ft                                                                                             |
 | **Duration** | Concentration, up to 10 min                                                                       |
 | **Effect**   | As Standard Barrier, but use Action while concentrating to move barrier up to 20 ft within range. |
-
----
 
 ### General Enhancements (Barrier)
 
@@ -223,8 +201,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, 1 Action, Self (10-ft cone)): Dex save vs 1d8 Essence damage, half on success.
 
----
-
 ### Mode: Cone Blast ✦ 2 SP
 
 | Property     | Value                                                                            |
@@ -239,8 +215,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Enhancement | SP Cost | Effect                           |
 |:------------|:--------|:---------------------------------|
 | Mega Cone   | +2 SP   | Increase cone length to 30 feet. |
-
----
 
 ### Mode: Orb Blast ✦ 2 SP
 
@@ -258,8 +232,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Large Orb   | +1 SP   | Increase radius to 10 feet. |
 | Mega Orb    | +3 SP   | Increase radius to 15 feet. |
 
----
-
 ### Mode: Lancing Blast ✦ 2 SP
 
 | Property     | Value                                                                                                                                                                               |
@@ -275,8 +247,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 |:---------------|:--------|:------------------------------------------------------|
 | Piercing Lance | +1 SP   | Increase line length to 30 feet.                      |
 | Twin Lance     | +2 SP   | Create two separate Lancing Blasts with this casting. |
-
----
 
 ### General Enhancements (Blast)
 
@@ -297,8 +267,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, 1 Action, 60 ft range): Ranged spell attack, 1d10 damage.
 
----
-
 ### Mode: Standard Bolt ✦ 2 SP
 
 | Property     | Value                                                              |
@@ -318,8 +286,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | ↳ Change Save (Physical) | +1 SP   | (Requires: Seeking Bolt Enhancement) Changes the required save to Strength or Constitution.                                                                                                            |
 | ↳ Change Save (Mental)   | +1 SP   | (Requires: Seeking Bolt Enhancement) Changes the required save to Wisdom, Intelligence, or Charisma.                                                                                                   |
 
----
-
 ### Mode: Area Bolt ✦ 3 SP
 
 | Property     | Value                                                                                                      |
@@ -334,8 +300,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Enhancement      | SP Cost | Effect                                                       |
 |:-----------------|:--------|:-------------------------------------------------------------|
 | Expand Area Bolt | +1 SP   | Increase the radius of the sphere by +5 feet. (*Stackable*). |
-
----
 
 ### Mode: Channeled Bolt ✦ 3 SP
 
@@ -354,8 +318,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Increase Channel Damage | +2 SP   | Increase subsequent Action damage by +1d8. (*Stackable*).                                                  |
 | Tenacious Channel       | +2 SP   | Concentration is not broken if you use your Action to cast a non-attack spell or take a non-Attack action. |
 
----
-
 ### General Enhancements (Bolt)
 
 | Enhancement       | SP Cost | Effect                                                                                                                                                                    |
@@ -371,8 +333,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 ### 5.4.6 Communicate
 
 > **Basic Effect** (0 SP, 1 Action, 60ft range): Send one-way, 10-word telepathic message, bypasses language, no reply.
-
----
 
 ### Mode: Direct Link ✦ 2 SP
 
@@ -393,8 +353,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Encrypt Link      | +1 SP          | Link resists interception (Int check vs Spell Save DC).                                                                                         |
 | Emotional Hue     | +1 SP          | Imbue communication with simple, strong emotion (calm, fear, joy, etc.).                                                                        |
 
----
-
 ### Mode: Sensory Scry ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                                                                                                                                                          |
@@ -412,8 +370,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Share Senses           | +2 SP   | (Applies To: Link Senses) Target one additional willing creature. Use Action to switch between targets. |
 | Two-Way Senses         | +2 SP   | (Applies To: Link Senses) Target(s) can use their Action to perceive through your senses.               |
 | Deepen Imprint Reading | +1 SP   | (Applies To: Read Imprint) Gain clearer images/sounds. Advantage on Investigation check.                |
-
----
 
 ### Mode: Universal Channel ✦ 1 SP
 
@@ -435,8 +391,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Swap Effect: Relay Net | +2 SP        | Change effect: Range 120 ft. Link up to 3 willing creatures (inc. self) for 10 mins (no Conc.). Linked members send 10-word telepathic messages to each other 1/round (no action).    |
 | Extended Understanding | +1 SP / step | (Requires: Base Effect, Written Word, or Speak to Beasts) Increase non-Concentration duration step (1 hour → 8 hours).                                                                |
 
----
-
 ### General Enhancements (Communicate)
 
 | Enhancement          | SP Cost      | Effect                                                                                                                        |
@@ -454,8 +408,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, reaction, 30ft, 1 round): When an ally declares an attack against a creature you can see, the triggering attack roll has advantage.
 
----
-
 ### Mode: Target Vulnerability ✦ 2 SP
 
 | Property     | Value                                                                                                                                                |
@@ -471,8 +423,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 |:------------------------|:--------|:----------------------------------------------------------------------------------|
 | Lingering Vulnerability | +1 SP   | If target succeeds save, vulnerability persists until the *end* of its next turn. |
 | Deepen Vulnerability    | +2 SP   | Target has disadvantage on its saving throws to end this effect.                  |
-
----
 
 ### Mode: Collaborative Strike ✦ 3 SP
 
@@ -490,8 +440,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Amplify Collaboration | +1 SP   | Increase the bonus damage dealt by allies by +1d8. (*Stackable*).         |
 | Personal Strike       | +1 SP   | Your own attacks can also trigger the bonus damage (once per turn total). |
 
----
-
 ### Mode: Resonance Field ✦ 4 SP
 
 | Property     | Value                                                                                                                                                                                                               |
@@ -507,8 +455,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 |:-------------------|:---------------|:-----------------------------------------------------|
 | Harmonic Resonance | +2 SP          | Increase the resonance damage from Spell Mod to 1d8. |
 | Expanded Field     | +1 SP / target | Increase the number of initial targets.              |
-
----
 
 ### General Enhancements (Conduit)
 
@@ -526,8 +472,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 ### 5.4.8 Debilitate
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target makes Con save vs speed halved.
-
----
 
 ### Mode: Single Target Affliction ✦ 2 SP
 
@@ -547,8 +491,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Shared Affliction       | +2 SP   | Target an additional creature within 30 ft of primary; also makes save vs same effect.  |
 | Extreme Affliction      | +3 SP   | Target becomes Stunned instead of having the status effect applied.                     |
 
----
-
 ### Mode: Area Affliction ✦ 3 SP
 
 | Property     | Value                                                                                                                                  |
@@ -565,8 +507,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Expand Area        | +1 SP / +5ft | Increase the cube's side length by +5 feet. (*Stackable*).                                                                 |
 | Increased Duration | +2 SP        | Effect lasts Concentration, up to 1 min. Affected creatures repeat save at end of turns, ending effect on self on success. |
 
----
-
 ### General Enhancements (Debilitate)
 
 | Enhancement        | SP Cost | Effect                                                                                              |
@@ -579,8 +519,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 ### 5.4.9 Defend
 
 > **Basic Effect** (0 SP, 1 Action, Self, 1 round): Resistance to Bludgeoning, Piercing, OR Slashing.
-
----
 
 ### Mode: Essence Ward ✦ 2 SP
 
@@ -603,8 +541,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Sustain Ward       | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour).                                                   |
 | Persistent Ward    | +3 SP        | (Requires: Sustain Ward ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                |
 
----
-
 ### Mode: Reactive Shield ✦ 3 SP
 
 | Property     | Value                                                                                    |
@@ -620,8 +556,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 |:------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
 | Shield Other      | +2 SP   | Range becomes Touch. Use reaction when ally within 5 ft is hit; grant them the AC bonus. (Total 5 SP).       |
 | Deflecting Shield | +1 SP   | If the triggering attack misses due to the AC bonus, attacker takes 1d8 Force/Essence damage. (Total 4 SP+). |
-
----
 
 ### Mode: Enduring Armor ✦ 0 SP
 
@@ -645,8 +579,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target gets +1d4 OR makes Wis save vs -1d4 to ONE attack roll OR saving throw.
 
----
-
 ### Mode: Greater Empowerment ✦ 2 SP
 
 | Property     | Value                                                                                         |
@@ -661,8 +593,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Enhancement        | SP Cost        | Effect                                               |
 |:-------------------|:---------------|:-----------------------------------------------------|
 | Shared Empowerment | +1 SP / target | Target additional creatures within 30 ft of primary. |
-
----
 
 ### Mode: Greater Enfeeblement ✦ 2 SP
 
@@ -682,8 +612,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Change Save (Physical)    | +1 SP          | Change save to Strength or Constitution.            |
 | Change Save (Mental)      | +1 SP          | Change save to Intelligence or Charisma.            |
 
----
-
 ### Mode: Reactive Interference ✦ 3 SP
 
 | Property     | Value                                                             |
@@ -692,8 +620,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Range**    | 60 ft                                                             |
 | **Duration** | Instantaneous                                                     |
 | **Effect**   | Target rerolls the triggering d20, must use the lower result.     |
-
----
 
 ### Mode: Reactive Fortune ✦ 3 SP
 
@@ -704,8 +630,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Duration** | Instantaneous                                                                                                   |
 | **Effect**   | Target rerolls the triggering d20, potentially changing the outcome (use higher for fail, lower for hit vs AC). |
 
----
-
 ### General Enhancements (Empower/Enfeeble)
 
 | Enhancement       | SP Cost      | Effect                                                                                                                |
@@ -715,15 +639,10 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Persistent Effect | +3 SP        | (Applies To: Greater Empowerment, Greater Enfeeblement) (Requires: Sustain Effect ≥ 1 hour) Duration 1 hour, no Conc. |
 
 ---
-Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipulate untouched as requested.
-
----
 
 ### 5.4.11 Heal
 
 > **Basic Effect** (0 SP, 1 Action, Touch): Target regains **1d4** + spellcasting ability modifier hit points OR becomes stabilized if dying.
-
----
 
 ### Mode: Standard Heal ✦ 2 SP
 
@@ -741,8 +660,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Distant Heal | +1 SP          | Range becomes 60 feet.                                                                                     |
 | Shared Heal  | +2 SP / target | Target additional willing creatures within 30 ft of original. Healing amount rolled once, applies to each. |
 
----
-
 ### Mode: Area Heal ✦ 5 SP
 
 | Property     | Value                                                                                                                       |
@@ -759,8 +676,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Expand Area      | +1 SP / +5ft       | Increase the sphere's radius by +5 feet. (*Stackable*). |
 | Increase Targets | +1 SP / +2 targets | Increase the number of creatures you can choose.        |
 
----
-
 ### Mode: Restorative Heal ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                              |
@@ -776,11 +691,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 |:--------------------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Greater Restoration | +2 SP   | Instead end **one** effect: Curse, Petrification, Charmed, Frightened, OR reduce exhaustion by one level, OR remove one reduction to ability score/HP max. (Total cost 5 SP). |
 
----
-
 ### General Enhancements (Heal)
-
-*(Add SP cost to applicable Mode's cost)*
 
 | Enhancement  | SP Cost | Effect                                                                                                                                                                         |
 |:-------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -792,8 +703,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 ### 5.4.12 Illusion
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Basic visual OR sound illusion, like Minor Illusion.
-
----
 
 ### Mode: Sensory Illusion ✦ 2 SP
 
@@ -816,8 +725,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Sustain Sensory       | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour).                                                                         |
 | Persistent Sensory    | +3 SP        | (Requires: Sustain Sensory ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                                   |
 
----
-
 ### Mode: Personal Illusion ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                                                                                                                                                                                                       |
@@ -835,8 +742,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Sustain Blur        | +1 SP / step | (Applies To: Blurring Form) Increase Concentration duration (1 min → 10 min → 1 hour).                    |
 | Persistent Blur     | +3 SP        | (Applies To: Blurring Form) (Requires: Sustain Blur ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
----
-
 ### Mode: Invisibility ✦ 4 SP
 
 | Property     | Value                                                                            |
@@ -853,11 +758,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Improved Invisibility | +3 SP          | Effect does not end if the target attacks or casts a spell. (Total cost 7 SP+).           |
 | Share Invisibility    | +2 SP / target | Target additional creatures touched. (Total cost 6 SP+ for 2 targets, 8 SP+ for 3, etc.). |
 
----
-
 ### General Enhancements (Illusion)
-
-*(Add SP cost to applicable Mode's cost)*
 
 | Enhancement    | SP Cost | Effect                                                                                                       |
 |:---------------|:--------|:-------------------------------------------------------------------------------------------------------------|
@@ -869,8 +770,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 ### 5.4.13 Influence
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 round): Target makes Wis save or has disadvantage on its next attack roll made against **you**.
-
----
 
 ### Mode: Charm Person ✦ 2 SP
 
@@ -888,8 +787,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Share Charm   | +2 SP / target | Target additional humanoids within range.                               |
 | Sustain Charm | +2 SP / step   | Increase non-Concentration duration step (1 hour → 8 hours → 24 hours). |
 
----
-
 ### Mode: Suggest Course ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                               |
@@ -906,8 +803,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Sustain Suggestion    | +2 SP / step | Increase Concentration duration step (8 hours → 24 hours). (*Can be made Persistent*) |
 | Persistent Suggestion | +3 SP        | (Requires: Sustain Suggestion at 24 hours) Duration becomes 24 hours, no Conc.        |
 
----
-
 ### Mode: Read Thoughts ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                            |
@@ -922,8 +817,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Enhancement  | SP Cost | Effect                                                                                                                                                              |
 |:-------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Probe Deeper | +1 SP   | As Action, force linked target Int save. Fail: access deeper thoughts for 1 round. Target knows mind is probed on failed save. Success: spell ends for that target. |
-
----
 
 ### Mode: Dominate Creature ✦ 6 SP
 
@@ -941,11 +834,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Extended Domination | +2 SP / step | Increase Concentration duration step (1 min → 10 min → 1 hour). |
 | Overwhelming Will   | +2 SP        | Target has disadvantage on the initial saving throw.            |
 
----
-
 ### General Enhancements (Influence)
-
-*(Add SP cost to applicable Mode's cost)*
 
 | Enhancement        | SP Cost | Effect                                                                                                                                       |
 |:-------------------|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -960,12 +849,8 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 
 ### 5.4.14 Manipulate
 
-*(Format retained as per user request)*
-
 > **Basic Effect (0 SP)** – 1 Action, 30 ft, 1 min.
 > Simple telekinetic nudge of an unattended object ≤ 5 lb (≈ 2 kg).
-
----
 
 ### Mode — **Focused Control** ✦ 2 SP
 
@@ -978,8 +863,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Duration**      | Conc. up to 10 min                                                                                                                                                                                             |
 | **Power**         | Lift / manipulate up to **25 lb** (≈ 12 kg)                                                                                                                                                                    |
 | **Finesse**       | May perform delicate tasks: pick locks (use relevant tool prof.), tie knots, write, pour, swap items from open containers, etc. Sleight of Hand vs Perception if unaware; Acrobatics vs Spell DC if resisting. |
-
----
 
 ### Enhancements
 
@@ -1006,8 +889,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 
 > **Basic Effect** (0 SP, Special (Part of Move), Self, Instantaneous): Enhance movement: Ignore Difficult Terrain OR Avoid Opportunity Attacks OR Move Through Hostiles.
 
----
-
 ### Mode: Blink Step ✦ 2 SP
 
 | Property     | Value                                                                                                                                                                                                |
@@ -1027,8 +908,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Phase Step              | +2 SP          | Teleport allows passing through solid objects/barriers up to 5 feet thick. Must end in unoccupied space.                             |
 | Elemental Arrival       | +1 SP          | Creatures within 5 feet of arrival space take damage = Spell Mod (min 1) of your Essence type.                                       |
 
----
-
 ### Mode: Velocity Surge ✦ 2 SP
 
 | Property     | Value                                                                                         |
@@ -1037,10 +916,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Range**    | Self                                                                                          |
 | **Duration** | Instantaneous                                                                                 |
 | **Effect**   | Gain the benefits of both the **Dash** and **Disengage** actions for your movement this turn. |
-
-*(No Unique Enhancements for this Mode)*
-
----
 
 ### Mode: Reactive Phase ✦ 3 SP
 
@@ -1058,11 +933,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Increase Teleport Dist. | +1 SP / +15 ft | Increase the distance teleported. (*Stackable*).                                               |
 | Elemental Arrival       | +1 SP          | Creatures within 5 feet of arrival space take damage = Spell Mod (min 1) of your Essence type. |
 
----
-
 ### General Enhancements (Move)
-
-*(Add SP cost to applicable Mode's cost OR cast alone where noted)*
 
 | Enhancement     | SP Cost | Effect                                                                                                                                                                               |
 |:----------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -1076,8 +947,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 
 > **Basic Effect** (0 SP, 1 Action, Self, Instantaneous): Make weapon attack, if hit deals +Spell Mod Essence damage.
 
----
-
 ### Mode: Empowered Strike ✦ 2 SP
 
 | Property     | Value                                                                                   |
@@ -1086,10 +955,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Range**    | Self                                                                                    |
 | **Duration** | Instantaneous                                                                           |
 | **Effect**   | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
-
-*(No Unique Enhancements for this Mode)*
-
----
 
 ### Mode: Cleaving Strike ✦ 4 SP
 
@@ -1100,10 +965,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Duration** | Instantaneous                                                                                                                                                                                                    |
 | **Effect**   | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
 
-*(No Unique Enhancements for this Mode)*
-
----
-
 ### Mode: Piercing Strike ✦ 4 SP
 
 | Property     | Value                                                                                                                                                                                                        |
@@ -1112,10 +973,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Range**    | Self (Affects primary target + 15ft line behind)                                                                                                                                                             |
 | **Duration** | Instantaneous                                                                                                                                                                                                |
 | **Effect**   | (Ranged/Thrown Only) Make ranged weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 15ft line behind target make Dex save vs **2d8** Essence damage (half on success). |
-
-*(No Unique Enhancements for this Mode)*
-
----
 
 ### Mode: Bursting Strike ✦ 5 SP
 
@@ -1126,13 +983,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | **Duration** | Instantaneous                                                                                                                                                                                     |
 | **Effect**   | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centered on target make Dex save vs **2d8** Essence damage (half on success). |
 
-*(No Unique Enhancements for this Mode)*
-
----
-
 ### General Enhancements (Strike)
-
-*(Add SP cost to applicable Mode's cost)*
 
 | Enhancement        | SP Cost   | Effect                                                                                                                                                                 |
 |:-------------------|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -1150,8 +1001,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 ### 5.4.17 Summon
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Summons Tiny servant (AC 10, 1 HP, Speed 15ft) that can use BA to Help ally.
-
----
 
 ### Mode: Utility Familiar ✦ 2 SP
 
@@ -1173,8 +1022,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Invisibility        | +1 SP        | Familiar is invisible.                                                         |
 | Sustain Familiar    | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours).                   |
 | Persistent Familiar | +3 SP        | (Requires: Sustain Familiar ≥ 1 hour) Duration 8 hours, no Concentration.      |
-
----
 
 ### Mode: Combat Spirit ✦ 4 SP
 
@@ -1199,11 +1046,7 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Movement Mode     | +1 SP          | Gains a fly, burrow, or swim speed equal to its walking speed (choose one).                                                                                                                                                                                                                                                                               |
 | Special Maneuver  | +2 SP          | Choose one option: **Charge:** (Replaces attack) Move ≥10ft straight, attack deals +1d8 dmg, target makes Str save vs Spell DC or knocked prone. **Grapple:** (Replaces attack) Make grapple check using Spell Atk bonus. **Area Burst:** (1/summon, replaces attack) 5-ft radius burst centered on self, 2d6 Essence dmg, Dex save vs Spell DC for half. |
 
----
-
 ### General Enhancements (Summon)
-
-*(Add SP cost to applicable Mode's cost)*
 
 | Enhancement           | SP Cost | Effect                                                                                                                   |
 |:----------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------|
@@ -1216,8 +1059,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 ### 5.4.18 Zone
 
 > **Basic Effect** (0 SP, 1 Action, 60ft range, 1 round): 10-ft square area becomes Difficult Terrain.
-
----
 
 ### Mode: Hindering Zone ✦ 3 SP
 
@@ -1237,8 +1078,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Mobile Silence      | +2 SP   | (Applies To: Silence) Zone centered on a willing creature/object you choose within range, moves with it.  |
 | Tenacious Restraint | +1 SP   | (Applies To: Restraining Field) Creatures have disadvantage on the Strength saving throw.                 |
 
----
-
 ### Mode: Harmful Zone ✦ 4 SP
 
 | Property     | Value                                                                                                                                                                                                                                                                                                      |
@@ -1256,8 +1095,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 | Lingering Hazard       | +1 SP   | The zone's area also becomes difficult terrain.                                                                                |
 | Weakening Field        | +1 SP   | (Applies To: Debilitating) Creatures have disadvantage on the initial save vs the status effect.                               |
 
----
-
 ### Mode: Sanctuary Zone ✦ 4 SP
 
 | Property     | Value                                                                                                 |
@@ -1273,8 +1110,6 @@ Okay, applying the "Best of Both" format to spells 11 through 18, leaving Manipu
 |:------------------|:--------|:------------------------------------------------------------------------------------------------------|
 | Greater Sanctuary | +2 SP   | Bonus increases to +2.                                                                                |
 | Purifying Aura    | +2 SP   | Chosen creatures also have advantage on saving throws against being charmed, frightened, or poisoned. |
-
----
 
 ### General Enhancements (Zone)
 
