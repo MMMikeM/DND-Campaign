@@ -1,25 +1,25 @@
 <!-- markdownlint-disable MD041 -->
 ## Section 5: Enhancements
 
-### **5.1 Purpose of Enhancements**
+### **7.1 Purpose of Enhancements**
 
 **Enhancements** allow casters to spend **Spell Points (SP)** to augment the **Basic Effect (0 SP)** of their known Spells. The most fundamental Enhancement is the **Standard Activation Enhancement**, which unlocks the Spell's original core function at a specific SP cost. Further Enhancements allow casters to scale a Spell's effects (increasing potency, scope, or duration), add new functions, or even alter how the Spell is cast or resolved, typically building upon the Standard Activation.
 
-### **5.2 Learning and Using Enhancements**
+### **7.2 Learning and Using Enhancements**
 
 - **Learning Enhancements:** Characters typically learn Enhancements as they gain levels in their spellcasting class, often choosing **one specific Spell** they know and **one Enhancement Category** relevant to that Spell.
 - **Define the Benefit:** Working with the GM, the player defines the specific mechanical benefit and **SP** cost for the learned Enhancement. They can either:
-  - Choose a suggested Example benefit from the list in 5.4 for the chosen Spell and Category.
+  - Choose a suggested Example benefit from the list in 7.4 for the chosen Spell and Category.
   - Propose a custom benefit that fits the chosen Category, using the Examples as guidelines for balance and scope (GM approval required).
   - The player should clearly record the defined benefit and its associated SP cost. This becomes *their* unique, learned Enhancement for that Spell.
-- **Applying Enhancements:** When activating a Spell, the caster declares they are using one or more learned Enhancements for that Spell. They describe the enhanced effect and add the SP cost of all applied Enhancements to the Spell's Base SP Cost. The total SP spent cannot exceed the Maximum SP per Activation limit (see 5.3).
+- **Applying Enhancements:** When activating a Spell, the caster declares they are using one or more learned Enhancements for that Spell. They describe the enhanced effect and add the SP cost of all applied Enhancements to the Spell's Base SP Cost. The total SP spent cannot exceed the Maximum SP per Activation limit (see 7.3).
 - **Combining Enhancements:** Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory (e.g., you cannot apply two Enhancements that change the saving throw type to different stats). The SP costs are cumulative.
 
-### **5.3 Maximum SP per Activation**
+### **7.3 Maximum SP per Activation**
 
 To maintain balance across levels, there is a limit to the total number of **Spell Points (SP)** (Base SP Cost + Enhancement SP Costs) that can be spent on a single activation of any Spell. This limit typically increases as a character gains levels. The specific progression will be detailed on [Table X-Y: Maximum SP per Activation] (to be created later, likely tied to class progression or caster level).
 
-### **5.4 Enhancement Categories by Spell**
+### **7.4 Enhancement Categories by Spell**
 
 Okay, here are the first 10 enhancement sections updated to use tables, following the style of the Manipulate example.
 
@@ -29,7 +29,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.1 Adapt Self
+### 7.4.1 Adapt Self
 
 > **Basic Effect** (0 SP, 1 Action, Self, 1 min): Minor physical adaptation: +5ft speed OR Adv Athletics climb/swim OR 1d4+Str unarmed strikes.
 
@@ -83,7 +83,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.2 Arcane Sight
+### 7.4.2 Arcane Sight
 
 > **Basic Effect** (0 SP, 1 Action, Self (30ft), Instantaneous): Briefly sense presence/direction of active magic OR make check DC 10 to suppress lowest-level magic effect on target until start of your next turn.
 
@@ -151,7 +151,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.3 Barrier
+### 7.4.3 Barrier
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): 5x5 plane, half cover (+2 AC/+2 Dex), 5 HP.
 
@@ -162,7 +162,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Cast**     | 1 Action                                                                                                                                                         |
 | **Range**    | 60 ft                                                                                                                                                            |
 | **Duration** | Concentration, up to 10 min                                                                                                                                      |
-| **Effect**   | Creates flat, vertical, opaque barrier (up to 10x10 ft plane OR 5-ft radius sphere/hemisphere). Provides total cover. AC 10, HP 15. Collapses at 0 HP. Anchored. |
+| **Effect**   | Creates flat, vertical, opaque barrier (up to 10x10 ft plane OR 5-ft radius sphere/hemisphere). Provides total cover. AC 10, HP 17. Collapses at 0 HP. Anchored. |
 
 ### Mode: Shaped Barrier ✦ 4 SP (Simple) / 5 SP (Complex)
 
@@ -197,7 +197,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.4 Blast
+### 7.4.4 Blast
 
 > **Basic Effect** (0 SP, 1 Action, Self (10-ft cone)): Dex save vs 1d8 Essence damage, half on success.
 
@@ -263,7 +263,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.5 Bolt
+### 7.4.5 Bolt
 
 > **Basic Effect** (0 SP, 1 Action, 60 ft range): Ranged spell attack, 1d10 damage.
 
@@ -330,7 +330,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.6 Communicate
+### 7.4.6 Communicate
 
 > **Basic Effect** (0 SP, 1 Action, 60ft range): Send one-way, 10-word telepathic message, bypasses language, no reply.
 
@@ -404,7 +404,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.7 Conduit
+### 7.4.7 Conduit
 
 > **Basic Effect** (0 SP, reaction, 30ft, 1 round): When an ally declares an attack against a creature you can see, the triggering attack roll has advantage.
 
@@ -469,7 +469,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.8 Debilitate
+### 7.4.8 Debilitate
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target makes Con save vs speed halved.
 
@@ -516,7 +516,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.9 Defend
+### 7.4.9 Defend
 
 > **Basic Effect** (0 SP, 1 Action, Self, 1 round): Resistance to Bludgeoning, Piercing, OR Slashing.
 
@@ -575,7 +575,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.10 Empower/Enfeeble
+### 7.4.10 Empower/Enfeeble
 
 > **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target gets +1d4 OR makes Wis save vs -1d4 to ONE attack roll OR saving throw.
 
@@ -640,7 +640,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.11 Heal
+### 7.4.11 Heal
 
 > **Basic Effect** (0 SP, 1 Action, Touch): Target regains **1d4** + spellcasting ability modifier hit points OR becomes stabilized if dying.
 
@@ -700,7 +700,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.12 Illusion
+### 7.4.12 Illusion
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Basic visual OR sound illusion, like Minor Illusion.
 
@@ -767,7 +767,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.13 Influence
+### 7.4.13 Influence
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 round): Target makes Wis save or has disadvantage on its next attack roll made against **you**.
 
@@ -847,7 +847,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.14 Manipulate
+### 7.4.14 Manipulate
 
 > **Basic Effect (0 SP)** – 1 Action, 30 ft, 1 min.
 > Simple telekinetic nudge of an unattended object ≤ 5 lb (≈ 2 kg).
@@ -885,7 +885,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.15 Move
+### 7.4.15 Move
 
 > **Basic Effect** (0 SP, Special (Part of Move), Self, Instantaneous): Enhance movement: Ignore Difficult Terrain OR Avoid Opportunity Attacks OR Move Through Hostiles.
 
@@ -943,7 +943,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.16 Strike
+### 7.4.16 Strike
 
 > **Basic Effect** (0 SP, 1 Action, Self, Instantaneous): Make weapon attack, if hit deals +Spell Mod Essence damage.
 
@@ -998,7 +998,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.17 Summon
+### 7.4.17 Summon
 
 > **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Summons Tiny servant (AC 10, 1 HP, Speed 15ft) that can use BA to Help ally.
 
@@ -1056,7 +1056,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ---
 
-### 5.4.18 Zone
+### 7.4.18 Zone
 
 > **Basic Effect** (0 SP, 1 Action, 60ft range, 1 round): 10-ft square area becomes Difficult Terrain.
 
@@ -1122,16 +1122,6 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Selective Zone  | +2 SP        | Choose creatures when casting; they are unaffected by the zone's detrimental effects (does not grant benefits of Sanctuary Zone).              |
 | Shape Zone      | +1 SP        | Can form the zone into a Cube, Cylinder, Line, or Wall of equivalent area/volume (GM discretion for specific dimensions based on radius/side). |
 
-6.1 Character Concept: Thinking about who your character is.
 
-6.2 Ability Scores: How to assign the standard array (+0, +1, +1, +2, +2, +3) to the six abilities (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma).
+---
 
-6.3 Choose Background: Selecting a background that grants skill/ proficiencies, and a narrative feature.
-
-6.4 Choose Class: Selecting one of the six classes detailed in Section 7. This determines Hit Dice, proficiencies, and starting spells.
-
-6.5 Calculate Hit Points: Determine starting HP based on class Hit Die and Constitution modifier.
-
-6.6 Choose Essences: Remind the player to choose their two starting Essence Descriptors (referencing Section 4.2).
-
-6.7 Final Details: Alignment, personality traits, appearance, name, etc.

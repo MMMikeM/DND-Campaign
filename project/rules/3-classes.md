@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD041 -->
-## **7. Classes**
+## **3. Classes**
 
 This section details the core classes available in Mike's TTRPG Rules. Each class is tied to one of the six core ability scores and provides a unique thematic and mechanical framework. Your class determines your starting hit points, proficiencies, class features gained at higher levels, and your access to **Spells**.
 
-### **7.1 Gaining Class Features**
+### **3.1 Gaining Class Features**
 
 As you gain levels in a class, you will unlock new features, including potentially more **Spells Known**. Your **Spell Point (SP)** pool and **Maximum SP per Activation** limit increase automatically with your character level as shown on **Table 2-1** (unless a specific class feature states otherwise, though this is uncommon).
 
-### **7.2 Starting Spells**
+### **3.2 Starting Spells**
 
 At 1st level (or when you first gain access to Spells through your class), you **know** a total of **four Spells**. The specific spells are determined as follows:
 
@@ -15,7 +15,7 @@ At 1st level (or when you first gain access to Spells through your class), you *
 2. **Unique Thematic Spell:** Your class grants you knowledge of a specific mandatory Spell that embodies its core concept.
 3. **Choice Spells (Choose 2):** You choose two additional Spells from your class's specific **Available Spells** list.
 
-### **7.3 Class Descriptions**
+### **3.3 Class Descriptions**
 
 The following classes represent broad archetypes defined by their primary ability score. Each description offers a theme and typical expressions of power, but these are merely suggestions – a foundation upon which to build *your* unique character. Use your choice of **Spells**, **Essences**, and **Enhancements** to bring your specific concept to life. How your character embodies their class is entirely up to you.
 
@@ -25,7 +25,7 @@ Here are the updated class entries with the "What could your X be?" bullet point
 
 ---
 
-#### **7.3.1 Champion (Strength)**
+#### **3.3.1 Champion (Strength)**
 
 Champions harness raw physical power, translating overwhelming Strength into tangible magical effects. They dominate the battlefield through might, protect allies with unwavering resolve, and their force of will can manifest as physical **Barriers** (`Barrier`) just as readily as devastating enhanced **Strikes** (`Strike`). This framework is a starting point; your Champion's power comes from within – define what drives yours.
 
@@ -56,7 +56,7 @@ Champions harness raw physical power, translating overwhelming Strength into tan
 
 ---
 
-#### **7.3.2 Trickster (Dexterity)**
+#### **3.3.2 Trickster (Dexterity)**
 
 Tricksters excel through speed, precision, and cunning, their enhanced agility allowing them to **Move** (`Move`) with supernatural grace. They might use magically guided attacks (`Strike`/`Bolt`), misdirection (`Illusion`), or sheer nimbleness to confound foes and navigate danger. This is just a template; your Trickster's style is yours to define.
 
@@ -87,7 +87,7 @@ Tricksters excel through speed, precision, and cunning, their enhanced agility a
 
 ---
 
-#### **7.3.3 Adapter (Constitution)**
+#### **3.3.3 Adapter (Constitution)**
 
 Adapters draw power from their remarkable resilience and life force, their bodies capable of extraordinary transformation (**Adapt Self**). They endure, evolve, and overcome challenges by altering their very form, making their body both weapon (`Strike`/`Bolt`) and shield (`Defend`). But the specifics are yours to create; the Adapter's power is personal.
 
@@ -118,7 +118,7 @@ Adapters draw power from their remarkable resilience and life force, their bodie
 
 ---
 
-#### **7.3.4 Scholar (Intelligence)**
+#### **3.3.4 Scholar (Intelligence)**
 
 Scholars reshape reality through careful study, pattern recognition, and the precise application of knowledge. Their intellect allows them to affect the world, often from afar, whether through direct force (`Bolt`), intricate control over objects and energy (**Manipulate**), or understanding the underlying principles of magic and nature. This archetype is broad; the Scholar's power comes from understanding – what do *you* seek to comprehend?
 
@@ -149,7 +149,7 @@ Scholars reshape reality through careful study, pattern recognition, and the pre
 
 ---
 
-#### **7.3.5 Sage (Wisdom)**
+#### **3.3.5 Sage (Wisdom)**
 
 Sages perceive what others cannot, drawing on intuition, experience, and a connection to the world around them to see hidden truths (**Arcane Sight**). Their wisdom often allows them to heal (`Heal`), guide (`Communicate`), protect (`Defend`), and understand deeper patterns, sometimes drawing on forces larger than themselves (`Summon`/`Zone`). The Sage's insight is unique – what informs yours?
 
@@ -180,7 +180,7 @@ Sages perceive what others cannot, drawing on intuition, experience, and a conne
 
 ---
 
-#### **7.3.6 Orator (Charisma)**
+#### **3.3.6 Orator (Charisma)**
 
 Orators command attention and shape reality through sheer force of personality, their presence allowing them to **Influence** (`Influence`) minds, emotions, and even the flow of magic itself. Their power might erupt as spectacular displays (`Blast`/`Bolt`), subtle manipulations (`Illusion`), compelling commands (`Communicate`), or pact-bound abilities (`Summon`). The Orator's power reflects their unique character – how does yours shine?
 

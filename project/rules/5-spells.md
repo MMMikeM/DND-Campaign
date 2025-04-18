@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
-## 3. Spells
+## 5. Spells
 
-### **3.1 Nature of Spells**
+### **5.1 Nature of Spells**
 
 In this system, specific spell lists are replaced by **Spells**. Spells are the fundamental building blocks of magical effects – generic templates representing a core concept like projecting energy, healing wounds, or bolstering defenses. This system uses a smaller, curated list of core Spells to simplify turns and emphasise narrative choices.
 
@@ -9,7 +9,7 @@ The specific manifestation, damage type, and finer details of a Spell activated 
 
 This approach shifts the focus from memorizing numerous specific rules to understanding a core set of effects and creatively applying Essences and Enhancements using your Spell Points (SP).
 
-### **3.2 Learning Spells**
+### **5.2 Learning Spells**
 
 Characters **know** a set number of Spells, representing the magical effects they have mastered. They do not prepare spells daily.
 
@@ -21,7 +21,7 @@ Characters **know** a set number of Spells, representing the magical effects the
 - **Changing Known Spells:** Every 4th level (starting at level 4), when you would normally gain a Feat or Ability Score Improvement, you can choose one of the Spells you know and replace it with a different Spell from your **Class Spell List**.
 - **Learning Outside Lists:** Certain Feats may grant the ability to learn Spells from lists other than your primary Class Spell List.
 
-### **3.3 Spell Descriptions**
+### **5.3 Spell Descriptions**
 
 Each Spell is presented in a standard format, detailing its core function before any Enhancements are applied.
 
@@ -39,7 +39,7 @@ Each Spell is presented in a standard format, detailing its core function before
 
 ---
 
-### **3.4 Core Spells - Basic Effects**
+### **5.4 Core Spells - Basic Effects**
 
 This section details the baseline **Basic Effect** for each core Spell. This effect costs **0 SP** to use and can be used at will, intended as a combat action or minor utility. Spending **Spell Points (SP)** allows activating one of the spell's specific **Modes** (detailed in Section 5). Activating a Mode *replaces* the Basic Effect with a more powerful one and unlocks further customization through **Enhancements**.
 
