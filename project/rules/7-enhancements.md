@@ -85,7 +85,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### 7.4.2 Arcane Sight
 
-> **Basic Effect** (0 SP, 1 Action, Self (30ft), Instantaneous): Briefly sense presence/direction of active magic OR make check DC 10 to suppress lowest-level magic effect on target until start of your next turn.
+> **Basic Effect** (0 SP, 1 Action, Self (30ft), Instantaneous): When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll.
 
 ### Mode: Detect Magic ✦ 2 SP
 
@@ -98,14 +98,13 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 #### Unique Enhancements (Detect Magic)
 
-| Enhancement          | SP Cost      | Effect                                                                                                                           |
-|:---------------------|:-------------|:---------------------------------------------------------------------------------------------------------------------------------|
-| Identify Properties  | +1 SP        | Change Cast Time to 1 min (touching item), Duration Instant. Learn item properties, function, activation, charges. (Total 3 SP). |
-| Power Analysis       | +1 SP        | When focusing aura, sense power level (Low: 1-3 SP, Med: 4-6 SP, High: 7+ SP). (Total 3 SP+).                                    |
-| See Ethereal         | +2 SP        | While concentrating, see Ethereal Plane creatures/objects in range. (Total 4 SP+).                                               |
-| Penetrating Vision   | +1 SP        | Detection ignores additional 1 ft stone / 1 inch metal / 3 ft wood/dirt. (*Stackable*).                                          |
-| Sustain Detection    | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours).                                                                     |
-| Persistent Detection | +3 SP        | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                               |
+| Enhancement           | SP Cost      | Effect                                                                                                                                                                                           |
+|:----------------------|:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Reveal Hidden Dangers | +1 SP        | While concentrating, you also gain awareness of the presence and general location of non-magical traps, hidden mechanisms, or secret doors within range. Pinpointing details may require checks. |
+| Identify Properties   | +1 SP        | Change Cast Time to 1 min (touching item), Duration Instant. Learn item properties, function, activation, charges. (Total 3 SP).                                                                 |
+| Penetrating Vision    | +1 SP        | Detection ignores additional 1 ft stone / 1 inch metal / 3 ft wood/dirt. (*Stackable*).                                                                                                          |
+| Sustain Detection     | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours).                                                                                                                                     |
+| Persistent Detection  | +3 SP        | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                                                                                               |
 
 ### Mode: Dispel Magic ✦ 4 SP
 
@@ -133,21 +132,15 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | **Duration** | Instantaneous                                                                                                                      |
 | **Effect**   | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + [SP cost / 2]) to cause spell to fail. |
 
-#### Unique Enhancements (Counterspell)
-
-| Enhancement            | SP Cost | Effect                                     |
-|:-----------------------|:--------|:-------------------------------------------|
-| Extended Counter Range | +1 SP   | Increase range to 120 feet. (Total 5 SP+). |
 
 ### General Enhancements (Arcane Sight)
 
 | Enhancement           | SP Cost | Effect                                                                                                                                  |
 |:----------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------|
-| Suppress              | +1 SP   | Target within 60 ft. Spellcasting check vs DC 10. Success: suppress lowest-SP magic effect until start of your next turn.               |
-| Increase Range/Radius | +1 SP   | Doubles range or radius (Detect radius, Dispel/Counter initial range). (*Stackable*).                                                   |
+| Increase Range/Radius | +1 SP   | Doubles range or radius (Detect radius, Dispel/Counter initial range).                                                  |
 | Greater Negation      | +2 SP   | (Applies To: Dispel/Counter Modes) Increases automatic dispel/counter threshold by +2 SP (e.g., base 3 -> 5). (*Stackable*).            |
 | Adept Negation        | +2 SP   | (Applies To: Dispel/Counter Modes) Gain advantage on spellcasting check to dispel/counter spells above threshold.                       |
-| Dispel Feedback       | +2 SP   | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 psychic damage per 2 full SP of negated spell's cost. |
+| Dispel Feedback       | +2 SP   | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 essence damage per 2 full SP of negated spell's cost. |
 
 ---
 
@@ -769,7 +762,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### 7.4.13 Influence
 
-> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 round): Target makes Wis save or has disadvantage on its next attack roll made against **you**.
+> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 round): Target makes Wis save or is forced to target **you** with any spells or attacks until your next turn.
 
 ### Mode: Charm Person ✦ 2 SP
 
@@ -838,7 +831,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 | Enhancement        | SP Cost | Effect                                                                                                                                       |
 |:-------------------|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------|
-| Increase Range     | +1 SP   | Doubles the range (where applicable). (*Stackable*).                                                                                         |
+| Increase Range     | +1 SP   | Doubles the range (where applicable).                                                                                                        |
 | Subtle Casting     | +1 SP   | Cast without Verbal or Somatic components.                                                                                                   |
 | Forceful Influence | +1 SP   | (Applies To: Charm Person, Suggest Course) Target has disadvantage on the initial saving throw (unless *Overwhelming Will* already applied). |
 | Stronger Hold      | +1 SP   | (Applies To: Charm Person, Suggest Course, Dominate Creature) Advantage on Charisma checks made against the target while affected.           |
@@ -1122,6 +1115,4 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Selective Zone  | +2 SP        | Choose creatures when casting; they are unaffected by the zone's detrimental effects (does not grant benefits of Sanctuary Zone).              |
 | Shape Zone      | +1 SP        | Can form the zone into a Cube, Cylinder, Line, or Wall of equivalent area/volume (GM discretion for specific dimensions based on radius/side). |
 
-
 ---
-
