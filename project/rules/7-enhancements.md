@@ -37,12 +37,12 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Focused Adaptation ✦ 2 SP
 
-| Property     | Value                                                                                                                                             |
-|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                          |
-| **Range**    | Self                                                                                                                                              |
-| **Duration** | Concentration, up to 10 min                                                                                                                       |
-| **Effect**   | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration. (Base cost includes their SP cost). |
+| Property     | Value                                                                                                                                  |
+|:-------------|:---------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                               |
+| **Range**    | Self                                                                                                                                   |
+| **Duration** | Concentration, up to 10 min                                                                                                            |
+| **Effect**   | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration at no additional SP cost. |
 
 ### Mode: Beast Shape ✦ 5 SP
 
@@ -137,7 +137,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 | Enhancement           | SP Cost | Effect                                                                                                                                  |
 |:----------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------|
-| Increase Range/Radius | +1 SP   | Doubles range or radius (Detect radius, Dispel/Counter initial range).                                                  |
+| Increase Range/Radius | +1 SP   | Doubles range or radius (Detect radius, Dispel/Counter initial range).                                                                  |
 | Greater Negation      | +2 SP   | (Applies To: Dispel/Counter Modes) Increases automatic dispel/counter threshold by +2 SP (e.g., base 3 -> 5). (*Stackable*).            |
 | Adept Negation        | +2 SP   | (Applies To: Dispel/Counter Modes) Gain advantage on spellcasting check to dispel/counter spells above threshold.                       |
 | Dispel Feedback       | +2 SP   | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 essence damage per 2 full SP of negated spell's cost. |
@@ -243,16 +243,16 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### General Enhancements (Blast)
 
-| Enhancement            | SP Cost   | Effect                                                                                                                         |
-|:-----------------------|:----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| Amplify Blast          | +1 SP     | Increase initial damage dice by +1d8. (*Stackable*).                                                                           |
-| Forceful Blast         | +1 SP     | Creatures failing the initial save are pushed 10 ft away from the origin/center.                                               |
-| Penetrating Blast      | +2 SP     | The blast's damage ignores resistance to its damage type.                                                                      |
-| Debilitating Blast     | +1/2/3 SP | (Cost based on Essence B-Tier status) Creatures failing initial save suffer the status effect until end of **your** next turn. |
-| Environmental Impact   | +1 SP     | The area affected by the initial blast becomes difficult terrain until the start of your next turn.                            |
-| Change Save (Physical) | +1 SP     | Changes the required saving throw from Dexterity to Strength or Constitution (choose when learning).                           |
-| Change Save (Mental)   | +2 SP     | Changes the required saving throw from Dexterity to Wisdom or Intelligence (choose when learning).                             |
-| Selective Blast        | +3 SP     | Choose creatures in initial area; they are unaffected by the initial blast. (*Does not affect Lancing Blast linger*).          |
+| Enhancement            | SP Cost | Effect                                                                                                                |
+|:-----------------------|:--------|:----------------------------------------------------------------------------------------------------------------------|
+| Amplify Blast          | +1 SP   | Increase initial damage dice by +1d8. (*Stackable*).                                                                  |
+| Forceful Blast         | +1 SP   | Creatures failing the initial save are pushed 10 ft away from the origin/center.                                      |
+| Penetrating Blast      | +2 SP   | The blast's damage ignores resistance to its damage type.                                                             |
+| Debilitating Blast     | +2 SP   | Creatures failing initial save suffer the status effect until end of **your** next turn.                              |
+| Environmental Impact   | +1 SP   | The area affected by the initial blast becomes difficult terrain until the start of your next turn.                   |
+| Change Save (Physical) | +1 SP   | Changes the required saving throw from Dexterity to Strength or Constitution (choose when learning).                  |
+| Change Save (Mental)   | +2 SP   | Changes the required saving throw from Dexterity to Wisdom or Intelligence (choose when learning).                    |
+| Selective Blast        | +3 SP   | Choose creatures in initial area; they are unaffected by the initial blast. (*Does not affect Lancing Blast linger*). |
 
 ---
 
@@ -843,7 +843,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 ### 7.4.14 Manipulate
 
 > **Basic Effect (0 SP)** – 1 Action, 30 ft, 1 min.
-> Simple telekinetic nudge of an unattended object ≤ 5 lb (≈ 2 kg).
+> Use Action (on cast or later turns) to target point in range. Cause one: Interact with object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked door/container; Pour contents from container. Lacks finesse/strength for complex tasks/attacks.
 
 ### Mode — **Focused Control** ✦ 2 SP
 
@@ -880,7 +880,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### 7.4.15 Move
 
-> **Basic Effect** (0 SP, Special (Part of Move), Self, Instantaneous): Enhance movement: Ignore Difficult Terrain OR Avoid Opportunity Attacks OR Move Through Hostiles.
+> **Basic Effect** (0 SP, Special (Part of Move), Self, Instantaneous): When moving this turn, your movement doesn't provoke opportunity attacks.
 
 ### Mode: Blink Step ✦ 2 SP
 
@@ -978,22 +978,22 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### General Enhancements (Strike)
 
-| Enhancement        | SP Cost   | Effect                                                                                                                                                                 |
-|:-------------------|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Increase Bonus Dmg | +1 SP     | Increases **bonus** damage dice by **+1d8**. (Applies to initial hit and secondary AoE where applicable). (*Stackable*).                                               |
-| Inflicted Strike   | +1/2/3 SP | (Cost based on Essence B-Tier status) (Applies to *initial* target) Hit: target makes Con save vs Spell DC or suffers B-Tier status until start of **your** next turn. |
-| Flashing Step      | +1 SP     | After the attack (hit or miss), teleport up to 10 feet.                                                                                                                |
-| Resounding Impact  | +1 SP     | (Applies to *initial* target) Hit: target makes Str save vs pushed 10 ft away.                                                                                         |
-| Tripping Strike    | +2 SP     | (Applies to *initial* target) Hit: target makes Str save vs knocked prone.                                                                                             |
-| Disarming Strike   | +2 SP     | (Applies to *initial* target) Hit: target makes Str/Dex save vs dropping one held item of your choice.                                                                 |
-| Feinting Strike    | +2 SP     | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn.                                                     |
-| Critical Surge     | +2 SP     | (Use as Reaction) On critical hit with the spell's attack, spend 2 SP to maximize the spell's **bonus** damage dice.                                                   |
+| Enhancement        | SP Cost | Effect                                                                                                                            |
+|:-------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------|
+| Increase Bonus Dmg | +1 SP   | Increases **bonus** damage dice by **+1d8**. (Applies to initial hit and secondary AoE where applicable). (*Stackable*).          |
+| Inflicted Strike   | +2 SP   | (Applies to *initial* target) Hit: target makes Con save vs Spell DC or suffers essence status until start of **your** next turn. |
+| Flashing Step      | +1 SP   | After the attack (hit or miss), teleport up to 10 feet.                                                                           |
+| Resounding Impact  | +1 SP   | (Applies to *initial* target) Hit: target makes Str save vs pushed 10 ft away.                                                    |
+| Tripping Strike    | +2 SP   | (Applies to *initial* target) Hit: target makes Str save vs knocked prone.                                                        |
+| Disarming Strike   | +2 SP   | (Applies to *initial* target) Hit: target makes Str/Dex save vs dropping one held item of your choice.                            |
+| Feinting Strike    | +2 SP   | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn.                |
+| Critical Surge     | +2 SP   | (Use as Reaction) On critical hit with the spell's attack, spend 2 SP to maximize the spell's **bonus** damage dice.              |
 
 ---
 
 ### 7.4.17 Summon
 
-> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Summons Tiny servant (AC 10, 1 HP, Speed 15ft) that can use BA to Help ally.
+> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Summons Tiny servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken directly before or after yours, to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end.
 
 ### Mode: Utility Familiar ✦ 2 SP
 
@@ -1073,20 +1073,20 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Harmful Zone ✦ 4 SP
 
-| Property     | Value                                                                                                                                                                                                                                                                                                      |
-|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                                   |
-| **Range**    | 60 ft (20-foot radius, 20-foot high cylinder)                                                                                                                                                                                                                                                              |
-| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                                                 |
-| **Effect**   | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs B-Tier status (linked to Essence) until start of *its* next turn. |
+| Property     | Value                                                                                                                                                                                                                                                                                   |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                |
+| **Range**    | 60 ft (20-foot radius, 20-foot high cylinder)                                                                                                                                                                                                                                           |
+| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                              |
+| **Effect**   | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs essence status until start of *its* next turn. |
 
 #### Unique Enhancements (Harmful Zone)
 
-| Enhancement            | SP Cost | Effect                                                                                                                         |
-|:-----------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------|
-| Increase Dmg/Debuff DC | +1 SP   | Increase damage by **+1d6** OR increase the save DC for the B-Tier status by +1. (Choose effect when learning). (*Stackable*). |
-| Lingering Hazard       | +1 SP   | The zone's area also becomes difficult terrain.                                                                                |
-| Weakening Field        | +1 SP   | (Applies To: Debilitating) Creatures have disadvantage on the initial save vs the status effect.                               |
+| Enhancement            | SP Cost | Effect                                                                                                                          |
+|:-----------------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------|
+| Increase Dmg/Debuff DC | +1 SP   | Increase damage by **+1d6** OR increase the save DC for the essence status by +1. (Choose effect when learning). (*Stackable*). |
+| Lingering Hazard       | +1 SP   | The zone's area also becomes difficult terrain.                                                                                 |
+| Weakening Field        | +1 SP   | (Applies To: Debilitating) Creatures have disadvantage on the initial save vs the status effect.                                |
 
 ### Mode: Sanctuary Zone ✦ 4 SP
 
