@@ -86,7 +86,7 @@ Equipping armor you do not have proficiency in will result in a -10ft penalty to
 
 Equipping heavy armour, irrespective of proficiency, imposes a disadvantage on stealth checks.
 
-Your **Proficiency Bonus** reflects your character's general training and expertise. This is a constant value of **+3** added to any roll you are proficient in, regardless of your level.
+This system uses a fixed Proficiency Bonus (+3) regardless of character level. This emphasizes consistent baseline capability rather than scaling numerical advantage, focusing progression more heavily on Feats, Spell Points, and Enhancements.
 
 ### 2.4 Roots: Forge Your Background (Skills)
 

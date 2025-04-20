@@ -7,9 +7,24 @@
 
 ### **7.2 Learning and Using Enhancements**
 
-- **Learning Enhancements:** Characters typically learn Enhancements as they gain levels. For each level, they choose **two Spells** they know and learn **one Enhancement** relevant to that Spell. When you gain a level where you learn Enhancements (Level 2+), you choose two Spells you know. For each of those spells, you may either learn one new Enhancement listed for that spell, OR learn one of that spell's available Modes (such as Standard Mode or other listed Modes).
-- **Applying Enhancements:** When activating a Spell, the caster declares they are using one or more learned Enhancements for that Spell. They describe the enhanced effect and add the SP cost of all applied Enhancements to the Spell's Base SP Cost. The total SP spent cannot exceed the Maximum SP per Activation limit (see 7.3).
-- **Combining Enhancements:** Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory (e.g., you cannot apply two Enhancements that change the saving throw type to different stats). The SP costs are cumulative.
+#### Learning Enhancements & Modes
+
+As you gain levels (Level 2+), your mastery of spells deepens. Each level, you gain two opportunities to improve your magic. For each opportunity, choose one spell you know and select either:
+
+- One new **Mode** listed for that spell (such as Standard Mode or other available Modes)
+- One new **Enhancement** listed for that spell
+
+These opportunities can be used on the same spell or different spells, in any combination.
+
+> **Example:** At 3rd level, Lyra could learn the "Forceful Bolt" Enhancement and "Area Bolt" Mode for her Bolt spell, OR learn "Chain Bolt" Enhancement for Bolt and "Sensory Illusion" Mode for her Illusion spell.
+
+#### Applying Enhancements
+
+When activating a Spell, you can declare any learned Enhancements you wish to apply. Add the SP cost of all applied Enhancements to the Spell's Base SP Cost. The total SP spent cannot exceed your Maximum SP per Activation limit (see Table 6-1 in Section 6.4).
+
+#### Combining Enhancements
+
+Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory (e.g., you cannot apply two Enhancements that change the saving throw type to different stats). The SP costs are cumulative.
 
 ### **7.3 Maximum SP per Activation**
 
@@ -84,7 +99,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 10 min                                                                                                                       |
 | **Effect**   | Sense presence/location of magic effects, items, residue within range. Action: Focus on visible target for aura/school. Penetrates thin barriers. |
 
-#### Unique Enhancements (Detect Magic)
+#### Detect Magic Enhancements
 
 | Enhancement           | SP Cost      | Effect                                                                                                                                                                                           |
 |:----------------------|:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -103,7 +118,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                                                                                       |
 | **Effect**   | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + [SP cost of the target spell / 2]) to end. |
 
-#### Unique Enhancements (Dispel Magic)
+#### Dispel Magic Enhancements
 
 | Enhancement           | SP Cost | Effect                                                                                                                             |
 |:----------------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------|
@@ -120,7 +135,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                                                                          |
 | **Effect**   | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + [SP cost of the target spell / 2]) to cause spell to fail. |
 
-### General Enhancements (Arcane Sight)
+### General Enhancements
 
 | Enhancement           | SP Cost | Effect                                                                                                                                  |
 |:----------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------|
@@ -190,7 +205,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                    |
 | **Effect**   | Creatures in cone make Dex save. Fail: 2d8 Essence damage. Success: Half damage. |
 
-#### Unique Enhancements (Cone Blast)
+#### Cone Blast Enhancements
 
 | Enhancement | SP Cost | Effect                           |
 |:------------|:--------|:---------------------------------|
@@ -205,7 +220,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                      |
 | **Effect**   | Creatures in sphere make Dex save. Fail: 2d8 Essence damage. Success: Half damage. |
 
-#### Unique Enhancements (Orb Blast)
+#### Orb Blast Enhancements
 
 | Enhancement | SP Cost | Effect                      |
 |:------------|:--------|:----------------------------|
@@ -221,7 +236,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous (Lingers until start of your next turn)                                                                                                                               |
 | **Effect**   | Creatures in line make Dex save. Fail: 2d8 Essence damage. Success: Half damage. Line persists; creatures entering/ending turn repeat save vs 1d8 Essence damage (half on success). |
 
-#### Unique Enhancements (Lancing Blast)
+#### Lancing Blast Enhancements
 
 | Enhancement    | SP Cost | Effect                                                |
 |:---------------|:--------|:------------------------------------------------------|
@@ -256,7 +271,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                      |
 | **Effect**   | Make a ranged spell attack vs one target. Hit: 3d8 Essence damage. |
 
-#### Unique Enhancements (Standard Bolt)
+#### Standard Bolt Enhancements
 
 | Enhancement              | SP Cost | Effect                                                                                                                                                                                                 |
 |:-------------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -275,7 +290,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                              |
 | **Effect**   | Creatures within the sphere make a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. |
 
-#### Unique Enhancements (Area Bolt)
+#### Area Bolt Enhancements
 
 | Enhancement      | SP Cost | Effect                                                       |
 |:-----------------|:--------|:-------------------------------------------------------------|
@@ -290,7 +305,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | **Effect**   | Choose delivery: **Attack Channel** (Make a spell attack. On hit: target takes 2d8 Essence damage and you establish a channel to them.) OR **Save Channel** (Target makes a Dexterity saving throw. On fail: takes 2d8 Essence damage and you establish a channel to them. On success: takes half damage and no channel is established). While concentrating, you can use your Action on subsequent turns to deal 2d8 Essence damage to the channeled target (if visible and within range). The channel ends if you lose concentration or use a different spell/effect that requires your Action on a subsequent turn. |
 
-#### Unique Enhancements (Channeled Bolt)
+#### Channeled Bolt Enhancements
 
 | Enhancement             | SP Cost | Effect                                                                                                     |
 |:------------------------|:--------|:-----------------------------------------------------------------------------------------------------------|
@@ -323,7 +338,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                         |
 | **Effect**   | Initiate a **two-way telepathic conversation** with one creature (willing, or Int save if unwilling). Bypasses language. Exchange thoughts freely. |
 
-#### Unique Enhancements (Direct Link)
+#### Direct Link Enhancements
 
 | Enhancement       | SP Cost        | Effect                                                                                                                                          |
 |:------------------|:---------------|:------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -342,7 +357,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 10 min                                                                                                                                                                                                                                                                                                    |
 | **Effect**   | Choose one: **Link Senses:** Target willing creature. Action to perceive via their visual/auditory senses (gain special senses); blind/deaf to own senses while doing so. OR **Read Object Imprint:** Target non-magical object. Gain vague psychic impressions of last user/events (needs Int [Invest] check vs GM DC 10-20). |
 
-#### Unique Enhancements (Sensory Scry)
+#### Sensory Scry Enhancements
 
 | Enhancement            | SP Cost | Effect                                                                                                  |
 |:-----------------------|:--------|:--------------------------------------------------------------------------------------------------------|
@@ -360,7 +375,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | 1 hour (no Concentration)                                |
 | **Effect**   | Understand literal meaning of any spoken language heard. |
 
-#### Unique Enhancements (Universal Channel)
+#### Universal Channel Enhancements
 
 | Enhancement            | SP Cost      | Effect                                                                                                                                                                                |
 |:-----------------------|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -397,7 +412,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                           |
 | **Effect**   | Target one creature. Choose one of your Essences. Target becomes vulnerable to that Essence's damage type. Con save at end of its turns ends effect. |
 
-#### Unique Enhancements (Target Vulnerability)
+#### Target Vulnerability Enhancements
 
 | Enhancement             | SP Cost | Effect                                                                            |
 |:------------------------|:--------|:----------------------------------------------------------------------------------|
@@ -413,7 +428,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                   |
 | **Effect**   | Target one creature. First time each turn an **ally** hits the target with an attack, that attack deals +1d8 Essence damage. |
 
-#### Unique Enhancements (Collaborative Strike)
+#### Collaborative Strike Enhancements
 
 | Enhancement           | SP Cost | Effect                                                                    |
 |:----------------------|:--------|:--------------------------------------------------------------------------|
@@ -429,7 +444,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                          |
 | **Effect**   | Choose up to three creatures within range. When any marked target takes damage from an attack or spell, all other marked targets within 30 feet of it take damage = your Spell Mod (min 1) of the same damage type. |
 
-#### Unique Enhancements (Resonance Field)
+#### Resonance Field Enhancements
 
 | Enhancement        | SP Cost        | Effect                                               |
 |:-------------------|:---------------|:-----------------------------------------------------|
@@ -462,7 +477,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                           |
 | **Effect**   | Target one creature makes a saving throw (Wisdom by default). On fail, target suffers an effect based on applied Essence (Ignited, etc.). Repeats save end of turns. |
 
-#### Unique Enhancements (Single Target Affliction)
+#### Single Target Affliction Enhancements
 
 | Enhancement             | SP Cost | Effect                                                                                  |
 |:------------------------|:--------|:----------------------------------------------------------------------------------------|
@@ -480,7 +495,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | 1 round                                                                                                                                |
 | **Effect**   | Creatures within cube make save (Wisdom default). On fail, targets suffer Essence-based status effect until end of **your** next turn. |
 
-#### Unique Enhancements (Area Affliction)
+#### Area Affliction Enhancements
 
 | Enhancement        | SP Cost      | Effect                                                                                                                     |
 |:-------------------|:-------------|:---------------------------------------------------------------------------------------------------------------------------|
@@ -509,7 +524,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                            |
 | **Effect**   | Gain resistance to the damage type determined by the applied Essence. |
 
-#### Unique Enhancements (Essence Ward)
+#### Essence Ward Enhancements
 
 | Enhancement        | SP Cost      | Effect                                                                                                       |
 |:-------------------|:-------------|:-------------------------------------------------------------------------------------------------------------|
@@ -530,7 +545,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | 1 round                                                                                  |
 | **Effect**   | Gain +5 bonus to AC against the triggering attack and until the start of your next turn. |
 
-#### Unique Enhancements (Reactive Shield)
+#### Reactive Shield Enhancements
 
 | Enhancement       | SP Cost | Effect                                                                                                       |
 |:------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
@@ -546,7 +561,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | 8 hours                                                   |
 | **Effect**   | Your base AC becomes 13 + Dex modifier. No Concentration. |
 
-#### Unique Enhancements (Enduring Armor)
+#### Enduring Armor Enhancements
 
 | Enhancement   | SP Cost | Effect                                                                               |
 |:--------------|:--------|:-------------------------------------------------------------------------------------|
@@ -568,7 +583,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                    |
 | **Effect**   | Target one creature. Gains +1d4 bonus to all attack rolls, saving throws, and ability checks. |
 
-#### Unique Enhancements (Greater Empowerment)
+#### Greater Empowerment Enhancements
 
 | Enhancement        | SP Cost        | Effect                                               |
 |:-------------------|:---------------|:-----------------------------------------------------|
@@ -583,7 +598,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                  |
 | **Effect**   | Target one creature. Target makes Wisdom save. Fail: -1d4 penalty to all attack rolls, saves, ability checks. Repeats save at end of turns. |
 
-#### Unique Enhancements (Greater Enfeeblement)
+#### Greater Enfeeblement Enhancements
 
 | Enhancement               | SP Cost        | Effect                                              |
 |:--------------------------|:---------------|:----------------------------------------------------|
@@ -633,7 +648,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                               |
 | **Effect**   | Target creature regains **2d8 + Spellcasting Ability Modifier** hit points. |
 
-#### Unique Enhancements (Standard Heal)
+#### Standard Heal Enhancements
 
 | Enhancement  | SP Cost        | Effect                                                                                                     |
 |:-------------|:---------------|:-----------------------------------------------------------------------------------------------------------|
@@ -649,7 +664,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                                               |
 | **Effect**   | Choose up to 6 willing creatures within the sphere. Each target regains **2d8 + Spellcasting Ability Modifier** hit points. |
 
-#### Unique Enhancements (Area Heal)
+#### Area Heal Enhancements
 
 | Enhancement      | SP Cost            | Effect                                                  |
 |:-----------------|:-------------------|:--------------------------------------------------------|
@@ -665,7 +680,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                                                                                                      |
 | **Effect**   | Target creature regains **1d8 + Spellcasting Ability Modifier** hit points AND you end **one** disease OR **one** condition affecting it (Blinded, Deafened, Paralyzed, Poisoned). |
 
-#### Unique Enhancements (Restorative Heal)
+#### Restorative Heal Enhancements
 
 | Enhancement         | SP Cost | Effect                                                                                                                                                                        |
 |:--------------------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -693,7 +708,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                               |
 | **Effect**   | Create EITHER image (object/creature/phenomenon ≤ 15-ft cube) OR sound effect (whisper to scream). Physical interaction reveals visual illusions; Action + Int (Investigation) check vs Spell Save DC discerns illusion. |
 
-#### Unique Enhancements (Sensory Illusion)
+#### Sensory Illusion Enhancements
 
 | Enhancement           | SP Cost      | Effect                                                                                                                             |
 |:----------------------|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------|
@@ -714,7 +729,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | See Effect                                                                                                                                                                                                                                                                                                                                                                  |
 | **Effect**   | Choose **one**: **Disguise Self:** Change appearance (visual only). Duration 1 hour, no Conc. Int (Investigation) check vs Spell DC on interaction/inspection reveals. **Blurring Form:** Attackers have disadvantage unless they don't use sight. Duration Conc, up to 1 min. **Illusory Duplicates:** Create 3 duplicates (like *Mirror Image*). Duration 1 min, no Conc. |
 
-#### Unique Enhancements (Personal Illusion)
+#### Personal Illusion Enhancements
 
 | Enhancement         | SP Cost      | Effect                                                                                                    |
 |:--------------------|:-------------|:----------------------------------------------------------------------------------------------------------|
@@ -731,7 +746,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 hour                                                      |
 | **Effect**   | A creature you touch becomes Invisible. Ends if target attacks or casts a spell. |
 
-#### Unique Enhancements (Invisibility)
+#### Invisibility Enhancements
 
 | Enhancement           | SP Cost        | Effect                                                                                    |
 |:----------------------|:---------------|:------------------------------------------------------------------------------------------|
@@ -760,7 +775,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | 1 hour (no Concentration)                                                                                                                                                                                          |
 | **Effect**   | Target one humanoid you can see. Wis save vs **Charmed**. Regards you as friendly acquaintance. Knows it was charmed after effect ends (unless *Lasting Impression* used). Ends early if harmed by you/companions. |
 
-#### Unique Enhancements (Charm Person)
+#### Charm Person Enhancements
 
 | Enhancement   | SP Cost        | Effect                                                                  |
 |:--------------|:---------------|:------------------------------------------------------------------------|
@@ -776,7 +791,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 8 hours                                                                                                                                                                        |
 | **Effect**   | Target one creature that can hear/understand you. Wis save vs following a suggested reasonable course of activity (1-2 sentences). Ends if suggestion completed or target harmed by you/companions. |
 
-#### Unique Enhancements (Suggest Course)
+#### Suggest Course Enhancements
 
 | Enhancement           | SP Cost      | Effect                                                                                |
 |:----------------------|:-------------|:--------------------------------------------------------------------------------------|
@@ -792,7 +807,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                       |
 | **Effect**   | Use Action to target creature within 30 ft. Wis save vs reading its surface thoughts while within 30 ft. Can switch targets with Action. Target unaware on success (unless *Probe Deeper* used). |
 
-#### Unique Enhancements (Read Thoughts)
+#### Read Thoughts Enhancements
 
 | Enhancement  | SP Cost | Effect                                                                                                                                                              |
 |:-------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -807,7 +822,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                           |
 | **Effect**   | Target one creature. Wis save vs **Charmed**. Establish telepathic link (same plane). Issue commands (no action). Use Action for precise control until end of next turn (use target's reaction with yours). Target repeats save each time it takes damage, ending effect on success. |
 
-#### Unique Enhancements (Dominate Creature)
+#### Dominate Creature Enhancements
 
 | Enhancement         | SP Cost      | Effect                                                          |
 |:--------------------|:-------------|:----------------------------------------------------------------|
@@ -832,7 +847,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 > **Basic Effect (0 SP)** – 1 Action, 30 ft, 1 min.
 > Use Action (on cast or later turns) to target point in range. Cause one: Interact with object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked door/container; Pour contents from container. Lacks finesse/strength for complex tasks/attacks.
 
-### Mode — **Focused Control** ✦ 2 SP
+### Mode: Focused Control ✦ 2 SP
 
 *This replaces the Basic Effect when cast.*
 
@@ -848,20 +863,20 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 
 (Add the listed SP to the 2 SP Mode cost)
 
-| Category             | Enhancement          | SP         | Effect / notes                                                                                                                                                                 |
-|:---------------------|:---------------------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Core Utility**     | Increase Range/Speed | +1 SP      | Doubles both range & movement of the focus. *Stackable.*                                                                                                                       |
-|                      | Sustain Control      | +1 SP/step | Extend concentration → 1 h → 8 h.                                                                                                                                              |
-|                      | Invisible Hand       | +1 SP      | The telekinetic effect leaves no visible trace.                                                                                                                                |
-| **Strength & Force** | Boost Force          | +1 SP/step | Each step: ×2 carry cap (25→50→100 lb …) **and** raises eligible size for shove / grapple by 1 (S→M→L…).                                                                       |
-|                      | Forceful Push        | +1 SP      | (Requires: ≥ 1 step Boost Force) Action: contested check (Spell ability vs Athletics/Acrobatics). On success, push creature ≤ size limit 10 ft.                                |
-|                      | Crushing Grip        | +2 SP      | (Requires: ≥ 1 step Boost Force) Action: contested check to **Grapple** (escape DC = Spell DC). On later turns: action to deal **1d8 Essence** or drag the target.             |
-|                      | Essence Lash         | +2 SP      | Action: melee spell attack from focus (reach 5 ft). Hit = **2d8 Essence**.                                                                                                     |
-| **Multiplicity**     | Dual Hands           | +3 SP      | Create a second identical focus. Both obey the same action command. Only one may attack per action (unless …).                                                                 |
-|                      | Coordinated Action   | +1 SP      | (Requires: Dual Hands) Both hands may attempt complex checks / attacks simultaneously; if aimed at the same target, gain Advantage.                                            |
-| **Elemental Work**   | Elemental Touch      | +1 SP      | (Requires: an Essence) Hand is immune to that element and can carry / slosh / ignite it for minor narrative effects.                                                           |
-|                      | Shape Element        | +2 SP      | (Requires: Elemental Touch and apt Essence) Action: sculpt / move a **5‑ft cube** of loose, non‑living matching material (sand, water, shadow, etc.). Lasts while spell lasts. |
-| **Longevity**        | Persistent Control   | +3 SP      | (Requires: Sustain Control ≥ 1 h) Duration 8 h, no concentration.                                                                                                              |
+| Enhancement          | SP         | Effect / notes                                                                                                                                                                 |
+|:---------------------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Increase Range/Speed | +1 SP      | Doubles both range & movement of the focus. *Stackable.*                                                                                                                       |
+| Sustain Control      | +1 SP/step | Extend concentration → 1 h → 8 h.                                                                                                                                              |
+| Invisible Hand       | +1 SP      | The telekinetic effect leaves no visible trace.                                                                                                                                |
+| Boost Force          | +1 SP/step | Each step: ×2 carry cap (25→50→100 lb …) **and** raises eligible size for shove / grapple by 1 (S→M→L…).                                                                       |
+| Forceful Push        | +1 SP      | (Requires: ≥ 1 step Boost Force) Action: contested check (Spell ability vs Athletics/Acrobatics). On success, push creature ≤ size limit 10 ft.                                |
+| Crushing Grip        | +2 SP      | (Requires: ≥ 1 step Boost Force) Action: contested check to **Grapple** (escape DC = Spell DC). On later turns: action to deal **1d8 Essence** or drag the target.             |
+| Essence Lash         | +2 SP      | Action: melee spell attack from focus (reach 5 ft). Hit = **2d8 Essence**.                                                                                                     |
+| Dual Hands           | +3 SP      | Create a second identical focus. Both obey the same action command. Only one may attack per action (unless …).                                                                 |
+| Coordinated Action   | +1 SP      | (Requires: Dual Hands) Both hands may attempt complex checks / attacks simultaneously; if aimed at the same target, gain Advantage.                                            |
+| Elemental Touch      | +1 SP      | (Requires: an Essence) Hand is immune to that element and can carry / slosh / ignite it for minor narrative effects.                                                           |
+| Shape Element        | +2 SP      | (Requires: Elemental Touch and apt Essence) Action: sculpt / move a **5‑ft cube** of loose, non‑living matching material (sand, water, shadow, etc.). Lasts while spell lasts. |
+| Persistent Control   | +3 SP      | (Requires: Sustain Control ≥ 1 h) Duration 8 h, no concentration.                                                                                                              |
 
 ---
 
@@ -878,7 +893,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                                                                                                                        |
 | **Effect**   | When moving, instead **teleport up to 30 feet** to an unoccupied space you can see. This uses an equivalent amount of movement speed. Can pass through obstacles you couldn't normally move through. |
 
-#### Unique Enhancements (Blink Step)
+#### Blink Step Enhancements
 
 | Enhancement             | SP Cost        | Effect                                                                                                                               |
 |:------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------|
@@ -906,7 +921,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Instantaneous                                                                                           |
 | **Effect**   | Immediately **teleport up to 15 feet** to an unoccupied space you can see *after* the trigger resolves. |
 
-#### Unique Enhancements (Reactive Phase)
+#### Reactive Phase Enhancements
 
 | Enhancement             | SP Cost        | Effect                                                                                         |
 |:------------------------|:---------------|:-----------------------------------------------------------------------------------------------|
@@ -991,7 +1006,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 10 min                                                                                                                             |
 | **Effect**   | Summon Tiny/Small spirit (AC 12, HP 5+SpellMod, Speed 30ft). Can Help, Search, Use Object, Dash actions. Obeys commands. Can deliver your touch spells. |
 
-#### Unique Enhancements (Utility Familiar)
+#### Utility Familiar Enhancements
 
 | Enhancement         | SP Cost      | Effect                                                                         |
 |:--------------------|:-------------|:-------------------------------------------------------------------------------|
@@ -1012,13 +1027,13 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 hour                                                                                                                                                                                                              |
 | **Effect**   | Summon Medium spirit (AC 14, HP 15 + [5 * SP spent above 4 SP], Speed 30ft). Acts on its own turn after yours. Can take most actions (no spells). Attack: Uses your Spell Attack vs AC, deals **1d8 + Spell Mod** Essence damage on hit. |
 
-#### Unique Enhancements (Combat Spirit)
+#### Combat Spirit Enhancements
 
 | Enhancement       | SP Cost        | Effect                                                                                                                                                                                                                                                                                                                                                    |
 |:------------------|:---------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Swift Summon      | +2 SP          | Casting Time becomes 1 Action. (Total cost 6 SP+).                                                                                                                                                                                                                                                                                                        |
 | Greater Attack    | +1 SP          | Increase attack damage by **+1d8**. (*Stackable*).                                                                                                                                                                                                                                                                                                        |
-| Multiattack       | +4 SP          | Can make two attacks with its Attack action. (Requires base spirit cost + 4 SP = 8 SP total min).                                                                                                                                                                                                                                                         |
+| Multiattack       | +4 SP          | Can make two attacks with its Attack action. (Requires a total SP cost of at least 8 SP for this spell activation).                                                                                                                                                                                                                                                         |
 | Guardian Stance   | +1 SP          | Can use its Reaction to impose disadvantage on an attack roll against a creature within 5 feet of it.                                                                                                                                                                                                                                                     |
 | Reinforced Spirit | +1 SP / +10 HP | Increase the spirit's maximum Hit Points by +10. (*Stackable*).                                                                                                                                                                                                                                                                                           |
 | Armored Spirit    | +1 SP / +1 AC  | Increase the spirit's AC by +1. (*Stackable, max +3 total bonus*).                                                                                                                                                                                                                                                                                        |
@@ -1049,7 +1064,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                                                                                                |
 | **Effect**   | Create zone. Choose **one** effect upon casting: **Difficult Terrain:** Area is difficult terrain. **Obscuring Mist:** Area heavily obscured. **Restraining Field:** Creatures entering/starting turn make Str save vs **Restrained** until start of their next turn. **Silence:** No sound within/passes through. Deafens inside. Prevents V components. |
 
-#### Unique Enhancements (Hindering Zone)
+#### Hindering Zone Enhancements
 
 | Enhancement         | SP Cost | Effect                                                                                                    |
 |:--------------------|:--------|:----------------------------------------------------------------------------------------------------------|
@@ -1067,7 +1082,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                               |
 | **Effect**   | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs essence status until start of *your* next turn. |
 
-#### Unique Enhancements (Harmful Zone)
+#### Harmful Zone Enhancements
 
 | Enhancement            | SP Cost | Effect                                                                                                                          |
 |:-----------------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------|
@@ -1084,7 +1099,7 @@ To maintain balance across levels, there is a limit to the total number of **Spe
 | **Duration** | Concentration, up to 1 min                                                                            |
 | **Effect**   | Choose creatures when casting. Chosen creatures inside gain **+1 bonus to AC and all saving throws**. |
 
-#### Unique Enhancements (Sanctuary Zone)
+#### Sanctuary Zone Enhancements
 
 | Enhancement       | SP Cost | Effect                                                                                                |
 |:------------------|:--------|:------------------------------------------------------------------------------------------------------|

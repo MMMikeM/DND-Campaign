@@ -18,7 +18,7 @@ There is a limit to the total SP you can spend on a single activation of a Spell
 
 ### **6.4 Spell Point Progression**
 
-#### Table 2-1: Spell Points and Maximum SP per Activation by Level**
+#### Table 6-1: Spell Points and Maximum SP per Activation by Level**
 
 | Level | Spell Points | Max SP Per Activation |
 |:------|:-------------|:----------------------|
@@ -41,4 +41,4 @@ There is a limit to the total SP you can spend on a single activation of a Spell
 | 17    | 90           | 11                    |
 | 18    | 95           | 11                    |
 | 19    | 100          | 12                    |
-| 20    | 110          | 12                    |
+| 20    | 105          | 12                    |

@@ -325,7 +325,7 @@ Remember that Modes and Enhancements for each spell are detailed in Section 7: E
 
 ## 5.7 Class Unique Spells
 
-Each class gains access to a special spell that embodies its approach to magic. These unique spells are unavailable to other classes without special feats or circumstances.
+Each class gains access to a special spell that embodies its approach to magic. These unique spells are unavailable to other classes without special feats or circumstances. Below is a summary of the Basic (0 SP) effect and the first key Mode for each unique spell, drawing from the full details found in Section 5.5 and Section 7: Enhancements.
 
 ### Champion: Barrier
 

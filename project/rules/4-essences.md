@@ -92,6 +92,8 @@ Each Essence represents a fundamental magical energy with unique properties. Cho
 
 ### Using Status Effects
 
+The "Primary Effect," "Secondary Effect," and "Minor Effect" listed for each Essence describe the mechanical and sensory effects a creature suffers while it is under the influence of the named status (e.g., Ignited, Frozen, Dazzled, etc.).
+
 * The Essence's *damage type* applies automatically to damaging spells
 * To **inflict the associated status effect**, you typically spend **+2 SP** when casting a spell (using an Enhancement that allows this) OR use a class feature that applies the status
 * Unless specified otherwise, status effects applied this way last until the **start of your next turn**
