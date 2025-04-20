@@ -13,7 +13,7 @@ Classes in this system aren't rigid archetypes—they're flexible frameworks for
 
 At 1st level, you begin knowing **four spells** that form the foundation of your magical repertoire:
 
-1. **Core Attack Spell:** Your primary magical attack—either `Strike` or `Bolt` (or a choice between them, depending on your class)
+1. **Core Attack Spell:** Your primary magical attack—either `Strike`, `Bolt`, or a choice between them, depending on your class
 2. **Unique Spell:** A distinctive spell that only your class can access, representing its fundamental approach to magic
 3. **Choice Spells:** Two additional spells you select from your class's available options, letting you customize your initial capabilities
 
@@ -48,8 +48,6 @@ The Champion's unique spell, `Barrier`, allows them to create physical manifesta
 | **Hit Dice**     | d10                                                          |
 | **Armor**        | All armor types and shields                                  |
 | **Weapons**      | Simple and martial weapons                                   |
-| **Saves**        | Strength, Constitution                                       |
-| **Skills**       | Choose 2 from: Athletics, Intimidation, Perception, Survival |
 
 #### Champion Spells
 
@@ -92,8 +90,6 @@ The Trickster's unique spell, `Move`, represents their unmatched mobility. Combi
 | **Hit Dice**     | d8                                                                                                 |
 | **Armor**        | Light armor                                                                                        |
 | **Weapons**      | Simple weapons, hand crossbows, longswords, rapiers, shortswords, shortbows                        |
-| **Saves**        | Dexterity, Intelligence                                                                            |
-| **Skills**       | Choose 3 from: Acrobatics, Deception, Insight, Investigation, Perception, Sleight of Hand, Stealth |
 
 #### Trickster Spells
 
@@ -136,8 +132,6 @@ The Adapter's unique spell, `Adapt Self`, represents their physical mutability. 
 | **Hit Dice**     | d10                                                                  |
 | **Armor**        | Light armor, medium armor, shields                                   |
 | **Weapons**      | Simple weapons                                                       |
-| **Saves**        | Constitution, Strength                                               |
-| **Skills**       | Choose 2 from: Athletics, Intimidation, Nature, Perception, Survival |
 
 #### Adapter Spells
 
@@ -180,8 +174,6 @@ The Scholar's unique spell, `Manipulate`, represents their fine control over obj
 | **Hit Dice**     | d6                                                                       |
 | **Armor**        | None                                                                     |
 | **Weapons**      | Daggers, darts, slings, quarterstaffs, light crossbows                   |
-| **Saves**        | Intelligence, Wisdom                                                     |
-| **Skills**       | Choose 2 from: Arcana, History, Insight, Investigation, Medicine, Nature |
 
 #### Scholar Spells
 
@@ -224,8 +216,6 @@ The Sage's unique spell, `Arcane Sight`, represents their extraordinary percepti
 | **Hit Dice**     | d8                                                                                |
 | **Armor**        | Light armor, medium armor, shields                                                |
 | **Weapons**      | Simple weapons                                                                    |
-| **Saves**        | Wisdom, Charisma                                                                  |
-| **Skills**       | Choose 2 from: Animal Handling, Insight, Medicine, Perception, Religion, Survival |
 
 #### Sage Spells
 
@@ -270,8 +260,6 @@ The Orator's unique spell, `Influence`, represents their ability to affect other
 | **Hit Dice**     | d8                                                                       |
 | **Armor**        | Light armor                                                              |
 | **Weapons**      | Simple weapons, hand crossbows, rapiers, shortswords                     |
-| **Saves**        | Charisma, Constitution                                                   |
-| **Skills**       | Choose 2 from: Deception, Insight, Intimidation, Performance, Persuasion |
 
 #### Orator Spells
 
