@@ -76,15 +76,7 @@ Think about your Concept. Which ability best represents their primary strength? 
 
 ### 2.3 Roots: Forge Your Background
 
-Your background is who you were *before* adventure called. It shaped your skills and connections. Instead of rigid categories, define your background by selecting:
-
-1. **Two Skill Proficiencies:** Choose **two** skills from the table below to gain +3 to checks made with that skill. Choose skills that reflect your past experiences.
-2. **A Story Hook:** Create a connection to the world that your GM can use to draw you into adventures. This is a narrative benefit, not a mechanical one. Examples:
-  
-    - "I have contacts in the thieves' guild who still owe me favors."
-    - "The remote monastery where I trained still seeks my counsel."
-    - "My family name opens doors in certain noble circles."
-    - "I know secret routes through the wilderness few others have mapped."
+Your past experiences have honed certain abilities. To reflect this, choose two skills from the table below. You gain proficiency in these chosen skills, adding a +3 bonus to any checks made using them.
 
 **Skill Proficiencies:**
 
@@ -100,7 +92,8 @@ Your background is who you were *before* adventure called. It shaped your skills
 
 Your Class defines *how* your character channels magical power and approaches challenges. It provides your core archetype and mechanical framework.
 
-1. **Review the Classes:** Read through the descriptions in **Section 3: Classes**. Pay attention to the **Key Ability** score – ideally, this should match the ability where you placed your +3 modifier in Step 2.2. Choose the Class that best fits your Character Concept.
+1. **Review the Classes:** Based on the table below, select a classs. 
+    - The **Key Ability** score should ideally match the where you placed your +3 modifier in Step 2.2. Choose the Class that best fits your Character Concept. More information on classes can be found in **Section 3: Classes**.
 2. **Note Your Class Benefits:** Your chosen class determines:
     - Your **Key Ability** score
     - Your **Unique Spell** (that only your class can access)
@@ -138,12 +131,12 @@ When you activate a Spell, you'll choose *one* of your known Essences to apply, 
 
 ### 2.6 Mastering Effects: Selecting Spells
 
-Your Class grants you access to **Spells** – the fundamental templates for your magical effects. At 1st level, you **know four Spells** that you can use freely without daily preparation.
+Your Class grants you access to **Spells** – the fundamental templates for your magical effects. Each class grants you four **Base Spells** that you can use freely.
 
-Refer to your chosen Class description in **Section 3.3** to determine your starting spells:
+Refer to your chosen Class description in **Section 3.3** to determine and select your starting spells:
 
-1. **Core Attack Spell:** Your class grants you knowledge of `Strike`, `Bolt`, or lets you choose one.
-2. **Unique Thematic Spell:** Your class grants you knowledge of a specific mandatory Spell central to its theme (your Unique Spell from 2.4).
+1. **Core Attack Spell:** Your class grants you knowledge of `Strike`, `Bolt`, or lets you choose between them.
+2. **Unique Spell:** Your class grants you knowledge of a specific spell that is unique to your class.
 3. **Choice Spells (Choose 2):** Your class provides a list of **Available Spells**. Choose **two** additional Spells from that list.
 
 Record your four starting Spells and familiarize yourself with their **Basic Effects** (0 SP cost) listed in Section 5.4. These 0 SP effects are always available to you, forming your baseline magical abilities.
@@ -207,12 +200,11 @@ Record your starting HP.
 As you gain experience, you'll unlock more powerful and versatile magical abilities through **Enhancements** and expendable **Spell Points (SP)**.
 
 - **Spell Points (SP):** Your magical energy pool. At 1st level, you have 10 SP, scaling with your level (see Section 6.4). You regain all SP after a Long Rest.
-- **Basic Effects (0 SP):** Each spell has a Basic Effect that costs 0 SP, usable at will (like cantrips).
 - **Enhancements:** As you level up, you'll learn Enhancements that let you spend SP to augment your spells in creative ways.
 - **Maximum SP per Activation:** At 1st level, you can spend a maximum of 3 SP on a single spell activation. This limit increases as you gain levels (see Section 6.4).
 
 **Learning Your First Enhancement:**
-At 1st level, you know one Enhancement for one of your spells. Choose one spell you know, then work with your GM to define one Enhancement for that spell, following the guidelines in Section 7. This Enhancement represents your initial specialization and creative approach to magic.
+At 2nd level, you learn your first Enhancement. Choose one spell you know, select one Enhancement for that spell, following the guidelines in Section 7. This Enhancement represents your specialization and creative approach to magic.
 
 ### 2.10 The Final Flourishes
 

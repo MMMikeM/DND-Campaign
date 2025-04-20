@@ -41,6 +41,13 @@ This book is structured to get you playing quickly:
 1. **Section 2: Forging Your Character:** This is your starting point. It guides you step-by-step through creating your unique hero, from initial concept to final details.
 2. **Sections 3-7:** These sections detail the core mechanics underpinning your character's abilities – Classes, Essences, Spells, Spell Points, and Enhancements. You'll reference these during character creation and throughout play.
 
-Don't feel you need to memorize everything upfront. Focus on understanding your character (Section 2) and the basics of their Class (Section 3) and Spells (Section 5). You can look up specifics on Essences (Section 4), Spell Points (Section 6), and Enhancements (Section 7) as they become relevant during play.
+Don't feel you need to memorize everything upfront. To start, you only need the following
+
+* Your character (Section 2)
+* the basics of their Class (Section 3)
+* Your two selected Essences (Section 4)
+* your four selected Spells (Section 5)
+
+Spell Points (Section 6) and Enhancements (Section 7) will become relevant as you progress through the game.
 
 Now, gather your dice, spark your imagination, and let's forge a hero! Turn to **Section 2: Forging Your Character** to begin.
