@@ -36,6 +36,10 @@ This modular approach shifts the focus from memorizing numerous specific rules t
 
 Characters **know** a set number of Spells, representing the magical effects they have mastered. Unlike some systems, you don't prepare spells daily—your known spells are always available to you.
 
+Your four starting spells form the core of your magical repertoire, representing the foundational concepts your character has mastered.
+Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 7).
+While your character may rarely learn entirely new spells through specific feats or unique narrative opportunities, the emphasis of this system is on deepening mastery over breadth of effects.
+
 ### Starting Spells
 
 At 1st level, you know **four Spells** determined as follows:
@@ -68,8 +72,8 @@ Each spell follows a standard format detailing its core function before any Enha
 
 ### Component Notes
 
-* **Verbal (V)** - Spoken words, incantations, or sounds
-* **Material (M)** - A focus that channels your magic (wand, staff, crystal, etc.)
+* **Verbal (V)** - Spoken words, incantations, or sounds. You must be able to speak to fulfill a Verbal component.
+* **Material (M)** - A focus that channels your magic (wand, staff, crystal, etc.). You must be holding the focus to fulfill a Material component. The hand holding the focus is typically sufficient for any gestures required by the spell.
 * **Somatic (S)** - Complex hand gestures beyond simply pointing your focus
 
 ### Common Tags
