@@ -247,8 +247,8 @@
 
 * *You can weave two magical energies together, creating unique hybrid effects.*
 * **Prerequisite:** None
-* **Dual Infusion:** When you cast a spell that deals damage and apply one of your known Essences, you can spend 2 additional SP to infuse a second known Essence into the spell. The spell's damage type becomes both Essence types (if damage dice are odd, you choose which type gets the extra point). If the spell forces a saving throw to resist an associated status effect, the target makes separate saving throw rolls (against the same Spell Save DC) for each Essence's status effect.
-* **Resonant Pairs:** Work with your GM to define one unique minor synergistic effect that occurs when you specifically combine two of your known Essences using Dual Infusion (e.g., Fire + Force might create a small explosion pushing targets back 5 feet).
+* **Dual Infusion:** When you cast a spell and apply one of your known Essences, you can spend 2 additional SP to infuse a second known Essence into the spell. Choose which Essence's damage type applies (if any). The spell then gains one minor property or narrative flourish associated with the second Essence (GM discretion, e.g., Fire damage that causes rocky debris to fly, or Cold damage that creates disorienting misty echoes).
+* **Resonant Effect:** When you spend SP to apply an associated status effect using an Enhancement, you may choose to apply the status effect associated with either of your two Essences you know, even if the spell's damage type (if any) was from the other Essence.
 * **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
 
 #### Elemental Adept
@@ -421,7 +421,7 @@
 * *You can directly channel raw elemental energy from your body.*
 * **Prerequisite:** Level 8+
 * **Essence Burst:** As an action, once per short rest, create a 10-foot radius burst of elemental energy around you. Creatures in the area make a Dexterity save or take damage equal to your level (half on success).
-* **Empowered Essence:** Add your spellcasting modifier to damage once per target when casting spells with your Essence.
+* **Empowered Essence:** Add your spellcasting modifier (minimum 1) to the damage dealt by a spell using the chosen Essence the first time it damages any given target during that spell's activation.
 * **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
 
 #### Essence Shield

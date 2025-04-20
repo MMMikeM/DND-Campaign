@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## Section 5: Enhancements
+## Section 7: Enhancements
 
 ### **7.1 Purpose of Enhancements**
 
@@ -7,11 +7,7 @@
 
 ### **7.2 Learning and Using Enhancements**
 
-- **Learning Enhancements:** Characters typically learn Enhancements as they gain levels in their spellcasting class, often choosing **one specific Spell** they know and **one Enhancement Category** relevant to that Spell.
-- **Define the Benefit:** Working with the GM, the player defines the specific mechanical benefit and **SP** cost for the learned Enhancement. They can either:
-  - Choose a suggested Example benefit from the list in 7.4 for the chosen Spell and Category.
-  - Propose a custom benefit that fits the chosen Category, using the Examples as guidelines for balance and scope (GM approval required).
-  - The player should clearly record the defined benefit and its associated SP cost. This becomes *their* unique, learned Enhancement for that Spell.
+- **Learning Enhancements:** Characters typically learn Enhancements as they gain levels. For each level, they choose **two Spells** they know and learn **one Enhancement** relevant to that Spell. When you gain a level where you learn Enhancements (Level 2+), you choose two Spells you know. For each of those spells, you may either learn one new Enhancement listed for that spell, OR learn one of that spell's available Modes (such as Standard Mode or other listed Modes).
 - **Applying Enhancements:** When activating a Spell, the caster declares they are using one or more learned Enhancements for that Spell. They describe the enhanced effect and add the SP cost of all applied Enhancements to the Spell's Base SP Cost. The total SP spent cannot exceed the Maximum SP per Activation limit (see 7.3).
 - **Combining Enhancements:** Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory (e.g., you cannot apply two Enhancements that change the saving throw type to different stats). The SP costs are cumulative.
 
@@ -20,14 +16,6 @@
 To maintain balance across levels, there is a limit to the total number of **Spell Points (SP)** (Base SP Cost + Enhancement SP Costs) that can be spent on a single activation of any Spell. This limit typically increases as a character gains levels. The specific progression will be detailed on [Table X-Y: Maximum SP per Activation] (to be created later, likely tied to class progression or caster level).
 
 ### **7.4 Enhancement Categories by Spell**
-
-Okay, here are the first 10 enhancement sections updated to use tables, following the style of the Manipulate example.
-
----
-
-Okay, here are the first 10 spell enhancement sections reformatted using the agreed-upon "Best of Both" conventions, including the `(Requires: ...)` and `(Applies To: ...)` prefixes for clarity.
-
----
 
 ### 7.4.1 Adapt Self
 
@@ -108,12 +96,12 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Dispel Magic ✦ 4 SP
 
-| Property     | Value                                                                                                                                           |
-|:-------------|:------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                        |
-| **Range**    | 120 ft                                                                                                                                          |
-| **Duration** | Instantaneous                                                                                                                                   |
-| **Effect**   | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + [SP cost / 2]) to end. |
+| Property     | Value                                                                                                                                                               |
+|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                            |
+| **Range**    | 120 ft                                                                                                                                                              |
+| **Duration** | Instantaneous                                                                                                                                                       |
+| **Effect**   | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + [SP cost of the target spell / 2]) to end. |
 
 #### Unique Enhancements (Dispel Magic)
 
@@ -125,13 +113,12 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Counterspell ✦ 4 SP
 
-| Property     | Value                                                                                                                              |
-|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | Reaction (when you see creature within 60 ft casting)                                                                              |
-| **Range**    | 60 ft                                                                                                                              |
-| **Duration** | Instantaneous                                                                                                                      |
-| **Effect**   | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + [SP cost / 2]) to cause spell to fail. |
-
+| Property     | Value                                                                                                                                                  |
+|:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | Reaction (when you see creature within 60 ft casting)                                                                                                  |
+| **Range**    | 60 ft                                                                                                                                                  |
+| **Duration** | Instantaneous                                                                                                                                          |
+| **Effect**   | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + [SP cost of the target spell / 2]) to cause spell to fail. |
 
 ### General Enhancements (Arcane Sight)
 
@@ -186,7 +173,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Damaging Barrier   | +2 SP        | Creatures ending turn adjacent or moving through its space (if possible) take 1d8 Essence damage.                 |
 | Obscuring Barrier  | +1 SP        | Barrier heavily obscures vision through it (if not already opaque).                                               |
 | One-Way Visibility | +2 SP        | Choose one side when casting; creatures on that side can see and target through as if transparent, others cannot. |
-| Persistent Barrier | +2 SP        | (Requires: Sustain Barrier ≥ 1 hour - *Implied based on pattern*) Removes the need for Concentration.             |
+| Persistent Barrier | +2 SP        | (Requires: Sustain Barrier ≥ 1 hour - Removes the need for Concentration.                                         |
 
 ---
 
@@ -296,12 +283,12 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Channeled Bolt ✦ 3 SP
 
-| Property     | Value                                                                                                                                                                                                                                                           |
-|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                                                                                                        |
-| **Range**    | 60 ft                                                                                                                                                                                                                                                           |
-| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                      |
-| **Effect**   | Choose delivery: **Attack Channel** (Spell attack, hit: 2d8 dmg, start channel) OR **Save Channel** (Dex save, fail: 2d8 dmg, start channel; success: half dmg, no channel). Subsequent turns: Action for 2d8 dmg to channeled target (needs visibility/range). |
+| Property     | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **Range**    | 60 ft                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Effect**   | Choose delivery: **Attack Channel** (Make a spell attack. On hit: target takes 2d8 Essence damage and you establish a channel to them.) OR **Save Channel** (Target makes a Dexterity saving throw. On fail: takes 2d8 Essence damage and you establish a channel to them. On success: takes half damage and no channel is established). While concentrating, you can use your Action on subsequent turns to deal 2d8 Essence damage to the channeled target (if visible and within range). The channel ends if you lose concentration or use a different spell/effect that requires your Action on a subsequent turn. |
 
 #### Unique Enhancements (Channeled Bolt)
 
@@ -332,7 +319,7 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 | Property     | Value                                                                                                                                              |
 |:-------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Cast**     | 1 Action                                                                                                                                           |
-| **Range**    | 60 ft                                                                                                                                              |
+| **Range**    | 120 ft                                                                                                                                             |
 | **Duration** | Concentration, up to 1 min                                                                                                                         |
 | **Effect**   | Initiate a **two-way telepathic conversation** with one creature (willing, or Int save if unwilling). Bypasses language. Exchange thoughts freely. |
 
@@ -1073,12 +1060,12 @@ Okay, here are the first 10 spell enhancement sections reformatted using the agr
 
 ### Mode: Harmful Zone ✦ 4 SP
 
-| Property     | Value                                                                                                                                                                                                                                                                                   |
-|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                |
-| **Range**    | 60 ft (20-foot radius, 20-foot high cylinder)                                                                                                                                                                                                                                           |
-| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                              |
-| **Effect**   | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs essence status until start of *its* next turn. |
+| Property     | Value                                                                                                                                                                                                                                                                                    |
+|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                 |
+| **Range**    | 60 ft (20-foot radius, 20-foot high cylinder)                                                                                                                                                                                                                                            |
+| **Duration** | Concentration, up to 1 min                                                                                                                                                                                                                                                               |
+| **Effect**   | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs essence status until start of *your* next turn. |
 
 #### Unique Enhancements (Harmful Zone)
 
