@@ -150,7 +150,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 | Property      | Value                                                              |
 |:--------------|:-------------------------------------------------------------------|
 | **Cast Time** | 1 Action                                                           |
-| **Range**     | 90 ft                                                              |
+| **Range**     | 60 ft                                                              |
 | **Duration**  | Instantaneous                                                      |
 | **Effect**    | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
 
@@ -279,12 +279,12 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ### Summon - Basic Effect (0 SP)
 
-| Property      | Value                                                                                                                                                           |
-|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                                        |
-| **Range**     | 30 ft                                                                                                                                                           |
-| **Duration**  | 1 minute                                                                                                                                                        |
-| **Effect**    | Summon Tiny Essence servant (AC 10, 1 HP, Speed 15ft fly/walk). Can use Action to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end. |
+| Property      | Value                                                                                                                                                                                            |
+|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast Time** | 1 Action                                                                                                                                                                                         |
+| **Range**     | 30 ft                                                                                                                                                                                            |
+| **Duration**  | 1 minute                                                                                                                                                                                         |
+| **Effect**    | Summons Tiny servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken directly before or after yours, to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end. |
 
 ---
 

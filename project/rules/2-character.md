@@ -72,11 +72,31 @@ Your character's natural talents are represented by six core abilities. These mo
 
 > **Embracing Specialization**: Every hero has strengths and weaknesses—that's what makes them interesting! Your +3 represents what you excel at, while your -1 is an opportunity for memorable roleplaying and creative problem-solving. A brilliant scholar might struggle to lift heavy objects. A mighty champion might miss social cues. These contrasts create depth and encourage teamwork.
 
-Think about your Concept. Which ability best represents their primary strength? This ability will often align with the **Key Ability** of the Class you choose in Step 2.4. Assign your **+3** there, then distribute the remaining modifiers to reflect their other talents and limitations.
+Think about your Concept. Which ability best represents their primary strength? This ability will often align with the **Key Ability** of the Class you choose in Step **2.5**. Assign your **+3** there, then distribute the remaining modifiers to reflect their other talents and limitations.
 
-### 2.3 Roots: Forge Your Background
+### 2.3 Core Mechanics: Proficiency Bonus
 
-Your past experiences have honed certain abilities. To reflect this, choose two skills from the table below. You gain proficiency in these chosen skills, adding a +3 bonus to any checks made using them.
+Characters can have proficiency in skills, saving throws, armor, and weapons.
+
+Weapon proficiency allows you to add your proficiency bonus to the attack roll and damage roll of the weapon.
+
+Armor proficiency allows you to don armor without any penalty.
+
+Equipping armor you do not have proficiency in will result in a -10ft penalty to your movement speed and disadvantage on any physical ability checks.
+
+Equipping heavy armour, irrespective of proficiency, imposes a disadvantage on stealth checks.
+
+Your **Proficiency Bonus** reflects your character's general training and expertise. This is a constant value of **+3** added to any roll you are proficient in, regardless of your level.
+
+### 2.4 Roots: Forge Your Background (Skills)
+
+Your past experiences have honed certain abilities. To reflect this, choose two skills from the table below. You gain proficiency in these chosen skills.
+
+When you make a **Skill Check**, you roll a d20 and add the modifier of the linked ability score. If you are proficient in the skill, you also add your **Proficiency Bonus**.
+
+`Skill Check = 1d20 + Ability Modifier + Proficiency Bonus (if proficient)`
+
+For the two skills you choose from the table below, you are proficient and add your Proficiency Bonus.
 
 **Skill Proficiencies:**
 
@@ -88,14 +108,14 @@ Your past experiences have honed certain abilities. To reflect this, choose two 
 |           |                 | Nature        | Perception      | Persuasion   |          |
 |           |                 | Religion      | Survival        |              |          |
 
-### 2.4 Defining Your Path: Choose Your Class
+### 2.5 Defining Your Path: Choose Your Class
 
 Your Class defines *how* your character channels magical power and approaches challenges. It provides your core archetype and mechanical framework.
 
-1. **Review the Classes:** Based on the table below, select a classs. 
-    - The **Key Ability** score should ideally match the where you placed your +3 modifier in Step 2.2. Choose the Class that best fits your Character Concept. More information on classes can be found in **Section 3: Classes**.
+1. **Review the Classes:** Based on the table below, select a class.
+    - The **Key Ability** score should ideally match where you placed your +3 modifier in Step **2.2**. Choose the Class that best fits your Character Concept. More information on classes can be found in **Section 3: Classes**.
 2. **Note Your Class Benefits:** Your chosen class determines:
-    - Your **Key Ability** score
+    - Your **Key Ability** score (used for spellcasting, see **2.7** below)
     - Your **Unique Spell** (that only your class can access)
     - Your **Hit Die** (for calculating HP)
     - Your **Proficiencies** in armor, weapons, and saving throws
@@ -111,7 +131,37 @@ Your Class defines *how* your character channels magical power and approaches ch
 | Sage      | Wisdom       | Arcane Sight | d8      | Perceptive, intuitive guide       |
 | Orator    | Charisma     | Influence    | d8      | Compelling, force of personality  |
 
-### 2.5 Shaping Your Magic: Choose Essences
+### 2.6 Core Mechanics: Saving Throws
+
+When a spell, trap, or other effect requires you to resist it, you make a **Saving Throw**. This is a roll against a specific Ability Score, often determined by the effect's nature (e.g., Dexterity for dodging, Constitution for resisting poison, Wisdom for resisting mental effects).
+
+Your class grants you proficiency in specific Saving Throws. When you make a Saving Throw you are proficient in, you add your **Proficiency Bonus**.
+
+`Saving Throw = 1d20 + Ability Modifier + Proficiency Bonus (if proficient)`
+
+The classes grant proficiency in the following saving throws:
+
+- **Champion:** Strength, Constitution
+- **Trickster:** Dexterity, Intelligence
+- **Adapter:** Constitution, Wisdom
+- **Scholar:** Intelligence, Wisdom
+- **Sage:** Wisdom, Charisma
+- **Orator:** Charisma, Dexterity
+
+### 2.7 Core Mechanics: Spellcasting
+
+Your ability to cast spells is primarily driven by your **Key Ability** score (determined by your class, see **2.5** above). The modifier from this ability is your **Spellcasting Ability Modifier** (often shortened to **Spell Mod**).
+
+This modifier determines how effective your spells are:
+
+- **Spell Attack Bonus:** Used for spells that require you to make an attack roll against a target.
+    `Spell Attack Bonus = Your Spellcasting Ability Modifier`
+- **Spell Save DC:** The difficulty class creatures must meet or exceed when making a saving throw against your spells.
+    `Spell Save DC = 10 + Your Spellcasting Ability Modifier`
+
+Many spell effects, particularly those dealing damage or healing, also scale based on your **Spellcasting Ability Modifier** (referred to as **Spell Mod** in spell descriptions).
+
+### 2.8 Shaping Your Magic: Choose Essences
 
 **Essences** define the *look, feel, and damage type* of your magic, bridging the gap between mechanical framework and your character's unique expression. Refer to **Section 4: Essences** for the full list and details.
 
@@ -129,7 +179,7 @@ Your Class defines *how* your character channels magical power and approaches ch
 
 When you activate a Spell, you'll choose *one* of your known Essences to apply, determining its damage type and descriptive flavor.
 
-### 2.6 Mastering Effects: Selecting Spells
+### 2.9 Mastering Effects: Selecting Spells
 
 Your Class grants you access to **Spells** – the fundamental templates for your magical effects. Each class grants you four **Base Spells** that you can use freely.
 
@@ -141,7 +191,7 @@ Refer to your chosen Class description in **Section 3.3** to determine and selec
 
 Record your four starting Spells and familiarize yourself with their **Basic Effects** (0 SP cost) listed in Section 5.4. These 0 SP effects are always available to you, forming your baseline magical abilities.
 
-### 2.7 Adding Depth: Your Hindrance
+### 2.10 Adding Depth: Your Hindrance
 
 Compelling heroes have flaws. Your hindrance is a significant weakness or complication that occasionally creates trouble—but also adds depth and roleplaying opportunities.
 
@@ -183,7 +233,7 @@ Create your own hindrance or use these as inspiration:
 - **Marked by Power**: Your connection to magic is visible and potentially alarming to others.
 - **Cosmic Attention**: Something beyond mortal understanding has noticed you.
 
-### 2.8 Calculating Vitality: Hit Points (HP)
+### 2.11 Calculating Vitality: Hit Points (HP)
 
 Your Hit Points determine how much punishment you can take before falling unconscious.
 
@@ -195,18 +245,18 @@ Your Hit Points determine how much punishment you can take before falling uncons
 
 Record your starting HP.
 
-### 2.9 Future Growth: Understanding Enhancements & Spell Points
+### 2.12 Future Growth: Understanding Enhancements & Spell Points
 
 As you gain experience, you'll unlock more powerful and versatile magical abilities through **Enhancements** and expendable **Spell Points (SP)**.
 
 - **Spell Points (SP):** Your magical energy pool. At 1st level, you have 10 SP, scaling with your level (see Section 6.4). You regain all SP after a Long Rest.
-- **Enhancements:** As you level up, you'll learn Enhancements that let you spend SP to augment your spells in creative ways.
+- **Enhancements:** As you gain levels, you'll learn Enhancements (2 per level from level 2 onwards) that let you spend SP to augment your spells in creative ways.
 - **Maximum SP per Activation:** At 1st level, you can spend a maximum of 3 SP on a single spell activation. This limit increases as you gain levels (see Section 6.4).
 
 **Learning Your First Enhancement:**
-At 2nd level, you learn your first Enhancement. Choose one spell you know, select one Enhancement for that spell, following the guidelines in Section 7. This Enhancement represents your specialization and creative approach to magic.
+At 2nd level, you learn your first two Enhancements. Choose one spell you know, select one Enhancement for that spell, following the guidelines in Section 7. This Enhancement represents your specialization and creative approach to magic.
 
-### 2.10 The Final Flourishes
+### 2.13 The Final Flourishes
 
 Fill in the remaining details that bring your character fully to life:
 
