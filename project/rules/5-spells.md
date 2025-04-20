@@ -50,7 +50,7 @@ At 1st level, you know **four Spells** determined as follows:
 
 ### Changing Known Spells
 
-Every 4th level (4th, 8th, 12th, 16th, 20th), when you would normally gain a Feat or Ability Score Improvement, you can replace one spell you know with a different spell from your class spell list, representing your character's evolving magical approach.
+Every 4th level (4th, 8th, 12th, 16th, 20th), when you would normally gain a Feat, you can replace one spell you know with a different spell from your class spell list, representing your character's evolving magical approach.
 
 ## 5.3 Spell Descriptions
 
