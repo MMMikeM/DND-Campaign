@@ -372,13 +372,6 @@
 * **New Enhancement:** Learn one new 1 SP Enhancement for a spell you know. Work with your GM to define its minor mechanical or flavorful effect, using existing 1 SP Enhancements as a guideline.
 * **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
 
-#### Metamagic Adept
-
-* *You've learned techniques to subtly alter how your spells function.*
-* **Prerequisite:** None
-* **Choose Metamagic:** Choose two Metamagic options (Careful, Distant, Subtle, Twinned). (See previous list for details)
-* **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
-
 ## Level 8+ Feats
 
 ### Combat Feats (Level 8+)
@@ -466,9 +459,9 @@
 
 #### Celestial Channel
 
-* *You can tap into radiant energy from beyond the material plane.*
+* *You can tap into energy from beyond the material plane.*
 * **Prerequisite:** Level 12+
-* **Planar Infusion:** For 3 SP, change a spell's Essence to Radiant and add temporary HP to allies in the area.
+* **Planar Infusion:** For 3 SP, add temporary HP to allies in the area.
 * **Ascendant Ward:** Once per long rest, cast `Barrier` (Standard Mode) as a free reaction.
 * **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
 
@@ -502,7 +495,7 @@
 
 * *You can apply multiple enhancements with unprecedented skill.*
 * **Prerequisite:** Level 12+
-* **Double Enhancement:** Once per long rest, apply two Enhancements simultaneously, potentially exceeding your Maximum SP limit.
+* **Double Enhancement:** Once per long rest, when you activate a spell, you may apply up to two learned Enhancements whose combined SP cost (added to the Mode cost) would normally exceed your Maximum SP per Activation limit. For this activation, you ignore that limit.
 * **Master's Touch:** One of your 1-2 SP Enhancements gains a minor passive bonus.
 * **Modifier Increase:** Increase your primary spellcasting ability modifier by +1.
 
