@@ -1,11 +1,15 @@
 <!-- markdownlint-disable MD041 -->
-## **1. Introduction**
+## 1. Introduction
 
 ### **1.1 Welcome: Doing Cool Shit**
 
 Welcome to a tabletop roleplaying game built from the ground up with one goal: **Empower you to do cool shit with as little friction as possible.** Forget dense rulebooks filled with exceptions and edge cases. This system is designed for dynamic, imaginative play where your character's unique abilities and your clever ideas take center stage.
 
-This is a game about heroes wielding incredible power, shaped not just by rigid rules, but by their personality, history, and the fundamental magical **Essences** they command. You won't find sprawling spell lists here. Instead, you'll master core **Spells** – versatile templates representing fundamental magical concepts – and customize them on the fly with **Essences** and tactical **Enhancements**. Want your energy blast to be a searing flame that pushes enemies back? A crackling bolt of lightning that chains between targets? A wave of chilling frost that slows them to a crawl? You can build that, expressing *your* character's specific brand of magic.
+This is a game about heroes wielding incredible power, shaped not just by rigid rules, but by their personality, history, and the fundamental magical **Essences** they command. You won't find sprawling spell lists here. Instead, you'll master core **Spells** – versatile templates representing fundamental magical concepts – and customize them on the fly with **Essences** and tactical **Enhancements**.
+
+Want your energy blast to be a searing flame that pushes enemies back? A crackling bolt of lightning that chains between targets? A wave of chilling frost that slows them to a crawl? You can build that, expressing *your* character's specific brand of magic.
+
+> **Magic in Action:** Lyra faces three charging goblins. "I slam my staff down and channel earth energy into a Blast!" She spends 2 SP for a standard Blast, adds Fire essence, and the Forceful enhancement (+1 SP). The goblins fail their saves and are pushed back by the wave of molten stone erupting from the ground – exactly the breathing room Lyra needed.
 
 Get ready to weave compelling stories, face daunting challenges, and unleash your creativity.
 
@@ -22,7 +26,9 @@ These rules are guided by a core set of principles aimed at creating the best po
 * **Balance:** We aim for earned power and fair challenges. Choices should be meaningful, without obvious "best" options or game-breaking combos. Every character path should feel viable and rewarding.
 * **Clean Design:** We've avoided legacy bloat and unnecessary complexity. This is a refined, streamlined system focused on doing its job elegantly.
 
-> ✨ **Our Golden Rule:** If a rule ever blocks a great idea or feels too complicated for the fun it provides, we tweak the rule—not the idea. **If it isn’t fun, it isn’t right.**
+> ✨ **Our Golden Rule:**  
+> If a rule ever blocks a great idea or feels too complicated for the fun it provides, we tweak the rule—not the idea.  
+> **If it isn't fun, it isn't right.**
 
 ### **1.3 What You Need to Play**
 
@@ -41,12 +47,12 @@ This book is structured to get you playing quickly:
 1. **Section 2: Forging Your Character:** This is your starting point. It guides you step-by-step through creating your unique hero, from initial concept to final details.
 2. **Sections 3-7:** These sections detail the core mechanics underpinning your character's abilities – Classes, Essences, Spells, Spell Points, and Enhancements. You'll reference these during character creation and throughout play.
 
-Don't feel you need to memorize everything upfront. To start, you only need the following
+Don't feel you need to memorize everything upfront. To start, you only need the following:
 
 * Your character (Section 2)
-* the basics of their Class (Section 3)
+* The basics of their Class (Section 3)
 * Your two selected Essences (Section 4)
-* your four selected Spells (Section 5)
+* Your four selected Spells (Section 5)
 
 Spell Points (Section 6) and Enhancements (Section 7) will become relevant as you progress through the game.
 

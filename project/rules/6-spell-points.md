@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## **6. Spell Points (SP)**
+## 6. Spell Points (SP)
 
 Magic is fueled by **Spell Points (SP)**, representing a caster's pool of magical energy. Activating Spell **Modes** and adding **Enhancements** costs SP.
 

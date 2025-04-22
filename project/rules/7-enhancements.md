@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## Section 7: Enhancements
+## 7: Enhancements
 
 ### **7.1 Purpose of Enhancements**
 

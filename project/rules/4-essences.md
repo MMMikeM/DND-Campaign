@@ -1,8 +1,9 @@
-# 4. Essences: The Flavors of Magic
+<!-- markdownlint-disable MD041 -->
+## 4. Essences: The Flavors of Magic
 
 > *A frostbite-inducing cold that creaks with each movement, a wildfire's devastating hunger, the silent embrace of shadow, the raw kinetic force of a thunderclap—Essences are the fundamental energies that give your magic its distinctive character.*
 
-## 4.1 What Are Essences?
+### 4.1 What Are Essences?
 
 **Essences** are the primal magical energies that transform abstract spells into vivid, sensory experiences. When you cast a generic `Bolt` spell, it's the **Fire Essence** that turns it into a searing flame, the **Lightning Essence** that makes it crackle with electricity, or the **Shadow Essence** that shapes it into a streak of devouring darkness.
 
@@ -18,7 +19,7 @@ Every spell you cast is shaped by the Essence you apply to it, making your magic
 >
 > More than just damage types, Essences are how your character expresses their magical identity. A scholarly wizard's fire might manifest as precise, geometric patterns of flame. A primal druid's lightning could appear as crackling vines of electric energy. A brooding warlock's cold essence might manifest as crystalline shards of midnight frost. How your Essences look and feel is entirely up to you!
 
-## 4.2 Learning Essences
+### 4.2 Learning Essences
 
 When you first gain access to Spells (typically at 1st level), you choose **two Essence Descriptors** from the list in section 4.5 that reflect your character's magical identity.
 
@@ -31,7 +32,7 @@ Your chosen Essences might be influenced by:
 
 Additional Essences might be learned through special feats or specific GM-granted opportunities as your adventure progresses.
 
-## 4.3 Using Essences
+### 4.3 Using Essences
 
 When you cast a Spell, you choose **one** of your known Essence Descriptors to apply. This choice shapes how your magic manifests and determines its damage type (if applicable).
 
@@ -50,28 +51,30 @@ When you cast a Spell, you choose **one** of your known Essence Descriptors to a
 > *Thorne the Champion applies **Earth Essence** to their `Barrier` spell: "I stomp my foot and a jagged wall of stone erupts from the ground, blocking the corridor."*
 >
 > *Vex the Trickster uses **Shadow Essence** with their `Move` spell: "I dissolve into wisps of darkness, flowing between the guards before reforming behind them."*
+>
+> *Orrin the Adapter channels **Life Essence** into his `Adapt Self` spell: "Bark-like patterns emerge across my skin as leafy vines coil around my arms, hardening into natural armor."*
 
-## 4.4 Mechanical Effects of Essences
+### 4.4 Mechanical Effects of Essences
 
 While primarily descriptive, Essences have several important mechanical implications:
 
-### Damage Type
+#### Damage Type
 
 For damaging spells, the chosen Essence determines the damage type—Fire damage, Cold damage, Lightning damage, etc. This interacts with creature resistances and vulnerabilities.
 
-### Status Effect Associations
+#### Status Effect Associations
 
-Each Essence is linked to a specific **sstatus effect** (see table in 4.5). These effects don't automatically apply with basic spells, but certain Enhancements (typically costing +2 SP) can allow you to apply these status effects.
+Each Essence is linked to a specific **status effect** (see table in 4.5). These effects don't automatically apply with basic spells, but certain Enhancements (typically costing +2 SP) can allow you to apply these status effects.
 
-### Minor Inherent Effects
+#### Minor Inherent Effects
 
 Essences provide small, flavorful effects outside of combat—Fire might ignite torches, Cold might chill drinks, Light might illuminate dark corners. These are primarily for narrative color rather than mechanical advantage.
 
-### Occasional Skill Interactions
+#### Occasional Skill Interactions
 
 The nature of an Essence might occasionally grant circumstantial benefits relevant to skills—a convincing Shadow illusion might aid Stealth, for instance. These situational benefits are adjudicated by the GM based on creative application.
 
-## 4.5 Essence Descriptors
+### 4.5 Essence Descriptors
 
 Each Essence represents a fundamental magical energy with unique properties. Choose one known Essence whenever you cast a spell to determine its damage type and potentially apply status effects with the right Enhancements.
 
@@ -90,7 +93,7 @@ Each Essence represents a fundamental magical energy with unique properties. Cho
 | **Sound**     | **Deafened**   | All saves at disadvantage    | Attacks gain advantage vs target                      | Casting Interference: DC 10 Con check for V spells | Ear-ringing disorientation that breaks concentration |
 | **Toxic**     | **Enfeebled**  | Attack rolls at disadvantage | Constitution saves at disadvantage                    | Disadvantage on Constitution checks                | Sickening poison that weakens resistance             |
 
-### Using Status Effects
+#### Using Status Effects
 
 The "Primary Effect," "Secondary Effect," and "Minor Effect" listed for each Essence describe the mechanical and sensory effects a creature suffers while it is under the influence of the named status (e.g., Ignited, Frozen, Dazzled, etc.).
 
@@ -109,3 +112,19 @@ The "Primary Effect," "Secondary Effect," and "Minor Effect" listed for each Ess
 > *"The bolt strikes true, arcing across the battlefield with a thunderous crack! The ogre takes 3d8 lightning damage [rolls] for 13 damage. As electricity courses through its body, it becomes **Conductive** - its muscles spasm, making attacks difficult, and its skin crackles with residual energy that will amplify the next hit it takes."*
 >
 > *GM: "The ogre roars in pain as lightning dances across its body. It's now Conductive until the start of your next turn."*
+
+### 4.6 Evolving Your Essence Expressions
+
+As you advance in experience, consider how your relationship with your Essences might develop:
+
+* **Growing Mastery**: Your Fire might evolve from wild, untamed flames to precisely controlled geometric patterns
+* **Personalized Aesthetics**: Your Lightning could develop a signature color or distinctive sound that marks it as uniquely yours
+* **Deepening Understanding**: Your application of Shadow might progress from simple darkness to intricate manipulations of light and perception
+
+While the mechanical effects remain consistent, your descriptions can evolve to reflect your character's growing mastery and changing relationship with their magical energies.
+
+> **Advanced Techniques**: Through special feats like "Dual Essence Wielder" or "Essence Explorer," experienced mages might learn to blend multiple Essences together or add entirely new Essences to their repertoire. Such advanced applications of Essence magic represent significant developments in a character's magical journey.
+
+---
+
+**Remember**: Your Essences represent your magical signature—how you leave your personal mark on the world through your spellcasting. Embrace creative descriptions, lean into your character's personality, and make your magic come alive at the table!
