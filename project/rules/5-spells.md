@@ -1,8 +1,8 @@
-# 5. Spells: The Frameworks of Magic
+## 5. Spells: The Frameworks of Magic
 
 > *"A mage who knows a hundred specific spells is limited. A mage who masters a dozen fundamental magical concepts and can adapt them endlessly? They are truly powerful."*
 
-## 5.1 The Nature of Spells
+### 5.1 The Nature of Spells
 
 In this system, **Spells** are foundational magical concepts—versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. Unlike traditional systems with sprawling spell lists, we focus on a curated set of core spells that you'll personalize through **Essences** and **Enhancements**.
 
@@ -32,7 +32,7 @@ This modular approach shifts the focus from memorizing numerous specific rules t
 >
 > **Behind the Magic:** Same spell (`Barrier`), different execution—this time with **Light Essence** and the simpler "Standard Barrier" mode (2 SP) for a quick defensive reaction.
 
-## 5.2 Learning Spells
+### 5.2 Learning Spells
 
 Characters **know** a set number of Spells, representing the magical effects they have mastered. Unlike some systems, you don't prepare spells daily—your known spells are always available to you.
 
@@ -40,7 +40,7 @@ Your four starting spells form the core of your magical repertoire, representing
 Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 7).
 While your character may rarely learn entirely new spells through specific feats or unique narrative opportunities, the emphasis of this system is on deepening mastery over breadth of effects.
 
-### Starting Spells
+#### Starting Spells
 
 At 1st level, you know **four Spells** determined as follows:
 
@@ -52,11 +52,11 @@ At 1st level, you know **four Spells** determined as follows:
 >
 > When choosing your two additional spells, consider how they'll complement your core and unique spells. Look for options that cover different situations (combat, exploration, social) or fill different roles (offense, defense, utility).
 
-### Changing Known Spells
+#### Changing Known Spells
 
 Every 4th level (4th, 8th, 12th, 16th, 20th), when you would normally gain a Feat, you can replace one spell you know with a different spell from your class spell list, representing your character's evolving magical approach.
 
-## 5.3 Spell Descriptions
+### 5.3 Spell Descriptions
 
 Each spell follows a standard format detailing its core function before any Enhancements are applied:
 
@@ -70,18 +70,18 @@ Each spell follows a standard format detailing its core function before any Enha
 | **Core Effect**  | Description of what happens when activating the spell at its Base SP Cost                                                                                                          |
 | **Tags**         | Optional keywords like **Concentration** or **Ritual**                                                                                                                             |
 
-### Component Notes
+#### Component Notes
 
 * **Verbal (V)** - Spoken words, incantations, or sounds. You must be able to speak to fulfill a Verbal component.
 * **Material (M)** - A focus that channels your magic (wand, staff, crystal, etc.). You must be holding the focus to fulfill a Material component. The hand holding the focus is typically sufficient for any gestures required by the spell.
 * **Somatic (S)** - Complex hand gestures beyond simply pointing your focus
 
-### Common Tags
+#### Common Tags
 
 * **Concentration** - Requires maintaining focus; you can only concentrate on one spell at a time
 * **Ritual** - Can be cast taking 10 minutes longer without spending SP (only for spells with this tag)
 
-## 5.4 Understanding Spell Effects
+### 5.4 Understanding Spell Effects
 
 Each spell has a **Basic Effect** (0 SP) that you can use at will, similar to a cantrip. This represents the most fundamental application of the magical concept.
 
@@ -101,11 +101,11 @@ By spending **Spell Points (SP)**, you can activate more powerful **Modes** of t
 >
 > *Adding the "Chain Bolt" **Enhancement** (+2 SP, total 4 SP) creates a bolt that jumps to a second target after hitting the first.*
 
-## 5.5 Core Spells - Basic Effects
+### 5.5 Core Spells - Basic Effects
 
 The following section details the baseline **Basic Effect** for each core spell. Remember that these 0 SP effects are always available to you, forming your baseline magical abilities that never run out.
 
-### Adapt Self - Basic Effect (0 SP)
+#### Adapt Self - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                  |
 |:--------------|:-------------------------------------------------------------------------------------------------------|
@@ -116,7 +116,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Arcane Sight - Basic Effect (0 SP)
+#### Arcane Sight - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                                                    |
 |:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -127,7 +127,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Barrier - Basic Effect (0 SP)
+#### Barrier - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                |
 |:--------------|:-------------------------------------------------------------------------------------------------------------------------------------|
@@ -138,7 +138,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Blast - Basic Effect (0 SP)
+#### Blast - Basic Effect (0 SP)
 
 | Property      | Value                                                                                        |
 |:--------------|:---------------------------------------------------------------------------------------------|
@@ -149,7 +149,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Bolt - Basic Effect (0 SP)
+#### Bolt - Basic Effect (0 SP)
 
 | Property      | Value                                                              |
 |:--------------|:-------------------------------------------------------------------|
@@ -160,7 +160,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Communicate - Basic Effect (0 SP)
+#### Communicate - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                                                                                                                                   |
 |:--------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -171,7 +171,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Conduit - Basic Effect (0 SP)
+#### Conduit - Basic Effect (0 SP)
 
 | Property      | Value                                           |
 |:--------------|:------------------------------------------------|
@@ -182,7 +182,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Debilitate - Basic Effect (0 SP)
+#### Debilitate - Basic Effect (0 SP)
 
 | Property      | Value                                                                                |
 |:--------------|:-------------------------------------------------------------------------------------|
@@ -193,7 +193,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Defend - Basic Effect (0 SP)
+#### Defend - Basic Effect (0 SP)
 
 | Property      | Value                                                             |
 |:--------------|:------------------------------------------------------------------|
@@ -204,7 +204,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Empower/Enfeeble - Basic Effect (0 SP)
+#### Empower/Enfeeble - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                                                                                                                         |
 |:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -215,7 +215,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Heal - Basic Effect (0 SP)
+#### Heal - Basic Effect (0 SP)
 
 | Property      | Value                                                                     |
 |:--------------|:--------------------------------------------------------------------------|
@@ -226,7 +226,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Illusion - Basic Effect (0 SP)
+#### Illusion - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                          |
 |:--------------|:-------------------------------------------------------------------------------------------------------------------------------|
@@ -237,7 +237,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Influence - Basic Effect (0 SP)
+#### Influence - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                     |
 |:--------------|:------------------------------------------------------------------------------------------------------------------------------------------|
@@ -248,7 +248,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Manipulate - Basic Effect (0 SP)
+#### Manipulate - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                                                                                                                               |
 |:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -259,7 +259,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Move - Basic Effect (0 SP)
+#### Move - Basic Effect (0 SP)
 
 | Property      | Value                                                                     |
 |:--------------|:--------------------------------------------------------------------------|
@@ -270,7 +270,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Strike - Basic Effect (0 SP)
+#### Strike - Basic Effect (0 SP)
 
 | Property      | Value                                                                                     |
 |:--------------|:------------------------------------------------------------------------------------------|
@@ -281,7 +281,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Summon - Basic Effect (0 SP)
+#### Summon - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                                                                                            |
 |:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -292,7 +292,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 
 ---
 
-### Zone - Basic Effect (0 SP)
+#### Zone - Basic Effect (0 SP)
 
 | Property      | Value                                                                                                                            |
 |:--------------|:---------------------------------------------------------------------------------------------------------------------------------|
@@ -301,7 +301,7 @@ The following section details the baseline **Basic Effect** for each core spell.
 | **Duration**  | 1 round                                                                                                                          |
 | **Effect**    | Choose point on surface seen. Creates 10-ft square area centered there. Area is Difficult Terrain until start of your next turn. |
 
-## 5.6 Creativity in Action
+### 5.6 Creativity in Action
 
 The true power of this spell system emerges when you combine Spells, Essences, and Enhancements to create unique magical effects that perfectly suit the situation at hand.
 
@@ -323,46 +323,46 @@ The true power of this spell system emerges when you combine Spells, Essences, a
 
 Remember that Modes and Enhancements for each spell are detailed in Section 7: Enhancements. As you gain levels, you'll learn more ways to customize your spells, making your magical repertoire increasingly versatile and powerful.
 
-## 5.7 Class Unique Spells
+### 5.7 Class Unique Spells
 
 Each class gains access to a special spell that embodies its approach to magic. These unique spells are unavailable to other classes without special feats or circumstances. Below is a summary of the Basic (0 SP) effect and the first key Mode for each unique spell, drawing from the full details found in Section 5.5 and Section 7: Enhancements.
 
-### Champion: Barrier
+#### Champion: Barrier
 
 The Champion's ability to manifest protective force through sheer strength of will.
 
 **Basic (0 SP):** A 5×5 ft plane of energy that provides half cover and has 5 HP.  
 **Standard (3 SP):** A 10×10 ft plane with total cover, 17 HP, lasting up to 10 minutes with concentration.
 
-### Trickster: Move
+#### Trickster: Move
 
 The Trickster's unmatched mobility and spatial awareness.
 
 **Basic (0 SP):** Your movement doesn't provoke opportunity attacks.  
 **Blink Step (2 SP):** Teleport up to 30 feet to a visible location.
 
-### Adapter: Adapt Self
+#### Adapter: Adapt Self
 
 The Adapter's remarkable ability to transform their body to meet any challenge.
 
 **Basic (0 SP):** Gain one physical enhancement for 1 minute.  
 **Focused Adaptation (2 SP):** Gain two enhancements for up to 10 minutes with concentration.
 
-### Scholar: Manipulate
+#### Scholar: Manipulate
 
 The Scholar's precise control over objects and energy through applied knowledge.
 
 **Basic (0 SP):** Telekinetically interact with objects up to 10 kg for 1 minute.  
 **Focused Control (2 SP):** Enhanced telekinetic control with greater range, capacity, and precision.
 
-### Sage: Arcane Sight
+#### Sage: Arcane Sight
 
 The Sage's extraordinary perception and insight into magical forces.
 
 **Basic (0 SP):** When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll.
 **Detect Magic (2 SP):** Detailed magical detection for up to 10 minutes with concentration.
 
-### Orator: Influence
+#### Orator: Influence
 
 The Orator's ability to affect others through sheer force of personality.
 
