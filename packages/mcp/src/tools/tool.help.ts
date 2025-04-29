@@ -91,7 +91,7 @@ const handler = async (args?: Record<string, unknown>) => {
 
 			paramsInfo = `
 - **table** (Required) (string): The specific type of entity to manage within this category${tableList}.
-- **operation** (Required) (string): The action to perform: "create", "update", or "delete".
+- **operation** (Required) (string): The operation to perform: "create", "update", or "delete".
 - **id** (Optional/Required) (number): The ID of the entity. Required for "update" and "delete" operations. Omit for "create".
 - **data** (Optional/Required) (object): The data for the entity. Required for "create" and "update" operations. Structure depends on the 'table' and 'operation'. Omit for "delete".
       `.trim()
