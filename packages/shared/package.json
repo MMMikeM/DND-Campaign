@@ -45,7 +45,6 @@
     "@types/pg": "^8.11.11",
     "bunchee": "^6.5.0",
     "drizzle-kit": "^0.30.6",
-    "tsup": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
