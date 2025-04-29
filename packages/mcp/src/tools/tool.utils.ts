@@ -82,32 +82,48 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 		}
 
 		if (operation.data === "create") {
-			const createData = schemas[tableName.data].safeParse(args?.data)
+			const parsedData = schemas[tableName.data].safeParse(args?.data)
 
-			if (!createData.success) {
+			if (!parsedData.success) {
 				return createErrorResponse(`Invalid data '${args?.data}' provided to ${categoryToolName} handler.`)
 			}
 
-			logger.info(`Creating ${tableName} (via ${categoryToolName}) with data ${createData.data}`)
+			const createData = parsedData.data
+
+			logger.info(`Creating ${tableName} (via ${categoryToolName}) with data ${createData}`)
 			// @ts-expect-error
-			const result = await db.insert(table).values(createData.data).returning({ successfullyCreated: table.id })
-			return createResponse(`Successfully created new ${tableName} with ID: ${result[0]?.successfullyCreated}`)
+			const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
+			return createResponse(`Successfully created new ${tableName} with ID: ${result?.successfullyCreated}`)
 		}
 
 		if (operation.data === "update") {
-			const updateData = schemas[tableName.data].partial().safeParse(args?.data)
+			const parsedData = schemas[tableName.data].partial().safeParse(args?.data)
 
-			if (!updateData.success) {
+			if (!parsedData.success) {
 				return createErrorResponse(`Invalid data '${args?.data}' provided to ${categoryToolName} handler.`)
 			}
 
-			logger.info(`Updating ${tableName} (via ${categoryToolName}) with data ${updateData.data}`)
+			if (args.id === undefined || args.id === null) {
+				return createErrorResponse(`An ID must be provided for the 'update' operation in ${categoryToolName}.`)
+			}
+
+			const dataToUpdate = parsedData.data
+
+			logger.info(
+				`Updating ${tableName.data} (via ${categoryToolName}) with ID ${args.id} and data ${JSON.stringify(dataToUpdate)}`,
+			)
 			const result = await db
 				.update(table)
-				.set(updateData.data)
-				.where(eq(table.id, updateData.data.id))
+				.set(dataToUpdate)
+				.where(eq(table.id, args.id))
 				.returning({ successfullyUpdated: table.id })
-			return createResponse(`Successfully updated ${tableName} with ID: ${result[0]?.successfullyUpdated}`)
+
+			if (result.length !== 1 || result[0] === undefined) {
+				logger.error(`No ${tableName.data} found with ID: ${args.id}`)
+				return createErrorResponse(`No ${tableName.data} found with ID: ${args.id}`)
+			}
+
+			return createResponse(`Successfully updated ${tableName.data} with ID: ${args.id}`)
 		}
 		return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)
 	}
@@ -120,7 +136,7 @@ export const createManageSchema = (
 	zodToMCP(
 		z.object({
 			table: z.enum(tableEnum),
-			action: z.enum(["create", "update", "delete"]),
+			operation: z.enum(["create", "update", "delete"]),
 			id: z.coerce.number().optional().describe("Required for 'update' and 'delete' operations, exclude to create"),
 			data: z
 				.object(schemaObject)

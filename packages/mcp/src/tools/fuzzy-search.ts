@@ -13,7 +13,7 @@ export const searchBySimilarity = async (
 	phoneticStrength = 2,
 ) =>
 	await db.execute(sql`
-    SELECT * FROM search_fuzzy_combined(
+    SELECT id, name, source_table FROM search_fuzzy_combined(
       ${searchTerm},
       ${fuzzyWeight},
       ${similarityThreshold},
