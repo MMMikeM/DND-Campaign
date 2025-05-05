@@ -1,7 +1,7 @@
 // quests/tables.ts
-import { integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables.js"
+import { embeddings } from "../embeddings/tables"
 import { regions, sites } from "../regions/tables"
 
 const questTypes = ["main", "side", "faction", "character", "generic"] as const
@@ -92,16 +92,6 @@ export const questUnlockConditions = pgTable("quest_unlock_conditions", {
 	importance: oneOf("importance", importance),
 })
 
-export const questTwists = pgTable("quest_twists", {
-	id: pk(),
-	questId: cascadeFk("quest_id", quests.id),
-	twistType: oneOf("twist_type", twistTypes),
-	impact: oneOf("impact", impactSeverity),
-	narrativePlacement: oneOf("narrative_placement", narrativePlacements),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
-})
-
 export const questStages = pgTable("quest_stages", {
 	id: pk(),
 	questId: cascadeFk("quest_id", quests.id),
@@ -117,6 +107,11 @@ export const questStages = pgTable("quest_stages", {
 	encounters: list("encounters"),
 	dramatic_moments: list("dramatic_moments"),
 	sensory_elements: list("sensory_elements"),
+
+	stage_importance: oneOf("importance", ["minor_step", "standard", "major_point", "climax_point"] as const).default(
+		"standard",
+	),
+
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
@@ -138,6 +133,10 @@ export const stageDecisions = pgTable(
 		description: list("description"),
 		creativePrompts: list("creative_prompts"),
 		options: list("options"),
+
+		// Optional explicit Try/Fail support
+		failure_leads_to_retry: boolean("failure_leads_to_retry").default(false),
+		failure_lesson_learned: string("failure_lesson_learned"),
 	},
 	(t) => [unique().on(t.questId, t.fromStageId, t.toStageId)],
 )

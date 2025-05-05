@@ -1,7 +1,7 @@
 // regions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils.js"
-import { embeddings } from "../embeddings/tables.js"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { embeddings } from "../embeddings/tables"
 
 const regionTypes = [
 	"coastal",

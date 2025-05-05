@@ -1,8 +1,8 @@
 // npc/tables.ts
-import { pgTable, unique } from "drizzle-orm/pg-core"
+import { integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
-import { embeddings } from "../embeddings/tables.js"
+import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
 
@@ -71,6 +71,11 @@ export const npcs = pgTable("npcs", {
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
 	embeddingId: nullableFk("embedding_id", embeddings.id),
+
+	// CPR Framework scores (fixed attributes)
+	base_capability_score: integer("base_capability_score"),
+	base_proactivity_score: integer("base_proactivity_score"),
+	base_relatability_score: integer("base_relatability_score"),
 })
 
 export const npcSites = pgTable(

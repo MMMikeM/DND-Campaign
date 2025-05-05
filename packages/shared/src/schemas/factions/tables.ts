@@ -1,9 +1,9 @@
 // factions/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils.js"
-import { alignments, relationshipStrengths, wealthLevels } from "../common.js"
-import { embeddings } from "../embeddings/tables.js"
-import { sites } from "../regions/tables.js"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { alignments, relationshipStrengths, wealthLevels } from "../common"
+import { embeddings } from "../embeddings/tables"
+import { sites } from "../regions/tables"
 
 const sizeTypes = ["tiny", "small", "medium", "large", "massive"] as const
 const reachLevels = ["local", "regional", "national", "continental", "global"] as const
