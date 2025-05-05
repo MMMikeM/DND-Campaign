@@ -1,9 +1,9 @@
 // world/tables.ts
-import { boolean, pgTable, timestamp } from "drizzle-orm/pg-core"
+import { pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { majorConflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
-import { narrativeArcs } from "../narrative/tables"
+import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
@@ -27,7 +27,6 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	id: pk(),
 
 	name: string("name").unique(),
-	description: list("description"),
 
 	changeType: oneOf("change_type", changeTypes),
 	severity: oneOf("severity", changeSeverity).default("moderate"),
@@ -44,14 +43,13 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	areaId: nullableFk("area_id", areas.id),
 	siteId: nullableFk("site_id", sites.id),
 	npcId: nullableFk("npc_id", npcs.id),
-	arcId: nullableFk("arc_id", narrativeArcs.id),
+	destinationId: nullableFk("destination_id", narrativeDestinations.id),
 
-	recordedDate: timestamp("recorded_date").defaultNow(),
 	futureQuestId: nullableFk("future_quest_id", quests.id),
-	isResolved: boolean("is_resolved").default(false),
 
-	creativePrompts: list("creative_prompts"),
+	description: list("description"),
 	gmNotes: list("gm_notes"),
+	creativePrompts: list("creative_prompts"),
 })
 
 export const enums = {

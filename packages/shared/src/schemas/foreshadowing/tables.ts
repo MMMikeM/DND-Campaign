@@ -1,10 +1,11 @@
 // foreshadowing/tables.ts
-import { boolean, pgTable, timestamp } from "drizzle-orm/pg-core"
+import { pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
-import { narrativeArcs } from "../narrative/tables"
+import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
-import { quests, questStages, questTwists } from "../quests/tables"
+import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 
 const foreshadowingSubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
@@ -27,13 +28,11 @@ export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 	narrativeWeight: oneOf("narrative_weight", narrativeWeight).default("supporting"),
 
 	foreshadowsQuestId: nullableFk("foreshadows_quest_id", quests.id),
-	foreshadowsTwistId: nullableFk("foreshadows_twist_id", questTwists.id),
+	foreshadowsEventId: nullableFk("foreshadows_event_id", narrativeEvents.id),
 	foreshadowsNpcId: nullableFk("foreshadows_npc_id", npcs.id),
-	foreshadowsArcId: nullableFk("foreshadows_arc_id", narrativeArcs.id),
+	foreshadowsDestinationId: nullableFk("foreshadows_destination_id", narrativeDestinations.id),
 	foreshadowsElement: string("foreshadows_element"),
 
-	discovered: boolean("discovered").default(false),
-	grantedToPlayers: timestamp("granted_to_players"),
 	playerNotes: list("player_notes"),
 	gmNotes: list("gm_notes"),
 })
