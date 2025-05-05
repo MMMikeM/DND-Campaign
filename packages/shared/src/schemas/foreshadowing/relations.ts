@@ -1,9 +1,10 @@
 // foreshadowing/relations.ts
 import { relations } from "drizzle-orm"
+import { narrativeEvents } from "../events/tables.js"
 import { factions } from "../factions/tables.js"
-import { narrativeArcs } from "../narrative/tables.js"
+import { narrativeDestinations } from "../narrative/tables.js"
 import { npcs } from "../npc/tables.js"
-import { quests, questStages, questTwists } from "../quests/tables.js"
+import { questStages, quests } from "../quests/tables.js"
 import { sites } from "../regions/tables.js"
 import { narrativeForeshadowing } from "./tables.js"
 
@@ -29,24 +30,24 @@ export const narrativeForeshadowingRelations = relations(narrativeForeshadowing,
 		relationName: "factionForeshadowingSource",
 	}),
 
-	targetQuest: one(quests, {
+	foreshadowsQuest: one(quests, {
 		fields: [narrativeForeshadowing.foreshadowsQuestId],
 		references: [quests.id],
-		relationName: "questForeshadowing",
+		relationName: "foreshadowsQuest",
 	}),
-	targetTwist: one(questTwists, {
-		fields: [narrativeForeshadowing.foreshadowsTwistId],
-		references: [questTwists.id],
-		relationName: "twistForeshadowing",
+	foreshadowsEvent: one(narrativeEvents, {
+		fields: [narrativeForeshadowing.foreshadowsEventId],
+		references: [narrativeEvents.id],
+		relationName: "foreshadowsEvent",
 	}),
-	targetNpc: one(npcs, {
+	foreshadowsNpc: one(npcs, {
 		fields: [narrativeForeshadowing.foreshadowsNpcId],
 		references: [npcs.id],
-		relationName: "npcForeshadowing",
+		relationName: "foreshadowsNpc",
 	}),
-	targetArc: one(narrativeArcs, {
-		fields: [narrativeForeshadowing.foreshadowsArcId],
-		references: [narrativeArcs.id],
-		relationName: "arcForeshadowing",
+	foreshadowedDestination: one(narrativeDestinations, {
+		fields: [narrativeForeshadowing.foreshadowsDestinationId],
+		references: [narrativeDestinations.id],
+		relationName: "foreshadowedDestination",
 	}),
 }))

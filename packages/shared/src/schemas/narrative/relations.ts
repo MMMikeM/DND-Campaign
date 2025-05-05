@@ -1,34 +1,27 @@
 // narrative/relations.ts
 import { relations } from "drizzle-orm"
-import { narrativeForeshadowing } from "../foreshadowing/tables.js"
-import { quests } from "../quests/tables.js"
-import { worldStateChanges } from "../world/tables.js"
-import { arcMembership, narrativeArcs } from "./tables.js"
+import { narrativeForeshadowing } from "../foreshadowing/tables"
+import { quests } from "../quests/tables"
+import { worldStateChanges } from "../world/tables"
+import { destinationContribution, narrativeDestinations } from "./tables"
 
-export const narrativeArcsRelations = relations(narrativeArcs, ({ many }) => ({
-	members: many(arcMembership, {
-		relationName: "arcMembers",
+export const narrativeRelations = relations(narrativeDestinations, ({ many }) => ({
+	destinationContributions: many(destinationContribution),
+	worldStateChanges: many(worldStateChanges, {
+		relationName: "worldChangesForDestination",
 	}),
-
 	foreshadowing: many(narrativeForeshadowing, {
-		relationName: "arcForeshadowing",
-	}),
-
-	worldChanges: many(worldStateChanges, {
-		relationName: "worldChangesByArc",
+		relationName: "foreshadowingEntries",
 	}),
 }))
 
-export const arcMembershipRelations = relations(arcMembership, ({ one }) => ({
-	arc: one(narrativeArcs, {
-		fields: [arcMembership.arcId],
-		references: [narrativeArcs.id],
-		relationName: "arcMembers",
+export const destinationContributionRelations = relations(destinationContribution, ({ one }) => ({
+	destination: one(narrativeDestinations, {
+		fields: [destinationContribution.destinationId],
+		references: [narrativeDestinations.id],
 	}),
-
 	quest: one(quests, {
-		fields: [arcMembership.questId],
+		fields: [destinationContribution.questId],
 		references: [quests.id],
-		relationName: "questArcs",
 	}),
 }))
