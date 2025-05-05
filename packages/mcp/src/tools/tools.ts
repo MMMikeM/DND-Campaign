@@ -5,6 +5,7 @@ import { logger } from ".."
 import { associationToolDefinitions } from "./association-tools"
 import { conflictToolDefinitions } from "./conflict-tools"
 import { embeddingToolDefinitions } from "./embedding-tools"
+import { eventToolDefinitions } from "./events-tools"
 import { factionToolDefinitions } from "./faction-tools"
 import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { fuzzySearchToolDefinitions } from "./fuzzy-search"
@@ -45,6 +46,7 @@ export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinition
 export const narrative = extractToolsAndHandlers(narrativeToolDefinitions)
 export const world = extractToolsAndHandlers(worldToolDefinitions)
 export const embeddings = extractToolsAndHandlers(embeddingToolDefinitions)
+export const events = extractToolsAndHandlers(eventToolDefinitions)
 export const help = extractToolsAndHandlers(helpToolDefinitions)
 export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
 export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
@@ -62,6 +64,7 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.tools,
 		...narrative.tools,
 		...world.tools,
+		...events.tools,
 		...fuzzySearch.tools,
 		...embeddings.tools,
 	]
@@ -78,6 +81,7 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.handlers,
 		...narrative.handlers,
 		...world.handlers,
+		...events.handlers,
 		...fuzzySearch.handlers,
 		...embeddings.handlers,
 	}
