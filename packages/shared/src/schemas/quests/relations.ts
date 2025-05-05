@@ -1,7 +1,11 @@
 // quests/relations.ts
 import { relations } from "drizzle-orm"
 import { clues, factionQuestInvolvement, items, npcQuestRoles } from "../associations/tables.js"
+import { conflictProgression } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables.js"
+import { narrativeEvents } from "../events/tables"
+import { narrativeForeshadowing } from "../foreshadowing/tables"
+import { destinationContribution } from "../narrative/tables"
 import { regions, sites } from "../regions/tables.js"
 import { worldStateChanges } from "../world/tables.js"
 import {
@@ -9,27 +13,36 @@ import {
 	questDependencies,
 	quests,
 	questStages,
-	questTwists,
 	questUnlockConditions,
 	stageDecisions,
 } from "./tables.js"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
-	outgoingRelations: many(questDependencies, { relationName: "sourceQuests" }),
-	incomingRelations: many(questDependencies, { relationName: "targetQuests" }),
-	npcs: many(npcQuestRoles, { relationName: "questNpcs" }),
-	items: many(items, { relationName: "questItems" }),
-	stages: many(questStages, { relationName: "questStages" }),
-	twists: many(questTwists, { relationName: "questTwists" }),
-	factions: many(factionQuestInvolvement, { relationName: "questFactions" }),
-	unlockConditions: many(questUnlockConditions, { relationName: "questUnlockConditions" }),
-	worldChanges: many(worldStateChanges, { relationName: "worldChangesByQuest" }),
-	futureTriggers: many(worldStateChanges, { relationName: "worldChangeLeadsToQuest" }),
-
 	region: one(regions, {
 		fields: [quests.regionId],
 		references: [regions.id],
-		relationName: "regionQuests",
+	}),
+	dependencies: many(questDependencies, {
+		relationName: "questDependencies",
+	}),
+	dependents: many(questDependencies, {
+		relationName: "questDependents",
+	}),
+	stages: many(questStages),
+	unlockConditions: many(questUnlockConditions),
+	factionInvolvement: many(factionQuestInvolvement),
+	npcRoles: many(npcQuestRoles),
+	items: many(items),
+	conflictProgression: many(conflictProgression),
+	destinationContributions: many(destinationContribution),
+	foreshadowing: many(narrativeForeshadowing, {
+		relationName: "foreshadowsQuest",
+	}),
+	worldChanges: many(worldStateChanges, {
+		relationName: "worldChangesByQuest",
+	}),
+	triggeredEvents: many(narrativeEvents, {
+		relationName: "relatedQuestEvents",
 	}),
 	embedding: one(embeddings, {
 		fields: [quests.embeddingId],
@@ -58,32 +71,29 @@ export const questUnlockConditionsRelations = relations(questUnlockConditions, (
 	}),
 }))
 
-export const questTwistsRelations = relations(questTwists, ({ one }) => ({
-	quest: one(quests, {
-		fields: [questTwists.questId],
-		references: [quests.id],
-		relationName: "questTwists",
-	}),
-}))
-
 export const questStagesRelations = relations(questStages, ({ one, many }) => ({
-	outgoingDecisions: many(stageDecisions, { relationName: "fromStage" }),
-	incomingDecisions: many(stageDecisions, { relationName: "toStage" }),
-	incomingConsequences: many(decisionOutcomes, { relationName: "affectedStage" }),
-	clues: many(clues, { relationName: "stageClues" }),
-
 	quest: one(quests, {
 		fields: [questStages.questId],
 		references: [quests.id],
-		relationName: "questStages",
 	}),
-
 	site: one(sites, {
 		fields: [questStages.siteId],
 		references: [sites.id],
-		relationName: "stageSite",
 	}),
-
+	decisionsFrom: many(stageDecisions, {
+		relationName: "decisionsFromStage",
+	}),
+	decisionsTo: many(stageDecisions, {
+		relationName: "decisionsToStage",
+	}),
+	clues: many(clues),
+	items: many(items),
+	foreshadowing: many(narrativeForeshadowing, {
+		relationName: "stageForeshadowing",
+	}),
+	narrativeEvents: many(narrativeEvents, {
+		relationName: "stageEvents",
+	}),
 	embedding: one(embeddings, {
 		fields: [questStages.embeddingId],
 		references: [embeddings.id],
@@ -94,19 +104,21 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 	quest: one(quests, {
 		fields: [stageDecisions.questId],
 		references: [quests.id],
-		relationName: "questDecisions",
 	}),
 	fromStage: one(questStages, {
 		fields: [stageDecisions.fromStageId],
 		references: [questStages.id],
-		relationName: "fromStage",
+		relationName: "decisionsFromStage",
 	}),
 	toStage: one(questStages, {
 		fields: [stageDecisions.toStageId],
 		references: [questStages.id],
-		relationName: "toStage",
+		relationName: "decisionsToStage",
 	}),
-	consequences: many(decisionOutcomes, { relationName: "decisionConsequences" }),
+	outcomes: many(decisionOutcomes),
+	triggeredEvents: many(narrativeEvents, {
+		relationName: "decisionTriggeredEvents",
+	}),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesByDecision" }),
 }))
 
