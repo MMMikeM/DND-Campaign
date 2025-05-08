@@ -11,7 +11,7 @@
     "dev": "bunchee --watch",
     "proxy": "tsx src/proxy.ts",
     "test": "vitest",
-    "db:generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate --custom --name=search_function",
+    "db:generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate",
     "db:migrate": "NODE_OPTIONS='--import tsx' drizzle-kit migrate",
     "db:studio": "NODE_OPTIONS='--import tsx' drizzle-kit studio"
   },
