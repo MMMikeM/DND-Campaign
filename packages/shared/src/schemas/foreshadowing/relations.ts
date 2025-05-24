@@ -50,4 +50,8 @@ export const narrativeForeshadowingRelations = relations(narrativeForeshadowing,
 		references: [narrativeDestinations.id],
 		relationName: "foreshadowedDestination",
 	}),
+	embedding: one(require("../embeddings/tables").embeddings, {
+		fields: [narrativeForeshadowing.embeddingId],
+		references: [require("../embeddings/tables").embeddings.id],
+	}),
 }))

@@ -27,6 +27,7 @@ export const majorConflicts = pgTable("major_conflicts", {
 	possibleOutcomes: list("possible_outcomes"),
 	hiddenTruths: list("hidden_truths"),
 	creativePrompts: list("creative_prompts"),
+	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
 })
 
 export const conflictParticipants = pgTable("conflict_participants", {

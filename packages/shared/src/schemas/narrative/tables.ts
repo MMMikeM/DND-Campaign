@@ -1,6 +1,6 @@
 // narrative/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
-import { cascadeFk, list, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { quests } from "../quests/tables"
 
 const arcTypes = ["main", "faction", "character", "side"] as const
@@ -19,6 +19,7 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 	themes: list("themes"),
 	foreshadowingElements: list("foreshadowing_elements"),
 	creativePrompts: list("creative_prompts"),
+	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
 })
 
 export const destinationContribution = pgTable("destination_contribution", {

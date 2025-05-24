@@ -13,6 +13,10 @@ export const narrativeRelations = relations(narrativeDestinations, ({ many }) =>
 	foreshadowing: many(narrativeForeshadowing, {
 		relationName: "foreshadowingEntries",
 	}),
+	embedding: one(require("../embeddings/tables").embeddings, {
+		fields: [narrativeDestinations.embeddingId],
+		references: [require("../embeddings/tables").embeddings.id],
+	}),
 }))
 
 export const destinationContributionRelations = relations(destinationContribution, ({ one }) => ({

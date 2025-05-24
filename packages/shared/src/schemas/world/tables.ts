@@ -50,6 +50,7 @@ export const worldStateChanges = pgTable("world_state_changes", {
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	creativePrompts: list("creative_prompts"),
+	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
 })
 
 export const enums = {

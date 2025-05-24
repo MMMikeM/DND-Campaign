@@ -19,4 +19,8 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	foreshadowedBy: many(narrativeForeshadowing, {
 		relationName: "foreshadowsEvent",
 	}),
+	embedding: one(require("../embeddings/tables").embeddings, {
+		fields: [narrativeEvents.embeddingId],
+		references: [require("../embeddings/tables").embeddings.id],
+	}),
 }))
