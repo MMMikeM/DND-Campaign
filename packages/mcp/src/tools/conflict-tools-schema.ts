@@ -7,7 +7,7 @@ const {
 	conflictTables: { majorConflicts, conflictParticipants, conflictProgression, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.conflictTables>
+type TableNames = CreateTableNames<typeof tables.conflictTables>
 
 export const tableEnum = ["majorConflicts", "conflictParticipants", "conflictProgression"] as const satisfies TableNames
 

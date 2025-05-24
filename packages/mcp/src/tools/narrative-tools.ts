@@ -9,7 +9,7 @@ const {
 	narrativeTables: { narrativeArcs, arcMembership },
 } = tables
 
-export type NarrativeGetters = CreateEntityGetters<typeof tables.narrativeTables>
+type NarrativeGetters = CreateEntityGetters<typeof tables.narrativeTables>
 
 export const entityGetters: NarrativeGetters = {
 	all_narrative_arcs: () => db.query.narrativeArcs.findMany({}),

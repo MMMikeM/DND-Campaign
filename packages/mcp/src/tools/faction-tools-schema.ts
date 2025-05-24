@@ -7,7 +7,7 @@ const {
 	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.factionTables>
+type TableNames = CreateTableNames<typeof tables.factionTables>
 
 export const tableEnum = [
 	"factions",

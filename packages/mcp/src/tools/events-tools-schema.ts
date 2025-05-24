@@ -7,7 +7,7 @@ const {
 	eventTables: { narrativeEvents, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.eventTables>
+type TableNames = CreateTableNames<typeof tables.eventTables>
 
 export const tableEnum = ["narrativeEvents"] as const satisfies TableNames
 

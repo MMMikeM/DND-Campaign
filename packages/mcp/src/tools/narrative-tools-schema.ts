@@ -7,7 +7,7 @@ const {
 	narrativeTables: { narrativeDestinations, destinationContribution, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.narrativeTables>
+type TableNames = CreateTableNames<typeof tables.narrativeTables>
 
 export const tableEnum = ["narrativeDestinations", "destinationContribution"] as const satisfies TableNames
 

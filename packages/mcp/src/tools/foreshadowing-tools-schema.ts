@@ -7,7 +7,7 @@ const {
 	foreshadowingTables: { narrativeForeshadowing, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
+type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
 
 export const tableEnum = ["narrativeForeshadowing"] as const satisfies TableNames
 

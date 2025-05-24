@@ -9,7 +9,7 @@ const {
 	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas },
 } = tables
 
-export type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
+type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
 
 export const entityGetters: FactionGetters = {
 	all_factions: () => db.query.factions.findMany({}),

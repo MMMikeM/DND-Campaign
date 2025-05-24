@@ -7,7 +7,7 @@ const {
 	worldTables: { worldStateChanges, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.worldTables>
+type TableNames = CreateTableNames<typeof tables.worldTables>
 
 export const tableEnum = ["worldStateChanges"] as const satisfies TableNames
 
