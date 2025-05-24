@@ -23,8 +23,6 @@ if (entityTypes.length === 0) {
 	throw new Error("No entity types found in shared tables object.")
 }
 
-export type AllEntityTypes = (typeof entityTypes)[number]
-
 export const getEntitySchema = z
 	.object({
 		entity_type: z.enum(entityTypes).describe("Type of entity to retrieve"),

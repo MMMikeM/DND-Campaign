@@ -5,7 +5,6 @@ import { z } from "zod/v4"
 // import { factionPromptDefinitions } from "./faction-prompts";
 import { logger } from ".."
 import { npcPromptDefinitions } from "./prompt-npc"
-import type { PromptCategory } from "./prompt-types"
 import { extractArgsFromZodSchema } from "./prompt-utils"
 
 // Combine all prompt definitions
@@ -24,19 +23,6 @@ export function getAllPrompts() {
 		description: def.description,
 		arguments: extractArgsFromZodSchema(def.schema),
 	}))
-}
-
-/**
- * Get prompts filtered by category
- */
-export function getPromptsByCategory(category: PromptCategory) {
-	return Object.entries(allPromptDefinitions)
-		.filter(([_, def]) => def.category === category)
-		.map(([name, def]) => ({
-			name,
-			description: def.description,
-			arguments: extractArgsFromZodSchema(def.schema),
-		}))
 }
 
 /**

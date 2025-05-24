@@ -2,7 +2,7 @@
 import type { z } from "zod/v4"
 
 // Type for prompt category
-export type PromptCategory = "npc" | "faction" | "quest" | "location" | "world"
+type PromptCategory = "npc" | "faction" | "quest" | "location" | "world"
 
 // Define the prompt definition structure
 export interface PromptDefinition<T extends z.ZodTypeAny> {
@@ -19,7 +19,7 @@ export interface PromptResult {
 	description?: string
 }
 
-export interface PromptMessage {
+interface PromptMessage {
 	role: "user" | "assistant"
 	content:
 		| {

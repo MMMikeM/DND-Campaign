@@ -15,7 +15,7 @@ const {
 	},
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.questTables>
+type TableNames = CreateTableNames<typeof tables.questTables>
 
 export const tableEnum = [
 	"quests",

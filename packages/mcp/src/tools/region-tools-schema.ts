@@ -7,7 +7,7 @@ const {
 	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.regionTables>
+type TableNames = CreateTableNames<typeof tables.regionTables>
 
 export const tableEnum = [
 	"regions",

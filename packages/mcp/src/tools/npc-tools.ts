@@ -9,7 +9,7 @@ const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites },
 } = tables
 
-export type NpcGetters = CreateEntityGetters<typeof tables.npcTables>
+type NpcGetters = CreateEntityGetters<typeof tables.npcTables>
 
 export const entityGetters: NpcGetters = {
 	all_npcs: () => db.query.npcs.findMany({}),

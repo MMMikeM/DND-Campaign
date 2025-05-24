@@ -23,23 +23,6 @@ export const createResponse = (message: string): ToolHandlerReturn => ({
 	content: [{ type: "text", text: message }],
 })
 
-export const formatZodErrors = (
-	error: z.ZodError,
-	entityName: string,
-	args: Record<string, unknown>,
-): ToolHandlerReturn => {
-	const errors = error.errors.map((err) => `- '${err.path.join(".")}': ${err.message}`).join("\n")
-
-	const operation = "operation" in args ? args.operation : "id" in args ? "update/delete" : "create"
-	logger.error(`Validation error during ${operation} ${entityName}:`, {
-		errors,
-	})
-
-	return createErrorResponse(
-		`Error during ${operation} ${entityName}:\n${errors}\n\nUse help({tool: 'relevant_tool_name'}) for details.`, // Update tool name dynamically later if needed
-	)
-}
-
 export function createManageEntityHandler<TS extends Schema<TK[number]>, TK extends readonly [string, ...string[]]>(
 	categoryToolName: string,
 	tables: Record<TK[number], PgTableWithId>,

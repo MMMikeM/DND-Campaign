@@ -5,7 +5,7 @@ import zodToMCP from "../zodToMcp"
 import { createErrorResponse, createResponse } from "./tool.utils"
 import type { ToolDefinition } from "./utils/types"
 
-export const searchBySimilarity = async (
+const searchBySimilarity = async (
 	searchTerm: string,
 	fuzzyWeight = 1.0,
 	similarityThreshold = 0.3,

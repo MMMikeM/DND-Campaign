@@ -9,7 +9,7 @@ const {
 	worldTables: { worldStateChanges },
 } = tables
 
-export type WorldGetters = CreateEntityGetters<typeof tables.worldTables>
+type WorldGetters = CreateEntityGetters<typeof tables.worldTables>
 
 export const entityGetters: WorldGetters = {
 	all_world_state_changes: () => db.query.worldStateChanges.findMany(),

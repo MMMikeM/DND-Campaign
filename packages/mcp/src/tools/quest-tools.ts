@@ -6,25 +6,16 @@ import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
-	questTables: {
-		quests,
-		questStages,
-		stageDecisions,
-		questDependencies,
-		questTwists,
-		decisionOutcomes,
-		questUnlockConditions,
-	},
+	questTables: { quests, questStages, stageDecisions, questDependencies, decisionOutcomes, questUnlockConditions },
 } = tables
 
-export type QuestGetters = CreateEntityGetters<typeof tables.questTables>
+type QuestGetters = CreateEntityGetters<typeof tables.questTables>
 
 export const entityGetters: QuestGetters = {
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
 	all_quest_dependencies: () => db.query.questDependencies.findMany({}),
-	all_quest_twists: () => db.query.questTwists.findMany({}),
 	all_decision_outcomes: () => db.query.decisionOutcomes.findMany({}),
 	all_quest_unlock_conditions: () => db.query.questUnlockConditions.findMany({}),
 
@@ -33,7 +24,6 @@ export const entityGetters: QuestGetters = {
 			where: eq(quests.id, id),
 			with: {
 				items: true,
-				twists: true,
 				stages: true,
 				worldChanges: true,
 				futureTriggers: true,
@@ -84,11 +74,7 @@ export const entityGetters: QuestGetters = {
 				targetQuest: { columns: { name: true, id: true } },
 			},
 		}),
-	quest_twist_by_id: (id: number) =>
-		db.query.questTwists.findFirst({
-			where: eq(questTwists.id, id),
-			with: { quest: { columns: { name: true, id: true } } },
-		}),
+
 	decision_outcome_by_id: (id: number) =>
 		db.query.decisionOutcomes.findFirst({
 			where: eq(decisionOutcomes.id, id),

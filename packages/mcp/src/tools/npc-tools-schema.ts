@@ -7,7 +7,7 @@ const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites, enums },
 } = tables
 
-export type TableNames = CreateTableNames<typeof tables.npcTables>
+type TableNames = CreateTableNames<typeof tables.npcTables>
 
 export const tableEnum = ["npcs", "characterRelationships", "npcFactions", "npcSites"] as const satisfies TableNames
 

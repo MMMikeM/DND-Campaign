@@ -9,7 +9,7 @@ const {
 	regionTables: { sites, areas, regions, regionConnections, siteEncounters, siteLinks, siteSecrets },
 } = tables
 
-export type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
+type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
 export const entityGetters: RegionGetters = {
 	all_regions: () =>

@@ -18,7 +18,7 @@ const {
 	},
 } = tables
 
-export type AssociationGetters = CreateEntityGetters<typeof tables.associationTables>
+type AssociationGetters = CreateEntityGetters<typeof tables.associationTables>
 
 export const entityGetters: AssociationGetters = {
 	all_clues: () => db.query.clues.findMany({}),

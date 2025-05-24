@@ -5,8 +5,11 @@ import { zodToMCP } from "../zodToMcp"
 import {
 	associations,
 	conflicts,
+	embeddings,
+	events,
 	factions,
 	foreshadowing,
+	fuzzySearch,
 	getEntity,
 	narrative,
 	npcs,
@@ -25,15 +28,19 @@ const handler = async (args?: Record<string, unknown>) => {
 	const toolName = args?.tool as string | undefined
 
 	const categories = {
-		npcs: npcs.tools,
-		factions: factions.tools,
-		regions: regions.tools,
-		quests: quests.tools,
 		associations: associations.tools,
 		conflicts: conflicts.tools,
-		narrative: narrative.tools,
-		world: world.tools,
+		embeddings: embeddings.tools,
+		events: events.tools,
+		factions: factions.tools,
 		foreshadowing: foreshadowing.tools,
+		fuzzySearch: fuzzySearch.tools,
+		getEntity: getEntity.tools,
+		narrative: narrative.tools,
+		npcs: npcs.tools,
+		quests: quests.tools,
+		regions: regions.tools,
+		world: world.tools,
 	}
 
 	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]
