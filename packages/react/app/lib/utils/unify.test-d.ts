@@ -215,7 +215,7 @@ describe("unifyRelations types", () => {
 				// Check that unique3 can hold a Date object
 				if (isDate(item.unique3)) {
 					// This should compile if the type is correct
-					const date: Date = item.unique3
+					const _date: Date = item.unique3
 				}
 
 				// @ts-expect-error - unique1 should not exist when unique3 exists

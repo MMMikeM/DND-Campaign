@@ -186,7 +186,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
 	const onNodeClick = useCallback(
-		(event: React.MouseEvent, node: Node) => {
+		(_: React.MouseEvent, node: Node) => {
 			// Extract the stage ID from the node ID (remove "stage-" prefix)
 			const stageId = parseInt(node.id.replace("stage-", ""), 10)
 

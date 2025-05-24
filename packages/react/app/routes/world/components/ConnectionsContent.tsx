@@ -81,4 +81,4 @@ export function ConnectionsContent({ change }: ConnectionsContentProps) {
 	)
 }
 
-export default ConnectionsContent
+export { ConnectionsContent }

@@ -64,4 +64,4 @@ export const QuestHeader: React.FC<Quest> = ({ name, type, urgency, visibility, 
 	</div>
 )
 
-export default QuestHeader
+export { QuestHeader }

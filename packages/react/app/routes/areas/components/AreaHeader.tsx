@@ -51,5 +51,3 @@ export const AreaHeader: React.FC<Area> = ({
 		</div>
 	)
 }
-
-export default AreaHeader

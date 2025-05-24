@@ -220,4 +220,4 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 	)
 }
 
-export default ConnectionsContent
+export { ConnectionsContent }

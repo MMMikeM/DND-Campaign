@@ -47,11 +47,6 @@ const regionConfig = {
 		}),
 }
 
-export const getRegionNamesAndIds = async () => {
-	const regions = await regionConfig.getNamesAndIds()
-	return addSlugs(regions)
-}
-
 export const getAllRegions = async () => {
 	const regions = await regionConfig.getAll()
 	return addSlugs(regions)

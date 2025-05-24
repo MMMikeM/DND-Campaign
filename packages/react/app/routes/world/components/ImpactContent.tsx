@@ -69,4 +69,4 @@ export function ImpactContent({ change }: { change: WorldChange }) {
 	)
 }
 
-export default ImpactContent
+export { ImpactContent }

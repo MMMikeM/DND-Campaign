@@ -191,4 +191,4 @@ assertType<string[]>(firstCulture.rituals)
 
 // Verify the culture item type doesn't have a slug property
 // @ts-expect-error Culture items shouldn't have slugs
-const shouldNotExist = firstCulture.slug
+const _shouldNotExist = firstCulture.slug

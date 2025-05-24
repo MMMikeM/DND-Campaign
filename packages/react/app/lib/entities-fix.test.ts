@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { unifyRelations } from "./unify"
+import { unifyRelations } from "./utils/unify"
 
 // Define the outgoing relation type for testing
 interface OutgoingRelation {

@@ -34,4 +34,4 @@ export function QuestsContent({ arc }: QuestsContentProps) {
 	)
 }
 
-export default QuestsContent
+export { QuestsContent }

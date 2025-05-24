@@ -49,4 +49,4 @@ export function ProgressionContent({ conflict }: ProgressionContentProps) {
 	)
 }
 
-export default ProgressionContent
+export { ProgressionContent }

@@ -25,5 +25,3 @@ export const DetailsContent: React.FC<Area> = ({ hazards, defenses, rumors, crea
 		</div>
 	)
 }
-
-export default DetailsContent

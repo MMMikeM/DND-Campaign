@@ -73,4 +73,4 @@ export function DetailsContent({ change }: { change: WorldChange }) {
 	)
 }
 
-export default DetailsContent
+export { DetailsContent }

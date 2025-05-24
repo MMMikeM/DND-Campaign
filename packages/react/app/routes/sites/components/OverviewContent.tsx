@@ -26,4 +26,4 @@ export const OverviewContent: React.FC<Site> = ({ description, features, creatur
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }

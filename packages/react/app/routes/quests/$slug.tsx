@@ -4,12 +4,12 @@ import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getQuest, getQuestStages } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import ConnectionsContent from "./components/ConnectionsContent"
-import OverviewContent from "./components/OverviewContent"
+import { ConnectionsContent } from "./components/ConnectionsContent"
+import { OverviewContent } from "./components/OverviewContent"
 import { QuestHeader } from "./components/QuestHeader"
-import StagesContent from "./components/StagesContent"
-import ThemesContent from "./components/ThemesContent"
-import TwistsContent from "./components/TwistsContent"
+import { StagesContent } from "./components/StagesContent"
+import { ThemesContent } from "./components/ThemesContent"
+import { TwistsContent } from "./components/TwistsContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {

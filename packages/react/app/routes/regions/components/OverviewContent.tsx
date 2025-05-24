@@ -102,4 +102,4 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }

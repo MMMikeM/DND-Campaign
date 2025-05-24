@@ -29,7 +29,6 @@ export const getParticipantRoleVariant = (role: string): "default" | "destructiv
 			return "secondary"
 		case "beneficiary":
 			return "secondary"
-		case "neutral":
 		default:
 			return "outline"
 	}
@@ -44,7 +43,6 @@ export const getQuestImpactVariant = (impact: string): "default" | "destructive"
 		case "reveals_truth":
 		case "changes_sides":
 			return "secondary"
-		case "no_change":
 		default:
 			return "outline"
 	}

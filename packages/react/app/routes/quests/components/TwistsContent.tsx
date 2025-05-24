@@ -90,4 +90,4 @@ export const TwistsContent: React.FC<TwistsContentProps> = ({ quest }) => {
 	)
 }
 
-export default TwistsContent
+export { TwistsContent }

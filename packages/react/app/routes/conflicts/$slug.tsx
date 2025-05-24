@@ -6,9 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Conflict } from "~/lib/entities"
 import { getConflict } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import OverviewContent from "./components/OverviewContent"
-import ParticipantsContent from "./components/ParticipantsContent"
-import ProgressionContent from "./components/ProgressionContent"
+import { OverviewContent } from "./components/OverviewContent"
+import { ParticipantsContent } from "./components/ParticipantsContent"
+import { ProgressionContent } from "./components/ProgressionContent"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {

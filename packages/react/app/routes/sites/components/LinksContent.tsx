@@ -35,4 +35,4 @@ export const LinksContent: React.FC<Site> = ({ relations }) => {
 	)
 }
 
-export default LinksContent
+export { LinksContent }
