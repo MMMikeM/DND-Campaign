@@ -84,8 +84,7 @@ const SearchResults = ({ data, searchQuery }: { data?: Awaited<ReturnType<typeof
 			) : data && data.length === 0 ? (
 				<div className="p-3 text-muted-foreground">No results found</div>
 			) : (
-				data &&
-				data.map(({ id, table, slug, name }, index) => (
+				data?.map(({ id, table, slug, name }, index) => (
 					<motion.div
 						key={`${table}-${id}`}
 						initial={{ opacity: 0 }}

@@ -29,5 +29,3 @@ export const SitesContent: React.FC<Area> = ({ sites }) => {
 		</InfoCard>
 	)
 }
-
-export default SitesContent

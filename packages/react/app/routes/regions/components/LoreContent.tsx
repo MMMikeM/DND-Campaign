@@ -29,4 +29,4 @@ export const LoreContent: React.FC<LoreContentProps> = ({ history, secrets, rumo
 	)
 }
 
-export default LoreContent
+export { LoreContent }

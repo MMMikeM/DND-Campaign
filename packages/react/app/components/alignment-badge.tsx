@@ -15,7 +15,7 @@ export const alignments = [
 	"chaotic evil",
 ] as const
 
-export type Alignment = (typeof alignments)[number]
+type Alignment = (typeof alignments)[number]
 
 export const alignmentConfig: Record<Alignment, { icon: React.ReactNode; color: string }> = {
 	"lawful good": {

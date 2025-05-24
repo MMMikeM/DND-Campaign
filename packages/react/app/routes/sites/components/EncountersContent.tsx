@@ -66,4 +66,4 @@ export const EncountersContent: React.FC<Site> = ({ encounters }) => {
 	)
 }
 
-export default EncountersContent
+export { EncountersContent }

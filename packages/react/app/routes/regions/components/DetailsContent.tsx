@@ -44,4 +44,4 @@ export const DetailsContent: React.FC<DetailsContentProps> = ({ hazards, pointsO
 	)
 }
 
-export default DetailsContent
+export { DetailsContent }

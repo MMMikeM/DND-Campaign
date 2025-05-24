@@ -12,37 +12,6 @@ export const toSlug = (text: string): string => {
 }
 
 /**
- * Convert a slug back to a normal string format (not guaranteed to match original)
- * @param slug The slug to convert back to text
- */
-export const fromSlug = (slug: string): string => {
-	return slug
-		.replace(/-/g, " ") // Replace hyphens with spaces
-		.trim()
-}
-
-/**
- * Get a URL for an entity
- * @param type The entity type ('npcs', 'quests', 'regions', 'factions')
- * @param name The entity name
- * @param id The entity ID (optional, used for edit routes)
- */
-export const getEntityUrl = (
-	type: "npcs" | "quests" | "regions" | "factions",
-	name: string,
-	id?: number,
-	action?: "edit" | "delete",
-): string => {
-	const slug = toSlug(name)
-
-	if (action) {
-		return `/${type}/${slug}/${action}`
-	}
-
-	return `/${type}/${slug}`
-}
-
-/**
  * Branded type for slugs to ensure type safety
  */
 export type Slug = string & { readonly __brand: "Slug" }
@@ -71,7 +40,7 @@ interface SluggableByName extends Identifiable {
 /**
  * Type for objects that should receive a slug (only by name).
  */
-export type Sluggable = SluggableByName
+type Sluggable = SluggableByName
 
 /**
  * Type with slug added to an identifiable object.
@@ -116,7 +85,7 @@ export type WithSlugsAdded<T> = RecursivelyWithSlugsAdded<T>
 /**
  * Recursively processes objects in data to add slugs where needed
  */
-export function addSlugsRecursively<T>(data: T): WithSlugsAdded<T> {
+function addSlugsRecursively<T>(data: T): WithSlugsAdded<T> {
 	// Handle null/undefined case
 	if (data === null || data === undefined) {
 		return data as WithSlugsAdded<T>

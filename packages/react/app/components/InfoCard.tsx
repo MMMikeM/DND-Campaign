@@ -26,11 +26,6 @@ export function InfoCard({
 	emptyMessage = `No ${title?.toLowerCase?.() || "information"} available.`,
 	description,
 }: InfoCardProps) {
-	const isEmpty =
-		!children ||
-		(Array.isArray(children) && children.length === 0) ||
-		(Array.isArray(children) && children.every((child) => child == null))
-
 	return (
 		<Card className={cn("overflow-hidden", className)}>
 			<CardHeader className="bg-slate-50 dark:bg-slate-800 border-b">

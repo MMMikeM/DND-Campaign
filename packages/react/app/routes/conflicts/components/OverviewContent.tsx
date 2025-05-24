@@ -57,4 +57,4 @@ export function OverviewContent({ conflict }: OverviewContentProps) {
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }

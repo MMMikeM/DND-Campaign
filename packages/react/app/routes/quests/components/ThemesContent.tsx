@@ -41,4 +41,4 @@ export const ThemesContent: React.FC<ThemesContentProps> = ({ quest }) => {
 	)
 }
 
-export default ThemesContent
+export { ThemesContent }

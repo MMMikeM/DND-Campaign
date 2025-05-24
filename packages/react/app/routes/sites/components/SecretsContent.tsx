@@ -69,4 +69,4 @@ export const SecretsContent: React.FC<Site> = ({ secrets }) => {
 	)
 }
 
-export default SecretsContent
+export { SecretsContent }

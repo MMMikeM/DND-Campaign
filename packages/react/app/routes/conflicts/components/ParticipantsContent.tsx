@@ -72,4 +72,4 @@ export function ParticipantsContent({ conflict }: ParticipantsContentProps) {
 	)
 }
 
-export default ParticipantsContent
+export { ParticipantsContent }

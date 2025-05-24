@@ -9,7 +9,7 @@ interface OverviewContentProps {
 	arc: NarrativeArc
 }
 
-const getThemeVariant = (theme: string): "default" | "destructive" | "outline" | "secondary" => {
+const getThemeVariant = (_theme: string): "default" | "destructive" | "outline" | "secondary" => {
 	return "outline"
 }
 
@@ -92,4 +92,4 @@ export function OverviewContent({ arc }: OverviewContentProps) {
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }

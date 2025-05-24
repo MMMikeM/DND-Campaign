@@ -52,4 +52,4 @@ export const OverviewContent: React.FC<Area> = ({
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }

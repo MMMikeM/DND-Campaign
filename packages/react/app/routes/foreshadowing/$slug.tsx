@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import { NavLink, useNavigate, useParams } from "react-router"
+import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
@@ -36,7 +36,6 @@ const getNarrativeWeightVariant = (weight: string): "default" | "destructive" | 
 			return "default"
 		case "supporting":
 			return "secondary"
-		case "minor":
 		default:
 			return "outline"
 	}
@@ -247,13 +246,6 @@ function ConnectionsContent({ item }: ConnectionsContentProps) {
 
 export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps) {
 	const item = loaderData
-	const { tab } = useParams()
-	const activeTab = tab || "details"
-	const navigate = useNavigate()
-
-	const handleTabChange = (value: string) => {
-		navigate(`/foreshadowing/${item.slug}/${value === "details" ? "" : value}`)
-	}
 
 	if (!item) {
 		return <div>Error: Foreshadowing data could not be loaded.</div>

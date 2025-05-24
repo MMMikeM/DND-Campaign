@@ -13,7 +13,7 @@ export const conditionTypes = [
 	"custom_event",
 ] as const
 
-export type ConditionType = (typeof conditionTypes)[number]
+type ConditionType = (typeof conditionTypes)[number]
 
 // Decision Types
 export const decisionTypes = [
@@ -25,7 +25,7 @@ export const decisionTypes = [
 	"identity_question",
 ] as const
 
-export type DecisionType = (typeof decisionTypes)[number]
+type DecisionType = (typeof decisionTypes)[number]
 
 // Configuration for condition types
 export const conditionTypeConfig: Record<

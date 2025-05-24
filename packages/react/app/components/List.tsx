@@ -69,7 +69,7 @@ interface ListWithHeadingCollapsibleProps extends BaseListProps {
 }
 
 // Union type to ensure proper prop combinations
-export type ListProps = ListWithoutHeadingProps | ListWithHeadingNonCollapsibleProps | ListWithHeadingCollapsibleProps
+type ListProps = ListWithoutHeadingProps | ListWithHeadingNonCollapsibleProps | ListWithHeadingCollapsibleProps
 
 export function List({
 	items,
@@ -206,7 +206,6 @@ function renderHeading(
 			}
 			tabIndex={collapsible ? 0 : undefined}
 			role={collapsible ? "button" : undefined}
-			aria-expanded={collapsible ? !isCollapsed : undefined}
 		>
 			{icon}
 			{heading}

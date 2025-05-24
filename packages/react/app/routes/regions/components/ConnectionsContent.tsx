@@ -80,4 +80,4 @@ export function ConnectionsContent({ territorialControl, relations }: Connection
 	)
 }
 
-export default ConnectionsContent
+export { ConnectionsContent }

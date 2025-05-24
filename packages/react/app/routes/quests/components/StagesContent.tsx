@@ -81,4 +81,4 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 	)
 }
 
-export default StagesContent
+export { StagesContent }

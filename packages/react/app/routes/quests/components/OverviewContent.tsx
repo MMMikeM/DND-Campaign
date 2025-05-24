@@ -121,4 +121,4 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 	)
 }
 
-export default OverviewContent
+export { OverviewContent }
