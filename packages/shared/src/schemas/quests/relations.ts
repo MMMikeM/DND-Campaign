@@ -1,13 +1,13 @@
 // quests/relations.ts
 import { relations } from "drizzle-orm"
-import { clues, factionQuestInvolvement, items, npcQuestRoles } from "../associations/tables.js"
+import { clues, factionQuestInvolvement, items, npcQuestRoles } from "../associations/tables"
 import { conflictProgression } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables.js"
+import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
 import { narrativeForeshadowing } from "../foreshadowing/tables"
 import { destinationContribution } from "../narrative/tables"
-import { regions, sites } from "../regions/tables.js"
-import { worldStateChanges } from "../world/tables.js"
+import { regions, sites } from "../regions/tables"
+import { worldStateChanges } from "../world/tables"
 import {
 	decisionOutcomes,
 	questDependencies,
@@ -15,7 +15,7 @@ import {
 	quests,
 	questUnlockConditions,
 	stageDecisions,
-} from "./tables.js"
+} from "./tables"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {

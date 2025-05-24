@@ -1,11 +1,11 @@
 // regions/relations.ts
 import { relations } from "drizzle-orm"
-import { factionTerritorialControl, items, regionConnectionDetails } from "../associations/tables.js"
-import { embeddings } from "../embeddings/tables.js"
-import { npcSites } from "../npc/tables.js"
-import { quests } from "../quests/tables.js"
-import { worldStateChanges } from "../world/tables.js"
-import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables.js"
+import { factionTerritorialControl, items, regionConnectionDetails } from "../associations/tables"
+import { embeddings } from "../embeddings/tables"
+import { npcSites } from "../npc/tables"
+import { quests } from "../quests/tables"
+import { worldStateChanges } from "../world/tables"
+import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
 
 export const regionsRelations = relations(regions, ({ many, one }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
