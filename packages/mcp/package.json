@@ -7,28 +7,34 @@
 	"types": "dist/index.d.ts",
 	"type": "module",
 	"scripts": {
-		"build": "tsup",
 		"build:watch": "tsup --watch",
+		"build": "tsup",
 		"dev": "tsx watch ./src/index.ts",
-		"test": "vitest"
+		"lint": "biome check .",
+		"test": "vitest",
+    "check": "tsc --noEmit",
+    "lint:fix": "biome check . --write"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "^1.9.0",
-		"@swc/helpers": "^0.5.15",
+		"@modelcontextprotocol/sdk": "^1.12.0",
 		"@tome-master/shared": "workspace:*",
 		"drizzle-orm": "catalog:",
-		"drizzle-zod": "catalog:",
+		"drizzle-zod": "^0.8.2",
 		"fast-fuzzy": "^1.12.0",
-		"pino": "^9.6.0",
+		"pino": "^9.7.0",
 		"pino-pretty": "^13.0.0",
-		"zod": "catalog:",
-		"zod-to-json-schema": "^3.24.5"
+		"zod": "catalog:"
+	},
+	"peerDependencies": {
+		"tailwindcss": "^3.0.0"
 	},
 	"devDependencies": {
-		"@modelcontextprotocol/inspector": "^0.6.0",
+		"@biomejs/biome": "catalog:",
+		"@modelcontextprotocol/inspector": "^0.13.0",
+		"@swc/helpers": "^0.5.17",
 		"@types/node": "catalog:",
 		"tsup": "catalog:",
 		"tsx": "catalog:",

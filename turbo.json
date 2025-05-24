@@ -20,7 +20,10 @@
     "lint": {
       "dependsOn": ["^build"]
     },
-    "check-types": {
+    "lint:fix": {
+      "dependsOn": ["^build"]
+    },
+    "check": {
       "dependsOn": ["^build"]
     },
     "dev": {

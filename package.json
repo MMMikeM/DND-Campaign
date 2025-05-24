@@ -1,43 +1,35 @@
+
 {
 	"name": "tome-master",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "turbo dev",
 		"build": "turbo build",
-		"lint": "turbo lint",
-		"test": "turbo test",
+		"check": "turbo check",
+		"db:down": "docker compose down -v",
+		"db:drop": "turbo db:drop",
 		"db:generate": "turbo db:generate",
 		"db:migrate": "turbo db:migrate",
-		"db:studio": "turbo db:studio",
-		"db:seed": "turbo db:seed",
-		"db:drop": "turbo db:drop",
 		"db:reset": "turbo db:reset",
+		"db:seed": "turbo db:seed",
+		"db:studio": "turbo db:studio",
 		"db:up": "docker compose up -d",
-		"db:down": "docker compose down -v",
-		"mcp:dev": "turbo mcp:dev",
+		"dev": "turbo dev",
+		"lint:fix": "turbo lint:fix",
+		"lint": "turbo lint",
 		"mcp:build": "turbo mcp:build",
-		"mcp:start": "turbo mcp:start"
+		"mcp:dev": "turbo mcp:dev",
+		"mcp:start": "turbo mcp:start",
+		"test": "turbo test"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"dependencies": {
-		"@swc/helpers": "^0.5.17",
-		"drizzle-orm": "^0.43.1",
-		"drizzle-zod": "^0.7.1",
-		"pg": "^8.15.6",
-		"zod": "^3.24.4"
-	},
 	"devDependencies": {
-		"@biomejs/biome": "2.0.0-beta.2",
+		"@biomejs/biome": "2.0.0-beta.5",
 		"@types/node": "catalog:",
-		"@types/pg": "^8.11.14",
-		"tsup": "catalog:",
-		"turbo": "^2.5.2",
-		"typescript": "catalog:",
-		"vitest": "catalog:"
+		"turbo": "^2.5.3"
 	},
 	"engines": {
 		"node": ">=22.0.0"
