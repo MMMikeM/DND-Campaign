@@ -53,6 +53,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.0
         version: 1.12.0
+      '@swc/helpers':
+        specifier: ^0.5.17
+        version: 0.5.17
       '@tome-master/shared':
         specifier: workspace:*
         version: link:../shared
@@ -84,9 +87,6 @@ importers:
       '@modelcontextprotocol/inspector':
         specifier: ^0.13.0
         version: 0.13.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.13.10)(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.13.10)(typescript@5.8.2)))(typescript@5.8.2)
-      '@swc/helpers':
-        specifier: ^0.5.17
-        version: 0.5.17
       '@types/node':
         specifier: 'catalog:'
         version: 22.13.10
@@ -319,6 +319,9 @@ importers:
       '@google/generative-ai':
         specifier: ^0.24.1
         version: 0.24.1
+      '@swc/helpers':
+        specifier: ^0.5.17
+        version: 0.5.17
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.41.0(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.2)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5)
@@ -334,9 +337,6 @@ importers:
       pino-pretty:
         specifier: ^13.0.0
         version: 13.0.0
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.23
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
