@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
+
 // Assuming a shared logger exists or can be created, otherwise use console
 // import { logger } from "../logger"; // Example path
 const logger = console // Using console as a placeholder

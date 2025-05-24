@@ -1,6 +1,6 @@
 // regions/tables.ts
-import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 
 const regionTypes = [
@@ -167,6 +167,25 @@ export const sites = pgTable("sites", {
 	smells: list("smells"),
 	weather: list("weather"),
 	descriptors: list("descriptors"),
+
+	// Battlemap Tactical Analysis
+	coverOptions: list("cover_options"),
+	elevationFeatures: list("elevation_features"),
+	movementRoutes: list("movement_routes"),
+	difficultTerrain: list("difficult_terrain"),
+	chokePoints: list("choke_points"),
+	sightLines: list("sight_lines"),
+	tacticalPositions: list("tactical_positions"),
+	interactiveElements: list("interactive_elements"),
+	environmentalHazards: list("environmental_hazards"),
+
+	// Battlemap Image Storage
+	battlemapImage: bytea("battlemap_image"),
+	imageFormat: oneOf("image_format", ["png", "jpg", "webp"]),
+	imageSize: integer("image_size"),
+	imageWidth: integer("image_width"),
+	imageHeight: integer("image_height"),
+
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
