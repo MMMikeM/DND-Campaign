@@ -1,17 +1,16 @@
 import * as Icons from "lucide-react"
-import React from "react"
-import { useNavigate, useParams, NavLink } from "react-router"
+import { NavLink, useNavigate, useParams } from "react-router"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getWorldChange } from "~/lib/entities"
 import type { WorldChange } from "~/lib/entities"
+import { getWorldChange } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getChangeSeverityVariant } from "./utils"
+import ConnectionsContent from "./components/ConnectionsContent"
 
 import DetailsContent from "./components/DetailsContent"
 import ImpactContent from "./components/ImpactContent"
-import ConnectionsContent from "./components/ConnectionsContent"
+import { getChangeSeverityVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {

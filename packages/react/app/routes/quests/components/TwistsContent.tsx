@@ -1,8 +1,8 @@
-import React from "react"
 import * as Icons from "lucide-react"
-import { Badge } from "~/components/ui/badge"
-import { List } from "~/components/List"
+import type React from "react"
 import { InfoCard } from "~/components/InfoCard"
+import { List } from "~/components/List"
+import { Badge } from "~/components/ui/badge"
 import type { Quest } from "~/lib/entities"
 
 interface TwistsContentProps {

@@ -1,10 +1,9 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
-import { NavLink } from "react-router"
 import type { NPC } from "~/lib/entities"
-import { getTrustLevelVariant, getWealthVariant, getAlignmentVariant, getAdaptabilityVariant } from "../utils"
+import { getAdaptabilityVariant, getAlignmentVariant, getTrustLevelVariant, getWealthVariant } from "../utils"
 
 interface NPCHeaderProps {
 	npc: NPC

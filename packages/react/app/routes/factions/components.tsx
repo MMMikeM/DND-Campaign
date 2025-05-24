@@ -1,4 +1,3 @@
-
 export const getAlignmentVariant = (alignment: string) => {
 	if (alignment.includes("good")) return "default"
 	if (alignment.includes("evil")) return "destructive"

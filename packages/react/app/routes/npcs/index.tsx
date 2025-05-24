@@ -1,14 +1,13 @@
-import { useState } from "react"
 import * as Icons from "lucide-react"
+import { useState } from "react"
 import { NavLink } from "react-router"
-
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllNpcs } from "~/lib/entities"
 import type { Route } from "./+types/index"
-import { useSearchFilter } from "~/hooks/useSearchFilter"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllNpcs()

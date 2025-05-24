@@ -3,8 +3,8 @@ import { toSlug } from "~/lib/utils/addSlugs"
 import type { Route } from "./+types/items"
 
 export async function loader({ request }: Route.LoaderArgs) {
-	let url = new URL(request.url)
-	let query = url.searchParams.get("q")
+	const url = new URL(request.url)
+	const query = url.searchParams.get("q")
 	if (!query) {
 		return []
 	}

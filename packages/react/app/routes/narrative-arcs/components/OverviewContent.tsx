@@ -1,10 +1,9 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getArcStatusVariant } from "../utils"
 import type { NarrativeArc } from "~/lib/entities"
+import { getArcStatusVariant } from "../utils"
 
 interface OverviewContentProps {
 	arc: NarrativeArc
@@ -88,7 +87,6 @@ export function OverviewContent({ arc }: OverviewContentProps) {
 						</div>
 					)}
 				</InfoCard>
-
 			</div>
 		</div>
 	)

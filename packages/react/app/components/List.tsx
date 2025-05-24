@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { ChevronDown, ChevronUp, Info } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import React, { useEffect, useRef, useState } from "react"
+import type React from "react"
+import { useEffect, useRef, useState } from "react"
 import { cn } from "../lib/utils"
 
 const listVariants = cva("", {

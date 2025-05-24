@@ -1,10 +1,9 @@
-import { useState } from "react"
-import * as Icons from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import { motion, AnimatePresence } from "motion/react"
-import { SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar"
-import { Link } from "~/components/ui/link"
+import * as Icons from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import { useLocation } from "react-router"
+import { Link } from "~/components/ui/link"
+import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 
 const menuVariants = {
 	hidden: {

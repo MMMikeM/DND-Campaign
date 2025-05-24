@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Faction } from "~/lib/entities"
 

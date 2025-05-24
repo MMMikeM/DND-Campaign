@@ -1,11 +1,10 @@
-import { useState } from "react"
 import * as Icons from "lucide-react"
+import { useState } from "react"
 import { NavLink } from "react-router"
-
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getAllRegions } from "~/lib/entities"
 import type { Route } from "./+types/index"
 

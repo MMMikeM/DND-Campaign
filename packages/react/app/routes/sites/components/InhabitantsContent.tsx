@@ -11,10 +11,9 @@ export const InhabitantsContent: React.FC<Site> = ({ npcs, territorialControl })
 				icon={<Icons.Users className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No NPCs are present at this site."
 			>
-						{npcs.map((npc) => (
-							<div key={`npc-${npc.id}`} className="border rounded p-4">
-							</div>
-						))}
+				{npcs.map((npc) => (
+					<div key={`npc-${npc.id}`} className="border rounded p-4"></div>
+				))}
 			</InfoCard>
 
 			<InfoCard

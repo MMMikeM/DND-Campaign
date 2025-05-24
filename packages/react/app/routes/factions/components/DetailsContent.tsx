@@ -1,6 +1,6 @@
 import * as Icons from "lucide-react"
-import { List } from "~/components/List"
 import { InfoCard } from "~/components/InfoCard"
+import { List } from "~/components/List"
 import type { Faction } from "~/lib/entities"
 
 export function DetailsContent(faction: Faction) {

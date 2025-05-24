@@ -1,12 +1,12 @@
 import * as Icons from "lucide-react"
+import { useState } from "react"
 import { NavLink } from "react-router"
+import { InfoCard } from "~/components/InfoCard"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import { getAllFactions } from "~/lib/entities"
-import { useMemo, useState } from "react"
-import type { Route } from "./+types/index"
-import { InfoCard } from "~/components/InfoCard"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
+import { getAllFactions } from "~/lib/entities"
+import type { Route } from "./+types/index"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllFactions()

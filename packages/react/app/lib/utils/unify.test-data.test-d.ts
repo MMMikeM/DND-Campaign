@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from "vitest"
-import { unifyRelations } from "./unify"
 import { unifyTestData } from "./addSlugs.test.data"
+import { unifyRelations } from "./unify"
 
 describe("unifyRelations types with real data", () => {
 	test("correctly infers types from real-world region data", () => {

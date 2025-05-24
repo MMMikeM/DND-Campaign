@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import React from "react"
+import type React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Region } from "~/lib/entities"

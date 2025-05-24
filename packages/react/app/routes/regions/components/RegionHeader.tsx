@@ -1,5 +1,5 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import type React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { getDangerVariant } from "../utils"
 

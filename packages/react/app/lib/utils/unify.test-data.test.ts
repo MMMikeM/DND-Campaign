@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest"
-import { unifyRelations } from "./unify"
+import { describe, expect, it } from "vitest"
 import { unifyTestData } from "./addSlugs.test.data"
+import { unifyRelations } from "./unify"
 
 describe("unifyRelations with real data", () => {
 	it("should correctly transform relations from incomingRelations and outgoingRelations", () => {

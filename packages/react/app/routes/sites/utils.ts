@@ -13,5 +13,5 @@ export const getSiteTypeIcon = (siteType: string | null | undefined) => {
 	// 	case "cave": return CaveIcon;
 	// 	default: return DefaultLocationIcon;
 	// }
-	return null; // Return null or a default icon
+	return null // Return null or a default icon
 }

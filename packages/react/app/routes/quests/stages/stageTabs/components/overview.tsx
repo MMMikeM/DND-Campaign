@@ -1,4 +1,3 @@
-import React from "react"
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
