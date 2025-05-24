@@ -1,6 +1,6 @@
-import { z } from "zod"
 import { tables } from "@tome-master/shared"
-import { optionalId, camelToSnakeCase } from "./tool.utils" // Import camelToSnakeCase
+import { z } from "zod/v4"
+import { camelToSnakeCase, optionalId } from "./tool.utils" // Import camelToSnakeCase
 
 const allTables = {
 	...tables.associationTables,

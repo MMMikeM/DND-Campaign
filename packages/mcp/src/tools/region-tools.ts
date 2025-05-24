@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./region-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	regionTables: { sites, areas, regions, regionConnections, siteEncounters, siteLinks, siteSecrets },

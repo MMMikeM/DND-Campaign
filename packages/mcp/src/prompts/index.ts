@@ -2,7 +2,7 @@
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { GetPromptRequestSchema, ListPromptsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
-import { getAllPrompts, executePrompt } from "./prompt-registry"
+import { executePrompt, getAllPrompts } from "./prompt-registry"
 
 export function registerPromptHandlers(server: Server) {
 	server.setRequestHandler(ListPromptsRequestSchema, async () => {

@@ -1,5 +1,5 @@
 // prompt-types.ts
-import { z } from "zod"
+import type { z } from "zod/v4"
 
 // Type for prompt category
 export type PromptCategory = "npc" | "faction" | "quest" | "location" | "world"

@@ -1,11 +1,12 @@
 // prompt-registry.ts
-import type { PromptDefinition, PromptCategory, PromptArgument } from "./prompt-types"
-import { extractArgsFromZodSchema } from "./prompt-utils"
+
+import { z } from "zod/v4"
 // Import other category definitions
 // import { factionPromptDefinitions } from "./faction-prompts";
 import { logger } from ".."
-import { z } from "zod"
 import { npcPromptDefinitions } from "./prompt-npc"
+import type { PromptCategory } from "./prompt-types"
+import { extractArgsFromZodSchema } from "./prompt-utils"
 
 // Combine all prompt definitions
 const allPromptDefinitions = {

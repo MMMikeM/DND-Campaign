@@ -1,9 +1,9 @@
 import { getGeminiEmbedding } from "@tome-master/shared"
-import { SQL, cosineDistance, isNotNull } from "drizzle-orm"
-import { PgTable, PgColumn } from "drizzle-orm/pg-core"
-import { z } from "zod"
-import { logger, db } from "../.."
-import { ToolHandler, ToolHandlerReturn } from "./types"
+import { cosineDistance, isNotNull, type SQL } from "drizzle-orm"
+import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
+import { z } from "zod/v4"
+import { db, logger } from "../.."
+import type { ToolHandler, ToolHandlerReturn } from "./types"
 
 const embeddingIdSchema = z.object({
 	id: z.number().describe("The ID of the entity to generate the embedding for."),

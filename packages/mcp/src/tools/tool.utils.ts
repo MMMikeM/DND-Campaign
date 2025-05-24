@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { db, logger } from "../index"
 import zodToMCP from "../zodToMcp"
-import { PgTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
+import type { PgTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
 
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
 export type Schema<T extends string> = Record<T, z.ZodObject<z.ZodRawShape, "strict", z.ZodTypeAny, unknown, unknown>>

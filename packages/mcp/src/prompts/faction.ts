@@ -1,5 +1,5 @@
-import { InferInsertModel } from "drizzle-orm"
-import { tables } from "@tome-master/shared"
+import type { tables } from "@tome-master/shared"
+import type { InferInsertModel } from "drizzle-orm"
 
 type Faction = InferInsertModel<typeof tables.factionTables.factions>
 

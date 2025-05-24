@@ -2,7 +2,7 @@ import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
 import { schemas, tableEnum } from "./world-tools-schema"
 
 const {
