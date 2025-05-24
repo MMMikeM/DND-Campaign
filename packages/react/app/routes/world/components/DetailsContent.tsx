@@ -11,7 +11,6 @@ const getVisibilityVariant = (visibility: string): "default" | "destructive" | "
 			return "default"
 		case "secret":
 			return "destructive"
-		case "obscure":
 		default:
 			return "outline"
 	}
