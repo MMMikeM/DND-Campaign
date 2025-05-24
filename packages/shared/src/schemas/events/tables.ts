@@ -1,5 +1,6 @@
 import { pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { embeddings } from "../embeddings/tables"
 import { questStages, quests, stageDecisions } from "../quests/tables"
 
 // Enums from changes.md
@@ -30,7 +31,7 @@ export const narrativeEvents = pgTable("narrative_events", {
 	// GM guidance
 	creativePrompts: list("creative_prompts"),
 	gmNotes: list("gm_notes"), // How to run it effectively
-	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const enums = {
