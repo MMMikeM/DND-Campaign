@@ -11,7 +11,7 @@ export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<str
 
 export type ToolDefinition = {
 	description: string
-	inputSchema: ReturnType<typeof z.toJSONSchema>
+	inputSchema: z.core.JSONSchema.BaseSchema
 	handler: ToolHandler
 }
 
