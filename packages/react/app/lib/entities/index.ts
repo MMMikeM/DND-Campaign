@@ -18,7 +18,7 @@ export const updateMaterializedView = async () => await db.execute(sql`REFRESH M
 
 export const searchBySimilarity = async (
 	searchTerm: string,
-  fuzzyWeight = 1.0,
+	fuzzyWeight = 1.0,
 	similarityThreshold = 0.3,
 	maxLevenshtein = 2,
 	phoneticStrength = 4,

@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import * as React from "react"
+import type * as React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { cn } from "~/lib/utils"
 import { Optional } from "./Optional"

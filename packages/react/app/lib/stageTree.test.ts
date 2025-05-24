@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest"
-import { buildStageTree, type StageNode, type RawQuestStage } from "./entities"
+import { describe, expect, it } from "vitest"
+import { buildStageTree, type RawQuestStage, type StageNode } from "./entities"
 
 // Create a mock of RawQuestStage type for testing
 type MockRawQuestStage = {

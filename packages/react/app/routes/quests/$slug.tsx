@@ -1,18 +1,15 @@
-import React, { useState } from "react"
-import { NavLink, useParams, useNavigate, Outlet } from "react-router"
 import * as Icons from "lucide-react"
+import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getQuest, getQuestStages } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-
+import ConnectionsContent from "./components/ConnectionsContent"
 import OverviewContent from "./components/OverviewContent"
+import { QuestHeader } from "./components/QuestHeader"
 import StagesContent from "./components/StagesContent"
 import ThemesContent from "./components/ThemesContent"
-import ConnectionsContent from "./components/ConnectionsContent"
 import TwistsContent from "./components/TwistsContent"
-
-import { QuestHeader } from "./components/QuestHeader"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {

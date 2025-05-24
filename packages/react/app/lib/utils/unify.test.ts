@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, expect, it } from "vitest"
 import { unifyRelations } from "./unify"
 
 describe("unifyRelations", () => {
@@ -89,9 +89,7 @@ describe("unifyRelations", () => {
 		}
 
 		expect(() => {
-			unifyRelations(input)
-				.from({ property: "notAnArray", key: "id" })
-				.to({ property: "result", key: "newId" })
+			unifyRelations(input).from({ property: "notAnArray", key: "id" }).to({ property: "result", key: "newId" })
 		}).toThrow("Property must be an array: notAnArray")
 	})
 

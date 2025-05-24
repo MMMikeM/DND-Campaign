@@ -3,8 +3,8 @@ import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Quest } from "~/lib/entities"
-import { getConditionTypeBadgeProps, getDecisionTypeBadgeProps } from "../../utils"
 import { cn } from "~/lib/utils"
+import { getConditionTypeBadgeProps, getDecisionTypeBadgeProps } from "../../utils"
 
 export default function StageDecisionsTab(selectedStage: Quest["stages"][0]) {
 	console.log({ selectedStage })

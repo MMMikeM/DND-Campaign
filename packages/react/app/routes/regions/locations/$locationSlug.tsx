@@ -1,12 +1,12 @@
-import { NavLink, useNavigate, useParams } from "react-router"
 import * as Icons from "lucide-react"
-import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
+import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { List } from "~/components/List"
+import { Button } from "~/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import type { Route } from "./+types/$locationSlug"
 import { getLocation } from "~/lib/entities"
+import type { Route } from "./+types/$locationSlug"
 
 // Server-side data fetching
 export async function loader({ params }: Route.LoaderArgs) {

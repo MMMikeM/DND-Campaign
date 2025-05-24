@@ -1,4 +1,4 @@
-import { Badge } from "~/components/ui/badge"
+import type { Badge } from "~/components/ui/badge"
 
 type BadgeProps = React.ComponentProps<typeof Badge>
 

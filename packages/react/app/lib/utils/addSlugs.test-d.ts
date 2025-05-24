@@ -1,5 +1,5 @@
-import { expectTypeOf, assertType } from "vitest"
-import type { Slug, Sluggable, WithSlug, WithSlugsAdded } from "./addSlugs"
+import { assertType, expectTypeOf } from "vitest"
+import type { Slug, WithSlug, WithSlugsAdded } from "./addSlugs"
 import addSlugs, { createSlug } from "./addSlugs"
 
 // Test Slug type

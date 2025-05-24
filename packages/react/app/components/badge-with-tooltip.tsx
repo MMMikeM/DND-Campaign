@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority"
-import * as React from "react"
-import { Badge, badgeVariants } from "~/components/ui/badge"
+import type * as React from "react"
+import { Badge, type badgeVariants } from "~/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
 import { cn } from "~/lib/utils"
 

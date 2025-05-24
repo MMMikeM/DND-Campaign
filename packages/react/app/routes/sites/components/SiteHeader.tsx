@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import React from "react"
+import type React from "react"
 import { NavLink } from "react-router"
 // import { getSiteTypeIcon } from "../utils" // Import utils if needed
 import type { Site } from "~/lib/entities" // Import the Site type

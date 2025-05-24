@@ -1,14 +1,14 @@
 import * as Icons from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { NavLink } from "react-router" // Corrected import source
-import { Input } from "~/components/ui/input"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getAllForeshadowing } from "~/lib/entities"
-import { getForeshadowingSubtletyVariant } from "./utils"
-import type { Route } from "./+types/index"
+import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
+import { getAllForeshadowing } from "~/lib/entities"
+import type { Route } from "./+types/index"
+import { getForeshadowingSubtletyVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return await getAllForeshadowing()

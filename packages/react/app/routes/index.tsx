@@ -31,8 +31,6 @@ const sections = [
 ]
 
 export default function IndexPage() {
-
-	
 	return (
 		<div className="container mx-auto py-8">
 			<div className="text-center mb-8">

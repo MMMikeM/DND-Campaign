@@ -1,13 +1,13 @@
 import * as Icons from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { NavLink } from "react-router"
-import { Input } from "~/components/ui/input"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getAllWorldChanges } from "~/lib/entities"
-import { getChangeSeverityVariant } from "./utils"
-import type { Route } from "./+types/index"
+import { InfoCard } from "~/components/InfoCard"
+import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
+import { getAllWorldChanges } from "~/lib/entities"
+import type { Route } from "./+types/index"
+import { getChangeSeverityVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const changes = await getAllWorldChanges()

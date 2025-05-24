@@ -10,10 +10,9 @@ export function unifyRelations<T extends Record<string, unknown>>(obj: T) {
 		/**
 		 * Specify the first source property and its key field
 		 */
-		from<
-			P extends keyof T,
-			K extends keyof (T[P] extends readonly (infer I)[] ? I : Record<string, unknown>),
-		>(config: Source<P, string & K>) {
+		from<P extends keyof T, K extends keyof (T[P] extends readonly (infer I)[] ? I : Record<string, unknown>)>(
+			config: Source<P, string & K>,
+		) {
 			// Infer the type of items in the source array
 			type SourceItemType = T[P] extends readonly (infer I)[] ? I : never
 			// Infer the type of the key being transformed
@@ -25,10 +24,9 @@ export function unifyRelations<T extends Record<string, unknown>>(obj: T) {
 				/**
 				 * Specify additional source property and its key field
 				 */
-				with<
-					P2 extends keyof T,
-					K2 extends keyof (T[P2] extends readonly (infer I)[] ? I : Record<string, unknown>),
-				>(config: Source<P2, string & K2>) {
+				with<P2 extends keyof T, K2 extends keyof (T[P2] extends readonly (infer I)[] ? I : Record<string, unknown>)>(
+					config: Source<P2, string & K2>,
+				) {
 					// Infer the type of items in the second source array
 					type SourceItem2Type = T[P2] extends readonly (infer I)[] ? I : never
 					// Infer the type of the second key being transformed

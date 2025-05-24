@@ -1,9 +1,9 @@
-import React from "react"
 import * as Icons from "lucide-react"
-import { Link } from "~/components/ui/link"
+import type React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getTypeVariant, getUrgencyVariant, getVisibilityVariant } from "../utils"
+import { Link } from "~/components/ui/link"
 import type { Quest } from "~/lib/entities"
+import { getTypeVariant, getUrgencyVariant, getVisibilityVariant } from "../utils"
 
 export const QuestHeader: React.FC<Quest> = ({ name, type, urgency, visibility, mood, factions, region }) => (
 	<div className="mb-6">

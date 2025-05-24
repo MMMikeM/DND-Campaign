@@ -1,10 +1,9 @@
-import React from "react"
 import * as Icons from "lucide-react"
+import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { getChangeSeverityVariant } from "../utils"
 import type { WorldChange } from "~/lib/entities"
+import { getChangeSeverityVariant } from "../utils"
 
 const getVisibilityVariant = (visibility: string): "default" | "destructive" | "outline" | "secondary" => {
 	switch (visibility) {

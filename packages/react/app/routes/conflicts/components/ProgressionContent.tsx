@@ -1,7 +1,6 @@
-import React from "react"
 import * as Icons from "lucide-react"
-import { InfoCard } from "~/components/InfoCard"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"

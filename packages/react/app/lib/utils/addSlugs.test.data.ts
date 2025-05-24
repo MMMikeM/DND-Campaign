@@ -6,8 +6,7 @@ export const testData = {
 	economy: "Tourism, fishing, agriculture, and temple offerings",
 	history:
 		"Founded according to legend where Aphrodite first emerged from the sea, Paphos has long been a spiritual center. Now it stands as the last major refugee center for those fleeing the northern corruption.",
-	population:
-		"A swelling population of approximately 60,000, with nearly half being refugees from northern areas.",
+	population: "A swelling population of approximately 60,000, with nearly half being refugees from northern areas.",
 	culturalNotes: [
 		"Religious practices honoring Aphrodite remain central to daily life",
 		"A mixing pot of traditional Cypriot culture and desperate northern refugees",
@@ -826,8 +825,7 @@ export const expectedResult = {
 	economy: "Tourism, fishing, agriculture, and temple offerings",
 	history:
 		"Founded according to legend where Aphrodite first emerged from the sea, Paphos has long been a spiritual center. Now it stands as the last major refugee center for those fleeing the northern corruption.",
-	population:
-		"A swelling population of approximately 60,000, with nearly half being refugees from northern areas.",
+	population: "A swelling population of approximately 60,000, with nearly half being refugees from northern areas.",
 	culturalNotes: [
 		"Religious practices honoring Aphrodite remain central to daily life",
 		"A mixing pot of traditional Cypriot culture and desperate northern refugees",

@@ -1,5 +1,5 @@
-import * as React from "react"
 import * as Icons from "lucide-react"
+import type * as React from "react"
 
 // Condition Types
 export const conditionTypes = [

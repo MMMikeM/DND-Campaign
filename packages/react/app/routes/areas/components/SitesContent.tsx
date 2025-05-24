@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import React from "react"
+import type React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"

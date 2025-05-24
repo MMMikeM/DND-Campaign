@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import React from "react"
+import type React from "react"
 import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import type { Area } from "~/lib/entities"
