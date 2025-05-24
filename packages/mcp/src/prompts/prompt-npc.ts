@@ -39,16 +39,16 @@ const handleCreateNpcConcept = async (args: z.infer<typeof createNpcConceptSchem
 	logger.info("Creating NPC concept", args)
 
 	// Base system prompt for morally complex NPCs
-	const baseSystemPrompt = `You're a master character creator specializing in morally complex, flawed NPCs for a gritty fantasy campaign.
+	// 	const _baseSystemPrompt = `You're a master character creator specializing in morally complex, flawed NPCs for a gritty fantasy campaign.
 
-Your NPCs should have:
-- Memorable personalities with contradictory motivations and self-serving instincts
-- A balanced mix of strengths with significant character flaws that create moral dilemmas
-- Distinctive speech patterns and mannerisms that make them instantly recognizable
-- Messy connections to the world through factions, locations, and complicated relationships
-- Personal vices, prejudices, or ethical blind spots that feel authentically human
-- Secrets and self-interested goals that may align or clash with player objectives
-- History of morally questionable decisions that continue to influence their present`
+	// Your NPCs should have:
+	// - Memorable personalities with contradictory motivations and self-serving instincts
+	// - A balanced mix of strengths with significant character flaws that create moral dilemmas
+	// - Distinctive speech patterns and mannerisms that make them instantly recognizable
+	// - Messy connections to the world through factions, locations, and complicated relationships
+	// - Personal vices, prejudices, or ethical blind spots that feel authentically human
+	// - Secrets and self-interested goals that may align or clash with player objectives
+	// - History of morally questionable decisions that continue to influence their present`
 
 	// Create a specific prompt based on the args
 	const promptText = `Create a unique NPC concept based on the theme: "${args.theme}"

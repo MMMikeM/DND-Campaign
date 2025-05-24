@@ -24,9 +24,7 @@ export const schemas = {
 		siteId: optionalId.describe("ID of the primary site affected by this change (if any)"),
 		npcId: optionalId.describe("ID of the primary NPC affected by this change (if any)"),
 		futureQuestId: optionalId.describe("ID of a future quest planned as a consequence of this change (if any)"),
-		recordedDate: (s) => z.string().optional().describe("Timestamp when this change was recorded (defaults to now)"),
-		isResolved: (s) =>
-			s.describe("Has the impact of this change been fully addressed or concluded? (Defaults to false)"),
+		destinationId: optionalId.describe("ID of the destination of this change (if any)"),
 		creativePrompts: (s) => s.describe("Ideas for GMs on how to showcase or follow up on this change"),
 		gmNotes: (s) => s.optional().describe("General GM notes about this world state change"),
 		changeType: z
