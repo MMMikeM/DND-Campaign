@@ -3,7 +3,7 @@ import { cosineDistance, eq, inArray } from "drizzle-orm"
 import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import { zodToMCP } from "../zodToMcp"
+import zodToMCP from "../zodToMcp"
 import {
 	type EmbeddableEntityType,
 	type EmbeddingTools,
@@ -11,10 +11,6 @@ import {
 	schemas,
 } from "./embedding-tools-schema"
 import type { ToolDefinition, ToolHandler } from "./utils/types"
-
-const {
-	embeddingTables: { embeddings },
-} = tables
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
 	faction: "factions",

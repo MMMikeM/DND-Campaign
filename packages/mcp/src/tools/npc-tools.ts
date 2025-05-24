@@ -1,13 +1,8 @@
 import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./npc-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
-
-const {
-	npcTables: { npcs, characterRelationships, npcFactions, npcSites },
-} = tables
 
 type NpcGetters = CreateEntityGetters<typeof tables.npcTables>
 
@@ -19,7 +14,7 @@ export const entityGetters: NpcGetters = {
 
 	npc_by_id: (id: number) =>
 		db.query.npcs.findFirst({
-			where: eq(npcs.id, id),
+			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
 				relatedItems: true,
 				relatedQuestHooks: { with: { hook: true } },
@@ -33,7 +28,7 @@ export const entityGetters: NpcGetters = {
 		}),
 	character_relationship_by_id: (id: number) =>
 		db.query.characterRelationships.findFirst({
-			where: eq(characterRelationships.id, id),
+			where: (characterRelationships, { eq }) => eq(characterRelationships.id, id),
 			with: {
 				sourceNpc: true,
 				targetNpc: true,
@@ -41,7 +36,7 @@ export const entityGetters: NpcGetters = {
 		}),
 	npc_faction_by_id: (id: number) =>
 		db.query.npcFactions.findFirst({
-			where: eq(npcFactions.id, id),
+			where: (npcFactions, { eq }) => eq(npcFactions.id, id),
 			with: {
 				npc: true,
 				faction: true,
@@ -49,7 +44,7 @@ export const entityGetters: NpcGetters = {
 		}),
 	npc_site_by_id: (id: number) =>
 		db.query.npcSites.findFirst({
-			where: eq(npcSites.id, id),
+			where: (npcSites, { eq }) => eq(npcSites.id, id),
 			with: {
 				npc: true,
 				site: true,

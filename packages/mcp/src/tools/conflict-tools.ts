@@ -1,13 +1,8 @@
 import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./conflict-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
-
-const {
-	conflictTables: { majorConflicts, conflictParticipants, conflictProgression },
-} = tables
 
 type ConflictGetters = CreateEntityGetters<typeof tables.conflictTables>
 
@@ -17,7 +12,7 @@ export const entityGetters: ConflictGetters = {
 	all_conflict_progression: () => db.query.conflictProgression.findMany({}),
 	major_conflict_by_id: (id: number) =>
 		db.query.majorConflicts.findFirst({
-			where: eq(majorConflicts.id, id),
+			where: (majorConflicts, { eq }) => eq(majorConflicts.id, id),
 			with: {
 				participants: true,
 				primaryRegion: true,
@@ -27,7 +22,7 @@ export const entityGetters: ConflictGetters = {
 		}),
 	conflict_participant_by_id: (id: number) =>
 		db.query.conflictParticipants.findFirst({
-			where: eq(conflictParticipants.id, id),
+			where: (conflictParticipants, { eq }) => eq(conflictParticipants.id, id),
 			with: {
 				conflict: true,
 				faction: true,
@@ -36,7 +31,7 @@ export const entityGetters: ConflictGetters = {
 
 	conflict_progression_by_id: (id: number) =>
 		db.query.conflictProgression.findFirst({
-			where: eq(conflictProgression.id, id),
+			where: (conflictProgression, { eq }) => eq(conflictProgression.id, id),
 			with: {
 				conflict: true,
 				quest: true,

@@ -1,13 +1,8 @@
 import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./faction-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
-
-const {
-	factionTables: { factions, factionDiplomacy, factionHeadquarters, factionCulture, factionAgendas },
-} = tables
 
 type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
 
@@ -46,7 +41,7 @@ export const entityGetters: FactionGetters = {
 		}),
 	faction_diplomacy_by_id: (id: number) =>
 		db.query.factionDiplomacy.findFirst({
-			where: eq(factionDiplomacy.id, id),
+			where: (factionDiplomacy, { eq }) => eq(factionDiplomacy.id, id),
 			with: {
 				sourceFaction: true,
 				targetFaction: true,
@@ -54,7 +49,7 @@ export const entityGetters: FactionGetters = {
 		}),
 	faction_headquarter_by_id: (id: number) =>
 		db.query.factionHeadquarters.findFirst({
-			where: eq(factionHeadquarters.id, id),
+			where: (factionHeadquarters, { eq }) => eq(factionHeadquarters.id, id),
 			with: {
 				site: true,
 				faction: true,
@@ -62,12 +57,12 @@ export const entityGetters: FactionGetters = {
 		}),
 	faction_culture_by_id: (id: number) =>
 		db.query.factionCulture.findFirst({
-			where: eq(factionCulture.id, id),
+			where: (factionCulture, { eq }) => eq(factionCulture.id, id),
 			with: { faction: true },
 		}),
 	faction_agenda_by_id: (id: number) =>
 		db.query.factionAgendas.findFirst({
-			where: eq(factionAgendas.id, id),
+			where: (factionAgendas, { eq }) => eq(factionAgendas.id, id),
 			with: { faction: true },
 		}),
 }
