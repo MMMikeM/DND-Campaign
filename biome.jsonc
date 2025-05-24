@@ -9,27 +9,18 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-
 			"complexity": {
 				"noForEach": "off"
 			}
 		},
-		"includes": [
-			"**",
-			"!**/src/server/schemas/generated/**"
-		]
+		"includes": ["**", "!**/src/server/schemas/generated/**"]
 	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
 		"indentWidth": 2,
 		"lineWidth": 120,
-		"includes": [
-			"**",
-			"!**/src/server/schemas/generated/**",
-			"!**/node_modules/**",
-			"!**/.next/**"
-		]
+		"includes": ["**", "!**/src/server/schemas/generated/**", "!**/node_modules/**", "!**/.next/**"]
 	},
 	"javascript": {
 		"formatter": {
@@ -41,7 +32,11 @@
 		"ignoreUnknown": true,
 		"includes": [
 			"**/*.ts",
-			"**/*.tsx"
+			"**/*.tsx",
+			"!packages/react/app/components/ui/**",
+			"!**/node_modules/**",
+			"!**/dist/**",
+			"!packages/react/.react-router/**"
 		]
 	}
 }
