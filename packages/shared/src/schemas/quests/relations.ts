@@ -11,8 +11,8 @@ import { worldStateChanges } from "../world/tables.js"
 import {
 	decisionOutcomes,
 	questDependencies,
-	quests,
 	questStages,
+	quests,
 	questUnlockConditions,
 	stageDecisions,
 } from "./tables.js"

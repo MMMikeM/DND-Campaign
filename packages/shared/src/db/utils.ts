@@ -1,5 +1,4 @@
-import { serial, type PgColumn, text, integer } from "drizzle-orm/pg-core"
-import { vector } from "drizzle-orm/pg-core"
+import { customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
 
 export const list = (description: string) => text(description).array().notNull()
 
@@ -23,3 +22,10 @@ export const pk = () => serial("id").primaryKey()
 export const embeddingVector = (name: string = "embedding") => {
 	return vector(name, { dimensions: 3072 })
 }
+
+// Custom bytea type for binary image data
+export const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
+	dataType() {
+		return "bytea"
+	},
+})
