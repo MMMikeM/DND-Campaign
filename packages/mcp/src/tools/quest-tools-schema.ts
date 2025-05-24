@@ -1,14 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
-import { CreateTableNames, id, optionalId, Schema } from "./tool.utils"
+import { z } from "zod/v4"
+import { type CreateTableNames, id, optionalId, type Schema } from "./tool.utils"
 
 const {
 	questTables: {
 		quests,
 		questDependencies,
 		questStages,
-		questTwists,
 		questUnlockConditions,
 		stageDecisions,
 		decisionOutcomes,
@@ -22,10 +21,9 @@ export const tableEnum = [
 	"quests",
 	"questDependencies",
 	"questStages",
-	"questTwists",
+	"decisionOutcomes",
 	"questUnlockConditions",
 	"stageDecisions",
-	"decisionOutcomes",
 ] as const satisfies TableNames
 
 export const schemas = {
@@ -82,23 +80,6 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
-
-	questTwists: createInsertSchema(questTwists, {
-		id: id.describe("ID of twist to manage (omit to create new, include alone to delete)"),
-		questId: id.describe("ID of quest this twist belongs to"),
-		description: (s) => s.describe("The revelation or unexpected development in detail in point form"),
-		creativePrompts: (s) => s.describe("Ideas for foreshadowing or maximizing impact"),
-		impact: z
-			.enum(enums.impactSeverity)
-			.describe("How significantly this changes the narrative (minor, moderate, major)"),
-		narrativePlacement: z
-			.enum(enums.narrativePlacements)
-			.describe("When twist occurs (early, middle, climax, denouement)"),
-		twistType: z.enum(enums.twistTypes).describe("Nature of surprise (reversal, revelation, betrayal, complication)"),
-	})
-		.omit({ id: true })
-		.strict()
-		.describe("Surprising developments that subvert player expectations and add depth to quest narratives"),
 
 	questUnlockConditions: createInsertSchema(questUnlockConditions, {
 		id: id.describe("ID of condition to manage (omit to create new, include alone to delete)"),

@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
-import { CreateTableNames, id, Schema } from "./tool.utils"
+import { z } from "zod/v4"
+import { type CreateTableNames, id, type Schema } from "./tool.utils"
 
 const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites, enums },

@@ -1,4 +1,4 @@
-import { type RunResult } from "@tome-master/shared"
+import type { RunResult } from "@tome-master/shared"
 import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import type { zodToJsonSchema } from "zod-to-json-schema"
 

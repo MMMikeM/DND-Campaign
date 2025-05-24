@@ -1,8 +1,9 @@
 // npc-prompts.ts
-import { z } from "zod"
-import { db, logger } from ".."
+
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
+import { z } from "zod/v4"
+import { db, logger } from ".."
 import type { PromptDefinition, PromptResult } from "./prompt-types"
 
 // Define schemas for NPC prompt arguments

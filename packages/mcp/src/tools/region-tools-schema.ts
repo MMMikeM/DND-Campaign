@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
-import { CreateTableNames, id, Schema } from "./tool.utils"
+import { z } from "zod/v4"
+import { type CreateTableNames, id, type Schema } from "./tool.utils"
 
 const {
 	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets, enums },
@@ -81,6 +81,21 @@ export const schemas = {
 		environment: (s) => s.describe("Setting context (urban, rural, wilderness, underground)"),
 		mood: (s) => s.describe("Emotional atmosphere (peaceful, tense, eerie, vibrant)"),
 		siteType: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
+		areas: (s) => s.describe("Areas of this site"),
+		coverOptions: (s) => s.describe("Cover options for this site"),
+		elevationFeatures: (s) => s.describe("Elevation features for this site"),
+		movementRoutes: (s) => s.describe("Movement routes for this site"),
+		difficultTerrain: (s) => s.describe("Difficult terrain for this site"),
+		chokePoints: (s) => s.describe("Choke points for this site"),
+		sightLines: (s) => s.describe("Sight lines for this site"),
+		tacticalPositions: (s) => s.describe("Tactical positions for this site"),
+		interactiveElements: (s) => s.describe("Interactive elements for this site"),
+		environmentalHazards: (s) => s.describe("Environmental hazards for this site"),
+		battlemapImage: (s) => s.describe("Battlemap image for this site"),
+		imageFormat: z.enum(enums.imageFormats).describe("Image format (png, jpg, webp)"),
+		imageSize: (s) => s.describe("Image size in bytes"),
+		imageWidth: (s) => s.describe("Image width in pixels"),
+		imageHeight: (s) => s.describe("Image height in pixels"),
 	})
 		.omit({ id: true })
 		.strict()

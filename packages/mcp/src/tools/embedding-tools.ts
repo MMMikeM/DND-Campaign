@@ -1,17 +1,16 @@
-import { z } from "zod"
+import { type EmbeddedEntityName, getGeminiEmbedding, getTextForEntity, tables } from "@tome-master/shared"
+import { cosineDistance, eq, inArray } from "drizzle-orm"
+import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
+import { z } from "zod/v4"
 import { db, logger } from ".."
 import { zodToMCP } from "../zodToMcp"
-import { inArray } from "drizzle-orm"
 import {
 	type EmbeddableEntityType,
 	type EmbeddingTools,
 	type SearchableEntityType,
 	schemas,
 } from "./embedding-tools-schema"
-import { getGeminiEmbedding, getTextForEntity, tables, type EmbeddedEntityName } from "@tome-master/shared"
-import { cosineDistance, eq } from "drizzle-orm"
-import type { PgTable, PgColumn } from "drizzle-orm/pg-core"
-import { ToolDefinition, ToolHandler } from "./utils/types"
+import type { ToolDefinition, ToolHandler } from "./utils/types"
 
 const {
 	embeddingTables: { embeddings },

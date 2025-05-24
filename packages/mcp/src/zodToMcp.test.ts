@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest"
-import { z } from "zod"
-import zodToMCPSchema from "./zodToMcp.js"
 import { tables } from "@tome-master/shared"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
+import { describe, expect, it, vi } from "vitest"
+import { z } from "zod/v4"
+import zodToMCPSchema from "./zodToMcp.js"
 import zodToMCP from "./zodToMcp.js"
 
 const {
@@ -620,9 +620,7 @@ describe("zodToMCPSchema", () => {
 					expect(hasArrayOption).toBe(true)
 				} else {
 					// If neither of the above conditions are met, the test should fail
-					expect(fieldSchema.type === "array" || (fieldSchema.type === "object" && fieldSchema.anyOf)).toBe(
-						true,
-					)
+					expect(fieldSchema.type === "array" || (fieldSchema.type === "object" && fieldSchema.anyOf)).toBe(true)
 				}
 			}
 		})

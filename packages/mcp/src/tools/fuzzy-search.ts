@@ -1,9 +1,9 @@
 import { sql } from "drizzle-orm"
-import { z } from "zod"
+import { z } from "zod/v4"
 import { db } from ".."
 import zodToMCP from "../zodToMcp"
 import { createErrorResponse, createResponse } from "./tool.utils"
-import { ToolDefinition } from "./utils/types"
+import type { ToolDefinition } from "./utils/types"
 
 export const searchBySimilarity = async (
 	searchTerm: string,

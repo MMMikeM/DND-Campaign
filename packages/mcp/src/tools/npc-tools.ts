@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./npc-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
 
 const {
 	npcTables: { npcs, characterRelationships, npcFactions, npcSites },

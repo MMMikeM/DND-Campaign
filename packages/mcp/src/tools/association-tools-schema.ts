@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
-import { CreateTableNames, id, optionalId, Schema } from "./tool.utils"
+import { z } from "zod/v4"
+import { type CreateTableNames, id, optionalId, type Schema } from "./tool.utils"
 
 const {
 	associationTables: {
@@ -27,6 +27,7 @@ export const tableEnum = [
 	"npcQuestRoles",
 	"questHookNpcs",
 	"questIntroductions",
+	"regionConnectionDetails",
 ] as const satisfies TableNames
 
 export const schemas = {

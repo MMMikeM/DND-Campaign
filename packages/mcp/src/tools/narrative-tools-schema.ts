@@ -1,18 +1,18 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
-import { CreateTableNames, id, Schema } from "./tool.utils"
+import { z } from "zod/v4"
+import { type CreateTableNames, id, type Schema } from "./tool.utils"
 
 const {
-	narrativeTables: { narrativeArcs, arcMembership, enums },
+	narrativeTables: { narrativeDestinations, destinationContribution, enums },
 } = tables
 
 export type TableNames = CreateTableNames<typeof tables.narrativeTables>
 
-export const tableEnum = ["narrativeArcs", "arcMembership"] as const satisfies TableNames
+export const tableEnum = ["narrativeDestinations", "destinationContribution"] as const satisfies TableNames
 
 export const schemas = {
-	narrativeArcs: createInsertSchema(narrativeArcs, {
+	narrativeDestinations: createInsertSchema(narrativeDestinations, {
 		id: id.describe("ID of narrative arc to manage (omit to create new, include alone to delete)"),
 		name: (s) => s.describe("Distinctive identifying title for this storyline"),
 		type: z.enum(enums.arcTypes).describe("Category of arc (main, faction, character, side)"),
@@ -28,7 +28,7 @@ export const schemas = {
 		.strict()
 		.describe("Major storylines that span multiple quests, providing campaign structure and thematic depth"),
 
-	arcMembership: createInsertSchema(arcMembership, {
+	destinationContribution: createInsertSchema(destinationContribution, {
 		id: id.describe("ID of membership record to manage (omit to create new, include alone to delete)"),
 		arcId: id.describe("ID of narrative arc this quest belongs to"),
 		questId: id.describe("ID of quest that forms part of this arc"),
