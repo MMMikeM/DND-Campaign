@@ -26,6 +26,9 @@
     "check": {
       "dependsOn": ["^build"]
     },
+    "knip": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "dependsOn": ["^build"],
       "cache": false,
