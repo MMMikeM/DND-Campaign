@@ -1,6 +1,7 @@
 // conflict/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -27,7 +28,7 @@ export const majorConflicts = pgTable("major_conflicts", {
 	possibleOutcomes: list("possible_outcomes"),
 	hiddenTruths: list("hidden_truths"),
 	creativePrompts: list("creative_prompts"),
-	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const conflictParticipants = pgTable("conflict_participants", {

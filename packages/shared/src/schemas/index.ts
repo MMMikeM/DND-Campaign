@@ -12,6 +12,7 @@ import * as worldRelations from "../schemas/world/relations"
 export const relations = {
 	associationRelations,
 	conflictRelations,
+	eventRelations,
 	factionRelations,
 	foreshadowingRelations,
 	narrativeRelations,
@@ -19,7 +20,6 @@ export const relations = {
 	questRelations,
 	regionRelations,
 	worldRelations,
-	eventRelations,
 }
 
 import * as associationTables from "../schemas/associations/tables"
@@ -37,6 +37,8 @@ import * as worldTables from "../schemas/world/tables"
 export const tables = {
 	associationTables,
 	conflictTables,
+	embeddingTables,
+	eventTables,
 	factionTables,
 	foreshadowingTables,
 	narrativeTables,
@@ -44,6 +46,4 @@ export const tables = {
 	questTables,
 	regionTables,
 	worldTables,
-	embeddingTables,
-	eventTables,
 }

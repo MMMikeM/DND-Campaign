@@ -1,6 +1,7 @@
 // foreshadowing/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
@@ -34,8 +35,9 @@ export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 	foreshadowsElement: string("foreshadows_element"),
 
 	playerNotes: list("player_notes"),
+	creativePrompts: list("creative_prompts"),
 	gmNotes: list("gm_notes"),
-	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const enums = {
