@@ -5,6 +5,7 @@ import { zodToMCP } from "../zodToMcp"
 import {
 	associations,
 	conflicts,
+	context,
 	embeddings,
 	events,
 	factions,
@@ -30,6 +31,7 @@ const handler = async (args?: Record<string, unknown>) => {
 	const categories = {
 		associations: associations.tools,
 		conflicts: conflicts.tools,
+		context: context.tools,
 		embeddings: embeddings.tools,
 		events: events.tools,
 		factions: factions.tools,

@@ -4,6 +4,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprot
 import { logger } from ".."
 import { associationToolDefinitions } from "./association-tools"
 import { conflictToolDefinitions } from "./conflict-tools"
+import { contextToolDefinitions } from "./context-tools"
 import { embeddingToolDefinitions } from "./embedding-tools"
 import { eventToolDefinitions } from "./events-tools"
 import { factionToolDefinitions } from "./faction-tools"
@@ -42,6 +43,7 @@ export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
 export const associations = extractToolsAndHandlers(associationToolDefinitions)
 export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
+export const context = extractToolsAndHandlers(contextToolDefinitions)
 export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
 export const narrative = extractToolsAndHandlers(narrativeToolDefinitions)
 export const world = extractToolsAndHandlers(worldToolDefinitions)
@@ -55,6 +57,7 @@ export function registerToolHandlers(server: Server) {
 	const tools = [
 		...help.tools,
 		...getEntity.tools,
+		...context.tools,
 		...factions.tools,
 		...regions.tools,
 		...npcs.tools,
@@ -72,6 +75,7 @@ export function registerToolHandlers(server: Server) {
 	const allToolHandlers = {
 		...help.handlers,
 		...getEntity.handlers,
+		...context.handlers,
 		...factions.handlers,
 		...regions.handlers,
 		...npcs.handlers,
