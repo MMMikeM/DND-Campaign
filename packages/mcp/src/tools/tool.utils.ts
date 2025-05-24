@@ -5,7 +5,7 @@ import zodToMCP from "../zodToMcp"
 import type { PgTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
 
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
-export type Schema<T extends string> = Record<T, z.ZodObject<z.ZodRawShape, "strict", z.ZodTypeAny, unknown, unknown>>
+export type Schema<T extends string> = Record<T, z.ZodObject>
 
 export const camelToSnakeCase = (str: string) => str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
 
@@ -74,7 +74,6 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			const createData = parsedData.data
 
 			logger.info(`Creating ${tableName} (via ${categoryToolName}) with data ${createData}`)
-			// @ts-expect-error
 			const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
 			return createResponse(`Successfully created new ${tableName} with ID: ${result?.successfullyCreated}`)
 		}
@@ -113,7 +112,7 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 }
 
 export const createManageSchema = (
-	schemaObject: Record<string, z.AnyZodObject>,
+	schemaObject: Record<string, z.ZodObject>,
 	tableEnum: readonly [string, ...string[]],
 ) =>
 	zodToMCP(
