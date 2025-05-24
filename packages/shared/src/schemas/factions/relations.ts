@@ -5,13 +5,13 @@ import {
 	factionQuestInvolvement,
 	factionTerritorialControl,
 	regionConnectionDetails,
-} from "../associations/tables.js"
-import { conflictParticipants } from "../conflict/tables.js"
-import { embeddings } from "../embeddings/tables.js"
-import { npcFactions } from "../npc/tables.js"
-import { sites } from "../regions/tables.js"
-import { worldStateChanges } from "../world/tables.js"
-import { factionAgendas, factionCulture, factionDiplomacy, factionHeadquarters, factions } from "./tables.js"
+} from "../associations/tables"
+import { conflictParticipants } from "../conflict/tables"
+import { embeddings } from "../embeddings/tables"
+import { npcFactions } from "../npc/tables"
+import { sites } from "../regions/tables"
+import { worldStateChanges } from "../world/tables"
+import { factionAgendas, factionCulture, factionDiplomacy, factionHeadquarters, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
 	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),

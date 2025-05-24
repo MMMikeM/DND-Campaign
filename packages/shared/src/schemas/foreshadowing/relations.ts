@@ -1,12 +1,12 @@
 // foreshadowing/relations.ts
 import { relations } from "drizzle-orm"
-import { narrativeEvents } from "../events/tables.js"
-import { factions } from "../factions/tables.js"
-import { narrativeDestinations } from "../narrative/tables.js"
-import { npcs } from "../npc/tables.js"
-import { questStages, quests } from "../quests/tables.js"
-import { sites } from "../regions/tables.js"
-import { narrativeForeshadowing } from "./tables.js"
+import { narrativeEvents } from "../events/tables"
+import { factions } from "../factions/tables"
+import { narrativeDestinations } from "../narrative/tables"
+import { npcs } from "../npc/tables"
+import { questStages, quests } from "../quests/tables"
+import { sites } from "../regions/tables"
+import { narrativeForeshadowing } from "./tables"
 
 export const narrativeForeshadowingRelations = relations(narrativeForeshadowing, ({ one }) => ({
 	sourceStage: one(questStages, {

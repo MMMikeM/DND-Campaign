@@ -1,10 +1,10 @@
 // conflict/relations.ts
 import { relations } from "drizzle-orm"
-import { factions } from "../factions/tables.js"
-import { quests } from "../quests/tables.js"
-import { regions } from "../regions/tables.js"
-import { worldStateChanges } from "../world/tables.js"
-import { conflictParticipants, conflictProgression, majorConflicts } from "./tables.js"
+import { factions } from "../factions/tables"
+import { quests } from "../quests/tables"
+import { regions } from "../regions/tables"
+import { worldStateChanges } from "../world/tables"
+import { conflictParticipants, conflictProgression, majorConflicts } from "./tables"
 
 export const majorConflictsRelations = relations(majorConflicts, ({ one, many }) => ({
 	primaryRegion: one(regions, {

@@ -1,12 +1,12 @@
 // world/relations.ts
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables.js"
-import { factions } from "../factions/tables.js"
-import { narrativeDestinations } from "../narrative/tables.js"
-import { npcs } from "../npc/tables.js"
-import { quests, stageDecisions } from "../quests/tables.js"
-import { areas, regions, sites } from "../regions/tables.js"
-import { worldStateChanges } from "./tables.js"
+import { majorConflicts } from "../conflict/tables"
+import { factions } from "../factions/tables"
+import { narrativeDestinations } from "../narrative/tables"
+import { npcs } from "../npc/tables"
+import { quests, stageDecisions } from "../quests/tables"
+import { areas, regions, sites } from "../regions/tables"
+import { worldStateChanges } from "./tables"
 
 export const worldStateChangesRelations = relations(worldStateChanges, ({ one }) => ({
 	// Source of the change
