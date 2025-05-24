@@ -1,4 +1,6 @@
 import { relations } from "drizzle-orm"
+import { clues } from "../associations/tables"
+import { embeddings } from "../embeddings/tables"
 import { narrativeForeshadowing } from "../foreshadowing/tables"
 import { questStages, quests, stageDecisions } from "../quests/tables"
 import { narrativeEvents } from "./tables"
@@ -19,8 +21,12 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	foreshadowedBy: many(narrativeForeshadowing, {
 		relationName: "foreshadowsEvent",
 	}),
-	embedding: one(require("../embeddings/tables").embeddings, {
+	embedding: one(embeddings, {
 		fields: [narrativeEvents.embeddingId],
-		references: [require("../embeddings/tables").embeddings.id],
+		references: [embeddings.id],
+	}),
+	clues: many(clues),
+	childEvents: many(narrativeEvents, {
+		relationName: "parent_event",
 	}),
 }))

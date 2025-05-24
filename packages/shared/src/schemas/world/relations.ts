@@ -1,6 +1,7 @@
 // world/relations.ts
 import { relations } from "drizzle-orm"
 import { majorConflicts } from "../conflict/tables"
+import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -64,8 +65,15 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 		references: [quests.id],
 		relationName: "worldChangeLeadsToQuest",
 	}),
-	embedding: one(require("../embeddings/tables").embeddings, {
+	embedding: one(embeddings, {
 		fields: [worldStateChanges.embeddingId],
-		references: [require("../embeddings/tables").embeddings.id],
+		references: [embeddings.id],
+	}),
+}))
+
+export const worldStateChangeRelations = relations(worldStateChanges, ({ one }) => ({
+	embedding: one(embeddings, {
+		fields: [worldStateChanges.embeddingId],
+		references: [embeddings.id],
 	}),
 }))
