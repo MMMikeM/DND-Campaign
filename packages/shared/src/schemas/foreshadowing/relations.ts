@@ -1,5 +1,6 @@
 // foreshadowing/relations.ts
 import { relations } from "drizzle-orm"
+import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
@@ -50,8 +51,8 @@ export const narrativeForeshadowingRelations = relations(narrativeForeshadowing,
 		references: [narrativeDestinations.id],
 		relationName: "foreshadowedDestination",
 	}),
-	embedding: one(require("../embeddings/tables").embeddings, {
+	embedding: one(embeddings, {
 		fields: [narrativeForeshadowing.embeddingId],
-		references: [require("../embeddings/tables").embeddings.id],
+		references: [embeddings.id],
 	}),
 }))

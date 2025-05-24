@@ -1,11 +1,12 @@
 // narrative/relations.ts
 import { relations } from "drizzle-orm"
+import { embeddings } from "../embeddings/tables"
 import { narrativeForeshadowing } from "../foreshadowing/tables"
 import { quests } from "../quests/tables"
 import { worldStateChanges } from "../world/tables"
 import { destinationContribution, narrativeDestinations } from "./tables"
 
-export const narrativeRelations = relations(narrativeDestinations, ({ many }) => ({
+export const narrativeRelations = relations(narrativeDestinations, ({ many, one }) => ({
 	destinationContributions: many(destinationContribution),
 	worldStateChanges: many(worldStateChanges, {
 		relationName: "worldChangesForDestination",
@@ -13,9 +14,9 @@ export const narrativeRelations = relations(narrativeDestinations, ({ many }) =>
 	foreshadowing: many(narrativeForeshadowing, {
 		relationName: "foreshadowingEntries",
 	}),
-	embedding: one(require("../embeddings/tables").embeddings, {
+	embedding: one(embeddings, {
 		fields: [narrativeDestinations.embeddingId],
-		references: [require("../embeddings/tables").embeddings.id],
+		references: [embeddings.id],
 	}),
 }))
 

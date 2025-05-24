@@ -1,5 +1,6 @@
 // conflict/relations.ts
 import { relations } from "drizzle-orm"
+import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -15,9 +16,9 @@ export const majorConflictsRelations = relations(majorConflicts, ({ one, many })
 	participants: many(conflictParticipants, { relationName: "conflictParticipants" }),
 	progression: many(conflictProgression, { relationName: "conflictProgression" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesByConflict" }),
-	embedding: one(require("../embeddings/tables").embeddings, {
+	embedding: one(embeddings, {
 		fields: [majorConflicts.embeddingId],
-		references: [require("../embeddings/tables").embeddings.id],
+		references: [embeddings.id],
 	}),
 }))
 
