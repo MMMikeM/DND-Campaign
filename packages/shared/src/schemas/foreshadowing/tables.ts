@@ -35,6 +35,7 @@ export const narrativeForeshadowing = pgTable("narrative_foreshadowing", {
 
 	playerNotes: list("player_notes"),
 	gmNotes: list("gm_notes"),
+	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
 })
 
 export const enums = {

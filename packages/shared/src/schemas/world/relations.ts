@@ -64,4 +64,8 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 		references: [quests.id],
 		relationName: "worldChangeLeadsToQuest",
 	}),
+	embedding: one(require("../embeddings/tables").embeddings, {
+		fields: [worldStateChanges.embeddingId],
+		references: [require("../embeddings/tables").embeddings.id],
+	}),
 }))

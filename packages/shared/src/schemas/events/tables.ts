@@ -30,6 +30,7 @@ export const narrativeEvents = pgTable("narrative_events", {
 	// GM guidance
 	creativePrompts: list("creative_prompts"),
 	gmNotes: list("gm_notes"), // How to run it effectively
+	embeddingId: nullableFk("embedding_id", require("../embeddings/tables").embeddings.id),
 })
 
 export const enums = {

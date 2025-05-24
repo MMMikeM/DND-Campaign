@@ -15,6 +15,10 @@ export const majorConflictsRelations = relations(majorConflicts, ({ one, many })
 	participants: many(conflictParticipants, { relationName: "conflictParticipants" }),
 	progression: many(conflictProgression, { relationName: "conflictProgression" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesByConflict" }),
+	embedding: one(require("../embeddings/tables").embeddings, {
+		fields: [majorConflicts.embeddingId],
+		references: [require("../embeddings/tables").embeddings.id],
+	}),
 }))
 
 export const conflictParticipantsRelations = relations(conflictParticipants, ({ one }) => ({
