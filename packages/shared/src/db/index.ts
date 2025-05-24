@@ -57,8 +57,6 @@ export function initializeDatabase(connectionString: string) {
 	return drizzle(pool, { schema, logger: false })
 }
 
-export type DrizzleDb = ReturnType<typeof initializeDatabase>
-
 // Use the proper type from pg
 export type RunResult = {
 	rowCount: number

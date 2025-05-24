@@ -4,9 +4,9 @@ import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import DetailsContent from "./components/DetailsContent"
+import { DetailsContent } from "./components/DetailsContent"
 import { OverviewContent } from "./components/OverviewContent"
-import SitesContent from "./components/SitesContent"
+import { SitesContent } from "./components/SitesContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {

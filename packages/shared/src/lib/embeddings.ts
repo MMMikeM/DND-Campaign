@@ -6,7 +6,7 @@ const logger = console // Using console as a placeholder
 
 // Define a type for the simple entity names we expect
 // This should ideally be kept in sync with actual table names used
-export type EmbeddedEntityName =
+type EmbeddedEntityName =
 	| "npcs"
 	| "quests"
 	| "questStages"
@@ -82,10 +82,10 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 		if (Array.isArray(fieldValue)) {
 			const stringArray = fieldValue.filter((item): item is string => typeof item === "string")
 			if (stringArray.length > 0) {
-				combinedText += stringArray.join(". ") + ". "
+				combinedText += `${stringArray.join(". ")}. `
 			}
 		} else if (typeof fieldValue === "string" && fieldValue.trim()) {
-			combinedText += fieldValue.trim() + ". "
+			combinedText += `${fieldValue.trim()}. `
 		}
 	}
 
