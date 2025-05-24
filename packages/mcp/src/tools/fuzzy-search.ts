@@ -40,7 +40,7 @@ export const fuzzySearchToolDefinitions: Record<"fuzzy_search", ToolDefinition> 
 			}
 			const { searchTerm } = parseResult.data
 			const { rows } = await searchBySimilarity(searchTerm)
-			return createResponse(rows)
+			return createResponse(rows as any)
 		},
 	},
 }
