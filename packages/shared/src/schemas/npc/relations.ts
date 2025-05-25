@@ -1,7 +1,9 @@
 import { relations } from "drizzle-orm"
-import { clues, items, npcQuestRoles, questHookNpcs } from "../associations/tables"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
+import { clues } from "../investigation/tables"
+import { items } from "../items/tables"
+import { questHookNpcs, questNpcRoles } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { characterRelationships, npcFactions, npcSites, npcs } from "./tables"
 
@@ -12,7 +14,7 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	relatedFactions: many(npcFactions, { relationName: "npcFactions" }),
 	relatedSites: many(npcSites, { relationName: "npcSites" }),
 
-	relatedQuests: many(npcQuestRoles, { relationName: "npcQuests" }),
+	relatedQuests: many(questNpcRoles, { relationName: "npcQuests" }),
 	relatedItems: many(items, { relationName: "npcItems" }),
 	relatedQuestHooks: many(questHookNpcs, { relationName: "npcQuestHooks" }),
 	relatedClues: many(clues, { relationName: "npcClues" }),
