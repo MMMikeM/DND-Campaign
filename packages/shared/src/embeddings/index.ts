@@ -3,11 +3,11 @@ import { getTextForEmbedding } from "../lib/embeddings"
 import type { majorConflicts } from "../schemas/conflict/tables"
 import type { narrativeEvents, worldStateChanges } from "../schemas/events/tables"
 import type { factionAgendas, factionCulture, factions } from "../schemas/factions/tables"
-import type { discoverableElements } from "../schemas/investigation/tables"
+import type { discoverableElements, investigations } from "../schemas/investigation/tables"
 import type { items } from "../schemas/items/tables"
 import type { narrativeDestinations } from "../schemas/narrative/tables"
-import type { npcs } from "../schemas/npc/tables"
-import type { questStages, quests } from "../schemas/quests/tables"
+import type { characterRelationships, npcs } from "../schemas/npc/tables"
+import type { questStages, quests, stageDecisions } from "../schemas/quests/tables"
 import type { areas, regions, siteEncounters, siteSecrets, sites } from "../schemas/regions/tables"
 import type { worldConcepts } from "../schemas/worldbuilding/tables"
 
@@ -31,6 +31,9 @@ export type EmbeddedEntityName =
 	| "siteSecrets"
 	| "worldConcepts"
 	| "worldStateChanges"
+	| "investigations"
+	| "stageDecisions"
+	| "characterRelationships"
 
 const logger = console
 
@@ -376,6 +379,45 @@ export const embeddingTextForWorldConcept = (concept: typeof worldConcepts.$infe
 		"creativePrompts",
 	])
 
+const embeddingTextForInvestigation = (investigation: typeof investigations.$inferSelect) =>
+	getTextForEmbedding(investigation, [
+		"name",
+		"status",
+		"targetType",
+		"description",
+		"objectives",
+		"findings",
+		"remainingLeads",
+		"creativePrompts",
+	])
+
+const embeddingTextForStageDecision = (decision: typeof stageDecisions.$inferSelect) =>
+	getTextForEmbedding(decision, [
+		"name",
+		"decisionType",
+		"conditionType",
+		"description",
+		"successDescription",
+		"failureDescription",
+		"narrativeTransition",
+		"potential_player_reactions",
+		"options",
+		"creativePrompts",
+		"failure_lesson_learned",
+	])
+
+const embeddingTextForCharacterRelationship = (rel: typeof characterRelationships.$inferSelect) =>
+	getTextForEmbedding(rel, [
+		"type",
+		"strength",
+		"history",
+		"description",
+		"narrativeTensions",
+		"sharedGoals",
+		"relationshipDynamics",
+		"creativePrompts",
+	])
+
 export const embeddingTextGenerators = {
 	areas: embeddingTextForArea,
 	discoverableElements: embeddingTextForDiscoverableElement,
@@ -395,4 +437,26 @@ export const embeddingTextGenerators = {
 	siteSecrets: embeddingTextForSiteSecret,
 	worldConcepts: embeddingTextForWorldConcept,
 	worldStateChanges: embeddingTextForWorldStateChange,
+	investigations: embeddingTextForInvestigation,
+	stageDecisions: embeddingTextForStageDecision,
+	characterRelationships: embeddingTextForCharacterRelationship,
 } as const
+
+// Batch embedding utility
+export async function generateEmbeddingsForEntities<T extends Record<string, unknown>>(
+	entityName: EmbeddedEntityName,
+	records: T[],
+): Promise<Array<{ record: T; embedding: number[] }>> {
+	const results = []
+	for (const record of records) {
+		try {
+			const text = getTextForEntity(entityName, record)
+			const embedding = await getGeminiEmbedding(text)
+			results.push({ record, embedding })
+		} catch (error) {
+			console.error(`Failed to generate embedding for ${entityName} record:`, error)
+			// Continue with others
+		}
+	}
+	return results
+}
