@@ -1,4 +1,4 @@
-oimport { getGeminiEmbedding, tables } from "@tome-master/shared"
+import { getGeminiEmbedding, tables } from "@tome-master/shared"
 
 import { cosineDistance, eq } from "drizzle-orm"
 import { db, logger } from ".."

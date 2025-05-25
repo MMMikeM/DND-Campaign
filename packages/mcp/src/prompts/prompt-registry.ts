@@ -4,14 +4,14 @@ import { z } from "zod/v4"
 // Import other category definitions
 // import { factionPromptDefinitions } from "./faction-prompts";
 import { logger } from ".."
+import { enhancedCampaignPrompts } from "./enhanced-campaign-prompts"
 import { npcPromptDefinitions } from "./prompt-npc"
 import { extractArgsFromZodSchema } from "./prompt-utils"
 
 // Combine all prompt definitions
 const allPromptDefinitions = {
 	...npcPromptDefinitions,
-	// Add other categories as needed
-	// ...factionPromptDefinitions,
+	...enhancedCampaignPrompts,
 }
 
 /**

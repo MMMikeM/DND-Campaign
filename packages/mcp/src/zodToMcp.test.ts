@@ -2,16 +2,16 @@ import { tables } from "@tome-master/shared"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 import { describe, expect, it, vi } from "vitest"
 import { z } from "zod/v4"
-import zodToMCPSchema from "./zodToMcp.js"
-import zodToMCP from "./zodToMcp.js"
+import zodToMCPSchema from "./zodToMcp"
+import zodToMCP from "./zodToMcp"
 
 const {
 	factionTables: { factions, factionRelationships },
 } = tables
 
-vi.importMock("./logger.js")
+vi.importMock("./logger")
 
-vi.importMock("./index.js")
+vi.importMock("./index")
 
 const expectedResults = {
 	// Input schema for the create_faction tool
