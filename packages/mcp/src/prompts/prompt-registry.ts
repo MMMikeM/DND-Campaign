@@ -1,24 +1,24 @@
 // prompt-registry.ts
 
 import { z } from "zod/v4"
-// Import other category definitions
-// import { factionPromptDefinitions } from "./faction-prompts";
 import { logger } from ".."
 import { enhancedCampaignPrompts } from "./enhanced-campaign-prompts"
-import { npcPromptDefinitions } from "./prompt-npc"
-import { extractArgsFromZodSchema } from "./prompt-utils"
+import { enhancedNpcPromptDefinitions } from "./prompt-npc-enhanced"
+import { enhancedQuestPromptDefinitions } from "./prompt-quest-enhanced"
+import { extractArgsFromZodSchema, type PromptDefinition } from "./prompt-utils"
 
 // Combine all prompt definitions
 const allPromptDefinitions = {
-	...npcPromptDefinitions,
+	...enhancedNpcPromptDefinitions,
 	...enhancedCampaignPrompts,
+	...enhancedQuestPromptDefinitions,
 }
 
 /**
  * Get all prompts in MCP format
  */
 export function getAllPrompts() {
-	return Object.entries(allPromptDefinitions).map(([name, def]) => ({
+	return Object.entries(allPromptDefinitions).map(([name, def]: [string, PromptDefinition<any>]) => ({
 		name,
 		description: def.description,
 		arguments: extractArgsFromZodSchema(def.schema),
@@ -31,7 +31,7 @@ export function getAllPrompts() {
 export async function executePrompt(name: string, args: Record<string, unknown>) {
 	logger.info(`Executing prompt: ${name}`, args)
 
-	const promptDef = allPromptDefinitions[name]
+	const promptDef = allPromptDefinitions[name as keyof typeof allPromptDefinitions]
 	if (!promptDef) {
 		throw new Error(`Prompt not found: ${name}`)
 	}
@@ -41,7 +41,7 @@ export async function executePrompt(name: string, args: Record<string, unknown>)
 		const validatedArgs = promptDef.schema.parse(args)
 
 		// Execute the prompt handler with validated args
-		return await promptDef.handler(validatedArgs)
+		return await promptDef.handler(validatedArgs as any)
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			logger.error(`Validation error in prompt ${name}:`, error.flatten())
