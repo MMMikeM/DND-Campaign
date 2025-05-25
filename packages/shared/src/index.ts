@@ -1,11 +1,12 @@
 // Export database utilities
-export * from "./db/index.js"
-export * from "./db/utils.js"
-
+export * from "./db/index"
+export * from "./db/utils"
 // Embedding utilities
-export type { EmbeddedEntityName } from "./lib/embeddingIndex"
-export { embeddingTextGenerators } from "./lib/embeddingIndex"
-export { getGeminiEmbedding, getTextForEntity } from "./lib/embeddings"
+export {
+	type EmbeddedEntityName,
+	getGeminiEmbedding,
+	getTextForEntity,
+} from "./embeddings"
 
 // Export schemas
-export * from "./schemas/index.js"
+export * from "./schemas/index"

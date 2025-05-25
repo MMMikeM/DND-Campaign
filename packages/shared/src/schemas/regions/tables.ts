@@ -88,6 +88,7 @@ const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] a
 const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
 const difficultyLevels = ["easy", "medium", "hard"] as const
 const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
+const imageFormats = ["png", "jpg", "webp"] as const
 
 export const regions = pgTable("regions", {
 	id: pk(),
@@ -181,7 +182,7 @@ export const sites = pgTable("sites", {
 
 	// Battlemap Image Storage
 	battlemapImage: bytea("battlemap_image"),
-	imageFormat: oneOf("image_format", ["png", "jpg", "webp"]),
+	imageFormat: oneOf("image_format", imageFormats),
 	imageSize: integer("image_size"),
 	imageWidth: integer("image_width"),
 	imageHeight: integer("image_height"),
@@ -245,4 +246,5 @@ export const enums = {
 	regionTypes,
 	secretTypes,
 	siteTypes,
+	imageFormats,
 }
