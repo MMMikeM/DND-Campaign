@@ -1,13 +1,28 @@
-// world/relations.ts
+// worldbuilding/relations.ts
 import { relations } from "drizzle-orm"
 import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
+import { worldStateChanges } from "../events/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { worldStateChanges } from "./tables"
+import { worldConcepts } from "./tables"
+
+export const worldConceptsRelations = relations(worldConcepts, ({ one, many }) => ({
+	embedding: one(embeddings, {
+		fields: [worldConcepts.embeddingId],
+		references: [embeddings.id],
+	}),
+	// Self-referential relationships for causedBy/ledTo
+	causedByConcepts: many(worldConcepts, {
+		relationName: "conceptCauses",
+	}),
+	ledToConcepts: many(worldConcepts, {
+		relationName: "conceptEffects",
+	}),
+}))
 
 export const worldStateChangesRelations = relations(worldStateChanges, ({ one }) => ({
 	// Source of the change
