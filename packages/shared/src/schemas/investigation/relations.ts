@@ -10,38 +10,6 @@ import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { discoverableElements, investigations } from "./tables"
 
-export const cluesRelations = relations(discoverableElements, ({ one }) => ({
-	stage: one(questStages, {
-		fields: [discoverableElements.questStageId],
-		references: [questStages.id],
-		relationName: "stageClues",
-	}),
-	site: one(sites, {
-		fields: [discoverableElements.siteId],
-		references: [sites.id],
-		relationName: "siteClues",
-	}),
-	sourceNpc: one(npcs, {
-		fields: [discoverableElements.npcId],
-		references: [npcs.id],
-		relationName: "npcClues",
-	}),
-	relatedItem: one(items, {
-		fields: [discoverableElements.relatedItemId],
-		references: [items.id],
-		relationName: "itemClues",
-	}),
-	faction: one(factions, {
-		fields: [discoverableElements.factionId],
-		references: [factions.id],
-		relationName: "factionClues",
-	}),
-	embedding: one(embeddings, {
-		fields: [discoverableElements.embeddingId],
-		references: [embeddings.id],
-	}),
-}))
-
 export const discoverableElementsRelations = relations(discoverableElements, ({ one }) => ({
 	stage: one(questStages, {
 		fields: [discoverableElements.questStageId],
@@ -100,10 +68,13 @@ export const discoverableElementsRelations = relations(discoverableElements, ({ 
 	}),
 }))
 
-export const investigationsRelations = relations(investigations, ({ one }) => ({
+export const investigationsRelations = relations(investigations, ({ one, many }) => ({
 	quest: one(quests, {
 		fields: [investigations.questId],
 		references: [quests.id],
 		relationName: "questInvestigations",
+	}),
+	elements: many(discoverableElements, {
+		relationName: "investigationDiscoverableElements",
 	}),
 }))

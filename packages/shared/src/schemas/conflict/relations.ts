@@ -1,10 +1,10 @@
 // conflict/relations.ts
 import { relations } from "drizzle-orm"
 import { embeddings } from "../embeddings/tables"
+import { worldStateChanges } from "../events/tables"
 import { factions } from "../factions/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
-import { worldStateChanges } from "../world/tables"
 import { conflictParticipants, conflictProgression, majorConflicts } from "./tables"
 
 export const majorConflictsRelations = relations(majorConflicts, ({ one, many }) => ({
