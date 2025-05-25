@@ -3,6 +3,8 @@ import { relations } from "drizzle-orm"
 import { conflictProgression } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
 import { narrativeEvents, worldStateChanges } from "../events/tables"
+import { factions } from "../factions/tables"
+import { discoverableElements, investigations } from "../investigation/tables"
 import { items } from "../items/tables"
 import { destinationContribution } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -31,14 +33,14 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	dependents: many(questDependencies, {
 		relationName: "questDependents",
 	}),
-	stages: many(questStages),
-	unlockConditions: many(questUnlockConditions),
-	factionInvolvement: many(questFactionInvolvement),
-	npcRoles: many(questNpcRoles),
-	introductions: many(questIntroductions),
-	items: many(items),
-	conflictProgression: many(conflictProgression),
-	destinationContributions: many(destinationContribution),
+	stages: many(questStages, { relationName: "questStages" }),
+	unlockConditions: many(questUnlockConditions, { relationName: "questUnlockConditions" }),
+	factionInvolvement: many(questFactionInvolvement, { relationName: "questFactionInvolvement" }),
+	npcRoles: many(questNpcRoles, { relationName: "questNpcRoles" }),
+	introductions: many(questIntroductions, { relationName: "questIntroductions" }),
+	items: many(items, { relationName: "questItems" }),
+	conflictProgression: many(conflictProgression, { relationName: "questConflictImpacts" }),
+	destinationContributions: many(destinationContribution, { relationName: "questDestinationContributions" }),
 
 	worldChanges: many(worldStateChanges, {
 		relationName: "worldChangesByQuest",
@@ -46,6 +48,7 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	triggeredEvents: many(narrativeEvents, {
 		relationName: "relatedQuestEvents",
 	}),
+	investigations: many(investigations, { relationName: "questInvestigations" }),
 	embedding: one(embeddings, {
 		fields: [quests.embeddingId],
 		references: [embeddings.id],
@@ -56,12 +59,12 @@ export const questDependenciesRelations = relations(questDependencies, ({ one })
 	sourceQuest: one(quests, {
 		fields: [questDependencies.questId],
 		references: [quests.id],
-		relationName: "sourceQuests",
+		relationName: "questDependencies",
 	}),
 	targetQuest: one(quests, {
 		fields: [questDependencies.relatedQuestId],
 		references: [quests.id],
-		relationName: "targetQuests",
+		relationName: "questDependents",
 	}),
 }))
 
@@ -77,10 +80,12 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	quest: one(quests, {
 		fields: [questStages.questId],
 		references: [quests.id],
+		relationName: "questStages",
 	}),
 	site: one(sites, {
 		fields: [questStages.siteId],
 		references: [sites.id],
+		relationName: "siteQuestStages",
 	}),
 	decisionsFrom: many(stageDecisions, {
 		relationName: "decisionsFromStage",
@@ -88,11 +93,12 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	decisionsTo: many(stageDecisions, {
 		relationName: "decisionsToStage",
 	}),
-	items: many(items),
+	items: many(items, { relationName: "stageItems" }),
 
 	narrativeEvents: many(narrativeEvents, {
 		relationName: "stageEvents",
 	}),
+	discoverableElements: many(discoverableElements, { relationName: "stageDiscoverableElements" }),
 	embedding: one(embeddings, {
 		fields: [questStages.embeddingId],
 		references: [embeddings.id],
@@ -103,6 +109,7 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 	quest: one(quests, {
 		fields: [stageDecisions.questId],
 		references: [quests.id],
+		relationName: "questDecisions",
 	}),
 	fromStage: one(questStages, {
 		fields: [stageDecisions.fromStageId],
@@ -114,7 +121,7 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		references: [questStages.id],
 		relationName: "decisionsToStage",
 	}),
-	outcomes: many(decisionOutcomes),
+	outcomes: many(decisionOutcomes, { relationName: "decisionOutcomes" }),
 	triggeredEvents: many(narrativeEvents, {
 		relationName: "decisionTriggeredEvents",
 	}),
@@ -125,7 +132,7 @@ export const decisionOutcomesRelations = relations(decisionOutcomes, ({ one }) =
 	decision: one(stageDecisions, {
 		fields: [decisionOutcomes.decisionId],
 		references: [stageDecisions.id],
-		relationName: "decisionConsequences",
+		relationName: "decisionOutcomes",
 	}),
 	affectedStage: one(questStages, {
 		fields: [decisionOutcomes.affectedStageId],
@@ -139,7 +146,12 @@ export const questNpcRolesRelations = relations(questNpcRoles, ({ one }) => ({
 	quest: one(quests, {
 		fields: [questNpcRoles.questId],
 		references: [quests.id],
-		relationName: "questNpcs",
+		relationName: "questNpcRoles",
+	}),
+	npc: one(npcs, {
+		fields: [questNpcRoles.npcId],
+		references: [npcs.id],
+		relationName: "npcQuests",
 	}),
 }))
 
@@ -147,7 +159,12 @@ export const questFactionInvolvementRelations = relations(questFactionInvolvemen
 	quest: one(quests, {
 		fields: [questFactionInvolvement.questId],
 		references: [quests.id],
-		relationName: "questFactions",
+		relationName: "questFactionInvolvement",
+	}),
+	faction: one(factions, {
+		fields: [questFactionInvolvement.factionId],
+		references: [factions.id],
+		relationName: "factionQuests",
 	}),
 }))
 
@@ -161,6 +178,16 @@ export const questIntroductionsRelations = relations(questIntroductions, ({ one 
 		fields: [questIntroductions.stageId],
 		references: [questStages.id],
 		relationName: "stageIntroductions",
+	}),
+	site: one(sites, {
+		fields: [questIntroductions.siteId],
+		references: [sites.id],
+		relationName: "siteQuestIntroductions",
+	}),
+	faction: one(factions, {
+		fields: [questIntroductions.factionId],
+		references: [factions.id],
+		relationName: "factionQuestIntroductions",
 	}),
 	deliveryNpc: one(npcs, {
 		fields: [questIntroductions.deliveryNpcId],

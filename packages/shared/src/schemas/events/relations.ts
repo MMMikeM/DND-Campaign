@@ -9,7 +9,7 @@ import { questStages, quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { narrativeEvents, worldStateChanges } from "./tables"
 
-export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many }) => ({
+export const narrativeEventsRelations = relations(narrativeEvents, ({ one }) => ({
 	questStage: one(questStages, {
 		fields: [narrativeEvents.questStageId],
 		references: [questStages.id],
@@ -25,9 +25,6 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	embedding: one(embeddings, {
 		fields: [narrativeEvents.embeddingId],
 		references: [embeddings.id],
-	}),
-	childEvents: many(narrativeEvents, {
-		relationName: "parent_event",
 	}),
 }))
 
@@ -46,7 +43,7 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 	conflict: one(majorConflicts, {
 		fields: [worldStateChanges.conflictId],
 		references: [majorConflicts.id],
-		relationName: "worldChangesInConflict",
+		relationName: "worldChangesByConflict",
 	}),
 	destination: one(narrativeDestinations, {
 		fields: [worldStateChanges.destinationId],
@@ -87,13 +84,6 @@ export const worldStateChangesRelations = relations(worldStateChanges, ({ one })
 		references: [quests.id],
 		relationName: "worldChangeLeadsToQuest",
 	}),
-	embedding: one(embeddings, {
-		fields: [worldStateChanges.embeddingId],
-		references: [embeddings.id],
-	}),
-}))
-
-export const worldStateChangeRelations = relations(worldStateChanges, ({ one }) => ({
 	embedding: one(embeddings, {
 		fields: [worldStateChanges.embeddingId],
 		references: [embeddings.id],

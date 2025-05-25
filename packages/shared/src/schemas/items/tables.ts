@@ -24,7 +24,6 @@ export const items = pgTable("items", {
 	controllingFactionId: nullableFk("controlling_faction_id", factions.id),
 
 	// Quest relevance
-	questRelevance: list("quest_relevance"), // Which quests care about this item
 	questId: nullableFk("quest_id", quests.id),
 	stageId: nullableFk("stage_id", questStages.id),
 
@@ -38,8 +37,14 @@ export const itemHistory = pgTable("item_history", {
 	itemId: cascadeFk("item_id", items.id),
 	event: string("event"),
 	timeframe: string("timeframe"),
-	participantNpcs: list("participant_npcs"),
 	significance: string("significance"),
+})
+
+export const itemHistoryParticipants = pgTable("item_history_participants", {
+	id: pk(),
+	historyId: cascadeFk("history_id", itemHistory.id),
+	npcId: cascadeFk("npc_id", npcs.id),
+	role: string("role"), // "previous_owner", "witness", "thief", "trader", etc.
 })
 
 export const enums = {

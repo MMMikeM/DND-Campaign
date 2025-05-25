@@ -3,9 +3,10 @@ import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
 import { worldStateChanges } from "../events/tables"
+import { discoverableElements } from "../investigation/tables"
 import { npcFactions } from "../npc/tables"
-import { questFactionInvolvement } from "../quests/tables"
-import { regionConnectionDetails, sites } from "../regions/tables"
+import { questFactionInvolvement, questIntroductions } from "../quests/tables"
+import { areas, regionConnectionDetails, regions, sites } from "../regions/tables"
 import {
 	factionAgendas,
 	factionCulture,
@@ -24,10 +25,12 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	culture: many(factionCulture, { relationName: "factionCulture" }),
 	members: many(npcFactions, { relationName: "factionMembers" }),
 	relatedQuests: many(questFactionInvolvement, { relationName: "factionQuests" }),
+	questIntroductions: many(questIntroductions, { relationName: "factionQuestIntroductions" }),
 	territorialControl: many(factionTerritorialControl, { relationName: "factionTerritorialControl" }),
 	controlledRoutes: many(regionConnectionDetails, { relationName: "factionControlledRoutes" }),
 	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
 	worldChanges: many(worldStateChanges, { relationName: "worldChangesAffectingFaction" }),
+	discoverableElements: many(discoverableElements, { relationName: "factionDiscoverableElements" }),
 
 	embedding: one(embeddings, {
 		fields: [factions.embeddingId],
@@ -91,5 +94,20 @@ export const factionTerritorialControlRelations = relations(factionTerritorialCo
 		fields: [factionTerritorialControl.factionId],
 		references: [factions.id],
 		relationName: "factionTerritorialControl",
+	}),
+	region: one(regions, {
+		fields: [factionTerritorialControl.regionId],
+		references: [regions.id],
+		relationName: "regionFactionInfluence",
+	}),
+	area: one(areas, {
+		fields: [factionTerritorialControl.areaId],
+		references: [areas.id],
+		relationName: "areaFactionInfluence",
+	}),
+	site: one(sites, {
+		fields: [factionTerritorialControl.siteId],
+		references: [sites.id],
+		relationName: "siteFactionInfluence",
 	}),
 }))

@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
-import { clues } from "../investigation/tables"
-import { items } from "../items/tables"
-import { questHookNpcs, questNpcRoles } from "../quests/tables"
+import { discoverableElements } from "../investigation/tables"
+import { itemHistoryParticipants, items } from "../items/tables"
+import { questNpcRoles } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { characterRelationships, npcFactions, npcSites, npcs } from "./tables"
 
@@ -16,8 +16,8 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 
 	relatedQuests: many(questNpcRoles, { relationName: "npcQuests" }),
 	relatedItems: many(items, { relationName: "npcItems" }),
-	relatedQuestHooks: many(questHookNpcs, { relationName: "npcQuestHooks" }),
-	relatedClues: many(clues, { relationName: "npcClues" }),
+	itemHistory: many(itemHistoryParticipants, { relationName: "npcItemHistory" }),
+	discoverableElements: many(discoverableElements, { relationName: "npcDiscoverableElements" }),
 
 	embedding: one(embeddings, {
 		fields: [npcs.embeddingId],
