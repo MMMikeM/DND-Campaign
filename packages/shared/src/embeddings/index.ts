@@ -32,14 +32,36 @@ export type EmbeddedEntityName =
 	| "worldStateChanges"
 	| "majorConflicts"
 
-// Using console as logger placeholder
-export const logger = console
+const logger = console
+
+/**
+ * Combines relevant text fields from a database record into a single string for embedding.
+ * Uses entity-specific text generators from the centralized registry.
+ * @param entityName The simple name of the entity type (e.g., 'npcs', 'quests').
+ * @param record The database record object.
+ * @returns A combined text string ready for embedding.
+ */
+
+export function getTextForEntity<T extends Record<string, unknown>>(entityName: EmbeddedEntityName, record: T): string {
+	const textGenerator = embeddingTextGenerators[entityName]
+	if (!textGenerator) {
+		logger.warn(`No text generator defined for entity name: ${entityName}. Using JSON fallback.`)
+		return JSON.stringify(record)
+	}
+
+	try {
+		const text = textGenerator(record as any)
+		return text
+	} catch (error) {
+		logger.error(`Error generating text for ${entityName}:`, error)
+		// Fallback to JSON representation
+
+		return JSON.stringify(record)
+	}
+}
 
 // Load API Key from environment
 const apiKey = process.env.GEMINI_API_KEY
-if (!apiKey) {
-	logger.error("GEMINI_API_KEY environment variable is not set. Embedding generation will fail.")
-}
 
 // Initialize Gemini Client (only if API key is available)
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null
