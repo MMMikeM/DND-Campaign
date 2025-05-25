@@ -30,27 +30,27 @@ export function initializeDatabase(connectionString: string) {
 	})
 
 	const schema = {
-		...tables.associationTables,
 		...tables.conflictTables,
 		...tables.factionTables,
-		...tables.foreshadowingTables,
 		...tables.narrativeTables,
 		...tables.npcTables,
 		...tables.questTables,
 		...tables.regionTables,
-		...tables.worldTables,
 		...tables.embeddingTables,
 		...tables.eventTables,
-		...relations.associationRelations,
+		...tables.investigationTables,
+		...tables.itemTables,
+		...tables.worldbuildingTables,
 		...relations.conflictRelations,
 		...relations.factionRelations,
-		...relations.foreshadowingRelations,
 		...relations.narrativeRelations,
 		...relations.npcRelations,
 		...relations.questRelations,
 		...relations.regionRelations,
-		...relations.worldRelations,
 		...relations.eventRelations,
+		...relations.investigationRelations,
+		...relations.itemRelations,
+		...relations.worldbuildingRelations,
 	}
 
 	// Create Drizzle ORM instance with all schemas
