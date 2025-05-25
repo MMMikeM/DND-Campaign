@@ -25,3 +25,15 @@ export const relationshipStrengths = [
 ] as const
 
 export const trustLevel = ["none", "low", "medium", "high"] as const
+
+export const discoverySubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
+
+export const narrativeWeight = ["minor", "supporting", "major", "crucial"] as const
+
+export const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
+
+export const impactSeverity = ["minor", "moderate", "major"] as const
+
+export const reliabilityLevels = ["verified", "likely", "uncertain", "suspect"] as const
+
+export const clueTypes = ["physical", "testimonial", "documentary", "circumstantial"] as const
