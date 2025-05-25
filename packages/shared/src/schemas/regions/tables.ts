@@ -1,7 +1,9 @@
 // regions/tables.ts
 import { integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { dangerLevels } from "../common"
 import { embeddings } from "../embeddings/tables"
+import { factions } from "../factions/tables"
 
 const regionTypes = [
 	"coastal",
@@ -83,12 +85,15 @@ const siteTypes = [
 ] as const
 const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
 
-const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
 const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] as const
 const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
 const difficultyLevels = ["easy", "medium", "hard"] as const
 const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
 const imageFormats = ["png", "jpg", "webp"] as const
+
+// Region connection details enums
+const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
+const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
 
 export const regions = pgTable("regions", {
 	id: pk(),
@@ -236,6 +241,20 @@ export const siteSecrets = pgTable("site_secrets", {
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
+// Region-owned connection details (moved from associations/)
+export const regionConnectionDetails = pgTable("region_connection_details", {
+	id: pk(),
+	connectionId: cascadeFk("connection_id", regionConnections.id).unique(),
+	routeType: oneOf("route_type", routeTypes),
+	travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
+	travelTime: string("travel_time"),
+	controllingFactionId: nullableFk("controlling_faction_id", factions.id),
+	travelHazards: list("travel_hazards"),
+	pointsOfInterest: list("points_of_interest"),
+	description: list("description"),
+	creativePrompts: list("creative_prompts"),
+})
+
 export const enums = {
 	areaTypes,
 	connectionTypes,
@@ -247,4 +266,6 @@ export const enums = {
 	secretTypes,
 	siteTypes,
 	imageFormats,
+	routeTypes,
+	travelDifficulties,
 }

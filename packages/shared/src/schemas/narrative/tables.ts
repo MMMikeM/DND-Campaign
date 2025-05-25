@@ -1,12 +1,12 @@
-// narrative/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { discoverySubtlety, narrativeWeight } from "../common"
 import { embeddings } from "../embeddings/tables"
 import { quests } from "../quests/tables"
 
-const arcTypes = ["main", "faction", "character", "side"] as const
-const arcStatuses = ["planned", "active", "completed", "abandoned"] as const
 const questRoles = ["introduction", "complication", "rising_action", "climax", "resolution", "epilogue"] as const
+const arcTypes = ["main", "faction", "character", "side"] as const
+const foreshadowingTypes = ["document", "conversation", "object", "environmental", "vision", "rumor"] as const
 
 export const narrativeDestinations = pgTable("narrative_destinations", {
 	id: pk(),
@@ -34,7 +34,9 @@ export const destinationContribution = pgTable("destination_contribution", {
 })
 
 export const enums = {
+	discoverySubtlety,
+	narrativeWeight,
+	foreshadowingTypes,
 	arcTypes,
-	arcStatuses,
 	questRoles,
 }

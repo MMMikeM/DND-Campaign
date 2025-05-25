@@ -3,7 +3,7 @@ import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { alignments, relationshipStrengths, wealthLevels } from "../common"
 import { embeddings } from "../embeddings/tables"
-import { sites } from "../regions/tables"
+import { areas, regions, sites } from "../regions/tables"
 
 const sizeTypes = ["tiny", "small", "medium", "large", "massive"] as const
 const reachLevels = ["local", "regional", "national", "continental", "global"] as const
@@ -23,6 +23,8 @@ const factionTypes = [
 	"political",
 	"arcane",
 ] as const
+
+const influenceLevels = ["contested", "minor", "influenced", "moderate", "strong", "controlled", "dominated"] as const
 
 export const factions = pgTable("factions", {
 	id: pk(),
@@ -111,6 +113,24 @@ export const factionCulture = pgTable(
 	(t) => [unique().on(t.factionId)],
 )
 
+// Faction-owned territorial control (moved from associations/)
+export const factionTerritorialControl = pgTable(
+	"faction_territorial_control",
+	{
+		id: pk(),
+		factionId: cascadeFk("faction_id", factions.id),
+		regionId: nullableFk("region_id", regions.id),
+		areaId: nullableFk("area_id", areas.id),
+		siteId: nullableFk("site_id", sites.id),
+		influenceLevel: oneOf("influence_level", influenceLevels),
+		presence: list("presence"),
+		priorities: list("priorities"),
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+	},
+	(t) => [unique().on(t.factionId, t.regionId, t.areaId, t.siteId)],
+)
+
 export const enums = {
 	diplomaticTypes,
 	relationshipStrengths,
@@ -122,4 +142,5 @@ export const enums = {
 	factionAgendaTypes,
 	factionAgendaStage,
 	factionAgendaImportance,
+	influenceLevels,
 }
