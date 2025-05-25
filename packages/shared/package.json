@@ -4,8 +4,9 @@
   "private": true,
   "description": "",
   "type": "module",
-  "main": "./dist/es/index.js",
-  "module": "./dist/es/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "bunchee",
     "check": "tsc --noEmit",
@@ -21,12 +22,8 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/es/index.d.ts",
-        "default": "./dist/es/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs/index.d.cts",
-        "default": "./dist/cjs/index.cjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
