@@ -1,6 +1,10 @@
 // prompt-server.ts
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import { GetPromptRequestSchema, ListPromptsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
+import {
+	GetPromptRequestSchema,
+	type GetPromptResult,
+	ListPromptsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
 import { executePrompt, getAllPrompts } from "./prompt-registry"
 
@@ -10,7 +14,7 @@ export function registerPromptHandlers(server: Server) {
 	})
 
 	// Handler for getting a specific prompt
-	server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+	server.setRequestHandler(GetPromptRequestSchema, async (request): Promise<GetPromptResult> => {
 		const { name, arguments: promptArgs = {} } = request.params
 		logger.info(`Getting prompt: ${name}`, promptArgs)
 

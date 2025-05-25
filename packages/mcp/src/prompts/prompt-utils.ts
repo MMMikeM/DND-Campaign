@@ -1,11 +1,14 @@
 // prompt-utils.ts
+import type { PromptArgument } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod/v4"
-import type { PromptArgument } from "./prompt-types"
+import type { PromptDefinition } from "./prompt-types"
+
+export type { PromptDefinition }
 
 /**
  * Extracts argument information from a Zod schema
  */
-export function extractArgsFromZodSchema<T extends z.AnyZodObject>(schema: T): PromptArgument[] {
+export function extractArgsFromZodSchema<T extends z.ZodObject<Record<string, z.ZodAny>>>(schema: T): PromptArgument[] {
 	const result: PromptArgument[] = []
 
 	// Get the shape of the schema

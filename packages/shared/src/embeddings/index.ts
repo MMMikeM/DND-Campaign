@@ -1,36 +1,36 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { getTextForEmbedding } from "../lib/embeddings"
-import type { clues, items } from "../schemas/associations/tables"
 import type { majorConflicts } from "../schemas/conflict/tables"
-import type { narrativeEvents } from "../schemas/events/tables"
+import type { narrativeEvents, worldStateChanges } from "../schemas/events/tables"
 import type { factionAgendas, factionCulture, factions } from "../schemas/factions/tables"
-import type { narrativeForeshadowing } from "../schemas/foreshadowing/tables"
+import type { discoverableElements } from "../schemas/investigation/tables"
+import type { items } from "../schemas/items/tables"
 import type { narrativeDestinations } from "../schemas/narrative/tables"
 import type { npcs } from "../schemas/npc/tables"
 import type { questStages, quests } from "../schemas/quests/tables"
 import type { areas, regions, siteEncounters, siteSecrets, sites } from "../schemas/regions/tables"
-import type { worldStateChanges } from "../schemas/world/tables"
+import type { worldConcepts } from "../schemas/worldbuilding/tables"
 
 // Type definitions for entity names
 export type EmbeddedEntityName =
+	| "areas"
+	| "discoverableElements"
+	| "factionAgendas"
+	| "factionCulture"
+	| "factions"
+	| "items"
+	| "majorConflicts"
+	| "narrativeDestinations"
+	| "narrativeEvents"
 	| "npcs"
 	| "quests"
 	| "questStages"
-	| "sites"
-	| "areas"
 	| "regions"
-	| "factions"
-	| "factionAgendas"
-	| "factionCulture"
-	| "items"
-	| "clues"
 	| "siteEncounters"
+	| "sites"
 	| "siteSecrets"
-	| "narrativeForeshadowing"
-	| "narrativeDestinations"
-	| "narrativeEvents"
+	| "worldConcepts"
 	| "worldStateChanges"
-	| "majorConflicts"
 
 const logger = console
 
@@ -102,10 +102,24 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 }
 
 const embeddingTextForItem = (item: typeof items.$inferSelect) =>
-	getTextForEmbedding(item, ["name", "type", "description", "significance", "creativePrompts"])
+	getTextForEmbedding(item, ["name", "itemType", "description", "significance", "creativePrompts"])
 
-const embeddingTextForClue = (clue: typeof clues.$inferSelect) =>
-	getTextForEmbedding(clue, ["description", "creativePrompts", "discoveryCondition", "reveals"])
+const embeddingTextForDiscoverableElement = (element: typeof discoverableElements.$inferSelect) =>
+	getTextForEmbedding(element, [
+		"name",
+		"purposeType",
+		"discoveryMethod",
+		"description",
+		"revealsInformation",
+		"foreshadowsElement",
+		"subtlety",
+		"narrativeWeight",
+		"clueType",
+		"reliability",
+		"playerNotes",
+		"gmNotes",
+		"creativePrompts",
+	])
 
 const embeddingTextForMajorConflict = (conflict: typeof majorConflicts.$inferSelect) =>
 	getTextForEmbedding(conflict, [
@@ -327,36 +341,58 @@ export const embeddingTextForNarrativeDestination = (destination: typeof narrati
 		"creativePrompts",
 	])
 
-export const embeddingTextForNarrativeForeshadowing = (foreshadowing: typeof narrativeForeshadowing.$inferSelect) =>
-	getTextForEmbedding(foreshadowing, [
+export const embeddingTextForWorldConcept = (concept: typeof worldConcepts.$inferSelect) =>
+	getTextForEmbedding(concept, [
 		"name",
-		"type",
-		"description",
-		"discoveryCondition",
-		"subtlety",
-		"narrativeWeight",
-		"foreshadowsElement",
-		"playerNotes",
-		"gmNotes",
+		"conceptType",
+		"timeframe",
+		"startYear",
+		"endYear",
+		"scope",
+		"primaryRegions",
+		"summary",
+		"details",
+		"modernRelevance",
+		"socialStructure",
+		"coreValues",
+		"traditions",
+		"languages",
+		"definingCharacteristics",
+		"majorEvents",
+		"keyFigures",
+		"lastingInstitutions",
+		"conflictingNarratives",
+		"relatedFactions",
+		"representativeFactions",
+		"allies",
+		"rivals",
+		"historicalGrievances",
+		"causedBy",
+		"ledTo",
+		"questHooks",
+		"currentChallenges",
+		"adaptationStrategies",
+		"modernConsequences",
+		"creativePrompts",
 	])
 
 export const embeddingTextGenerators = {
+	areas: embeddingTextForArea,
+	discoverableElements: embeddingTextForDiscoverableElement,
+	factionAgendas: embeddingTextForFactionAgenda,
+	factionCulture: embeddingTextForFactionCulture,
+	factions: embeddingTextForFaction,
+	items: embeddingTextForItem,
+	majorConflicts: embeddingTextForMajorConflict,
+	narrativeDestinations: embeddingTextForNarrativeDestination,
+	narrativeEvents: embeddingTextForNarrativeEvent,
 	npcs: embeddingTextForNpc,
 	quests: embeddingTextForQuest,
 	questStages: embeddingTextForQuestStage,
-	sites: embeddingTextForSite,
-	areas: embeddingTextForArea,
 	regions: embeddingTextForRegion,
-	factions: embeddingTextForFaction,
-	factionAgendas: embeddingTextForFactionAgenda,
-	factionCulture: embeddingTextForFactionCulture,
-	items: embeddingTextForItem,
-	clues: embeddingTextForClue,
 	siteEncounters: embeddingTextForSiteEncounter,
+	sites: embeddingTextForSite,
 	siteSecrets: embeddingTextForSiteSecret,
-	narrativeForeshadowing: embeddingTextForNarrativeForeshadowing,
-	narrativeDestinations: embeddingTextForNarrativeDestination,
-	narrativeEvents: embeddingTextForNarrativeEvent,
+	worldConcepts: embeddingTextForWorldConcept,
 	worldStateChanges: embeddingTextForWorldStateChange,
-	majorConflicts: embeddingTextForMajorConflict,
 } as const
