@@ -1,7 +1,10 @@
 // quests/tables.ts
 import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { impactSeverity, trustLevel } from "../common"
 import { embeddings } from "../embeddings/tables"
+import { factions } from "../factions/tables"
+import { npcs } from "../npc/tables"
 import { regions, sites } from "../regions/tables"
 
 const questTypes = ["main", "side", "faction", "character", "generic"] as const
@@ -9,9 +12,6 @@ const urgencies = ["background", "developing", "urgent", "critical"] as const
 const visibilities = ["hidden", "rumored", "known", "featured"] as const
 const dependencyTypes = ["prerequisite", "sequel", "parallel", "alternative", "hidden_connection"] as const
 const twistTypes = ["reversal", "revelation", "betrayal", "complication"] as const
-const impactSeverity = ["minor", "moderate", "major"] as const
-const narrativePlacements = ["early", "middle", "climax", "denouement"] as const
-const outcomeSeverity = ["minor", "moderate", "major"] as const
 const outcomeVisibility = ["obvious", "subtle", "hidden"] as const
 const outcomeDelay = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
 const importance = ["critical", "recommended", "optional"] as const
@@ -50,6 +50,13 @@ const outcomeTypes = [
 	"item_acquisition",
 	"reputation_change",
 ] as const
+
+// Quest-owned association enums
+const npcRoles = ["quest_giver", "ally", "antagonist", "guide", "bystander", "target", "victim", "resource"] as const
+const importanceLevels = ["minor", "supporting", "major", "critical"] as const
+const factionRoles = ["quest_giver", "antagonist", "ally", "target", "beneficiary", "obstacle", "resource"] as const
+const introductionTypes = ["rumor", "npc_interaction", "location_discovery"] as const
+const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
 
 export const quests = pgTable("quests", {
 	id: pk(),
@@ -148,7 +155,7 @@ export const decisionOutcomes = pgTable(
 		decisionId: cascadeFk("decision_id", stageDecisions.id),
 		affectedStageId: nullableFk("affected_stage_id", questStages.id),
 		outcomeType: oneOf("outcome_type", outcomeTypes),
-		severity: oneOf("severity", outcomeSeverity),
+		severity: oneOf("severity", impactSeverity),
 		visibility: oneOf("visibility", outcomeVisibility),
 		delayFactor: oneOf("delay_factor", outcomeDelay),
 		description: list("description"),
@@ -157,15 +164,76 @@ export const decisionOutcomes = pgTable(
 	(t) => [unique().on(t.outcomeType, t.decisionId)],
 )
 
+// Quest-owned association tables (moved from associations/)
+export const questNpcRoles = pgTable(
+	"quest_npc_roles",
+	{
+		id: pk(),
+		questId: cascadeFk("quest_id", quests.id),
+		npcId: cascadeFk("npc_id", npcs.id),
+		role: oneOf("role", npcRoles),
+		importance: oneOf("importance", importanceLevels),
+		description: list("description"),
+		creativePrompts: list("creative_prompts"),
+		dramaticMoments: list("dramatic_moments"),
+		hiddenAspects: list("hidden_aspects"),
+	},
+	(t) => [unique().on(t.questId, t.npcId, t.role)],
+)
+
+export const questFactionInvolvement = pgTable(
+	"quest_faction_involvement",
+	{
+		id: pk(),
+		questId: cascadeFk("quest_id", quests.id),
+		factionId: cascadeFk("faction_id", factions.id),
+		role: oneOf("role", factionRoles),
+		interest: list("interest"),
+		creativePrompts: list("creative_prompts"),
+	},
+	(t) => [unique().on(t.questId, t.factionId)],
+)
+
+export const questIntroductions = pgTable(
+	"quest_introductions",
+	{
+		id: pk(),
+		questId: cascadeFk("quest_id", quests.id),
+		stageId: cascadeFk("stage_id", questStages.id),
+
+		// Location context
+		siteId: nullableFk("site_id", sites.id),
+		factionId: nullableFk("faction_id", factions.id),
+
+		// Introduction details
+		source: string("source"),
+		introductionType: oneOf("introduction_type", introductionTypes),
+		presentationStyle: oneOf("presentation_style", presentationStyles),
+
+		// Content
+		description: list("description"),
+		hookContent: list("hook_content"),
+		discoveryConditions: list("discovery_conditions"),
+
+		// NPC delivery (consolidated from questHookNpcs)
+		deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
+		npcRelationship: string("npc_relationship"),
+		trustRequired: oneOf("trust_required", trustLevel),
+		dialogueHint: string("dialogue_hint"),
+
+		creativePrompts: list("creative_prompts"),
+	},
+	(t) => [unique().on(t.questId, t.stageId, t.siteId, t.factionId)],
+)
+
 export const enums = {
 	conditionTypes,
 	decisionTypes,
 	dependencyTypes,
 	impactSeverity,
 	importance,
-	narrativePlacements,
 	outcomeDelay,
-	outcomeSeverity,
+	outcomeSeverity: impactSeverity,
 	outcomeTypes,
 	outcomeVisibility,
 	questTypes,
@@ -173,4 +241,11 @@ export const enums = {
 	unlockConditionTypes,
 	urgencies,
 	visibilities,
+	// Quest-owned association enums
+	npcRoles,
+	importanceLevels,
+	factionRoles,
+	introductionTypes,
+	presentationStyles,
+	trustLevels: trustLevel,
 }
