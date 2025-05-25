@@ -1,7 +1,7 @@
 import { search } from "fast-fuzzy"
 import { z } from "zod/v4"
 import { logger } from ".."
-import { zodToMCP } from "../zodToMcp"
+import zodToMCP from "../zodToMcp"
 import {
 	associations,
 	conflicts,

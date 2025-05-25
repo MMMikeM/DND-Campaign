@@ -3,9 +3,11 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { initializeDatabase } from "@tome-master/shared"
-import { createLogger } from "./logger.js"
-import { registerPromptHandlers } from "./prompts/index.js"
-import { registerToolHandlers } from "./tools/tools.js"
+import { createLogger } from "./logger"
+import { registerPromptHandlers } from "./prompts/index"
+import { registerToolHandlers } from "./tools/tools"
+
+console.error("Starting MCP server")
 
 export const logger = createLogger()
 
@@ -18,7 +20,6 @@ logger.info("Environment variables", {
 	NODE_ENV: process.env.NODE_ENV,
 })
 
-// Initialize database
 logger.info("Initializing database...")
 const dbPath = "postgres://postgres:postgres@localhost:5432/dnd_campaign"
 logger.info(`Using database at: ${dbPath}`)
@@ -26,7 +27,6 @@ export const db: ReturnType<typeof initializeDatabase> = initializeDatabase(dbPa
 
 logger.info("Database initialized successfully")
 
-// Create MCP Server
 const mcpServer = new Server(
 	{
 		name: "DND MCP",
