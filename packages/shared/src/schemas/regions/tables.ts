@@ -1,9 +1,18 @@
 // regions/tables.ts
 import { integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { dangerLevels } from "../common"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
+export const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
+
+const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
+const difficultyLevels = ["easy", "medium", "hard"] as const
+const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] as const
+const imageFormats = ["png", "jpg", "webp"] as const
+const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
+const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
+const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
+const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
 
 const regionTypes = [
 	"coastal",
@@ -83,32 +92,43 @@ const siteTypes = [
 	"crossroads",
 	"trail",
 ] as const
-const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
-
-const encounterTypes = ["combat", "social", "puzzle", "trap", "environmental"] as const
-const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
-const difficultyLevels = ["easy", "medium", "hard"] as const
-const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
-const imageFormats = ["png", "jpg", "webp"] as const
-
-// Region connection details enums
-const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
-const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
+const atmosphereTypes = [
+	"safe_haven_rest",
+	"oppressive_tense",
+	"mysterious_intriguing",
+	"mundane_stable",
+	"wild_dangerous_challenging",
+	"wonder_awe",
+] as const
+const siteFunctions = [
+	"rest_stop_recovery",
+	"challenge_hub_obstacle",
+	"information_node_lore",
+	"thematic_showcase_mood",
+	"social_interaction_nexus",
+] as const
 
 export const regions = pgTable("regions", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	name: string("name").unique(),
 
 	dangerLevel: oneOf("danger_level", dangerLevels),
 	type: oneOf("type", regionTypes),
+
+	// New fields from schema updates plan
+	atmosphereType: oneOf("atmosphere_type", atmosphereTypes),
+	revelationLayersSummary: list("revelation_layers_summary"),
 
 	economy: string("economy"),
 	history: string("history"),
 	population: string("population"),
 
 	culturalNotes: list("cultural_notes"),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
 	hazards: list("hazards"),
 	pointsOfInterest: list("points_of_interest"),
 	rumors: list("rumors"),
@@ -119,18 +139,25 @@ export const regions = pgTable("regions", {
 
 export const areas = pgTable("areas", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	regionId: cascadeFk("region_id", regions.id),
 	name: string("name").unique(),
 	type: oneOf("type", areaTypes),
 	dangerLevel: oneOf("danger_level", dangerLevels),
 
+	// New fields from schema updates plan
+	atmosphereType: oneOf("atmosphere_type", atmosphereTypes),
+	revelationLayersSummary: list("revelation_layers_summary"),
+
 	leadership: string("leadership"),
 	population: string("population"),
 	primaryActivity: string("primary_activity"),
 
-	description: list("description"),
 	culturalNotes: list("cultural_notes"),
-	creativePrompts: list("creative_prompts"),
 	hazards: list("hazards"),
 	pointsOfInterest: list("points_of_interest"),
 	rumors: list("rumors"),
@@ -142,19 +169,30 @@ export const regionConnections = pgTable(
 	"region_connections",
 	{
 		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
 		regionId: cascadeFk("region_id", regions.id),
 		otherRegionId: nullableFk("other_region_id", regions.id),
 		connectionType: oneOf("connection_type", connectionTypes),
-		description: list("description"),
-		creativePrompts: list("creative_prompts"),
 	},
 	(t) => [unique().on(t.regionId, t.otherRegionId)],
 )
 
 export const sites = pgTable("sites", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	areaId: cascadeFk("area_id", areas.id),
 	siteType: oneOf("site_type", siteTypes),
+
+	// New field from schema updates plan
+	intendedSiteFunction: oneOf("intended_site_function", siteFunctions),
 
 	name: string("name").unique(),
 	terrain: string("terrain"),
@@ -162,9 +200,7 @@ export const sites = pgTable("sites", {
 	mood: string("mood"),
 	environment: string("environment"),
 
-	creativePrompts: list("creative_prompts"),
 	creatures: list("creatures"),
-	description: list("description"),
 	features: list("features"),
 	treasures: list("treasures"),
 	lightingDescription: list("lighting_description"),
@@ -199,11 +235,14 @@ export const siteLinks = pgTable(
 	"site_links",
 	{
 		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
 		siteId: cascadeFk("site_id", sites.id),
 		otherSiteId: nullableFk("other_site_id", sites.id),
 
-		description: list("description"),
-		creativePrompts: list("creative_prompts"),
 		linkType: oneOf("link_type", linkTypes),
 	},
 	(t) => [unique().on(t.siteId, t.otherSiteId)],
@@ -213,6 +252,11 @@ export const siteEncounters = pgTable(
 	"site_encounters",
 	{
 		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
 		name: string("name").unique(),
 		siteId: cascadeFk("site_id", sites.id),
 
@@ -220,8 +264,6 @@ export const siteEncounters = pgTable(
 		dangerLevel: oneOf("danger_level", dangerLevels),
 		difficulty: oneOf("difficulty", difficultyLevels),
 
-		description: list("description"),
-		creativePrompts: list("creative_prompts"),
 		creatures: list("creatures"),
 		treasure: list("treasure"),
 		embeddingId: nullableFk("embedding_id", embeddings.id),
@@ -231,12 +273,15 @@ export const siteEncounters = pgTable(
 
 export const siteSecrets = pgTable("site_secrets", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	siteId: cascadeFk("site_id", sites.id),
 	secretType: oneOf("secret_type", secretTypes),
 	difficultyToDiscover: oneOf("difficulty", difficultyLevels),
 	discoveryMethod: list("discovery_method"),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
 	consequences: list("consequences"),
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
@@ -244,6 +289,11 @@ export const siteSecrets = pgTable("site_secrets", {
 // Region-owned connection details (moved from associations/)
 export const regionConnectionDetails = pgTable("region_connection_details", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	connectionId: cascadeFk("connection_id", regionConnections.id).unique(),
 	routeType: oneOf("route_type", routeTypes),
 	travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
@@ -251,21 +301,21 @@ export const regionConnectionDetails = pgTable("region_connection_details", {
 	controllingFactionId: nullableFk("controlling_faction_id", factions.id),
 	travelHazards: list("travel_hazards"),
 	pointsOfInterest: list("points_of_interest"),
-	description: list("description"),
-	creativePrompts: list("creative_prompts"),
 })
 
 export const enums = {
 	areaTypes,
+	atmosphereTypes,
 	connectionTypes,
 	dangerLevels,
 	difficultyLevels,
 	encounterTypes,
+	imageFormats,
 	linkTypes,
 	regionTypes,
-	secretTypes,
-	siteTypes,
-	imageFormats,
 	routeTypes,
+	secretTypes,
+	siteFunctions,
+	siteTypes,
 	travelDifficulties,
 }

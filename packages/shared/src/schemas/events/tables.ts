@@ -1,7 +1,6 @@
 // events/tables.ts
 import { pgTable } from "drizzle-orm/pg-core"
-import { list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { impactSeverity } from "../common"
+import { list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
@@ -10,85 +9,126 @@ import { npcs } from "../npc/tables"
 import { questStages, quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 
-const changeTypes = [
-	"faction_power",
-	"region_status",
-	"political_shift",
-	"environmental",
-	"demographic",
-	"reputation",
-	"resource_availability",
-	"npc_status",
-] as const
-const changeVisibility = ["obvious", "subtle", "hidden"] as const
-const changeTimeframe = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
-const sourcesOfChange = ["decision", "quest_completion", "world_event", "player_choice", "time_passage"] as const
+const impactSeverity = ["minor", "moderate", "major"] as const
 const eventTypes = ["complication", "escalation", "twist"] as const
 const narrativePlacements = ["early", "middle", "climax", "denouement"] as const
+const rhythmEffects = [
+	"spike_tension",
+	"introduce_mystery",
+	"provide_breather_twist",
+	"force_reassessment_of_plans",
+	"heighten_stakes",
+] as const
+
+const consequenceTypes = [
+	// Character & Relationship
+	"character_reaction",
+	"npc_status_change",
+	"relationship_change",
+
+	// Faction & Political
+	"faction_power_shift",
+	"political_shift",
+	"reputation_change",
+
+	// World & Environment
+	"region_status_change",
+	"environmental_change",
+	"demographic_shift",
+
+	// Resources & Items
+	"resource_availability_change",
+	"item_acquisition",
+
+	// Quest & Narrative
+	"quest_availability_change",
+	"story_progression",
+] as const
+
+const consequenceVisibility = ["obvious", "subtle", "hidden"] as const
+const consequenceTimeframe = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
+const consequenceSources = ["decision", "quest_completion", "world_event", "player_choice", "time_passage"] as const
+const playerImpactFeels = [
+	"empowering_reward",
+	"earned_progress",
+	"challenging_setback",
+	"neutral_world_evolution",
+	"unexpected_opportunity",
+	"just_consequence",
+] as const
 
 export const narrativeEvents = pgTable("narrative_events", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	name: string("name").unique(),
 	eventType: oneOf("event_type", eventTypes),
 
-	// What this event affects
+	intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
+
 	questStageId: nullableFk("quest_stage_id", questStages.id), // Where it happens
 	triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id), // If triggered by a choice
 	relatedQuestId: nullableFk("related_quest_id", quests.id), // If it impacts the whole quest
 
-	// Common fields
-	description: list("description"),
 	narrativePlacement: oneOf("narrative_placement", narrativePlacements),
 	impactSeverity: oneOf("impact_severity", impactSeverity),
 
-	// Type-specific details (used based on eventType)
-	complication_details: string("complication_details"), // e.g., "Requires DC 15 Survival check"
-	escalation_details: string("escalation_details"), // e.g., "Enemy numbers double," "Time limit halved"
-	twist_reveal_details: string("twist_reveal_details"), // e.g., "NPC reveals true allegiance"
+	complication_details: nullableString("complication_details"), // e.g., "Requires DC 15 Survival check"
+	escalation_details: nullableString("escalation_details"), // e.g., "Enemy numbers double," "Time limit halved"
+	twist_reveal_details: nullableString("twist_reveal_details"), // e.g., "NPC reveals true allegiance"
 
-	// GM guidance
-	creativePrompts: list("creative_prompts"),
-	gmNotes: list("gm_notes"), // How to run it effectively
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-export const worldStateChanges = pgTable("world_state_changes", {
+export const consequences = pgTable("consequences", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
 
 	name: string("name").unique(),
 
-	changeType: oneOf("change_type", changeTypes),
+	// What type of consequence this is
+	consequenceType: oneOf("consequence_type", consequenceTypes),
 	severity: oneOf("severity", impactSeverity).default("moderate"),
-	visibility: oneOf("visibility", changeVisibility).default("obvious"),
-	timeframe: oneOf("timeframe", changeTimeframe).default("immediate"),
-	sourceType: oneOf("source_type", sourcesOfChange),
+	visibility: oneOf("visibility", consequenceVisibility).default("obvious"),
+	timeframe: oneOf("timeframe", consequenceTimeframe).default("immediate"),
+	sourceType: oneOf("source_type", consequenceSources),
 
-	questId: nullableFk("quest_id", quests.id),
-	decisionId: nullableFk("decision_id", stageDecisions.id),
-	conflictId: nullableFk("conflict_id", majorConflicts.id),
+	// Player experience
+	playerImpactFeel: oneOf("player_impact_feel", playerImpactFeels),
 
-	factionId: nullableFk("faction_id", factions.id),
-	regionId: nullableFk("region_id", regions.id),
-	areaId: nullableFk("area_id", areas.id),
-	siteId: nullableFk("site_id", sites.id),
-	npcId: nullableFk("npc_id", npcs.id),
-	destinationId: nullableFk("destination_id", narrativeDestinations.id),
+	// What triggered this consequence
+	triggerDecisionId: nullableFk("trigger_decision_id", stageDecisions.id),
+	triggerQuestId: nullableFk("trigger_quest_id", quests.id),
+	triggerConflictId: nullableFk("trigger_conflict_id", majorConflicts.id),
 
+	// What's affected by this consequence
+	affectedFactionId: nullableFk("affected_faction_id", factions.id),
+	affectedRegionId: nullableFk("affected_region_id", regions.id),
+	affectedAreaId: nullableFk("affected_area_id", areas.id),
+	affectedSiteId: nullableFk("affected_site_id", sites.id),
+	affectedNpcId: nullableFk("affected_npc_id", npcs.id),
+	affectedDestinationId: nullableFk("affected_destination_id", narrativeDestinations.id),
+
+	// Future implications
 	futureQuestId: nullableFk("future_quest_id", quests.id),
 
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	creativePrompts: list("creative_prompts"),
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const enums = {
-	changeSeverity: impactSeverity,
-	changeTypes,
-	changeVisibility,
-	changeTimeframe,
-	sourcesOfChange,
 	eventTypes,
+	impactSeverity,
 	narrativePlacements,
-	impactSeverities: impactSeverity,
+	rhythmEffects,
+	consequenceTypes,
+	consequenceVisibility,
+	consequenceTimeframe,
+	consequenceSources,
+	playerImpactFeels,
 }

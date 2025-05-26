@@ -1,3 +1,7 @@
+// shared-enums.ts
+// This file contains ONLY enums that are shared between multiple table files.
+// Single-use enums should be defined directly in their respective table files.
+
 export const alignments = [
 	"lawful good",
 	"neutral good",
@@ -24,16 +28,8 @@ export const relationshipStrengths = [
 	"war",
 ] as const
 
-export const trustLevel = ["none", "low", "medium", "high"] as const
-
 export const discoverySubtlety = ["obvious", "moderate", "subtle", "hidden"] as const
 
 export const narrativeWeight = ["minor", "supporting", "major", "crucial"] as const
 
-export const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
-
-export const impactSeverity = ["minor", "moderate", "major"] as const
-
-export const reliabilityLevels = ["verified", "likely", "uncertain", "suspect"] as const
-
-export const clueTypes = ["physical", "testimonial", "documentary", "circumstantial"] as const
+export const trustLevels = ["none", "low", "medium", "high"] as const

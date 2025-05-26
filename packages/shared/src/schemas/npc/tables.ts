@@ -1,14 +1,15 @@
-// npc/tables.ts
-import { integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { alignments, relationshipStrengths, trustLevel, wealthLevels } from "../common"
+import { sql } from "drizzle-orm"
+import { boolean, check, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
+import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
+import { alignments, relationshipStrengths, trustLevels, wealthLevels } from "../shared-enums"
 
 const genders = ["male", "female", "non-humanoid"] as const
 const relationshipTypes = ["ally", "enemy", "family", "rival", "mentor", "student", "friend", "contact"] as const
-const adaptability = ["rigid", "reluctant", "flexible", "opportunistic"] as const
+const adaptabilityLevels = ["rigid", "reluctant", "flexible", "opportunistic"] as const
 const npcFactionRoles = [
 	"leader",
 	"lieutenant",
@@ -38,23 +39,69 @@ const races = [
 	"other",
 ] as const
 
+const cprScores = ["low", "medium", "high"] as const
+
+const characterComplexityProfiles = [
+	"moral_anchor_good",
+	"moral_anchor_evil",
+	"contextual_flawed_understandable",
+	"deeply_complex_contradictory",
+	"simple_what_you_see",
+] as const
+
+const playerPerceptionGoals = [
+	"trustworthy_ally_anchor",
+	"clear_villain_foil",
+	"intriguing_mystery_figure",
+	"comic_relief_levity",
+	"tragic_figure_empathy",
+	"relatable_everyman",
+] as const
+
+const npcStatuses = ["alive", "dead", "missing", "imprisoned", "exiled", "unknown"] as const
+const availabilityLevels = ["always", "often", "sometimes", "rarely", "unavailable"] as const
+
+const siteAssociationTypes = [
+	"residence",
+	"workplace",
+	"frequent_visitor",
+	"secret_meeting_spot",
+	"hideout",
+	"place_of_power",
+	"sentimental_location",
+] as const
+
 export const npcs = pgTable("npcs", {
 	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
 	name: string("name").unique(),
 
 	alignment: oneOf("alignment", alignments),
 	disposition: string("disposition"),
 	gender: oneOf("gender", genders),
 	race: oneOf("race", races),
-	trustLevel: oneOf("trust_level", trustLevel),
+	trustLevel: oneOf("trust_level", trustLevels),
 	wealth: oneOf("wealth", wealthLevels),
-	adaptability: oneOf("adaptability", adaptability),
+	adaptability: oneOf("adaptability", adaptabilityLevels),
+
+	complexityProfile: oneOf("complexity_profile", characterComplexityProfiles),
+	playerPerceptionGoal: oneOf("player_perception_goal", playerPerceptionGoals),
 
 	age: string("age"),
 	attitude: string("attitude"),
 	occupation: string("occupation"),
 	quirk: string("quirk"),
 	socialStatus: string("social_status"),
+
+	currentStatus: oneOf("current_status", npcStatuses).default("alive"),
+	availability: oneOf("availability", availabilityLevels).default("often"),
+	currentLocationId: nullableFk("current_location_id", sites.id),
+
+	currentGoals: list("current_goals"),
 
 	appearance: list("appearance"),
 	avoidTopics: list("avoid_topics"),
@@ -70,33 +117,43 @@ export const npcs = pgTable("npcs", {
 	rumours: list("rumours"),
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 
-	// CPR Framework scores (fixed attributes)
-	base_capability_score: integer("base_capability_score"),
-	base_proactivity_score: integer("base_proactivity_score"),
-	base_relatability_score: integer("base_relatability_score"),
+	baseCapabilityScore: oneOf("base_capability_score", cprScores),
+	baseProactivityScore: oneOf("base_proactivity_score", cprScores),
+	baseRelatabilityScore: oneOf("base_relatability_score", cprScores),
+
+	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const npcSites = pgTable(
 	"npc_sites",
 	{
 		id: pk(),
-		npcId: cascadeFk("npc_id", npcs.id),
-		siteId: nullableFk("site_id", sites.id),
-		description: list("description"),
 		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		npcId: cascadeFk("npc_id", npcs.id),
+		siteId: cascadeFk("site_id", sites.id),
+
+		associationType: oneOf("association_type", siteAssociationTypes),
 	},
-	(t) => [unique().on(t.npcId, t.siteId)],
+	(t) => [unique().on(t.npcId, t.siteId, t.associationType)],
 )
 
 export const npcFactions = pgTable(
 	"npc_factions",
 	{
 		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
 		npcId: cascadeFk("npc_id", npcs.id),
-		factionId: nullableFk("faction_id", factions.id),
-		loyalty: oneOf("loyalty", trustLevel),
+		factionId: cascadeFk("faction_id", factions.id),
+		loyalty: oneOf("loyalty", trustLevels),
 
 		justification: string("justification"),
 		role: oneOf("role", npcFactionRoles),
@@ -111,28 +168,70 @@ export const characterRelationships = pgTable(
 	"character_relationships",
 	{
 		id: pk(),
-		npcId: cascadeFk("npc_id", npcs.id),
-		relatedNpcId: nullableFk("related_npc_id", npcs.id),
-		type: oneOf("type", relationshipTypes),
-		strength: oneOf("strength", relationshipStrengths),
-		history: list("history"),
+		creativePrompts: list("creative_prompts"),
 		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		npcId: cascadeFk("npc_id", npcs.id),
+		relatedNpcId: cascadeFk("related_npc_id", npcs.id),
+		relationshipType: oneOf("relationship_type", relationshipTypes),
+		strength: oneOf("strength", relationshipStrengths),
+
+		history: list("history"),
 		narrativeTensions: list("narrative_tensions"),
 		sharedGoals: list("shared_goals"),
 		relationshipDynamics: list("relationship_dynamics"),
-		creativePrompts: list("creative_prompts"),
+
+		isBidirectional: boolean("is_bidirectional").default(true),
 	},
-	(t) => [unique().on(t.npcId, t.relatedNpcId)],
+	(t) => [
+		unique().on(t.npcId, t.relatedNpcId, t.relationshipType),
+		check("no_self_relationship", sql`${t.npcId} != ${t.relatedNpcId}`),
+	],
 )
 
+export const npcDevelopment = pgTable("npc_development", {
+	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
+	npcId: cascadeFk("npc_id", npcs.id),
+	developmentEvent: string("development_event"),
+
+	triggerType: oneOf("trigger_type", [
+		"significant_choice",
+		"major_experience",
+		"consistent_pattern",
+		"external_pressure",
+		"relationship_change",
+	] as const),
+
+	changedAspects: list("changed_aspects"),
+	previousState: string("previous_state"),
+	newState: string("new_state"),
+
+	questId: nullableFk("quest_id", quests.id),
+	sessionDate: nullableString("session_date"),
+	triggeringNpcId: nullableFk("triggering_npc_id", npcs.id),
+})
+
 export const enums = {
-	adaptability,
+	adaptabilityLevels,
 	alignments,
+	availabilityLevels,
+	characterComplexityProfiles,
+	cprScores,
 	genders,
+	npcFactionRoles,
+	npcStatuses,
+	playerPerceptionGoals,
 	races,
 	relationshipStrengths,
 	relationshipTypes,
-	trustLevel,
+	siteAssociationTypes,
+	trustLevels,
 	wealthLevels,
-	npcFactionRoles,
 }
