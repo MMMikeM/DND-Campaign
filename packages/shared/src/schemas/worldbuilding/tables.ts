@@ -1,5 +1,4 @@
 // worldbuilding/tables.ts
-
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
@@ -25,7 +24,6 @@ const complexityProfiles = ["simple_clear", "layered_nuance", "deep_mystery"] as
 const moralClarity = ["clear_good_evil_spectrum", "contextual_grey", "inherently_ambiguous"] as const
 const conceptStatuses = ["historical", "active", "emerging", "declining", "dormant"] as const
 
-// Relationship types for inter-concept connections
 const conceptRelationshipTypes = [
 	"allies",
 	"rivals",
@@ -40,15 +38,14 @@ const conceptRelationshipTypes = [
 	"undermines",
 ] as const
 
-// Connection types to world entities
 const worldConnectionTypes = [
-	"represents", // Faction represents this concept
-	"originates_from", // Concept originates from this region/NPC
-	"influences", // Concept influences this entity
-	"conflicts_with", // Concept conflicts with this entity
-	"explores", // Quest explores this concept
-	"embodies", // NPC embodies this concept
-	"threatens", // Concept threatens this entity
+	"represents",
+	"originates_from",
+	"influences",
+	"conflicts_with",
+	"explores",
+	"embodies",
+	"threatens",
 ] as const
 
 // Regional significance levels
@@ -60,7 +57,6 @@ const regionalSignificance = [
 	"peripheral",
 ] as const
 
-// Faction relationship types
 const factionRelationshipTypes = [
 	"representative_of",
 	"influenced_by",
@@ -74,49 +70,40 @@ const factionRelationshipTypes = [
 export const worldConcepts = pgTable("world_concepts", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
-	description: list("description"), // Keep for compatibility, but focus on structured fields below
+	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	name: string("name").unique(),
 	conceptType: oneOf("concept_type", conceptTypes),
 
-	// Philosophy-aligned complexity and revelation structure
 	complexityProfile: oneOf("complexity_profile", complexityProfiles),
 	moralClarity: oneOf("moral_clarity", moralClarity),
 
-	// Consolidated descriptive approach (addressing field redundancy)
-	summary: string("summary"), // 1-2 sentence elevator pitch
+	summary: string("summary"),
 
-	// Structured revelation system (core of Dynamic Realism philosophy)
-	surfaceImpression: nullableString("surface_impression"), // What's immediately apparent
-	livedRealityDetails: nullableString("lived_reality_details"), // Day-to-day complexity
-	hiddenTruthsOrDepths: nullableString("hidden_truths_or_depths"), // Secrets/deeper understanding
+	surfaceImpression: nullableString("surface_impression"),
+	livedRealityDetails: nullableString("lived_reality_details"),
+	hiddenTruthsOrDepths: nullableString("hidden_truths_or_depths"),
 
-	// Additional details for miscellaneous extra info
 	additionalDetails: list("additional_details"),
 
-	// Core properties
 	scope: oneOf("scope", conceptScopes),
 	status: oneOf("status", conceptStatuses).default("active"),
 
-	// Temporal context
-	timeframe: string("timeframe"), // "Ancient", "Recent", "Ongoing"
+	timeframe: string("timeframe"),
 	startYear: integer("start_year"),
-	endYear: integer("end_year"), // null if ongoing
+	endYear: integer("end_year"),
 
-	// Modern relevance and impact
 	modernRelevance: string("modern_relevance"),
 	currentChallenges: list("current_challenges"),
 	modernConsequences: list("modern_consequences"),
 
-	// Quest integration
 	questHooks: list("quest_hooks"),
 
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-// Replace string-based relationships with proper bidirectional FK relationships
 export const conceptRelationships = pgTable(
 	"concept_relationships",
 	{
@@ -130,11 +117,9 @@ export const conceptRelationships = pgTable(
 		targetConceptId: cascadeFk("target_concept_id", worldConcepts.id),
 		relationshipType: oneOf("relationship_type", conceptRelationshipTypes),
 
-		// Details about this specific relationship
 		relationshipDetails: nullableString("relationship_details"),
 		strength: oneOf("strength", ["weak", "moderate", "strong"] as const),
 
-		// Is this relationship bidirectional or one-way?
 		isBidirectional: boolean("is_bidirectional").default(false),
 	},
 	(t) => [
@@ -143,7 +128,6 @@ export const conceptRelationships = pgTable(
 	],
 )
 
-// Proper FK relationships to regions (replacing primaryRegions string list)
 export const conceptRegions = pgTable(
 	"concept_regions",
 	{
@@ -157,13 +141,11 @@ export const conceptRegions = pgTable(
 		regionId: cascadeFk("region_id", regions.id),
 		significance: oneOf("significance", regionalSignificance),
 
-		// How this concept manifests in this region
 		regionalManifestation: nullableString("regional_manifestation"),
 	},
 	(t) => [unique().on(t.conceptId, t.regionId)],
 )
 
-// Proper FK relationships to factions (replacing relatedFactions/representativeFactions string lists)
 export const conceptFactions = pgTable(
 	"concept_factions",
 	{
@@ -177,14 +159,12 @@ export const conceptFactions = pgTable(
 		factionId: cascadeFk("faction_id", factions.id),
 		relationshipType: oneOf("relationship_type", factionRelationshipTypes),
 
-		// Details of the relationship
 		relationshipStrength: oneOf("relationship_strength", ["weak", "moderate", "strong"] as const),
 		relationshipDetails: nullableString("relationship_details"),
 	},
 	(t) => [unique().on(t.conceptId, t.factionId, t.relationshipType)],
 )
 
-// Proper FK relationships to NPCs (replacing keyFigures string list)
 export const conceptKeyFigures = pgTable(
 	"concept_key_figures",
 	{
@@ -197,7 +177,6 @@ export const conceptKeyFigures = pgTable(
 		conceptId: cascadeFk("concept_id", worldConcepts.id),
 		npcId: cascadeFk("npc_id", npcs.id),
 
-		// Their role in relation to this concept
 		roleInConcept: string("role_in_concept"), // "Founder", "Key opponent", "Living embodiment", "Historical figure"
 		significance: oneOf("significance", ["minor", "supporting", "major", "central"] as const),
 
@@ -207,7 +186,6 @@ export const conceptKeyFigures = pgTable(
 	(t) => [unique().on(t.conceptId, t.npcId)],
 )
 
-// Link concepts to other world entities (conflicts, quests, etc.)
 export const conceptWorldConnections = pgTable("concept_world_connections", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
@@ -217,7 +195,6 @@ export const conceptWorldConnections = pgTable("concept_world_connections", {
 
 	conceptId: cascadeFk("concept_id", worldConcepts.id),
 
-	// What this concept connects to (one will be set per record)
 	conflictId: nullableFk("conflict_id", majorConflicts.id),
 	questId: nullableFk("quest_id", quests.id),
 
@@ -226,7 +203,6 @@ export const conceptWorldConnections = pgTable("concept_world_connections", {
 	connectionDetails: nullableString("connection_details"),
 })
 
-// Separate tables for concept-type-specific data (addressing conditional field problem)
 export const culturalGroups = pgTable("cultural_groups", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
@@ -234,16 +210,13 @@ export const culturalGroups = pgTable("cultural_groups", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(), // 1:1 with world_concepts where type = 'cultural_group'
-
-	// Cultural group specific properties
+	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
 	socialStructure: string("social_structure"),
 	coreValues: list("core_values"),
 	traditions: list("traditions"),
 	languages: list("languages"),
 	adaptationStrategies: list("adaptation_strategies"),
 
-	// Modern cultural context
 	modernChallenges: list("modern_challenges"),
 	culturalEvolution: list("cultural_evolution"),
 })
@@ -255,16 +228,13 @@ export const historicalPeriods = pgTable("historical_periods", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(), // 1:1 with world_concepts where type = 'historical_period'
-
-	// Historical period specific properties
+	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
 	definingCharacteristics: list("defining_characteristics"),
 	majorEvents: list("major_events"),
 	lastingInstitutions: list("lasting_institutions"),
 	conflictingNarratives: list("conflicting_narratives"),
 	historicalGrievances: list("historical_grievances"),
 
-	// Legacy and aftermath
 	endingCauses: list("ending_causes"),
 	historicalLessons: list("historical_lessons"),
 })
@@ -276,9 +246,8 @@ export const socialInstitutions = pgTable("social_institutions", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(), // 1:1 with world_concepts where type = 'social_institution'
+	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
 
-	// Social institution specific properties
 	purpose: string("purpose"),
 	structure: string("structure"),
 	membership: list("membership"),
@@ -286,7 +255,6 @@ export const socialInstitutions = pgTable("social_institutions", {
 	traditions: list("traditions"),
 	modernAdaptations: list("modern_adaptations"),
 
-	// Institutional health and challenges
 	currentEffectiveness: oneOf("current_effectiveness", [
 		"failing",
 		"struggling",

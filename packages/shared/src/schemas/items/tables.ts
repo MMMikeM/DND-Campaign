@@ -19,7 +19,6 @@ const narrativeRoles = [
 ] as const
 const perceivedSimplicityLevels = ["what_it_seems", "deceptively_simple", "obviously_complex"] as const
 
-// New enums for relationships and history
 const itemRelationshipTypes = [
 	"part_of_set",
 	"key_for",
@@ -58,26 +57,21 @@ export const items = pgTable("items", {
 	itemType: oneOf("item_type", itemTypes),
 	rarity: oneOf("rarity", rarityLevels),
 
-	// Philosophy-aligned narrative fields
 	narrativeRole: oneOf("narrative_role", narrativeRoles),
 	perceivedSimplicity: oneOf("perceived_simplicity", perceivedSimplicityLevels),
 
-	// Three levels of significance (all justified for significant story items)
-	significance: string("significance"), // Executive summary of current importance
-	loreSignificance: string("lore_significance"), // Historical/background importance
+	significance: string("significance"),
+	loreSignificance: string("lore_significance"),
 	mechanicalEffects: list("mechanical_effects"),
 
-	// Origin information (fundamental for significant items)
-	creatorName: nullableString("creator_name"), // "Master Smith Aldric", "The Forge of Stars"
-	creationPeriod: nullableString("creation_period"), // "First Age", "During King Alaric's Reign"
-	placeOfOrigin: nullableString("place_of_origin"), // "Lost City of Eldoria", "The Sunken Temple"
+	creatorName: nullableString("creator_name"),
+	creationPeriod: nullableString("creation_period"),
+	placeOfOrigin: nullableString("place_of_origin"),
 
-	// Current location and ownership
 	currentLocationId: nullableFk("current_location_id", sites.id),
 	ownerNpcId: nullableFk("owner_npc_id", npcs.id),
 	controllingFactionId: nullableFk("controlling_faction_id", factions.id),
 
-	// Quest relevance
 	questId: nullableFk("quest_id", quests.id),
 	stageId: nullableFk("stage_id", questStages.id),
 
@@ -97,8 +91,7 @@ export const itemRelationships = pgTable(
 		relatedItemId: cascadeFk("related_item_id", items.id),
 		relationshipType: oneOf("relationship_type", itemRelationshipTypes),
 
-		// Details about the relationship
-		relationshipDetails: nullableString("relationship_details"), // How they interact specifically
+		relationshipDetails: nullableString("relationship_details"),
 	},
 	(t) => [unique().on(t.sourceItemId, t.relatedItemId, t.relationshipType)],
 )
@@ -111,11 +104,10 @@ export const itemHistory = pgTable("item_history", {
 	tags: list("tags"),
 
 	itemId: cascadeFk("item_id", items.id),
-	historicalEvent: string("historical_event"), // What happened
-	timeframe: string("timeframe"), // When it occurred
-	significance: string("significance"), // Why this event matters to the item's story
+	historicalEvent: string("historical_event"),
+	timeframe: string("timeframe"),
+	significance: string("significance"),
 
-	// Location context for the event
 	eventLocationId: nullableFk("event_location_id", sites.id),
 })
 
@@ -130,9 +122,8 @@ export const itemHistoryParticipants = pgTable(
 
 		historyEventId: cascadeFk("history_event_id", itemHistory.id),
 		npcId: cascadeFk("npc_id", npcs.id),
-		role: oneOf("role", historyRoles), // Structured enum for better querying
+		role: oneOf("role", historyRoles),
 
-		// Additional context about their involvement
 		involvementDetails: nullableString("involvement_details"),
 	},
 	(t) => [unique().on(t.historyEventId, t.npcId, t.role)],
