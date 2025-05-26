@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { quests } from "../quests/tables"
@@ -191,7 +191,7 @@ export const characterRelationships = pgTable(
 	],
 )
 
-export const npcDevelopment = pgTable("npc_development", {
+export const npcNotableDevelopment = pgTable("npc_notable_development", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
@@ -199,23 +199,10 @@ export const npcDevelopment = pgTable("npc_development", {
 	tags: list("tags"),
 
 	npcId: cascadeFk("npc_id", npcs.id),
-	developmentEvent: string("development_event"),
-
-	triggerType: oneOf("trigger_type", [
-		"significant_choice",
-		"major_experience",
-		"consistent_pattern",
-		"external_pressure",
-		"relationship_change",
-	] as const),
-
-	changedAspects: list("changed_aspects"),
-	previousState: string("previous_state"),
-	newState: string("new_state"),
-
-	questId: nullableFk("quest_id", quests.id),
-	sessionDate: nullableString("session_date"),
-	triggeringNpcId: nullableFk("triggering_npc_id", npcs.id),
+	developmentEventDescription: string("development_event_description"),
+	changedAspectsSummaryText: string("changed_aspects_summary_text"),
+	triggeringContextText: string("triggering_context_text"),
+	relatedQuestId: nullableFk("related_quest_id", quests.id),
 })
 
 export const enums = {

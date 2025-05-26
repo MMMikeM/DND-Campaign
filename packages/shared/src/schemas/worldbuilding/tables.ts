@@ -88,6 +88,34 @@ export const worldConcepts = pgTable("world_concepts", {
 
 	additionalDetails: list("additional_details"),
 
+	// Consolidated fields from specialized concept tables
+	socialStructure: nullableString("social_structure"),
+	coreValues: list("core_values"),
+	traditions: list("traditions"),
+	languages: list("languages"),
+	adaptationStrategies: list("adaptation_strategies"),
+	definingCharacteristics: list("defining_characteristics"),
+	majorEvents: list("major_events"),
+	lastingInstitutions: list("lasting_institutions"),
+	conflictingNarratives: list("conflicting_narratives"),
+	historicalGrievances: list("historical_grievances"),
+	endingCauses: list("ending_causes"),
+	historicalLessons: list("historical_lessons"),
+	purpose: nullableString("purpose"),
+	structure: nullableString("structure"),
+	membership: list("membership"),
+	rules: list("rules"),
+	modernAdaptations: list("modern_adaptations"),
+	currentEffectiveness: oneOf("current_effectiveness", [
+		"failing",
+		"struggling",
+		"stable",
+		"thriving",
+		"dominant",
+	] as const),
+	institutionalChallenges: list("institutional_challenges"),
+	culturalEvolution: list("cultural_evolution"),
+
 	scope: oneOf("scope", conceptScopes),
 	status: oneOf("status", conceptStatuses).default("active"),
 
@@ -128,65 +156,7 @@ export const conceptRelationships = pgTable(
 	],
 )
 
-export const conceptRegions = pgTable(
-	"concept_regions",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		conceptId: cascadeFk("concept_id", worldConcepts.id),
-		regionId: cascadeFk("region_id", regions.id),
-		significance: oneOf("significance", regionalSignificance),
-
-		regionalManifestation: nullableString("regional_manifestation"),
-	},
-	(t) => [unique().on(t.conceptId, t.regionId)],
-)
-
-export const conceptFactions = pgTable(
-	"concept_factions",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		conceptId: cascadeFk("concept_id", worldConcepts.id),
-		factionId: cascadeFk("faction_id", factions.id),
-		relationshipType: oneOf("relationship_type", factionRelationshipTypes),
-
-		relationshipStrength: oneOf("relationship_strength", ["weak", "moderate", "strong"] as const),
-		relationshipDetails: nullableString("relationship_details"),
-	},
-	(t) => [unique().on(t.conceptId, t.factionId, t.relationshipType)],
-)
-
-export const conceptKeyFigures = pgTable(
-	"concept_key_figures",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		conceptId: cascadeFk("concept_id", worldConcepts.id),
-		npcId: cascadeFk("npc_id", npcs.id),
-
-		roleInConcept: string("role_in_concept"), // "Founder", "Key opponent", "Living embodiment", "Historical figure"
-		significance: oneOf("significance", ["minor", "supporting", "major", "central"] as const),
-
-		// Context of their involvement
-		involvementDetails: nullableString("involvement_details"),
-	},
-	(t) => [unique().on(t.conceptId, t.npcId)],
-)
-
-export const conceptWorldConnections = pgTable("concept_world_connections", {
+export const worldConceptLinks = pgTable("world_concept_links", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
@@ -194,75 +164,14 @@ export const conceptWorldConnections = pgTable("concept_world_connections", {
 	tags: list("tags"),
 
 	conceptId: cascadeFk("concept_id", worldConcepts.id),
-
+	regionId: nullableFk("region_id", regions.id),
+	factionId: nullableFk("faction_id", factions.id),
+	npcId: nullableFk("npc_id", npcs.id),
 	conflictId: nullableFk("conflict_id", majorConflicts.id),
 	questId: nullableFk("quest_id", quests.id),
-
-	connectionType: oneOf("connection_type", worldConnectionTypes),
-	connectionStrength: oneOf("connection_strength", ["weak", "moderate", "strong"] as const),
-	connectionDetails: nullableString("connection_details"),
-})
-
-export const culturalGroups = pgTable("cultural_groups", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
-	socialStructure: string("social_structure"),
-	coreValues: list("core_values"),
-	traditions: list("traditions"),
-	languages: list("languages"),
-	adaptationStrategies: list("adaptation_strategies"),
-
-	modernChallenges: list("modern_challenges"),
-	culturalEvolution: list("cultural_evolution"),
-})
-
-export const historicalPeriods = pgTable("historical_periods", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
-	definingCharacteristics: list("defining_characteristics"),
-	majorEvents: list("major_events"),
-	lastingInstitutions: list("lasting_institutions"),
-	conflictingNarratives: list("conflicting_narratives"),
-	historicalGrievances: list("historical_grievances"),
-
-	endingCauses: list("ending_causes"),
-	historicalLessons: list("historical_lessons"),
-})
-
-export const socialInstitutions = pgTable("social_institutions", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	conceptId: cascadeFk("concept_id", worldConcepts.id).unique(),
-
-	purpose: string("purpose"),
-	structure: string("structure"),
-	membership: list("membership"),
-	rules: list("rules"),
-	traditions: list("traditions"),
-	modernAdaptations: list("modern_adaptations"),
-
-	currentEffectiveness: oneOf("current_effectiveness", [
-		"failing",
-		"struggling",
-		"stable",
-		"thriving",
-		"dominant",
-	] as const),
-	institutionalChallenges: list("institutional_challenges"),
+	linkRoleOrTypeText: string("link_role_or_type_text"),
+	linkStrengthText: string("link_strength_text"),
+	linkDetailsText: string("link_details_text"),
 })
 
 export const enums = {

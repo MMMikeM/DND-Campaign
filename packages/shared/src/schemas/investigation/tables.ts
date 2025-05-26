@@ -1,5 +1,5 @@
 import { pgTable } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
@@ -13,7 +13,7 @@ import { discoverySubtlety, narrativeWeight } from "../shared-enums"
 const reliabilityLevels = ["verified", "likely", "uncertain", "suspect"] as const
 const investigationStatuses = ["active", "solved", "cold", "abandoned"] as const
 const targetTypes = ["person", "organization", "event", "mystery"] as const
-const purposeTypes = ["investigation_clue", "narrative_foreshadowing", "world_building"] as const
+const purposeTypes = ["investigation_clue", "narrative_foreshadowing", "world_building", "arc_foreshadowing"] as const
 const clueTypes = ["physical", "testimonial", "documentary", "circumstantial"] as const
 const informationClarity = ["direct_fact", "strong_implication", "ambiguous_hint", "misleading_if_unanalyzed"] as const
 const intendedPlayerFeelings = [
@@ -37,6 +37,9 @@ export const investigations = pgTable("investigations", {
 	questId: nullableFk("quest_id", quests.id),
 	findings: list("findings"),
 	remainingLeads: list("remaining_leads"),
+
+	// Primary lead NPC reference
+	primaryLeadNpcId: nullableFk("primary_lead_npc_id", npcs.id),
 })
 
 export const discoverableElements = pgTable("discoverable_elements", {
@@ -79,24 +82,10 @@ export const discoverableElements = pgTable("discoverable_elements", {
 	foreshadowsDestinationId: nullableFk("foreshadows_destination_id", narrativeDestinations.id),
 	relatedItemId: nullableFk("related_item_id", items.id),
 
+	// Investigation reference for 1:N relationship
+	investigationId: nullableFk("investigation_id", investigations.id),
+
 	embeddingId: nullableFk("embedding_id", embeddings.id),
-})
-
-// Fixed: Proper relationship tables
-export const investigationLeads = pgTable("investigation_leads", {
-	id: pk(),
-	investigationId: cascadeFk("investigation_id", investigations.id),
-	leadInvestigatorId: cascadeFk("lead_investigator_id", npcs.id),
-	role: oneOf("role", ["primary", "secondary", "consultant"]),
-})
-
-// Many-to-many: elements can belong to multiple investigations
-export const investigationElements = pgTable("investigation_elements", {
-	id: pk(),
-	investigationId: cascadeFk("investigation_id", investigations.id),
-	elementId: cascadeFk("element_id", discoverableElements.id),
-	discoveryStatus: oneOf("discovery_status", ["undiscovered", "discovered", "analyzed"]),
-	discoveryDate: nullableString("discovery_date"),
 })
 
 export const enums = {

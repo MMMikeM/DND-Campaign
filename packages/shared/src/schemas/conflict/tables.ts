@@ -3,7 +3,6 @@ import { pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
-import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 
 const conflictScopes = ["local", "regional", "global"] as const
@@ -59,21 +58,6 @@ export const conflictParticipants = pgTable("conflict_participants", {
 	publicStance: string("public_stance"),
 	secretStance: string("secret_stance"),
 	resources: list("resources"),
-})
-
-export const conflictProgression = pgTable("conflict_progression", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	conflictId: cascadeFk("conflict_id", majorConflicts.id),
-	questId: cascadeFk("quest_id", quests.id),
-
-	impact: oneOf("impact", questImpacts).default("no_change"),
-
-	notes: list("notes"),
 })
 
 export const enums = {

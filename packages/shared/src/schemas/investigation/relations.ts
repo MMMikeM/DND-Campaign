@@ -7,7 +7,7 @@ import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { discoverableElements, investigationElements, investigationLeads, investigations } from "./tables"
+import { discoverableElements, investigations } from "./tables"
 
 export const discoverableElementsRelations = relations(discoverableElements, ({ many, one }) => ({
 	stage: one(questStages, {
@@ -35,8 +35,10 @@ export const discoverableElementsRelations = relations(discoverableElements, ({ 
 		references: [factions.id],
 		relationName: "factionDiscoverableElements",
 	}),
-	investigationElements: many(investigationElements, {
-		relationName: "elementInvestigations",
+	investigation: one(investigations, {
+		fields: [discoverableElements.investigationId],
+		references: [investigations.id],
+		relationName: "investigationDiscoverableElements",
 	}),
 
 	foreshadowsQuest: one(quests, {
@@ -65,42 +67,17 @@ export const discoverableElementsRelations = relations(discoverableElements, ({ 
 	}),
 }))
 
-export const investigationElementsRelations = relations(investigationElements, ({ one }) => ({
-	investigation: one(investigations, {
-		fields: [investigationElements.investigationId],
-		references: [investigations.id],
-		relationName: "investigationJoinTableEntries",
-	}),
-	element: one(discoverableElements, {
-		fields: [investigationElements.elementId],
-		references: [discoverableElements.id],
-		relationName: "elementInvestigations",
-	}),
-}))
-
 export const investigationsRelations = relations(investigations, ({ one, many }) => ({
 	quest: one(quests, {
 		fields: [investigations.questId],
 		references: [quests.id],
 		relationName: "questInvestigations",
 	}),
-	investigationJoinElements: many(investigationElements, {
-		relationName: "investigationJoinTableEntries",
+	discoverableElements: many(discoverableElements, {
+		relationName: "investigationDiscoverableElements",
 	}),
-
-	leads: many(investigationLeads, {
-		relationName: "investigationLeadsViaJoinTable",
-	}),
-}))
-
-export const investigationLeadsRelations = relations(investigationLeads, ({ one }) => ({
-	investigation: one(investigations, {
-		fields: [investigationLeads.investigationId],
-		references: [investigations.id],
-		relationName: "investigationLeadsViaJoinTable",
-	}),
-	leadInvestigator: one(npcs, {
-		fields: [investigationLeads.leadInvestigatorId],
+	primaryLeadNpc: one(npcs, {
+		fields: [investigations.primaryLeadNpcId],
 		references: [npcs.id],
 		relationName: "npcInvestigationLeads",
 	}),

@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { getTextForEmbedding } from "../lib/embeddings"
 import type { majorConflicts } from "../schemas/conflict/tables"
-import type { narrativeEvents, worldStateChanges } from "../schemas/events/tables"
+import type { consequences, narrativeEvents } from "../schemas/events/tables"
 import type { factionAgendas, factionCulture, factions } from "../schemas/factions/tables"
 import type { discoverableElements, investigations } from "../schemas/investigation/tables"
 import type { items } from "../schemas/items/tables"
@@ -30,7 +30,7 @@ export type EmbeddedEntityName =
 	| "sites"
 	| "siteSecrets"
 	| "worldConcepts"
-	| "worldStateChanges"
+	| "consequences"
 	| "investigations"
 	| "stageDecisions"
 	| "characterRelationships"
@@ -109,34 +109,32 @@ const embeddingTextForItem = (item: typeof items.$inferSelect) =>
 
 const embeddingTextForDiscoverableElement = (element: typeof discoverableElements.$inferSelect) =>
 	getTextForEmbedding(element, [
-		"name",
-		"purposeType",
-		"discoveryMethod",
-		"description",
-		"revealsInformation",
-		"foreshadowsElement",
-		"subtlety",
-		"narrativeWeight",
 		"clueType",
-		"reliability",
-		"playerNotes",
-		"gmNotes",
 		"creativePrompts",
+		"description",
+		"discoveryMethod",
+		"gmNotes",
+		"name",
+		"narrativeWeight",
+		"purposeType",
+		"reliability",
+		"revealsInformation",
+		"subtlety",
 	])
 
 const embeddingTextForMajorConflict = (conflict: typeof majorConflicts.$inferSelect) =>
 	getTextForEmbedding(conflict, [
-		"name",
-		"scope",
-		"nature",
-		"status",
 		"cause",
-		"description",
-		"stakes",
-		"moralDilemma",
-		"possibleOutcomes",
-		"hiddenTruths",
 		"creativePrompts",
+		"description",
+		"hiddenTruths",
+		"moralDilemma",
+		"name",
+		"nature",
+		"possibleOutcomes",
+		"scope",
+		"stakes",
+		"status",
 	])
 
 const embeddingTextForNarrativeEvent = (event: typeof narrativeEvents.$inferSelect) =>
@@ -230,14 +228,15 @@ const embeddingTextForSiteSecret = (secret: typeof siteSecrets.$inferSelect) =>
 		"consequences",
 	])
 
-const embeddingTextForWorldStateChange = (change: typeof worldStateChanges.$inferSelect) =>
+const embeddingTextForConsequence = (change: typeof consequences.$inferSelect) =>
 	getTextForEmbedding(change, [
 		"name",
-		"changeType",
+		"consequenceType",
 		"severity",
 		"visibility",
 		"timeframe",
 		"sourceType",
+		"playerImpactFeel",
 		"description",
 		"gmNotes",
 		"creativePrompts",
@@ -352,29 +351,12 @@ export const embeddingTextForWorldConcept = (concept: typeof worldConcepts.$infe
 		"startYear",
 		"endYear",
 		"scope",
-		"primaryRegions",
 		"summary",
-		"details",
+
 		"modernRelevance",
-		"socialStructure",
-		"coreValues",
-		"traditions",
-		"languages",
-		"definingCharacteristics",
-		"majorEvents",
-		"keyFigures",
-		"lastingInstitutions",
-		"conflictingNarratives",
-		"relatedFactions",
-		"representativeFactions",
-		"allies",
-		"rivals",
-		"historicalGrievances",
-		"causedBy",
-		"ledTo",
+
 		"questHooks",
 		"currentChallenges",
-		"adaptationStrategies",
 		"modernConsequences",
 		"creativePrompts",
 	])
@@ -385,7 +367,6 @@ const embeddingTextForInvestigation = (investigation: typeof investigations.$inf
 		"status",
 		"targetType",
 		"description",
-		"objectives",
 		"findings",
 		"remainingLeads",
 		"creativePrompts",
@@ -408,7 +389,6 @@ const embeddingTextForStageDecision = (decision: typeof stageDecisions.$inferSel
 
 const embeddingTextForCharacterRelationship = (rel: typeof characterRelationships.$inferSelect) =>
 	getTextForEmbedding(rel, [
-		"type",
 		"strength",
 		"history",
 		"description",
@@ -436,7 +416,7 @@ export const embeddingTextGenerators = {
 	sites: embeddingTextForSite,
 	siteSecrets: embeddingTextForSiteSecret,
 	worldConcepts: embeddingTextForWorldConcept,
-	worldStateChanges: embeddingTextForWorldStateChange,
+	consequences: embeddingTextForConsequence,
 	investigations: embeddingTextForInvestigation,
 	stageDecisions: embeddingTextForStageDecision,
 	characterRelationships: embeddingTextForCharacterRelationship,

@@ -1,14 +1,19 @@
-import { customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
+import { type AnyPgColumn, customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
 
 export const list = (description: string) => text(description).array().notNull()
 
-export const nullableFk = (description: string, id: PgColumn) =>
-	integer(description).references(() => id, { onDelete: "set null" })
+export const nullableFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
+	const refThunk =
+		typeof referencedColumnOrThunk === "function" ? referencedColumnOrThunk : () => referencedColumnOrThunk
 
-export const cascadeFk = (description: string, id: PgColumn) =>
-	integer(description)
-		.references(() => id, { onDelete: "cascade" })
-		.notNull()
+	return integer(description).references(refThunk, { onDelete: "set null" })
+}
+
+export const cascadeFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
+	const refThunk =
+		typeof referencedColumnOrThunk === "function" ? referencedColumnOrThunk : () => referencedColumnOrThunk
+	return integer(description).references(refThunk, { onDelete: "cascade" }).notNull()
+}
 
 export const string = (description: string) => text(description).notNull()
 
