@@ -1,5 +1,6 @@
-import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { sql } from "drizzle-orm"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { alignments, relationshipStrengths, wealthLevels } from "../shared-enums"
@@ -26,49 +27,8 @@ const factionTypes = [
 
 const transparencyLevels = ["transparent", "secretive", "deceptive"] as const
 
-export const factions = pgTable("factions", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	name: string("name").unique(),
-	alignment: oneOf("alignment", alignments),
-	size: oneOf("size", factionSizes),
-	wealth: oneOf("wealth", wealthLevels),
-	reach: oneOf("reach", reachLevels),
-	type: oneOf("type", factionTypes),
-	publicGoal: string("public_goal"),
-	publicPerception: string("public_perception"),
-	secretGoal: nullableString("secret_goal"),
-
-	transparencyLevel: oneOf("transparency_level", transparencyLevels),
-
-	perceivedAlignment: nullableString("perceived_alignment"),
-
-	values: list("values"),
-	history: list("history"),
-	notes: list("notes"),
-	resources: list("resources"),
-	recruitment: list("recruitment").notNull(),
-
-	// Merged from factionCulture
-	symbols: list("symbols"),
-	rituals: list("rituals"),
-	taboos: list("taboos"),
-	aesthetics: list("aesthetics"),
-	jargon: list("jargon"),
-	recognitionSigns: list("recognition_signs"),
-
-	// Primary headquarters reference
-	primaryHqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
-})
-
-export const factionDiplomacy = pgTable(
-	"faction_diplomacy",
+export const factions = pgTable(
+	"factions",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -76,12 +36,42 @@ export const factionDiplomacy = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		factionId: cascadeFk("faction_id", factions.id),
-		otherFactionId: cascadeFk("other_faction_id", factions.id),
-		strength: oneOf("strength", relationshipStrengths),
-		diplomaticStatus: oneOf("diplomatic_status", diplomaticStatuses),
+		name: string("name").unique(),
+		publicAlignment: oneOf("public_alignment", alignments),
+		secretAlignment: nullableOneOf("secret_alignment", alignments),
+		size: oneOf("size", factionSizes),
+		wealth: oneOf("wealth", wealthLevels),
+		reach: oneOf("reach", reachLevels),
+		type: manyOf("type", factionTypes),
+		publicGoal: string("public_goal"),
+		secretGoal: nullableString("secret_goal"),
+
+		publicPerception: string("public_perception"),
+		transparencyLevel: oneOf("transparency_level", transparencyLevels),
+
+		values: list("values"),
+		history: list("history"),
+		notes: list("notes"),
+
+		symbols: list("symbols"),
+		rituals: list("rituals"),
+		taboos: list("taboos"),
+		aesthetics: list("aesthetics"),
+		jargon: list("jargon"),
+		recognitionSigns: list("recognition_signs"),
+
+		primaryHqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
+
+		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
-	(t) => [unique().on(t.factionId, t.otherFactionId)],
+	(t) => [
+		check(
+			"transparency_level",
+			// if transparent, secret goal and secret alignment must be null
+			sql`(${t.transparencyLevel} = 'transparent' AND ${t.secretAlignment} IS NULL AND ${t.secretGoal} IS NULL) 
+			 OR (${t.transparencyLevel} = 'secretive' AND ${t.secretAlignment} IS NOT NULL AND ${t.secretGoal} IS NOT NULL)`,
+		),
+	],
 )
 
 export const factionAgendas = pgTable(
@@ -101,12 +91,7 @@ export const factionAgendas = pgTable(
 		ultimateAim: string("ultimate_aim"),
 		moralAmbiguity: string("moral_ambiguity"),
 
-		hiddenCosts: list("hidden_costs"),
-		keyOpponents: list("key_opponents"),
-		internalConflicts: list("internal_conflicts"),
 		approach: list("approach"),
-		publicImage: list("public_image"),
-		personalStakes: list("personal_stakes"),
 		storyHooks: list("story_hooks"),
 
 		embeddingId: nullableFk("embedding_id", embeddings.id),
@@ -114,23 +99,51 @@ export const factionAgendas = pgTable(
 	(t) => [unique().on(t.factionId, t.name)],
 )
 
-export const factionInfluence = pgTable("faction_influence", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const factionDiplomacy = pgTable(
+	"faction_diplomacy",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	factionId: cascadeFk("faction_id", factions.id),
-	regionId: nullableFk("region_id", () => regions.id),
-	areaId: nullableFk("area_id", () => areas.id),
-	siteId: nullableFk("site_id", sites.id),
-	influenceLevel: oneOf("influence_level", influenceLevels),
+		factionId: cascadeFk("faction_id", factions.id),
+		otherFactionId: cascadeFk("other_faction_id", factions.id),
+		strength: oneOf("strength", relationshipStrengths),
+		diplomaticStatus: oneOf("diplomatic_status", diplomaticStatuses),
+	},
+	(t) => [unique().on(t.factionId, t.otherFactionId)],
+)
 
-	presenceTypes: list("presence_types"),
-	presenceDetails: list("presence_details"),
-	priorities: list("priorities"),
-})
+export const factionInfluence = pgTable(
+	"faction_influence",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		factionId: cascadeFk("faction_id", factions.id),
+		regionId: nullableFk("region_id", () => regions.id),
+		areaId: nullableFk("area_id", () => areas.id),
+		siteId: nullableFk("site_id", sites.id),
+		influenceLevel: oneOf("influence_level", influenceLevels),
+
+		presenceTypes: list("presence_types"),
+		presenceDetails: list("presence_details"),
+		priorities: list("priorities"),
+	},
+	(t) => [
+		check(
+			"region_or_area_or_site",
+			sql`(${t.regionId} IS NOT NULL AND ${t.areaId} IS NULL AND ${t.siteId} IS NULL) 
+			OR  (${t.regionId} IS NULL AND ${t.areaId} IS NOT NULL AND ${t.siteId} IS NULL) 
+			OR  (${t.regionId} IS NULL AND ${t.areaId} IS NULL AND ${t.siteId} IS NOT NULL)`,
+		),
+	],
+)
 
 export const enums = {
 	alignments,

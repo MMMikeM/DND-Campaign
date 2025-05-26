@@ -38,34 +38,8 @@ const conceptRelationshipTypes = [
 	"undermines",
 ] as const
 
-const worldConnectionTypes = [
-	"represents",
-	"originates_from",
-	"influences",
-	"conflicts_with",
-	"explores",
-	"embodies",
-	"threatens",
-] as const
-
-// Regional significance levels
-const regionalSignificance = [
-	"primary",
-	"secondary",
-	"historical_origin",
-	"significant_influence",
-	"peripheral",
-] as const
-
-const factionRelationshipTypes = [
-	"representative_of",
-	"influenced_by",
-	"opposed_by",
-	"founded_by",
-	"threatens",
-	"supports",
-	"related_to",
-] as const
+// Suggested enum for link strength
+const conceptLinkStrengths = ["tenuous", "moderate", "strong", "defining"] as const
 
 export const worldConcepts = pgTable("world_concepts", {
 	id: pk(),
@@ -87,8 +61,6 @@ export const worldConcepts = pgTable("world_concepts", {
 	hiddenTruthsOrDepths: nullableString("hidden_truths_or_depths"),
 
 	additionalDetails: list("additional_details"),
-
-	// Consolidated fields from specialized concept tables
 	socialStructure: nullableString("social_structure"),
 	coreValues: list("core_values"),
 	traditions: list("traditions"),
@@ -147,7 +119,6 @@ export const conceptRelationships = pgTable(
 
 		relationshipDetails: nullableString("relationship_details"),
 		strength: oneOf("strength", ["weak", "moderate", "strong"] as const),
-
 		isBidirectional: boolean("is_bidirectional").default(false),
 	},
 	(t) => [
@@ -156,23 +127,40 @@ export const conceptRelationships = pgTable(
 	],
 )
 
-export const worldConceptLinks = pgTable("world_concept_links", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const worldConceptLinks = pgTable(
+	"world_concept_links",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	conceptId: cascadeFk("concept_id", worldConcepts.id),
-	regionId: nullableFk("region_id", regions.id),
-	factionId: nullableFk("faction_id", factions.id),
-	npcId: nullableFk("npc_id", npcs.id),
-	conflictId: nullableFk("conflict_id", majorConflicts.id),
-	questId: nullableFk("quest_id", quests.id),
-	linkRoleOrTypeText: string("link_role_or_type_text"),
-	linkStrengthText: string("link_strength_text"),
-	linkDetailsText: string("link_details_text"),
-})
+		conceptId: cascadeFk("concept_id", worldConcepts.id),
+
+		regionId: nullableFk("region_id", regions.id),
+		factionId: nullableFk("faction_id", factions.id),
+		npcId: nullableFk("npc_id", npcs.id),
+		conflictId: nullableFk("conflict_id", majorConflicts.id),
+		questId: nullableFk("quest_id", quests.id),
+
+		linkRoleOrTypeText: string("link_role_or_type_text"),
+		linkStrength: oneOf("link_strength", conceptLinkStrengths),
+		linkDetailsText: string("link_details_text"),
+	},
+	(t) => [
+		check(
+			"chk_world_concept_link_target",
+			sql`
+			${t.regionId} IS NOT NULL OR
+			${t.factionId} IS NOT NULL OR
+			${t.npcId} IS NOT NULL OR
+			${t.conflictId} IS NOT NULL OR
+			${t.questId} IS NOT NULL
+	`,
+		),
+	],
+)
 
 export const enums = {
 	conceptTypes,
@@ -181,7 +169,5 @@ export const enums = {
 	moralClarity,
 	conceptStatuses,
 	conceptRelationshipTypes,
-	worldConnectionTypes,
-	regionalSignificance,
-	factionRelationshipTypes,
+	conceptLinkStrengths, // Added new enum to exports
 }
