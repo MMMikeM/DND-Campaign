@@ -33,3 +33,5 @@ export const discoverySubtlety = ["obvious", "moderate", "subtle", "hidden"] as 
 export const narrativeWeight = ["minor", "supporting", "major", "crucial"] as const
 
 export const trustLevels = ["none", "low", "medium", "high"] as const
+
+export const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const

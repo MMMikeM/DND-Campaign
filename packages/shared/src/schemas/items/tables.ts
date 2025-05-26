@@ -96,7 +96,7 @@ export const itemRelationships = pgTable(
 	(t) => [unique().on(t.sourceItemId, t.relatedItemId, t.relationshipType)],
 )
 
-export const itemHistory = pgTable("item_history", {
+export const itemNotableHistory = pgTable("item_notable_history", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
@@ -104,30 +104,12 @@ export const itemHistory = pgTable("item_history", {
 	tags: list("tags"),
 
 	itemId: cascadeFk("item_id", items.id),
-	historicalEvent: string("historical_event"),
+	eventDescription: string("event_description"),
 	timeframe: string("timeframe"),
-	significance: string("significance"),
-
-	eventLocationId: nullableFk("event_location_id", sites.id),
+	keyNpcId: nullableFk("key_npc_id", npcs.id),
+	npcRoleInEvent: string("npc_role_in_event"),
+	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
 })
-
-export const itemHistoryParticipants = pgTable(
-	"item_history_participants",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		historyEventId: cascadeFk("history_event_id", itemHistory.id),
-		npcId: cascadeFk("npc_id", npcs.id),
-		role: oneOf("role", historyRoles),
-
-		involvementDetails: nullableString("involvement_details"),
-	},
-	(t) => [unique().on(t.historyEventId, t.npcId, t.role)],
-)
 
 export const enums = {
 	itemTypes,

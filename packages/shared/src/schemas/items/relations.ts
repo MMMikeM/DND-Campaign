@@ -5,7 +5,7 @@ import { discoverableElements } from "../investigation/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { itemHistory, itemHistoryParticipants, itemRelationships, items } from "./tables"
+import { itemRelationships, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ one, many }) => ({
 	currentLocation: one(sites, {
@@ -33,7 +33,6 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
 		references: [questStages.id],
 		relationName: "stageItems",
 	}),
-	history: many(itemHistory, { relationName: "itemHistory" }),
 	discoverableElements: many(discoverableElements, { relationName: "itemDiscoverableElements" }),
 
 	sourceOfRelationships: many(itemRelationships, {
@@ -49,15 +48,6 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
 	}),
 }))
 
-export const itemHistoryRelations = relations(itemHistory, ({ one, many }) => ({
-	item: one(items, {
-		fields: [itemHistory.itemId],
-		references: [items.id],
-		relationName: "itemHistory",
-	}),
-	participants: many(itemHistoryParticipants, { relationName: "historyParticipants" }),
-}))
-
 export const itemRelationshipsRelations = relations(itemRelationships, ({ one }) => ({
 	sourceItem: one(items, {
 		fields: [itemRelationships.sourceItemId],
@@ -68,18 +58,5 @@ export const itemRelationshipsRelations = relations(itemRelationships, ({ one })
 		fields: [itemRelationships.relatedItemId],
 		references: [items.id],
 		relationName: "relatedItemInRelationships",
-	}),
-}))
-
-export const itemHistoryParticipantsRelations = relations(itemHistoryParticipants, ({ one }) => ({
-	history: one(itemHistory, {
-		fields: [itemHistoryParticipants.historyEventId],
-		references: [itemHistory.id],
-		relationName: "historyParticipants",
-	}),
-	npc: one(npcs, {
-		fields: [itemHistoryParticipants.npcId],
-		references: [npcs.id],
-		relationName: "npcItemHistory",
 	}),
 }))

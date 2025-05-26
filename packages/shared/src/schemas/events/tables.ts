@@ -47,7 +47,14 @@ const consequenceTypes = [
 
 const consequenceVisibility = ["obvious", "subtle", "hidden"] as const
 const consequenceTimeframe = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
-const consequenceSources = ["decision", "quest_completion", "world_event", "player_choice", "time_passage"] as const
+const consequenceSources = [
+	"decision",
+	"quest_completion",
+	"world_event",
+	"player_choice",
+	"time_passage",
+	"quest_completion_affecting_conflict",
+] as const
 const playerImpactFeels = [
 	"empowering_reward",
 	"earned_progress",
@@ -114,6 +121,10 @@ export const consequences = pgTable("consequences", {
 	affectedSiteId: nullableFk("affected_site_id", sites.id),
 	affectedNpcId: nullableFk("affected_npc_id", npcs.id),
 	affectedDestinationId: nullableFk("affected_destination_id", narrativeDestinations.id),
+
+	// Conflict progression fields
+	affectedConflictId: nullableFk("affected_conflict_id", majorConflicts.id),
+	conflictImpactDescription: nullableString("conflict_impact_description"),
 
 	// Future implications
 	futureQuestId: nullableFk("future_quest_id", quests.id),

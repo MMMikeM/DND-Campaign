@@ -1,6 +1,6 @@
 // quests/tables.ts
-import { pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { type AnyPgColumn, integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
@@ -74,6 +74,11 @@ export const quests = pgTable("quests", {
 	rewards: list("rewards"),
 	themes: list("themes"),
 	inspirations: list("inspirations"),
+
+	// Quest prerequisites
+	prerequisiteQuestId: integer("parent_id").references((): AnyPgColumn => quests.id),
+	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
+
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
@@ -92,55 +97,6 @@ export const questRelationships = pgTable(
 		relationshipType: oneOf("relationship_type", relationshipTypes),
 	},
 	(t) => [unique().on(t.questId, t.relatedQuestId)],
-)
-
-export const questUnlockConditions = pgTable("quest_unlock_conditions", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	questId: cascadeFk("quest_id", quests.id),
-	conditionType: oneOf("condition_type", unlockConditionTypes),
-	conditionDetails: string("condition_details"),
-	importance: oneOf("importance", unlockImportanceLevels),
-})
-
-export const questNpcInvolvement = pgTable(
-	"quest_npc_involvement",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		questId: cascadeFk("quest_id", quests.id),
-		npcId: cascadeFk("npc_id", npcs.id),
-		role: oneOf("role", npcRoles),
-		importance: oneOf("importance", participantImportanceLevels),
-		dramaticMoments: list("dramatic_moments"),
-		hiddenAspects: list("hidden_aspects"),
-	},
-	(t) => [unique().on(t.questId, t.npcId, t.role)],
-)
-
-export const questFactionInvolvement = pgTable(
-	"quest_faction_involvement",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		questId: cascadeFk("quest_id", quests.id),
-		factionId: cascadeFk("faction_id", factions.id),
-		role: oneOf("role", factionRoles),
-		involvementReasons: list("involvement_reasons"),
-	},
-	(t) => [unique().on(t.questId, t.factionId)],
 )
 
 export const questHooks = pgTable(
@@ -177,6 +133,21 @@ export const questHooks = pgTable(
 	// Fixed: More flexible unique constraint allows multiple hooks from same faction/site
 	(t) => [unique().on(t.questId, t.source, t.hookType)],
 )
+
+export const questParticipantInvolvement = pgTable("quest_participant_involvement", {
+	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+
+	questId: cascadeFk("quest_id", quests.id),
+	npcId: nullableFk("npc_id", npcs.id),
+	factionId: nullableFk("faction_id", factions.id),
+	roleInQuest: string("role_in_quest"),
+	importanceInQuest: string("importance_in_quest"),
+	involvementDetails: list("involvement_details"),
+})
 
 export const enums = {
 	...stageEnums,

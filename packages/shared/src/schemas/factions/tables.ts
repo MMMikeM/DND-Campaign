@@ -53,24 +53,19 @@ export const factions = pgTable("factions", {
 	resources: list("resources"),
 	recruitment: list("recruitment").notNull(),
 
+	// Merged from factionCulture
+	symbols: list("symbols"),
+	rituals: list("rituals"),
+	taboos: list("taboos"),
+	aesthetics: list("aesthetics"),
+	jargon: list("jargon"),
+	recognitionSigns: list("recognition_signs"),
+
+	// Primary headquarters reference
+	primaryHqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
+
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
-
-export const factionHeadquarters = pgTable(
-	"faction_headquarters",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		factionId: cascadeFk("faction_id", factions.id),
-		siteId: cascadeFk("site_id", sites.id),
-	},
-
-	(t) => [unique().on(t.factionId, t.siteId)],
-)
 
 export const factionDiplomacy = pgTable(
 	"faction_diplomacy",
@@ -119,86 +114,23 @@ export const factionAgendas = pgTable(
 	(t) => [unique().on(t.factionId, t.name)],
 )
 
-export const factionCulture = pgTable(
-	"faction_culture",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
+export const factionInfluence = pgTable("faction_influence", {
+	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
 
-		factionId: cascadeFk("faction_id", factions.id),
-		symbols: list("symbols"),
-		rituals: list("rituals"),
-		taboos: list("taboos"),
-		aesthetics: list("aesthetics"),
-		jargon: list("jargon"),
-		recognitionSigns: list("recognition_signs"),
-		embeddingId: nullableFk("embedding_id", embeddings.id),
-	},
-	(t) => [unique().on(t.factionId)],
-)
+	factionId: cascadeFk("faction_id", factions.id),
+	regionId: nullableFk("region_id", () => regions.id),
+	areaId: nullableFk("area_id", () => areas.id),
+	siteId: nullableFk("site_id", sites.id),
+	influenceLevel: oneOf("influence_level", influenceLevels),
 
-export const factionRegionalControl = pgTable(
-	"faction_regional_control",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		factionId: cascadeFk("faction_id", factions.id),
-		regionId: cascadeFk("region_id", regions.id),
-		influenceLevel: oneOf("influence_level", influenceLevels),
-
-		presenceTypes: list("presence_types"),
-		presenceDetails: list("presence_details"),
-		priorities: list("priorities"),
-	},
-	(t) => [unique().on(t.factionId, t.regionId)],
-)
-
-export const factionAreaControl = pgTable(
-	"faction_area_control",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		factionId: cascadeFk("faction_id", factions.id),
-		areaId: cascadeFk("area_id", areas.id),
-		influenceLevel: oneOf("influence_level", influenceLevels),
-
-		presenceTypes: list("presence_types"),
-		presenceDetails: list("presence_details"),
-		priorities: list("priorities"),
-	},
-	(t) => [unique().on(t.factionId, t.areaId)],
-)
-
-export const factionSiteControl = pgTable(
-	"faction_site_control",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		factionId: cascadeFk("faction_id", factions.id),
-		siteId: cascadeFk("site_id", sites.id),
-		controlLevel: oneOf("control_level", influenceLevels),
-
-		presenceTypes: list("presence_types"),
-		presenceDetails: list("presence_details"),
-		priorities: list("priorities"),
-	},
-	(t) => [unique().on(t.factionId, t.siteId)],
-)
+	presenceTypes: list("presence_types"),
+	presenceDetails: list("presence_details"),
+	priorities: list("priorities"),
+})
 
 export const enums = {
 	alignments,
