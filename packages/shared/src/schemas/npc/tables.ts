@@ -3,7 +3,6 @@ import { boolean, check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
-import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { alignments, relationshipStrengths, trustLevels, wealthLevels } from "../shared-enums"
 
@@ -97,8 +96,7 @@ export const npcs = pgTable("npcs", {
 	quirk: string("quirk"),
 	socialStatus: string("social_status"),
 
-	currentStatus: oneOf("current_status", npcStatuses).default("alive"),
-	availability: oneOf("availability", availabilityLevels).default("often"),
+	availability: oneOf("availability", availabilityLevels),
 	currentLocationId: nullableFk("current_location_id", sites.id),
 
 	currentGoals: list("current_goals"),
@@ -118,9 +116,9 @@ export const npcs = pgTable("npcs", {
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
 
-	baseCapabilityScore: oneOf("base_capability_score", cprScores),
-	baseProactivityScore: oneOf("base_proactivity_score", cprScores),
-	baseRelatabilityScore: oneOf("base_relatability_score", cprScores),
+	capability: oneOf("capability", cprScores),
+	proactivity: oneOf("proactivity", cprScores),
+	relatability: oneOf("relatability", cprScores),
 
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
@@ -164,8 +162,8 @@ export const npcFactions = pgTable(
 	(t) => [unique().on(t.npcId, t.factionId)],
 )
 
-export const characterRelationships = pgTable(
-	"character_relationships",
+export const npcRelationships = pgTable(
+	"npc_relationships",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -190,20 +188,6 @@ export const characterRelationships = pgTable(
 		check("no_self_relationship", sql`${t.npcId} != ${t.relatedNpcId}`),
 	],
 )
-
-export const npcNotableDevelopment = pgTable("npc_notable_development", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
-
-	npcId: cascadeFk("npc_id", npcs.id),
-	developmentEventDescription: string("development_event_description"),
-	changedAspectsSummaryText: string("changed_aspects_summary_text"),
-	triggeringContextText: string("triggering_context_text"),
-	relatedQuestId: nullableFk("related_quest_id", quests.id),
-})
 
 export const enums = {
 	adaptabilityLevels,

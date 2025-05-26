@@ -51,8 +51,7 @@ export const questStages = pgTable("quest_stages", {
 
 	questId: cascadeFk("quest_id", quests.id),
 	siteId: nullableFk("site_id", sites.id),
-	// Renamed for clarity about branching vs linear progression
-	stageOrder: integer("stage_order").notNull(), // Typical sequence, not strict linear progression
+	stageOrder: integer("stage_order").notNull(),
 	name: string("name").unique(),
 	dramatic_question: string("dramatic_question"),
 
@@ -65,7 +64,7 @@ export const questStages = pgTable("quest_stages", {
 	dramatic_moments: list("dramatic_moments"),
 	sensory_elements: list("sensory_elements"),
 
-	stageImportance: oneOf("stage_importance", stageImportanceLevels).default("standard"),
+	stageImportance: oneOf("stage_importance", stageImportanceLevels),
 
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
@@ -94,8 +93,7 @@ export const stageDecisions = pgTable(
 		potential_player_reactions: list("potential_player_reactions"),
 		options: list("options"),
 
-		// Try/Fail support
-		failure_leads_to_retry: boolean("failure_leads_to_retry").default(false),
+		failure_leads_to_retry: boolean("failure_leads_to_retry"),
 		failure_lesson_learned: string("failure_lesson_learned"),
 	},
 	(t) => [unique().on(t.questId, t.fromStageId, t.toStageId)],

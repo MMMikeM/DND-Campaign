@@ -1,5 +1,7 @@
 // events/tables.ts
-import { pgTable } from "drizzle-orm/pg-core"
+
+import { sql } from "drizzle-orm"
+import { check, pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
@@ -76,61 +78,68 @@ export const narrativeEvents = pgTable("narrative_events", {
 
 	intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
 
-	questStageId: nullableFk("quest_stage_id", questStages.id), // Where it happens
-	triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id), // If triggered by a choice
-	relatedQuestId: nullableFk("related_quest_id", quests.id), // If it impacts the whole quest
+	questStageId: nullableFk("quest_stage_id", questStages.id),
+	triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id),
+	relatedQuestId: nullableFk("related_quest_id", quests.id),
 
 	narrativePlacement: oneOf("narrative_placement", narrativePlacements),
 	impactSeverity: oneOf("impact_severity", impactSeverity),
 
-	complication_details: nullableString("complication_details"), // e.g., "Requires DC 15 Survival check"
-	escalation_details: nullableString("escalation_details"), // e.g., "Enemy numbers double," "Time limit halved"
-	twist_reveal_details: nullableString("twist_reveal_details"), // e.g., "NPC reveals true allegiance"
+	complication_details: nullableString("complication_details"),
+	escalation_details: nullableString("escalation_details"),
+	twist_reveal_details: nullableString("twist_reveal_details"),
 
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-export const consequences = pgTable("consequences", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const consequences = pgTable(
+	"consequences",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	name: string("name").unique(),
+		name: string("name").unique(),
 
-	// What type of consequence this is
-	consequenceType: oneOf("consequence_type", consequenceTypes),
-	severity: oneOf("severity", impactSeverity).default("moderate"),
-	visibility: oneOf("visibility", consequenceVisibility).default("obvious"),
-	timeframe: oneOf("timeframe", consequenceTimeframe).default("immediate"),
-	sourceType: oneOf("source_type", consequenceSources),
+		consequenceType: oneOf("consequence_type", consequenceTypes),
+		severity: oneOf("severity", impactSeverity),
+		visibility: oneOf("visibility", consequenceVisibility),
+		timeframe: oneOf("timeframe", consequenceTimeframe),
+		sourceType: oneOf("source_type", consequenceSources),
 
-	// Player experience
-	playerImpactFeel: oneOf("player_impact_feel", playerImpactFeels),
+		playerImpactFeel: oneOf("player_impact_feel", playerImpactFeels),
 
-	// What triggered this consequence
-	triggerDecisionId: nullableFk("trigger_decision_id", stageDecisions.id),
-	triggerQuestId: nullableFk("trigger_quest_id", quests.id),
-	triggerConflictId: nullableFk("trigger_conflict_id", majorConflicts.id),
+		// What triggered this consequence
+		triggerDecisionId: nullableFk("trigger_decision_id", stageDecisions.id),
+		triggerQuestId: nullableFk("trigger_quest_id", quests.id),
+		triggerConflictId: nullableFk("trigger_conflict_id", majorConflicts.id),
 
-	// What's affected by this consequence
-	affectedFactionId: nullableFk("affected_faction_id", factions.id),
-	affectedRegionId: nullableFk("affected_region_id", regions.id),
-	affectedAreaId: nullableFk("affected_area_id", areas.id),
-	affectedSiteId: nullableFk("affected_site_id", sites.id),
-	affectedNpcId: nullableFk("affected_npc_id", npcs.id),
-	affectedDestinationId: nullableFk("affected_destination_id", narrativeDestinations.id),
+		// What's affected by this consequence
+		affectedFactionId: nullableFk("affected_faction_id", factions.id),
+		affectedRegionId: nullableFk("affected_region_id", regions.id),
+		affectedAreaId: nullableFk("affected_area_id", areas.id),
+		affectedSiteId: nullableFk("affected_site_id", sites.id),
+		affectedNpcId: nullableFk("affected_npc_id", npcs.id),
+		affectedDestinationId: nullableFk("affected_destination_id", narrativeDestinations.id),
 
-	// Conflict progression fields
-	affectedConflictId: nullableFk("affected_conflict_id", majorConflicts.id),
-	conflictImpactDescription: nullableString("conflict_impact_description"),
+		// Conflict progression fields
+		affectedConflictId: nullableFk("affected_conflict_id", majorConflicts.id),
+		conflictImpactDescription: nullableString("conflict_impact_description"),
 
-	// Future implications
-	futureQuestId: nullableFk("future_quest_id", quests.id),
+		// Future implications
+		futureQuestId: nullableFk("future_quest_id", quests.id),
 
-	embeddingId: nullableFk("embedding_id", embeddings.id),
-})
+		embeddingId: nullableFk("embedding_id", embeddings.id),
+	},
+	(t) => [
+		check(
+			"npc_or_faction",
+			sql`(${t.affectedNpcId} IS NOT NULL AND ${t.affectedFactionId} IS NULL) OR (${t.affectedNpcId} IS NULL AND ${t.affectedFactionId} IS NOT NULL)`,
+		),
+	],
+)
 
 export const enums = {
 	eventTypes,

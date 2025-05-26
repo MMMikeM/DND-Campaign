@@ -1,10 +1,7 @@
 // items/tables.ts
 import { pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
-import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
-import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 
 const itemTypes = ["weapon", "armor", "tool", "treasure", "document", "key_item", "consumable"] as const
@@ -62,20 +59,9 @@ export const items = pgTable("items", {
 
 	significance: string("significance"),
 	loreSignificance: string("lore_significance"),
-	mechanicalEffects: list("mechanical_effects"),
 
-	creatorName: nullableString("creator_name"),
 	creationPeriod: nullableString("creation_period"),
 	placeOfOrigin: nullableString("place_of_origin"),
-
-	currentLocationId: nullableFk("current_location_id", sites.id),
-	ownerNpcId: nullableFk("owner_npc_id", npcs.id),
-	controllingFactionId: nullableFk("controlling_faction_id", factions.id),
-
-	questId: nullableFk("quest_id", quests.id),
-	stageId: nullableFk("stage_id", questStages.id),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const itemRelationships = pgTable(

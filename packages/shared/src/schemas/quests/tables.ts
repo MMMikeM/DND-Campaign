@@ -32,7 +32,6 @@ const unlockConditionTypes = [
 	"skill_threshold",
 	"quest_outcome",
 ] as const
-
 const pacingRoles = [
 	"tension_builder",
 	"release_valve",
@@ -40,7 +39,6 @@ const pacingRoles = [
 	"action_peak",
 	"character_development_focus",
 ] as const
-
 const playerExperienceGoals = [
 	"heroism_clarity",
 	"challenging_dilemma",
@@ -75,14 +73,12 @@ export const quests = pgTable("quests", {
 	themes: list("themes"),
 	inspirations: list("inspirations"),
 
-	// Quest prerequisites
 	prerequisiteQuestId: integer("parent_id").references((): AnyPgColumn => quests.id),
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
 
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-// Renamed for semantic clarity
 export const questRelationships = pgTable(
 	"quest_relationships",
 	{
@@ -109,28 +105,18 @@ export const questHooks = pgTable(
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", quests.id),
-
-		// Where the hook appears
 		siteId: nullableFk("site_id", sites.id),
 		factionId: nullableFk("faction_id", factions.id),
-
-		// Hook details
-		source: string("source"), // "tavern gossip", "notice board", etc.
+		source: string("source"),
 		hookType: oneOf("hook_type", hookTypes),
 		presentationStyle: oneOf("presentation_style", presentationStyles),
-
-		// Content
 		hookContent: list("hook_content"),
 		discoveryConditions: list("discovery_conditions"),
-
-		// NPC delivery (if applicable)
 		deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
-		// Clarified field name
 		npcRelationshipToParty: string("npc_relationship_to_party"),
 		trustRequired: oneOf("trust_required", trustLevels),
 		dialogueHint: string("dialogue_hint"),
 	},
-	// Fixed: More flexible unique constraint allows multiple hooks from same faction/site
 	(t) => [unique().on(t.questId, t.source, t.hookType)],
 )
 
@@ -145,7 +131,7 @@ export const questParticipantInvolvement = pgTable("quest_participant_involvemen
 	npcId: nullableFk("npc_id", npcs.id),
 	factionId: nullableFk("faction_id", factions.id),
 	roleInQuest: string("role_in_quest"),
-	importanceInQuest: string("importance_in_quest"),
+	importanceInQuest: oneOf("importance_in_quest", participantImportanceLevels),
 	involvementDetails: list("involvement_details"),
 })
 

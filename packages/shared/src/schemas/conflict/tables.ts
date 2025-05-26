@@ -1,8 +1,11 @@
 // conflict/tables.ts
-import { pgTable } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+
+import { sql } from "drizzle-orm"
+import { check, pgTable } from "drizzle-orm/pg-core"
+import { cascadeFk, list, manyOf, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
+import { npcs } from "../npc/tables"
 import { regions } from "../regions/tables"
 
 const conflictScopes = ["local", "regional", "global"] as const
@@ -27,7 +30,7 @@ export const majorConflicts = pgTable("major_conflicts", {
 	primaryRegionId: nullableFk("primary_region_id", regions.id),
 	name: string("name").unique(),
 	scope: oneOf("scope", conflictScopes),
-	nature: oneOf("nature", conflictNatures),
+	natures: manyOf("natures", conflictNatures),
 	status: oneOf("status", conflictStatuses).default("active"),
 
 	cause: string("cause"),
@@ -43,22 +46,31 @@ export const majorConflicts = pgTable("major_conflicts", {
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
-export const conflictParticipants = pgTable("conflict_participants", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const conflictParticipants = pgTable(
+	"conflict_participants",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	conflictId: cascadeFk("conflict_id", majorConflicts.id),
-	factionId: cascadeFk("faction_id", factions.id),
-	role: oneOf("role", factionRoles),
+		conflictId: cascadeFk("conflict_id", majorConflicts.id),
 
-	motivation: string("motivation"),
-	publicStance: string("public_stance"),
-	secretStance: string("secret_stance"),
-	resources: list("resources"),
-})
+		npcId: nullableFk("npc_id", npcs.id),
+		factionId: nullableFk("faction_id", factions.id),
+
+		motivation: string("motivation"),
+		publicStance: string("public_stance"),
+		secretStance: string("secret_stance"),
+	},
+	(t) => [
+		check(
+			"npc_or_faction",
+			sql`(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL) OR (${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)`,
+		),
+	],
+)
 
 export const enums = {
 	conflictClarity,
