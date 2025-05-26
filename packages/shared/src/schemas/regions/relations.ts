@@ -1,12 +1,19 @@
 // regions/relations.ts
 import { relations } from "drizzle-orm"
+import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
-import { worldStateChanges } from "../events/tables"
-import { factionHeadquarters, factions, factionTerritorialControl } from "../factions/tables"
+import { consequences } from "../events/tables"
+import {
+	factionAreaControl,
+	factionHeadquarters,
+	factionRegionalControl,
+	factionSiteControl,
+	factions,
+} from "../factions/tables"
 import { discoverableElements } from "../investigation/tables"
 import { items } from "../items/tables"
 import { npcSites } from "../npc/tables"
-import { questIntroductions, questStages, quests } from "../quests/tables"
+import { questHooks, questStages, quests } from "../quests/tables"
 import {
 	areas,
 	regionConnectionDetails,
@@ -24,8 +31,9 @@ export const regionsRelations = relations(regions, ({ many, one }) => ({
 
 	areas: many(areas, { relationName: "regionAreas" }),
 	quests: many(quests, { relationName: "regionQuests" }),
-	territorialControl: many(factionTerritorialControl, { relationName: "regionFactionInfluence" }),
-	worldChanges: many(worldStateChanges, { relationName: "worldChangesInRegion" }),
+	conflicts: many(majorConflicts, { relationName: "regionConflicts" }),
+	factionControl: many(factionRegionalControl, { relationName: "regionFactionInfluence" }),
+	consequences: many(consequences, { relationName: "consequencesInRegion" }),
 
 	embedding: one(embeddings, {
 		fields: [regions.embeddingId],
@@ -41,8 +49,8 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 	}),
 
 	sites: many(sites, { relationName: "areaSites" }),
-	territorialControl: many(factionTerritorialControl, { relationName: "areaFactionInfluence" }),
-	worldChanges: many(worldStateChanges, { relationName: "worldChangesInArea" }),
+	factionControl: many(factionAreaControl, { relationName: "areaFactionInfluence" }),
+	consequences: many(consequences, { relationName: "consequencesInArea" }),
 
 	embedding: one(embeddings, {
 		fields: [areas.embeddingId],
@@ -66,10 +74,10 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	items: many(items, { relationName: "siteItems" }),
 	discoverableElements: many(discoverableElements, { relationName: "siteDiscoverableElements" }),
 	questStages: many(questStages, { relationName: "siteQuestStages" }),
-	questIntroductions: many(questIntroductions, { relationName: "siteQuestIntroductions" }),
+	questHooks: many(questHooks, { relationName: "siteQuestHooks" }),
 	headquarters: many(factionHeadquarters, { relationName: "headquartersSite" }),
-	territorialControl: many(factionTerritorialControl, { relationName: "siteFactionInfluence" }),
-	worldChanges: many(worldStateChanges, { relationName: "worldChangesAtSite" }),
+	factionControl: many(factionSiteControl, { relationName: "siteFactionInfluence" }),
+	consequences: many(consequences, { relationName: "consequencesAtSite" }),
 
 	embedding: one(embeddings, {
 		fields: [sites.embeddingId],
@@ -77,7 +85,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	}),
 }))
 
-export const regionConnectionsRelations = relations(regionConnections, ({ one, many }) => ({
+export const regionConnectionsRelations = relations(regionConnections, ({ one }) => ({
 	sourceRegion: one(regions, {
 		fields: [regionConnections.regionId],
 		references: [regions.id],
@@ -89,7 +97,11 @@ export const regionConnectionsRelations = relations(regionConnections, ({ one, m
 		relationName: "targetRegion",
 	}),
 
-	details: many(regionConnectionDetails, { relationName: "connectionDetails" }),
+	details: one(regionConnectionDetails, {
+		fields: [regionConnections.id],
+		references: [regionConnectionDetails.connectionId],
+		relationName: "connectionDetails",
+	}),
 }))
 
 export const regionConnectionDetailsRelations = relations(regionConnectionDetails, ({ one }) => ({

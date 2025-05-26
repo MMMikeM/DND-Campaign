@@ -5,7 +5,7 @@ import { discoverableElements } from "../investigation/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { itemHistory, itemHistoryParticipants, items } from "./tables"
+import { itemHistory, itemHistoryParticipants, itemRelationships, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ one, many }) => ({
 	currentLocation: one(sites, {
@@ -35,6 +35,14 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
 	}),
 	history: many(itemHistory, { relationName: "itemHistory" }),
 	discoverableElements: many(discoverableElements, { relationName: "itemDiscoverableElements" }),
+
+	sourceOfRelationships: many(itemRelationships, {
+		relationName: "sourceItemInRelationships",
+	}),
+
+	targetInRelationships: many(itemRelationships, {
+		relationName: "relatedItemInRelationships",
+	}),
 	embedding: one(embeddings, {
 		fields: [items.embeddingId],
 		references: [embeddings.id],
@@ -50,9 +58,22 @@ export const itemHistoryRelations = relations(itemHistory, ({ one, many }) => ({
 	participants: many(itemHistoryParticipants, { relationName: "historyParticipants" }),
 }))
 
+export const itemRelationshipsRelations = relations(itemRelationships, ({ one }) => ({
+	sourceItem: one(items, {
+		fields: [itemRelationships.sourceItemId],
+		references: [items.id],
+		relationName: "sourceItemInRelationships",
+	}),
+	relatedItem: one(items, {
+		fields: [itemRelationships.relatedItemId],
+		references: [items.id],
+		relationName: "relatedItemInRelationships",
+	}),
+}))
+
 export const itemHistoryParticipantsRelations = relations(itemHistoryParticipants, ({ one }) => ({
 	history: one(itemHistory, {
-		fields: [itemHistoryParticipants.historyId],
+		fields: [itemHistoryParticipants.historyEventId],
 		references: [itemHistory.id],
 		relationName: "historyParticipants",
 	}),

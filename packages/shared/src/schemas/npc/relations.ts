@@ -3,9 +3,9 @@ import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { discoverableElements } from "../investigation/tables"
 import { itemHistoryParticipants, items } from "../items/tables"
-import { questNpcRoles } from "../quests/tables"
+import { questNpcInvolvement, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { characterRelationships, npcFactions, npcSites, npcs } from "./tables"
+import { characterRelationships, npcDevelopment, npcFactions, npcSites, npcs } from "./tables"
 
 export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	outgoingRelationships: many(characterRelationships, { relationName: "sourceNpc" }),
@@ -14,10 +14,29 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	relatedFactions: many(npcFactions, { relationName: "npcFactions" }),
 	relatedSites: many(npcSites, { relationName: "npcSites" }),
 
-	relatedQuests: many(questNpcRoles, { relationName: "npcQuests" }),
+	relatedQuests: many(questNpcInvolvement, { relationName: "npcQuests" }),
 	relatedItems: many(items, { relationName: "npcItems" }),
 	itemHistory: many(itemHistoryParticipants, { relationName: "npcItemHistory" }),
 	discoverableElements: many(discoverableElements, { relationName: "npcDiscoverableElements" }),
+
+	discoverableElementsAsSource: many(discoverableElements, {
+		relationName: "npcDiscoverableElements",
+	}),
+	discoverableElementsForeshadowingThisNpc: many(discoverableElements, {
+		relationName: "foreshadowsNpc",
+	}),
+
+	currentLocation: one(sites, {
+		fields: [npcs.currentLocationId],
+		references: [sites.id],
+		relationName: "npcsAtCurrentLocation",
+	}),
+	developmentEntries: many(npcDevelopment, {
+		relationName: "npcDevelopmentHistory",
+	}),
+	triggeredDevelopments: many(npcDevelopment, {
+		relationName: "npcTriggeredDevelopment",
+	}),
 
 	embedding: one(embeddings, {
 		fields: [npcs.embeddingId],
@@ -51,7 +70,7 @@ export const npcFactionsRelations = relations(npcFactions, ({ one }) => ({
 	}),
 }))
 
-export const npcSiteRelations = relations(npcSites, ({ one }) => ({
+export const npcSitesRelations = relations(npcSites, ({ one }) => ({
 	npc: one(npcs, {
 		fields: [npcSites.npcId],
 		references: [npcs.id],
@@ -61,5 +80,23 @@ export const npcSiteRelations = relations(npcSites, ({ one }) => ({
 		fields: [npcSites.siteId],
 		references: [sites.id],
 		relationName: "siteNpcs",
+	}),
+}))
+
+export const npcDevelopmentRelations = relations(npcDevelopment, ({ one }) => ({
+	npc: one(npcs, {
+		fields: [npcDevelopment.npcId],
+		references: [npcs.id],
+		relationName: "npcDevelopmentHistory", // Matches npcsRelations.developmentEntries
+	}),
+	quest: one(quests, {
+		fields: [npcDevelopment.questId],
+		references: [quests.id],
+		relationName: "questNpcDevelopments", // For backlink from quests
+	}),
+	triggeringNpc: one(npcs, {
+		fields: [npcDevelopment.triggeringNpcId],
+		references: [npcs.id],
+		relationName: "npcTriggeredDevelopment", // Matches npcsRelations.triggeredDevelopments
 	}),
 }))

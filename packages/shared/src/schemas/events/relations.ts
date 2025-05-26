@@ -7,85 +7,88 @@ import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { narrativeEvents, worldStateChanges } from "./tables"
+import { consequences, narrativeEvents } from "./tables"
 
 export const narrativeEventsRelations = relations(narrativeEvents, ({ one }) => ({
 	questStage: one(questStages, {
 		fields: [narrativeEvents.questStageId],
 		references: [questStages.id],
+		relationName: "stageEvents",
 	}),
+
 	triggeringDecision: one(stageDecisions, {
 		fields: [narrativeEvents.triggeringDecisionId],
 		references: [stageDecisions.id],
+		relationName: "decisionTriggeredEvents",
 	}),
 	relatedQuest: one(quests, {
 		fields: [narrativeEvents.relatedQuestId],
 		references: [quests.id],
+		relationName: "questEvents",
 	}),
+
 	embedding: one(embeddings, {
 		fields: [narrativeEvents.embeddingId],
 		references: [embeddings.id],
 	}),
 }))
 
-export const worldStateChangesRelations = relations(worldStateChanges, ({ one }) => ({
-	// Source of the change
-	quest: one(quests, {
-		fields: [worldStateChanges.questId],
+export const consequencesRelations = relations(consequences, ({ one }) => ({
+	triggerQuest: one(quests, {
+		fields: [consequences.triggerQuestId],
 		references: [quests.id],
-		relationName: "worldChangesByQuest",
+		relationName: "consequencesByQuest",
 	}),
-	decision: one(stageDecisions, {
-		fields: [worldStateChanges.decisionId],
+	triggerDecision: one(stageDecisions, {
+		fields: [consequences.triggerDecisionId],
 		references: [stageDecisions.id],
-		relationName: "worldChangesByDecision",
+		relationName: "consequencesByDecision",
 	}),
-	conflict: one(majorConflicts, {
-		fields: [worldStateChanges.conflictId],
+	triggerConflict: one(majorConflicts, {
+		fields: [consequences.triggerConflictId],
 		references: [majorConflicts.id],
-		relationName: "worldChangesByConflict",
+		relationName: "consequencesByConflict",
 	}),
-	destination: one(narrativeDestinations, {
-		fields: [worldStateChanges.destinationId],
+
+	affectedDestination: one(narrativeDestinations, {
+		fields: [consequences.affectedDestinationId],
 		references: [narrativeDestinations.id],
-		relationName: "worldChangesForDestination",
+		relationName: "consequencesForDestination",
 	}),
-	// Affected entities
-	faction: one(factions, {
-		fields: [worldStateChanges.factionId],
+	affectedFaction: one(factions, {
+		fields: [consequences.affectedFactionId],
 		references: [factions.id],
-		relationName: "worldChangesAffectingFaction",
+		relationName: "consequencesAffectingFaction",
 	}),
-
-	region: one(regions, {
-		fields: [worldStateChanges.regionId],
+	affectedRegion: one(regions, {
+		fields: [consequences.affectedRegionId],
 		references: [regions.id],
-		relationName: "worldChangesInRegion",
+		relationName: "consequencesInRegion",
 	}),
-	area: one(areas, {
-		fields: [worldStateChanges.areaId],
+	affectedArea: one(areas, {
+		fields: [consequences.affectedAreaId],
 		references: [areas.id],
-		relationName: "worldChangesInArea",
+		relationName: "consequencesInArea",
 	}),
-	site: one(sites, {
-		fields: [worldStateChanges.siteId],
+	affectedSite: one(sites, {
+		fields: [consequences.affectedSiteId],
 		references: [sites.id],
-		relationName: "worldChangesAtSite",
+		relationName: "consequencesAtSite",
 	}),
-	npc: one(npcs, {
-		fields: [worldStateChanges.npcId],
+	affectedNpc: one(npcs, {
+		fields: [consequences.affectedNpcId],
 		references: [npcs.id],
-		relationName: "worldChangesAffectingNpc",
+		relationName: "consequencesAffectingNpc",
 	}),
 
-	// Potential future impact
 	futureQuest: one(quests, {
-		fields: [worldStateChanges.futureQuestId],
+		fields: [consequences.futureQuestId],
 		references: [quests.id],
-		relationName: "worldChangeLeadsToQuest",
+		relationName: "consequenceLeadsToQuest",
 	}),
+
 	embedding: one(embeddings, {
-		fields: [worldStateChanges.embeddingId],
+		fields: [consequences.embeddingId],
 		references: [embeddings.id],
 	}),
 }))
