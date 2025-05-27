@@ -1,46 +1,90 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, optionalId, type Schema } from "./tool.utils"
+import { type CreateTableNames, optionalId, type Schema } from "./tool.utils"
 
 const {
-	foreshadowingTables: { narrativeForeshadowing, enums },
+	foreshadowingTables: { foreshadowingSeeds, enums },
 } = tables
 
 type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
 
-export const tableEnum = ["narrativeForeshadowing"] as const satisfies TableNames
+export const tableEnum = ["foreshadowingSeeds"] as const satisfies TableNames
 
 export const schemas = {
-	narrativeForeshadowing: createInsertSchema(narrativeForeshadowing, {
-		id: id.describe("ID of foreshadowing hint to update"),
-		questStageId: optionalId.describe("ID of quest stage where this hint appears"),
-		siteId: optionalId.describe("ID of site where this hint is encountered"),
-		npcId: optionalId.describe("ID of NPC involved in delivering this hint"),
-		factionId: optionalId.describe("ID of faction connected to this hint"),
-		name: (s) => s.describe("Short, evocative title (e.g., 'Mysterious Symbol on Wall')"),
-		type: z
-			.enum(enums.foreshadowingTypes)
-			.describe("Delivery method (document, conversation, object, environmental, vision)"),
-		description: (s) => s.describe("What players observe or experience when encountering this hint"),
-		discoveryCondition: (s) => s.describe("How players might find this hint (e.g., 'Perception DC 15')"),
+	foreshadowingSeeds: createInsertSchema(foreshadowingSeeds, {
+		description: (s) => s.describe("Description of this foreshadowing seed"),
+		tags: (s) => s.describe("Tags for this foreshadowing seed"),
+		sourceNpcId: optionalId.describe("ID of the NPC that is the source of this foreshadowing seed"),
+		sourceSiteId: optionalId.describe("ID of the site that is the source of this foreshadowing seed"),
+		sourceQuestId: optionalId.describe("ID of the quest that is the source of this foreshadowing seed"),
+		sourceQuestStageId: optionalId.describe("ID of the quest stage that is the source of this foreshadowing seed"),
+		suggestedDeliveryMethods: (s) => s.describe("Suggested methods for delivering this foreshadowing seed"),
+		targetEntityType: z
+			.enum(enums.foreshadowedEntityType)
+			.describe("Type of entity this foreshadowing seed points toward"),
+		targetAbstractDetail: (s) =>
+			s.optional().describe("Abstract detail about the target entity (for abstract_theme or specific_reveal types)"),
+		targetFactionId: optionalId.describe("ID of the faction that is the target of this foreshadowing seed"),
+		targetItemId: optionalId.describe("ID of the item that is the target of this foreshadowing seed"),
+		targetMajorConflictId: optionalId.describe(
+			"ID of the major conflict that is the target of this foreshadowing seed",
+		),
+		targetNarrativeDestinationId: optionalId.describe(
+			"ID of the narrative destination that is the target of this foreshadowing seed",
+		),
+		targetNpcId: optionalId.describe("ID of the NPC that is the target of this foreshadowing seed"),
+		targetQuestId: optionalId.describe("ID of the quest that is the target of this foreshadowing seed"),
+		targetWorldConceptId: optionalId.describe("ID of the world concept that is the target of this foreshadowing seed"),
+		targetNarrativeEventId: optionalId.describe(
+			"ID of the narrative event that is the target of this foreshadowing seed",
+		),
+		targetSiteId: optionalId.describe("ID of the site that is the target of this foreshadowing seed"),
 		subtlety: z
-			.enum(enums.foreshadowingSubtlety)
-			.describe("How noticeable the hint is (obvious, moderate, subtle, hidden)"),
+			.enum(enums.discoverySubtlety)
+			.describe("How noticeable this element is (obvious, moderate, subtle, hidden)"),
 		narrativeWeight: z
 			.enum(enums.narrativeWeight)
 			.describe("Importance to the story (minor, supporting, major, crucial)"),
-		foreshadowsQuestId: optionalId.describe("ID of quest this hint points toward"),
-		foreshadowsTwistId: optionalId.describe("ID of quest twist this hint suggests"),
-		foreshadowsNpcId: optionalId.describe("ID of NPC this hint relates to"),
-		foreshadowsArcId: optionalId.describe("ID of narrative arc this hint connects to"),
-		foreshadowsElement: (s) => s.describe("Specific event, trait, or plot point being hinted at"),
-		discovered: (s) => s.optional().describe("Whether players have found this hint yet"),
-		grantedToPlayers: (s) => s.optional().describe("When the hint was explicitly given to players"),
-		playerNotes: (s) => s.optional().describe("Player reactions or theories about this hint"),
-		gmNotes: (s) => s.optional().describe("GM-only information about this foreshadowing element"),
+
+		gmNotes: (s) => s.describe("GM-only information about this element"),
+		creativePrompts: (s) => s.describe("Ideas for presenting and integrating this element"),
 	})
-		.omit({ id: true })
+		.omit({ id: true, embeddingId: true })
 		.strict()
-		.describe("Subtle clues that hint at future events, creating anticipation and narrative cohesion"),
+		.describe("Clues, foreshadowing, and discoverable information that players can find through investigation")
+		.refine(
+			(data) => {
+				// Validate that the correct target field is populated based on targetEntityType
+				switch (data.targetEntityType) {
+					case "quest":
+						return data.targetQuestId !== undefined
+					case "npc":
+						return data.targetNpcId !== undefined
+					case "narrative_event":
+						return data.targetNarrativeEventId !== undefined
+					case "major_conflict":
+						return data.targetMajorConflictId !== undefined
+					case "item":
+						return data.targetItemId !== undefined
+					case "narrative_destination":
+						return data.targetNarrativeDestinationId !== undefined
+					case "world_concept":
+						return data.targetWorldConceptId !== undefined
+					case "faction":
+						return data.targetFactionId !== undefined
+					case "site":
+						return data.targetSiteId !== undefined
+					case "abstract_theme":
+					case "specific_reveal":
+						return data.targetAbstractDetail !== undefined
+					default:
+						return false
+				}
+			},
+			{
+				message: "Target entity type must have corresponding target field populated",
+				path: ["targetEntityType"],
+			},
+		),
 } as const satisfies Schema<TableNames[number]>
