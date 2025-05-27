@@ -44,7 +44,7 @@ export const addFields = (
 	sections: string[],
 	fields: Array<{ label: string; value?: string | number | null; convertSpaces?: boolean }>,
 ): void => {
-	fields.forEach(({ label, value, convertSpaces = false }) => {
+	fields.forEach(({ label, value, convertSpaces = true }) => {
 		if (value !== undefined && value !== null && value !== "") {
 			const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
 			sections.push(`${label}: ${displayValue}`)
@@ -60,7 +60,7 @@ export const buildConditionalFields = (
 ): string[] => {
 	return fieldMappings
 		.filter(({ value }) => value !== undefined && value !== null && value !== "")
-		.map(({ label, value, convertSpaces = false }) => {
+		.map(({ label, value, convertSpaces = true }) => {
 			const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
 			return `${label}: ${displayValue}`
 		})
@@ -95,7 +95,7 @@ export const addBasicInfoSection = (
 ): void => {
 	const basicInfo: string[] = []
 
-	fields.forEach(({ label, value, convertSpaces = false }) => {
+	fields.forEach(({ label, value, convertSpaces = true }) => {
 		if (value !== undefined && value !== null && value !== "") {
 			const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
 			basicInfo.push(`${label}: ${displayValue}`)
@@ -207,7 +207,7 @@ export class EmbeddingBuilder {
 		return this
 	}
 
-	field(label: string, value?: string | number | null, convertSpaces = false): this {
+	field(label: string, value?: string | number | null, convertSpaces = true): this {
 		if (convertSpaces) {
 			addFieldWithSpaces(this.sections, label, value as string)
 		} else {
