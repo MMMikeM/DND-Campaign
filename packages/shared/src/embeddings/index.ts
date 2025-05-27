@@ -1,20 +1,27 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
-import { getTextForEmbedding } from "../lib/embeddings"
-import type { majorConflicts } from "../schemas/conflict/tables"
-import type { consequences, narrativeEvents } from "../schemas/events/tables"
-import type { factionAgendas, factions } from "../schemas/factions/tables"
-import type { items } from "../schemas/items/tables"
-import type { narrativeDestinations } from "../schemas/narrative/tables"
-import type { npcRelationships, npcs } from "../schemas/npc/tables"
-import type { questStages, quests, stageDecisions } from "../schemas/quests/tables"
-import type { areas, regions, siteEncounters, siteSecrets, sites } from "../schemas/regions/tables"
-import type { worldConcepts } from "../schemas/worldbuilding/tables"
+
+// Re-export embedding input types
+export * from "./embedding-input-types"
+// Re-export hydration utilities for convenience
+export * from "./hydration"
+
+import { embeddingTextForMajorConflict } from "./conflicts.embedding"
+import { embeddingTextForConsequence, embeddingTextForNarrativeEvent } from "./events.embedding"
+import { embeddingTextForFaction, embeddingTextForFactionAgenda } from "./factions.embedding"
+import { embeddingTextForForeshadowingSeed } from "./foreshadowing.embedding"
+import { embeddingTextForItem } from "./items.embedding"
+import { embeddingTextForNarrativeDestination, embeddingTextForWorldConcept } from "./narrative.embedding"
+import { embeddingTextForCharacterRelationship, embeddingTextForNpc } from "./npcs.embedding"
+import { embeddingTextForQuest, embeddingTextForQuestStage, embeddingTextForStageDecision } from "./quests.embedding"
+import { embeddingTextForArea, embeddingTextForRegion } from "./regions.embedding"
+import { embeddingTextForSite, embeddingTextForSiteEncounter, embeddingTextForSiteSecret } from "./sites.embedding"
 
 // Type definitions for entity names
 export type EmbeddedEntityName =
 	| "areas"
 	| "factionAgendas"
 	| "factions"
+	| "foreshadowingSeeds"
 	| "items"
 	| "majorConflicts"
 	| "narrativeDestinations"
@@ -37,11 +44,12 @@ const logger = console
  * Combines relevant text fields from a database record into a single string for embedding.
  * Uses entity-specific text generators from the centralized registry.
  * @param entityName The simple name of the entity type (e.g., 'npcs', 'quests').
- * @param record The database record object.
+ * @param record The database record object (can be hydrated with related data).
+ * @param additionalData Optional additional data for entities that require related information.
  * @returns A combined text string ready for embedding.
  */
 
-export function getTextForEntity<T extends Record<string, unknown>>(entityName: EmbeddedEntityName, record: T): string {
+export function getTextForEntity<T>(entityName: EmbeddedEntityName, record: T, additionalData?: any): string {
 	const textGenerator = embeddingTextGenerators[entityName]
 	if (!textGenerator) {
 		logger.warn(`No text generator defined for entity name: ${entityName}. Using JSON fallback.`)
@@ -54,7 +62,6 @@ export function getTextForEntity<T extends Record<string, unknown>>(entityName: 
 	} catch (error) {
 		logger.error(`Error generating text for ${entityName}:`, error)
 		// Fallback to JSON representation
-
 		return JSON.stringify(record)
 	}
 }
@@ -100,268 +107,11 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 	}
 }
 
-const embeddingTextForItem = (item: typeof items.$inferSelect) =>
-	getTextForEmbedding(item, ["name", "itemType", "description", "significance", "creativePrompts"])
-
-const embeddingTextForMajorConflict = (conflict: typeof majorConflicts.$inferSelect) =>
-	getTextForEmbedding(conflict, [
-		"cause",
-		"creativePrompts",
-		"description",
-		"hiddenTruths",
-		"moralDilemma",
-		"name",
-		"possibleOutcomes",
-		"scope",
-		"stakes",
-		"status",
-	])
-
-const embeddingTextForNarrativeEvent = (event: typeof narrativeEvents.$inferSelect) =>
-	getTextForEmbedding(event, [
-		"name",
-		"eventType",
-		"description",
-		"narrativePlacement",
-		"impactSeverity",
-		"complication_details",
-		"escalation_details",
-		"twist_reveal_details",
-		"creativePrompts",
-		"gmNotes",
-	])
-
-const embeddingTextForRegion = (region: typeof regions.$inferSelect) =>
-	getTextForEmbedding(region, [
-		"name",
-		"type",
-		"description",
-		"history",
-		"culturalNotes",
-		"pointsOfInterest",
-		"rumors",
-		"secrets",
-		"economy",
-		"population",
-		"hazards",
-		"security",
-		"dangerLevel",
-		"creativePrompts",
-	])
-
-const embeddingTextForArea = (area: typeof areas.$inferSelect) =>
-	getTextForEmbedding(area, [
-		"name",
-		"type",
-		"dangerLevel",
-		"leadership",
-		"population",
-		"primaryActivity",
-		"description",
-		"culturalNotes",
-		"creativePrompts",
-		"hazards",
-		"pointsOfInterest",
-		"rumors",
-		"defenses",
-	])
-
-const embeddingTextForSite = (site: typeof sites.$inferSelect) =>
-	getTextForEmbedding(site, [
-		"name",
-		"siteType",
-		"terrain",
-		"climate",
-		"mood",
-		"environment",
-		"creativePrompts",
-		"creatures",
-		"description",
-		"features",
-		"treasures",
-		"lightingDescription",
-		"soundscape",
-		"smells",
-		"weather",
-		"descriptors",
-	])
-
-const embeddingTextForSiteEncounter = (encounter: typeof siteEncounters.$inferSelect) =>
-	getTextForEmbedding(encounter, [
-		"name",
-		"encounterType",
-		"dangerLevel",
-		"difficulty",
-		"description",
-		"creativePrompts",
-		"creatures",
-		"treasure",
-	])
-
-const embeddingTextForSiteSecret = (secret: typeof siteSecrets.$inferSelect) =>
-	getTextForEmbedding(secret, [
-		"secretType",
-		"difficultyToDiscover",
-		"discoveryMethod",
-		"description",
-		"creativePrompts",
-		"consequences",
-	])
-
-const embeddingTextForConsequence = (change: typeof consequences.$inferSelect) =>
-	getTextForEmbedding(change, [
-		"name",
-		"consequenceType",
-		"severity",
-		"visibility",
-		"timeframe",
-		"sourceType",
-		"playerImpactFeel",
-		"description",
-		"gmNotes",
-		"creativePrompts",
-	])
-
-const embeddingTextForNpc = (npc: typeof npcs.$inferSelect) =>
-	getTextForEmbedding(npc, [
-		"name",
-		"race",
-		"gender",
-		"age",
-		"occupation",
-		"alignment",
-		"disposition",
-		"attitude",
-		"personalityTraits",
-		"drives",
-		"fears",
-		"background",
-		"knowledge",
-		"secrets",
-		"quirk",
-		"appearance",
-		"mannerisms",
-		"biases",
-		"socialStatus",
-		"wealth",
-		"voiceNotes",
-	])
-
-const embeddingTextForQuest = (quest: typeof quests.$inferSelect) =>
-	getTextForEmbedding(quest, [
-		"name",
-		"type",
-		"description",
-		"objectives",
-		"themes",
-		"mood",
-		"urgency",
-		"visibility",
-		"successOutcomes",
-		"failureOutcomes",
-		"rewards",
-		"inspirations",
-		"creativePrompts",
-	])
-
-const embeddingTextForQuestStage = (stage: typeof questStages.$inferSelect) =>
-	getTextForEmbedding(stage, [
-		"name",
-		"description",
-		"objectives",
-		"dramatic_question",
-		"completionPaths",
-		"encounters",
-		"dramatic_moments",
-		"sensory_elements",
-		"creativePrompts",
-	])
-const embeddingTextForFaction = (faction: typeof factions.$inferSelect) =>
-	getTextForEmbedding(faction, [
-		"name",
-		"type",
-		"description",
-		"values",
-		"history",
-		"publicGoal",
-		"secretGoal",
-		"publicPerception",
-	])
-
-const embeddingTextForFactionAgenda = (agenda: typeof factionAgendas.$inferSelect) =>
-	getTextForEmbedding(agenda, [
-		"name",
-		"agendaType",
-		"currentStage",
-		"importance",
-		"ultimateAim",
-		"moralAmbiguity",
-		"description",
-		"approach",
-		"storyHooks",
-		"creativePrompts",
-	])
-
-export const embeddingTextForNarrativeDestination = (destination: typeof narrativeDestinations.$inferSelect) =>
-	getTextForEmbedding(destination, [
-		"name",
-		"type",
-		"promise",
-		"payoff",
-		"description",
-		"themes",
-		"foreshadowingElements",
-		"creativePrompts",
-	])
-
-export const embeddingTextForWorldConcept = (concept: typeof worldConcepts.$inferSelect) =>
-	getTextForEmbedding(concept, [
-		"name",
-		"conceptType",
-		"timeframe",
-		"startYear",
-		"endYear",
-		"scope",
-		"summary",
-
-		"modernRelevance",
-
-		"questHooks",
-		"currentChallenges",
-		"modernConsequences",
-		"creativePrompts",
-	])
-
-const embeddingTextForStageDecision = (decision: typeof stageDecisions.$inferSelect) =>
-	getTextForEmbedding(decision, [
-		"name",
-		"decisionType",
-		"conditionType",
-		"description",
-		"successDescription",
-		"failureDescription",
-		"narrativeTransition",
-		"potential_player_reactions",
-		"options",
-		"creativePrompts",
-		"failure_lesson_learned",
-	])
-
-const embeddingTextForCharacterRelationship = (rel: typeof npcRelationships.$inferSelect) =>
-	getTextForEmbedding(rel, [
-		"strength",
-		"history",
-		"description",
-		"narrativeTensions",
-		"sharedGoals",
-		"relationshipDynamics",
-		"creativePrompts",
-	])
-
 export const embeddingTextGenerators = {
 	areas: embeddingTextForArea,
 	factionAgendas: embeddingTextForFactionAgenda,
 	factions: embeddingTextForFaction,
+	foreshadowingSeeds: embeddingTextForForeshadowingSeed,
 	items: embeddingTextForItem,
 	majorConflicts: embeddingTextForMajorConflict,
 	narrativeDestinations: embeddingTextForNarrativeDestination,
@@ -380,14 +130,16 @@ export const embeddingTextGenerators = {
 } as const
 
 // Batch embedding utility
-export async function generateEmbeddingsForEntities<T extends Record<string, unknown>>(
+export async function generateEmbeddingsForEntities<T>(
 	entityName: EmbeddedEntityName,
 	records: T[],
+	getAdditionalData?: (record: T) => any,
 ): Promise<Array<{ record: T; embedding: number[] }>> {
 	const results = []
 	for (const record of records) {
 		try {
-			const text = getTextForEntity(entityName, record)
+			const additionalData = getAdditionalData?.(record)
+			const text = getTextForEntity(entityName, record, additionalData)
 			const embedding = await getGeminiEmbedding(text)
 			results.push({ record, embedding })
 		} catch (error) {
