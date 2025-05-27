@@ -1,9 +1,9 @@
 import type { RunResult } from "@tome-master/shared"
-import type { baseTable, PgColumn } from "drizzle-orm/pg-core"
+import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import type { z } from "zod/v4"
 
 // Shared type for Drizzle tables assumed to have an 'id' column
-export type baseTableWithId = baseTable & {
+export type baseTableWithId = PgTable & {
 	id: PgColumn
 }
 

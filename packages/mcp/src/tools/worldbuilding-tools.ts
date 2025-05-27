@@ -14,16 +14,43 @@ export const entityGetters: WorldbuildingGetters = {
 	world_concept_by_id: (id: number) =>
 		db.query.worldConcepts.findFirst({
 			where: (worldConcepts, { eq }) => eq(worldConcepts.id, id),
+			with: {
+				itemRelationships: true,
+				links: {
+					with: {
+						linkedConflict: true,
+						linkedFaction: true,
+						linkedNpc: true,
+						linkedQuest: true,
+						linkedRegion: true,
+						worldConcept: true,
+					},
+				},
+				sourceOfConceptRelationships: { with: { sourceConcept: { columns: { name: true, id: true } } } },
+				targetInConceptRelationships: { with: { targetConcept: { columns: { name: true, id: true } } } },
+			},
 		}),
 
 	concept_relationship_by_id: (id: number) =>
 		db.query.conceptRelationships.findFirst({
 			where: (conceptRelationships, { eq }) => eq(conceptRelationships.id, id),
+			with: {
+				sourceConcept: true,
+				targetConcept: true,
+			},
 		}),
 
 	world_concept_link_by_id: (id: number) =>
 		db.query.worldConceptLinks.findFirst({
 			where: (worldConceptLinks, { eq }) => eq(worldConceptLinks.id, id),
+			with: {
+				linkedConflict: true,
+				linkedFaction: true,
+				linkedNpc: true,
+				linkedQuest: true,
+				linkedRegion: true,
+				worldConcept: true,
+			},
 		}),
 }
 

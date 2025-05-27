@@ -6,7 +6,6 @@ import { z } from "zod/v4"
  */
 function zodToMCP<T extends z.ZodType>(schema: T): z.core.JSONSchema.BaseSchema {
 	const JSONSchema = z.toJSONSchema(schema)
-	console.error(JSONSchema)
 	return JSONSchema
 }
 

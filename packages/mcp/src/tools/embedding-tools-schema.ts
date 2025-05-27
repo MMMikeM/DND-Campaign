@@ -12,7 +12,6 @@ const embeddableEntityTypes = [
 	"site_encounter",
 	"site_secret",
 	"item",
-	"clue",
 ] as const
 
 const searchableEntityTypes = ["faction", "npc", "quest", "quest_stage", "region", "site"] as const

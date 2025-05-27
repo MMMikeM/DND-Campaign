@@ -129,6 +129,12 @@ export const schemas = {
 		),
 
 	regionConnections: createInsertSchema(regionConnections, {
+		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
+		controllingFactionId: (s) => s.describe("ID of faction controlling this region"),
+		routeType: z.enum(enums.routeTypes).describe("Route type (road, river, air, sea)"),
+		travelDifficulty: z.enum(enums.travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
+		travelHazards: (s) => s.describe("Travel hazards for this region"),
+		travelTime: (s) => s.describe("Travel time for this region"),
 		connectionType: z.enum(enums.connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
 		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
 		description: (s) => s.describe("How these regions interact and current dynamics"),

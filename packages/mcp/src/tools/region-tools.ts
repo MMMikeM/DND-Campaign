@@ -22,10 +22,8 @@ export const entityGetters: RegionGetters = {
 					},
 				},
 				quests: { columns: { name: true, id: true } },
-				worldChanges: { columns: { name: true, id: true } },
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } },
-				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } },
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
 			},
 		}),
 	all_areas: () =>
@@ -36,8 +34,6 @@ export const entityGetters: RegionGetters = {
 				description: true,
 			},
 			with: {
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				worldChanges: { columns: { name: true, id: true } },
 				region: { columns: { name: true, id: true } },
 				sites: { columns: { name: true, id: true } },
 			},
@@ -64,11 +60,6 @@ export const entityGetters: RegionGetters = {
 			},
 		}),
 
-	all_region_connection_details: () => db.query.regionConnectionDetails.findMany({}),
-	region_connection_detail_by_id: (id: number) =>
-		db.query.regionConnectionDetails.findFirst({
-			where: (regionConnectionDetails, { eq }) => eq(regionConnectionDetails.id, id),
-		}),
 	all_site_encounters: () =>
 		db.query.siteEncounters.findMany({
 			with: {
@@ -95,20 +86,19 @@ export const entityGetters: RegionGetters = {
 			with: {
 				areas: true,
 				quests: { columns: { name: true, id: true } },
-				worldChanges: { columns: { name: true, id: true } },
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } },
-				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } },
+				conflicts: true,
+				factionInfluence: true,
+				incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } },
 			},
 		}),
 	area_by_id: (id: number) =>
 		db.query.areas.findFirst({
 			where: (areas, { eq }) => eq(areas.id, id),
 			with: {
+				factionInfluence: true,
 				sites: true,
 				region: { columns: { name: true, id: true } },
-				worldChanges: { columns: { name: true, id: true } },
-				territorialControl: { with: { faction: { columns: { name: true, id: true } } } },
 			},
 		}),
 	site_by_id: (id: number) =>
@@ -128,12 +118,11 @@ export const entityGetters: RegionGetters = {
 		db.query.regionConnections.findFirst({
 			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
 			with: {
-				details: true,
 				sourceRegion: {
-					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } }, details: true } } },
+					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } } },
 				},
 				targetRegion: {
-					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } }, details: true } } },
+					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } } },
 				},
 			},
 		}),
