@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from "../index"
 import zodToMCP from "../zodToMcp"
-import type { PgTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
+import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./utils/types"
 
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
 export type Schema<T extends string> = Record<T, z.ZodObject>
@@ -25,7 +25,7 @@ export const createResponse = (message: string): ToolHandlerReturn => ({
 
 export function createManageEntityHandler<TS extends Schema<TK[number]>, TK extends readonly [string, ...string[]]>(
 	categoryToolName: string,
-	tables: Record<TK[number], PgTableWithId>,
+	tables: Record<TK[number], baseTableWithId>,
 	tableEnum: TK,
 	schemas: TS,
 ): ToolHandler {
@@ -73,9 +73,12 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 
 			const createData = parsedData.data
 
-			logger.info(`Creating ${tableName} (via ${categoryToolName}) with data ${createData}`)
+			logger.info(`Creating ${tableName.data} (via ${categoryToolName}) with data ${JSON.stringify(createData)}`)
 			const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
-			return createResponse(`Successfully created new ${tableName} with ID: ${result?.successfullyCreated}`)
+
+			// Get the entity name from the created data if available
+			const entityName = createData?.name || tableName.data
+			return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
 		}
 
 		if (operation.data === "update") {

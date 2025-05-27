@@ -3,20 +3,19 @@ import { z } from "zod/v4"
 import { logger } from ".."
 import zodToMCP from "../zodToMcp"
 import {
-	associations,
 	conflicts,
 	context,
-	embeddings,
+	// embeddings,
 	events,
 	factions,
-	foreshadowing,
 	fuzzySearch,
 	getEntity,
+	items,
 	narrative,
 	npcs,
 	quests,
 	regions,
-	world,
+	worldbuilding,
 } from "./tools"
 import type { ToolDefinition } from "./utils/types"
 
@@ -29,20 +28,19 @@ const handler = async (args?: Record<string, unknown>) => {
 	const toolName = args?.tool as string | undefined
 
 	const categories = {
-		associations: associations.tools,
 		conflicts: conflicts.tools,
 		context: context.tools,
-		embeddings: embeddings.tools,
+		// embeddings: embeddings.tools,
 		events: events.tools,
 		factions: factions.tools,
-		foreshadowing: foreshadowing.tools,
 		fuzzySearch: fuzzySearch.tools,
 		getEntity: getEntity.tools,
+		items: items.tools,
 		narrative: narrative.tools,
 		npcs: npcs.tools,
 		quests: quests.tools,
 		regions: regions.tools,
-		world: world.tools,
+		worldbuilding: worldbuilding.tools,
 	}
 
 	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]
@@ -231,12 +229,15 @@ const categoryEnum = z
 		"factions",
 		"regions",
 		"quests",
-		"associations",
 		"conflicts",
+		"context",
+		"embeddings",
+		"events",
+		"fuzzySearch",
+		"getEntity",
+		"items",
 		"narrative",
-		"world",
-		"foreshadowing",
-		// Add other categories if they have tools defined
+		"worldbuilding",
 	])
 	.optional()
 	.describe("Optional category to filter tools")

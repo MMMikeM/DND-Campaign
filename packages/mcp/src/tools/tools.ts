@@ -2,22 +2,21 @@ import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
-import { associationToolDefinitions } from "./association-tools"
 import { conflictToolDefinitions } from "./conflict-tools"
 import { contextToolDefinitions } from "./context-tools"
-import { embeddingToolDefinitions } from "./embedding-tools"
 import { eventToolDefinitions } from "./events-tools"
 import { factionToolDefinitions } from "./faction-tools"
 import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { fuzzySearchToolDefinitions } from "./fuzzy-search"
 import { getEntityToolDefinition } from "./get-entity"
+import { itemToolDefinitions } from "./items-tools"
 import { narrativeToolDefinitions } from "./narrative-tools"
 import { npcToolDefinitions } from "./npc-tools"
 import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { helpToolDefinitions } from "./tool.help"
 import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
-import { worldToolDefinitions } from "./world-tools"
+import { worldToolDefinitions as worldbuildingToolDefinitions } from "./worldbuilding-tools"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
@@ -41,14 +40,14 @@ export const factions = extractToolsAndHandlers(factionToolDefinitions)
 export const regions = extractToolsAndHandlers(regionToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
-export const associations = extractToolsAndHandlers(associationToolDefinitions)
 export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
 export const context = extractToolsAndHandlers(contextToolDefinitions)
-export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
 export const narrative = extractToolsAndHandlers(narrativeToolDefinitions)
-export const world = extractToolsAndHandlers(worldToolDefinitions)
-export const embeddings = extractToolsAndHandlers(embeddingToolDefinitions)
+export const worldbuilding = extractToolsAndHandlers(worldbuildingToolDefinitions)
+// export const embeddings = extractToolsAndHandlers(embeddingToolDefinitions)
 export const events = extractToolsAndHandlers(eventToolDefinitions)
+export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
+export const items = extractToolsAndHandlers(itemToolDefinitions)
 export const help = extractToolsAndHandlers(helpToolDefinitions)
 export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
 export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
@@ -62,14 +61,14 @@ export function registerToolHandlers(server: Server) {
 		...regions.tools,
 		...npcs.tools,
 		...quests.tools,
-		...associations.tools,
 		...conflicts.tools,
-		...foreshadowing.tools,
 		...narrative.tools,
-		...world.tools,
+		...worldbuilding.tools,
 		...events.tools,
+		...foreshadowing.tools,
+		...items.tools,
 		...fuzzySearch.tools,
-		...embeddings.tools,
+		// ...embeddings.tools,
 	]
 
 	const allToolHandlers = {
@@ -80,14 +79,14 @@ export function registerToolHandlers(server: Server) {
 		...regions.handlers,
 		...npcs.handlers,
 		...quests.handlers,
-		...associations.handlers,
 		...conflicts.handlers,
-		...foreshadowing.handlers,
 		...narrative.handlers,
-		...world.handlers,
+		...worldbuilding.handlers,
 		...events.handlers,
+		...foreshadowing.handlers,
+		...items.handlers,
 		...fuzzySearch.handlers,
-		...embeddings.handlers,
+		// ...embeddings.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))

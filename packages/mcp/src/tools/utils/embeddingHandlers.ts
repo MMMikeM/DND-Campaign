@@ -1,6 +1,6 @@
 import { getGeminiEmbedding } from "@tome-master/shared"
 import { cosineDistance, isNotNull, type SQL } from "drizzle-orm"
-import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
+import type { baseTable, PgColumn } from "drizzle-orm/pg-core"
 import { z } from "zod/v4"
 import { db, logger } from "../.."
 import type { ToolHandler, ToolHandlerReturn } from "./types"
@@ -65,7 +65,7 @@ export const similaritySearchSchema = z.object({
 })
 
 export const createSimilaritySearchHandler = (
-	table: PgTable & { embedding?: PgColumn }, // Make embedding optional in type but runtime code assumes it exists
+	table: baseTable & { embedding?: PgColumn }, // Make embedding optional in type but runtime code assumes it exists
 	entityName: string,
 	selectColumns: Record<string, PgColumn | SQL<any>>, // Keep original signature for compatibility
 ): ToolHandler => {

@@ -28,7 +28,6 @@ export const entityGetters: ConflictGetters = {
 				faction: true,
 			},
 		}),
-
 	conflict_progression_by_id: (id: number) =>
 		db.query.conflictProgression.findFirst({
 			where: (conflictProgression, { eq }) => eq(conflictProgression.id, id),

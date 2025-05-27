@@ -16,10 +16,9 @@ export const entityGetters: NpcGetters = {
 		db.query.npcs.findFirst({
 			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
+				discoverableElements: true,
 				relatedItems: true,
-				relatedQuestHooks: { with: { hook: true } },
 				relatedFactions: { with: { faction: { columns: { name: true, id: true } } } },
-				relatedClues: { with: { stage: { columns: { name: true, id: true } } } },
 				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
 				relatedSites: { with: { site: { columns: { name: true, id: true } } } },
 				incomingRelationships: { with: { sourceNpc: { columns: { name: true, id: true } } } },

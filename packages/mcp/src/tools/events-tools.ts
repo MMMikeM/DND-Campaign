@@ -8,22 +8,28 @@ type EventGetters = CreateEntityGetters<typeof tables.eventTables>
 
 export const entityGetters: EventGetters = {
 	all_narrative_events: () => db.query.narrativeEvents.findMany({}),
+	all_consequences: () => db.query.consequences.findMany({}),
+
 	narrative_event_by_id: (id: number) =>
 		db.query.narrativeEvents.findFirst({
 			where: (narrativeEvents, { eq }) => eq(narrativeEvents.id, id),
 			with: {
-				questStage: true,
-				triggeringDecision: true,
-				relatedQuest: true,
-				foreshadowedBy: true,
+				questStage: { columns: { name: true, id: true } },
+				relatedQuest: { columns: { name: true, id: true } },
+				triggeringDecision: { columns: { name: true, id: true } },
 			},
+		}),
+
+	consequence_by_id: (id: number) =>
+		db.query.consequences.findFirst({
+			where: (consequences, { eq }) => eq(consequences.id, id),
 		}),
 }
 
-export const eventToolDefinitions: Record<"manage_events", ToolDefinition> = {
-	manage_events: {
-		description: "Manage narrative events (complications, escalations, twists).",
+export const eventToolDefinitions: Record<"manage_event", ToolDefinition> = {
+	manage_event: {
+		description: "Manage event-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_events", tables.eventTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_event", tables.eventTables, tableEnum, schemas),
 	},
 }

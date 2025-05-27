@@ -1,13 +1,8 @@
 import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { db } from "../index"
 import { schemas, tableEnum } from "./region-tools-schema"
 import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
-
-const {
-	regionTables: { sites, areas, regions, regionConnections, siteEncounters, siteLinks, siteSecrets },
-} = tables
 
 type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
 
@@ -68,6 +63,12 @@ export const entityGetters: RegionGetters = {
 				targetRegion: { columns: { name: true, id: true } },
 			},
 		}),
+
+	all_region_connection_details: () => db.query.regionConnectionDetails.findMany({}),
+	region_connection_detail_by_id: (id: number) =>
+		db.query.regionConnectionDetails.findFirst({
+			where: (regionConnectionDetails, { eq }) => eq(regionConnectionDetails.id, id),
+		}),
 	all_site_encounters: () =>
 		db.query.siteEncounters.findMany({
 			with: {
@@ -90,7 +91,7 @@ export const entityGetters: RegionGetters = {
 
 	region_by_id: (id: number) =>
 		db.query.regions.findFirst({
-			where: eq(regions.id, id),
+			where: (regions, { eq }) => eq(regions.id, id),
 			with: {
 				areas: true,
 				quests: { columns: { name: true, id: true } },
@@ -102,7 +103,7 @@ export const entityGetters: RegionGetters = {
 		}),
 	area_by_id: (id: number) =>
 		db.query.areas.findFirst({
-			where: eq(areas.id, id),
+			where: (areas, { eq }) => eq(areas.id, id),
 			with: {
 				sites: true,
 				region: { columns: { name: true, id: true } },
@@ -112,7 +113,7 @@ export const entityGetters: RegionGetters = {
 		}),
 	site_by_id: (id: number) =>
 		db.query.sites.findFirst({
-			where: eq(sites.id, id),
+			where: (sites, { eq }) => eq(sites.id, id),
 			with: {
 				items: true,
 				secrets: true,
@@ -125,7 +126,7 @@ export const entityGetters: RegionGetters = {
 		}),
 	region_connection_by_id: (id: number) =>
 		db.query.regionConnections.findFirst({
-			where: eq(regionConnections.id, id),
+			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
 			with: {
 				details: true,
 				sourceRegion: {
@@ -138,22 +139,33 @@ export const entityGetters: RegionGetters = {
 		}),
 	site_link_by_id: (id: number) =>
 		db.query.siteLinks.findFirst({
-			where: eq(siteLinks.id, id),
+			where: (siteLinks, { eq }) => eq(siteLinks.id, id),
 			with: {
 				targetSite: { with: { outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } } } },
 				sourceSite: { with: { incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } } } },
 			},
 		}),
 	site_encounter_by_id: (id: number) =>
-		db.query.siteEncounters.findFirst({ where: eq(siteEncounters.id, id), with: { site: true } }),
+		db.query.siteEncounters.findFirst({
+			where: (siteEncounters, { eq }) => eq(siteEncounters.id, id),
+			with: { site: true },
+		}),
 	site_secret_by_id: (id: number) =>
-		db.query.siteSecrets.findFirst({ where: eq(siteSecrets.id, id), with: { site: true } }),
+		db.query.siteSecrets.findFirst({ where: (siteSecrets, { eq }) => eq(siteSecrets.id, id), with: { site: true } }),
 }
 
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 	manage_region: {
-		description: "Manage region-related entities.",
+		description:
+			"Manage region-related entities. IMPORTANT: Sites represent tactical battlemap locations and MUST include battlemap image data (battlemapImage, imageFormat, imageSize, imageWidth, imageHeight) when creating new sites.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_region", tables.regionTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Regions",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }
