@@ -1,9 +1,27 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
-// Re-export embedding input types
-export * from "./embedding-input-types"
-// Re-export hydration utilities for convenience
-export * from "./hydration"
+// Export only the types that are actually used in implemented embedding functions
+export type {
+	AreaEmbeddingInput,
+	ConsequenceEmbeddingInput,
+	FactionAgendaEmbeddingInput,
+	FactionEmbeddingInput,
+	ForeshadowingSeedEmbeddingInput,
+	ItemEmbeddingInput,
+	MajorConflictEmbeddingInput,
+	NarrativeDestinationEmbeddingInput,
+	NarrativeEventEmbeddingInput,
+	NpcEmbeddingInput,
+	NpcRelationshipEmbeddingInput,
+	QuestEmbeddingInput,
+	QuestStageEmbeddingInput,
+	RegionEmbeddingInput,
+	SiteEmbeddingInput,
+	SiteEncounterEmbeddingInput,
+	SiteSecretEmbeddingInput,
+	StageDecisionEmbeddingInput,
+	WorldConceptEmbeddingInput,
+} from "./embedding-input-types"
 
 import { embeddingTextForMajorConflict } from "./conflicts.embedding"
 import { embeddingTextForConsequence, embeddingTextForNarrativeEvent } from "./events.embedding"
@@ -57,6 +75,12 @@ export function getTextForEntity<T>(entityName: EmbeddedEntityName, record: T, a
 	}
 
 	try {
+		// Special handling for character relationships which need additional data
+		if (entityName === "characterRelationships" && additionalData) {
+			const text = (textGenerator as any)(record, additionalData.npc1Name, additionalData.npc2Name)
+			return text
+		}
+
 		const text = textGenerator(record as any)
 		return text
 	} catch (error) {
@@ -88,7 +112,7 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 	const trimmedText = text.trim()
 	if (!trimmedText) {
 		logger.warn("Attempted to generate embedding for empty text.")
-		return Array(768).fill(0) // Return zero vector for empty input
+		return Array(3072).fill(0) // Return zero vector for empty input (Gemini embedding dimensions)
 	}
 
 	try {
