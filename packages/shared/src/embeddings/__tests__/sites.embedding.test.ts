@@ -122,19 +122,19 @@ Area: Test Area`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle sites with null values by omitting those fields", () => {
-			const siteWithNulls: SiteEmbeddingInput = {
-				name: "Null Site",
-				siteType: null,
-				intendedSiteFunction: null,
-				terrain: null,
-				climate: null,
-				mood: null,
-				environment: null,
-				lightingDescription: null,
-				weather: null,
-				parentAreaName: null,
-				parentRegionName: null,
+		it("should handle sites with undefined values by omitting those fields", () => {
+			const siteWithUndefined: SiteEmbeddingInput = {
+				name: "Undefined Site",
+				parentAreaName: "Test Area",
+				siteType: undefined,
+				intendedSiteFunction: undefined,
+				terrain: undefined,
+				climate: undefined,
+				mood: undefined,
+				environment: undefined,
+				lightingDescription: undefined,
+				weather: undefined,
+				parentRegionName: undefined,
 				creatures: [],
 				features: [],
 				treasures: [],
@@ -145,9 +145,11 @@ Area: Test Area`
 				description: [],
 			}
 
-			const result = embeddingTextForSite(siteWithNulls)
-			const expectedNullText = "Site: Null Site"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForSite(siteWithUndefined)
+			const expectedUndefinedText = `Site: Undefined Site
+Basic Information:
+Area: Test Area`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 
@@ -216,21 +218,23 @@ Site: Test Site`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle encounters with null values by omitting those fields", () => {
-			const encounterWithNulls: SiteEncounterEmbeddingInput = {
-				name: "Null Encounter",
-				encounterType: null,
-				dangerLevel: null,
-				difficulty: null,
-				parentSiteName: null,
+		it("should handle encounters with undefined values by omitting those fields", () => {
+			const encounterWithUndefined: SiteEncounterEmbeddingInput = {
+				name: "Undefined Encounter",
+				encounterType: undefined,
+				dangerLevel: undefined,
+				difficulty: undefined,
+				parentSiteName: "Test Site", // Required field, can't be undefined
 				creatures: [],
 				treasure: [],
 				description: [],
 			}
 
-			const result = embeddingTextForSiteEncounter(encounterWithNulls)
-			const expectedNullText = "Site Encounter: Null Encounter"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForSiteEncounter(encounterWithUndefined)
+			const expectedUndefinedText = `Site Encounter: Undefined Encounter
+Basic Information:
+Site: Test Site`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 
@@ -295,20 +299,24 @@ Site: Test Site`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle secrets with null values by omitting those fields", () => {
-			const secretWithNulls: SiteSecretEmbeddingInput = {
-				secretType: null,
-				difficultyToDiscover: null,
-				parentSiteName: null,
-				discoveryMethod: [],
-				consequences: [],
-				description: [],
+		it("should handle secrets with undefined values by omitting those fields", () => {
+			const secretWithUndefined: SiteSecretEmbeddingInput = {
+				parentSiteName: "Test Site",
+				secretType: undefined,
+				creativePrompts: undefined,
+				gmNotes: undefined,
+				tags: undefined,
+				difficultyToDiscover: undefined,
+				discoveryMethod: undefined,
+				consequences: undefined,
+				description: undefined,
 			}
 
-			const result = embeddingTextForSiteSecret(secretWithNulls)
-			const expectedNullText = `Site Secret: Unknown Site Secret
-Basic Information:`
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForSiteSecret(secretWithUndefined)
+			const expectedUndefinedText = `Site Secret: Test Site Secret
+Basic Information:
+Site: Test Site`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })

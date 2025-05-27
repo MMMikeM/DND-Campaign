@@ -152,31 +152,31 @@ Occupation: Guard`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle NPCs with null values by omitting those fields", () => {
-			const npcWithNulls: NpcEmbeddingInput = {
-				name: "Null NPC",
-				race: null,
-				gender: null,
-				age: null,
-				occupation: null,
-				alignment: null,
-				disposition: null,
-				attitude: null,
-				quirk: null,
-				socialStatus: null,
-				wealth: null,
-				trustLevel: null,
-				currentLocationSiteName: null,
-				primaryFactionNameAndRole: null,
+		it("should handle NPCs with undefined values by omitting those fields", () => {
+			const npcWithUndefined: NpcEmbeddingInput = {
+				name: "Undefined NPC",
+				race: undefined,
+				gender: undefined,
+				age: undefined,
+				occupation: undefined,
+				alignment: undefined,
+				disposition: undefined,
+				attitude: undefined,
+				quirk: undefined,
+				socialStatus: undefined,
+				wealth: undefined,
+				trustLevel: undefined,
+				currentLocationSiteName: undefined,
+				primaryFactionNameAndRole: undefined,
 				personalityTraits: [],
 				drives: [],
 				fears: [],
 				description: [],
 			}
 
-			const result = embeddingTextForNpc(npcWithNulls)
-			const expectedNullText = "Character: Null NPC"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForNpc(npcWithUndefined)
+			const expectedUndefinedText = "Character: Undefined NPC"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 

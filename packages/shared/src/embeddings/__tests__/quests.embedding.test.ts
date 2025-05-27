@@ -113,23 +113,23 @@ Type: side`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle quests with null values by omitting those fields", () => {
-			const questWithNulls: QuestEmbeddingInput = {
-				name: "Null Quest",
-				type: null,
-				urgency: null,
-				visibility: null,
-				mood: null,
-				regionName: null,
-				prerequisiteQuestName: null,
-				otherUnlockConditionsNotes: null,
+		it("should handle quests with undefined values by omitting those fields", () => {
+			const questWithUndefined: QuestEmbeddingInput = {
+				name: "Undefined Quest",
+				type: undefined,
+				urgency: undefined,
+				visibility: undefined,
+				mood: undefined,
+				regionName: undefined,
+				prerequisiteQuestName: undefined,
+				otherUnlockConditionsNotes: undefined,
 				objectives: [],
 				description: [],
 			}
 
-			const result = embeddingTextForQuest(questWithNulls)
-			const expectedNullText = "Quest: Null Quest"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForQuest(questWithUndefined)
+			const expectedUndefinedText = "Quest: Undefined Quest"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 

@@ -114,22 +114,21 @@ Suggested Delivery Methods:
 			expect(result).toBe(expectedComplexText)
 		})
 
-		it("should handle seeds with null values by omitting those fields", () => {
-			const seedWithNulls: ForeshadowingSeedEmbeddingInput = {
-				targetEntityType: "faction",
-				targetAbstractDetail: null,
-				subtlety: null,
-				narrativeWeight: null,
-				targetEntityName: null,
-				sourceContextSummary: null,
-				suggestedDeliveryMethods: [],
-				description: [],
+		it("should handle seeds with undefined values by omitting those fields", () => {
+			const seedWithUndefined: ForeshadowingSeedEmbeddingInput = {
+				targetEntityType: undefined,
+				targetAbstractDetail: undefined,
+				subtlety: undefined,
+				narrativeWeight: undefined,
+				targetEntityName: undefined,
+				sourceContextSummary: undefined,
+				suggestedDeliveryMethods: undefined,
+				description: undefined,
 			}
 
-			const result = embeddingTextForForeshadowingSeed(seedWithNulls)
-			const expectedNullText = `Foreshadowing Seed: Unknown Target
-Target Entity Type: faction`
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForForeshadowingSeed(seedWithUndefined)
+			const expectedUndefinedText = `Foreshadowing Seed: Unknown Target`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })

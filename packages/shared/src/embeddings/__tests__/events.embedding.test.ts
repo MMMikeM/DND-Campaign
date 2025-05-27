@@ -190,25 +190,24 @@ Type: environmental`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle consequences with null values by omitting those fields", () => {
-			const consequenceWithNulls: ConsequenceEmbeddingInput = {
-				name: "Null Consequence",
-				consequenceType: "magical",
-				severity: null,
-				visibility: null,
-				timeframe: null,
-				sourceType: null,
-				playerImpactFeel: null,
-				conflictImpactDescription: null,
-				triggerDecisionName: null,
-				triggerQuestName: null,
-				description: [],
+		it("should handle consequences with undefined values by omitting those fields", () => {
+			const consequenceWithUndefined: ConsequenceEmbeddingInput = {
+				name: "Undefined Consequence",
+				consequenceType: undefined,
+				severity: undefined,
+				visibility: undefined,
+				timeframe: undefined,
+				sourceType: undefined,
+				playerImpactFeel: undefined,
+				conflictImpactDescription: undefined,
+				triggerDecisionName: undefined,
+				triggerQuestName: undefined,
+				description: undefined,
 			}
 
-			const result = embeddingTextForConsequence(consequenceWithNulls)
-			const expectedNullText = `Consequence: Null Consequence
-Type: magical`
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForConsequence(consequenceWithUndefined)
+			const expectedUndefinedText = `Consequence: Undefined Consequence`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })

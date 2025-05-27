@@ -98,16 +98,16 @@ Type: grassland`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle regions with null values by omitting those fields", () => {
-			const regionWithNulls: RegionEmbeddingInput = {
-				name: "Null Region",
-				dangerLevel: null,
-				type: null,
-				atmosphereType: null,
-				economy: null,
-				history: null,
-				population: null,
-				security: null,
+		it("should handle regions with undefined values by omitting those fields", () => {
+			const regionWithUndefined: RegionEmbeddingInput = {
+				name: "Undefined Region",
+				dangerLevel: undefined,
+				type: undefined,
+				atmosphereType: undefined,
+				economy: undefined,
+				history: undefined,
+				population: undefined,
+				security: undefined,
 				culturalNotes: [],
 				hazards: [],
 				pointsOfInterest: [],
@@ -117,9 +117,9 @@ Type: grassland`
 				description: [],
 			}
 
-			const result = embeddingTextForRegion(regionWithNulls)
-			const expectedNullText = "Region: Null Region"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForRegion(regionWithUndefined)
+			const expectedUndefinedText = "Region: Undefined Region"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 
@@ -237,17 +237,17 @@ Type: settlement`
 			expect(result).toBe(expectedStandaloneText)
 		})
 
-		it("should handle areas with null values by omitting those fields", () => {
-			const areaWithNulls: AreaEmbeddingInput = {
-				name: "Null Area",
-				type: null,
-				dangerLevel: null,
-				atmosphereType: null,
-				leadership: null,
-				population: null,
-				primaryActivity: null,
-				defenses: null,
-				parentRegionName: null,
+		it("should handle areas with undefined values by omitting those fields", () => {
+			const areaWithUndefined: AreaEmbeddingInput = {
+				name: "Undefined Area",
+				parentRegionName: "Test Region", // Required field, can't be undefined
+				type: undefined,
+				dangerLevel: undefined,
+				atmosphereType: undefined,
+				leadership: undefined,
+				population: undefined,
+				primaryActivity: undefined,
+				defenses: undefined,
 				culturalNotes: [],
 				hazards: [],
 				pointsOfInterest: [],
@@ -256,9 +256,11 @@ Type: settlement`
 				description: [],
 			}
 
-			const result = embeddingTextForArea(areaWithNulls)
-			const expectedNullText = "Area: Null Area"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForArea(areaWithUndefined)
+			const expectedUndefinedText = `Area: Undefined Area
+Basic Information:
+Region: Test Region`
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })
