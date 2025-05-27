@@ -106,13 +106,13 @@ Scope: local`
 			expect(result).toBe(expectedEmptyArrayText)
 		})
 
-		it("should handle conflicts with null values by omitting those fields", () => {
-			const conflictWithNulls: MajorConflictEmbeddingInput = {
-				name: "Null Conflict",
-				scope: null,
-				cause: null,
-				moralDilemma: null,
-				primaryRegionName: null,
+		it("should handle conflicts with undefined values by omitting those fields", () => {
+			const conflictWithUndefined: MajorConflictEmbeddingInput = {
+				name: "Undefined Conflict",
+				scope: undefined,
+				cause: undefined,
+				moralDilemma: undefined,
+				primaryRegionName: undefined,
 				description: [],
 				natures: [],
 				stakes: [],
@@ -121,9 +121,9 @@ Scope: local`
 				participantSummaries: [],
 			}
 
-			const result = embeddingTextForMajorConflict(conflictWithNulls)
-			const expectedNullText = "Conflict: Null Conflict"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForMajorConflict(conflictWithUndefined)
+			const expectedUndefinedText = "Conflict: Undefined Conflict"
+			expect(result).toBe(expectedUndefinedText)
 		})
 
 		it("should handle conflicts with only resolved fields", () => {

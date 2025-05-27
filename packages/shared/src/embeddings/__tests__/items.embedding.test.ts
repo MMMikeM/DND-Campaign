@@ -119,25 +119,25 @@ Mechanical Effects:
 			expect(result).toBe(expectedComplexText)
 		})
 
-		it("should handle items with null values by omitting those fields", () => {
-			const itemWithNulls: ItemEmbeddingInput = {
-				name: "Null Item",
-				itemType: null,
-				rarity: null,
-				narrativeRole: null,
-				perceivedSimplicity: null,
-				significance: null,
-				loreSignificance: null,
-				creationPeriod: null,
-				placeOfOrigin: null,
-				relatedQuestName: null,
+		it("should handle items with undefined values by omitting those fields", () => {
+			const itemWithUndefined: ItemEmbeddingInput = {
+				name: "Undefined Item",
+				itemType: undefined,
+				rarity: undefined,
+				narrativeRole: undefined,
+				perceivedSimplicity: undefined,
+				significance: undefined,
+				loreSignificance: undefined,
+				creationPeriod: undefined,
+				placeOfOrigin: undefined,
+				relatedQuestName: undefined,
 				mechanicalEffects: [],
 				description: [],
 			}
 
-			const result = embeddingTextForItem(itemWithNulls)
-			const expectedNullText = "Item: Null Item"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForItem(itemWithUndefined)
+			const expectedUndefinedText = "Item: Undefined Item"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })

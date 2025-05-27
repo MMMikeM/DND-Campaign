@@ -82,25 +82,25 @@ Type: achievement`
 			expect(result).toBe(expectedEmptyArrayText)
 		})
 
-		it("should handle destinations with null values by omitting those fields", () => {
-			const destinationWithNulls: NarrativeDestinationEmbeddingInput = {
-				name: "Null Destination",
-				type: null,
-				status: null,
-				promise: null,
-				payoff: null,
-				intendedEmotionalArc: null,
-				primaryRegionName: null,
-				relatedConflictName: null,
+		it("should handle destinations with undefined values by omitting those fields", () => {
+			const destinationWithUndefined: NarrativeDestinationEmbeddingInput = {
+				name: "Undefined Destination",
+				type: undefined,
+				status: undefined,
+				promise: undefined,
+				payoff: undefined,
+				intendedEmotionalArc: undefined,
+				primaryRegionName: undefined,
+				relatedConflictName: undefined,
 				themes: [],
 				foreshadowingElements: [],
 				keyQuestNamesInArc: [],
 				description: [],
 			}
 
-			const result = embeddingTextForNarrativeDestination(destinationWithNulls)
-			const expectedNullText = "Narrative Destination: Null Destination"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForNarrativeDestination(destinationWithUndefined)
+			const expectedUndefinedText = "Narrative Destination: Undefined Destination"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 

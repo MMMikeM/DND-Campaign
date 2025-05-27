@@ -132,28 +132,28 @@ Type: trade`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle factions with null values by omitting those fields", () => {
-			const factionWithNulls: FactionEmbeddingInput = {
-				name: "Null Faction",
-				publicAlignment: null,
-				secretAlignment: null,
-				size: null,
-				wealth: null,
-				reach: null,
-				publicGoal: null,
-				secretGoal: null,
-				publicPerception: null,
-				transparencyLevel: null,
-				jargon: null,
-				primaryHqSiteName: null,
+		it("should handle factions with undefined values by omitting those fields", () => {
+			const factionWithUndefined: FactionEmbeddingInput = {
+				name: "Undefined Faction",
+				publicAlignment: undefined,
+				secretAlignment: undefined,
+				size: undefined,
+				wealth: undefined,
+				reach: undefined,
+				publicGoal: undefined,
+				secretGoal: undefined,
+				publicPerception: undefined,
+				transparencyLevel: undefined,
+				jargon: undefined,
+				primaryHqSiteName: undefined,
 				type: [],
 				values: [],
 				description: [],
 			}
 
-			const result = embeddingTextForFaction(factionWithNulls)
-			const expectedNullText = "Faction: Null Faction"
-			expect(result).toBe(expectedNullText)
+			const result = embeddingTextForFaction(factionWithUndefined)
+			const expectedUndefinedText = "Faction: Undefined Faction"
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 
@@ -229,24 +229,24 @@ Faction: Test Faction`
 			expect(result).toBe(expectedEmptyText)
 		})
 
-		it("should handle agendas with null values by omitting those fields", () => {
-			const agendaWithNulls: FactionAgendaEmbeddingInput = {
-				name: "Null Agenda",
+		it("should handle agendas with undefined values by omitting those fields", () => {
+			const agendaWithUndefined: FactionAgendaEmbeddingInput = {
+				name: "Undefined Agenda",
 				parentFactionName: "Test Faction",
-				agendaType: null,
-				currentStage: null,
-				importance: null,
-				ultimateAim: null,
-				moralAmbiguity: null,
+				agendaType: undefined,
+				currentStage: undefined,
+				importance: undefined,
+				ultimateAim: undefined,
+				moralAmbiguity: undefined,
 				approach: [],
 				storyHooks: [],
 				description: [],
 			}
 
-			const result = embeddingTextForFactionAgenda(agendaWithNulls)
-			const expectedNullText = `Faction Agenda: Null Agenda
+			const result = embeddingTextForFactionAgenda(agendaWithUndefined)
+			const expectedUndefinedText = `Faction Agenda: Undefined Agenda
 Faction: Test Faction`
-			expect(result).toBe(expectedNullText)
+			expect(result).toBe(expectedUndefinedText)
 		})
 	})
 })
