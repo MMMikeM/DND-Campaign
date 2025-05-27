@@ -51,7 +51,6 @@ export const factions = pgTable(
 
 		values: list("values"),
 		history: list("history"),
-		notes: list("notes"),
 
 		symbols: list("symbols"),
 		rituals: list("rituals"),

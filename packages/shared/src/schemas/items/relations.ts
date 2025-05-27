@@ -8,7 +8,7 @@ import { sites } from "../regions/tables"
 import { worldConcepts } from "../worldbuilding/tables"
 import { itemNotableHistory, itemRelationships, items } from "./tables"
 
-export const itemsRelations = relations(items, ({ one, many }) => ({
+export const itemsRelations = relations(items, ({ many }) => ({
 	sourceOfRelationships: many(itemRelationships, {
 		relationName: "sourceItemInRelationships",
 	}),
