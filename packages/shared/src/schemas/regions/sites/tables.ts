@@ -1,4 +1,5 @@
-import { integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { sql } from "drizzle-orm"
+import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../../db/utils"
 import { embeddings } from "../../embeddings/tables"
 import { dangerLevels } from "../../shared-enums"
@@ -117,7 +118,10 @@ export const siteLinks = pgTable(
 
 		linkType: oneOf("link_type", linkTypes),
 	},
-	(t) => [unique().on(t.siteId, t.otherSiteId)],
+	(t) => [
+		unique().on(t.siteId, t.otherSiteId, t.linkType),
+		check("chk_no_self_site_link", sql`COALESCE(${t.siteId} != ${t.otherSiteId}, TRUE)`),
+	],
 )
 
 export const siteEncounters = pgTable(

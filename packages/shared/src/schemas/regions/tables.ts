@@ -1,5 +1,7 @@
 // regions/tables.ts
-import { pgTable, unique } from "drizzle-orm/pg-core"
+
+import { sql } from "drizzle-orm"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
@@ -143,7 +145,10 @@ export const regionConnections = pgTable(
 		travelHazards: list("travel_hazards"),
 		pointsOfInterest: list("points_of_interest"),
 	},
-	(t) => [unique().on(t.regionId, t.otherRegionId)],
+	(t) => [
+		unique().on(t.regionId, t.otherRegionId, t.connectionType),
+		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
+	],
 )
 
 export const enums = {

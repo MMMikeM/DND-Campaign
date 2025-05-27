@@ -5,7 +5,7 @@ import { factions } from "../factions/tables"
 import { itemRelationships } from "../items/tables"
 import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
-import { areas, regions, sites } from "../regions/tables"
+import { regions } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
 import {
 	destinationParticipantInvolvement,
@@ -16,22 +16,12 @@ import {
 
 export const narrativeDestinationsRelations = relations(narrativeDestinations, ({ one, many }) => ({
 	region: one(regions, {
-		fields: [narrativeDestinations.regionId],
+		fields: [narrativeDestinations.primaryRegionId],
 		references: [regions.id],
 		relationName: "regionNarrativeDestinations",
 	}),
-	area: one(areas, {
-		fields: [narrativeDestinations.areaId],
-		references: [areas.id],
-		relationName: "areaNarrativeDestinations",
-	}),
-	site: one(sites, {
-		fields: [narrativeDestinations.siteId],
-		references: [sites.id],
-		relationName: "siteNarrativeDestinations",
-	}),
 	conflict: one(majorConflicts, {
-		fields: [narrativeDestinations.conflictId],
+		fields: [narrativeDestinations.relatedConflictId],
 		references: [majorConflicts.id],
 		relationName: "conflictNarrativeDestinations",
 	}),

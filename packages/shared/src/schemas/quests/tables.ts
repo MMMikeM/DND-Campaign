@@ -1,5 +1,7 @@
 // quests/tables.ts
-import { type AnyPgColumn, integer, pgTable, unique } from "drizzle-orm/pg-core"
+
+import { sql } from "drizzle-orm"
+import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
@@ -120,20 +122,32 @@ export const questHooks = pgTable(
 	(t) => [unique().on(t.questId, t.source, t.hookType)],
 )
 
-export const questParticipantInvolvement = pgTable("quest_participant_involvement", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const questParticipantInvolvement = pgTable(
+	"quest_participant_involvement",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	questId: cascadeFk("quest_id", quests.id),
-	npcId: nullableFk("npc_id", npcs.id),
-	factionId: nullableFk("faction_id", factions.id),
-	roleInQuest: string("role_in_quest"),
-	importanceInQuest: oneOf("importance_in_quest", participantImportanceLevels),
-	involvementDetails: list("involvement_details"),
-})
+		questId: cascadeFk("quest_id", quests.id),
+		npcId: nullableFk("npc_id", npcs.id),
+		factionId: nullableFk("faction_id", factions.id),
+		roleInQuest: string("role_in_quest"),
+		importanceInQuest: oneOf("importance_in_quest", participantImportanceLevels),
+		involvementDetails: list("involvement_details"),
+	},
+	(t) => [
+		check(
+			"chk_quest_participant_exclusive",
+			sql`
+		(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL) OR
+		(${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)
+		`,
+		),
+	],
+)
 
 export const enums = {
 	...stageEnums,

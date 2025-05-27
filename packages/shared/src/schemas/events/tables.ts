@@ -66,31 +66,47 @@ const playerImpactFeels = [
 	"just_consequence",
 ] as const
 
-export const narrativeEvents = pgTable("narrative_events", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const narrativeEvents = pgTable(
+	"narrative_events",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	name: string("name").unique(),
-	eventType: oneOf("event_type", eventTypes),
+		name: string("name").unique(),
+		eventType: oneOf("event_type", eventTypes),
 
-	intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
+		intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
 
-	questStageId: nullableFk("quest_stage_id", questStages.id),
-	triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id),
-	relatedQuestId: nullableFk("related_quest_id", quests.id),
+		questStageId: nullableFk("quest_stage_id", questStages.id),
+		triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id),
+		relatedQuestId: nullableFk("related_quest_id", quests.id),
 
-	narrativePlacement: oneOf("narrative_placement", narrativePlacements),
-	impactSeverity: oneOf("impact_severity", impactSeverity),
+		narrativePlacement: oneOf("narrative_placement", narrativePlacements),
+		impactSeverity: oneOf("impact_severity", impactSeverity),
 
-	complication_details: nullableString("complication_details"),
-	escalation_details: nullableString("escalation_details"),
-	twist_reveal_details: nullableString("twist_reveal_details"),
+		complication_details: nullableString("complication_details"),
+		escalation_details: nullableString("escalation_details"),
+		twist_reveal_details: nullableString("twist_reveal_details"),
 
-	embeddingId: nullableFk("embedding_id", embeddings.id),
-})
+		embeddingId: nullableFk("embedding_id", embeddings.id),
+	},
+	(t) => [
+		check(
+			"chk_event_type_details_exclusive",
+			sql`
+		CASE ${t.eventType}
+			WHEN 'complication' THEN (${t.complication_details} IS NOT NULL AND ${t.escalation_details} IS NULL AND ${t.twist_reveal_details} IS NULL)
+			WHEN 'escalation' THEN (${t.complication_details} IS NULL AND ${t.escalation_details} IS NOT NULL AND ${t.twist_reveal_details} IS NULL)
+			WHEN 'twist' THEN (${t.complication_details} IS NULL AND ${t.escalation_details} IS NULL AND ${t.twist_reveal_details} IS NOT NULL)
+			ELSE TRUE 
+		END
+		`,
+		),
+	],
+)
 
 export const consequences = pgTable(
 	"consequences",
@@ -135,8 +151,33 @@ export const consequences = pgTable(
 	},
 	(t) => [
 		check(
-			"npc_or_faction",
-			sql`(${t.affectedNpcId} IS NOT NULL AND ${t.affectedFactionId} IS NULL) OR (${t.affectedNpcId} IS NULL AND ${t.affectedFactionId} IS NOT NULL)`,
+			"chk_consequence_has_a_trigger_source",
+			sql`
+			${t.triggerDecisionId} IS NOT NULL OR
+			${t.triggerQuestId} IS NOT NULL OR
+			${t.triggerConflictId} IS NOT NULL OR
+			${t.sourceType} IN ('world_event', 'player_choice', 'time_passage', 'quest_completion_affecting_conflict')
+			`,
+		),
+		check(
+			"chk_consequence_has_an_effect_defined",
+			sql`
+			${t.affectedFactionId} IS NOT NULL OR
+			${t.affectedRegionId} IS NOT NULL OR
+			${t.affectedAreaId} IS NOT NULL OR
+			${t.affectedSiteId} IS NOT NULL OR
+			${t.affectedNpcId} IS NOT NULL OR
+			${t.affectedDestinationId} IS NOT NULL OR
+			${t.affectedConflictId} IS NOT NULL OR
+			${t.futureQuestId} IS NOT NULL OR
+			${t.consequenceType} IS NOT NULL 
+			`,
+		),
+		check(
+			"chk_consequence_conflict_impact_description_if_conflict_affected",
+			sql`
+			(${t.affectedConflictId} IS NULL) OR (${t.conflictImpactDescription} IS NOT NULL)
+			`,
 		),
 	],
 )

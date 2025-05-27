@@ -1,6 +1,8 @@
 // quests/stages/tables.ts
-import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../../db/utils"
+
+import { sql } from "drizzle-orm"
+import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../../db/utils"
 import { embeddings } from "../../embeddings/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
@@ -94,9 +96,16 @@ export const stageDecisions = pgTable(
 		options: list("options"),
 
 		failure_leads_to_retry: boolean("failure_leads_to_retry"),
-		failure_lesson_learned: string("failure_lesson_learned"),
+		failure_lesson_learned: nullableString("failure_lesson_learned"),
 	},
-	(t) => [unique().on(t.questId, t.fromStageId, t.toStageId)],
+	(t) => [
+		unique().on(t.questId, t.fromStageId, t.toStageId),
+		check("chk_stage_decision_no_self_loop", sql`COALESCE(${t.fromStageId} != ${t.toStageId}, TRUE)`),
+		check(
+			"chk_failure_retry_lesson",
+			sql`(${t.failure_leads_to_retry} = FALSE) OR (${t.failure_lesson_learned} IS NOT NULL)`,
+		),
+	],
 )
 
 export const enums = {

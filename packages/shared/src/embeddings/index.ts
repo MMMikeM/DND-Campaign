@@ -13,9 +13,7 @@ import type { worldConcepts } from "../schemas/worldbuilding/tables"
 // Type definitions for entity names
 export type EmbeddedEntityName =
 	| "areas"
-	| "discoverableElements"
 	| "factionAgendas"
-	| "factionCulture"
 	| "factions"
 	| "items"
 	| "majorConflicts"
@@ -30,7 +28,6 @@ export type EmbeddedEntityName =
 	| "siteSecrets"
 	| "worldConcepts"
 	| "consequences"
-	| "investigations"
 	| "stageDecisions"
 	| "characterRelationships"
 
@@ -335,17 +332,6 @@ export const embeddingTextForWorldConcept = (concept: typeof worldConcepts.$infe
 		"creativePrompts",
 	])
 
-const embeddingTextForInvestigation = (investigation: typeof investigations.$inferSelect) =>
-	getTextForEmbedding(investigation, [
-		"name",
-		"status",
-		"targetType",
-		"description",
-		"findings",
-		"remainingLeads",
-		"creativePrompts",
-	])
-
 const embeddingTextForStageDecision = (decision: typeof stageDecisions.$inferSelect) =>
 	getTextForEmbedding(decision, [
 		"name",
@@ -389,7 +375,6 @@ export const embeddingTextGenerators = {
 	siteSecrets: embeddingTextForSiteSecret,
 	worldConcepts: embeddingTextForWorldConcept,
 	consequences: embeddingTextForConsequence,
-	investigations: embeddingTextForInvestigation,
 	stageDecisions: embeddingTextForStageDecision,
 	characterRelationships: embeddingTextForCharacterRelationship,
 } as const
