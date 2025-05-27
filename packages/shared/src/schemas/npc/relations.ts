@@ -1,26 +1,34 @@
 import { relations } from "drizzle-orm"
+import { conflictParticipants } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
+import { consequences } from "../events/tables"
 import { factions } from "../factions/tables"
-import { discoverableElements } from "../investigation/tables"
-
+import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { itemNotableHistory, itemRelationships } from "../items/tables"
+import { destinationParticipantInvolvement } from "../narrative/tables"
+import { questHooks, questStages } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { characterRelationships, npcFactions, npcSites, npcs } from "./tables"
+import { worldConceptLinks } from "../worldbuilding/tables"
+import { npcFactions, npcRelationships, npcSites, npcs } from "./tables"
 
 export const npcsRelations = relations(npcs, ({ many, one }) => ({
-	outgoingRelationships: many(characterRelationships, { relationName: "sourceNpc" }),
-	incomingRelationships: many(characterRelationships, { relationName: "targetNpc" }),
+	outgoingRelationships: many(npcRelationships, { relationName: "sourceNpc" }),
+	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
 
 	relatedFactions: many(npcFactions, { relationName: "npcFactions" }),
 	relatedSites: many(npcSites, { relationName: "npcSites" }),
 
-	discoverableElements: many(discoverableElements, { relationName: "npcDiscoverableElements" }),
-
-	discoverableElementsAsSource: many(discoverableElements, {
-		relationName: "npcDiscoverableElements",
-	}),
-	discoverableElementsForeshadowingThisNpc: many(discoverableElements, {
-		relationName: "foreshadowsNpc",
-	}),
+	// Relations from other schemas that reference this NPC
+	conflictParticipation: many(conflictParticipants, { relationName: "npcConflicts" }),
+	affectedByConsequences: many(consequences, { relationName: "consequencesAffectingNpc" }),
+	targetOfForeshadowing: many(foreshadowingSeeds, { relationName: "foreshadowedNpc" }),
+	sourceOfForeshadowing: many(foreshadowingSeeds, { relationName: "npcForeshadowingSeeds" }),
+	itemHistory: many(itemNotableHistory, { relationName: "npcItemHistory" }),
+	itemRelationships: many(itemRelationships, { relationName: "npcItemRelationships" }),
+	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "npcDestinationInvolvement" }),
+	questHooks: many(questHooks, { relationName: "npcQuestHooks" }),
+	questStageDeliveries: many(questStages, { relationName: "npcQuestDeliveries" }),
+	worldConceptLinks: many(worldConceptLinks, { relationName: "npcWorldConceptLinks" }),
 
 	currentLocation: one(sites, {
 		fields: [npcs.currentLocationId],
@@ -34,14 +42,14 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	}),
 }))
 
-export const characterRelationshipsRelations = relations(characterRelationships, ({ one }) => ({
+export const characterRelationshipsRelations = relations(npcRelationships, ({ one }) => ({
 	sourceNpc: one(npcs, {
-		fields: [characterRelationships.npcId],
+		fields: [npcRelationships.npcId],
 		references: [npcs.id],
 		relationName: "sourceNpc",
 	}),
 	targetNpc: one(npcs, {
-		fields: [characterRelationships.relatedNpcId],
+		fields: [npcRelationships.relatedNpcId],
 		references: [npcs.id],
 		relationName: "targetNpc",
 	}),

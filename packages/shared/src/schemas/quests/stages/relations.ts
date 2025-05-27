@@ -2,8 +2,9 @@
 import { relations } from "drizzle-orm"
 import { embeddings } from "../../embeddings/tables"
 import { consequences, narrativeEvents } from "../../events/tables"
-import { discoverableElements } from "../../investigation/tables"
+import { foreshadowingSeeds } from "../../foreshadowing/tables"
 import { items } from "../../items/tables"
+import { npcs } from "../../npc/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
 import { questStages, stageDecisions } from "./tables"
@@ -29,12 +30,13 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	narrativeEvents: many(narrativeEvents, {
 		relationName: "stageEvents",
 	}),
-	triggeredEvents: many(narrativeEvents, {
-		relationName: "stageEvents",
+	deliveryNpcs: many(npcs, {
+		relationName: "npcQuestDeliveries",
 	}),
-	discoverableElements: many(discoverableElements, {
-		relationName: "stageDiscoverableElements",
+	foreshadowingSeeds: many(foreshadowingSeeds, {
+		relationName: "stageForeshadowingSeeds",
 	}),
+
 	embedding: one(embeddings, {
 		fields: [questStages.embeddingId],
 		references: [embeddings.id],

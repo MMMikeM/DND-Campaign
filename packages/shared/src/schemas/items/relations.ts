@@ -1,40 +1,14 @@
 import { relations } from "drizzle-orm"
-import { embeddings } from "../embeddings/tables"
+import { majorConflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
-import { discoverableElements } from "../investigation/tables"
+import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
-import { questStages, quests } from "../quests/tables"
+import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { itemRelationships, items } from "./tables"
+import { worldConcepts } from "../worldbuilding/tables"
+import { itemNotableHistory, itemRelationships, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ one, many }) => ({
-	currentLocation: one(sites, {
-		fields: [items.currentLocationId],
-		references: [sites.id],
-		relationName: "siteItems",
-	}),
-	ownerNpc: one(npcs, {
-		fields: [items.ownerNpcId],
-		references: [npcs.id],
-		relationName: "npcItems",
-	}),
-	controllingFaction: one(factions, {
-		fields: [items.controllingFactionId],
-		references: [factions.id],
-		relationName: "factionItems",
-	}),
-	quest: one(quests, {
-		fields: [items.questId],
-		references: [quests.id],
-		relationName: "questItems",
-	}),
-	stage: one(questStages, {
-		fields: [items.stageId],
-		references: [questStages.id],
-		relationName: "stageItems",
-	}),
-	discoverableElements: many(discoverableElements, { relationName: "itemDiscoverableElements" }),
-
 	sourceOfRelationships: many(itemRelationships, {
 		relationName: "sourceItemInRelationships",
 	}),
@@ -42,9 +16,9 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
 	targetInRelationships: many(itemRelationships, {
 		relationName: "relatedItemInRelationships",
 	}),
-	embedding: one(embeddings, {
-		fields: [items.embeddingId],
-		references: [embeddings.id],
+
+	notableHistory: many(itemNotableHistory, {
+		relationName: "itemHistory",
 	}),
 }))
 
@@ -54,9 +28,64 @@ export const itemRelationshipsRelations = relations(itemRelationships, ({ one })
 		references: [items.id],
 		relationName: "sourceItemInRelationships",
 	}),
+
+	// Polymorphic relations - only one will be populated based on relatedEntityType
 	relatedItem: one(items, {
 		fields: [itemRelationships.relatedItemId],
 		references: [items.id],
 		relationName: "relatedItemInRelationships",
+	}),
+	relatedNpc: one(npcs, {
+		fields: [itemRelationships.relatedNpcId],
+		references: [npcs.id],
+		relationName: "npcItemRelationships",
+	}),
+	relatedFaction: one(factions, {
+		fields: [itemRelationships.relatedFactionId],
+		references: [factions.id],
+		relationName: "factionItemRelationships",
+	}),
+	relatedSite: one(sites, {
+		fields: [itemRelationships.relatedSiteId],
+		references: [sites.id],
+		relationName: "siteItemRelationships",
+	}),
+	relatedQuest: one(quests, {
+		fields: [itemRelationships.relatedQuestId],
+		references: [quests.id],
+		relationName: "questItemRelationships",
+	}),
+	relatedConflict: one(majorConflicts, {
+		fields: [itemRelationships.relatedConflictId],
+		references: [majorConflicts.id],
+		relationName: "conflictItemRelationships",
+	}),
+	relatedNarrativeDestination: one(narrativeDestinations, {
+		fields: [itemRelationships.relatedNarrativeDestinationId],
+		references: [narrativeDestinations.id],
+		relationName: "narrativeDestinationItemRelationships",
+	}),
+	relatedWorldConcept: one(worldConcepts, {
+		fields: [itemRelationships.relatedWorldConceptId],
+		references: [worldConcepts.id],
+		relationName: "worldConceptItemRelationships",
+	}),
+}))
+
+export const itemNotableHistoryRelations = relations(itemNotableHistory, ({ one }) => ({
+	item: one(items, {
+		fields: [itemNotableHistory.itemId],
+		references: [items.id],
+		relationName: "itemHistory",
+	}),
+	keyNpc: one(npcs, {
+		fields: [itemNotableHistory.keyNpcId],
+		references: [npcs.id],
+		relationName: "npcItemHistory",
+	}),
+	eventLocationSite: one(sites, {
+		fields: [itemNotableHistory.eventLocationSiteId],
+		references: [sites.id],
+		relationName: "siteItemHistory",
 	}),
 }))

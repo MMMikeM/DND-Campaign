@@ -80,6 +80,11 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		references: [npcs.id],
 		relationName: "consequencesAffectingNpc",
 	}),
+	affectedConflict: one(majorConflicts, {
+		fields: [consequences.affectedConflictId],
+		references: [majorConflicts.id],
+		relationName: "consequencesAffectingConflict",
+	}),
 
 	futureQuest: one(quests, {
 		fields: [consequences.futureQuestId],

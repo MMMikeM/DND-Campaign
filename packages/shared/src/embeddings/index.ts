@@ -2,11 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 import { getTextForEmbedding } from "../lib/embeddings"
 import type { majorConflicts } from "../schemas/conflict/tables"
 import type { consequences, narrativeEvents } from "../schemas/events/tables"
-import type { factionAgendas, factionCulture, factions } from "../schemas/factions/tables"
-import type { discoverableElements, investigations } from "../schemas/investigation/tables"
+import type { factionAgendas, factions } from "../schemas/factions/tables"
 import type { items } from "../schemas/items/tables"
 import type { narrativeDestinations } from "../schemas/narrative/tables"
-import type { characterRelationships, npcs } from "../schemas/npc/tables"
+import type { npcRelationships, npcs } from "../schemas/npc/tables"
 import type { questStages, quests, stageDecisions } from "../schemas/quests/tables"
 import type { areas, regions, siteEncounters, siteSecrets, sites } from "../schemas/regions/tables"
 import type { worldConcepts } from "../schemas/worldbuilding/tables"
@@ -107,21 +106,6 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 const embeddingTextForItem = (item: typeof items.$inferSelect) =>
 	getTextForEmbedding(item, ["name", "itemType", "description", "significance", "creativePrompts"])
 
-const embeddingTextForDiscoverableElement = (element: typeof discoverableElements.$inferSelect) =>
-	getTextForEmbedding(element, [
-		"clueType",
-		"creativePrompts",
-		"description",
-		"discoveryMethod",
-		"gmNotes",
-		"name",
-		"narrativeWeight",
-		"purposeType",
-		"reliability",
-		"revealsInformation",
-		"subtlety",
-	])
-
 const embeddingTextForMajorConflict = (conflict: typeof majorConflicts.$inferSelect) =>
 	getTextForEmbedding(conflict, [
 		"cause",
@@ -130,7 +114,6 @@ const embeddingTextForMajorConflict = (conflict: typeof majorConflicts.$inferSel
 		"hiddenTruths",
 		"moralDilemma",
 		"name",
-		"nature",
 		"possibleOutcomes",
 		"scope",
 		"stakes",
@@ -306,7 +289,6 @@ const embeddingTextForFaction = (faction: typeof factions.$inferSelect) =>
 		"publicGoal",
 		"secretGoal",
 		"publicPerception",
-		"resources",
 	])
 
 const embeddingTextForFactionAgenda = (agenda: typeof factionAgendas.$inferSelect) =>
@@ -318,18 +300,10 @@ const embeddingTextForFactionAgenda = (agenda: typeof factionAgendas.$inferSelec
 		"ultimateAim",
 		"moralAmbiguity",
 		"description",
-		"hiddenCosts",
-		"keyOpponents",
-		"internalConflicts",
 		"approach",
-		"publicImage",
-		"personalStakes",
 		"storyHooks",
 		"creativePrompts",
 	])
-
-const embeddingTextForFactionCulture = (culture: typeof factionCulture.$inferSelect) =>
-	getTextForEmbedding(culture, ["symbols", "rituals", "taboos", "aesthetics", "jargon", "recognitionSigns"])
 
 export const embeddingTextForNarrativeDestination = (destination: typeof narrativeDestinations.$inferSelect) =>
 	getTextForEmbedding(destination, [
@@ -387,7 +361,7 @@ const embeddingTextForStageDecision = (decision: typeof stageDecisions.$inferSel
 		"failure_lesson_learned",
 	])
 
-const embeddingTextForCharacterRelationship = (rel: typeof characterRelationships.$inferSelect) =>
+const embeddingTextForCharacterRelationship = (rel: typeof npcRelationships.$inferSelect) =>
 	getTextForEmbedding(rel, [
 		"strength",
 		"history",
@@ -400,9 +374,7 @@ const embeddingTextForCharacterRelationship = (rel: typeof characterRelationship
 
 export const embeddingTextGenerators = {
 	areas: embeddingTextForArea,
-	discoverableElements: embeddingTextForDiscoverableElement,
 	factionAgendas: embeddingTextForFactionAgenda,
-	factionCulture: embeddingTextForFactionCulture,
 	factions: embeddingTextForFaction,
 	items: embeddingTextForItem,
 	majorConflicts: embeddingTextForMajorConflict,
