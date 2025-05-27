@@ -9,34 +9,27 @@ type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
 export const entityGetters: FactionGetters = {
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
-	all_faction_headquarters: () => db.query.factionHeadquarters.findMany({}),
-	all_faction_culture: () => db.query.factionCulture.findMany({}),
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
-
+	all_faction_influence: () => db.query.factionInfluence.findMany({}),
 	faction_by_id: (id: number) =>
 		db.query.factions.findFirst({
 			where: (factions, { eq }) => eq(factions.id, id),
 			with: {
-				clues: true,
 				agendas: true,
-				culture: true,
 				conflicts: true,
-				embedding: true,
-				worldChanges: true,
-				controlledRoutes: true,
-				headquarters: { with: { site: true } },
-				members: { with: { npc: { columns: { name: true, id: true } } } },
-				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
-				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
-				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
-				territorialControl: {
+				primaryHqSite: true,
+				questParticipation: true,
+				influence: {
 					with: {
 						area: { columns: { name: true, id: true } },
-						site: { columns: { name: true, id: true } },
-						region: { columns: { name: true, id: true } },
 						faction: { columns: { name: true, id: true } },
+						region: { columns: { name: true, id: true } },
+						site: { columns: { name: true, id: true } },
 					},
 				},
+				members: { with: { npc: { columns: { name: true, id: true } } } },
+				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
+				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
 			},
 		}),
 	faction_diplomacy_by_id: (id: number) =>
@@ -47,23 +40,15 @@ export const entityGetters: FactionGetters = {
 				targetFaction: true,
 			},
 		}),
-	faction_headquarter_by_id: (id: number) =>
-		db.query.factionHeadquarters.findFirst({
-			where: (factionHeadquarters, { eq }) => eq(factionHeadquarters.id, id),
-			with: {
-				site: true,
-				faction: true,
-			},
-		}),
-	faction_culture_by_id: (id: number) =>
-		db.query.factionCulture.findFirst({
-			where: (factionCulture, { eq }) => eq(factionCulture.id, id),
-			with: { faction: true },
-		}),
 	faction_agenda_by_id: (id: number) =>
 		db.query.factionAgendas.findFirst({
 			where: (factionAgendas, { eq }) => eq(factionAgendas.id, id),
 			with: { faction: true },
+		}),
+	faction_influence_by_id: (id: number) =>
+		db.query.factionInfluence.findFirst({
+			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
+			with: { faction: true, region: true, area: true, site: true },
 		}),
 }
 

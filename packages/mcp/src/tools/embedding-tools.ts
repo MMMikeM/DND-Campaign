@@ -10,7 +10,6 @@ import {
 	type SearchableEntityType,
 	schemas,
 } from "./embedding-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
 import type { CreateEntityGetters, ToolDefinition, ToolHandler } from "./utils/types"
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
@@ -52,10 +51,9 @@ const entityTableMap: Record<EmbeddableEntityType | SearchableEntityType, Entity
 	},
 	site_secret: { table: tables.regionTables.siteSecrets as EntityTableConfig["table"] },
 	item: {
-		table: tables.associationTables.items as EntityTableConfig["table"],
-		nameColumn: tables.associationTables.items.name,
+		table: tables.itemTables.items as EntityTableConfig["table"],
+		nameColumn: tables.itemTables.items.name,
 	},
-	clue: { table: tables.associationTables.clues as EntityTableConfig["table"] },
 }
 
 const formatResponse = (message: string, isError = false) => ({
@@ -82,7 +80,6 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 			site_encounter: db.query.siteEncounters,
 			site_secret: db.query.siteSecrets,
 			item: db.query.items,
-			clue: db.query.clues,
 		} satisfies Record<EmbeddableEntityType, any>
 
 		const { table } = entityConfig
@@ -95,7 +92,7 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 
 		logger.info(`Generating embedding for ${entity_type} ID: ${id}`)
 
-		const record = await queryRunner.findFirst({ where: eq(table.id, id) })
+		const record = await queryRunner.findFirst({ where: (t: any, { eq }: any) => eq(t.id, id) })
 		if (!record) {
 			return formatResponse(`${entity_type} with ID ${id} not found.`, true)
 		}
@@ -109,6 +106,8 @@ const generateEmbeddingHandler: ToolHandler = async (args) => {
 		const embeddingVector = await getGeminiEmbedding(combinedText)
 
 		let embeddingIdToLink: number | undefined = record.embeddingId ?? undefined
+
+		const { embeddings } = tables.embeddingTables
 
 		if (embeddingIdToLink) {
 			logger.debug(`Updating existing embedding ID: ${embeddingIdToLink} for ${entity_type} ID: ${id}`)
@@ -168,14 +167,16 @@ const searchBySimilarityHandler: ToolHandler = async (args) => {
 
 		const queryEmbedding = await getGeminiEmbedding(query)
 
-		const embeddingResults = await db
+		const { embeddings } = tables.embeddingTables
+
+		const embeddingResults = (await db
 			.select({
 				id: embeddings.id,
 				similarity: cosineDistance(embeddings.embedding, queryEmbedding),
 			})
 			.from(embeddings)
 			.orderBy(cosineDistance(embeddings.embedding, queryEmbedding))
-			.limit(limit)
+			.limit(limit)) as Array<{ id: number; similarity: number }>
 
 		if (embeddingResults.length === 0) {
 			logger.info(`No similar embeddings found for query: "${query}"`)
@@ -197,21 +198,21 @@ const searchBySimilarityHandler: ToolHandler = async (args) => {
 			.where(inArray(table.embeddingId, embeddingIds))
 
 		const finalResults = entityResults
-			.map((entity) => {
+			.map((entity: any) => {
 				const similarity = entity.embeddingId ? similarityMap.get(entity.embeddingId) : null
 				return {
 					...entity,
 					similarity: similarity,
 				}
 			})
-			.sort((a, b) => (a.similarity ?? 1) - (b.similarity ?? 1))
+			.sort((a: any, b: any) => (a.similarity ?? 1) - (b.similarity ?? 1))
 
 		logger.info(`Found ${finalResults.length} similar ${entity_type}(s) for query: "${query}"`)
 		logger.debug(`Similarity search results for "${query}":`, {
-			results: finalResults.map((r) => ({ id: r.id, name: r.name, similarity: r.similarity })),
+			results: finalResults.map((r: any) => ({ id: r.id, name: r.name, similarity: r.similarity })),
 		})
 
-		return finalResults.map(({ embeddingId, ...rest }) => rest)
+		return finalResults.map(({ embeddingId, ...rest }: any) => rest)
 	} catch (error) {
 		logger.error(`Error during ${entity_type} similarity search for query "${query}":`, {
 			error: error instanceof Error ? error.message : String(error),
@@ -234,7 +235,7 @@ type EmbeddingGetters = CreateEntityGetters<typeof tables.embeddingTables>
 export const entityGetters: EmbeddingGetters = {
 	all_embeddings: () => db.query.embeddings.findMany({}),
 	embedding_by_id: (id: number) =>
-		db.query.embeddings.findFirst({ where: (embeddings, { eq }) => eq(embeddings.id, id) }),
+		db.query.embeddings.findFirst({ where: (embeddings: any, { eq }: any) => eq(embeddings.id, id) }),
 }
 
 export const embeddingToolDefinitions: Record<EmbeddingTools, ToolDefinition> = {
@@ -247,10 +248,5 @@ export const embeddingToolDefinitions: Record<EmbeddingTools, ToolDefinition> = 
 		description: schemas.search_by_similarity.description ?? "Search entities by similarity",
 		inputSchema: zodToMCP(schemas.search_by_similarity),
 		handler: searchBySimilarityHandler,
-	},
-	manage_embedding: {
-		description: "Manage embedding-related entities.",
-		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_embedding", tables.embeddingTables, tableEnum, schemas),
 	},
 }

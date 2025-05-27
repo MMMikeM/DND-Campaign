@@ -10,42 +10,19 @@ export const entityGetters: QuestGetters = {
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
-	all_decision_outcomes: () => db.query.decisionOutcomes.findMany({}),
-	all_quest_unlock_conditions: () => db.query.questUnlockConditions.findMany({}),
-	all_quest_faction_involvement: () => db.query.questFactionInvolvement.findMany({}),
-	all_quest_introductions: () => db.query.questIntroductions.findMany({}),
-	all_quest_npc_roles: () => db.query.questNpcRoles.findMany({}),
-	all_quest_dependencies: () => db.query.questDependencies.findMany({}),
-	quest_faction_involvement_by_id: (id: number) =>
-		db.query.questFactionInvolvement.findFirst({
-			where: (questFactionInvolvement, { eq }) => eq(questFactionInvolvement.id, id),
-			with: { quest: { columns: { name: true, id: true } } },
-		}),
-	quest_introduction_by_id: (id: number) =>
-		db.query.questIntroductions.findFirst({
-			where: (questIntroductions, { eq }) => eq(questIntroductions.id, id),
-			with: { quest: { columns: { name: true, id: true } } },
-		}),
-	quest_npc_role_by_id: (id: number) =>
-		db.query.questNpcRoles.findFirst({
-			where: (questNpcRoles, { eq }) => eq(questNpcRoles.id, id),
-			with: { quest: { columns: { name: true, id: true } } },
-		}),
+	all_quest_hooks: () => db.query.questHooks.findMany({}),
+	all_quest_participant_involvement: () => db.query.questParticipantInvolvement.findMany({}),
+	all_quest_relationships: () => db.query.questRelationships.findMany({}),
+
 	quest_by_id: (id: number) =>
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
-				conflictProgression: true,
 				dependencies: true,
 				dependents: true,
 				destinationContributions: true,
-				factionInvolvement: true,
-				npcRoles: true,
 				triggeredEvents: true,
-				items: true,
 				stages: true,
-				worldChanges: true,
-				unlockConditions: true,
 				region: { columns: { name: true, id: true } },
 			},
 		}),
@@ -82,24 +59,27 @@ export const entityGetters: QuestGetters = {
 				worldChanges: true,
 			},
 		}),
-	quest_dependencie_by_id: (id: number) =>
-		db.query.questDependencies.findFirst({
-			where: (questDependencies, { eq }) => eq(questDependencies.id, id),
+	quest_hook_by_id: (id: number) =>
+		db.query.questHooks.findFirst({
+			where: (questHooks, { eq }) => eq(questHooks.id, id),
+			with: {
+				quest: { columns: { name: true, id: true } },
+			},
+		}),
+	quest_participant_involvement_by_id: (id: number) =>
+		db.query.questParticipantInvolvement.findFirst({
+			where: (questParticipantInvolvement, { eq }) => eq(questParticipantInvolvement.id, id),
+			with: {
+				quest: { columns: { name: true, id: true } },
+			},
+		}),
+	quest_relationship_by_id: (id: number) =>
+		db.query.questRelationships.findFirst({
+			where: (questRelationships, { eq }) => eq(questRelationships.id, id),
 			with: {
 				sourceQuest: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
 			},
-		}),
-
-	decision_outcome_by_id: (id: number) =>
-		db.query.decisionOutcomes.findFirst({
-			where: (decisionOutcomes, { eq }) => eq(decisionOutcomes.id, id),
-			with: { decision: true, affectedStage: true },
-		}),
-	quest_unlock_condition_by_id: (id: number) =>
-		db.query.questUnlockConditions.findFirst({
-			where: (questUnlockConditions, { eq }) => eq(questUnlockConditions.id, id),
-			with: { quest: { columns: { name: true, id: true } } },
 		}),
 }
 

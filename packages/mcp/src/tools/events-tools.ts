@@ -23,6 +23,19 @@ export const entityGetters: EventGetters = {
 	consequence_by_id: (id: number) =>
 		db.query.consequences.findFirst({
 			where: (consequences, { eq }) => eq(consequences.id, id),
+			with: {
+				affectedConflict: true,
+				affectedDestination: true,
+				affectedNpc: true,
+				futureQuest: true,
+				triggerConflict: true,
+				triggerQuest: true,
+				triggerDecision: true,
+				affectedRegion: true,
+				affectedArea: true,
+				affectedSite: true,
+				affectedFaction: true,
+			},
 		}),
 }
 
