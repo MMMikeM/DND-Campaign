@@ -1,9 +1,9 @@
 import type { RunResult } from "@tome-master/shared"
-import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
+import type { baseTable, PgColumn } from "drizzle-orm/pg-core"
 import type { z } from "zod/v4"
 
 // Shared type for Drizzle tables assumed to have an 'id' column
-export type PgTableWithId = PgTable & {
+export type baseTableWithId = baseTable & {
 	id: PgColumn
 }
 
@@ -13,6 +13,13 @@ export type ToolDefinition = {
 	description: string
 	inputSchema: z.core.JSONSchema.BaseSchema
 	handler: ToolHandler
+	annotations?: {
+		title?: string
+		readOnlyHint?: boolean
+		destructiveHint?: boolean
+		idempotentHint?: boolean
+		openWorldHint?: boolean
+	}
 }
 
 export type ToolHandler = (args?: Record<string, unknown>) => Promise<ToolHandlerReturn>

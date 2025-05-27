@@ -1,32 +1,26 @@
 import { tables } from "@tome-master/shared"
 import { z } from "zod/v4"
-import { camelToSnakeCase, optionalId } from "./tool.utils" // Import camelToSnakeCase
 
-const allTables = {
-	...tables.associationTables,
-	...tables.conflictTables,
-	...tables.factionTables,
-	...tables.foreshadowingTables,
-	...tables.narrativeTables,
-	...tables.npcTables,
-	...tables.questTables,
-	...tables.regionTables,
-	...tables.worldTables,
-}
-
-// Extract table names (entity types), convert to snake_case, and filter out 'enums'
-const entityTypes = Object.keys(allTables)
-	.filter((key) => key !== "enums")
-	.map(camelToSnakeCase) as [string, ...string[]] // Type assertion for non-empty array for Zod enum
-
-if (entityTypes.length === 0) {
-	throw new Error("No entity types found in shared tables object.")
-}
+const allTableNames = [
+	...Object.keys(tables.conflictTables),
+	...Object.keys(tables.embeddingTables),
+	...Object.keys(tables.eventTables),
+	...Object.keys(tables.factionTables),
+	...Object.keys(tables.foreshadowingTables),
+	...Object.keys(tables.itemTables),
+	...Object.keys(tables.narrativeTables),
+	...Object.keys(tables.npcTables),
+	...Object.keys(tables.questTables),
+	...Object.keys(tables.regionTables),
+	...Object.keys(tables.worldbuildingTables),
+] as const
 
 export const getEntitySchema = z
 	.object({
-		entity_type: z.enum(entityTypes).describe("Type of entity to retrieve"),
-		id: optionalId.describe("Optional ID of the specific entity to retrieve"),
+		entity_type: z.enum(allTableNames as [string, ...string[]]).describe("The type of entity to retrieve"),
+		id: z
+			.number()
+			.optional()
+			.describe("Optional ID to get a specific entity. If not provided, returns all entities of the type."),
 	})
-	.strict()
-	.describe("Get any entity by type and optional ID. If ID is omitted, retrieves all entities of the specified type.")
+	.describe("Get any entity by type and optional ID")

@@ -10,10 +10,27 @@ export const entityGetters: QuestGetters = {
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
-	all_quest_dependencies: () => db.query.questDependencies.findMany({}),
 	all_decision_outcomes: () => db.query.decisionOutcomes.findMany({}),
 	all_quest_unlock_conditions: () => db.query.questUnlockConditions.findMany({}),
-
+	all_quest_faction_involvement: () => db.query.questFactionInvolvement.findMany({}),
+	all_quest_introductions: () => db.query.questIntroductions.findMany({}),
+	all_quest_npc_roles: () => db.query.questNpcRoles.findMany({}),
+	all_quest_dependencies: () => db.query.questDependencies.findMany({}),
+	quest_faction_involvement_by_id: (id: number) =>
+		db.query.questFactionInvolvement.findFirst({
+			where: (questFactionInvolvement, { eq }) => eq(questFactionInvolvement.id, id),
+			with: { quest: { columns: { name: true, id: true } } },
+		}),
+	quest_introduction_by_id: (id: number) =>
+		db.query.questIntroductions.findFirst({
+			where: (questIntroductions, { eq }) => eq(questIntroductions.id, id),
+			with: { quest: { columns: { name: true, id: true } } },
+		}),
+	quest_npc_role_by_id: (id: number) =>
+		db.query.questNpcRoles.findFirst({
+			where: (questNpcRoles, { eq }) => eq(questNpcRoles.id, id),
+			with: { quest: { columns: { name: true, id: true } } },
+		}),
 	quest_by_id: (id: number) =>
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
@@ -22,7 +39,6 @@ export const entityGetters: QuestGetters = {
 				dependencies: true,
 				dependents: true,
 				destinationContributions: true,
-				foreshadowing: true,
 				factionInvolvement: true,
 				npcRoles: true,
 				triggeredEvents: true,
@@ -37,7 +53,6 @@ export const entityGetters: QuestGetters = {
 		db.query.questStages.findFirst({
 			where: (questStages, { eq }) => eq(questStages.id, id),
 			with: {
-				clues: true,
 				quest: { columns: { name: true, id: true } },
 				site: {
 					with: {
@@ -51,7 +66,6 @@ export const entityGetters: QuestGetters = {
 				},
 				decisionsFrom: true,
 				decisionsTo: true,
-				foreshadowing: true,
 				items: true,
 				narrativeEvents: true,
 			},

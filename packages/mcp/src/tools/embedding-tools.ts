@@ -1,6 +1,6 @@
 import { type EmbeddedEntityName, getGeminiEmbedding, getTextForEntity, tables } from "@tome-master/shared"
 import { cosineDistance, eq, inArray } from "drizzle-orm"
-import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
+import type { PgColumn } from "drizzle-orm/pg-core"
 import { z } from "zod/v4"
 import { db, logger } from ".."
 import zodToMCP from "../zodToMcp"
@@ -10,7 +10,8 @@ import {
 	type SearchableEntityType,
 	schemas,
 } from "./embedding-tools-schema"
-import type { ToolDefinition, ToolHandler } from "./utils/types"
+import { createManageEntityHandler, createManageSchema } from "./tool.utils"
+import type { CreateEntityGetters, ToolDefinition, ToolHandler } from "./utils/types"
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
 	faction: "factions",
@@ -22,11 +23,10 @@ const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> =
 	site_encounter: "siteEncounters",
 	site_secret: "siteSecrets",
 	item: "items",
-	clue: "clues",
 }
 
 type EntityTableConfig = {
-	table: PgTable & { id: PgColumn; embeddingId: PgColumn | null }
+	table: any & { id: PgColumn; embeddingId: PgColumn | null }
 	nameColumn?: PgColumn
 }
 
@@ -229,6 +229,14 @@ const searchBySimilarityHandler: ToolHandler = async (args) => {
 	}
 }
 
+type EmbeddingGetters = CreateEntityGetters<typeof tables.embeddingTables>
+
+export const entityGetters: EmbeddingGetters = {
+	all_embeddings: () => db.query.embeddings.findMany({}),
+	embedding_by_id: (id: number) =>
+		db.query.embeddings.findFirst({ where: (embeddings, { eq }) => eq(embeddings.id, id) }),
+}
+
 export const embeddingToolDefinitions: Record<EmbeddingTools, ToolDefinition> = {
 	generate_embedding: {
 		description: schemas.generate_embedding.description ?? "Generate embedding for an entity",
@@ -239,5 +247,10 @@ export const embeddingToolDefinitions: Record<EmbeddingTools, ToolDefinition> = 
 		description: schemas.search_by_similarity.description ?? "Search entities by similarity",
 		inputSchema: zodToMCP(schemas.search_by_similarity),
 		handler: searchBySimilarityHandler,
+	},
+	manage_embedding: {
+		description: "Manage embedding-related entities.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_embedding", tables.embeddingTables, tableEnum, schemas),
 	},
 }

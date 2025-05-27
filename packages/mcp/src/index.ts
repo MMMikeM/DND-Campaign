@@ -4,7 +4,8 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { initializeDatabase } from "@tome-master/shared"
 import { createLogger } from "./logger"
-import { registerPromptHandlers } from "./prompts/index"
+import { registerPromptHandlers } from "./prompts"
+import { registerResourceHandlers } from "./resources/resources"
 import { registerToolHandlers } from "./tools/tools"
 
 console.error("Starting MCP server")
@@ -49,8 +50,11 @@ logger.info("Registering tool handlers")
 registerToolHandlers(mcpServer)
 logger.info("Tool handlers registered")
 
+registerResourceHandlers(mcpServer)
+logger.info("Resource handlers registered")
+
 registerPromptHandlers(mcpServer)
-logger.info("Prompts added")
+logger.info("Prompt handlers registered")
 
 async function startServer() {
 	logger.info("Starting server...")

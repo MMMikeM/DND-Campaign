@@ -22,7 +22,6 @@ export const entityGetters: NarrativeGetters = {
 			where: (narrativeDestinations, { eq }) => eq(narrativeDestinations.id, id),
 			with: {
 				destinationContributions: true,
-				foreshadowing: true,
 				worldStateChanges: true,
 			},
 		}),
