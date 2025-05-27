@@ -38,7 +38,6 @@ export function initializeDatabase(connectionString: string) {
 		...tables.regionTables,
 		...tables.embeddingTables,
 		...tables.eventTables,
-		...tables.investigationTables,
 		...tables.itemTables,
 		...tables.worldbuildingTables,
 		...relations.conflictRelations,
@@ -48,7 +47,6 @@ export function initializeDatabase(connectionString: string) {
 		...relations.questRelations,
 		...relations.regionRelations,
 		...relations.eventRelations,
-		...relations.investigationRelations,
 		...relations.itemRelations,
 		...relations.worldbuildingRelations,
 	}

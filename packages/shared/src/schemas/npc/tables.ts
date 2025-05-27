@@ -181,7 +181,7 @@ export const npcRelationships = pgTable(
 		sharedGoals: list("shared_goals"),
 		relationshipDynamics: list("relationship_dynamics"),
 
-		isBidirectional: boolean("is_bidirectional").default(true),
+		isBidirectional: boolean("is_bidirectional"),
 	},
 	(t) => [
 		unique().on(t.npcId, t.relatedNpcId, t.relationshipType),

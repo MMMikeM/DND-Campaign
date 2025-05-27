@@ -22,6 +22,12 @@ export const nullableString = (description: string) => text(description)
 export const oneOf = (description: string, options: readonly [string, ...string[]]) =>
 	text(description, { enum: options }).notNull()
 
+export const nullableOneOf = (description: string, options: readonly [string, ...string[]]) =>
+	text(description, { enum: options })
+
+export const manyOf = (description: string, options: readonly [string, ...string[]]) =>
+	text(description, { enum: options }).array().notNull()
+
 export const pk = () => serial("id").primaryKey()
 
 export const embeddingVector = (name: string = "embedding") => {

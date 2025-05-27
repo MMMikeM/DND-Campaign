@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
-import { cascadeFk, list, manyOf, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
@@ -11,7 +11,19 @@ import { regions } from "../regions/tables"
 const conflictScopes = ["local", "regional", "global"] as const
 const conflictNatures = ["political", "military", "mystical", "social", "economic", "environmental"] as const
 const conflictStatuses = ["brewing", "active", "escalating", "deescalating", "resolved"] as const
-const factionRoles = ["instigator", "opponent", "ally", "neutral", "mediator", "beneficiary"] as const
+const participantRolesInConflict = [
+	"instigator",
+	"opponent",
+	"ally",
+	"neutral",
+	"mediator",
+	"beneficiary",
+	"leader",
+	"key_figure",
+	"victim",
+	"opportunist",
+	"saboteur",
+] as const
 const questImpacts = ["escalates", "deescalates", "reveals_truth", "changes_sides", "no_change"] as const
 const conflictClarity = [
 	"clear_aggressor_victim",
@@ -31,7 +43,7 @@ export const majorConflicts = pgTable("major_conflicts", {
 	name: string("name").unique(),
 	scope: oneOf("scope", conflictScopes),
 	natures: manyOf("natures", conflictNatures),
-	status: oneOf("status", conflictStatuses).default("active"),
+	status: oneOf("status", conflictStatuses),
 
 	cause: string("cause"),
 	stakes: list("stakes"),
@@ -60,13 +72,15 @@ export const conflictParticipants = pgTable(
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
 
+		role: oneOf("role", participantRolesInConflict),
+
 		motivation: string("motivation"),
 		publicStance: string("public_stance"),
-		secretStance: string("secret_stance"),
+		secretStance: nullableString("secret_stance"),
 	},
 	(t) => [
 		check(
-			"npc_or_faction",
+			"npc_or_faction_participant_exclusive",
 			sql`(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL) OR (${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)`,
 		),
 	],
@@ -77,6 +91,6 @@ export const enums = {
 	conflictScopes,
 	conflictNatures,
 	conflictStatuses,
-	factionRoles,
+	participantRolesInConflict,
 	questImpacts,
 }

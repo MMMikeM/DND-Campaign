@@ -44,7 +44,7 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 
 	name: string("name").unique(),
 	type: oneOf("type", arcTypes),
-	status: oneOf("status", destinationStatuses).default("planned"),
+	status: oneOf("status", destinationStatuses),
 
 	promise: string("promise"),
 	payoff: string("payoff"),
@@ -70,7 +70,7 @@ export const destinationQuestRoles = pgTable(
 		destinationId: cascadeFk("destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
 		role: oneOf("role", questRoles),
-		sequenceInArc: integer("sequence_in_arc").default(1),
+		sequenceInArc: integer("sequence_in_arc"),
 		contributionDetails: list("contribution_details"),
 	},
 	(t) => [unique().on(t.destinationId, t.questId)],
@@ -90,7 +90,10 @@ export const destinationRelationships = pgTable(
 		relationshipType: oneOf("relationship_type", destinationRelationshipTypes),
 		relationshipDetails: list("relationship_details"),
 	},
-	(t) => [unique().on(t.sourceDestinationId, t.relatedDestinationId)],
+	(t) => [
+		unique().on(t.sourceDestinationId, t.relatedDestinationId),
+		check("chk_no_self_destination_relationship", sql`${t.sourceDestinationId} != ${t.relatedDestinationId}`),
+	],
 )
 
 export const destinationParticipantInvolvement = pgTable(
@@ -111,7 +114,7 @@ export const destinationParticipantInvolvement = pgTable(
 	},
 	(t) => [
 		check(
-			"npc_or_faction",
+			"npc_or_faction_exclusive_participant",
 			sql`(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL)
 			 OR (${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)`,
 		),

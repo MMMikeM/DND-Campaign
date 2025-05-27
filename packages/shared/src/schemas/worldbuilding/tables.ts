@@ -89,7 +89,7 @@ export const worldConcepts = pgTable("world_concepts", {
 	culturalEvolution: list("cultural_evolution"),
 
 	scope: oneOf("scope", conceptScopes),
-	status: oneOf("status", conceptStatuses).default("active"),
+	status: oneOf("status", conceptStatuses),
 
 	timeframe: string("timeframe"),
 	startYear: integer("start_year"),
@@ -119,7 +119,7 @@ export const conceptRelationships = pgTable(
 
 		relationshipDetails: nullableString("relationship_details"),
 		strength: oneOf("strength", ["weak", "moderate", "strong"] as const),
-		isBidirectional: boolean("is_bidirectional").default(false),
+		isBidirectional: boolean("is_bidirectional"),
 	},
 	(t) => [
 		unique().on(t.sourceConceptId, t.targetConceptId, t.relationshipType),
@@ -150,14 +150,14 @@ export const worldConceptLinks = pgTable(
 	},
 	(t) => [
 		check(
-			"chk_world_concept_link_target",
+			"chk_world_concept_link_has_target",
 			sql`
 			${t.regionId} IS NOT NULL OR
 			${t.factionId} IS NOT NULL OR
 			${t.npcId} IS NOT NULL OR
 			${t.conflictId} IS NOT NULL OR
 			${t.questId} IS NOT NULL
-	`,
+		`,
 		),
 	],
 )

@@ -66,10 +66,8 @@ export const factions = pgTable(
 	},
 	(t) => [
 		check(
-			"transparency_level",
-			// if transparent, secret goal and secret alignment must be null
-			sql`(${t.transparencyLevel} = 'transparent' AND ${t.secretAlignment} IS NULL AND ${t.secretGoal} IS NULL) 
-			 OR (${t.transparencyLevel} = 'secretive' AND ${t.secretAlignment} IS NOT NULL AND ${t.secretGoal} IS NOT NULL)`,
+			"chk_faction_transparency_rules",
+			sql`NOT ((${t.transparencyLevel} = 'transparent') AND (${t.secretAlignment} IS NOT NULL OR ${t.secretGoal} IS NOT NULL))`,
 		),
 	],
 )
