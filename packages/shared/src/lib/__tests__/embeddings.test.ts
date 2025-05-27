@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest"
-import { type EmbeddingConfig, getTextForEmbedding } from "../embeddings"
+import { getTextForEmbeddingLegacy as getTextForEmbedding } from "../embeddings"
+
+// Legacy configuration type for tests
+interface EmbeddingConfig {
+	fieldConfig?: Record<
+		string,
+		{
+			booleanTrueForm?: string
+			booleanFalseForm?: string
+			listItemTypeName?: string
+		}
+	>
+}
 
 describe("getTextForEmbedding", () => {
 	const mockRecord = {
