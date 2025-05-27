@@ -39,6 +39,7 @@ export function initializeDatabase(connectionString: string) {
 		...tables.embeddingTables,
 		...tables.eventTables,
 		...tables.itemTables,
+		...tables.foreshadowingTables,
 		...tables.worldbuildingTables,
 		...relations.conflictRelations,
 		...relations.factionRelations,
@@ -49,6 +50,7 @@ export function initializeDatabase(connectionString: string) {
 		...relations.eventRelations,
 		...relations.itemRelations,
 		...relations.worldbuildingRelations,
+		...relations.foreshadowingRelations,
 	}
 
 	// Create Drizzle ORM instance with all schemas
