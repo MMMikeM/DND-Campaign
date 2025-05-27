@@ -51,7 +51,7 @@ export const questStages = pgTable("quest_stages", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	questId: cascadeFk("quest_id", quests.id),
+	questId: cascadeFk("quest_id", () => quests.id),
 	siteId: nullableFk("site_id", sites.id),
 	stageOrder: integer("stage_order").notNull(),
 	name: string("name").unique(),
@@ -80,7 +80,10 @@ export const stageDecisions = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		questId: cascadeFk("quest_id", quests.id),
+		questId: cascadeFk("quest_id", () => {
+			const { quests } = require("../tables")
+			return quests.id
+		}),
 		fromStageId: cascadeFk("from_stage_id", questStages.id),
 		toStageId: nullableFk("to_stage_id", questStages.id),
 		conditionType: oneOf("condition_type", conditionTypes),
