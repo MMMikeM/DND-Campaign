@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm"
+import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
@@ -7,78 +8,79 @@ import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { discoverableElements, investigations } from "./tables"
+import { worldConcepts } from "../worldbuilding/tables"
+import { foreshadowingSeeds } from "./tables"
 
-export const discoverableElementsRelations = relations(discoverableElements, ({ many, one }) => ({
-	stage: one(questStages, {
-		fields: [discoverableElements.questStageId],
-		references: [questStages.id],
-		relationName: "stageDiscoverableElements",
-	}),
-	location: one(sites, {
-		fields: [discoverableElements.siteId],
-		references: [sites.id],
-		relationName: "siteDiscoverableElements",
-	}),
-	sourceNpc: one(npcs, {
-		fields: [discoverableElements.npcId],
-		references: [npcs.id],
-		relationName: "npcDiscoverableElements",
-	}),
-	relatedItem: one(items, {
-		fields: [discoverableElements.relatedItemId],
-		references: [items.id],
-		relationName: "itemDiscoverableElements",
-	}),
-	faction: one(factions, {
-		fields: [discoverableElements.factionId],
-		references: [factions.id],
-		relationName: "factionDiscoverableElements",
-	}),
-	investigation: one(investigations, {
-		fields: [discoverableElements.investigationId],
-		references: [investigations.id],
-		relationName: "investigationDiscoverableElements",
-	}),
-
-	foreshadowsQuest: one(quests, {
-		fields: [discoverableElements.foreshadowsQuestId],
+export const foreshadowingSeedsRelations = relations(foreshadowingSeeds, ({ one }) => ({
+	targetQuest: one(quests, {
+		fields: [foreshadowingSeeds.targetQuestId],
 		references: [quests.id],
-		relationName: "foreshadowsQuest",
+		relationName: "foreshadowedQuest",
 	}),
-	foreshadowsEvent: one(narrativeEvents, {
-		fields: [discoverableElements.foreshadowsEventId],
-		references: [narrativeEvents.id],
-		relationName: "foreshadowsEvent",
-	}),
-	foreshadowsNpc: one(npcs, {
-		fields: [discoverableElements.foreshadowsNpcId],
+	targetNpc: one(npcs, {
+		fields: [foreshadowingSeeds.targetNpcId],
 		references: [npcs.id],
-		relationName: "foreshadowsNpc",
+		relationName: "foreshadowedNpc",
 	}),
-	foreshadowedDestination: one(narrativeDestinations, {
-		fields: [discoverableElements.foreshadowsDestinationId],
+	targetNarrativeEvent: one(narrativeEvents, {
+		fields: [foreshadowingSeeds.targetNarrativeEventId],
+		references: [narrativeEvents.id],
+		relationName: "foreshadowedEvent",
+	}),
+	targetMajorConflict: one(majorConflicts, {
+		fields: [foreshadowingSeeds.targetMajorConflictId],
+		references: [majorConflicts.id],
+		relationName: "foreshadowedConflict",
+	}),
+	targetItem: one(items, {
+		fields: [foreshadowingSeeds.targetItemId],
+		references: [items.id],
+		relationName: "foreshadowedItem",
+	}),
+	targetNarrativeDestination: one(narrativeDestinations, {
+		fields: [foreshadowingSeeds.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "foreshadowedDestination",
 	}),
-	embedding: one(embeddings, {
-		fields: [discoverableElements.embeddingId],
-		references: [embeddings.id],
+	targetWorldConcept: one(worldConcepts, {
+		fields: [foreshadowingSeeds.targetWorldConceptId],
+		references: [worldConcepts.id],
+		relationName: "foreshadowedWorldConcept",
 	}),
-}))
+	targetFaction: one(factions, {
+		fields: [foreshadowingSeeds.targetFactionId],
+		references: [factions.id],
+		relationName: "foreshadowedFaction",
+	}),
+	targetSite: one(sites, {
+		fields: [foreshadowingSeeds.targetSiteId],
+		references: [sites.id],
+		relationName: "foreshadowedSite",
+	}),
 
-export const investigationsRelations = relations(investigations, ({ one, many }) => ({
-	quest: one(quests, {
-		fields: [investigations.questId],
+	sourceQuest: one(quests, {
+		fields: [foreshadowingSeeds.sourceQuestId],
 		references: [quests.id],
-		relationName: "questInvestigations",
+		relationName: "questForeshadowingSeeds",
 	}),
-	discoverableElements: many(discoverableElements, {
-		relationName: "investigationDiscoverableElements",
+	sourceQuestStage: one(questStages, {
+		fields: [foreshadowingSeeds.sourceQuestStageId],
+		references: [questStages.id],
+		relationName: "stageForeshadowingSeeds",
 	}),
-	primaryLeadNpc: one(npcs, {
-		fields: [investigations.primaryLeadNpcId],
+	sourceSite: one(sites, {
+		fields: [foreshadowingSeeds.sourceSiteId],
+		references: [sites.id],
+		relationName: "siteForeshadowingSeeds",
+	}),
+	sourceNpc: one(npcs, {
+		fields: [foreshadowingSeeds.sourceNpcId],
 		references: [npcs.id],
-		relationName: "npcInvestigationLeads",
+		relationName: "npcForeshadowingSeeds",
+	}),
+
+	embedding: one(embeddings, {
+		fields: [foreshadowingSeeds.embeddingId],
+		references: [embeddings.id],
 	}),
 }))

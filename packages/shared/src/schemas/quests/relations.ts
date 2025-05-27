@@ -3,13 +3,14 @@ import { relations } from "drizzle-orm"
 import { embeddings } from "../embeddings/tables"
 import { consequences, narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
-import { investigations } from "../investigation/tables"
-import { items } from "../items/tables"
+import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { itemRelationships } from "../items/tables"
 import { destinationQuestRoles } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { regions, sites } from "../regions/tables"
+import { worldConceptLinks } from "../worldbuilding/tables"
 import { questStages } from "./stages/tables"
-import { questHooks, questRelationships, quests } from "./tables"
+import { questHooks, questParticipantInvolvement, questRelationships, quests } from "./tables"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {
@@ -26,16 +27,19 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	stages: many(questStages, { relationName: "questStages" }),
 
 	hooks: many(questHooks, { relationName: "questHooks" }),
-	items: many(items, { relationName: "questItems" }),
-	destinationContributions: many(destinationQuestRoles, { relationName: "questDestinationContributions" }),
+	participantInvolvement: many(questParticipantInvolvement, { relationName: "questParticipants" }),
+	destinationContributions: many(destinationQuestRoles, { relationName: "questDestinationRoles" }),
 
 	consequences: many(consequences, {
 		relationName: "consequencesByQuest",
 	}),
 	triggeredEvents: many(narrativeEvents, {
-		relationName: "relatedQuestEvents",
+		relationName: "questEvents",
 	}),
-	investigations: many(investigations, { relationName: "questInvestigations" }),
+	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "questForeshadowingSeeds" }),
+	itemRelationships: many(itemRelationships, { relationName: "questItemRelationships" }),
+	worldConceptLinks: many(worldConceptLinks, { relationName: "questWorldConceptLinks" }),
+
 	embedding: one(embeddings, {
 		fields: [quests.embeddingId],
 		references: [embeddings.id],
@@ -75,5 +79,23 @@ export const questHooksRelations = relations(questHooks, ({ one }) => ({
 		fields: [questHooks.deliveryNpcId],
 		references: [npcs.id],
 		relationName: "npcQuestHooks",
+	}),
+}))
+
+export const questParticipantInvolvementRelations = relations(questParticipantInvolvement, ({ one }) => ({
+	quest: one(quests, {
+		fields: [questParticipantInvolvement.questId],
+		references: [quests.id],
+		relationName: "questParticipants",
+	}),
+	npc: one(npcs, {
+		fields: [questParticipantInvolvement.npcId],
+		references: [npcs.id],
+		relationName: "npcQuestParticipation",
+	}),
+	faction: one(factions, {
+		fields: [questParticipantInvolvement.factionId],
+		references: [factions.id],
+		relationName: "factionQuestParticipation",
 	}),
 }))

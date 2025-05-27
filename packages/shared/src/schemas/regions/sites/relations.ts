@@ -1,9 +1,10 @@
 import { relations } from "drizzle-orm"
 import { embeddings } from "../../embeddings/tables"
 import { consequences } from "../../events/tables"
-import { discoverableElements } from "../../investigation/tables"
-import { items } from "../../items/tables"
-import { npcSites } from "../../npc/tables"
+import { factionInfluence, factions } from "../../factions/tables"
+import { foreshadowingSeeds } from "../../foreshadowing/tables"
+import { itemNotableHistory, itemRelationships } from "../../items/tables"
+import { npcSites, npcs } from "../../npc/tables"
 import { questHooks, questStages } from "../../quests/tables"
 import { areas } from "../tables"
 import { siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -21,11 +22,16 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	encounters: many(siteEncounters, { relationName: "siteEncounters" }),
 	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
 	npcs: many(npcSites, { relationName: "siteNpcs" }),
-	items: many(items, { relationName: "siteItems" }),
-	discoverableElements: many(discoverableElements, { relationName: "siteDiscoverableElements" }),
 	questStages: many(questStages, { relationName: "siteQuestStages" }),
 	questHooks: many(questHooks, { relationName: "siteQuestHooks" }),
 	consequences: many(consequences, { relationName: "consequencesAtSite" }),
+	currentLocationNpcs: many(npcs, { relationName: "npcsAtCurrentLocation" }),
+	factionHqs: many(factions, { relationName: "factionHq" }),
+	factionInfluence: many(factionInfluence, { relationName: "influenceAtSite" }),
+	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "siteForeshadowingSeeds" }),
+	foreshadowingTargets: many(foreshadowingSeeds, { relationName: "foreshadowedSite" }),
+	itemHistory: many(itemNotableHistory, { relationName: "siteItemHistory" }),
+	itemRelationships: many(itemRelationships, { relationName: "siteItemRelationships" }),
 
 	embedding: one(embeddings, {
 		fields: [sites.embeddingId],
