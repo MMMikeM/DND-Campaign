@@ -1,54 +1,63 @@
-/**
- * Embedding Input Type Definitions
- *
- * These interfaces define the exact shape of data objects that the corresponding
- * `embeddingTextFor[EntityName]` functions will receive. Each interface includes:
- * - Direct fields from the database tables
- * - Resolved/summarized fields from related entities (populated by mapper functions)
- */
-
 // ============================================================================
 // CONFLICT ENTITIES
 // ============================================================================
 
 export interface MajorConflictEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'major_conflicts' table
 	name: string
-	scope?: string | null
-	natures?: string[] | null
-	status?: string | null
-	cause?: string | null
-	stakes?: string[] | null
-	moralDilemma?: string | null
-	possibleOutcomes?: string[] | null
-	hiddenTruths?: string[] | null
-	clarityOfRightWrong?: string | null
-	currentTensionLevel?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	scope?: string
+	natures?: string[]
+	status?: string
+	cause?: string
+	stakes?: string[]
+	moralDilemma?: string
+	possibleOutcomes?: string[]
+	hiddenTruths?: string[]
+	clarityOfRightWrong?: string
+	currentTensionLevel?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	primaryRegionName?: string | null
-	participantSummaries?: string[] // e.g., ["Thag (Goblin Leader, Instigator)", "The Iron Brigade (Opponent)"]
-}
-
-export interface ConflictParticipantEmbeddingInput {
-	// Direct fields
-	role?: string | null
-	motivation?: string | null
-	publicStance?: string | null
-	secretStance?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentConflictName: string
-	participantName: string
-	participantType: "NPC" | "Faction"
+	// Resolved/Summarized fields for Relationships
+	primaryRegion?: {
+		name: string
+		type?: string
+	}
+	participants?: Array<{
+		name: string
+		type: "Faction" | "NPC"
+		roleInConflict?: string
+		motivation?: string
+		publicStance?: string
+	}>
+	keyRelatedQuests?: Array<{
+		name: string
+		relationship?: string
+	}>
+	keyRelatedNarrativeDestinations?: Array<{
+		name: string
+		relationship?: string
+	}>
+	keyRelatedConsequences?: Array<{
+		name: string
+		consequenceType?: string
+		severity?: string
+		visibility?: string
+		timeframe?: string
+		playerImpactFeel?: string
+		impactDescription?: string
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
+	keyRelatedWorldConcepts?: Array<{
+		name: string
+		relationship?: string
+	}>
 }
 
 // ============================================================================
@@ -56,53 +65,25 @@ export interface ConflictParticipantEmbeddingInput {
 // ============================================================================
 
 export interface NarrativeEventEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'narrative_events' table
 	name: string
-	eventType?: string | null
-	intendedRhythmEffect?: string | null
-	narrativePlacement?: string | null
-	impactSeverity?: string | null
-	complication_details?: string | null
-	escalation_details?: string | null
-	twist_reveal_details?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	eventType?: string
+	intendedRhythmEffect?: string
+	narrativePlacement?: string
+	impactSeverity?: string
+	complication_details?: string
+	escalation_details?: string
+	twist_reveal_details?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	relatedQuestName?: string | null
-	questStageName?: string | null
-	triggeringDecisionName?: string | null
-}
-
-export interface ConsequenceEmbeddingInput {
-	// Direct fields
-	name: string
-	consequenceType?: string | null
-	severity?: string | null
-	visibility?: string | null
-	timeframe?: string | null
-	sourceType?: string | null
-	playerImpactFeel?: string | null
-	conflictImpactDescription?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	triggerDecisionName?: string | null
-	triggerQuestName?: string | null
-	triggerConflictName?: string | null
-	affectedFactionName?: string | null
-	affectedRegionName?: string | null
-	affectedAreaName?: string | null
-	affectedSiteName?: string | null
-	affectedNpcName?: string | null
-	affectedDestinationName?: string | null
-	affectedConflictNameAsEffect?: string | null
-	futureQuestName?: string | null
+	// Resolved/Summarized fields
+	relatedQuestName?: string
+	questStageName?: string
+	triggeringDecisionName?: string
 }
 
 // ============================================================================
@@ -110,107 +91,115 @@ export interface ConsequenceEmbeddingInput {
 // ============================================================================
 
 export interface FactionEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'factions' table (includes merged faction_culture fields)
 	name: string
-	publicAlignment?: string | null
-	secretAlignment?: string | null
-	size?: string | null
-	wealth?: string | null
-	reach?: string | null
-	type?: string[] | null
-	publicGoal?: string | null
-	secretGoal?: string | null
-	publicPerception?: string | null
-	transparencyLevel?: string | null
-	values?: string[] | null
-	history?: string[] | null
-	symbols?: string[] | null
-	rituals?: string[] | null
-	taboos?: string[] | null
-	aesthetics?: string[] | null
-	jargon?: string | null
-	recognitionSigns?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	publicAlignment?: string
+	secretAlignment?: string
+	size?: string
+	wealth?: string
+	reach?: string
+	type?: string[]
+	publicGoal?: string
+	secretGoal?: string
+	publicPerception?: string
+	transparencyLevel?: string
+	values?: string[]
+	history?: string[]
+	symbols?: string[]
+	rituals?: string[]
+	taboos?: string[]
+	aesthetics?: string[]
+	jargon?: string[]
+	recognitionSigns?: string[]
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	primaryHqSiteName?: string | null
-	keyAllyFactionNames?: string[]
-	keyEnemyFactionNames?: string[]
-	areasOfInfluence?: string[] // e.g., ["Dominates Silverwood Forest (Region)", "Strong influence in Port Town (Area)"]
-}
-
-export interface FactionAgendaEmbeddingInput {
-	// Direct fields
-	name: string
-	agendaType?: string | null
-	currentStage?: string | null
-	importance?: string | null
-	ultimateAim?: string | null
-	moralAmbiguity?: string | null
-	approach?: string[] | null
-	storyHooks?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentFactionName: string
-}
-
-export interface FactionDiplomacyEmbeddingInput {
-	// Direct fields
-	strength?: string | null
-	diplomaticStatus?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	faction1Name: string
-	faction2Name: string
-}
-
-export interface FactionInfluenceEmbeddingInput {
-	// Direct fields
-	influenceLevel?: string | null
-	presenceTypes?: string[] | null
-	presenceDetails?: string[] | null
-	priorities?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentFactionName: string
-	locationName: string
-	locationType: "Region" | "Area" | "Site"
+	// Resolved/Summarized fields for Relationships
+	primaryHq?: {
+		name: string
+		siteType?: string
+		site?: {
+			name: string
+			type: string
+		}
+	}
+	agendas?: Array<{
+		name: string
+		agendaType?: string
+		currentStage?: string
+		importance?: string
+		ultimateAim?: string
+		moralAmbiguity?: string
+		approach?: string[]
+		storyHooks?: string[]
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
+	diplomaticTies?: Array<{
+		otherFactionName: string
+		status?: string
+		strength?: string
+		sharedGoalsOrConflicts?: string
+	}>
+	influenceAreas?: Array<{
+		locationName: string
+		locationType: "Region" | "Area" | "Site"
+		level?: string
+		presenceSummary?: string
+	}>
+	keyMembers?: Array<{
+		npcName: string
+		roleInFaction?: string
+		rank?: string
+		loyalty?: string
+	}>
+	keyConflictsInvolved?: Array<{
+		conflictName: string
+		roleInConflict?: string
+	}>
+	relatedWorldConcepts?: Array<{
+		name: string
+		relationship?: string
+	}>
+	keyQuestsInvolved?: Array<{
+		questName: string
+		roleInQuest?: string
+	}>
 }
 
 // ============================================================================
-// FORESHADOWING ENTITIES
+// FORESHADOWING / DISCOVERABLE ELEMENT ENTITIES
 // ============================================================================
 
-export interface ForeshadowingSeedEmbeddingInput {
-	// Direct fields
-	targetEntityType?: string | null
-	targetAbstractDetail?: string | null
-	suggestedDeliveryMethods?: string[] | null
-	subtlety?: string | null
-	narrativeWeight?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+export interface ForeshadowingEmbeddingInput {
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'foreshadowing_seeds' table
+	targetEntityType?: string
+	targetAbstractDetail?: string
+	suggestedDeliveryMethods?: string[]
+	subtlety?: string
+	narrativeWeight?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	targetEntityName?: string | null
-	sourceContextSummary?: string // e.g., "Can be delivered by Elara during the 'Lost Artifact' quest at the Old Mill site."
+	// Resolved/Summarized fields
+	targetEntityNameAndType?: {
+		name: string
+		type: string
+	}
+	sourceContext?: {
+		questName?: string
+		stageName?: string
+		siteName?: string
+		npcName?: string
+	}
 }
 
 // ============================================================================
@@ -218,125 +207,79 @@ export interface ForeshadowingSeedEmbeddingInput {
 // ============================================================================
 
 export interface ItemEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'items' table
 	name: string
-	itemType?: string | null
-	rarity?: string | null
-	narrativeRole?: string | null
-	perceivedSimplicity?: string | null
-	significance?: string | null
-	loreSignificance?: string | null
-	mechanicalEffects?: string[] | null
-	creationPeriod?: string | null
-	placeOfOrigin?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	itemType?: string
+	rarity?: string
+	narrativeRole?: string
+	perceivedSimplicity?: string
+	significance?: string
+	loreSignificance?: string
+	mechanicalEffects?: string[]
+	creationPeriod?: string
+	placeOfOrigin?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	relatedQuestName?: string | null
-}
-
-export interface ItemRelationshipEmbeddingInput {
-	// Direct fields
-	relatedEntityType?: string | null
-	relationshipType?: string | null
-	relationshipDetails?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	sourceItemName: string
-	relatedEntityName: string
-}
-
-export interface ItemNotableHistoryEmbeddingInput {
-	// Direct fields
-	eventDescription?: string | null
-	timeframe?: string | null
-	npcRoleInEvent?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentItemName: string
-	keyNpcName?: string | null
-	eventLocationSiteName?: string | null
+	// Resolved/Summarized fields for Relationships
+	relatedQuestName?: string
+	keyRelationshipSummaries?: Array<{
+		relatedEntityName: string
+		entityType: string
+		relationshipType: string
+		details?: string
+	}>
+	historicalHighlights?: Array<{
+		event: string
+		timeframe?: string
+		keyNpcName?: string
+		locationSiteName?: string
+		npcRole?: string
+	}>
 }
 
 // ============================================================================
-// NARRATIVE ENTITIES
+// NARRATIVE DESTINATION ENTITIES
 // ============================================================================
 
 export interface NarrativeDestinationEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'narrative_destinations' table
 	name: string
-	type?: string | null
-	status?: string | null
-	promise?: string | null
-	payoff?: string | null
-	themes?: string[] | null
-	foreshadowingElements?: string[] | null
-	intendedEmotionalArc?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	type?: string
+	status?: string
+	promise?: string
+	payoff?: string
+	themes?: string[]
+	foreshadowingElements?: string[]
+	intendedEmotionalArc?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	primaryRegionName?: string | null
-	relatedConflictName?: string | null
-	keyQuestNamesInArc?: string[]
-}
-
-export interface DestinationQuestRoleEmbeddingInput {
-	// Direct fields
-	role?: string | null
-	sequenceInArc?: number | null
-	contributionDetails?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentDestinationName: string
-	questName: string
-}
-
-export interface DestinationRelationshipEmbeddingInput {
-	// Direct fields
-	relationshipType?: string | null
-	relationshipDetails?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	sourceDestinationName: string
-	relatedDestinationName: string
-}
-
-export interface DestinationParticipantInvolvementEmbeddingInput {
-	// Direct fields
-	roleInArc?: string | null
-	arcImportance?: string | null
-	involvementDetails?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentDestinationName: string
-	participantName: string
-	participantType: "NPC" | "Faction"
+	// Resolved/Summarized fields
+	primaryRegionName?: string
+	relatedConflictName?: string
+	keyQuestAndRoleSummaries?: Array<{
+		questName: string
+		role?: string
+		contributionToArc?: string
+	}>
+	relatedArcSummaries?: Array<{
+		arcName: string
+		relationshipType?: string
+		connectionDetails?: string
+	}>
+	keyParticipantSummaries?: Array<{
+		participantName: string
+		participantType: "npc" | "faction"
+		roleInArc?: string
+		arcImportance?: string
+	}>
 }
 
 // ============================================================================
@@ -344,373 +287,409 @@ export interface DestinationParticipantInvolvementEmbeddingInput {
 // ============================================================================
 
 export interface NpcEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'npcs' table
 	name: string
-	alignment?: string | null
-	disposition?: string | null
-	gender?: string | null
-	race?: string | null
-	trustLevel?: string | null
-	wealth?: string | null
-	adaptability?: string | null
-	complexityProfile?: string | null
-	playerPerceptionGoal?: string | null
-	age?: string | null
-	attitude?: string | null
-	occupation?: string | null
-	quirk?: string | null
-	socialStatus?: string | null
-	availability?: string | null
-	currentGoals?: string[] | null
-	appearance?: string[] | null
-	avoidTopics?: string[] | null
-	background?: string[] | null
-	biases?: string[] | null
-	dialogue?: string[] | null
-	drives?: string[] | null
-	fears?: string[] | null
-	knowledge?: string[] | null
-	mannerisms?: string[] | null
-	personalityTraits?: string[] | null
-	preferredTopics?: string[] | null
-	rumours?: string[] | null
-	secrets?: string[] | null
-	voiceNotes?: string[] | null
-	capability?: string | null
-	proactivity?: string | null
-	relatability?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	alignment?: string
+	disposition?: string
+	gender?: string
+	race?: string
+	trustLevel?: string
+	wealth?: string
+	adaptability?: string
+	complexityProfile?: string
+	playerPerceptionGoal?: string
+	age?: string
+	attitude?: string
+	occupation?: string
+	quirk?: string
+	socialStatus?: string
+	availability?: string
+	currentGoals?: string[]
+	appearance?: string[]
+	avoidTopics?: string[]
+	background?: string[]
+	biases?: string[]
+	dialogue?: string[]
+	drives?: string[]
+	fears?: string[]
+	knowledge?: string[]
+	mannerisms?: string[]
+	personalityTraits?: string[]
+	preferredTopics?: string[]
+	rumours?: string[]
+	secrets?: string[]
+	voiceNotes?: string[]
+	capability?: string
+	proactivity?: string
+	relatability?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	currentLocationSiteName?: string | null
-	primaryFactionNameAndRole?: string // e.g., "The Shadow Guild (Leader)"
-	keySiteAssociations?: string[] // e.g., ["Resides at The Old Tower", "Works at The Arcane Library"]
-	keyRelationshipSummaries?: string[] // e.g., ["Ally (Strong) with Elara", "Rival (Moderate) with Borin"]
-}
-
-export interface NpcSiteEmbeddingInput {
-	// Direct fields
-	associationType?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	npcName: string
-	siteName: string
-}
-
-export interface NpcFactionEmbeddingInput {
-	// Direct fields
-	loyalty?: string | null
-	justification?: string | null
-	role?: string | null
-	rank?: string | null
-	secrets?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	npcName: string
-	factionName: string
-}
-
-export interface NpcRelationshipEmbeddingInput {
-	// Direct fields
-	relationshipType?: string | null
-	strength?: string | null
-	history?: string[] | null
-	narrativeTensions?: string[] | null
-	sharedGoals?: string[] | null
-	relationshipDynamics?: string[] | null
-	isBidirectional?: boolean | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields (optional to allow for external parameter passing)
-	npc1Name?: string
-	npc2Name?: string
+	// Resolved/Summarized fields for Relationships
+	currentLocation?: {
+		siteName: string
+		siteType?: string
+		areaName?: string
+	}
+	factionAffiliations?: Array<{
+		factionName: string
+		roleInFaction?: string
+		rank?: string
+		loyalty?: string
+		justification?: string
+	}>
+	siteAssociations?: Array<{
+		siteName: string
+		associationType?: string
+		siteContext?: string
+	}>
+	relationships?: Array<{
+		otherNpcName: string
+		otherNpcRace?: string
+		otherNpcOccupation?: string
+		relationshipType?: string
+		strength?: string
+		history?: string[]
+		narrativeTensions?: string[]
+		sharedGoals?: string[]
+		relationshipDynamics?: string[]
+		isBidirectional?: boolean
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
+	keyConflictsInvolved?: Array<{
+		conflictName: string
+		roleInConflict?: string
+		motivation?: string
+	}>
+	keyQuestsInvolved?: Array<{
+		questName: string
+		roleInQuest?: string
+	}>
+	relatedWorldConcepts?: Array<{
+		name: string
+		roleOrRelationship?: string
+	}>
+	itemsOfSignificance?: Array<{
+		itemName: string
+		relationship?: string
+	}>
 }
 
 // ============================================================================
 // QUEST ENTITIES
 // ============================================================================
 
-export interface QuestStageEmbeddingInput {
-	// Direct fields
-	stageOrder?: number | null
-	name: string
-	dramatic_question?: string | null
-	stageType?: string | null
-	intendedComplexityLevel?: string | null
-	objectives?: string[] | null
-	completionPaths?: string[] | null
-	encounters?: string[] | null
-	dramatic_moments?: string[] | null
-	sensory_elements?: string[] | null
-	stageImportance?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentQuestName: string
-	siteName?: string | null
-}
-
-export interface StageDecisionEmbeddingInput {
-	// Direct fields
-	conditionType?: string | null
-	decisionType?: string | null
-	name: string
-	ambiguityLevel?: string | null
-	conditionValue?: string | null
-	successDescription?: string[] | null
-	failureDescription?: string[] | null
-	narrativeTransition?: string[] | null
-	potential_player_reactions?: string[] | null
-	options?: string[] | null
-	failure_leads_to_retry?: boolean | null
-	failure_lesson_learned?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentQuestName: string
-	fromStageName: string
-	toStageName?: string | null
-}
-
 export interface QuestEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'quests' table
 	name: string
-	type?: string | null
-	urgency?: string | null
-	visibility?: string | null
-	mood?: string | null
-	moralSpectrumFocus?: string | null
-	intendedPacingRole?: string | null
-	primaryPlayerExperienceGoal?: string | null
-	failureOutcomes?: string[] | null
-	successOutcomes?: string[] | null
-	objectives?: string[] | null
-	rewards?: string[] | null
-	themes?: string[] | null
-	inspirations?: string[] | null
-	otherUnlockConditionsNotes?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	type?: string
+	urgency?: string
+	visibility?: string
+	mood?: string
+	moralSpectrumFocus?: string
+	intendedPacingRole?: string
+	primaryPlayerExperienceGoal?: string
+	failureOutcomes?: string[]
+	successOutcomes?: string[]
+	objectives?: string[]
+	rewards?: string[]
+	themes?: string[]
+	inspirations?: string[]
+	otherUnlockConditionsNotes?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	regionName?: string | null
-	prerequisiteQuestName?: string | null
-	keyParticipantSummaries?: string[] // e.g., ["Elara (Quest Giver)", "Gorgon (Antagonist, NPC)", "The Silver Hand (Ally, Faction)"]
+	// Resolved/Summarized fields for Relationships
+	region?: {
+		name: string
+		type?: string
+	}
+	relatedQuests?: Array<{
+		name: string
+		relationshipType?: string
+		objectiveSummary?: string
+	}>
+	participants?: Array<{
+		name: string
+		type: "NPC" | "Faction"
+		roleInQuest?: string
+		importance?: string
+	}>
+	stages?: Array<{
+		name: string
+		order?: number
+		dramaticQuestion?: string
+		siteName?: string
+		objectiveSummary?: string
+	}>
+	hooks?: Array<{
+		sourceDescription?: string
+		hookType?: string
+		presentationStyle?: string
+		deliveryNpcName?: string
+		triggeringFactionName?: string
+	}>
+	keyItemsInvolved?: Array<{
+		itemName: string
+		roleInQuest?: string
+	}>
+	keyNarrativeEventsTriggered?: Array<{
+		eventName: string
+		eventType?: string
+	}>
+	keyConsequences?: Array<{
+		consequenceName: string
+		consequenceType?: string
+		severity?: string
+		visibility?: string
+		timeframe?: string
+		playerImpactFeel?: string
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
 }
 
-export interface QuestRelationshipEmbeddingInput {
-	// Direct fields
-	relationshipType?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+export interface QuestStageEmbeddingInput {
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'quest_stages' table
+	stageOrder?: number
+	name: string
+	dramatic_question?: string
+	stageType?: string
+	intendedComplexityLevel?: string
+	objectives?: string[]
+	completionPaths?: string[]
+	encounters?: string[]
+	dramatic_moments?: string[]
+	sensory_elements?: string[]
+	stageImportance?: string
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	quest1Name: string
-	quest2Name: string
-}
-
-export interface QuestHookEmbeddingInput {
-	// Direct fields
-	source?: string | null
-	hookType?: string | null
-	presentationStyle?: string | null
-	hookContent?: string[] | null
-	discoveryConditions?: string[] | null
-	npcRelationshipToParty?: string | null
-	trustRequired?: string | null
-	dialogueHint?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
+	// Resolved/Summarized fields
 	parentQuestName: string
-	siteName?: string | null
-	factionName?: string | null
-	deliveryNpcName?: string | null
-}
-
-export interface QuestParticipantInvolvementEmbeddingInput {
-	// Direct fields
-	roleInQuest?: string | null
-	importanceInQuest?: string | null
-	involvementDetails?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentQuestName: string
-	participantName: string
-	participantType: "NPC" | "Faction"
+	site?: {
+		name: string
+		type?: string
+	}
+	keyDecisions?: Array<{
+		name: string
+		decisionType?: string
+		conditionType?: string
+		ambiguityLevel?: string
+		conditionValue?: string
+		successDescription?: string[]
+		failureDescription?: string[]
+		narrativeTransition?: string[]
+		potentialPlayerReactions?: string[]
+		options?: string[]
+		failureLeadsToRetry?: boolean
+		failureLessonLearned?: string
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+		successLeadsToStageName?: string
+		failureLeadsToStageName?: string
+		consequences?: Array<{
+			name: string
+			consequenceType?: string
+			severity?: string
+			visibility?: string
+			timeframe?: string
+			playerImpactFeel?: string
+			description?: string[]
+			creativePrompts?: string[]
+			gmNotes?: string[]
+			tags?: string[]
+		}>
+	}>
 }
 
 // ============================================================================
-// REGION/SITE ENTITIES
+// REGION/AREA/SITE ENTITIES
 // ============================================================================
-
-export interface SiteEmbeddingInput {
-	// Direct fields
-	siteType?: string | null
-	intendedSiteFunction?: string | null
-	name: string
-	terrain?: string | null
-	climate?: string | null
-	mood?: string | null
-	environment?: string | null
-	creatures?: string[] | null
-	features?: string[] | null
-	treasures?: string[] | null
-	lightingDescription?: string | null
-	soundscape?: string[] | null
-	smells?: string[] | null
-	weather?: string | null
-	descriptors?: string[] | null
-	coverOptions?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentAreaName: string
-	parentRegionName?: string | null
-}
-
-export interface SiteLinkEmbeddingInput {
-	// Direct fields
-	linkType?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	site1Name: string
-	site2Name?: string | null
-}
-
-export interface SiteEncounterEmbeddingInput {
-	// Direct fields
-	name: string
-	encounterType?: string | null
-	dangerLevel?: string | null
-	difficulty?: string | null
-	creatures?: string[] | null
-	treasure?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentSiteName: string
-}
-
-export interface SiteSecretEmbeddingInput {
-	// Direct fields
-	secretType?: string | null
-	difficultyToDiscover?: string | null
-	discoveryMethod?: string[] | null
-	consequences?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentSiteName: string
-}
 
 export interface RegionEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'regions' table
 	name: string
-	dangerLevel?: string | null
-	type?: string | null
-	atmosphereType?: string | null
-	revelationLayersSummary?: string[] | null
-	economy?: string | null
-	history?: string | null
-	population?: string | null
-	culturalNotes?: string[] | null
-	hazards?: string[] | null
-	pointsOfInterest?: string[] | null
-	rumors?: string[] | null
-	secrets?: string[] | null
-	security?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	dangerLevel?: string
+	type?: string
+	atmosphereType?: string
+	revelationLayersSummary?: string[]
+	economy?: string
+	history?: string
+	population?: string
+	culturalNotes?: string[]
+	hazards?: string[]
+	pointsOfInterest?: string[]
+	rumors?: string[]
+	secrets?: string[]
+	security?: string[]
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
+
+	// Resolved/Summarized fields
+	keyAreaSummaries?: Array<{
+		areaName: string
+		type?: string
+		primaryActivity?: string
+		dangerLevel?: string
+		atmosphereType?: string
+	}>
+	keyConnectionSummaries?: Array<{
+		connectedRegionName: string
+		connectionType?: string
+		routeType?: string
+		travelDifficulty?: string
+		travelTime?: string
+	}>
+	keyFactionInfluenceSummaries?: Array<{
+		factionName: string
+		influenceLevel?: string
+		presenceSummary?: string
+	}>
+	relatedWorldConceptSummaries?: Array<{
+		conceptName: string
+		relationship?: string
+		relevance?: string
+	}>
 }
 
 export interface AreaEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'areas' table
 	name: string
-	type?: string | null
-	dangerLevel?: string | null
-	atmosphereType?: string | null
-	revelationLayersSummary?: string[] | null
-	leadership?: string | null
-	population?: string | null
-	primaryActivity?: string | null
-	culturalNotes?: string[] | null
-	hazards?: string[] | null
-	pointsOfInterest?: string[] | null
-	rumors?: string[] | null
-	defenses?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	type?: string
+	dangerLevel?: string
+	atmosphereType?: string
+	revelationLayersSummary?: string[]
+	leadership?: string
+	population?: string
+	primaryActivity?: string
+	culturalNotes?: string[]
+	hazards?: string[]
+	pointsOfInterest?: string[]
+	rumors?: string[]
+	defenses?: string[]
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
+	// Resolved/Summarized fields
 	parentRegionName: string
+	keySiteSummaries?: Array<{
+		siteName: string
+		siteType?: string
+		intendedFunction?: string
+		mood?: string
+	}>
+	keyFactionInfluenceSummaries?: Array<{
+		factionName: string
+		influenceLevel?: string
+		presenceSummary?: string
+	}>
 }
 
-export interface RegionConnectionEmbeddingInput {
-	// Direct fields
-	connectionType?: string | null
-	routeType?: string | null
-	travelDifficulty?: string | null
-	travelTime?: string | null
-	travelHazards?: string[] | null
-	pointsOfInterest?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+export interface SiteEmbeddingInput {
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'sites' table
+	siteType?: string
+	intendedSiteFunction?: string
+	name: string
+	terrain?: string
+	climate?: string
+	mood?: string
+	environment?: string
+	creatures?: string[]
+	features?: string[]
+	treasures?: string[]
+	lightingDescription?: string[]
+	soundscape?: string[]
+	smells?: string[]
+	weather?: string[]
+	descriptors?: string[]
+	coverOptions?: string[]
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	region1Name: string
-	region2Name?: string | null
-	controllingFactionName?: string | null
+	// Resolved/Summarized fields for Relationships
+	locationContext?: {
+		areaName: string
+		areaType?: string
+		regionName: string
+		regionType?: string
+	}
+	encounters?: Array<{
+		name: string
+		encounterType?: string
+		dangerLevel?: string
+		difficulty?: string
+		creatures?: string[]
+		treasure?: string[]
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
+	secrets?: Array<{
+		secretType?: string
+		briefDescription: string
+		difficultyToDiscover?: string
+		discoveryMethod?: string[]
+		consequences?: string[]
+		description?: string[]
+		creativePrompts?: string[]
+		gmNotes?: string[]
+		tags?: string[]
+	}>
+	connectedSites?: Array<{
+		otherSiteName: string
+		linkType?: string
+		travelDescription?: string
+	}>
+	keyNpcsPresent?: Array<{
+		npcName: string
+		associationType?: string
+		npcSummary?: string
+	}>
+	factionsPresent?: Array<{
+		factionName: string
+		influenceLevel?: string
+		presenceSummary?: string
+	}>
+	keyQuestsLocatedHere?: Array<{
+		questName: string
+		stageName?: string
+		objectiveSummary?: string
+	}>
+	itemsLocatedHere?: Array<{
+		itemName: string
+		context?: string
+	}>
+	relatedWorldConcepts?: Array<{
+		name: string
+		relationship?: string
+	}>
 }
 
 // ============================================================================
@@ -718,66 +697,82 @@ export interface RegionConnectionEmbeddingInput {
 // ============================================================================
 
 export interface WorldConceptEmbeddingInput {
-	// Direct fields
+	// CORE EMBEDDABLE ENTITY
+	// Direct fields from 'world_concepts' table (and its 1:1 subtype tables like cultural_groups, historical_periods, social_institutions)
 	name: string
-	conceptType?: string | null
-	complexityProfile?: string | null
-	moralClarity?: string | null
-	summary?: string | null
-	surfaceImpression?: string | null
-	livedRealityDetails?: string | null
-	hiddenTruthsOrDepths?: string | null
-	additionalDetails?: string[] | null
-	socialStructure?: string | null
-	coreValues?: string[] | null
-	scope?: string | null
-	status?: string | null
-	timeframe?: string | null
-	startYear?: number | null
-	endYear?: number | null
-	modernRelevance?: string | null
-	currentChallenges?: string[] | null
-	modernConsequences?: string[] | null
-	questHooks?: string[] | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+	conceptType?: string
+	complexityProfile?: string
+	moralClarity?: string
+	summary?: string
+	surfaceImpression?: string
+	livedRealityDetails?: string
+	hiddenTruthsOrDepths?: string
+	additionalDetails?: string[]
+	socialStructure?: string
+	coreValues?: string[]
+	traditions?: string[]
+	languages?: string[]
+	definingCharacteristics?: string[]
+	majorEvents?: string[]
+	scope?: string
+	status?: string
+	timeframe?: string
+	startYear?: number
+	endYear?: number
+	modernRelevance?: string
+	currentChallenges?: string[]
+	modernConsequences?: string[]
+	questHooks?: string[]
+	description?: string[]
+	creativePrompts?: string[]
+	gmNotes?: string[]
+	tags?: string[]
 
-	// Resolved fields
-	keyRelatedConceptNamesAndTypes?: string[] // e.g., ["The Old Faith (Influenced By)", "The Great Schism (Led To)"]
-	primaryRegionNamesWhereRelevant?: string[]
-	keyFactionNamesRepresentingConcept?: string[]
+	// Resolved/Summarized fields for Relationships
+	relatedConcepts?: Array<{
+		otherConceptName: string
+		relationshipType?: string
+		strength?: string
+		details?: string
+	}>
+	entityLinks?: Array<{
+		entityName: string
+		entityType: "Region" | "Faction" | "NPC" | "Conflict" | "Quest"
+		roleOrType?: string
+		strength?: string
+		details?: string
+	}>
+	primaryRegionSummaries?: Array<{
+		regionName: string
+		relevanceType?: string
+		influence?: string
+	}>
+	keyFactionSummaries?: Array<{
+		factionName: string
+		relationshipType?: string
+		representationLevel?: string
+	}>
 }
 
-export interface ConceptRelationshipEmbeddingInput {
-	// Direct fields
-	relationshipType?: string | null
-	relationshipDetails?: string | null
-	strength?: string | null
-	isBidirectional?: boolean | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
+// ============================================================================
+// UTILITY TYPES
+// ============================================================================
 
-	// Resolved fields
-	sourceConceptName: string
-	targetConceptName: string
-}
-
-export interface WorldConceptLinkEmbeddingInput {
-	// Direct fields
-	linkRoleOrTypeText?: string | null
-	linkStrength?: string | null
-	linkDetailsText?: string | null
-	description?: string[] | null
-	creativePrompts?: string[] | null
-	gmNotes?: string[] | null
-	tags?: string[] | null
-
-	// Resolved fields
-	parentConceptName: string
-	linkedEntityName: string
-	linkedEntityType: "Region" | "Faction" | "NPC" | "Conflict" | "Quest"
-}
+/**
+ * Recursively makes all properties required, handling arrays, objects, and null unions properly
+ */
+export type RecursiveRequired<T> = T extends (infer U)[]
+	? RecursiveRequired<U>[] // Handle arrays
+	: T extends object
+		? T extends Function
+			? T // Don't transform functions
+			: {
+					[K in keyof T]-?: T[K] extends infer U
+						? U extends object
+							? RecursiveRequired<U> // Recursively transform nested objects, removing null
+							: U // Keep primitives as-is, removing null
+						: T[K] extends object
+							? RecursiveRequired<T[K]> // Handle non-null objects
+							: T[K] // Keep primitives as-is
+				}
+		: T // Return primitives unchanged
