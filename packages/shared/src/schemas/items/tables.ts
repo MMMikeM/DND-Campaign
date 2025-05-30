@@ -44,7 +44,7 @@ const itemRelationshipTypes = [
 	"conceals",
 ] as const
 
-const relatedEntityTypes = [
+const targetEntityTypes = [
 	"item",
 	"npc",
 	"faction",
@@ -106,15 +106,15 @@ export const itemRelationships = pgTable(
 		sourceItemId: cascadeFk("source_item_id", items.id),
 
 		// Polymorphic relationship - only one of these should be populated
-		relatedEntityType: oneOf("related_entity_type", relatedEntityTypes),
-		relatedItemId: nullableFk("related_item_id", items.id),
-		relatedNpcId: nullableFk("related_npc_id", npcs.id),
-		relatedFactionId: nullableFk("related_faction_id", factions.id),
-		relatedSiteId: nullableFk("related_site_id", sites.id),
-		relatedQuestId: nullableFk("related_quest_id", quests.id),
-		relatedConflictId: nullableFk("related_conflict_id", majorConflicts.id),
-		relatedNarrativeDestinationId: nullableFk("related_narrative_destination_id", narrativeDestinations.id),
-		relatedWorldConceptId: nullableFk("related_world_concept_id", worldConcepts.id),
+		targetEntityType: oneOf("target_entity_type", targetEntityTypes),
+		targetItemId: nullableFk("target_item_id", items.id),
+		targetNpcId: nullableFk("target_npc_id", npcs.id),
+		targetFactionId: nullableFk("target_faction_id", factions.id),
+		targetSiteId: nullableFk("target_site_id", sites.id),
+		targetQuestId: nullableFk("target_quest_id", quests.id),
+		targetConflictId: nullableFk("target_conflict_id", majorConflicts.id),
+		targetNarrativeDestinationId: nullableFk("target_narrative_destination_id", narrativeDestinations.id),
+		targetWorldConceptId: nullableFk("target_world_concept_id", worldConcepts.id),
 
 		relationshipType: oneOf("relationship_type", itemRelationshipTypes),
 		relationshipDetails: nullableString("relationship_details"),
@@ -122,29 +122,29 @@ export const itemRelationships = pgTable(
 	(t) => [
 		unique().on(
 			t.sourceItemId,
-			t.relatedEntityType,
-			t.relatedItemId,
-			t.relatedNpcId,
-			t.relatedFactionId,
-			t.relatedSiteId,
-			t.relatedQuestId,
-			t.relatedConflictId,
-			t.relatedNarrativeDestinationId,
-			t.relatedWorldConceptId,
+			t.targetEntityType,
+			t.targetItemId,
+			t.targetNpcId,
+			t.targetFactionId,
+			t.targetSiteId,
+			t.targetQuestId,
+			t.targetConflictId,
+			t.targetNarrativeDestinationId,
+			t.targetWorldConceptId,
 			t.relationshipType,
 		),
 		check(
 			"single_related_entity_exclusive_and_correct",
 			sql`
-			CASE ${t.relatedEntityType}
-				WHEN 'item' THEN (${t.relatedItemId} IS NOT NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'npc' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NOT NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'faction' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NOT NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'site' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NOT NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'quest' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NOT NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'conflict' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NOT NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'narrative_destination' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NOT NULL AND ${t.relatedWorldConceptId} IS NULL)
-				WHEN 'world_concept' THEN (${t.relatedItemId} IS NULL AND ${t.relatedNpcId} IS NULL AND ${t.relatedFactionId} IS NULL AND ${t.relatedSiteId} IS NULL AND ${t.relatedQuestId} IS NULL AND ${t.relatedConflictId} IS NULL AND ${t.relatedNarrativeDestinationId} IS NULL AND ${t.relatedWorldConceptId} IS NOT NULL)
+			CASE ${t.targetEntityType}
+				WHEN 'item' THEN (${t.targetItemId} IS NOT NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'npc' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NOT NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'faction' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NOT NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'site' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NOT NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'quest' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NOT NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'conflict' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NOT NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'narrative_destination' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NOT NULL AND ${t.targetWorldConceptId} IS NULL)
+				WHEN 'world_concept' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NOT NULL)
 				ELSE FALSE
 			END
 			`,
@@ -173,6 +173,6 @@ export const enums = {
 	perceivedSimplicityLevels,
 	rarityLevels,
 	itemRelationshipTypes,
-	relatedEntityTypes,
+	targetEntityTypes,
 	historyRoles,
 }

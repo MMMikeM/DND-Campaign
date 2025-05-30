@@ -62,7 +62,7 @@ export const sites = pgTable("sites", {
 	tags: list("tags"),
 
 	areaId: cascadeFk("area_id", () => areas.id),
-	siteType: oneOf("site_type", siteTypes),
+	type: oneOf("site_type", siteTypes),
 
 	// New field from schema updates plan
 	intendedSiteFunction: oneOf("intended_site_function", siteFunctions),
