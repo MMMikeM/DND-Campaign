@@ -1,64 +1,157 @@
-import { createEmbeddingBuilder } from "../embedding-helpers"
-import type { FactionAgendaEmbeddingInput, FactionEmbeddingInput } from "../embedding-input-types"
+import { buildEmbedding } from "../embedding-helpers"
+import type { FactionEmbeddingInput } from "../embedding-input-types"
 
-export const embeddingTextForFaction = (faction: FactionEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
+export const embeddingTextForFaction = (input: FactionEmbeddingInput): string => {
+	const {
+		name,
+		description,
+		history,
+		publicAlignment,
+		secretAlignment,
+		size,
+		wealth,
+		reach,
+		type,
+		publicGoal,
+		secretGoal,
+		publicPerception,
+		transparencyLevel,
+		values,
+		jargon,
+		symbols,
+		rituals,
+		taboos,
+		aesthetics,
+		recognitionSigns,
+		primaryHqSite,
+		members,
+		agendas,
+		relationships,
+		influence,
+		questParticipation,
+		worldConceptLinks,
+	} = input
 
-	builder.setEntity("Faction", faction.name, faction.description)
+	return buildEmbedding({
+		faction: name,
+		overview: description,
+		history,
+		publicAlignment,
+		secretAlignment,
+		size,
+		wealth,
+		reach,
+		type,
+		publicGoal,
+		secretGoal,
+		publicPerception,
+		transparencyLevel,
+		values,
+		jargon,
+		symbols,
+		rituals,
+		taboos,
+		aesthetics,
+		recognitionSigns,
+		primaryHqSite: primaryHqSite?.name,
+		members: members?.map(({ role, rank, loyalty, justification, description, secrets, npcInfo }) => ({
+			npc: npcInfo.name,
+			alignment: npcInfo.alignment,
+			occupation: npcInfo.occupation,
+			role,
+			rank,
+			loyalty,
+			justification,
+			description,
+			secrets,
+		})),
+		agendas: agendas?.map(
+			({
+				name,
+				agendaType,
+				currentStage,
+				importance,
+				ultimateAim,
+				moralAmbiguity,
+				description,
+				approach,
+				storyHooks,
+			}) => ({
+				agenda: name,
+				agendaType,
+				currentStage,
+				importance,
+				ultimateAim,
+				moralAmbiguity,
+				description,
+				approach,
+				storyHooks,
+			}),
+		),
+		relationships: relationships?.map(({ diplomaticStatus, strength, description, otherFaction }) => ({
+			otherFaction: otherFaction.name,
+			factionType: otherFaction.type,
+			diplomaticStatus,
+			strength,
+			description,
+		})),
+		influence: influence?.map((inf) => {
+			const baseInfluence = {
+				influenceLevel: inf.influenceLevel,
+				description: inf.description,
+				priorities: inf.priorities,
+				presenceTypes: inf.presenceTypes,
+				presenceDetails: inf.presenceDetails,
+			}
 
-	builder.addFields("Basic Information", {
-		type: faction.type?.join(", "),
-		size: faction.size,
-		wealth: faction.wealth,
-		reach: faction.reach,
-		headquarters: faction.primaryHqSiteName,
+			if (inf.scope === "Region" && "regionInfo" in inf) {
+				return {
+					...baseInfluence,
+					scope: "Region",
+					regionName: inf.regionInfo.name,
+					regionType: inf.regionInfo.type,
+					regionDescription: inf.regionInfo.description,
+				}
+			}
+			if (inf.scope === "Area" && "areaInfo" in inf) {
+				return {
+					...baseInfluence,
+					scope: "Area",
+					areaName: inf.areaInfo.name,
+					areaType: inf.areaInfo.type,
+					areaDescription: inf.areaInfo.description,
+				}
+			}
+			if (inf.scope === "Site" && "siteInfo" in inf) {
+				return {
+					...baseInfluence,
+					scope: "Site",
+					siteName: inf.siteInfo.name,
+					siteType: inf.siteInfo.type,
+					siteDescription: inf.siteInfo.description,
+				}
+			}
+			return baseInfluence
+		}),
+		questParticipation: questParticipation?.map(
+			({ roleInQuest, importanceInQuest, description, involvementDetails, questInfo }) => ({
+				quest: questInfo.name,
+				questType: questInfo.type,
+				roleInQuest,
+				importanceInQuest,
+				description,
+				involvementDetails,
+			}),
+		),
+		worldConceptLinks: worldConceptLinks?.map(
+			({ linkRoleOrTypeText, linkStrength, linkDetailsText, description, associatedConcept }) => ({
+				concept: associatedConcept.name,
+				conceptType: associatedConcept.conceptType,
+				linkRole: linkRoleOrTypeText,
+				linkStrength,
+				linkDetails: linkDetailsText,
+				description,
+			}),
+		),
 	})
-
-	builder.addFields("Alignment & Goals", {
-		publicAlignment: faction.publicAlignment,
-		secretAlignment: faction.secretAlignment,
-		publicGoal: faction.publicGoal,
-		secretGoal: faction.secretGoal,
-		publicPerception: faction.publicPerception,
-		transparencyLevel: faction.transparencyLevel,
-	})
-
-	builder.addList("Core Values", faction.values)
-
-	// Culture & Identity sections
-	builder
-		.addList("History", faction.history)
-		.addList("Symbols", faction.symbols)
-		.addList("Rituals", faction.rituals)
-		.addList("Taboos", faction.taboos)
-		.addList("Aesthetics", faction.aesthetics)
-		.addList("Jargon", faction.jargon)
-		.addList("Recognition Signs", faction.recognitionSigns)
-
-	// Relationships
-	builder
-		.addList("Allied Factions", faction.keyAllyFactionNames)
-		.addList("Enemy Factions", faction.keyEnemyFactionNames)
-		.addList("Areas of Influence", faction.areasOfInfluence)
-
-	return builder.build()
-}
-
-export const embeddingTextForFactionAgenda = (agenda: FactionAgendaEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Faction Agenda", agenda.name, agenda.description)
-
-	builder.addFields("Agenda Details", {
-		faction: agenda.parentFactionName,
-		type: agenda.agendaType,
-		currentStage: agenda.currentStage,
-		importance: agenda.importance,
-		ultimateAim: agenda.ultimateAim,
-		moralAmbiguity: agenda.moralAmbiguity,
-	})
-
-	builder.addList("Approach", agenda.approach).addList("Story Hooks", agenda.storyHooks)
-
-	return builder.build()
 }

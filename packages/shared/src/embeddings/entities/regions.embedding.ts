@@ -1,54 +1,137 @@
-import { createEmbeddingBuilder } from "../embedding-helpers"
+import { buildEmbedding } from "../embedding-helpers"
 import type { AreaEmbeddingInput, RegionEmbeddingInput } from "../embedding-input-types"
 
-export const embeddingTextForRegion = (region: RegionEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
+export const embeddingTextForRegion = ({
+	name,
+	description,
+	type,
+	dangerLevel,
+	atmosphereType,
+	revelationLayersSummary,
+	economy,
+	history,
+	population,
+	culturalNotes,
+	hazards,
+	pointsOfInterest,
+	rumors,
+	secrets,
+	containedAreas,
+	outgoingConnections,
+	worldConceptConnections,
+	regionalFactionInfluence,
+}: RegionEmbeddingInput): string => {
+	return buildEmbedding({
+		region: name,
+		overview: description,
+		type,
+		dangerLevel,
+		atmosphereType,
+		economy,
+		population,
+		revelationLayersSummary,
+		history,
+		culturalNotes,
+		hazards,
+		pointsOfInterest,
+		rumors,
+		secrets,
+		containedAreas: containedAreas?.map(({ name, type, dangerLevel, atmosphereType, description }) => ({
+			area: name,
+			areaType: type,
+			dangerLevel,
+			atmosphereType,
+			description,
+		})),
+		outgoingConnections: outgoingConnections?.map(
+			({
+				connectionType,
+				routeType,
+				travelDifficulty,
+				travelTime,
+				travelHazards,
+				pointsOfInterest,
+				description,
+				connectedToRegion,
+				controllingFaction,
+			}) => ({
+				region: connectedToRegion.name,
+				regionType: connectedToRegion.type,
+				connectionType,
+				routeType,
+				travelDifficulty,
+				travelTime,
+				travelHazards,
+				pointsOfInterest,
+				description,
+				controllingFaction: controllingFaction?.name,
+				controllingFactionType: controllingFaction?.type,
+			}),
+		),
+		regionalFactionInfluence: regionalFactionInfluence?.map(({ factionInfo, description }) => ({
+			faction: factionInfo.name,
+			factionType: factionInfo.type,
+			description,
+		})),
 
-	builder.setEntity("Region", region.name, region.description)
-
-	builder.addFields("Basic Information", {
-		type: region.type,
-		dangerLevel: region.dangerLevel,
-		atmosphere: region.atmosphereType,
-		economy: region.economy,
-		population: region.population,
-		security: region.security,
-		history: region.history,
+		worldConceptConnections: worldConceptConnections?.map(
+			({ linkRoleOrTypeText, linkStrength, linkDetailsText, description, conceptInfo }) => ({
+				concept: conceptInfo.name,
+				conceptType: conceptInfo.conceptType,
+				summary: conceptInfo.summary,
+				linkRole: linkRoleOrTypeText,
+				linkStrength,
+				linkDetails: linkDetailsText,
+				description,
+			}),
+		),
 	})
-
-	builder
-		.addList("Revelation Layers", region.revelationLayersSummary)
-		.addList("Cultural Notes", region.culturalNotes)
-		.addList("Hazards", region.hazards)
-		.addList("Points of Interest", region.pointsOfInterest)
-		.addList("Rumors", region.rumors)
-		.addList("Secrets", region.secrets)
-
-	return builder.build()
 }
 
-export const embeddingTextForArea = (area: AreaEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Area", area.name, area.description)
-
-	builder.addFields("Basic Information", {
-		type: area.type,
-		dangerLevel: area.dangerLevel,
-		atmosphere: area.atmosphereType,
-		region: area.parentRegionName,
-		leadership: area.leadership,
-		population: area.population,
-		primaryActivity: area.primaryActivity,
-		defenses: area.defenses,
+export const embeddingTextForArea = ({
+	name,
+	description,
+	type,
+	dangerLevel,
+	atmosphereType,
+	leadership,
+	population,
+	primaryActivity,
+	parentRegion,
+	revelationLayersSummary,
+	culturalNotes,
+	hazards,
+	pointsOfInterest,
+	rumors,
+	defenses,
+	containedSites,
+}: AreaEmbeddingInput): string => {
+	return buildEmbedding({
+		area: name,
+		overview: description,
+		type,
+		dangerLevel,
+		atmosphereType,
+		leadership,
+		population,
+		primaryActivity,
+		parentRegion: {
+			region: parentRegion.name,
+			regionType: parentRegion.type,
+			dangerLevel: parentRegion.dangerLevel,
+		},
+		revelationLayersSummary,
+		culturalNotes,
+		hazards,
+		pointsOfInterest,
+		rumors,
+		defenses,
+		containedSites: containedSites?.map(({ name, intendedSiteFunction, mood, description, type }) => ({
+			site: name,
+			intendedSiteFunction,
+			mood,
+			description,
+			type,
+		})),
 	})
-
-	builder
-		.addList("Revelation Layers", area.revelationLayersSummary)
-		.addList("Cultural Notes", area.culturalNotes)
-		.addList("Hazards", area.hazards)
-		.addList("Points of Interest", area.pointsOfInterest)
-		.addList("Rumors", area.rumors)
-
-	return builder.build()
 }
