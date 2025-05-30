@@ -30,10 +30,19 @@ type CamelToSnakeCase<S extends string> = S extends `${infer T}${infer U}`
 	? `${T extends Capitalize<T> ? "_" : ""}${Lowercase<T>}${CamelToSnakeCase<U>}`
 	: S
 
-export type CreateEntityGetters<T extends Record<string, unknown>> = {
+type CreateEntityGetters<T extends Record<string, unknown>> = {
 	[K in `all_${CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>}`]: () => Promise<unknown[]>
 } & {
 	[K in `${DropTrailingS<CamelToSnakeCase<Extract<Exclude<keyof T, "enums">, string>>>}_by_id`]: (
 		id: number,
 	) => Promise<unknown>
 }
+
+// Utility type to ensure no extra properties beyond what's required
+type NoExtraProperties<T, U> = T & Record<Exclude<keyof T, keyof U>, never>
+
+// Factory function to create a properly typed createEntityGetters for specific table types
+export const createEntityGettersFactory =
+	<Tables extends Record<string, unknown>>(tables: Tables) =>
+	<T extends CreateEntityGetters<Tables>>(getters: NoExtraProperties<T, CreateEntityGetters<Tables>>): T =>
+		getters
