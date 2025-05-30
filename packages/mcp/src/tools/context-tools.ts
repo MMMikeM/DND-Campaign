@@ -3,7 +3,7 @@ import { getGeminiEmbedding, tables } from "@tome-master/shared"
 import { cosineDistance, eq } from "drizzle-orm"
 import { db, logger } from ".."
 import zodToMcp from "../zodToMcp"
-import { contextSchemas } from "./context-tools-schema"
+import { contextSchemas } from "./context-tools.schema"
 import type { ToolDefinition, ToolHandler } from "./utils/types"
 
 // Utility function to format entity context

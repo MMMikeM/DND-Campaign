@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./npc-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./npc-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type NpcGetters = CreateEntityGetters<typeof tables.npcTables>
+const createEntityGetters = createEntityGettersFactory(tables.npcTables)
 
-export const entityGetters: NpcGetters = {
+export const entityGetters = createEntityGetters({
 	all_npcs: () => db.query.npcs.findMany({}),
 	all_npc_factions: () => db.query.npcFactions.findMany({}),
 	all_npc_sites: () => db.query.npcSites.findMany({}),
@@ -57,7 +58,7 @@ export const entityGetters: NpcGetters = {
 				targetNpc: true,
 			},
 		}),
-}
+})
 
 export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
 	manage_npc: {

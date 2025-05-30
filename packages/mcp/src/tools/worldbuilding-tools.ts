@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
-import { schemas, tableEnum } from "./worldbuilding-tools-schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
+import { schemas, tableEnum } from "./worldbuilding-tools.schema"
 
-type WorldbuildingGetters = CreateEntityGetters<typeof tables.worldbuildingTables>
+const createEntityGetters = createEntityGettersFactory(tables.worldbuildingTables)
 
-export const entityGetters: WorldbuildingGetters = {
+export const entityGetters = createEntityGetters({
 	all_world_concepts: () => db.query.worldConcepts.findMany({}),
 	all_concept_relationships: () => db.query.conceptRelationships.findMany({}),
 	all_world_concept_links: () => db.query.worldConceptLinks.findMany({}),
@@ -52,7 +53,7 @@ export const entityGetters: WorldbuildingGetters = {
 				worldConcept: true,
 			},
 		}),
-}
+})
 
 export const worldToolDefinitions: Record<"manage_worldbuilding", ToolDefinition> = {
 	manage_worldbuilding: {

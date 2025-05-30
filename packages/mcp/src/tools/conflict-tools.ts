@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./conflict-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./conflict-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type ConflictGetters = CreateEntityGetters<typeof tables.conflictTables>
+const createEntityGetters = createEntityGettersFactory(tables.conflictTables)
 
-export const entityGetters: ConflictGetters = {
+export const entityGetters = createEntityGetters({
 	all_major_conflicts: () => db.query.majorConflicts.findMany({}),
 	all_conflict_participants: () => db.query.conflictParticipants.findMany({}),
 	major_conflict_by_id: (id: number) =>
@@ -32,7 +33,7 @@ export const entityGetters: ConflictGetters = {
 				npc: true,
 			},
 		}),
-}
+})
 
 export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> = {
 	manage_conflict: {

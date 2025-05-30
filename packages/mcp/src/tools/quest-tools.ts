@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./quest-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./quest-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type QuestGetters = CreateEntityGetters<typeof tables.questTables>
+const createEntityGetters = createEntityGettersFactory(tables.questTables)
 
-export const entityGetters: QuestGetters = {
+export const entityGetters = createEntityGetters({
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
@@ -81,7 +82,7 @@ export const entityGetters: QuestGetters = {
 				targetQuest: { columns: { name: true, id: true } },
 			},
 		}),
-}
+})
 
 export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
 	manage_quest: {

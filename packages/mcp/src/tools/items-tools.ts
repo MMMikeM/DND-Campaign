@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./items-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./items-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type ItemGetters = CreateEntityGetters<typeof tables.itemTables>
+const createEntityGetters = createEntityGettersFactory(tables.itemTables)
 
-export const entityGetters: ItemGetters = {
+export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
 	all_item_notable_history: () => db.query.itemNotableHistory.findMany({}),
 	all_item_relationships: () => db.query.itemRelationships.findMany({}),
@@ -14,22 +15,27 @@ export const entityGetters: ItemGetters = {
 		db.query.items.findFirst({
 			where: (items, { eq }) => eq(items.id, id),
 			with: {
-				notableHistory: true,
-				sourceOfRelationships: {
+				notableHistory: {
 					with: {
-						sourceItem: { columns: { name: true, id: true } },
+						keyNpc: { columns: { name: true, id: true } },
+						eventLocationSite: { columns: { name: true, id: true } },
 					},
 				},
-				targetInRelationships: {
+				sourceOfRelationships: {
 					with: {
-						relatedConflict: true,
-						relatedFaction: true,
-						relatedNpc: true,
-						relatedQuest: true,
-						relatedSite: true,
-						relatedWorldConcept: true,
-						relatedItem: true,
-						relatedNarrativeDestination: true,
+						targetConflict: { columns: { name: true, id: true } },
+						targetFaction: { columns: { name: true, id: true } },
+						targetNpc: { columns: { name: true, id: true } },
+						targetQuest: { columns: { name: true, id: true } },
+						targetSite: { columns: { name: true, id: true } },
+						targetWorldConcept: { columns: { name: true, id: true } },
+						targetItem: { columns: { name: true, id: true } },
+						targetNarrativeDestination: { columns: { name: true, id: true } },
+					},
+				},
+				targetOfRelationships: {
+					with: {
+						sourceItem: { columns: { name: true, id: true } },
 					},
 				},
 			},
@@ -45,18 +51,18 @@ export const entityGetters: ItemGetters = {
 		db.query.itemRelationships.findFirst({
 			where: (itemRelationships, { eq }) => eq(itemRelationships.id, id),
 			with: {
-				relatedConflict: true,
-				relatedFaction: true,
-				relatedNpc: true,
-				relatedQuest: true,
-				relatedSite: true,
-				relatedWorldConcept: true,
-				relatedItem: true,
-				relatedNarrativeDestination: true,
+				targetConflict: true,
+				targetFaction: true,
+				targetNpc: true,
+				targetQuest: true,
+				targetSite: true,
+				targetWorldConcept: true,
+				targetItem: true,
+				targetNarrativeDestination: true,
 				sourceItem: true,
 			},
 		}),
-}
+})
 
 export const itemToolDefinitions: Record<"manage_items", ToolDefinition> = {
 	manage_items: {

@@ -1,6 +1,6 @@
 import { z } from "zod/v4"
-import { id } from "./tool.utils"
 import { similaritySearchSchema } from "./utils/embeddingHandlers"
+import { id } from "./utils/tool.utils"
 
 const embeddableEntityTypes = [
 	"faction",

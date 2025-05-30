@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./faction-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./faction-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type FactionGetters = CreateEntityGetters<typeof tables.factionTables>
+const createEntityGetters = createEntityGettersFactory(tables.factionTables)
 
-export const entityGetters: FactionGetters = {
+export const entityGetters = createEntityGetters({
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
@@ -50,7 +51,7 @@ export const entityGetters: FactionGetters = {
 			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
 			with: { faction: true, region: true, area: true, site: true },
 		}),
-}
+})
 
 export const factionToolDefinitions: Record<"manage_faction", ToolDefinition> = {
 	manage_faction: {
