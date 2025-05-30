@@ -1,79 +1,144 @@
-import { createEmbeddingBuilder } from "../embedding-helpers"
-import type {
-	SiteEmbeddingInput,
-	SiteEncounterEmbeddingInput,
-	SiteSecretEmbeddingInput,
-} from "../embedding-input-types"
+import { buildEmbedding } from "../embedding-helpers"
+import type { SiteEmbeddingInput } from "../embedding-input-types"
 
-export const embeddingTextForSite = (site: SiteEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Site", site.name, site.description)
-
-	builder.addFields("Basic Information", {
-		type: site.siteType,
-		intendedFunction: site.intendedSiteFunction,
-		terrain: site.terrain,
-		climate: site.climate,
-		mood: site.mood,
-		environment: site.environment,
-		area: site.parentAreaName,
-		region: site.parentRegionName,
+export const embeddingTextForSite = ({
+	name,
+	description,
+	type,
+	intendedSiteFunction,
+	terrain,
+	climate,
+	mood,
+	environment,
+	locationHierarchy,
+	descriptors,
+	creatures,
+	features,
+	treasures,
+	lightingDescription,
+	soundscape,
+	smells,
+	weather,
+	coverOptions,
+	elevationFeatures,
+	movementRoutes,
+	difficultTerrain,
+	chokePoints,
+	sightLines,
+	tacticalPositions,
+	interactiveElements,
+	environmentalHazards,
+	siteEncounters,
+	hiddenSecrets,
+	siteConnections,
+	npcsCurrentlyPresent,
+	npcGeneralAssociations,
+	questStagesLocatedHere,
+	relatedItems,
+	siteFactionInfluence,
+	relevantWorldConcepts,
+}: SiteEmbeddingInput): string => {
+	return buildEmbedding({
+		site: name,
+		overview: description,
+		type,
+		intendedSiteFunction,
+		terrain,
+		climate,
+		mood,
+		environment,
+		locationHierarchy: {
+			area: locationHierarchy.area?.name,
+			areaType: locationHierarchy.area?.type,
+			region: locationHierarchy.region?.name,
+			regionType: locationHierarchy.region?.type,
+		},
+		descriptors,
+		creatures,
+		features,
+		treasures,
+		lightingDescription,
+		soundscape,
+		smells,
+		weather,
+		coverOptions,
+		elevationFeatures,
+		movementRoutes,
+		difficultTerrain,
+		chokePoints,
+		sightLines,
+		tacticalPositions,
+		interactiveElements,
+		environmentalHazards,
+		siteEncounters: siteEncounters?.map(
+			({ name, encounterType, dangerLevel, difficulty, creatures, treasure, description }) => ({
+				encounter: name,
+				encounterType,
+				dangerLevel,
+				difficulty,
+				creatures,
+				treasure,
+				description,
+			}),
+		),
+		hiddenSecrets: hiddenSecrets?.map(
+			({ secretType, difficultyToDiscover, discoveryMethod, consequences, description }) => ({
+				secretType,
+				difficultyToDiscover,
+				discoveryMethod,
+				consequences,
+				description,
+			}),
+		),
+		siteConnections: siteConnections?.map(({ linkType, description, linkedSite }) => ({
+			connectedSite: linkedSite,
+			linkType,
+			description,
+		})),
+		npcsCurrentlyPresent: npcsCurrentlyPresent?.map(({ name, occupation, disposition, currentGoals }) => ({
+			npc: name,
+			occupation,
+			disposition,
+			currentGoals,
+		})),
+		npcGeneralAssociations: npcGeneralAssociations?.map(({ associationType, description, npcInfo }) => ({
+			npc: npcInfo,
+			associationType,
+			description,
+		})),
+		questStagesLocatedHere: questStagesLocatedHere?.map(
+			({ name, stageOrder, stageImportance, dramatic_question, parentQuest }) => ({
+				stage: name,
+				quest: parentQuest,
+				stageOrder,
+				stageImportance,
+				dramaticQuestion: dramatic_question,
+			}),
+		),
+		relatedItems: relatedItems?.map(({ relationshipType, relationshipDetails, description, itemInfo }) => ({
+			item: itemInfo,
+			relationshipType,
+			relationshipDetails,
+			description,
+		})),
+		siteFactionInfluence: siteFactionInfluence?.map(
+			({ influenceLevel, presenceTypes, presenceDetails, priorities, description, factionInfo }) => ({
+				faction: factionInfo,
+				influenceLevel,
+				presenceTypes,
+				presenceDetails,
+				priorities,
+				description,
+			}),
+		),
+		relevantWorldConcepts: relevantWorldConcepts?.map(
+			({ linkRoleOrTypeText, linkStrength, linkDetailsText, description, conceptInfo }) => ({
+				concept: conceptInfo,
+				linkRole: linkRoleOrTypeText,
+				linkStrength,
+				linkDetails: linkDetailsText,
+				description,
+			}),
+		),
 	})
-
-	// Environmental Details (only if present)
-	const environmentalDetails: Record<string, unknown> = {}
-	if (site.lightingDescription) environmentalDetails.lighting = site.lightingDescription
-	if (site.weather) environmentalDetails.weather = site.weather
-
-	if (Object.keys(environmentalDetails).length > 0) {
-		builder.addFields("Environmental Details", environmentalDetails)
-	}
-
-	builder
-		.addList("Descriptors", site.descriptors)
-		.addList("Creatures", site.creatures)
-		.addList("Features", site.features)
-		.addList("Treasures", site.treasures)
-		.addList("Soundscape", site.soundscape)
-		.addList("Smells", site.smells)
-		.addList("Cover Options", site.coverOptions)
-
-	return builder.build()
-}
-
-export const embeddingTextForSiteEncounter = (encounter: SiteEncounterEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Site Encounter", encounter.name, encounter.description)
-
-	builder.addFields("Encounter Details", {
-		type: encounter.encounterType,
-		dangerLevel: encounter.dangerLevel,
-		difficulty: encounter.difficulty,
-		site: encounter.parentSiteName,
-	})
-
-	builder.addList("Creatures", encounter.creatures).addList("Treasure", encounter.treasure)
-
-	return builder.build()
-}
-
-export const embeddingTextForSiteSecret = (secret: SiteSecretEmbeddingInput): string => {
-	// Generate a name for the secret if it doesn't have one
-	const secretName = secret.name || (secret.parentSiteName ? `${secret.parentSiteName} Secret` : "Unknown Site Secret")
-
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Site Secret", secretName, secret.description)
-
-	builder.addFields("Secret Details", {
-		type: secret.secretType,
-		difficultyToDiscover: secret.difficultyToDiscover,
-		site: secret.parentSiteName,
-	})
-
-	builder.addList("Discovery Methods", secret.discoveryMethod).addList("Consequences", secret.consequences)
-
-	return builder.build()
 }

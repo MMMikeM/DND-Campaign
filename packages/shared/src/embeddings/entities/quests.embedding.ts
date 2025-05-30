@@ -1,98 +1,171 @@
-import { createEmbeddingBuilder } from "../embedding-helpers"
-import type {
-	QuestEmbeddingInput,
-	QuestStageEmbeddingInput,
-	StageDecisionEmbeddingInput,
-} from "../embedding-input-types"
+import { buildEmbedding } from "../embedding-helpers"
+import type { QuestEmbeddingInput } from "../embedding-input-types"
 
-export const embeddingTextForQuest = (quest: QuestEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
+export const embeddingTextForQuest = (input: QuestEmbeddingInput): string => {
+	const {
+		name,
+		description,
+		type,
+		urgency,
+		visibility,
+		mood,
+		moralSpectrumFocus,
+		intendedPacingRole,
+		primaryPlayerExperienceGoal,
+		objectives,
+		rewards,
+		themes,
+		inspirations,
+		failureOutcomes,
+		successOutcomes,
+		primaryRegion,
+		parentQuest,
+		otherUnlockConditionsNotes,
+		stages,
+		participants,
+		relatedQuests,
+		hooks,
+		worldConceptConnections,
+		directConsequences,
+		relatedItems,
+		relatedNarrativeEvents,
+	} = input
 
-	builder.setEntity("Quest", quest.name, quest.description)
-
-	builder.addFields("Quest Details", {
-		type: quest.type,
-		urgency: quest.urgency,
-		visibility: quest.visibility,
-		mood: quest.mood,
-		region: quest.regionName,
-		moralFocus: quest.moralSpectrumFocus,
-		pacingRole: quest.intendedPacingRole,
-		playerExperienceGoal: quest.primaryPlayerExperienceGoal,
-		prerequisiteQuest: quest.prerequisiteQuestName,
-		unlockConditions: quest.otherUnlockConditionsNotes,
-	})
-
-	builder
-		.addList("Objectives", quest.objectives)
-		.addList("Success Outcomes", quest.successOutcomes)
-		.addList("Failure Outcomes", quest.failureOutcomes)
-		.addList("Rewards", quest.rewards)
-		.addList("Themes", quest.themes)
-		.addList("Inspirations", quest.inspirations)
-		.addList("Key Participants", quest.keyParticipantSummaries)
-
-	return builder.build()
-}
-
-export const embeddingTextForQuestStage = (stage: QuestStageEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Quest Stage", stage.name, stage.description)
-
-	builder.addFields("Stage Details", {
-		quest: stage.parentQuestName,
-		stageOrder: stage.stageOrder,
-		location: stage.siteName,
-		stageType: stage.stageType,
-		complexityLevel: stage.intendedComplexityLevel,
-		importance: stage.stageImportance,
-		dramaticQuestion: stage.dramatic_question,
-	})
-
-	builder
-		.addList("Objectives", stage.objectives)
-		.addList("Completion Paths", stage.completionPaths)
-		.addList("Encounters", stage.encounters)
-		.addList("Dramatic Moments", stage.dramatic_moments)
-		.addList("Sensory Elements", stage.sensory_elements)
-
-	return builder.build()
-}
-
-export const embeddingTextForStageDecision = (decision: StageDecisionEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Stage Decision", decision.name, decision.description)
-
-	builder.addFields(
-		"Decision Details",
-		{
-			quest: decision.parentQuestName,
-			fromStage: decision.fromStageName,
-			toStage: decision.toStageName,
-			decisionType: decision.decisionType,
-			conditionType: decision.conditionType,
-			conditionValue: decision.conditionValue,
-			ambiguityLevel: decision.ambiguityLevel,
-			failureLeadsToRetry:
-				decision.failure_leads_to_retry === true ? "yes" : decision.failure_leads_to_retry === false ? "no" : undefined,
-			failureLesson: decision.failure_lesson_learned,
+	return buildEmbedding({
+		quest: name,
+		overview: description,
+		type,
+		urgency,
+		visibility,
+		mood,
+		moralSpectrumFocus,
+		intendedPacingRole,
+		primaryPlayerExperienceGoal,
+		objectives,
+		rewards,
+		themes,
+		inspirations,
+		failureOutcomes,
+		successOutcomes,
+		otherUnlockConditionsNotes,
+		primaryRegion: {
+			region: primaryRegion?.name,
+			regionType: primaryRegion?.type,
+			dangerLevel: primaryRegion?.dangerLevel,
 		},
-		{
-			// Don't convert spaces for the boolean field
-			transform: {
-				failureLeadsToRetry: (value) => value,
+		parentQuest: {
+			quest: parentQuest?.name,
+			questType: parentQuest?.type,
+		},
+		stages: stages?.map(({ name, stageOrder, stageType, dramatic_question, description, stageSite }) => ({
+			stage: name,
+			stageOrder,
+			stageType,
+			dramaticQuestion: dramatic_question,
+			description,
+			site: stageSite?.name,
+			siteType: stageSite?.type,
+			siteMood: stageSite?.mood,
+		})),
+		participants: participants?.map(
+			({ roleInQuest, importanceInQuest, involvementDetails, description, ...participantInfo }) => {
+				const baseData = {
+					roleInQuest,
+					importanceInQuest,
+					involvementDetails,
+					description,
+				}
+
+				if (participantInfo.participantType === "Npc") {
+					return {
+						...baseData,
+						participant: participantInfo.npcInfo.name,
+						participantType: "NPC",
+						occupation: participantInfo.npcInfo.occupation,
+						disposition: participantInfo.npcInfo.disposition,
+					}
+				} else {
+					return {
+						...baseData,
+						participant: participantInfo.factionInfo.name,
+						participantType: "Faction",
+						factionType: participantInfo.factionInfo.type,
+						publicGoal: participantInfo.factionInfo.publicGoal,
+					}
+				}
 			},
-		},
-	)
-
-	builder
-		.addList("Success Outcomes", decision.successDescription)
-		.addList("Failure Outcomes", decision.failureDescription)
-		.addList("Narrative Transitions", decision.narrativeTransition)
-		.addList("Player Reactions", decision.potential_player_reactions)
-		.addList("Options", decision.options)
-
-	return builder.build()
+		),
+		relatedQuests: relatedQuests?.map(({ relationshipType, description, otherQuest }) => ({
+			quest: otherQuest.name,
+			questType: otherQuest.type,
+			questUrgency: otherQuest.urgency,
+			relationshipType,
+			description,
+		})),
+		hooks: hooks?.map(
+			({
+				source,
+				hookType,
+				presentationStyle,
+				hookContent,
+				discoveryConditions,
+				npcRelationshipToParty,
+				trustRequired,
+				dialogueHint,
+				deliveryNpc,
+				description,
+				hookFaction,
+				hookSite,
+			}) => ({
+				source,
+				hookType,
+				presentationStyle,
+				hookContent,
+				discoveryConditions,
+				npcRelationshipToParty,
+				trustRequired,
+				dialogueHint,
+				deliveryNpc: deliveryNpc?.name,
+				site: hookSite?.name,
+				faction: hookFaction?.name,
+				description,
+			}),
+		),
+		relatedItems: relatedItems?.map(({ relationshipType, relationshipDetails, description, itemInfo }) => ({
+			item: itemInfo.name,
+			itemType: itemInfo.itemType,
+			rarity: itemInfo.rarity,
+			narrativeRole: itemInfo.narrativeRole,
+			relationshipType,
+			relationshipDetails,
+			description,
+		})),
+		worldConceptConnections: worldConceptConnections?.map(
+			({ linkRoleOrTypeText, linkStrength, linkDetailsText, description, conceptInfo }) => ({
+				concept: conceptInfo.name,
+				conceptType: conceptInfo.conceptType,
+				summary: conceptInfo.summary,
+				linkRole: linkRoleOrTypeText,
+				linkStrength,
+				linkDetails: linkDetailsText,
+				description,
+			}),
+		),
+		relatedNarrativeEvents: relatedNarrativeEvents?.map(({ description, eventType, intendedRhythmEffect, name }) => ({
+			event: name,
+			eventType,
+			intendedRhythmEffect,
+			description,
+		})),
+		directConsequences: directConsequences?.map(
+			({ description, consequenceType, name, affectedConflictName, playerImpactFeel, severity }) => ({
+				consequence: name,
+				consequenceType,
+				affectedConflictName,
+				playerImpactFeel,
+				severity,
+				description,
+			}),
+		),
+	})
 }

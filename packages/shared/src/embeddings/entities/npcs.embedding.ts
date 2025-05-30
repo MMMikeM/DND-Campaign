@@ -1,81 +1,180 @@
-import { createEmbeddingBuilder } from "../embedding-helpers"
-import type { NpcEmbeddingInput, NpcRelationshipEmbeddingInput } from "../embedding-input-types"
+import { buildEmbedding } from "../embedding-helpers"
+import type { NpcEmbeddingInput } from "../embedding-input-types"
 
-export const embeddingTextForNpc = (npc: NpcEmbeddingInput): string => {
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Character", npc.name, npc.description)
-
-	builder.addFields("Basic Information", {
-		race: npc.race,
-		gender: npc.gender,
-		age: npc.age,
-		occupation: npc.occupation,
-		alignment: npc.alignment,
-		currentLocation: npc.currentLocationSiteName,
-		primaryFaction: npc.primaryFactionNameAndRole,
+export const embeddingTextForNpc = ({
+	name,
+	race,
+	gender,
+	age,
+	occupation,
+	alignment,
+	socialStatus,
+	wealth,
+	disposition,
+	attitude,
+	trustLevel,
+	adaptability,
+	complexityProfile,
+	playerPerceptionGoal,
+	availability,
+	capability,
+	proactivity,
+	relatability,
+	quirk,
+	description,
+	currentGoals,
+	appearance,
+	avoidTopics,
+	background,
+	biases,
+	dialogue,
+	drives,
+	fears,
+	knowledge,
+	mannerisms,
+	personalityTraits,
+	preferredTopics,
+	rumours,
+	secrets,
+	voiceNotes,
+	currentLocation,
+	factionAffiliations,
+	associatedSites,
+	relationshipsWithOtherNpcs,
+	conflictInvolvement,
+	questInvolvement,
+	worldConceptConnections,
+	significantItems,
+}: NpcEmbeddingInput): string => {
+	return buildEmbedding({
+		npc: name,
+		overview: description,
+		race,
+		gender,
+		age,
+		occupation,
+		alignment,
+		socialStatus,
+		wealth,
+		disposition,
+		attitude,
+		trustLevel,
+		adaptability,
+		complexityProfile,
+		playerPerceptionGoal,
+		availability,
+		capability,
+		proactivity,
+		relatability,
+		quirk,
+		currentGoals,
+		appearance,
+		background,
+		personalityTraits,
+		mannerisms,
+		dialogue,
+		voiceNotes,
+		drives,
+		fears,
+		biases,
+		knowledge,
+		preferredTopics,
+		avoidTopics,
+		rumours,
+		secrets,
+		currentLocation: {
+			site: currentLocation?.name,
+			type: currentLocation?.type,
+			mood: currentLocation?.mood,
+			environment: currentLocation?.environment,
+		},
+		factionAffiliations: factionAffiliations?.map(
+			({ role, rank, loyalty, justification, description, factionInfo, secrets }) => ({
+				faction: factionInfo.name,
+				factionType: factionInfo.type,
+				factionAlignment: factionInfo.publicAlignment,
+				secrets,
+				role,
+				rank,
+				loyalty,
+				justification,
+				description,
+			}),
+		),
+		associatedSites: associatedSites?.map(({ associationType, description, siteInfo }) => ({
+			site: siteInfo.name,
+			siteType: siteInfo.type,
+			siteMood: siteInfo.mood,
+			associationType,
+			description,
+		})),
+		relationshipsWithOtherNpcs: relationshipsWithOtherNpcs?.map(
+			({
+				relationshipType,
+				strength,
+				history,
+				narrativeTensions,
+				sharedGoals,
+				relationshipDynamics,
+				isBidirectional,
+				description,
+				relatedNpcInfo,
+			}) => ({
+				relatedNpc: relatedNpcInfo.name,
+				npcOccupation: relatedNpcInfo.occupation,
+				npcAlignment: relatedNpcInfo.alignment,
+				relationshipType,
+				strength,
+				bidirectional: isBidirectional,
+				description,
+				history,
+				narrativeTensions,
+				sharedGoals,
+				relationshipDynamics,
+			}),
+		),
+		conflictInvolvement: conflictInvolvement?.map(
+			({ role, motivation, publicStance, secretStance, description, conflictInfo }) => ({
+				conflict: conflictInfo.name,
+				conflictScope: conflictInfo.scope,
+				conflictStatus: conflictInfo.status,
+				role,
+				motivation,
+				publicStance,
+				secretStance,
+				description,
+			}),
+		),
+		questInvolvement: questInvolvement?.map(
+			({ roleInQuest, importanceInQuest, involvementDetails, description, questInfo }) => ({
+				quest: questInfo.name,
+				questType: questInfo.type,
+				questUrgency: questInfo.urgency,
+				role: roleInQuest,
+				importance: importanceInQuest,
+				involvementDetails,
+				description,
+			}),
+		),
+		worldConceptConnections: worldConceptConnections?.map(
+			({ linkRoleOrTypeText, linkStrength, linkDetailsText, description, conceptInfo }) => ({
+				concept: conceptInfo.name,
+				conceptType: conceptInfo.conceptType,
+				conceptSummary: conceptInfo.summary,
+				linkRole: linkRoleOrTypeText,
+				linkStrength,
+				linkDetails: linkDetailsText,
+				description,
+			}),
+		),
+		significantItems: significantItems?.map(({ relationshipType, relationshipDetails, description, itemInfo }) => ({
+			item: itemInfo.name,
+			itemType: itemInfo.itemType,
+			itemRarity: itemInfo.rarity,
+			itemSignificance: itemInfo.significance,
+			relationshipType,
+			relationshipDetails,
+			description,
+		})),
 	})
-
-	builder.addFields("Personality & Behavior", {
-		disposition: npc.disposition,
-		attitude: npc.attitude,
-		socialStatus: npc.socialStatus,
-		wealth: npc.wealth,
-		trustLevel: npc.trustLevel,
-		adaptability: npc.adaptability,
-		complexity: npc.complexityProfile,
-		playerPerceptionGoal: npc.playerPerceptionGoal,
-		availability: npc.availability,
-		capability: npc.capability,
-		proactivity: npc.proactivity,
-		relatability: npc.relatability,
-	})
-
-	builder
-		.addList("Personality Traits", npc.personalityTraits)
-		.addList("Drives & Motivations", npc.drives)
-		.addList("Fears", npc.fears)
-		.addList("Current Goals", npc.currentGoals)
-		.addList("Background", npc.background)
-		.addList("Knowledge & Expertise", npc.knowledge)
-		.addList("Secrets", npc.secrets)
-
-	builder.ifPresent(npc.quirk, (b) => b.addSection("Quirk", npc.quirk))
-
-	builder
-		.addList("Physical Appearance", npc.appearance)
-		.addList("Mannerisms", npc.mannerisms)
-		.addList("Biases", npc.biases)
-		.addList("Site Associations", npc.keySiteAssociations)
-		.addList("Key Relationships", npc.keyRelationshipSummaries)
-
-	return builder.build()
-}
-
-export const embeddingTextForCharacterRelationship = (
-	rel: NpcRelationshipEmbeddingInput,
-	npc1Name?: string,
-	npc2Name?: string,
-): string => {
-	const firstName = rel.npc1Name || npc1Name
-	const secondName = rel.npc2Name || npc2Name
-	const relationshipName = firstName && secondName ? `${firstName} and ${secondName}` : "Unknown Characters"
-
-	const builder = createEmbeddingBuilder()
-
-	builder.setEntity("Character Relationship", relationshipName, rel.description)
-
-	builder.addFields("Relationship Details", {
-		type: rel.relationshipType,
-		strength: rel.strength,
-		direction: rel.isBidirectional === true ? "bidirectional" : rel.isBidirectional === false ? "one-way" : undefined,
-	})
-
-	builder
-		.addList("History", rel.history)
-		.addList("Narrative Tensions", rel.narrativeTensions)
-		.addList("Shared Goals", rel.sharedGoals)
-		.addList("Relationship Dynamics", rel.relationshipDynamics)
-
-	return builder.build()
 }
