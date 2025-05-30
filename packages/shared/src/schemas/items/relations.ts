@@ -10,15 +10,15 @@ import { itemNotableHistory, itemRelationships, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ many }) => ({
 	sourceOfRelationships: many(itemRelationships, {
-		relationName: "sourceItemInRelationships",
+		relationName: "sourceItem",
 	}),
 
-	targetInRelationships: many(itemRelationships, {
-		relationName: "relatedItemInRelationships",
+	targetOfRelationships: many(itemRelationships, {
+		relationName: "targetItem",
 	}),
 
 	notableHistory: many(itemNotableHistory, {
-		relationName: "itemHistory",
+		relationName: "item",
 	}),
 }))
 
@@ -26,49 +26,48 @@ export const itemRelationshipsRelations = relations(itemRelationships, ({ one })
 	sourceItem: one(items, {
 		fields: [itemRelationships.sourceItemId],
 		references: [items.id],
-		relationName: "sourceItemInRelationships",
+		relationName: "sourceItem",
 	}),
 
-	// Polymorphic relations - only one will be populated based on relatedEntityType
-	relatedItem: one(items, {
-		fields: [itemRelationships.relatedItemId],
+	targetItem: one(items, {
+		fields: [itemRelationships.targetItemId],
 		references: [items.id],
-		relationName: "relatedItemInRelationships",
+		relationName: "targetItem",
 	}),
-	relatedNpc: one(npcs, {
-		fields: [itemRelationships.relatedNpcId],
+
+	targetNpc: one(npcs, {
+		fields: [itemRelationships.targetNpcId],
 		references: [npcs.id],
-		relationName: "npcItemRelationships",
 	}),
-	relatedFaction: one(factions, {
-		fields: [itemRelationships.relatedFactionId],
+
+	targetFaction: one(factions, {
+		fields: [itemRelationships.targetFactionId],
 		references: [factions.id],
-		relationName: "factionItemRelationships",
 	}),
-	relatedSite: one(sites, {
-		fields: [itemRelationships.relatedSiteId],
+
+	targetSite: one(sites, {
+		fields: [itemRelationships.targetSiteId],
 		references: [sites.id],
-		relationName: "siteItemRelationships",
 	}),
-	relatedQuest: one(quests, {
-		fields: [itemRelationships.relatedQuestId],
+
+	targetQuest: one(quests, {
+		fields: [itemRelationships.targetQuestId],
 		references: [quests.id],
-		relationName: "questItemRelationships",
 	}),
-	relatedConflict: one(majorConflicts, {
-		fields: [itemRelationships.relatedConflictId],
+
+	targetConflict: one(majorConflicts, {
+		fields: [itemRelationships.targetConflictId],
 		references: [majorConflicts.id],
-		relationName: "conflictItemRelationships",
 	}),
-	relatedNarrativeDestination: one(narrativeDestinations, {
-		fields: [itemRelationships.relatedNarrativeDestinationId],
+
+	targetNarrativeDestination: one(narrativeDestinations, {
+		fields: [itemRelationships.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
-		relationName: "narrativeDestinationItemRelationships",
 	}),
-	relatedWorldConcept: one(worldConcepts, {
-		fields: [itemRelationships.relatedWorldConceptId],
+
+	targetWorldConcept: one(worldConcepts, {
+		fields: [itemRelationships.targetWorldConceptId],
 		references: [worldConcepts.id],
-		relationName: "worldConceptItemRelationships",
 	}),
 }))
 
@@ -76,7 +75,7 @@ export const itemNotableHistoryRelations = relations(itemNotableHistory, ({ one 
 	item: one(items, {
 		fields: [itemNotableHistory.itemId],
 		references: [items.id],
-		relationName: "itemHistory",
+		relationName: "item",
 	}),
 	keyNpc: one(npcs, {
 		fields: [itemNotableHistory.keyNpcId],
