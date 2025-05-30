@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./narrative-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./narrative-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type NarrativeGetters = CreateEntityGetters<typeof tables.narrativeTables>
+const createEntityGetters = createEntityGettersFactory(tables.narrativeTables)
 
-export const entityGetters: NarrativeGetters = {
+export const entityGetters = createEntityGetters({
 	all_narrative_destinations: () => db.query.narrativeDestinations.findMany({}),
 	all_destination_participant_involvement: () => db.query.destinationParticipantInvolvement.findMany({}),
 	all_destination_quest_roles: () => db.query.destinationQuestRoles.findMany({}),
@@ -48,7 +49,7 @@ export const entityGetters: NarrativeGetters = {
 				worldConceptLinks: true,
 			},
 		}),
-}
+})
 
 export const narrativeToolDefinitions: Record<"manage_narrative", ToolDefinition> = {
 	manage_narrative: {

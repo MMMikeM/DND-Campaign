@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, optionalId, type Schema } from "./tool.utils"
+import { type CreateTableNames, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	eventTables: { narrativeEvents, consequences, enums },

@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, type Schema } from "./tool.utils"
+import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
 	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets, enums },

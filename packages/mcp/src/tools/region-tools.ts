@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./region-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./region-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type RegionGetters = CreateEntityGetters<typeof tables.regionTables>
+const createEntityGetters = createEntityGettersFactory(tables.regionTables)
 
-export const entityGetters: RegionGetters = {
+export const entityGetters = createEntityGetters({
 	all_regions: () =>
 		db.query.regions.findMany({
 			columns: {
@@ -141,7 +142,7 @@ export const entityGetters: RegionGetters = {
 		}),
 	site_secret_by_id: (id: number) =>
 		db.query.siteSecrets.findFirst({ where: (siteSecrets, { eq }) => eq(siteSecrets.id, id), with: { site: true } }),
-}
+})
 
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 	manage_region: {

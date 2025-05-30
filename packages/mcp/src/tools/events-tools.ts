@@ -1,12 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./events-tools-schema"
-import { createManageEntityHandler, createManageSchema } from "./tool.utils"
-import type { CreateEntityGetters, ToolDefinition } from "./utils/types"
+import { schemas, tableEnum } from "./events-tools.schema"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import type { ToolDefinition } from "./utils/types"
+import { createEntityGettersFactory } from "./utils/types"
 
-type EventGetters = CreateEntityGetters<typeof tables.eventTables>
+const createEntityGetters = createEntityGettersFactory(tables.eventTables)
 
-export const entityGetters: EventGetters = {
+export const entityGetters = createEntityGetters({
 	all_narrative_events: () => db.query.narrativeEvents.findMany({}),
 	all_consequences: () => db.query.consequences.findMany({}),
 
@@ -37,7 +38,7 @@ export const entityGetters: EventGetters = {
 				affectedFaction: true,
 			},
 		}),
-}
+})
 
 export const eventToolDefinitions: Record<"manage_event", ToolDefinition> = {
 	manage_event: {

@@ -9,7 +9,7 @@ import {
 	type EmbeddingTools,
 	type SearchableEntityType,
 	schemas,
-} from "./embedding-tools-schema"
+} from "./embedding-tools.schema"
 import type { CreateEntityGetters, ToolDefinition, ToolHandler } from "./utils/types"
 
 const entityNameToTextKeyMap: Record<EmbeddableEntityType, EmbeddedEntityName> = {
