@@ -1,134 +1,213 @@
 import { describe, expect, it } from "vitest"
-import type { ForeshadowingSeedEmbeddingInput } from "../embedding-input-types"
-import { embeddingTextForForeshadowingSeed } from "../foreshadowing.embedding"
+import type { ForeshadowingEmbeddingInput, RecursiveRequired } from "../embedding-input-types"
+import { embeddingTextForForeshadowingSeed } from "../entities/foreshadowing.embedding"
 
 describe("Foreshadowing Embedding Functions", () => {
 	describe("embeddingTextForForeshadowingSeed", () => {
-		const mockSeedInput: ForeshadowingSeedEmbeddingInput = {
-			targetEntityType: "quest",
+		const mockSeedInput: RecursiveRequired<ForeshadowingEmbeddingInput> = {
+			targetEntityType: "Quest",
 			targetAbstractDetail: "The ancient evil will return when the stars align.",
-			suggestedDeliveryMethods: [
-				"Cryptic prophecy in an old book.",
-				"Dying words of a mysterious stranger.",
-				"Strange dreams that plague the party.",
-			],
+			suggestedDeliveryMethods: ["npc_dialogue", "environmental_detail", "document_snippet"],
 			subtlety: "subtle",
 			narrativeWeight: "major",
 			description: ["A seed that hints at the coming darkness.", "Should be planted early in the campaign."],
 
-			// Resolved fields
-			targetEntityName: "The Return of the Shadow Lord",
-			sourceContextSummary:
-				"Can be delivered by the Oracle during the 'Seeking Wisdom' quest at the Temple of Foresight.",
+			targetEntityContext: {
+				entityType: "Quest",
+				name: "The Return of the Shadow Lord",
+				details: {
+					type: "main",
+				},
+			},
+
+			sourceEntityContext: {
+				sourceType: "QuestStage",
+				name: "Consulting the Oracle",
+				details: {
+					stageType: "revelation_point",
+				},
+				parentQuestName: "Seeking Wisdom",
+			},
 		}
 
 		it("should generate comprehensive text for a foreshadowing seed with all fields", () => {
 			const result = embeddingTextForForeshadowingSeed(mockSeedInput)
 
-			const expectedText = `Foreshadowing Seed: The Return of the Shadow Lord
-Overview:
-A seed that hints at the coming darkness.
-Should be planted early in the campaign.
-Target Entity Type: quest
-Target Entity: The Return of the Shadow Lord
-Target Detail: The ancient evil will return when the stars align.
-Subtlety: subtle
-Narrative Weight: major
-Source Context: Can be delivered by the Oracle during the 'Seeking Wisdom' quest at the Temple of Foresight.
-Suggested Delivery Methods:
-- Cryptic prophecy in an old book.
-- Dying words of a mysterious stranger.
-- Strange dreams that plague the party.`
+			expect(result).toContain("Foreshadowing Seed: The Return of the Shadow Lord")
+			expect(result).toContain("A seed that hints at the coming darkness.")
+			expect(result).toContain("Should be planted early in the campaign.")
+			expect(result).toContain("targetEntityType: Quest")
+			expect(result).toContain("subtlety: subtle")
+			expect(result).toContain("narrativeWeight: major")
+			expect(result).toContain("Target Entity:")
+			expect(result).toContain("entity: The Return of the Shadow Lord")
+			expect(result).toContain("entityType: Quest")
+			expect(result).toContain("type: main")
+			expect(result).toContain("Source Context:")
+			expect(result).toContain("source: Consulting the Oracle")
+			expect(result).toContain("sourceType: QuestStage")
+			expect(result).toContain("stageType: revelation_point")
+			expect(result).toContain("parentQuest: Seeking Wisdom")
+			expect(result).toContain("Suggested Delivery Methods:")
+			expect(result).toContain("- npc_dialogue")
+			expect(result).toContain("- environmental_detail")
+			expect(result).toContain("- document_snippet")
+		})
 
-			expect(result).toBe(expectedText)
+		it("should handle seeds with abstract target details", () => {
+			const abstractSeed: ForeshadowingEmbeddingInput = {
+				targetEntityType: "abstract_theme",
+				targetAbstractDetail: "Betrayal comes from within",
+				suggestedDeliveryMethods: ["symbol_motif"],
+				subtlety: "hidden",
+				narrativeWeight: "crucial",
+				description: ["Hints at internal faction conflict"],
+				targetEntityContext: {
+					entityType: "AbstractTheme",
+					name: "Betrayal comes from within",
+					details: {
+						abstractType: "abstract_theme",
+					},
+				},
+			}
+
+			const result = embeddingTextForForeshadowingSeed(abstractSeed)
+
+			expect(result).toContain("Foreshadowing Seed: Betrayal comes from within")
+			expect(result).toContain("targetEntityType: abstract_theme")
+			expect(result).toContain("subtlety: hidden")
+			expect(result).toContain("narrativeWeight: crucial")
+			expect(result).toContain("Abstract Target:")
+			expect(result).toContain("abstractDetail: Betrayal comes from within")
+			expect(result).toContain("abstractType: abstract_theme")
+			expect(result).toContain("- symbol_motif")
+		})
+
+		it("should handle seeds with NPC target context", () => {
+			const npcSeed: ForeshadowingEmbeddingInput = {
+				targetEntityType: "Npc",
+				targetAbstractDetail: null,
+				suggestedDeliveryMethods: ["overheard_conversation"],
+				subtlety: "moderate",
+				narrativeWeight: "supporting",
+				description: ["Hints about the merchant's true nature"],
+				targetEntityContext: {
+					entityType: "Npc",
+					name: "Gareth the Merchant",
+					details: {
+						occupation: "merchant",
+						race: "human",
+					},
+				},
+				sourceEntityContext: {
+					sourceType: "Site",
+					name: "The Crossroads Inn",
+					details: {
+						type: "building",
+						intendedSiteFunction: "social_interaction_nexus",
+					},
+				},
+			}
+
+			const result = embeddingTextForForeshadowingSeed(npcSeed)
+
+			expect(result).toContain("Foreshadowing Seed: Gareth the Merchant")
+			expect(result).toContain("targetEntityType: Npc")
+			expect(result).toContain("Target Entity:")
+			expect(result).toContain("entity: Gareth the Merchant")
+			expect(result).toContain("entityType: Npc")
+			expect(result).toContain("occupation: merchant")
+			expect(result).toContain("race: human")
+			expect(result).toContain("Source Context:")
+			expect(result).toContain("source: The Crossroads Inn")
+			expect(result).toContain("sourceType: Site")
+			expect(result).toContain("type: building")
+			expect(result).toContain("intendedSiteFunction: social_interaction_nexus")
 		})
 
 		it("should handle seeds with minimal data", () => {
-			const minimalSeed: ForeshadowingSeedEmbeddingInput = {
-				targetEntityType: "npc",
-				targetAbstractDetail: "A betrayal is coming.",
+			const minimalSeed: ForeshadowingEmbeddingInput = {
+				targetEntityType: "Item",
+				targetAbstractDetail: null,
+				suggestedDeliveryMethods: ["item_description"],
+				subtlety: "obvious",
+				narrativeWeight: "minor",
+				description: ["Simple foreshadowing"],
 			}
 
 			const result = embeddingTextForForeshadowingSeed(minimalSeed)
-			const expectedMinimalText = `Foreshadowing Seed: Unknown Target
-Target Entity Type: npc
-Target Detail: A betrayal is coming.`
-			expect(result).toBe(expectedMinimalText)
+
+			expect(result).toContain("Foreshadowing Seed: Item Target")
+			expect(result).toContain("Simple foreshadowing")
+			expect(result).toContain("targetEntityType: Item")
+			expect(result).toContain("subtlety: obvious")
+			expect(result).toContain("narrativeWeight: minor")
+			expect(result).toContain("- item_description")
+			expect(result).not.toContain("Target Entity:")
+			expect(result).not.toContain("Source Context:")
 		})
 
 		it("should handle seeds with empty arrays gracefully", () => {
-			const seedWithEmptyArrays: ForeshadowingSeedEmbeddingInput = {
-				targetEntityType: "conflict",
+			const seedWithEmptyArrays: ForeshadowingEmbeddingInput = {
+				targetEntityType: "MajorConflict",
+				targetAbstractDetail: null,
 				suggestedDeliveryMethods: [],
+				subtlety: "subtle",
+				narrativeWeight: "major",
 				description: [],
 			}
 
 			const result = embeddingTextForForeshadowingSeed(seedWithEmptyArrays)
-			const expectedEmptyText = `Foreshadowing Seed: Unknown Target
-Target Entity Type: conflict`
-			expect(result).toBe(expectedEmptyText)
+
+			expect(result).toContain("Foreshadowing Seed: MajorConflict Target")
+			expect(result).toContain("targetEntityType: MajorConflict")
+			expect(result).toContain("subtlety: subtle")
+			expect(result).toContain("narrativeWeight: major")
+			expect(result).not.toContain("Suggested Delivery Methods:")
 		})
 
-		it("should handle seeds with null resolved fields", () => {
-			const seedWithNullResolved: ForeshadowingSeedEmbeddingInput = {
-				targetEntityType: "item",
-				targetAbstractDetail: "A powerful artifact will be needed.",
-				targetEntityName: null,
-				sourceContextSummary: "",
-				description: [],
-			}
-
-			const result = embeddingTextForForeshadowingSeed(seedWithNullResolved)
-			const expectedNullText = `Foreshadowing Seed: Unknown Target
-Target Entity Type: item
-Target Detail: A powerful artifact will be needed.`
-			expect(result).toBe(expectedNullText)
-		})
-
-		it("should handle seeds with complex delivery methods", () => {
-			const complexSeed: ForeshadowingSeedEmbeddingInput = {
-				targetEntityType: "narrative_destination",
-				targetAbstractDetail: "The final battle will be fought where it all began.",
-				suggestedDeliveryMethods: [
-					"Environmental storytelling: ancient battlefield markers.",
-					"NPC dialogue: old veteran mentions the historic site.",
-					"Item description: weapon forged at the original battle site.",
-					"Quest reward: map showing the convergence of ley lines.",
-				],
+		it("should handle seeds with null fields", () => {
+			const seedWithNulls: ForeshadowingEmbeddingInput = {
+				targetEntityType: "Faction",
+				targetAbstractDetail: null,
+				suggestedDeliveryMethods: ["rumor"],
 				subtlety: "moderate",
-				narrativeWeight: "climactic",
-				description: [],
+				narrativeWeight: "supporting",
+				description: ["Faction-related foreshadowing"],
+				targetEntityContext: undefined,
+				sourceEntityContext: undefined,
 			}
 
-			const result = embeddingTextForForeshadowingSeed(complexSeed)
-			const expectedComplexText = `Foreshadowing Seed: Unknown Target
-Target Entity Type: narrative destination
-Target Detail: The final battle will be fought where it all began.
-Subtlety: moderate
-Narrative Weight: climactic
-Suggested Delivery Methods:
-- Environmental storytelling: ancient battlefield markers.
-- NPC dialogue: old veteran mentions the historic site.
-- Item description: weapon forged at the original battle site.
-- Quest reward: map showing the convergence of ley lines.`
-			expect(result).toBe(expectedComplexText)
+			const result = embeddingTextForForeshadowingSeed(seedWithNulls)
+
+			expect(result).toContain("Foreshadowing Seed: Faction Target")
+			expect(result).toContain("Faction-related foreshadowing")
+			expect(result).toContain("targetEntityType: Faction")
+			expect(result).toContain("- rumor")
+			expect(result).not.toContain("Target Entity:")
+			expect(result).not.toContain("Source Context:")
+			expect(result).not.toContain("Abstract Target:")
 		})
 
 		it("should handle seeds with undefined values by omitting those fields", () => {
-			const seedWithUndefined: ForeshadowingSeedEmbeddingInput = {
+			const seedWithUndefined: ForeshadowingEmbeddingInput = {
 				targetEntityType: undefined,
 				targetAbstractDetail: undefined,
 				subtlety: undefined,
 				narrativeWeight: undefined,
-				targetEntityName: undefined,
-				sourceContextSummary: undefined,
 				suggestedDeliveryMethods: undefined,
 				description: undefined,
+				targetEntityContext: undefined,
+				sourceEntityContext: undefined,
 			}
 
 			const result = embeddingTextForForeshadowingSeed(seedWithUndefined)
-			const expectedUndefinedText = `Foreshadowing Seed: Unknown Target`
-			expect(result).toBe(expectedUndefinedText)
+
+			expect(result).toContain("Foreshadowing Seed: undefined Target")
+			expect(result).not.toContain("Foreshadowing Details:")
+			expect(result).not.toContain("Target Entity:")
+			expect(result).not.toContain("Source Context:")
+			expect(result).not.toContain("Suggested Delivery Methods:")
 		})
 	})
 })
