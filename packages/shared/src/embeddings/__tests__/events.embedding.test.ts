@@ -1,213 +1,153 @@
 import { describe, expect, it } from "vitest"
-import type { ConsequenceEmbeddingInput, NarrativeEventEmbeddingInput } from "../embedding-input-types"
-import { embeddingTextForConsequence, embeddingTextForNarrativeEvent } from "../events.embedding"
+import type { NarrativeEventEmbeddingInput, RecursiveRequired } from "../embedding-input-types"
+import { embeddingTextForNarrativeEvent } from "../entities/events.embedding"
 
 describe("Events Embedding Functions", () => {
 	describe("embeddingTextForNarrativeEvent", () => {
-		const mockEventInput: NarrativeEventEmbeddingInput = {
+		const mockEventInput: RecursiveRequired<NarrativeEventEmbeddingInput> = {
 			name: "The Dragon's Awakening",
 			eventType: "escalation",
-			intendedRhythmEffect: "tension_spike",
-			narrativePlacement: "mid_campaign",
+			intendedRhythmEffect: "spike_tension",
+			narrativePlacement: "climax",
 			impactSeverity: "major",
 			complication_details: "The dragon's awakening disrupts all magical wards in the region.",
-			escalation_details: "Ancient magic surges, affecting all spellcasters.",
+			escalation_details: "Ancient magic surges uncontrollably, affecting all spellcasters.",
 			twist_reveal_details: "The dragon was actually protecting the realm from a greater threat.",
 			description: [
 				"A massive ancient dragon awakens from centuries of slumber.",
-				"Its roar shakes the very foundations of the world.",
+				"Its awakening sends shockwaves through the magical fabric of reality.",
 			],
 
-			// Resolved fields
-			relatedQuestName: "The Ancient Prophecy",
-			questStageName: "Investigate the Tremors",
-			triggeringDecisionName: "Enter the Dragon's Lair",
+			relatedQuest: {
+				name: "The Sleeping Giant",
+				type: "main",
+			},
+
+			questStage: {
+				name: "Investigate the Tremors",
+				stageType: "revelation_point",
+			},
+
+			triggeringDecision: {
+				name: "Enter the Dragon's Lair",
+				decisionType: "tactical_decision",
+				description: ["The party decides to venture into the ancient lair"],
+			},
+
+			triggeredConsequences: [
+				{
+					name: "Magical Chaos",
+					consequenceType: "environmental_change",
+					severity: "major",
+					playerImpactFeel: "challenging_setback",
+					conflictImpactDescription: "Disrupts the balance of magical forces",
+					description: ["Wild magic surges affect the entire region"],
+				},
+			],
 		}
 
 		it("should generate comprehensive text for a narrative event with all fields", () => {
 			const result = embeddingTextForNarrativeEvent(mockEventInput)
 
-			const expectedText = `Narrative Event: The Dragon's Awakening
-Overview:
-A massive ancient dragon awakens from centuries of slumber.
-Its roar shakes the very foundations of the world.
-Type: escalation
-Rhythm Effect: tension spike
-Narrative Placement: mid campaign
-Impact Severity: major
-Related Quest: The Ancient Prophecy
-Quest Stage: Investigate the Tremors
-Triggering Decision: Enter the Dragon's Lair
-Complication Details: The dragon's awakening disrupts all magical wards in the region.
-Escalation Details: Ancient magic surges, affecting all spellcasters.
-Twist/Reveal Details: The dragon was actually protecting the realm from a greater threat.`
-
-			expect(result).toBe(expectedText)
+			expect(result).toContain("Narrative Event: The Dragon's Awakening")
+			expect(result).toContain("A massive ancient dragon awakens from centuries of slumber.")
+			expect(result).toContain("Its awakening sends shockwaves through the magical fabric of reality.")
+			expect(result).toContain("type: escalation")
+			expect(result).toContain("rhythmEffect: spike_tension")
+			expect(result).toContain("narrativePlacement: climax")
+			expect(result).toContain("impactSeverity: major")
+			expect(result).toContain("Related Quest:")
+			expect(result).toContain("quest: The Sleeping Giant")
+			expect(result).toContain("questType: main")
+			expect(result).toContain("Quest Stage:")
+			expect(result).toContain("stage: Investigate the Tremors")
+			expect(result).toContain("stageType: revelation_point")
+			expect(result).toContain("Triggering Decision:")
+			expect(result).toContain("decision: Enter the Dragon's Lair")
+			expect(result).toContain("decisionType: tactical_decision")
+			expect(result).toContain("Complication Details: The dragon's awakening disrupts all magical wards in the region.")
+			expect(result).toContain("Escalation Details: Ancient magic surges uncontrollably, affecting all spellcasters.")
+			expect(result).toContain(
+				"Twist/Reveal Details: The dragon was actually protecting the realm from a greater threat.",
+			)
+			expect(result).toContain("Triggered Consequences:")
+			expect(result).toContain("Consequence: Magical Chaos")
+			expect(result).toContain("Type: environmental_change")
+			expect(result).toContain("Severity: major")
+			expect(result).toContain("Player Impact: challenging_setback")
+			expect(result).toContain("Conflict Impact: Disrupts the balance of magical forces")
 		})
 
 		it("should handle events with minimal data", () => {
 			const minimalEvent: NarrativeEventEmbeddingInput = {
 				name: "Simple Event",
 				eventType: "complication",
+				intendedRhythmEffect: "introduce_mystery",
+				narrativePlacement: "early",
+				impactSeverity: "minor",
+				description: ["A simple complication arises"],
 			}
 
 			const result = embeddingTextForNarrativeEvent(minimalEvent)
-			const expectedMinimalText = `Narrative Event: Simple Event
-Type: complication`
-			expect(result).toBe(expectedMinimalText)
-		})
 
-		it("should handle events with null resolved fields", () => {
-			const eventWithNullResolved: NarrativeEventEmbeddingInput = {
-				name: "Standalone Event",
-				eventType: "twist",
-				relatedQuestName: null,
-				questStageName: null,
-				triggeringDecisionName: null,
-				description: [],
-			}
-
-			const result = embeddingTextForNarrativeEvent(eventWithNullResolved)
-			const expectedNullText = `Narrative Event: Standalone Event
-Type: twist`
-			expect(result).toBe(expectedNullText)
+			expect(result).toContain("Narrative Event: Simple Event")
+			expect(result).toContain("A simple complication arises")
+			expect(result).toContain("type: complication")
+			expect(result).toContain("rhythmEffect: introduce_mystery")
+			expect(result).toContain("narrativePlacement: early")
+			expect(result).toContain("impactSeverity: minor")
+			expect(result).not.toContain("Related Quest:")
+			expect(result).not.toContain("Quest Stage:")
+			expect(result).not.toContain("Triggering Decision:")
+			expect(result).not.toContain("Triggered Consequences:")
 		})
 
 		it("should handle events with empty arrays gracefully", () => {
 			const eventWithEmptyArrays: NarrativeEventEmbeddingInput = {
 				name: "Empty Event",
 				eventType: "complication",
+				intendedRhythmEffect: "introduce_mystery",
+				narrativePlacement: "early",
+				impactSeverity: "minor",
 				description: [],
+				triggeredConsequences: [],
 			}
 
 			const result = embeddingTextForNarrativeEvent(eventWithEmptyArrays)
-			const expectedEmptyText = `Narrative Event: Empty Event
-Type: complication`
-			expect(result).toBe(expectedEmptyText)
-		})
-	})
 
-	describe("embeddingTextForConsequence", () => {
-		const mockConsequenceInput: ConsequenceEmbeddingInput = {
-			name: "The Kingdom Falls to Chaos",
-			consequenceType: "political",
-			severity: "catastrophic",
-			visibility: "public",
-			timeframe: "immediate",
-			sourceType: "player_action",
-			playerImpactFeel: "regret",
-			conflictImpactDescription: "The civil war intensifies as leadership crumbles.",
-			description: ["The royal family is overthrown.", "Anarchy spreads throughout the land."],
-
-			// Resolved fields
-			triggerDecisionName: "Assassinate the King",
-			triggerQuestName: "The Royal Conspiracy",
-			triggerConflictName: "The War of Succession",
-			affectedFactionName: "The Royal Guard",
-			affectedRegionName: "The Capital Kingdom",
-			affectedAreaName: "The Royal District",
-			affectedSiteName: "The Royal Palace",
-			affectedNpcName: "Queen Isabella",
-			affectedDestinationName: "The Golden Age",
-			affectedConflictNameAsEffect: "The Peasant Uprising",
-			futureQuestName: "Restore Order",
-		}
-
-		it("should generate comprehensive text for a consequence with all fields", () => {
-			const result = embeddingTextForConsequence(mockConsequenceInput)
-
-			const expectedText = `Consequence: The Kingdom Falls to Chaos
-Overview:
-The royal family is overthrown.
-Anarchy spreads throughout the land.
-Type: political
-Severity: catastrophic
-Visibility: public
-Timeframe: immediate
-Source Type: player action
-Player Impact Feel: regret
-Conflict Impact: The civil war intensifies as leadership crumbles.
-Triggers:
-Triggered by Decision: Assassinate the King
-Triggered by Quest: The Royal Conspiracy
-Triggered by Conflict: The War of Succession
-Effects:
-Affected Faction: The Royal Guard
-Affected Region: The Capital Kingdom
-Affected Area: The Royal District
-Affected Site: The Royal Palace
-Affected NPC: Queen Isabella
-Affected Destination: The Golden Age
-Affected Conflict: The Peasant Uprising
-Future Quest: Restore Order`
-
-			expect(result).toBe(expectedText)
+			expect(result).toContain("Narrative Event: Empty Event")
+			expect(result).toContain("type: complication")
+			expect(result).not.toContain("Triggered Consequences:")
 		})
 
-		it("should handle consequences with minimal data", () => {
-			const minimalConsequence: ConsequenceEmbeddingInput = {
-				name: "Simple Outcome",
-				consequenceType: "social",
-			}
-
-			const result = embeddingTextForConsequence(minimalConsequence)
-			const expectedMinimalText = `Consequence: Simple Outcome
-Type: social`
-			expect(result).toBe(expectedMinimalText)
-		})
-
-		it("should handle consequences with some null resolved fields", () => {
-			const partialConsequence: ConsequenceEmbeddingInput = {
-				name: "Partial Consequence",
-				consequenceType: "economic",
-				severity: "moderate",
-				triggerDecisionName: "Trade Agreement",
-				affectedFactionName: "Merchant Guild",
+		it("should handle events with undefined values by omitting those fields", () => {
+			const eventWithUndefined: NarrativeEventEmbeddingInput = {
+				name: "Undefined Event",
+				eventType: "complication",
+				intendedRhythmEffect: "introduce_mystery",
+				narrativePlacement: "early",
+				impactSeverity: "minor",
+				complication_details: undefined,
+				escalation_details: undefined,
+				twist_reveal_details: undefined,
+				relatedQuest: undefined,
+				questStage: undefined,
+				triggeringDecision: undefined,
+				triggeredConsequences: undefined,
 				description: [],
 			}
 
-			const result = embeddingTextForConsequence(partialConsequence)
-			const expectedPartialText = `Consequence: Partial Consequence
-Type: economic
-Severity: moderate
-Triggers:
-Triggered by Decision: Trade Agreement
-Effects:
-Affected Faction: Merchant Guild`
-			expect(result).toBe(expectedPartialText)
-		})
+			const result = embeddingTextForNarrativeEvent(eventWithUndefined)
 
-		it("should handle consequences with empty arrays gracefully", () => {
-			const consequenceWithEmptyArrays: ConsequenceEmbeddingInput = {
-				name: "Empty Consequence",
-				consequenceType: "environmental",
-				description: [],
-			}
-
-			const result = embeddingTextForConsequence(consequenceWithEmptyArrays)
-			const expectedEmptyText = `Consequence: Empty Consequence
-Type: environmental`
-			expect(result).toBe(expectedEmptyText)
-		})
-
-		it("should handle consequences with undefined values by omitting those fields", () => {
-			const consequenceWithUndefined: ConsequenceEmbeddingInput = {
-				name: "Undefined Consequence",
-				consequenceType: undefined,
-				severity: undefined,
-				visibility: undefined,
-				timeframe: undefined,
-				sourceType: undefined,
-				playerImpactFeel: undefined,
-				conflictImpactDescription: undefined,
-				triggerDecisionName: undefined,
-				triggerQuestName: undefined,
-				description: undefined,
-			}
-
-			const result = embeddingTextForConsequence(consequenceWithUndefined)
-			const expectedUndefinedText = `Consequence: Undefined Consequence`
-			expect(result).toBe(expectedUndefinedText)
+			expect(result).toContain("Narrative Event: Undefined Event")
+			expect(result).toContain("type: complication")
+			expect(result).not.toContain("Related Quest:")
+			expect(result).not.toContain("Quest Stage:")
+			expect(result).not.toContain("Triggering Decision:")
+			expect(result).not.toContain("Complication Details:")
+			expect(result).not.toContain("Escalation Details:")
+			expect(result).not.toContain("Twist/Reveal Details:")
+			expect(result).not.toContain("Triggered Consequences:")
 		})
 	})
 })

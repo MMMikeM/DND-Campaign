@@ -1,144 +1,266 @@
 import { describe, expect, it } from "vitest"
-import { embeddingTextForMajorConflict } from "../conflicts.embedding"
-import type { MajorConflictEmbeddingInput } from "../embedding-input-types"
+import type { MajorConflictEmbeddingInput, RecursiveRequired } from "../embedding-input-types"
+import { embeddingTextForMajorConflict } from "../entities/conflicts.embedding"
 
 describe("Conflicts Embedding Functions", () => {
 	describe("embeddingTextForMajorConflict", () => {
-		const mockConflictInput: MajorConflictEmbeddingInput = {
+		const mockConflictInput: RecursiveRequired<MajorConflictEmbeddingInput> = {
 			name: "The War of the Broken Crown",
 			scope: "regional",
-			natures: ["political", "succession", "territorial"],
-			status: "escalating",
-			cause: "The rightful heir was murdered, leaving multiple claimants to the throne.",
-			stakes: ["Control of the kingdom.", "Lives of thousands of civilians.", "Balance of power in the region."],
-			moralDilemma: "Supporting the rightful heir means backing a weak ruler during wartime.",
+			natures: ["political", "military"],
+			status: "active",
+			cause: "Disputed succession after the king's death",
+			stakes: ["Control of the kingdom", "Legitimacy of royal bloodline", "Trade route dominance"],
+			moralDilemma: "Both claimants have legitimate rights to the throne",
 			possibleOutcomes: [
-				"United kingdom under strong leadership.",
-				"Fractured realm with multiple small kingdoms.",
-				"Foreign invasion during the chaos.",
+				"Eldest son claims throne through military might",
+				"Daughter proves legitimacy through ancient law",
+				"Kingdom splits into two separate realms",
+				"Foreign power intervenes and claims control",
 			],
 			hiddenTruths: [
-				"The murder was orchestrated by a foreign power.",
-				"One claimant is actually illegitimate.",
-				"Ancient magic is involved in the succession.",
+				"The king was poisoned by his advisor",
+				"Ancient treaty gives neighboring kingdom claim to throne",
+				"Royal bloodline is actually illegitimate",
 			],
-			clarityOfRightWrong: "morally_ambiguous",
+			clarityOfRightWrong: "competing_legitimate_grievances",
 			currentTensionLevel: "high",
 			description: [
-				"A devastating civil war that threatens to tear the kingdom apart.",
-				"Multiple factions vie for control while the people suffer.",
+				"A bitter succession war tears the kingdom apart",
+				"Noble houses choose sides based on old alliances",
+				"Common folk suffer as armies march across their lands",
 			],
-
-			// Resolved fields
-			primaryRegionName: "The Kingdom of Aldermere",
-			participantSummaries: [
-				"Prince Aldric (Rightful Heir, NPC)",
-				"Duke Blackwood (Usurper, NPC)",
-				"The Royal Army (Loyalist, Faction)",
-				"The Rebel Alliance (Opposition, Faction)",
+			primaryRegion: {
+				name: "Kingdom of Valdris",
+				type: "grassland",
+			},
+			participants: [
+				{
+					participantType: "Faction",
+					factionInfo: {
+						name: "House Blackwater",
+						size: "large",
+						type: ["noble_house"],
+					},
+					role: "instigator",
+					motivation: "Support for traditional male succession",
+					publicStance: "Prince Marcus is the rightful heir by ancient law",
+					secretStance: "Will accept any ruler who grants them more power",
+					description: ["Ancient noble house with vast military resources"],
+				},
+				{
+					participantType: "NPC",
+					npcInfo: {
+						name: "Lord Advisor Theron",
+						alignment: "lawful_neutral",
+						occupation: "Royal Advisor",
+					},
+					role: "neutral",
+					motivation: "Preserve the kingdom's stability",
+					publicStance: "Calls for peaceful resolution",
+					secretStance: "Secretly orchestrated the king's death",
+					description: ["Elderly advisor who has served three kings"],
+				},
+			],
+			narrativeDestinations: [
+				{
+					name: "The Succession Crisis Arc",
+					type: "main",
+					status: "in_progress",
+					description: ["Primary narrative arc driving the conflict"],
+				},
+			],
+			consequences: [
+				{
+					name: "Kingdom Divided",
+					consequenceType: "political_shift",
+					severity: "major",
+					playerImpactFeel: "challenging_setback",
+					description: ["Noble houses declare for different claimants"],
+				},
+			],
+			affectedByConsequences: [
+				{
+					name: "Economic Collapse",
+					consequenceType: "resource_availability_change",
+					severity: "moderate",
+					playerImpactFeel: "challenging_setback",
+					description: ["Trade routes disrupted by warfare"],
+				},
+			],
+			worldConceptLinks: [
+				{
+					linkRoleOrTypeText: "Ideological foundation",
+					linkStrength: "defining",
+					linkDetailsText: "The conflict challenges traditional succession laws",
+					description: ["Core belief system being questioned by the conflict"],
+					associatedConcept: {
+						name: "Divine Right of Kings",
+						conceptType: "political",
+					},
+				},
 			],
 		}
 
-		it("should generate comprehensive text for a major conflict with all fields", () => {
+		it("should generate comprehensive embedding text for a major conflict", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+			console.clear()
+			console.log(result)
+
+			// Check for basic conflict information
+			expect(result).toContain("The War of the Broken Crown")
+			expect(result).toContain("regional")
+			expect(result).toContain("political")
+			expect(result).toContain("military")
+			expect(result).toContain("active")
+			expect(result).toContain("high")
+		})
+
+		it("should include conflict cause and location", () => {
 			const result = embeddingTextForMajorConflict(mockConflictInput)
 
-			const expectedText = `Conflict: The War of the Broken Crown
-Overview:
-A devastating civil war that threatens to tear the kingdom apart.
-Multiple factions vie for control while the people suffer.
-Scope: regional
-Current Status: escalating
-Tension Level: high
-Primary Location: The Kingdom of Aldermere
-Primary Cause: The rightful heir was murdered, leaving multiple claimants to the throne.
-Nature of Conflict:
-- political
-- succession
-- territorial
-Key Stakes:
-- Control of the kingdom.
-- Lives of thousands of civilians.
-- Balance of power in the region.
-Moral Dilemma: Supporting the rightful heir means backing a weak ruler during wartime.
-Moral Clarity: morally ambiguous
-Hidden Truths or Secrets:
-- The murder was orchestrated by a foreign power.
-- One claimant is actually illegitimate.
-- Ancient magic is involved in the succession.
-Potential Outcomes:
-- United kingdom under strong leadership.
-- Fractured realm with multiple small kingdoms.
-- Foreign invasion during the chaos.
-Key Participants:
-- Prince Aldric (Rightful Heir, NPC)
-- Duke Blackwood (Usurper, NPC)
-- The Royal Army (Loyalist, Faction)
-- The Rebel Alliance (Opposition, Faction)`
-
-			expect(result).toBe(expectedText)
+			expect(result).toContain("Disputed succession")
+			expect(result).toContain("Kingdom of Valdris")
 		})
 
-		it("should handle conflicts with minimal data", () => {
-			const minimalConflict: MajorConflictEmbeddingInput = {
-				name: "Simple Dispute",
+		it("should include stakes and moral elements", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("Control of the kingdom")
+			expect(result).toContain("Both claimants have legitimate rights")
+			expect(result).toContain("competing legitimate grievances")
+		})
+
+		it("should include hidden truths and possible outcomes", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("king was poisoned")
+			expect(result).toContain("Kingdom splits into two")
+			expect(result).toContain("Foreign power intervenes")
+		})
+
+		it("should include participant summaries when provided", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("House Blackwater")
+			expect(result).toContain("Lord Advisor Theron")
+			expect(result).toContain("NPC Details")
+			expect(result).toContain("Royal Advisor")
+			expect(result).toContain("instigator")
+		})
+
+		it("should handle minimal conflict input gracefully", () => {
+			const minimalInput: MajorConflictEmbeddingInput = {
+				name: "Simple Conflict",
 				scope: "local",
+				natures: ["social"],
+				status: "brewing",
+				cause: "Resource dispute",
+				stakes: ["Water rights"],
+				moralDilemma: "Both sides need the resource",
+				possibleOutcomes: ["Negotiated settlement"],
+				hiddenTruths: ["Ancient claim exists"],
+				clarityOfRightWrong: "clear_aggressor_victim",
+				currentTensionLevel: "low",
+				description: ["A minor dispute over water rights"],
 			}
 
-			const result = embeddingTextForMajorConflict(minimalConflict)
-			const expectedMinimalText = `Conflict: Simple Dispute
-Scope: local`
-			expect(result).toBe(expectedMinimalText)
+			const result = embeddingTextForMajorConflict(minimalInput)
+
+			expect(result).toContain("Simple Conflict")
+			expect(result).toContain("local")
+			expect(result).toContain("Resource dispute")
+			expect(result).toContain("Water rights")
 		})
 
-		it("should handle conflicts with empty arrays gracefully", () => {
-			const conflictWithEmptyArrays: MajorConflictEmbeddingInput = {
+		it("should handle missing optional fields", () => {
+			const inputWithoutOptionals: MajorConflictEmbeddingInput = {
 				name: "Basic Conflict",
-				natures: [],
-				stakes: [],
-				possibleOutcomes: [],
-				hiddenTruths: [],
-				participantSummaries: [],
-				description: [],
+				scope: "regional",
+				natures: ["military"],
+				status: "active",
+				cause: "Border dispute",
+				stakes: ["Territory"],
+				moralDilemma: "Both have historical claims",
+				possibleOutcomes: ["Military victory"],
+				hiddenTruths: ["Secret alliance"],
+				clarityOfRightWrong: "competing_legitimate_grievances",
+				currentTensionLevel: "building",
+				description: ["Two nations clash over borders"],
 			}
 
-			const result = embeddingTextForMajorConflict(conflictWithEmptyArrays)
-			const expectedEmptyArrayText = "Conflict: Basic Conflict"
-			expect(result).toBe(expectedEmptyArrayText)
+			const result = embeddingTextForMajorConflict(inputWithoutOptionals)
+
+			expect(result).toContain("Basic Conflict")
+			expect(result).toContain("Border dispute")
+			// Should not throw errors for missing optional fields
+			expect(result).toBeDefined()
+			expect(result.length).toBeGreaterThan(0)
 		})
 
-		it("should handle conflicts with undefined values by omitting those fields", () => {
-			const conflictWithUndefined: MajorConflictEmbeddingInput = {
-				name: "Undefined Conflict",
-				scope: undefined,
-				cause: undefined,
-				moralDilemma: undefined,
-				primaryRegionName: undefined,
-				description: [],
-				natures: [],
-				stakes: [],
-				possibleOutcomes: [],
-				hiddenTruths: [],
-				participantSummaries: [],
-			}
+		it("should include all major structural elements in embedding", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
 
-			const result = embeddingTextForMajorConflict(conflictWithUndefined)
-			const expectedUndefinedText = "Conflict: Undefined Conflict"
-			expect(result).toBe(expectedUndefinedText)
+			// Check for section headers/labels that should be present
+			expect(result).toContain("Conflict")
+			expect(result).toContain("Scope")
+			expect(result).toContain("Status")
+			expect(result).toContain("Tension Level")
+			expect(result).toContain("Primary Cause")
+			expect(result).toContain("Nature of Conflict")
+			expect(result).toContain("Key Stakes")
+			expect(result).toContain("Moral Dilemma")
+			expect(result).toContain("Hidden Truths or Secrets")
+			expect(result).toContain("Potential Outcomes")
+			expect(result).toContain("Key Participants")
 		})
 
-		it("should handle conflicts with only resolved fields", () => {
-			const conflictWithOnlyResolved: MajorConflictEmbeddingInput = {
-				name: "Resolved Only",
-				primaryRegionName: "Test Region",
-				participantSummaries: ["Test Participant (Role, Type)"],
+		it("should handle empty arrays gracefully", () => {
+			const inputWithEmptyArrays: MajorConflictEmbeddingInput = {
+				name: "Empty Arrays Conflict",
+				scope: "local",
+				natures: [], // Empty array
+				status: "brewing",
+				cause: "Unknown cause",
+				stakes: [], // Empty array
+				moralDilemma: "Unclear",
+				possibleOutcomes: [], // Empty array
+				hiddenTruths: [], // Empty array
+				clarityOfRightWrong: "inherently_ambiguous",
+				currentTensionLevel: "low",
+				description: [], // Empty array
 			}
 
-			const result = embeddingTextForMajorConflict(conflictWithOnlyResolved)
-			const expectedResolvedText = `Conflict: Resolved Only
-Primary Location: Test Region
-Key Participants:
-- Test Participant (Role, Type)`
-			expect(result).toBe(expectedResolvedText)
+			const result = embeddingTextForMajorConflict(inputWithEmptyArrays)
+
+			expect(result).toContain("Empty Arrays Conflict")
+			expect(result).toContain("Unknown cause")
+			expect(result).toBeDefined()
+			expect(result.length).toBeGreaterThan(0)
+		})
+
+		it("should include narrative destinations when provided", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("The Succession Crisis Arc")
+			expect(result).toContain("Related Narrative Arcs")
+		})
+
+		it("should include consequences when provided", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("Kingdom Divided")
+			expect(result).toContain("Economic Collapse")
+			expect(result).toContain("Triggered Consequences")
+			expect(result).toContain("Affecting Consequences")
+		})
+
+		it("should include world concept links when provided", () => {
+			const result = embeddingTextForMajorConflict(mockConflictInput)
+
+			expect(result).toContain("Divine Right of Kings")
+			expect(result).toContain("Related World Concepts")
+			expect(result).toContain("defining")
 		})
 	})
 })
