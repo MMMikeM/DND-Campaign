@@ -2,13 +2,8 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "workspaces": {
     ".": {
-      "entry": [
-        "mcp-start.js",
-        "go.sh"
-      ],
       "project": [
-        "*.{js,ts,mjs}",
-        "app/**/*.{js,ts,tsx}"
+        "app/**/*.{ts,tsx}"
       ]
     },
     "packages/react": {
@@ -16,12 +11,10 @@
         "app/root.tsx",
         "app/routes.ts",
         "app/routes/**/*.{ts,tsx}",
-        "vite.config.ts",
-        "patches/*.js"
+        "vite.config.ts"
       ],
       "project": [
         "app/**/*.{ts,tsx}",
-        "patches/**/*.js",
         "vite.config.ts"
       ]
     },
@@ -30,12 +23,13 @@
         "src/index.ts"
       ],
       "project": [
-        "src/**/*.{ts,js}"
+        "src/**/*.ts"
       ]
     },
     "packages/shared": {
       "entry": [
         "src/index.ts",
+        "src/db/index.ts",
         "src/proxy.ts",
         "drizzle.config.ts"
       ],
@@ -52,7 +46,8 @@
     "**/node_modules/**",
     "**/*.d.ts",
     "packages/react/app/components/ui/**",
-    "**/*.test.data.ts"
+    "**/*.test.data.ts",
+    "**/*.test.ts"
   ],
   "ignoreDependencies": [
     "@biomejs/biome"
