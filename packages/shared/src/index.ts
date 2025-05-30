@@ -4,6 +4,7 @@ export * from "./db/utils"
 // Embedding utilities
 export {
 	type EmbeddedEntityName,
+	embeddingInputTypes,
 	embeddingTextGenerators,
 	generateEmbeddingsForEntities,
 	getGeminiEmbedding,

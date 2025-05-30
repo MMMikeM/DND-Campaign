@@ -1,38 +1,18 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
 // Export only the types that are actually used in implemented embedding functions
-export type {
-	AreaEmbeddingInput,
-	ConsequenceEmbeddingInput,
-	FactionAgendaEmbeddingInput,
-	FactionEmbeddingInput,
-	ForeshadowingSeedEmbeddingInput,
-	ItemEmbeddingInput,
-	MajorConflictEmbeddingInput,
-	NarrativeDestinationEmbeddingInput,
-	NarrativeEventEmbeddingInput,
-	NpcEmbeddingInput,
-	NpcRelationshipEmbeddingInput,
-	QuestEmbeddingInput,
-	QuestStageEmbeddingInput,
-	RegionEmbeddingInput,
-	SiteEmbeddingInput,
-	SiteEncounterEmbeddingInput,
-	SiteSecretEmbeddingInput,
-	StageDecisionEmbeddingInput,
-	WorldConceptEmbeddingInput,
-} from "./embedding-input-types"
+export * as embeddingInputTypes from "./embedding-input-types"
 
-import { embeddingTextForMajorConflict } from "./conflicts.embedding"
-import { embeddingTextForConsequence, embeddingTextForNarrativeEvent } from "./events.embedding"
-import { embeddingTextForFaction, embeddingTextForFactionAgenda } from "./factions.embedding"
-import { embeddingTextForForeshadowingSeed } from "./foreshadowing.embedding"
-import { embeddingTextForItem } from "./items.embedding"
-import { embeddingTextForNarrativeDestination, embeddingTextForWorldConcept } from "./narrative.embedding"
-import { embeddingTextForCharacterRelationship, embeddingTextForNpc } from "./npcs.embedding"
-import { embeddingTextForQuest, embeddingTextForQuestStage, embeddingTextForStageDecision } from "./quests.embedding"
-import { embeddingTextForArea, embeddingTextForRegion } from "./regions.embedding"
-import { embeddingTextForSite, embeddingTextForSiteEncounter, embeddingTextForSiteSecret } from "./sites.embedding"
+import { embeddingTextForMajorConflict } from "./entities/conflicts.embedding"
+import { embeddingTextForNarrativeEvent } from "./entities/events.embedding"
+import { embeddingTextForFaction } from "./entities/factions.embedding"
+import { embeddingTextForForeshadowingSeed } from "./entities/foreshadowing.embedding"
+import { embeddingTextForItem } from "./entities/items.embedding"
+import { embeddingTextForNarrativeDestination, embeddingTextForWorldConcept } from "./entities/narrative.embedding"
+import { embeddingTextForNpc } from "./entities/npcs.embedding"
+import { embeddingTextForQuest } from "./entities/quests.embedding"
+import { embeddingTextForArea, embeddingTextForRegion } from "./entities/regions.embedding"
+import { embeddingTextForSite } from "./entities/sites.embedding"
 
 // Type definitions for entity names
 export type EmbeddedEntityName =
@@ -133,7 +113,6 @@ export async function getGeminiEmbedding(text: string): Promise<number[]> {
 
 export const embeddingTextGenerators = {
 	areas: embeddingTextForArea,
-	factionAgendas: embeddingTextForFactionAgenda,
 	factions: embeddingTextForFaction,
 	foreshadowingSeeds: embeddingTextForForeshadowingSeed,
 	items: embeddingTextForItem,
@@ -142,15 +121,9 @@ export const embeddingTextGenerators = {
 	narrativeEvents: embeddingTextForNarrativeEvent,
 	npcs: embeddingTextForNpc,
 	quests: embeddingTextForQuest,
-	questStages: embeddingTextForQuestStage,
 	regions: embeddingTextForRegion,
-	siteEncounters: embeddingTextForSiteEncounter,
 	sites: embeddingTextForSite,
-	siteSecrets: embeddingTextForSiteSecret,
 	worldConcepts: embeddingTextForWorldConcept,
-	consequences: embeddingTextForConsequence,
-	stageDecisions: embeddingTextForStageDecision,
-	characterRelationships: embeddingTextForCharacterRelationship,
 } as const
 
 // Batch embedding utility
