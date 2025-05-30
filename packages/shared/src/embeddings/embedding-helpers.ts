@@ -1,125 +1,70 @@
-/**
- * Generic helper functions for building embedding text
- */
+import { stringify } from "yaml"
 
-/**
- * Builder class for more fluent embedding text construction
- */
-export class EmbeddingBuilder {
-	private sections: string[] = []
+// Simple key mapping type for overrides only
+export type KeyMapping = Record<string, string>
 
-	title(entityType: string, name: string): this {
-		this.sections.push(`${entityType}: ${name}`)
-		return this
+// Convert camelCase or snake_case to Title Case
+function toTitleCase(key: string): string {
+	return key
+		.replace(/([A-Z])/g, " $1") // Add space before capital letters
+		.replace(/_/g, " ") // Replace underscores with spaces
+		.replace(/^\w/, (c) => c.toUpperCase()) // Capitalize first letter
+		.replace(/\s+/g, " ") // Clean up multiple spaces
+		.trim()
+}
+
+// Capitalize the first letter of a string value and convert object keys to Title Case
+function capitalizeValue(value: unknown): unknown {
+	if (typeof value === "string") {
+		const cleaned = value.replace(/_/g, " ")
+		return cleaned.charAt(0).toUpperCase() + cleaned.slice(1)
 	}
-
-	overview(description?: string[] | null): this {
-		if (description && description.length > 0) {
-			this.sections.push("Overview:")
-			description.forEach((desc) => this.sections.push(desc))
-		}
-		return this
+	if (Array.isArray(value)) {
+		return value.map(capitalizeValue)
 	}
-
-	field(label: string, value?: string | number | null, convertSpaces = true): this {
-		if (value !== undefined && value !== null && value !== "") {
-			const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
-			this.sections.push(`${label}: ${displayValue}`)
-		}
-		return this
-	}
-
-	fields(fields: Array<{ label: string; value?: string | number | null; convertSpaces?: boolean }>): this {
-		fields.forEach(({ label, value, convertSpaces = true }) => {
-			if (value !== undefined && value !== null && value !== "") {
-				const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
-				this.sections.push(`${label}: ${displayValue}`)
+	if (value && typeof value === "object" && value.constructor === Object) {
+		const transformed: Record<string, unknown> = {}
+		for (const [key, val] of Object.entries(value)) {
+			if (val !== undefined && val !== null && val !== "") {
+				// Convert the key to Title Case and recursively process the value
+				const titleCaseKey = toTitleCase(key)
+				transformed[titleCaseKey] = capitalizeValue(val)
 			}
-		})
-		return this
+		}
+		return Object.keys(transformed).length > 0 ? transformed : undefined
 	}
+	return value
+}
 
-	basicInfoSection(
-		fields: Array<{ label: string; value?: string | number | null; convertSpaces?: boolean }>,
-		sectionTitle = "Basic Information",
-	): this {
-		const basicInfo: string[] = []
+// Check if a value should be included (not empty)
+function shouldInclude(value: unknown): boolean {
+	if (value === undefined || value === null) return false
+	if (typeof value === "string") return value.trim() !== ""
+	if (Array.isArray(value)) return value.length > 0
+	if (typeof value === "object") return Object.keys(value).length > 0
+	return true
+}
 
-		fields.forEach(({ label, value, convertSpaces = true }) => {
-			if (value !== undefined && value !== null && value !== "") {
-				const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
-				basicInfo.push(`${label}: ${displayValue}`)
+// New simplified buildEmbedding function
+export function buildEmbedding(entity: Record<string, unknown>, keyMappings: KeyMapping = {}): string {
+	// Destructure and filter the entity to only include defined, non-empty values
+	const cleanEntity: Record<string, unknown> = {}
+
+	for (const [key, value] of Object.entries(entity)) {
+		if (shouldInclude(value)) {
+			// Use explicit mapping if provided, otherwise auto-convert to title case
+			const transformedKey = keyMappings[key] || toTitleCase(key)
+			const transformedValue = capitalizeValue(value)
+			if (transformedValue !== undefined) {
+				cleanEntity[transformedKey] = transformedValue
 			}
-		})
-
-		if (basicInfo.length > 0) {
-			this.sections.push(`${sectionTitle}:`)
-			basicInfo.forEach((info) => this.sections.push(info))
 		}
-		return this
 	}
 
-	list(title: string, items?: string[] | null): this {
-		if (items && items.length > 0) {
-			this.sections.push(`${title}:`)
-			items.forEach((item) => this.sections.push(`- ${item}`))
-		}
-		return this
-	}
-
-	lists(lists: Array<{ title: string; items?: string[] | null }>): this {
-		lists.forEach(({ title, items }) => {
-			this.list(title, items)
-		})
-		return this
-	}
-
-	groupedLists(sectionTitle: string, groups: Array<{ title: string; items?: string[] | null }>): this {
-		const validGroups = groups
-			.filter(({ items }) => items && items.length > 0)
-			.map(({ title, items }) => ({
-				title,
-				items: items!.map((item) => `- ${item}`),
-			}))
-
-		if (validGroups.length > 0) {
-			this.sections.push(`${sectionTitle}:`)
-			validGroups.forEach(({ title, items }) => {
-				this.sections.push(`${title}:`)
-				items.forEach((item) => this.sections.push(item))
-			})
-		}
-		return this
-	}
-
-	conditionalSection(sectionTitle: string, builder: () => string[]): this {
-		const items = builder()
-		if (items.length > 0) {
-			this.sections.push(`${sectionTitle}:`)
-			items.forEach((item) => this.sections.push(item))
-		}
-		return this
-	}
-
-	conditionalFieldSection(
-		sectionTitle: string,
-		fieldMappings: Array<{ label: string; value?: string | number | null; convertSpaces?: boolean }>,
-	): this {
-		const items = fieldMappings
-			.filter(({ value }) => value !== undefined && value !== null && value !== "")
-			.map(({ label, value, convertSpaces = true }) => {
-				const displayValue = convertSpaces && typeof value === "string" ? value.replace(/_/g, " ") : String(value)
-				return `${label}: ${displayValue}`
-			})
-
-		if (items.length > 0) {
-			this.sections.push(`${sectionTitle}:`)
-			items.forEach((item) => this.sections.push(item))
-		}
-		return this
-	}
-
-	build(): string {
-		return this.sections.join("\n")
-	}
+	return stringify(cleanEntity, {
+		indent: 2,
+		lineWidth: 0, // Disable line wrapping
+		minContentWidth: 0,
+		doubleQuotedAsJSON: false,
+	})
 }
