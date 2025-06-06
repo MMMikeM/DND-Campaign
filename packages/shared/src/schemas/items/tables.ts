@@ -10,65 +10,10 @@ import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { worldConcepts } from "../worldbuilding/tables"
+import { enums } from "./enums"
 
-const itemTypes = ["weapon", "armor", "tool", "treasure", "document", "key_item", "consumable"] as const
-const rarityLevels = ["common", "uncommon", "rare", "very_rare", "legendary", "artifact"] as const
-const narrativeRoles = [
-	"utility_tool",
-	"quest_key",
-	"emotional_anchor",
-	"thematic_symbol",
-	"simple_reward",
-	"macguffin",
-] as const
-const perceivedSimplicityLevels = ["what_it_seems", "deceptively_simple", "obviously_complex"] as const
-
-const itemRelationshipTypes = [
-	"part_of_set",
-	"key_for",
-	"activates",
-	"counterpart_to",
-	"synergizes_with",
-	"opposes",
-	"transforms_into",
-	"contains",
-	"powers",
-	"owned_by",
-	"created_by",
-	"guarded_by",
-	"sought_by",
-	"connected_to",
-	"empowers",
-	"weakens",
-	"reveals",
-	"conceals",
-] as const
-
-const targetEntityTypes = [
-	"item",
-	"npc",
-	"faction",
-	"site",
-	"quest",
-	"conflict",
-	"narrative_destination",
-	"world_concept",
-] as const
-
-const historyRoles = [
-	"creator",
-	"wielder",
-	"owner",
-	"guardian",
-	"thief",
-	"trader",
-	"destroyer",
-	"corrupter",
-	"restorer",
-	"witness",
-	"discoverer",
-	"protector",
-] as const
+const { itemRelationshipTypes, itemTypes, narrativeRoles, perceivedSimplicityLevels, rarityLevels, targetEntityTypes } =
+	enums
 
 export const items = pgTable("items", {
 	id: pk(),
@@ -167,12 +112,4 @@ export const itemNotableHistory = pgTable("item_notable_history", {
 	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
 })
 
-export const enums = {
-	itemTypes,
-	narrativeRoles,
-	perceivedSimplicityLevels,
-	rarityLevels,
-	itemRelationshipTypes,
-	targetEntityTypes,
-	historyRoles,
-}
+export { enums } from "./enums"

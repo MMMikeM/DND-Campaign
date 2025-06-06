@@ -6,43 +6,9 @@ import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "
 import { embeddings } from "../../embeddings/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
+import { enums } from "./enums"
 
-const decisionTypes = [
-	"moral_choice",
-	"tactical_decision",
-	"resource_allocation",
-	"trust_test",
-	"sacrifice_opportunity",
-	"identity_question",
-] as const
-
-const conditionTypes = [
-	"choice",
-	"skill_check",
-	"item",
-	"npc_relation",
-	"faction",
-	"time",
-	"combat",
-	"custom_event",
-] as const
-
-const stageTypes = [
-	"revelation_point",
-	"decision_point",
-	"consequence_point",
-	"character_point",
-	"simple_challenge_point",
-	"rest_interaction_point",
-	"setup_foreshadowing",
-] as const
-const ambiguityLevels = [
-	"clear_best_option_obvious_tradeoff",
-	"balanced_valid_options",
-	"truly_ambiguous_no_clear_right",
-] as const
-const stageImportanceLevels = ["minor_step", "standard", "major_point", "climax_point"] as const
-const complexityLevels = ["low_complexity_breather", "medium_complexity_standard", "high_complexity_peak"] as const
+const { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageImportanceLevels, stageTypes } = enums
 
 export const questStages = pgTable("quest_stages", {
 	id: pk(),
@@ -98,7 +64,7 @@ export const stageDecisions = pgTable(
 		potential_player_reactions: list("potential_player_reactions"),
 		options: list("options"),
 
-		failure_leads_to_retry: boolean("failure_leads_to_retry"),
+		failure_leads_to_retry: boolean("failure_leads_to_retry").notNull().default(false),
 		failure_lesson_learned: nullableString("failure_lesson_learned"),
 	},
 	(t) => [
@@ -111,11 +77,4 @@ export const stageDecisions = pgTable(
 	],
 )
 
-export const enums = {
-	decisionTypes,
-	conditionTypes,
-	stageTypes,
-	ambiguityLevels,
-	stageImportanceLevels,
-	complexityLevels,
-}
+export { enums } from "./enums"
