@@ -1,5 +1,4 @@
 // conflict/tables.ts
-
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
@@ -7,30 +6,9 @@ import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { regions } from "../regions/tables"
+import { enums } from "./enums"
 
-const conflictScopes = ["local", "regional", "global"] as const
-const conflictNatures = ["political", "military", "mystical", "social", "economic", "environmental"] as const
-const conflictStatuses = ["brewing", "active", "escalating", "deescalating", "resolved"] as const
-const participantRolesInConflict = [
-	"instigator",
-	"opponent",
-	"ally",
-	"neutral",
-	"mediator",
-	"beneficiary",
-	"leader",
-	"key_figure",
-	"victim",
-	"opportunist",
-	"saboteur",
-] as const
-const questImpacts = ["escalates", "deescalates", "reveals_truth", "changes_sides", "no_change"] as const
-const conflictClarity = [
-	"clear_aggressor_victim",
-	"competing_legitimate_grievances",
-	"mutually_flawed_sides",
-	"no_discernible_good_option",
-] as const
+const { conflictClarity, conflictNatures, conflictScopes, conflictStatuses, participantRolesInConflict } = enums
 
 export const majorConflicts = pgTable("major_conflicts", {
 	id: pk(),
@@ -86,11 +64,4 @@ export const conflictParticipants = pgTable(
 	],
 )
 
-export const enums = {
-	conflictClarity,
-	conflictScopes,
-	conflictNatures,
-	conflictStatuses,
-	participantRolesInConflict,
-	questImpacts,
-}
+export { enums } from "./enums"

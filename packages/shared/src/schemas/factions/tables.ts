@@ -3,29 +3,22 @@ import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { alignments, relationshipStrengths, wealthLevels } from "../shared-enums"
+import { enums } from "./enums"
 
-const factionSizes = ["tiny", "small", "medium", "large", "massive"] as const
-const reachLevels = ["local", "regional", "national", "continental", "global"] as const
-const diplomaticStatuses = ["ally", "enemy", "neutral", "vassal", "suzerain", "rival", "trade"] as const
-const agendaTypes = ["economic", "military", "political", "social", "occult", "technological"] as const
-const agendaStages = ["preparatory", "active", "concluding", "resolved"] as const
-const agendaImportance = ["peripheral", "significant", "central"] as const
-const influenceLevels = ["contested", "minor", "influenced", "moderate", "strong", "controlled", "dominated"] as const
-const factionTypes = [
-	"guild",
-	"cult",
-	"tribe",
-	"noble_house",
-	"mercantile",
-	"religious",
-	"military",
-	"criminal",
-	"political",
-	"arcane",
-] as const
-
-const transparencyLevels = ["transparent", "secretive", "deceptive"] as const
+const {
+	agendaImportance,
+	agendaStages,
+	agendaTypes,
+	alignments,
+	diplomaticStatuses,
+	factionSizes,
+	factionTypes,
+	influenceLevels,
+	reachLevels,
+	relationshipStrengths,
+	transparencyLevels,
+	wealthLevels,
+} = enums
 
 export const factions = pgTable(
 	"factions",
@@ -142,17 +135,33 @@ export const factionInfluence = pgTable(
 	],
 )
 
-export const enums = {
-	alignments,
-	diplomaticStatuses,
-	agendaImportance,
-	agendaStages,
-	agendaTypes,
-	factionTypes,
-	factionSizes,
-	influenceLevels,
-	reachLevels,
-	relationshipStrengths,
-	transparencyLevels,
-	wealthLevels,
-}
+const { connectionTypes, routeTypes, travelDifficulties } = enums
+
+export const regionConnections = pgTable(
+	"region_connections",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		regionId: cascadeFk("region_id", regions.id),
+		otherRegionId: nullableFk("other_region_id", regions.id),
+		connectionType: oneOf("connection_type", connectionTypes),
+
+		// Merged from regionConnectionDetails
+		routeType: oneOf("route_type", routeTypes),
+		travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
+		travelTime: string("travel_time"),
+		controllingFactionId: nullableFk("controlling_faction_id", () => factions.id),
+		travelHazards: list("travel_hazards"),
+		pointsOfInterest: list("points_of_interest"),
+	},
+	(t) => [
+		unique().on(t.regionId, t.otherRegionId, t.connectionType),
+		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
+	],
+)
+
+export { enums } from "./enums"

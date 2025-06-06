@@ -12,34 +12,10 @@ import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { discoverySubtlety, narrativeWeight } from "../shared-enums"
 import { worldConcepts } from "../worldbuilding/tables"
+import { enums } from "./enums"
 
-const seedDeliveryMethods = [
-	"npc_dialogue",
-	"item_description",
-	"environmental_detail",
-	"document_snippet",
-	"rumor",
-	"dream_vision",
-	"symbol_motif",
-	"player_intuition_prompt",
-	" overheard_conversation",
-] as const
-
-const foreshadowedEntityType = [
-	"quest",
-	"npc",
-	"narrative_event",
-	"major_conflict",
-	"item",
-	"narrative_destination",
-	"world_concept",
-	"faction",
-	"site",
-	"abstract_theme",
-	"specific_reveal",
-] as const
+const { discoverySubtlety, foreshadowedEntityType, narrativeWeight, seedDeliveryMethods } = enums
 
 export const foreshadowingSeeds = pgTable(
 	"foreshadowing_seeds",
@@ -96,9 +72,4 @@ export const foreshadowingSeeds = pgTable(
 	],
 )
 
-export const enums = {
-	seedDeliveryMethods,
-	foreshadowedEntityType,
-	discoverySubtlety,
-	narrativeWeight,
-}
+export { enums } from "./enums"
