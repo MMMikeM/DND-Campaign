@@ -10,6 +10,8 @@ import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const {
 	complexityProfiles,
 	conceptLinkStrengths,
@@ -140,5 +142,3 @@ export const worldConceptLinks = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"

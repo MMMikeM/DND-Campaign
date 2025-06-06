@@ -12,6 +12,8 @@ import { sites } from "../regions/tables"
 import { worldConcepts } from "../worldbuilding/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const { itemRelationshipTypes, itemTypes, narrativeRoles, perceivedSimplicityLevels, rarityLevels, targetEntityTypes } =
 	enums
 
@@ -111,5 +113,3 @@ export const itemNotableHistory = pgTable("item_notable_history", {
 	npcRoleInEvent: string("npc_role_in_event"),
 	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
 })
-
-export { enums } from "./enums"

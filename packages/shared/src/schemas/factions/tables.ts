@@ -5,6 +5,8 @@ import { embeddings } from "../embeddings/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const {
 	agendaImportance,
 	agendaStages,
@@ -163,5 +165,3 @@ export const regionConnections = pgTable(
 		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
 	],
 )
-
-export { enums } from "./enums"

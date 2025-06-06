@@ -8,6 +8,8 @@ import { npcs } from "../npc/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const { conflictClarity, conflictNatures, conflictScopes, conflictStatuses, participantRolesInConflict } = enums
 
 export const majorConflicts = pgTable("major_conflicts", {
@@ -63,5 +65,3 @@ export const conflictParticipants = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"

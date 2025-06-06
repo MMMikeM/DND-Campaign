@@ -6,6 +6,8 @@ import { bytea, cascadeFk, list, nullableFk, nullableString, oneOf, pk, string }
 import { embeddings } from "../embeddings/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const {
 	areaTypes,
 	atmosphereTypes,

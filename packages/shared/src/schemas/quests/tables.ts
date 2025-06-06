@@ -7,6 +7,7 @@ import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { regions, sites } from "../regions/tables"
+import { enums as questEnums } from "./enums"
 import * as stageModule from "./stages/tables"
 
 const { enums: stageEnums, questStages, stageDecisions } = stageModule
@@ -14,10 +15,8 @@ const { enums: stageEnums, questStages, stageDecisions } = stageModule
 export { questStages, stageDecisions }
 
 const {
-	factionRoles,
 	hookTypes,
 	moralSpectrumFocus,
-	npcRoles,
 	pacingRoles,
 	participantImportanceLevels,
 	playerExperienceGoals,
@@ -25,11 +24,9 @@ const {
 	questTypes,
 	relationshipTypes,
 	trustLevels,
-	unlockConditionTypes,
-	unlockImportanceLevels,
 	urgencyLevels,
 	visibilityLevels,
-} = enums
+} = questEnums
 
 export const quests = pgTable("quests", {
 	id: pk(),

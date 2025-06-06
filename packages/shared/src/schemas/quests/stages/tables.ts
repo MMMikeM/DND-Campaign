@@ -8,6 +8,8 @@ import { sites } from "../../regions/tables"
 import { quests } from "../tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageImportanceLevels, stageTypes } = enums
 
 export const questStages = pgTable("quest_stages", {
@@ -76,5 +78,3 @@ export const stageDecisions = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"

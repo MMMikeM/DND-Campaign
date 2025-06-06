@@ -6,6 +6,8 @@ import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const {
 	adaptabilityLevels,
 	alignments,
@@ -141,5 +143,3 @@ export const npcRelationships = pgTable(
 		check("no_self_relationship", sql`${t.npcId} != ${t.relatedNpcId}`),
 	],
 )
-
-export { enums } from "./enums"
