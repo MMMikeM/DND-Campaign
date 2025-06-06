@@ -12,6 +12,8 @@ import { questStages, quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const {
 	consequenceSources,
 	consequenceTimeframe,
@@ -139,5 +141,3 @@ export const consequences = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"

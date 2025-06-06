@@ -11,6 +11,8 @@ import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const { arcImportanceLevels, arcTypes, destinationRelationshipTypes, destinationStatuses, emotionalArcs, questRoles } =
 	enums
 
@@ -99,5 +101,3 @@ export const destinationParticipantInvolvement = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"

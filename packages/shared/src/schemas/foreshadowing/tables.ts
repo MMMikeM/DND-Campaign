@@ -15,6 +15,8 @@ import { sites } from "../regions/tables"
 import { worldConcepts } from "../worldbuilding/tables"
 import { enums } from "./enums"
 
+export { enums } from "./enums"
+
 const { discoverySubtlety, foreshadowedEntityType, narrativeWeight, seedDeliveryMethods } = enums
 
 export const foreshadowingSeeds = pgTable(
@@ -71,5 +73,3 @@ export const foreshadowingSeeds = pgTable(
 		),
 	],
 )
-
-export { enums } from "./enums"
