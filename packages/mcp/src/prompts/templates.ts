@@ -1,7 +1,18 @@
-// Enhanced Prompt Template System
+/**
+ * Prompt Template System
+ *
+ * Provides template prompts for rapid campaign development:
+ * - "template-npc" - Common character archetypes (tavern keeper, guard captain)
+ * - "template-faction" - Standard organizations (thieves guild, merchant guild)
+ * - "template-location" - Typical places (frontier town, ancient ruins)
+ * - "template-quest" - Adventure hooks (missing person, political intrigue)
+ * - "template-scenario" - Complete multi-entity setups
+ */
+
 import { z } from "zod/v4"
 import { logger } from ".."
-import type { PromptDefinition } from "./prompt-utils"
+import { createTypedHandler } from "./types"
+import type { PromptDefinition } from "./utils"
 
 const templateSchema = z.object({
 	template_name: z.string().describe("Name of the template to use"),
@@ -419,11 +430,11 @@ export const templatePromptDefinitions: Record<string, PromptDefinition> = {
 	template: {
 		description: "Use a predefined template for quick entity creation with sensible defaults",
 		schema: templateSchema,
-		handler: templateHandler,
+		handler: createTypedHandler(templateSchema, templateHandler),
 	},
 	"template-list": {
 		description: "List all available templates for entity creation",
 		schema: templateListSchema,
-		handler: templateListHandler,
+		handler: createTypedHandler(templateListSchema, templateListHandler),
 	},
 }

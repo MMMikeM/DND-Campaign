@@ -1,8 +1,12 @@
-// prompt-types.ts
-import type { EmbeddedResource, GetPromptResult, PromptMessage, TextContent } from "@modelcontextprotocol/sdk/types.js"
-import type { z } from "zod/v4"
+/**
+ * Prompt Types and MCP Integration
+ *
+ * Provides type definitions and helper functions for creating MCP-compliant
+ * prompt messages with type safety and standardized formatting.
+ */
 
-export type PromptCategory = "npc" | "faction" | "quest" | "location" | "world" | "campaign"
+import type { GetPromptResult, PromptMessage } from "@modelcontextprotocol/sdk/types.js"
+import type { z } from "zod/v4"
 
 /**
  * Enhanced prompt definition using proper MCP SDK types
@@ -17,7 +21,7 @@ export interface PromptDefinition<T extends z.ZodTypeAny = z.ZodTypeAny> {
 	handler: (args: unknown) => Promise<GetPromptResult>
 }
 
-export type { GetPromptResult, PromptMessage, TextContent, EmbeddedResource }
+export type { GetPromptResult }
 
 /**
  * Helper functions for creating MCP-compliant prompt messages

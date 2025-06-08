@@ -1,8 +1,15 @@
-// Enhanced Faction Creation Prompt with Resource Embedding
+/**
+ * Faction Creation
+ *
+ * Provides the "create-faction-enhanced" prompt for generating political organizations
+ * with automatic relationship mapping, territory analysis, and integration with
+ * existing campaign conflicts and power structures.
+ */
 
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import type { PromptDefinition } from "./prompt-utils"
+import { createTypedHandler } from "./types"
+import type { PromptDefinition } from "./utils"
 
 const enhancedFactionCreationSchema = z.object({
 	name: z.string().describe("Name for the new faction"),
@@ -25,20 +32,18 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 		// Get existing factions for relationship context
 		const existingFactions = await db.query.factions.findMany({
 			with: {
-				headquarters: {
-					columns: { id: true, description: true },
-					with: { site: { columns: { id: true, name: true } } },
-				},
-				territorialControl: {
-					columns: { id: true, description: true },
-					with: { site: { columns: { id: true, name: true } } },
+				primaryHqSite: {
+					with: {
+						area: { columns: { id: true, name: true } },
+					},
 				},
 			},
 			columns: {
 				id: true,
 				name: true,
 				type: true,
-				alignment: true,
+				publicAlignment: true,
+				secretAlignment: true,
 				description: true,
 			},
 		})
@@ -49,7 +54,7 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 			columns: {
 				id: true,
 				name: true,
-				siteType: true,
+				type: true,
 				description: true,
 			},
 		})
@@ -60,16 +65,16 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 				id: true,
 				name: true,
 				occupation: true,
-				alignment: true,
 			},
 		})
 
 		// Get nearby entities if location hint provided
 		let nearbyEntities: any = null
+
 		if (args.location_hint) {
 			const relatedSites = await db.query.sites.findMany({
 				where: (sites, { like }) => like(sites.name, `%${args.location_hint}%`),
-				columns: { id: true, name: true, siteType: true },
+				columns: { id: true, name: true, type: true },
 			})
 
 			if (relatedSites.length > 0) {
@@ -81,14 +86,13 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 						npcs: true,
 					},
 					where: (sites, { or, eq }) => or(...siteIds.map((id) => eq(sites.id, id))),
-					columns: { id: true, name: true, siteType: true },
-					limit: 5,
+					columns: { id: true, name: true, type: true },
 				})
 
 				// Get other factions in the area
-				const nearbyFactions = await db.query.factionHeadquarters.findMany({
-					where: (factionHeadquarters, { or, eq }) => or(...siteIds.map((id) => eq(factionHeadquarters.siteId, id))),
-					columns: { id: true, description: true },
+				const nearbyFactions = await db.query.factions.findMany({
+					where: (factions, { or, eq }) => or(...siteIds.map((id) => eq(factions.primaryHqSiteId, id))),
+					columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true },
 				})
 
 				nearbyEntities = {
@@ -109,14 +113,6 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 			},
 		})
 
-		// Get recent quests for campaign themes
-		const quests = await db.query.factionQuestInvolvement.findMany({
-			with: {
-				quest: true,
-				faction: { columns: { id: true, name: true, description: true } },
-			},
-		})
-
 		// Generate faction relationship suggestions based on type and alignment
 		const suggestedRelationships = await generateFactionRelationshipSuggestions(args, existingFactions)
 
@@ -128,7 +124,6 @@ async function gatherFactionCreationContext(args: z.infer<typeof enhancedFaction
 			nearbyEntities,
 			activeConflicts,
 			campaignThemes: {
-				recentQuests: quests,
 				activeConflicts,
 			},
 			suggestedRelationships,
@@ -245,6 +240,6 @@ export const enhancedFactionPromptDefinitions: Record<string, PromptDefinition> 
 	"create-faction-enhanced": {
 		description: "Create a faction with full campaign context, relationship suggestions, and political positioning",
 		schema: enhancedFactionCreationSchema,
-		handler: enhancedFactionCreationHandler,
+		handler: createTypedHandler(enhancedFactionCreationSchema, enhancedFactionCreationHandler),
 	},
 }

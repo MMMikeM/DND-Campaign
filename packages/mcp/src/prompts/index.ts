@@ -1,4 +1,10 @@
-// prompt-server.ts
+/**
+ * Prompt Server Registration - MCP Protocol Handler
+ *
+ * Registers prompt handlers with the MCP server for AI assistant integration.
+ * Handles ListPrompts and GetPrompt requests, routing to the prompt registry.
+ */
+
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import {
 	GetPromptRequestSchema,
@@ -6,7 +12,7 @@ import {
 	ListPromptsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
-import { executePrompt, getAllPrompts } from "./prompt-registry"
+import { executePrompt, getAllPrompts } from "./registry"
 
 export function registerPromptHandlers(server: Server) {
 	server.setRequestHandler(ListPromptsRequestSchema, async () => {

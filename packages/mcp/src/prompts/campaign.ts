@@ -1,19 +1,29 @@
-import { getGeminiEmbedding, tables } from "@tome-master/shared"
-import { cosineDistance, eq, sql } from "drizzle-orm"
+/**
+ * Campaign Prompts - Interactive Campaign Management
+ *
+ * Provides interactive prompts for real-time campaign management:
+ * - "fuzzy-search" - Find NPCs, factions, and quests with intelligent search
+ * - "generate-npc-dialogue" - Context-aware dialogue generation
+ * - "adapt-quest" - Dynamic quest adaptation when players go off-script
+ * - "faction-response" - Generate faction reactions to player actions
+ * - "conversational-npc-creation" - Step-by-step guided NPC creation
+ * - "help-enhanced-prompts" - Interactive help system
+ */
+
+import { tables } from "@tome-master/shared"
+import { eq, sql } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import { gatherNPCCreationContext } from "./prompt-npc-enhanced"
-// Import context gathering functions from other prompt files
-import { gatherQuestCreationContext } from "./prompt-quest-enhanced"
+import { gatherNPCCreationContext } from "./npc"
+import { gatherQuestCreationContext } from "./quest"
 import {
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
 	type GetPromptResult,
 	type PromptDefinition,
-} from "./prompt-types"
+} from "./types"
 
-// Use existing fuzzy search infrastructure
 const searchBySimilarity = async (
 	searchTerm: string,
 	fuzzyWeight = 1.0,
@@ -31,17 +41,14 @@ const searchBySimilarity = async (
     ) limit 10
   `)
 
-// Smart hybrid search combining fuzzy + embedding search
 const fuzzySearchEntities = async (query: string, entityType?: string) => {
 	const { rows } = await searchBySimilarity(query)
 
-	// Filter by entity type if specified
 	let filteredRows = rows as Array<{ id: number; name: string; source_table: string }>
 	if (entityType) {
 		filteredRows = filteredRows.filter((row) => row.source_table === entityType)
 	}
 
-	// Enhance with additional info for each entity type
 	const enhancedResults = await Promise.all(
 		filteredRows.map(async (row) => {
 			try {
@@ -53,7 +60,6 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 							with: {
 								relatedSites: {
 									with: { site: { columns: { name: true } } },
-									limit: 1,
 								},
 							},
 						})
@@ -69,7 +75,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 					case "factions": {
 						const faction = await db.query.factions.findFirst({
 							where: eq(tables.factionTables.factions.id, row.id),
-							columns: { id: true, name: true, type: true, alignment: true },
+							columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true },
 						})
 						return faction ? { ...faction, source_table: "factions" } : null
 					}
@@ -108,51 +114,6 @@ const fuzzySearchQuests = async (query: string, limit = 5) => {
 	return fuzzySearchEntities(query, "quests").then((results) => results.slice(0, limit))
 }
 
-// Embedding search utilities
-const embeddingSearchNPCs = async (query: string, limit = 5) => {
-	try {
-		// Get embedding for the search query
-		const queryEmbedding = await getGeminiEmbedding(query)
-
-		// Find NPCs with similar embeddings
-		const similarNPCs = await db
-			.select({
-				id: tables.embeddingTables.embeddings.id,
-				similarity: cosineDistance(tables.embeddingTables.embeddings.embedding, queryEmbedding),
-			})
-			.from(tables.embeddingTables.embeddings)
-			.orderBy(cosineDistance(tables.embeddingTables.embeddings.embedding, queryEmbedding))
-			.limit(limit * 2) // Get more to filter for NPCs specifically
-
-		const embeddingIds = similarNPCs.map((r) => r.id)
-		const similarityMap = new Map(similarNPCs.map((r) => [r.id, r.similarity]))
-
-		// Find NPCs that have these embeddings
-		const npcResults = await db.query.npcs.findMany({
-			columns: { id: true, name: true, occupation: true, embeddingId: true },
-			with: {
-				relatedSites: {
-					with: { site: { columns: { name: true } } },
-					limit: 1,
-				},
-			},
-			where: (npcs, { inArray }) => inArray(npcs.embeddingId, embeddingIds),
-		})
-
-		return npcResults
-			.map((npc) => ({
-				...npc,
-				location: npc.relatedSites[0]?.site?.name || "Unknown location",
-				similarity: npc.embeddingId ? similarityMap.get(npc.embeddingId) : 1,
-			}))
-			.sort((a, b) => Number(a.similarity || 1) - Number(b.similarity || 1))
-			.slice(0, limit)
-	} catch (error) {
-		logger.warn("Embedding search failed, falling back to empty results", { error })
-		return []
-	}
-}
-
 // Hybrid smart search: fuzzy first, then embedding fallback
 const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | "quest", limit = 5) => {
 	logger.info(`Smart search for ${entityType}: "${query}"`)
@@ -177,18 +138,6 @@ const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | 
 			method: "fuzzy" as const,
 			results: fuzzyResults,
 			query,
-		}
-	}
-
-	// Step 2: Fall back to embedding search for NPCs (most common case)
-	if (entityType === "npc") {
-		const embeddingResults = await embeddingSearchNPCs(query, limit)
-		if (embeddingResults.length > 0) {
-			return {
-				method: "semantic" as const,
-				results: embeddingResults,
-				query,
-			}
 		}
 	}
 

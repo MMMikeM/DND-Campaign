@@ -1,10 +1,16 @@
-// Enhanced Quest Creation Prompt with Resource Embedding
+/**
+ * Quest Creation
+ *
+ * Provides the "create-quest-enhanced" prompt for generating complex adventures
+ * with multi-stage development, faction involvement analysis, and automatic
+ * integration with existing storylines and campaign conflicts.
+ */
 
 import { tables } from "@tome-master/shared"
 import { eq, or, sql } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import type { PromptDefinition } from "./prompt-utils"
+import type { PromptDefinition } from "./utils"
 
 // Fuzzy search function for better entity matching
 const searchBySimilarity = async (
@@ -25,17 +31,10 @@ const searchBySimilarity = async (
   `)
 
 const {
-	embeddingTables,
-	eventTables,
-	narrativeTables,
-	regionTables: { sites },
-	worldTables,
-	associationTables,
 	conflictTables: { majorConflicts },
-	factionTables: { factions, factionHeadquarters },
-	foreshadowingTables,
-	npcTables: { npcs, npcSites, npcFactions },
-	questTables: { quests, questStages },
+	factionTables: { factions },
+	npcTables: { npcFactions },
+	questTables: { quests },
 } = tables
 
 const enhancedQuestCreationSchema = z.object({
@@ -75,7 +74,6 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 				type: true,
 				description: true,
 			},
-			limit: 12,
 		})
 
 		// Get quest stages for structure inspiration
@@ -86,7 +84,6 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 				name: true,
 				description: true,
 			},
-			limit: 15,
 		})
 
 		// Get locations for quest settings
@@ -94,10 +91,9 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 			columns: {
 				id: true,
 				name: true,
-				siteType: true,
+				type: true,
 				description: true,
 			},
-			limit: 15,
 		})
 
 		// Get factions for quest givers and opposition
@@ -106,10 +102,10 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 				id: true,
 				name: true,
 				type: true,
-				alignment: true,
+				publicAlignment: true,
+				secretAlignment: true,
 				description: true,
 			},
-			limit: 12,
 		})
 
 		// Get NPCs for quest givers, targets, and allies
@@ -120,61 +116,7 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 				occupation: true,
 				alignment: true,
 			},
-			limit: 20,
 		})
-
-		// Get location-specific entities if location hint provided
-		let locationContext: any = null
-		if (args.location_hint) {
-			// Use fuzzy search to find locations
-			const { rows: locationRows } = await searchBySimilarity(args.location_hint, 1.0, 0.3, 2, 2)
-			const siteMatches = locationRows.filter((row: any) => row.source_table === "sites")
-
-			const relatedLocations =
-				siteMatches.length > 0
-					? await db.query.sites.findMany({
-							where: sql`${sites.id} IN (${sql.join(
-								siteMatches.map((s: any) => s.id),
-								sql`, `,
-							)})`,
-							columns: { id: true, name: true, siteType: true, description: true },
-						})
-					: []
-
-			if (relatedLocations.length > 0) {
-				const locationIds = relatedLocations.map((l) => l.id)
-
-				// Get NPCs in the location via junction table
-				const locationNPCRelations = await db.query.npcSites.findMany({
-					where: or(...locationIds.map((id) => eq(npcSites.siteId, id))),
-					with: {
-						npc: {
-							columns: { id: true, name: true, occupation: true, alignment: true },
-						},
-					},
-					limit: 8,
-				})
-				const locationNPCs = locationNPCRelations.map((rel) => rel.npc)
-
-				// Get factions with presence in the location via headquarters
-				const locationFactionRelations = await db.query.factionHeadquarters.findMany({
-					where: or(...locationIds.map((id) => eq(factionHeadquarters.siteId, id))),
-					with: {
-						faction: {
-							columns: { id: true, name: true, type: true, alignment: true },
-						},
-					},
-					limit: 6,
-				})
-				const locationFactions = locationFactionRelations.map((rel) => rel.faction)
-
-				locationContext = {
-					locations: relatedLocations,
-					npcs: locationNPCs,
-					factions: locationFactions,
-				}
-			}
-		}
 
 		// Get faction-specific entities if faction hint provided
 		let factionContext: any = null
@@ -190,7 +132,14 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 								factionMatches.map((f: any) => f.id),
 								sql`, `,
 							)})`,
-							columns: { id: true, name: true, type: true, alignment: true, description: true },
+							columns: {
+								id: true,
+								name: true,
+								type: true,
+								publicAlignment: true,
+								secretAlignment: true,
+								description: true,
+							},
 						})
 					: []
 
@@ -222,7 +171,7 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 			columns: {
 				id: true,
 				name: true,
-				nature: true,
+				natures: true,
 				description: true,
 			},
 			limit: 8,
@@ -243,7 +192,6 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 			availableLocations,
 			availableFactions,
 			availableNPCs,
-			locationContext,
 			factionContext,
 			activeConflicts,
 			suggestedConnections,
@@ -255,7 +203,6 @@ async function gatherQuestCreationContext(args: z.infer<typeof enhancedQuestCrea
 			availableLocations: availableLocations.length,
 			availableFactions: availableFactions.length,
 			availableNPCs: availableNPCs.length,
-			locationContext: locationContext ? Object.keys(locationContext).length : 0,
 			factionContext: factionContext ? Object.keys(factionContext).length : 0,
 		})
 

@@ -1,8 +1,16 @@
+/**
+ * NPC Creation
+ *
+ * Provides the "create-npc-enhanced" prompt for generating detailed NPCs
+ * with automatic relationship mapping, faction affiliations, and quest hook
+ * suggestions based on existing campaign context.
+ */
+
 import { tables } from "@tome-master/shared"
 import { and, like, or } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import type { GetPromptResult, PromptDefinition } from "./prompt-types"
+import type { GetPromptResult, PromptDefinition } from "./types"
 
 // Schema for enhanced NPC creation with context hints
 const createNpcContextualSchema = z.object({
@@ -67,17 +75,15 @@ async function gatherNPCCreationContext(args: z.infer<typeof createNpcContextual
 
 		// 3. Get active factions
 		const factions = await db.query.factions.findMany({
-			columns: { id: true, name: true, type: true, alignment: true, description: true },
+			columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true, description: true },
 			orderBy: (factions, { asc }) => [asc(factions.name)],
-			limit: 20,
 		})
 		context.factions = factions
 
 		// 4. Get location hierarchy
 		const locations = await db.query.sites.findMany({
-			columns: { id: true, name: true, siteType: true, description: true },
+			columns: { id: true, name: true, type: true, description: true },
 			orderBy: (sites, { asc }) => [asc(sites.name)],
-			limit: 15,
 		})
 		context.locations = locations
 
@@ -89,13 +95,11 @@ async function gatherNPCCreationContext(args: z.infer<typeof createNpcContextual
 					// Could also search by site associations
 				),
 				columns: { id: true, name: true, occupation: true },
-				limit: 5,
 			})
 
 			const nearbyFactions = await db.query.factions.findMany({
 				where: like(tables.factionTables.factions.name, `%${args.location_hint}%`),
 				columns: { id: true, name: true, type: true },
-				limit: 3,
 			})
 
 			context.nearbyEntities = {
@@ -112,7 +116,6 @@ async function gatherNPCCreationContext(args: z.infer<typeof createNpcContextual
 					args.role_hint ? like(tables.npcTables.npcs.occupation, `%${args.role_hint}%`) : undefined,
 				),
 				columns: { id: true, name: true, occupation: true, alignment: true },
-				limit: 5,
 			})
 
 			context.suggestedRelationships = relationshipCandidates.map((npc) => ({
@@ -124,7 +127,6 @@ async function gatherNPCCreationContext(args: z.infer<typeof createNpcContextual
 		// 7. Get campaign themes from recent quests/conflicts
 		const recentQuests = await db.query.quests.findMany({
 			columns: { id: true, name: true, description: true },
-			limit: 5,
 		})
 
 		// Note: conflicts table might not exist yet, skipping for now

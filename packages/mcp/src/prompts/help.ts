@@ -1,7 +1,15 @@
-// Enhanced Prompt Help and Discovery System
+/**
+ * Prompt Help System
+ *
+ * Provides the "prompt-help" prompt for interactive documentation and guidance.
+ * Shows detailed usage instructions, examples, and performance metrics for all
+ * enhanced campaign prompts with category-based filtering.
+ */
+
 import { z } from "zod/v4"
 import { logger } from ".."
-import type { PromptDefinition } from "./prompt-utils"
+import { createTypedHandler } from "./types"
+import type { PromptDefinition } from "./utils"
 
 const promptHelpSchema = z.object({
 	prompt_name: z.string().optional().describe("Specific prompt to get help for (optional)"),
@@ -303,6 +311,6 @@ export const promptHelpDefinitions: Record<string, PromptDefinition> = {
 	"prompt-help": {
 		description: "Get help and examples for enhanced entity creation prompts",
 		schema: promptHelpSchema,
-		handler: promptHelpHandler,
+		handler: createTypedHandler(promptHelpSchema, promptHelpHandler),
 	},
 }

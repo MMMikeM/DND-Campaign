@@ -1,4 +1,10 @@
-// Enhanced Prompt Validation and Error Handling
+/**
+ * Prompt Validation and Error Handling
+ *
+ * Provides input validation, sanitization, error handling, and performance
+ * monitoring for all prompt operations with graceful degradation support.
+ */
+
 import { z } from "zod/v4"
 import { logger } from ".."
 
