@@ -35,19 +35,15 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 		const [existingNpcs, factions, regions, sites] = await Promise.all([
 			db.query.npcs.findMany({
 				columns: { id: true, name: true, occupation: true, alignment: true },
-				limit: 10,
 			}),
 			db.query.factions.findMany({
-				columns: { id: true, name: true, type: true, alignment: true },
-				limit: 10,
+				columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true },
 			}),
 			db.query.regions.findMany({
 				columns: { id: true, name: true, type: true },
-				limit: 5,
 			}),
 			db.query.sites.findMany({
-				columns: { id: true, name: true, siteType: true },
-				limit: 10,
+				columns: { id: true, name: true, type: true },
 			}),
 		])
 
@@ -65,7 +61,8 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 				active_factions: factions.map((faction) => ({
 					name: faction.name,
 					type: faction.type,
-					alignment: faction.alignment,
+					public_alignment: faction.publicAlignment,
+					secret_alignment: faction.secretAlignment,
 				})),
 				available_regions: regions.map((region) => ({
 					name: region.name,
@@ -73,7 +70,7 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 				})),
 				notable_sites: sites.map((site) => ({
 					name: site.name,
-					type: site.siteType,
+					type: site.type,
 				})),
 			},
 			creation_guidelines: {
@@ -105,19 +102,15 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 		const [activeQuests, factions, conflicts, npcs] = await Promise.all([
 			db.query.quests.findMany({
 				columns: { id: true, name: true, type: true, urgency: true },
-				limit: 10,
 			}),
 			db.query.factions.findMany({
 				columns: { id: true, name: true, type: true, publicGoal: true },
-				limit: 8,
 			}),
 			db.query.majorConflicts.findMany({
-				columns: { id: true, name: true, nature: true, status: true },
-				limit: 5,
+				columns: { id: true, name: true, natures: true, status: true },
 			}),
 			db.query.npcs.findMany({
 				columns: { id: true, name: true, occupation: true },
-				limit: 15,
 			}),
 		])
 
@@ -139,7 +132,7 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 				})),
 				ongoing_conflicts: conflicts.map((conflict) => ({
 					name: conflict.name,
-					nature: conflict.nature,
+					nature: conflict.natures,
 					status: conflict.status,
 				})),
 				available_npcs: npcs.map((npc) => ({
@@ -172,12 +165,10 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 	logger.info(`Gathering faction response context for: ${factionName}`)
 
 	try {
-		// Find the specific faction
 		const faction = await db.query.factions.findFirst({
 			where: (factions, { eq }) => eq(factions.name, factionName),
 			with: {
 				agendas: true,
-				culture: true,
 				outgoingRelationships: {
 					with: { targetFaction: { columns: { name: true, type: true } } },
 				},
@@ -195,20 +186,17 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 			faction_profile: {
 				name: faction.name,
 				type: faction.type,
-				alignment: faction.alignment,
+				public_alignment: faction.publicAlignment,
+				secret_alignment: faction.secretAlignment,
 				public_goal: faction.publicGoal,
 				secret_goal: faction.secretGoal,
 				values: faction.values,
-				resources: faction.resources,
 			},
-			faction_culture:
-				faction.culture && faction.culture.length > 0
-					? {
-							symbols: faction.culture[0]?.symbols,
-							rituals: faction.culture[0]?.rituals,
-							taboos: faction.culture[0]?.taboos,
-						}
-					: null,
+			faction_culture: {
+				symbols: faction.symbols,
+				rituals: faction.rituals,
+				taboos: faction.taboos,
+			},
 			active_agendas: faction.agendas.map((agenda) => ({
 				name: agenda.name,
 				type: agenda.agendaType,
@@ -259,7 +247,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 					with: { faction: { columns: { name: true, type: true } } },
 				},
 				relatedSites: {
-					with: { site: { columns: { name: true, siteType: true } } },
+					with: { site: { columns: { name: true, type: true } } },
 				},
 				outgoingRelationships: {
 					with: { targetNpc: { columns: { name: true, occupation: true } } },
@@ -295,13 +283,13 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 			})),
 			location_context: npc.relatedSites.map((rel) => ({
 				site_name: rel.site?.name || "Unknown",
-				site_type: rel.site?.siteType || "Unknown",
+				site_type: rel.site?.type || "Unknown",
 				description: rel.description,
 			})),
 			relationships: npc.outgoingRelationships.map((rel) => ({
 				related_npc: rel.targetNpc?.name || "Unknown",
 				occupation: rel.targetNpc?.occupation || "Unknown",
-				relationship_type: rel.type,
+				relationship_type: rel.relationshipType,
 				strength: rel.strength,
 			})),
 			dialogue_guidelines: {
@@ -350,7 +338,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				with: {
 					areas: {
 						with: {
-							sites: { columns: { name: true, siteType: true } },
+							sites: { columns: { name: true, type: true } },
 						},
 					},
 				},
@@ -364,22 +352,15 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				location_type: "site",
 				site_details: {
 					name: site.name,
-					type: site.siteType,
+					type: site.type,
 					description: site.description,
 					features: site.features,
 					mood: site.mood,
 					environment: site.environment,
 				},
-				regional_context: site.area?.region
-					? {
-							region_name: site.area.region.name,
-							region_type: site.area.region.type,
-						}
-					: null,
 				encounters: site.encounters.map((enc) => ({
 					name: enc.name,
-					type: enc.encounterType,
-					difficulty: enc.difficulty,
+					type: enc.objectiveType,
 				})),
 				secrets: site.secrets.map((secret) => ({
 					type: secret.secretType,
@@ -405,7 +386,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				notable_sites: region.areas.flatMap((area) =>
 					area.sites.map((site) => ({
 						name: site.name,
-						type: site.siteType,
+						type: site.type,
 					})),
 				),
 			}

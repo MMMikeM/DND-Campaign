@@ -1,7 +1,13 @@
-// prompt-utils.ts
+/**
+ * Prompt Utilities - Schema Processing and Argument Extraction
+ *
+ * Provides utility functions for extracting argument definitions from Zod schemas
+ * for MCP prompt registration and automatic argument documentation.
+ */
+
 import type { PromptArgument } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod/v4"
-import type { PromptDefinition } from "./prompt-types"
+import type { PromptDefinition } from "./types"
 
 export type { PromptDefinition }
 

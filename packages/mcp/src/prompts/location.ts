@@ -1,8 +1,15 @@
-// Enhanced Location Creation Prompt with Resource Embedding
+/**
+ * Location Creation
+ *
+ * Provides the "create-location-enhanced" prompt for generating geographic locations
+ * with faction control analysis, cultural integration, and automatic connection
+ * suggestions within the campaign's political landscape.
+ */
 
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import type { PromptDefinition } from "./prompt-utils"
+import { createTypedHandler } from "./types"
+import type { PromptDefinition } from "./utils"
 
 const enhancedLocationCreationSchema = z.object({
 	name: z.string().describe("Name for the new location"),
@@ -19,7 +26,7 @@ async function gatherLocationCreationContext(args: z.infer<typeof enhancedLocati
 		// Check for name conflicts
 		const nameConflicts = await db.query.sites.findMany({
 			where: (sites, { like }) => like(sites.name, `%${args.name}%`),
-			columns: { id: true, name: true, siteType: true },
+			columns: { id: true, name: true, type: true },
 		})
 
 		// Get existing locations for geographic context
@@ -27,7 +34,7 @@ async function gatherLocationCreationContext(args: z.infer<typeof enhancedLocati
 			columns: {
 				id: true,
 				name: true,
-				siteType: true,
+				type: true,
 				description: true,
 			},
 			limit: 15,
@@ -57,24 +64,24 @@ async function gatherLocationCreationContext(args: z.infer<typeof enhancedLocati
 				// Get locations in the region
 				const regionalLocations = await db.query.sites.findMany({
 					where: (sites, { or, eq }) => or(...regionIds.map((id) => eq(sites.areaId, id))),
-					columns: { id: true, name: true, siteType: true },
-					limit: 8,
+					columns: { id: true, name: true, type: true },
 				})
 
 				// Get factions in the region
 				const regionalFactions = await db.query.factions.findMany({
 					with: {
-						headquarters: true,
-						territorialControl: true,
+						primaryHqSite: {
+							with: {
+								area: { columns: { id: true, name: true } },
+							},
+						},
 					},
 					columns: { id: true, name: true, type: true },
-					limit: 5,
 				})
 
 				// Get NPCs in the region
 				const regionalNPCs = await db.query.npcs.findMany({
 					columns: { id: true, name: true, occupation: true },
-					limit: 8,
 				})
 
 				nearbyEntities = {
@@ -92,22 +99,20 @@ async function gatherLocationCreationContext(args: z.infer<typeof enhancedLocati
 				id: true,
 				name: true,
 				type: true,
-				alignment: true,
+				publicAlignment: true,
+				secretAlignment: true,
 			},
-			limit: 12,
-			orderBy: sql`${factions.updatedAt} DESC`,
 		})
 
 		// Get active conflicts for strategic positioning
 		const activeConflicts = await db.query.majorConflicts.findMany({
-			where: eq(majorConflicts.status, "active"),
+			where: (majorConflicts, { eq }) => eq(majorConflicts.status, "active"),
 			columns: {
 				id: true,
 				name: true,
-				nature: true,
+				natures: true,
 				description: true,
 			},
-			limit: 6,
 		})
 
 		// Get recent quests for location relevance
@@ -115,11 +120,9 @@ async function gatherLocationCreationContext(args: z.infer<typeof enhancedLocati
 			columns: {
 				id: true,
 				name: true,
-				questType: true,
+				type: true,
 				description: true,
 			},
-			limit: 8,
-			orderBy: sql`${quests.updatedAt} DESC`,
 		})
 
 		// Generate location relationship suggestions
@@ -174,11 +177,11 @@ async function generateLocationConnectionSuggestions(
 
 		const complementary = complementaryTypes[args.type_hint as keyof typeof complementaryTypes] || []
 		const relatedLocations = existingLocations.filter(
-			(loc) => complementary.includes(loc.siteType) || loc.siteType === args.type_hint,
+			(loc) => complementary.includes(loc.type) || loc.type === args.type_hint,
 		)
 
 		if (relatedLocations.length > 0) {
-			suggestions.push(`Trade route connection to ${relatedLocations[0].name} (${relatedLocations[0].siteType})`)
+			suggestions.push(`Trade route connection to ${relatedLocations[0].name} (${relatedLocations[0].type})`)
 			if (relatedLocations.length > 1) {
 				suggestions.push(`Strategic position between ${relatedLocations[0].name} and ${relatedLocations[1].name}`)
 			}
@@ -266,6 +269,6 @@ export const enhancedLocationPromptDefinitions: Record<string, PromptDefinition>
 	"create-location-enhanced": {
 		description: "Create a location with full geographic context, faction control, and campaign integration",
 		schema: enhancedLocationCreationSchema,
-		handler: enhancedLocationCreationHandler,
+		handler: createTypedHandler(enhancedLocationCreationSchema, enhancedLocationCreationHandler),
 	},
 }

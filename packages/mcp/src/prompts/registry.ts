@@ -1,17 +1,30 @@
-// prompt-registry.ts
+/**
+ * Prompt Registry - Central Hub for Campaign Management Prompts
+ *
+ * Combines all prompt definitions into a single registry and handles their execution.
+ * Provides getAllPrompts() for MCP discovery and executePrompt() with validation.
+ */
 
 import { z } from "zod/v4"
 import { logger } from ".."
-import { enhancedCampaignPrompts } from "./enhanced-campaign-prompts"
-import { enhancedNpcPromptDefinitions } from "./prompt-npc-enhanced"
-import { enhancedQuestPromptDefinitions } from "./prompt-quest-enhanced"
-import { extractArgsFromZodSchema, type PromptDefinition } from "./prompt-utils"
+import { enhancedCampaignPrompts } from "./campaign"
+import { enhancedFactionPromptDefinitions } from "./faction"
+import { promptHelpDefinitions } from "./help"
+import { enhancedLocationPromptDefinitions } from "./location"
+import { enhancedNpcPromptDefinitions } from "./npc"
+import { enhancedQuestPromptDefinitions } from "./quest"
+import { templatePromptDefinitions } from "./templates"
+import { extractArgsFromZodSchema, type PromptDefinition } from "./utils"
 
 // Combine all prompt definitions
 const allPromptDefinitions = {
 	...enhancedNpcPromptDefinitions,
 	...enhancedCampaignPrompts,
 	...enhancedQuestPromptDefinitions,
+	...enhancedFactionPromptDefinitions,
+	...enhancedLocationPromptDefinitions,
+	...promptHelpDefinitions,
+	...templatePromptDefinitions,
 }
 
 /**
