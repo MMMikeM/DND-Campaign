@@ -7,7 +7,7 @@
  * - "adapt-quest" - Dynamic quest adaptation when players go off-script
  * - "faction-response" - Generate faction reactions to player actions
  * - "conversational-npc-creation" - Step-by-step guided NPC creation
- * - "help-enhanced-prompts" - Interactive help system
+ * - "help-prompts" - Interactive help system
  */
 
 import { tables } from "@tome-master/shared"
@@ -20,6 +20,7 @@ import {
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
+	extractArgsFromZodSchema,
 	type GetPromptResult,
 	type PromptDefinition,
 } from "./types"
@@ -49,7 +50,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 		filteredRows = filteredRows.filter((row) => row.source_table === entityType)
 	}
 
-	const enhancedResults = await Promise.all(
+	const results = await Promise.all(
 		filteredRows.map(async (row) => {
 			try {
 				switch (row.source_table) {
@@ -58,7 +59,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 							where: eq(tables.npcTables.npcs.id, row.id),
 							columns: { id: true, name: true, occupation: true },
 							with: {
-								relatedSites: {
+								siteAssociations: {
 									with: { site: { columns: { name: true } } },
 								},
 							},
@@ -67,7 +68,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 							? {
 									...npc,
 									source_table: "npcs",
-									location: npc.relatedSites[0]?.site?.name || "Unknown location",
+									location: npc.siteAssociations[0]?.site?.name || "Unknown location",
 								}
 							: null
 					}
@@ -98,7 +99,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 		}),
 	)
 
-	return enhancedResults.filter(Boolean)
+	return results.filter(Boolean)
 }
 
 // Entity-specific fuzzy search functions
@@ -554,7 +555,7 @@ const handlePromptHelp = async (args: unknown): Promise<GetPromptResult> => {
 	const allPrompts = {
 		npc: [
 			{
-				name: "create-npc-enhanced",
+				name: "create-npc",
 				description: "Create rich, connected NPCs with automatic relationship suggestions",
 				performance: "8.3x content improvement • 1.0KB context • 157ms",
 				args: [
@@ -573,7 +574,7 @@ const handlePromptHelp = async (args: unknown): Promise<GetPromptResult> => {
 		],
 		faction: [
 			{
-				name: "create-faction-enhanced",
+				name: "create-faction",
 				description: "Generate political organizations with territory and power dynamics",
 				performance: "11x content improvement • 1.3KB context • 137ms",
 				args: [
@@ -592,7 +593,7 @@ const handlePromptHelp = async (args: unknown): Promise<GetPromptResult> => {
 		],
 		location: [
 			{
-				name: "create-location-enhanced",
+				name: "create-location",
 				description: "Build detailed locations with geographic and political integration",
 				performance: "12.3x content improvement • 0.9KB context • 247ms",
 				args: [
@@ -606,7 +607,7 @@ const handlePromptHelp = async (args: unknown): Promise<GetPromptResult> => {
 		],
 		quest: [
 			{
-				name: "create-quest-enhanced",
+				name: "create-quest",
 				description: "Design multi-layered quests with narrative consequences",
 				performance: "11.4x content improvement • 1.4KB context • 233ms",
 				args: [
@@ -1129,28 +1130,33 @@ export const enhancedCampaignPrompts = {
 		description: "Generate contextual NPC dialogue with full campaign awareness (supports fuzzy name search)",
 		schema: npcDialogueSchema,
 		handler: handleNPCDialogue,
+		arguments: extractArgsFromZodSchema(npcDialogueSchema),
 	},
 	adapt_quest_progression: {
 		description: "Adapt quest progression when players take unexpected actions (supports fuzzy quest search)",
 		schema: questAdaptationSchema,
 		handler: handleQuestAdaptation,
+		arguments: extractArgsFromZodSchema(questAdaptationSchema),
 	},
 
 	// Enhanced creation prompts (matching the guide)
-	"create-faction-enhanced": {
+	"create-faction": {
 		description: "Generate political organizations with territory and power dynamics",
 		schema: createFactionEnhancedSchema,
 		handler: handleCreateFactionEnhanced,
+		arguments: extractArgsFromZodSchema(createFactionEnhancedSchema),
 	},
-	"create-location-enhanced": {
+	"create-location": {
 		description: "Build detailed locations with geographic and political integration",
 		schema: createLocationEnhancedSchema,
 		handler: handleCreateLocationEnhanced,
+		arguments: extractArgsFromZodSchema(createLocationEnhancedSchema),
 	},
-	"create-quest-enhanced": {
+	"create-quest": {
 		description: "Design multi-layered quests with narrative consequences",
 		schema: createQuestEnhancedSchema,
 		handler: handleCreateQuestEnhanced,
+		arguments: extractArgsFromZodSchema(createQuestEnhancedSchema),
 	},
 
 	// Help system
@@ -1158,6 +1164,7 @@ export const enhancedCampaignPrompts = {
 		description: "Get help with available enhanced prompts, organized by category",
 		schema: promptHelpSchema,
 		handler: handlePromptHelp,
+		arguments: extractArgsFromZodSchema(promptHelpSchema),
 	},
 
 	// Faction response system
@@ -1165,6 +1172,7 @@ export const enhancedCampaignPrompts = {
 		description: "Generate faction responses to player actions with political consequences",
 		schema: factionResponseSchema,
 		handler: handleFactionResponse,
+		arguments: extractArgsFromZodSchema(factionResponseSchema),
 	},
 
 	// Quest workflow
@@ -1172,6 +1180,7 @@ export const enhancedCampaignPrompts = {
 		description: "Multi-step guided quest creation workflow with campaign integration",
 		schema: questWorkflowSchema,
 		handler: handleQuestWorkflow,
+		arguments: extractArgsFromZodSchema(questWorkflowSchema),
 	},
 
 	// Conversational NPC creation
@@ -1179,5 +1188,6 @@ export const enhancedCampaignPrompts = {
 		description: "Multi-step conversation to create a new NPC",
 		schema: conversationalNpcCreationSchema,
 		handler: handleConversationalNpcCreation,
+		arguments: extractArgsFromZodSchema(conversationalNpcCreationSchema),
 	},
 } satisfies Record<string, PromptDefinition<z.ZodTypeAny>>

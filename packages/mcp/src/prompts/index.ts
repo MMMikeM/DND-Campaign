@@ -12,12 +12,10 @@ import {
 	ListPromptsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
-import { executePrompt, getAllPrompts } from "./registry"
+import { executePrompt, prompts } from "./registry"
 
 export function registerPromptHandlers(server: Server) {
-	server.setRequestHandler(ListPromptsRequestSchema, async () => {
-		return { prompts: getAllPrompts() }
-	})
+	server.setRequestHandler(ListPromptsRequestSchema, async () => ({ prompts }))
 
 	// Handler for getting a specific prompt
 	server.setRequestHandler(GetPromptRequestSchema, async (request): Promise<GetPromptResult> => {
