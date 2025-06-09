@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, enums },
+	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, regionConnections, enums },
 } = tables
 
 type TableNames = CreateTableNames<typeof tables.factionTables>
@@ -14,6 +14,7 @@ export const tableEnum = [
 	"factionAgendas",
 	"factionDiplomacy",
 	"factionInfluence",
+	"regionConnections",
 ] as const satisfies TableNames
 
 export const schemas = {
@@ -107,4 +108,22 @@ export const schemas = {
 			message: "Exactly one of regionId, areaId, or siteId must be provided",
 			path: ["regionId", "areaId", "siteId"],
 		}),
+	regionConnections: createInsertSchema(regionConnections, {
+		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
+		controllingFactionId: (s) => s.describe("ID of faction controlling this region"),
+		routeType: z.enum(enums.routeTypes).describe("Route type (road, river, air, sea)"),
+		travelDifficulty: z.enum(enums.travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
+		travelHazards: (s) => s.describe("Travel hazards for this region"),
+		travelTime: (s) => s.describe("Travel time for this region"),
+		connectionType: z.enum(enums.connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
+		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
+		description: (s) => s.describe("How these regions interact and current dynamics"),
+		gmNotes: (s) => s.describe("GM notes for this connection"),
+		otherRegionId: id.describe("Required ID of secondary region in this relationship"),
+		regionId: id.describe("Required ID of primary region in this relationship"),
+		tags: (s) => s.describe("Tags for this connection"),
+	})
+		.omit({ id: true })
+		.strict()
+		.describe("Political, economic, and geographical relationships between different regions"),
 } as const satisfies Schema<TableNames[number]>

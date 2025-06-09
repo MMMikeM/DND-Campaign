@@ -5,18 +5,19 @@
  * prompt messages with type safety and standardized formatting.
  */
 
-import type { GetPromptResult, PromptMessage } from "@modelcontextprotocol/sdk/types.js"
-import type { z } from "zod/v4"
+import type { GetPromptResult, PromptArgument, PromptMessage } from "@modelcontextprotocol/sdk/types.js"
+import { z } from "zod/v4"
 
 /**
  * Enhanced prompt definition using proper MCP SDK types
- * Note: Handler takes 'unknown' to match MCP SDK expectations, but should validate with schema
  */
 export interface PromptDefinition<T extends z.ZodTypeAny = z.ZodTypeAny> {
 	/** Human-readable description of what this prompt does */
 	description: string
 	/** Zod schema for validating prompt arguments */
 	schema: T
+	/** MCP-compatible argument definitions for discovery */
+	arguments: PromptArgument[]
 	/** Handler function that processes arguments and returns MCP-compliant result */
 	handler: (args: unknown) => Promise<GetPromptResult>
 }
@@ -74,4 +75,54 @@ export const createTypedHandler = <T extends z.ZodTypeAny>(
 		}
 		return handler(parseResult.data)
 	}
+}
+
+/**
+ * Creates a complete prompt definition with automatic argument extraction from Zod schema
+ */
+export const createPromptDefinition = <T extends z.ZodObject<Record<string, z.ZodAny>>>(
+	description: string,
+	schema: T,
+	handler: (args: z.infer<T>) => Promise<GetPromptResult>,
+): PromptDefinition<T> => {
+	return {
+		description,
+		schema,
+		arguments: extractArgsFromZodSchema(schema),
+		handler: createTypedHandler(schema, handler),
+	}
+}
+
+/**
+ * Extracts argument information from a Zod schema
+ */
+export const extractArgsFromZodSchema = <T extends z.ZodObject>(schema: T): PromptArgument[] => {
+	const result: PromptArgument[] = []
+
+	// Get the shape of the schema
+	const shape = schema.shape
+
+	// Process each property in the schema
+	for (const [name, field] of Object.entries(shape)) {
+		// Extract description
+		let description = name
+		if (field instanceof z.ZodType) {
+			// Try to extract description from the field
+			const desc = field.description
+			if (desc) {
+				description = desc
+			}
+		}
+
+		// Determine if the field is required
+		const isOptional = field instanceof z.ZodOptional || field instanceof z.ZodDefault
+
+		result.push({
+			name,
+			description,
+			required: !isOptional,
+		})
+	}
+
+	return result
 }
