@@ -6,6 +6,7 @@ import { factions } from "../factions/tables"
 import { foreshadowingSeeds } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
 import { destinationParticipantInvolvement } from "../narrative/tables"
+import { npcStageInvolvement } from "../quests/stages/tables"
 import { questHooks, questStages } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
@@ -16,7 +17,7 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
 
 	relatedFactions: many(npcFactions, { relationName: "npcFactions" }),
-	relatedSites: many(npcSites, { relationName: "npcSites" }),
+	siteAssociations: many(npcSites, { relationName: "npcSites" }),
 
 	// Relations from other schemas that reference this NPC
 	conflictParticipation: many(conflictParticipants, { relationName: "npcConflicts" }),
@@ -27,14 +28,9 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	itemRelationships: many(itemRelationships, { relationName: "npcItemRelationships" }),
 	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "npcDestinationInvolvement" }),
 	questHooks: many(questHooks, { relationName: "npcQuestHooks" }),
-	questStageDeliveries: many(questStages, { relationName: "npcQuestDeliveries" }),
+	questStageDeliveries: many(questStages, { relationName: "npcQuestStageDeliveries" }),
+	stageInvolvement: many(npcStageInvolvement, { relationName: "npcStageInvolvement" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "npcWorldConceptLinks" }),
-
-	currentLocation: one(sites, {
-		fields: [npcs.currentLocationId],
-		references: [sites.id],
-		relationName: "npcsAtCurrentLocation",
-	}),
 
 	embedding: one(embeddings, {
 		fields: [npcs.embeddingId],

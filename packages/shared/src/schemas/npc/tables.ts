@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm"
-import { boolean, check, pgTable, unique } from "drizzle-orm/pg-core"
+import { boolean, check, pgTable, unique, uniqueIndex } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
@@ -52,8 +52,6 @@ export const npcs = pgTable("npcs", {
 	socialStatus: string("social_status"),
 
 	availability: oneOf("availability", availabilityLevels),
-	currentLocationId: nullableFk("current_location_id", sites.id),
-
 	currentGoals: list("current_goals"),
 
 	appearance: list("appearance"),
@@ -91,8 +89,12 @@ export const npcSites = pgTable(
 		siteId: cascadeFk("site_id", sites.id),
 
 		associationType: oneOf("association_type", siteAssociationTypes),
+		isCurrent: boolean("is_current").notNull().default(false),
 	},
-	(t) => [unique().on(t.npcId, t.siteId, t.associationType)],
+	(t) => [
+		unique().on(t.npcId, t.siteId, t.associationType),
+		uniqueIndex("unique_current_per_npc").on(t.npcId).where(sql`${t.isCurrent} = true`),
+	],
 )
 
 export const npcFactions = pgTable(

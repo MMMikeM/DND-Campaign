@@ -7,7 +7,7 @@ import { factionInfluence, factions, regionConnections } from "../factions/table
 import { foreshadowingSeeds } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
 import { narrativeDestinations } from "../narrative/tables"
-import { npcSites, npcs } from "../npc/tables"
+import { npcSites } from "../npc/tables"
 import { questHooks, questStages, quests } from "../quests/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
 import { areas, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -77,11 +77,10 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 
 	encounters: many(siteEncounters, { relationName: "siteEncounters" }),
 	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
-	npcs: many(npcSites, { relationName: "siteNpcs" }),
+	npcAssociations: many(npcSites, { relationName: "siteNpcs" }),
 	questStages: many(questStages, { relationName: "siteQuestStages" }),
 	questHooks: many(questHooks, { relationName: "siteQuestHooks" }),
 	consequences: many(consequences, { relationName: "consequencesAtSite" }),
-	currentLocationNpcs: many(npcs, { relationName: "npcsAtCurrentLocation" }),
 	factionHqs: many(factions, { relationName: "factionHq" }),
 	factionInfluence: many(factionInfluence, { relationName: "influenceAtSite" }),
 	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "siteForeshadowingSeeds" }),
