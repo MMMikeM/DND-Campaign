@@ -10,6 +10,7 @@
   "scripts": {
     "build": "bunchee",
     "check": "tsc --noEmit",
+    "db:custom": "sh -c 'NODE_OPTIONS=\"--import tsx\" drizzle-kit generate --custom --name=\"$1\"' --",
     "db:generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate",
     "db:migrate": "NODE_OPTIONS='--import tsx' drizzle-kit migrate",
     "db:studio": "NODE_OPTIONS='--import tsx' drizzle-kit studio",
@@ -31,14 +32,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@swc/helpers": "^0.5.17",
     "drizzle-orm": "catalog:",
     "pg": "^8.16.0",
-    "pgvector": "^0.2.1",
-    "pino": "^9.7.0",
-    "pino-pretty": "^13.0.0",
-    "yaml": "^2.8.0"
+    "pgvector": "^0.2.1"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
