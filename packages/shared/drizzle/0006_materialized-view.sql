@@ -1,5 +1,3 @@
--- Step 4: Create the Materialized View using the individual entity views
-
 CREATE MATERIALIZED VIEW search_index AS
 
 -- Select and process data from region_search_data_view
@@ -10,14 +8,22 @@ SELECT
     'region', entity_main,
     'areas', related_areas,
     'quests', related_quests,
-    'territorialControl', related_territorial_control,
+    'conflicts', related_conflicts,
+    'consequences', related_consequences,
+    'narrativeDestinations', related_narrative_destinations,
+    'factionInfluence', related_faction_influence,
+    'worldConceptLinks', related_world_concept_links,
     'connections', related_connections
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
     'areas', related_areas,
     'quests', related_quests,
-    'territorialControl', related_territorial_control,
+    'conflicts', related_conflicts,
+    'consequences', related_consequences,
+    'narrativeDestinations', related_narrative_destinations,
+    'factionInfluence', related_faction_influence,
+    'worldConceptLinks', related_world_concept_links,
     'connections', related_connections
   )) AS content,
   weighted_search_vector(
@@ -25,10 +31,13 @@ SELECT
     jsonb_build_object(
       'areas', related_areas,
       'quests', related_quests,
-      'territorialControl', related_territorial_control,
+      'conflicts', related_conflicts,
+      'consequences', related_consequences,
+      'narrativeDestinations', related_narrative_destinations,
+      'factionInfluence', related_faction_influence,
+      'worldConceptLinks', related_world_concept_links,
       'connections', related_connections
     )
-    -- Add text search config argument if needed: , 'public.english_unaccent'
   ) AS content_tsv
 FROM region_search_data_view
 
@@ -43,22 +52,36 @@ SELECT
     'area', related_area,
     'encounters', related_encounters,
     'secrets', related_secrets,
-    'items', related_items,
     'npcs', related_npcs,
-    'incomingRelations', related_incoming_relations,
+    'questStages', related_quest_stages,
+    'questHooks', related_quest_hooks,
+    'consequences', related_consequences,
+    'factionHqs', related_faction_hqs,
+    'factionInfluence', related_faction_influence,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'foreshadowingTargets', related_foreshadowing_targets,
+    'itemHistory', related_item_history,
+    'itemRelationships', related_item_relationships,
     'outgoingRelations', related_outgoing_relations,
-    'territorialControl', related_territorial_control
+    'incomingRelations', related_incoming_relations
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
     'area', related_area,
     'encounters', related_encounters,
     'secrets', related_secrets,
-    'items', related_items,
     'npcs', related_npcs,
-    'incomingRelations', related_incoming_relations,
+    'questStages', related_quest_stages,
+    'questHooks', related_quest_hooks,
+    'consequences', related_consequences,
+    'factionHqs', related_faction_hqs,
+    'factionInfluence', related_faction_influence,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'foreshadowingTargets', related_foreshadowing_targets,
+    'itemHistory', related_item_history,
+    'itemRelationships', related_item_relationships,
     'outgoingRelations', related_outgoing_relations,
-    'territorialControl', related_territorial_control
+    'incomingRelations', related_incoming_relations
   )) AS content,
   weighted_search_vector(
     entity_main,
@@ -66,11 +89,18 @@ SELECT
       'area', related_area,
       'encounters', related_encounters,
       'secrets', related_secrets,
-      'items', related_items,
       'npcs', related_npcs,
-      'incomingRelations', related_incoming_relations,
+      'questStages', related_quest_stages,
+      'questHooks', related_quest_hooks,
+      'consequences', related_consequences,
+      'factionHqs', related_faction_hqs,
+      'factionInfluence', related_faction_influence,
+      'foreshadowingSeeds', related_foreshadowing_seeds,
+      'foreshadowingTargets', related_foreshadowing_targets,
+      'itemHistory', related_item_history,
+      'itemRelationships', related_item_relationships,
       'outgoingRelations', related_outgoing_relations,
-      'territorialControl', related_territorial_control
+      'incomingRelations', related_incoming_relations
     )
   ) AS content_tsv
 FROM site_search_data_view
@@ -85,23 +115,23 @@ SELECT
     'area', entity_main,
     'region', related_region,
     'sites', related_sites,
-    'territorialControl', related_territorial_control,
-    'worldChanges', related_world_changes
+    'consequences', related_consequences,
+    'factionInfluence', related_faction_influence
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
     'region', related_region,
     'sites', related_sites,
-    'territorialControl', related_territorial_control,
-    'worldChanges', related_world_changes
+    'consequences', related_consequences,
+    'factionInfluence', related_faction_influence
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
       'region', related_region,
       'sites', related_sites,
-      'territorialControl', related_territorial_control,
-      'worldChanges', related_world_changes
+      'consequences', related_consequences,
+      'factionInfluence', related_faction_influence
     )
   ) AS content_tsv
 FROM area_search_data_view
@@ -114,25 +144,37 @@ SELECT
   source_table,
   jsonb_build_object(
     'conflict', entity_main,
-    'worldChanges', related_world_changes,
+    'primaryRegion', related_primary_region,
     'participants', related_participants,
-    'progression', related_progression,
-    'primaryRegion', related_primary_region
+    'consequencesCaused', related_consequences_caused,
+    'consequencesAffecting', related_consequences_affecting,
+    'narrativeDestinations', related_narrative_destinations,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'worldChanges', related_world_changes,
+    'primaryRegion', related_primary_region,
     'participants', related_participants,
-    'progression', related_progression,
-    'primaryRegion', related_primary_region
+    'consequencesCaused', related_consequences_caused,
+    'consequencesAffecting', related_consequences_affecting,
+    'narrativeDestinations', related_narrative_destinations,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'worldChanges', related_world_changes,
+      'primaryRegion', related_primary_region,
       'participants', related_participants,
-      'progression', related_progression,
-      'primaryRegion', related_primary_region
+      'consequencesCaused', related_consequences_caused,
+      'consequencesAffecting', related_consequences_affecting,
+      'narrativeDestinations', related_narrative_destinations,
+      'foreshadowingSeeds', related_foreshadowing_seeds,
+      'itemRelationships', related_item_relationships,
+      'worldConceptLinks', related_world_concept_links
     )
   ) AS content_tsv
 FROM conflict_search_data_view
@@ -145,46 +187,55 @@ SELECT
   source_table,
   jsonb_build_object(
     'faction', entity_main,
-    'culture', related_culture,
+    'primaryHq', related_primary_hq,
     'agendas', related_agendas,
-    'clues', related_clues,
-    'conflicts', related_conflicts,
-    'worldChanges', related_world_changes,
     'members', related_members,
-    'headquarters', related_headquarters,
-    'relatedQuests', related_quests,
+    'questHooks', related_quest_hooks,
+    'questParticipation', related_quest_participation,
+    'influence', related_influence,
+    'conflicts', related_conflicts,
+    'consequences', related_consequences,
+    'destinationInvolvement', related_destination_involvement,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links,
     'incomingRelationships', related_incoming_relationships,
-    'outgoingRelationships', related_outgoing_relationships,
-    'territorialControl', related_territorial_control
+    'outgoingRelationships', related_outgoing_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'culture', related_culture,
+    'primaryHq', related_primary_hq,
     'agendas', related_agendas,
-    'clues', related_clues,
-    'conflicts', related_conflicts,
-    'worldChanges', related_world_changes,
     'members', related_members,
-    'headquarters', related_headquarters,
-    'relatedQuests', related_quests,
+    'questHooks', related_quest_hooks,
+    'questParticipation', related_quest_participation,
+    'influence', related_influence,
+    'conflicts', related_conflicts,
+    'consequences', related_consequences,
+    'destinationInvolvement', related_destination_involvement,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links,
     'incomingRelationships', related_incoming_relationships,
-    'outgoingRelationships', related_outgoing_relationships,
-    'territorialControl', related_territorial_control
+    'outgoingRelationships', related_outgoing_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'culture', related_culture,
+      'primaryHq', related_primary_hq,
       'agendas', related_agendas,
-      'clues', related_clues,
-      'conflicts', related_conflicts,
-      'worldChanges', related_world_changes,
       'members', related_members,
-      'headquarters', related_headquarters,
-      'relatedQuests', related_quests,
+      'questHooks', related_quest_hooks,
+      'questParticipation', related_quest_participation,
+      'influence', related_influence,
+      'conflicts', related_conflicts,
+      'consequences', related_consequences,
+      'destinationInvolvement', related_destination_involvement,
+      'foreshadowingSeeds', related_foreshadowing_seeds,
+      'itemRelationships', related_item_relationships,
+      'worldConceptLinks', related_world_concept_links,
       'incomingRelationships', related_incoming_relationships,
-      'outgoingRelationships', related_outgoing_relationships,
-      'territorialControl', related_territorial_control
+      'outgoingRelationships', related_outgoing_relationships
     )
   ) AS content_tsv
 FROM faction_search_data_view
@@ -197,68 +248,95 @@ SELECT
   source_table,
   jsonb_build_object(
     'foreshadowing', entity_main,
+    'sourceQuest', related_source_quest,
     'sourceStage', related_source_stage,
     'sourceSite', related_source_site,
     'sourceNpc', related_source_npc,
-    'sourceFaction', related_source_faction,
     'targetQuest', related_target_quest,
-    'targetTwist', related_target_twist,
     'targetNpc', related_target_npc,
-    'targetArc', related_target_arc
+    'targetNarrativeEvent', related_target_narrative_event,
+    'targetMajorConflict', related_target_major_conflict,
+    'targetItem', related_target_item,
+    'targetNarrativeDestination', related_target_narrative_destination,
+    'targetWorldConcept', related_target_world_concept,
+    'targetFaction', related_target_faction,
+    'targetSite', related_target_site
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
+    'sourceQuest', related_source_quest,
     'sourceStage', related_source_stage,
     'sourceSite', related_source_site,
     'sourceNpc', related_source_npc,
-    'sourceFaction', related_source_faction,
     'targetQuest', related_target_quest,
-    'targetTwist', related_target_twist,
     'targetNpc', related_target_npc,
-    'targetArc', related_target_arc
+    'targetNarrativeEvent', related_target_narrative_event,
+    'targetMajorConflict', related_target_major_conflict,
+    'targetItem', related_target_item,
+    'targetNarrativeDestination', related_target_narrative_destination,
+    'targetWorldConcept', related_target_world_concept,
+    'targetFaction', related_target_faction,
+    'targetSite', related_target_site
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
+      'sourceQuest', related_source_quest,
       'sourceStage', related_source_stage,
       'sourceSite', related_source_site,
       'sourceNpc', related_source_npc,
-      'sourceFaction', related_source_faction,
       'targetQuest', related_target_quest,
-      'targetTwist', related_target_twist,
       'targetNpc', related_target_npc,
-      'targetArc', related_target_arc
+      'targetNarrativeEvent', related_target_narrative_event,
+      'targetMajorConflict', related_target_major_conflict,
+      'targetItem', related_target_item,
+      'targetNarrativeDestination', related_target_narrative_destination,
+      'targetWorldConcept', related_target_world_concept,
+      'targetFaction', related_target_faction,
+      'targetSite', related_target_site
     )
   ) AS content_tsv
 FROM foreshadowing_search_data_view
 
 UNION ALL
 
--- Select and process data from narrative_arc_search_data_view
+-- Select and process data from narrative_destination_search_data_view
 SELECT
   id::text,
   source_table,
   jsonb_build_object(
-    'narrativeArc', entity_main,
-    'foreshadowing', related_foreshadowing,
-    'worldChanges', related_world_changes,
-    'members', related_members
+    'narrativeDestination', entity_main,
+    'primaryRegion', related_primary_region,
+    'conflict', related_conflict,
+    'questRoles', related_quest_roles,
+    'participantInvolvement', related_participant_involvement,
+    'itemRelationships', related_item_relationships,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'foreshadowing', related_foreshadowing,
-    'worldChanges', related_world_changes,
-    'members', related_members
+    'primaryRegion', related_primary_region,
+    'conflict', related_conflict,
+    'questRoles', related_quest_roles,
+    'participantInvolvement', related_participant_involvement,
+    'itemRelationships', related_item_relationships,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'foreshadowing', related_foreshadowing,
-      'worldChanges', related_world_changes,
-      'members', related_members
+      'primaryRegion', related_primary_region,
+      'conflict', related_conflict,
+      'questRoles', related_quest_roles,
+      'participantInvolvement', related_participant_involvement,
+      'itemRelationships', related_item_relationships,
+      'outgoingRelationships', related_outgoing_relationships,
+      'incomingRelationships', related_incoming_relationships
     )
   ) AS content_tsv
-FROM narrative_arc_search_data_view
+FROM narrative_destination_search_data_view
 
 UNION ALL
 
@@ -268,37 +346,55 @@ SELECT
   source_table,
   jsonb_build_object(
     'npc', entity_main,
-    'relatedItems', related_items,
-    'relatedFactions', related_factions,
-    'relatedQuests', related_quests,
-    'incomingRelationships', related_incoming_relationships,
+    'factions', related_factions,
+    'siteAssociations', related_site_associations,
+    'conflictParticipation', related_conflict_participation,
+    'consequences', related_consequences,
+    'targetForeshadowing', related_target_foreshadowing,
+    'sourceForeshadowing', related_source_foreshadowing,
+    'itemHistory', related_item_history,
+    'itemRelationships', related_item_relationships,
+    'destinationInvolvement', related_destination_involvement,
+    'questHooks', related_quest_hooks,
+    'questStageDeliveries', related_quest_stage_deliveries,
+    'worldConceptLinks', related_world_concept_links,
     'outgoingRelationships', related_outgoing_relationships,
-    'relatedClues', related_clues,
-    'relatedSites', related_sites,
-    'relatedQuestHooks', related_quest_hooks
+    'incomingRelationships', related_incoming_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'relatedItems', related_items,
-    'relatedFactions', related_factions,
-    'relatedQuests', related_quests,
-    'incomingRelationships', related_incoming_relationships,
+    'factions', related_factions,
+    'siteAssociations', related_site_associations,
+    'conflictParticipation', related_conflict_participation,
+    'consequences', related_consequences,
+    'targetForeshadowing', related_target_foreshadowing,
+    'sourceForeshadowing', related_source_foreshadowing,
+    'itemHistory', related_item_history,
+    'itemRelationships', related_item_relationships,
+    'destinationInvolvement', related_destination_involvement,
+    'questHooks', related_quest_hooks,
+    'questStageDeliveries', related_quest_stage_deliveries,
+    'worldConceptLinks', related_world_concept_links,
     'outgoingRelationships', related_outgoing_relationships,
-    'relatedClues', related_clues,
-    'relatedSites', related_sites,
-    'relatedQuestHooks', related_quest_hooks
+    'incomingRelationships', related_incoming_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'relatedItems', related_items,
-      'relatedFactions', related_factions,
-      'relatedQuests', related_quests,
-      'incomingRelationships', related_incoming_relationships,
+      'factions', related_factions,
+      'siteAssociations', related_site_associations,
+      'conflictParticipation', related_conflict_participation,
+      'consequences', related_consequences,
+      'targetForeshadowing', related_target_foreshadowing,
+      'sourceForeshadowing', related_source_foreshadowing,
+      'itemHistory', related_item_history,
+      'itemRelationships', related_item_relationships,
+      'destinationInvolvement', related_destination_involvement,
+      'questHooks', related_quest_hooks,
+      'questStageDeliveries', related_quest_stage_deliveries,
+      'worldConceptLinks', related_world_concept_links,
       'outgoingRelationships', related_outgoing_relationships,
-      'relatedClues', related_clues,
-      'relatedSites', related_sites,
-      'relatedQuestHooks', related_quest_hooks
+      'incomingRelationships', related_incoming_relationships
     )
   ) AS content_tsv
 FROM npc_search_data_view
@@ -311,99 +407,199 @@ SELECT
   source_table,
   jsonb_build_object(
     'quest', entity_main,
-    'items', related_items,
-    'unlockConditions', related_unlock_conditions,
-    'twists', related_twists,
-    'futureTriggers', related_future_triggers,
     'region', related_region,
+    'parentQuest', related_parent_quest,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships,
     'stages', related_stages,
-    'worldChanges', related_world_changes,
-    'incomingRelations', related_incoming_relations,
-    'outgoingRelations', related_outgoing_relations,
-    'factions', related_factions,
-    'npcs', related_npcs
+    'hooks', related_hooks,
+    'participantInvolvement', related_participant_involvement,
+    'destinationContributions', related_destination_contributions,
+    'consequences', related_consequences,
+    'narrativeEvents', related_narrative_events,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'items', related_items,
-    'unlockConditions', related_unlock_conditions,
-    'twists', related_twists,
-    'futureTriggers', related_future_triggers,
     'region', related_region,
+    'parentQuest', related_parent_quest,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships,
     'stages', related_stages,
-    'worldChanges', related_world_changes,
-    'incomingRelations', related_incoming_relations,
-    'outgoingRelations', related_outgoing_relations,
-    'factions', related_factions,
-    'npcs', related_npcs
+    'hooks', related_hooks,
+    'participantInvolvement', related_participant_involvement,
+    'destinationContributions', related_destination_contributions,
+    'consequences', related_consequences,
+    'narrativeEvents', related_narrative_events,
+    'foreshadowingSeeds', related_foreshadowing_seeds,
+    'itemRelationships', related_item_relationships,
+    'worldConceptLinks', related_world_concept_links
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'items', related_items,
-      'unlockConditions', related_unlock_conditions,
-      'twists', related_twists,
-      'futureTriggers', related_future_triggers,
       'region', related_region,
+      'parentQuest', related_parent_quest,
+      'outgoingRelationships', related_outgoing_relationships,
+      'incomingRelationships', related_incoming_relationships,
       'stages', related_stages,
-      'worldChanges', related_world_changes,
-      'incomingRelations', related_incoming_relations,
-      'outgoingRelations', related_outgoing_relations,
-      'factions', related_factions,
-      'npcs', related_npcs
+      'hooks', related_hooks,
+      'participantInvolvement', related_participant_involvement,
+      'destinationContributions', related_destination_contributions,
+      'consequences', related_consequences,
+      'narrativeEvents', related_narrative_events,
+      'foreshadowingSeeds', related_foreshadowing_seeds,
+      'itemRelationships', related_item_relationships,
+      'worldConceptLinks', related_world_concept_links
     )
   ) AS content_tsv
 FROM quest_search_data_view
 
 UNION ALL
 
--- Select and process data from world_change_search_data_view
+-- Select and process data from world_concept_search_data_view
 SELECT
   id::text,
   source_table,
   jsonb_build_object(
-    'worldChange', entity_main,
-    'sourceQuest', related_source_quest,
-    'sourceDecision', related_source_decision,
-    'sourceConflict', related_source_conflict,
-    'relatedArc', related_arc,
-    'affectedFaction', related_affected_faction,
-    'affectedRegion', related_affected_region,
-    'affectedArea', related_affected_area,
-    'affectedSite', related_affected_site,
-    'affectedNpc', related_affected_npc,
-    'leadsToQuest', related_leads_to_quest
+    'worldConcept', entity_main,
+    'outgoingConceptRelationships', related_outgoing_concept_relationships,
+    'incomingConceptRelationships', related_incoming_concept_relationships,
+    'entityLinks', related_entity_links,
+    'itemRelationships', related_item_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
-    'sourceQuest', related_source_quest,
-    'sourceDecision', related_source_decision,
-    'sourceConflict', related_source_conflict,
-    'relatedArc', related_arc,
-    'affectedFaction', related_affected_faction,
-    'affectedRegion', related_affected_region,
-    'affectedArea', related_affected_area,
-    'affectedSite', related_affected_site,
-    'affectedNpc', related_affected_npc,
-    'leadsToQuest', related_leads_to_quest
+    'outgoingConceptRelationships', related_outgoing_concept_relationships,
+    'incomingConceptRelationships', related_incoming_concept_relationships,
+    'entityLinks', related_entity_links,
+    'itemRelationships', related_item_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
-      'sourceQuest', related_source_quest,
-      'sourceDecision', related_source_decision,
-      'sourceConflict', related_source_conflict,
-      'relatedArc', related_arc,
+      'outgoingConceptRelationships', related_outgoing_concept_relationships,
+      'incomingConceptRelationships', related_incoming_concept_relationships,
+      'entityLinks', related_entity_links,
+      'itemRelationships', related_item_relationships
+    )
+  ) AS content_tsv
+FROM world_concept_search_data_view
+
+UNION ALL
+
+-- Select and process data from item_search_data_view
+SELECT
+  id::text,
+  source_table,
+  jsonb_build_object(
+    'item', entity_main,
+    'relatedQuest', related_quest,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships,
+    'notableHistory', related_notable_history
+  ) AS raw_data,
+  jsonb_deep_text_values(entity_main) || ' ' ||
+  jsonb_deep_text_values(jsonb_build_object(
+    'relatedQuest', related_quest,
+    'outgoingRelationships', related_outgoing_relationships,
+    'incomingRelationships', related_incoming_relationships,
+    'notableHistory', related_notable_history
+  )) AS content,
+  weighted_search_vector(
+    entity_main,
+    jsonb_build_object(
+      'relatedQuest', related_quest,
+      'outgoingRelationships', related_outgoing_relationships,
+      'incomingRelationships', related_incoming_relationships,
+      'notableHistory', related_notable_history
+    )
+  ) AS content_tsv
+FROM item_search_data_view
+
+UNION ALL
+
+-- Select and process data from narrative_event_search_data_view
+SELECT
+  id::text,
+  source_table,
+  jsonb_build_object(
+    'narrativeEvent', entity_main,
+    'questStage', related_quest_stage,
+    'triggeringDecision', related_triggering_decision,
+    'relatedQuest', related_quest
+  ) AS raw_data,
+  jsonb_deep_text_values(entity_main) || ' ' ||
+  jsonb_deep_text_values(jsonb_build_object(
+    'questStage', related_quest_stage,
+    'triggeringDecision', related_triggering_decision,
+    'relatedQuest', related_quest
+  )) AS content,
+  weighted_search_vector(
+    entity_main,
+    jsonb_build_object(
+      'questStage', related_quest_stage,
+      'triggeringDecision', related_triggering_decision,
+      'relatedQuest', related_quest
+    )
+  ) AS content_tsv
+FROM narrative_event_search_data_view
+
+UNION ALL
+
+-- Select and process data from consequence_search_data_view
+SELECT
+  id::text,
+  source_table,
+  jsonb_build_object(
+    'consequence', entity_main,
+    'triggerQuest', related_trigger_quest,
+    'triggerDecision', related_trigger_decision,
+    'triggerConflict', related_trigger_conflict,
+    'affectedFaction', related_affected_faction,
+    'affectedRegion', related_affected_region,
+    'affectedArea', related_affected_area,
+    'affectedSite', related_affected_site,
+    'affectedNpc', related_affected_npc,
+    'affectedDestination', related_affected_destination,
+    'affectedConflict', related_affected_conflict,
+    'futureQuest', related_future_quest
+  ) AS raw_data,
+  jsonb_deep_text_values(entity_main) || ' ' ||
+  jsonb_deep_text_values(jsonb_build_object(
+    'triggerQuest', related_trigger_quest,
+    'triggerDecision', related_trigger_decision,
+    'triggerConflict', related_trigger_conflict,
+    'affectedFaction', related_affected_faction,
+    'affectedRegion', related_affected_region,
+    'affectedArea', related_affected_area,
+    'affectedSite', related_affected_site,
+    'affectedNpc', related_affected_npc,
+    'affectedDestination', related_affected_destination,
+    'affectedConflict', related_affected_conflict,
+    'futureQuest', related_future_quest
+  )) AS content,
+  weighted_search_vector(
+    entity_main,
+    jsonb_build_object(
+      'triggerQuest', related_trigger_quest,
+      'triggerDecision', related_trigger_decision,
+      'triggerConflict', related_trigger_conflict,
       'affectedFaction', related_affected_faction,
       'affectedRegion', related_affected_region,
       'affectedArea', related_affected_area,
       'affectedSite', related_affected_site,
       'affectedNpc', related_affected_npc,
-      'leadsToQuest', related_leads_to_quest
+      'affectedDestination', related_affected_destination,
+      'affectedConflict', related_affected_conflict,
+      'futureQuest', related_future_quest
     )
   ) AS content_tsv
-FROM world_change_search_data_view
+FROM consequence_search_data_view
 ;
+
 -- Step 5: Create Indexes for the search_index Materialized View
 
 -- Unique index (Required for CONCURRENTLY refresh)

@@ -159,8 +159,8 @@ SELECT
   COALESCE(jsonb_build_object('id', r.id, 'name', r.name), '{}'::jsonb) AS related_primary_region,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'participant', to_jsonb(cp.*),
-    'faction', CASE WHEN cp.faction_id IS NOT NULL THEN jsonb_build_object('id', f.id, 'name', f.name) ELSE NULL END,
-    'npc', CASE WHEN cp.npc_id IS NOT NULL THEN jsonb_build_object('id', n.id, 'name', n.name) ELSE NULL END
+    'faction', CASE WHEN cp.faction_id IS NOT NULL THEN jsonb_build_object('id', f.id, 'name', f.name) END,
+    'npc', CASE WHEN cp.npc_id IS NOT NULL THEN jsonb_build_object('id', n.id, 'name', n.name) END
   )) FILTER (WHERE cp.id IS NOT NULL), '[]'::jsonb) AS related_participants,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c_caused.id, 'description', c_caused.description)) FILTER (WHERE c_caused.id IS NOT NULL), '[]'::jsonb) AS related_consequences_caused,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c_affecting.id, 'description', c_affecting.description)) FILTER (WHERE c_affecting.id IS NOT NULL), '[]'::jsonb) AS related_consequences_affecting,
@@ -209,9 +209,9 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participation', to_jsonb(qpi.*), 'quest', jsonb_build_object('id', q.id, 'name', q.name))) FILTER (WHERE qpi.id IS NOT NULL), '[]'::jsonb) AS related_quest_participation,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
       'influence', to_jsonb(fi.*),
-      'region', CASE WHEN fi.region_id IS NOT NULL THEN jsonb_build_object('id', r.id, 'name', r.name) ELSE NULL END,
-      'area', CASE WHEN fi.area_id IS NOT NULL THEN jsonb_build_object('id', a.id, 'name', a.name) ELSE NULL END,
-      'site', CASE WHEN fi.site_id IS NOT NULL THEN jsonb_build_object('id', s.id, 'name', s.name) ELSE NULL END
+      'region', CASE WHEN fi.region_id IS NOT NULL THEN jsonb_build_object('id', r.id, 'name', r.name) END,
+      'area', CASE WHEN fi.area_id IS NOT NULL THEN jsonb_build_object('id', a.id, 'name', a.name) END,
+      'site', CASE WHEN fi.site_id IS NOT NULL THEN jsonb_build_object('id', s.id, 'name', s.name) END
     )) FILTER (WHERE fi.id IS NOT NULL), '[]'::jsonb) AS related_influence,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participant', to_jsonb(cp.*), 'conflict', jsonb_build_object('id', mc.id, 'name', mc.name))) FILTER (WHERE cp.id IS NOT NULL), '[]'::jsonb) AS related_conflicts,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c.id, 'description', c.description)) FILTER (WHERE c.id IS NOT NULL), '[]'::jsonb) AS related_consequences,
@@ -304,8 +304,8 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('role', to_jsonb(dqr.*), 'quest', jsonb_build_object('id', q.id, 'name', q.name))) FILTER (WHERE dqr.id IS NOT NULL), '[]'::jsonb) AS related_quest_roles,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'involvement', to_jsonb(dpi.*),
-    'npc', CASE WHEN dpi.npc_id IS NOT NULL THEN jsonb_build_object('id', n.id, 'name', n.name) ELSE NULL END,
-    'faction', CASE WHEN dpi.faction_id IS NOT NULL THEN jsonb_build_object('id', f.id, 'name', f.name) ELSE NULL END
+    'npc', CASE WHEN dpi.npc_id IS NOT NULL THEN jsonb_build_object('id', n.id, 'name', n.name) END,
+    'faction', CASE WHEN dpi.faction_id IS NOT NULL THEN jsonb_build_object('id', f.id, 'name', f.name) END
   )) FILTER (WHERE dpi.id IS NOT NULL), '[]'::jsonb) AS related_participant_involvement,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(dr_out.*), 'relatedDestination', jsonb_build_object('id', rd_out.id, 'name', rd_out.name))) FILTER (WHERE dr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
@@ -346,7 +346,7 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(dpi.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dpi.id IS NOT NULL), '[]'::jsonb) AS related_destination_involvement,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qh.id, 'source', qh.source, 'hook_content', qh.hook_content)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_quest_hooks,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'quest', jsonb_build_object('id', q_delivery.id, 'name', q_delivery.name))) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_quest_stage_deliveries,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'quest', jsonb_build_object('id', q_stage_delivery.id, 'name', q_stage_delivery.name))) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_quest_stage_deliveries,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_out.*), 'relatedNpc', jsonb_build_object('id', rn_out.id, 'name', rn_out.name))) FILTER (WHERE nr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships
@@ -369,6 +369,8 @@ LEFT JOIN destination_participant_involvement dpi ON dpi.npc_id = n.id
 LEFT JOIN narrative_destinations nd ON dpi.destination_id = nd.id
 LEFT JOIN quest_hooks qh ON qh.delivery_npc_id = n.id
 LEFT JOIN quests q_delivery ON qh.quest_id = q_delivery.id
+LEFT JOIN quest_stages qs ON qs.delivery_npc_id = n.id
+LEFT JOIN quests q_stage_delivery ON qs.quest_id = q_stage_delivery.id
 LEFT JOIN world_concept_links wcl ON wcl.npc_id = n.id
 LEFT JOIN npc_relationships nr_out ON nr_out.npc_id = n.id
 LEFT JOIN npcs rn_out ON nr_out.related_npc_id = rn_out.id
@@ -391,11 +393,11 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(qr_out.*), 'targetQuest', jsonb_build_object('id', tq.id, 'name', tq.name))) FILTER (WHERE qr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(qr_in.*), 'sourceQuest', jsonb_build_object('id', sq.id, 'name', sq.name))) FILTER (WHERE qr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'stage_order', qs.stage_order, 'stage_type', qs.stage_type)) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_stages,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('hook', to_jsonb(qh.*), 'site', CASE WHEN qh.site_id IS NOT NULL THEN jsonb_build_object('id', h_s.id, 'name', h_s.name) ELSE NULL END, 'faction', CASE WHEN qh.faction_id IS NOT NULL THEN jsonb_build_object('id', h_f.id, 'name', h_f.name) ELSE NULL END, 'deliveryNpc', CASE WHEN qh.delivery_npc_id IS NOT NULL THEN jsonb_build_object('id', h_n.id, 'name', h_n.name) ELSE NULL END)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_hooks,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('hook', to_jsonb(qh.*), 'site', CASE WHEN qh.site_id IS NOT NULL THEN jsonb_build_object('id', h_s.id, 'name', h_s.name) END, 'faction', CASE WHEN qh.faction_id IS NOT NULL THEN jsonb_build_object('id', h_f.id, 'name', h_f.name) END, 'deliveryNpc', CASE WHEN qh.delivery_npc_id IS NOT NULL THEN jsonb_build_object('id', h_n.id, 'name', h_n.name) END)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_hooks,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'involvement', to_jsonb(qpi.*),
-    'npc', CASE WHEN qpi.npc_id IS NOT NULL THEN jsonb_build_object('id', p_n.id, 'name', p_n.name) ELSE NULL END,
-    'faction', CASE WHEN qpi.faction_id IS NOT NULL THEN jsonb_build_object('id', p_f.id, 'name', p_f.name) ELSE NULL END
+    'npc', CASE WHEN qpi.npc_id IS NOT NULL THEN jsonb_build_object('id', p_n.id, 'name', p_n.name) END,
+    'faction', CASE WHEN qpi.faction_id IS NOT NULL THEN jsonb_build_object('id', p_f.id, 'name', p_f.name) END
   )) FILTER (WHERE qpi.id IS NOT NULL), '[]'::jsonb) AS related_participant_involvement,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('role', to_jsonb(dqr.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dqr.id IS NOT NULL), '[]'::jsonb) AS related_destination_contributions,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c.id, 'description', c.description)) FILTER (WHERE c.id IS NOT NULL), '[]'::jsonb) AS related_consequences,
@@ -442,11 +444,11 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(cr_in.*), 'sourceConcept', jsonb_build_object('id', sc.id, 'name', sc.name))) FILTER (WHERE cr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_concept_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'link', to_jsonb(wcl.*),
-    'region', CASE WHEN wcl.region_id IS NOT NULL THEN jsonb_build_object('id', lr.id, 'name', lr.name) ELSE NULL END,
-    'faction', CASE WHEN wcl.faction_id IS NOT NULL THEN jsonb_build_object('id', lf.id, 'name', lf.name) ELSE NULL END,
-    'npc', CASE WHEN wcl.npc_id IS NOT NULL THEN jsonb_build_object('id', ln.id, 'name', ln.name) ELSE NULL END,
-    'conflict', CASE WHEN wcl.conflict_id IS NOT NULL THEN jsonb_build_object('id', lmc.id, 'name', lmc.name) ELSE NULL END,
-    'quest', CASE WHEN wcl.quest_id IS NOT NULL THEN jsonb_build_object('id', lq.id, 'name', lq.name) ELSE NULL END
+    'region', CASE WHEN wcl.region_id IS NOT NULL THEN jsonb_build_object('id', lr.id, 'name', lr.name) END,
+    'faction', CASE WHEN wcl.faction_id IS NOT NULL THEN jsonb_build_object('id', lf.id, 'name', lf.name) END,
+    'npc', CASE WHEN wcl.npc_id IS NOT NULL THEN jsonb_build_object('id', ln.id, 'name', ln.name) END,
+    'conflict', CASE WHEN wcl.conflict_id IS NOT NULL THEN jsonb_build_object('id', lmc.id, 'name', lmc.name) END,
+    'quest', CASE WHEN wcl.quest_id IS NOT NULL THEN jsonb_build_object('id', lq.id, 'name', lq.name) END
   )) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_entity_links,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships
 FROM
@@ -477,14 +479,14 @@ SELECT
   COALESCE(jsonb_build_object('id', rq.id, 'name', rq.name), '{}'::jsonb) AS related_quest,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'relationship', to_jsonb(ir_out.*),
-    'targetItem', CASE WHEN ir_out.target_item_id IS NOT NULL THEN jsonb_build_object('id', ti.id, 'name', ti.name) ELSE NULL END,
-    'targetNpc', CASE WHEN ir_out.target_npc_id IS NOT NULL THEN jsonb_build_object('id', tn.id, 'name', tn.name) ELSE NULL END,
-    'targetFaction', CASE WHEN ir_out.target_faction_id IS NOT NULL THEN jsonb_build_object('id', tf.id, 'name', tf.name) ELSE NULL END,
-    'targetSite', CASE WHEN ir_out.target_site_id IS NOT NULL THEN jsonb_build_object('id', ts.id, 'name', ts.name) ELSE NULL END,
-    'targetQuest', CASE WHEN ir_out.target_quest_id IS NOT NULL THEN jsonb_build_object('id', tq.id, 'name', tq.name) ELSE NULL END,
-    'targetConflict', CASE WHEN ir_out.target_conflict_id IS NOT NULL THEN jsonb_build_object('id', tc.id, 'name', tc.name) ELSE NULL END,
-    'targetNarrativeDestination', CASE WHEN ir_out.target_narrative_destination_id IS NOT NULL THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) ELSE NULL END,
-    'targetWorldConcept', CASE WHEN ir_out.target_world_concept_id IS NOT NULL THEN jsonb_build_object('id', twc.id, 'name', twc.name) ELSE NULL END
+    'targetItem', CASE WHEN ir_out.target_item_id IS NOT NULL THEN jsonb_build_object('id', ti.id, 'name', ti.name) END,
+    'targetNpc', CASE WHEN ir_out.target_npc_id IS NOT NULL THEN jsonb_build_object('id', tn.id, 'name', tn.name) END,
+    'targetFaction', CASE WHEN ir_out.target_faction_id IS NOT NULL THEN jsonb_build_object('id', tf.id, 'name', tf.name) END,
+    'targetSite', CASE WHEN ir_out.target_site_id IS NOT NULL THEN jsonb_build_object('id', ts.id, 'name', ts.name) END,
+    'targetQuest', CASE WHEN ir_out.target_quest_id IS NOT NULL THEN jsonb_build_object('id', tq.id, 'name', tq.name) END,
+    'targetConflict', CASE WHEN ir_out.target_conflict_id IS NOT NULL THEN jsonb_build_object('id', tc.id, 'name', tc.name) END,
+    'targetNarrativeDestination', CASE WHEN ir_out.target_narrative_destination_id IS NOT NULL THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) END,
+    'targetWorldConcept', CASE WHEN ir_out.target_world_concept_id IS NOT NULL THEN jsonb_build_object('id', twc.id, 'name', twc.name) END
   )) FILTER (WHERE ir_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'relationship', to_jsonb(ir_in.*),
@@ -492,8 +494,8 @@ SELECT
   )) FILTER (WHERE ir_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'history', to_jsonb(ih.*),
-    'keyNpc', CASE WHEN ih.key_npc_id IS NOT NULL THEN jsonb_build_object('id', hn.id, 'name', hn.name) ELSE NULL END,
-    'eventLocationSite', CASE WHEN ih.event_location_site_id IS NOT NULL THEN jsonb_build_object('id', hs.id, 'name', hs.name) ELSE NULL END
+    'keyNpc', CASE WHEN ih.key_npc_id IS NOT NULL THEN jsonb_build_object('id', hn.id, 'name', hn.name) END,
+    'eventLocationSite', CASE WHEN ih.event_location_site_id IS NOT NULL THEN jsonb_build_object('id', hs.id, 'name', hs.name) END
   )) FILTER (WHERE ih.id IS NOT NULL), '[]'::jsonb) AS related_notable_history
 FROM
   items i
