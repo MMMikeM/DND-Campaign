@@ -7,6 +7,12 @@ import type {
 	QuestForAnalysis,
 } from "./types"
 
+// Helper function to count occurrences using Object.groupBy
+function countBy<T>(items: T[], extractor: (item: T) => string): Record<string, number> {
+	const grouped = Object.groupBy(items, extractor)
+	return Object.fromEntries(Object.entries(grouped).map(([key, items]) => [key, items?.length ?? 0]))
+}
+
 export function analyzeCampaignContext(
 	existingNPCs: NPCForAnalysis[],
 	factions: FactionForAnalysis[],
@@ -22,13 +28,7 @@ export function analyzeCampaignContext(
 	}
 
 	// Analyze NPC complexity distribution
-	const complexityDistribution = existingNPCs.reduce(
-		(acc, npc) => {
-			acc[npc.complexityProfile] = (acc[npc.complexityProfile] || 0) + 1
-			return acc
-		},
-		{} as Record<string, number>,
-	)
+	const complexityDistribution = countBy(existingNPCs, (npc) => npc.complexityProfile)
 
 	const underrepresentedComplexity = [
 		"moral_anchor_good",
@@ -45,13 +45,7 @@ export function analyzeCampaignContext(
 	}
 
 	// Analyze player perception goals
-	const perceptionDistribution = existingNPCs.reduce(
-		(acc, npc) => {
-			acc[npc.playerPerceptionGoal] = (acc[npc.playerPerceptionGoal] || 0) + 1
-			return acc
-		},
-		{} as Record<string, number>,
-	)
+	const perceptionDistribution = countBy(existingNPCs, (npc) => npc.playerPerceptionGoal)
 
 	if ((perceptionDistribution.comic_relief_levity || 0) < 2) {
 		analysis.playerPerceptionGaps.push("Campaign needs more comic relief characters")

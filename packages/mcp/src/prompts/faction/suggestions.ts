@@ -1,3 +1,4 @@
+import { search } from "fast-fuzzy"
 import type { FactionCreationArgs, FactionForAnalysis, FactionRelationshipSuggestions } from "./types"
 
 export function generateFactionRelationshipSuggestions(
@@ -11,23 +12,23 @@ export function generateFactionRelationshipSuggestions(
 		narrativeOpportunities: [],
 	}
 
-	// Generate ally suggestions based on alignment
+	// Generate ally suggestions based on alignment with fuzzy matching
 	if (alignment_hint) {
+		const alignmentHint = alignment_hint.toLowerCase()
 		const alignmentAllies = existingFactions.filter((faction) => {
-			const isGoodAlignment = alignment_hint.includes("good")
-			const isEvilAlignment = alignment_hint.includes("evil")
-			const isLawfulAlignment = alignment_hint.includes("lawful")
-			const isChaoticAlignment = alignment_hint.includes("chaotic")
+			const factionAlignment = faction.publicAlignment.toLowerCase()
 
-			// Good factions align with good, evil with evil
-			if (isGoodAlignment && faction.publicAlignment.includes("good")) return true
-			if (isEvilAlignment && faction.publicAlignment.includes("evil")) return true
+			// Use fuzzy search to match alignment keywords
+			const alignmentKeywords = ["good", "evil", "lawful", "chaotic", "neutral"]
+			const hintKeywords = alignmentKeywords.filter(
+				(keyword) => search(keyword, [alignmentHint], { threshold: 0.8 }).length > 0,
+			)
+			const factionKeywords = alignmentKeywords.filter(
+				(keyword) => search(keyword, [factionAlignment], { threshold: 0.8 }).length > 0,
+			)
 
-			// Lawful factions might ally regardless of good/evil
-			if (isLawfulAlignment && faction.publicAlignment.includes("lawful")) return true
-			if (isChaoticAlignment && faction.publicAlignment.includes("chaotic")) return true
-
-			return false
+			// Find matching alignment components
+			return hintKeywords.some((keyword) => factionKeywords.includes(keyword))
 		})
 
 		alignmentAllies.slice(0, 3).forEach((faction) => {
@@ -39,23 +40,35 @@ export function generateFactionRelationshipSuggestions(
 		})
 	}
 
-	// Generate rival suggestions based on opposing alignments
+	// Generate rival suggestions based on opposing alignments with fuzzy matching
 	if (alignment_hint) {
+		const alignmentHint = alignment_hint.toLowerCase()
 		const alignmentRivals = existingFactions.filter((faction) => {
-			const isGoodAlignment = alignment_hint.includes("good")
-			const isEvilAlignment = alignment_hint.includes("evil")
-			const isLawfulAlignment = alignment_hint.includes("lawful")
-			const isChaoticAlignment = alignment_hint.includes("chaotic")
+			const factionAlignment = faction.publicAlignment.toLowerCase()
 
-			// Good opposes evil
-			if (isGoodAlignment && faction.publicAlignment.includes("evil")) return true
-			if (isEvilAlignment && faction.publicAlignment.includes("good")) return true
+			// Define opposing alignments
+			const oppositions = {
+				good: ["evil"],
+				evil: ["good"],
+				lawful: ["chaotic"],
+				chaotic: ["lawful"],
+			}
 
-			// Lawful opposes chaotic
-			if (isLawfulAlignment && faction.publicAlignment.includes("chaotic")) return true
-			if (isChaoticAlignment && faction.publicAlignment.includes("lawful")) return true
+			// Use fuzzy search to find alignment keywords
+			const alignmentKeywords = Object.keys(oppositions)
+			const hintKeywords = alignmentKeywords.filter(
+				(keyword) => search(keyword, [alignmentHint], { threshold: 0.8 }).length > 0,
+			)
+			const factionKeywords = alignmentKeywords.filter(
+				(keyword) => search(keyword, [factionAlignment], { threshold: 0.8 }).length > 0,
+			)
 
-			return false
+			// Check for opposing alignments
+			return hintKeywords.some((hintKeyword) =>
+				factionKeywords.some((factionKeyword) =>
+					oppositions[hintKeyword as keyof typeof oppositions]?.includes(factionKeyword),
+				),
+			)
 		})
 
 		alignmentRivals.slice(0, 2).forEach((faction) => {
@@ -67,11 +80,14 @@ export function generateFactionRelationshipSuggestions(
 		})
 	}
 
-	// Generate suggestions based on faction type
+	// Generate suggestions based on faction type with fuzzy matching
 	if (type_hint) {
 		const typeAllies = existingFactions.filter((faction) => {
-			// Similar types might ally
-			return faction.type.some((factionType) => factionType === type_hint)
+			// Use fuzzy search to match similar types
+			return faction.type.some((factionType) => {
+				const fuzzyResult = search(type_hint, [factionType], { threshold: 0.7 })
+				return fuzzyResult.length > 0
+			})
 		})
 
 		typeAllies.slice(0, 2).forEach((faction) => {
@@ -84,7 +100,7 @@ export function generateFactionRelationshipSuggestions(
 			}
 		})
 
-		// Competing types might be rivals
+		// Competing types might be rivals with fuzzy matching
 		const competingTypes: Record<string, string[]> = {
 			criminal: ["military", "political"],
 			military: ["criminal", "cult"],
@@ -93,9 +109,18 @@ export function generateFactionRelationshipSuggestions(
 			political: ["cult", "criminal"],
 		}
 
-		if (competingTypes[type_hint]) {
+		// Use fuzzy search to find the matching competing type
+		const typeKeys = Object.keys(competingTypes)
+		const [matchingTypeKey] = search(type_hint, typeKeys, { threshold: 0.7 })
+
+		if (matchingTypeKey && competingTypes[matchingTypeKey]) {
 			const typeRivals = existingFactions.filter((faction) =>
-				faction.type.some((factionType) => competingTypes[type_hint]?.includes(factionType)),
+				faction.type.some((factionType) => {
+					// Use fuzzy search for competing types
+					return competingTypes[matchingTypeKey]?.some(
+						(competingType) => search(competingType, [factionType], { threshold: 0.7 }).length > 0,
+					)
+				}),
 			)
 
 			typeRivals.slice(0, 2).forEach((faction) => {
@@ -110,13 +135,20 @@ export function generateFactionRelationshipSuggestions(
 		}
 	}
 
-	// Generate location-based suggestions
+	// Generate location-based suggestions with fuzzy matching
 	if (location_hint) {
-		const samLocationFactions = existingFactions.filter(
-			(faction) => faction.primaryHqSite?.area?.name?.toLowerCase().includes(location_hint.toLowerCase()) || false,
-		)
+		const locationNames = existingFactions
+			.map((faction) => faction.primaryHqSite?.area?.name)
+			.filter(Boolean) as string[]
 
-		samLocationFactions.forEach((faction) => {
+		const fuzzyLocationMatches = search(location_hint, locationNames, { threshold: 0.6 })
+
+		const sameLocationFactions = existingFactions.filter((faction) => {
+			const areaName = faction.primaryHqSite?.area?.name
+			return areaName && fuzzyLocationMatches.includes(areaName)
+		})
+
+		sameLocationFactions.forEach((faction) => {
 			suggestions.territorialOverlap.push({
 				location: {
 					id: faction.primaryHqSite?.area?.id || 0,
@@ -129,9 +161,13 @@ export function generateFactionRelationshipSuggestions(
 		})
 	}
 
-	// Generate role-based narrative opportunities
+	// Generate role-based narrative opportunities with fuzzy matching
 	if (role_hint) {
-		switch (role_hint.toLowerCase()) {
+		const roleHintLower = role_hint.toLowerCase()
+		const roleKeywords = ["ally", "enemy", "neutral"]
+		const [matchingRole] = search(roleHintLower, roleKeywords, { threshold: 0.7 })
+
+		switch (matchingRole) {
 			case "ally":
 				suggestions.narrativeOpportunities.push(
 					"Could serve as quest-giver or information source",
