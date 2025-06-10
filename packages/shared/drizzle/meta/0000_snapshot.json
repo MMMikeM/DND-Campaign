@@ -1,5 +1,5 @@
 {
-  "id": "8ca1aa9a-2cbc-4c9c-bca5-c062b457e696",
+  "id": "dd3bc5ce-54cf-4797-b832-d62fec96c7b8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1451,6 +1451,158 @@
       },
       "isRLSEnabled": false
     },
+    "public.region_connections": {
+      "name": "region_connections",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "other_region_id": {
+          "name": "other_region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "connection_type": {
+          "name": "connection_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "route_type": {
+          "name": "route_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "travel_difficulty": {
+          "name": "travel_difficulty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "travel_time": {
+          "name": "travel_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "controlling_faction_id": {
+          "name": "controlling_faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "travel_hazards": {
+          "name": "travel_hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "region_connections_region_id_regions_id_fk": {
+          "name": "region_connections_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "region_connections_other_region_id_regions_id_fk": {
+          "name": "region_connections_other_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "other_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "region_connections_controlling_faction_id_factions_id_fk": {
+          "name": "region_connections_controlling_faction_id_factions_id_fk",
+          "tableFrom": "region_connections",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "controlling_faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "region_connections_region_id_other_region_id_connection_type_unique": {
+          "name": "region_connections_region_id_other_region_id_connection_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "region_id",
+            "other_region_id",
+            "connection_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_no_self_region_connection": {
+          "name": "chk_no_self_region_connection",
+          "value": "COALESCE(\"region_connections\".\"region_id\" != \"region_connections\".\"other_region_id\", TRUE)"
+        }
+      },
+      "isRLSEnabled": false
+    },
     "public.foreshadowing_seeds": {
       "name": "foreshadowing_seeds",
       "schema": "",
@@ -1955,56 +2107,56 @@
           "primaryKey": false,
           "notNull": true
         },
-        "related_entity_type": {
-          "name": "related_entity_type",
+        "target_entity_type": {
+          "name": "target_entity_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "related_item_id": {
-          "name": "related_item_id",
+        "target_item_id": {
+          "name": "target_item_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_npc_id": {
-          "name": "related_npc_id",
+        "target_npc_id": {
+          "name": "target_npc_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_faction_id": {
-          "name": "related_faction_id",
+        "target_faction_id": {
+          "name": "target_faction_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_site_id": {
-          "name": "related_site_id",
+        "target_site_id": {
+          "name": "target_site_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_quest_id": {
-          "name": "related_quest_id",
+        "target_quest_id": {
+          "name": "target_quest_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_conflict_id": {
-          "name": "related_conflict_id",
+        "target_conflict_id": {
+          "name": "target_conflict_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_narrative_destination_id": {
-          "name": "related_narrative_destination_id",
+        "target_narrative_destination_id": {
+          "name": "target_narrative_destination_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "related_world_concept_id": {
-          "name": "related_world_concept_id",
+        "target_world_concept_id": {
+          "name": "target_world_concept_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -2037,12 +2189,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "item_relationships_related_item_id_items_id_fk": {
-          "name": "item_relationships_related_item_id_items_id_fk",
+        "item_relationships_target_item_id_items_id_fk": {
+          "name": "item_relationships_target_item_id_items_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "items",
           "columnsFrom": [
-            "related_item_id"
+            "target_item_id"
           ],
           "columnsTo": [
             "id"
@@ -2050,12 +2202,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_npc_id_npcs_id_fk": {
-          "name": "item_relationships_related_npc_id_npcs_id_fk",
+        "item_relationships_target_npc_id_npcs_id_fk": {
+          "name": "item_relationships_target_npc_id_npcs_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "npcs",
           "columnsFrom": [
-            "related_npc_id"
+            "target_npc_id"
           ],
           "columnsTo": [
             "id"
@@ -2063,12 +2215,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_faction_id_factions_id_fk": {
-          "name": "item_relationships_related_faction_id_factions_id_fk",
+        "item_relationships_target_faction_id_factions_id_fk": {
+          "name": "item_relationships_target_faction_id_factions_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "factions",
           "columnsFrom": [
-            "related_faction_id"
+            "target_faction_id"
           ],
           "columnsTo": [
             "id"
@@ -2076,12 +2228,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_site_id_sites_id_fk": {
-          "name": "item_relationships_related_site_id_sites_id_fk",
+        "item_relationships_target_site_id_sites_id_fk": {
+          "name": "item_relationships_target_site_id_sites_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "sites",
           "columnsFrom": [
-            "related_site_id"
+            "target_site_id"
           ],
           "columnsTo": [
             "id"
@@ -2089,12 +2241,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_quest_id_quests_id_fk": {
-          "name": "item_relationships_related_quest_id_quests_id_fk",
+        "item_relationships_target_quest_id_quests_id_fk": {
+          "name": "item_relationships_target_quest_id_quests_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "quests",
           "columnsFrom": [
-            "related_quest_id"
+            "target_quest_id"
           ],
           "columnsTo": [
             "id"
@@ -2102,12 +2254,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_conflict_id_major_conflicts_id_fk": {
-          "name": "item_relationships_related_conflict_id_major_conflicts_id_fk",
+        "item_relationships_target_conflict_id_major_conflicts_id_fk": {
+          "name": "item_relationships_target_conflict_id_major_conflicts_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "major_conflicts",
           "columnsFrom": [
-            "related_conflict_id"
+            "target_conflict_id"
           ],
           "columnsTo": [
             "id"
@@ -2115,12 +2267,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_narrative_destination_id_narrative_destinations_id_fk": {
-          "name": "item_relationships_related_narrative_destination_id_narrative_destinations_id_fk",
+        "item_relationships_target_narrative_destination_id_narrative_destinations_id_fk": {
+          "name": "item_relationships_target_narrative_destination_id_narrative_destinations_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "narrative_destinations",
           "columnsFrom": [
-            "related_narrative_destination_id"
+            "target_narrative_destination_id"
           ],
           "columnsTo": [
             "id"
@@ -2128,12 +2280,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_related_world_concept_id_world_concepts_id_fk": {
-          "name": "item_relationships_related_world_concept_id_world_concepts_id_fk",
+        "item_relationships_target_world_concept_id_world_concepts_id_fk": {
+          "name": "item_relationships_target_world_concept_id_world_concepts_id_fk",
           "tableFrom": "item_relationships",
           "tableTo": "world_concepts",
           "columnsFrom": [
-            "related_world_concept_id"
+            "target_world_concept_id"
           ],
           "columnsTo": [
             "id"
@@ -2144,20 +2296,20 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "item_relationships_source_item_id_related_entity_type_related_item_id_related_npc_id_related_faction_id_related_site_id_related_quest_id_related_conflict_id_related_narrative_destination_id_related_world_concept_id_relationship_type_unique": {
-          "name": "item_relationships_source_item_id_related_entity_type_related_item_id_related_npc_id_related_faction_id_related_site_id_related_quest_id_related_conflict_id_related_narrative_destination_id_related_world_concept_id_relationship_type_unique",
+        "item_relationships_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique": {
+          "name": "item_relationships_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_item_id",
-            "related_entity_type",
-            "related_item_id",
-            "related_npc_id",
-            "related_faction_id",
-            "related_site_id",
-            "related_quest_id",
-            "related_conflict_id",
-            "related_narrative_destination_id",
-            "related_world_concept_id",
+            "target_entity_type",
+            "target_item_id",
+            "target_npc_id",
+            "target_faction_id",
+            "target_site_id",
+            "target_quest_id",
+            "target_conflict_id",
+            "target_narrative_destination_id",
+            "target_world_concept_id",
             "relationship_type"
           ]
         }
@@ -2166,7 +2318,7 @@
       "checkConstraints": {
         "single_related_entity_exclusive_and_correct": {
           "name": "single_related_entity_exclusive_and_correct",
-          "value": "\n\t\t\tCASE \"item_relationships\".\"related_entity_type\"\n\t\t\t\tWHEN 'item' THEN (\"item_relationships\".\"related_item_id\" IS NOT NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'npc' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NOT NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'faction' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NOT NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'site' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NOT NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'quest' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NOT NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'conflict' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NOT NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'narrative_destination' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NOT NULL AND \"item_relationships\".\"related_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'world_concept' THEN (\"item_relationships\".\"related_item_id\" IS NULL AND \"item_relationships\".\"related_npc_id\" IS NULL AND \"item_relationships\".\"related_faction_id\" IS NULL AND \"item_relationships\".\"related_site_id\" IS NULL AND \"item_relationships\".\"related_quest_id\" IS NULL AND \"item_relationships\".\"related_conflict_id\" IS NULL AND \"item_relationships\".\"related_narrative_destination_id\" IS NULL AND \"item_relationships\".\"related_world_concept_id\" IS NOT NULL)\n\t\t\t\tELSE FALSE\n\t\t\tEND\n\t\t\t"
+          "value": "\n\t\t\tCASE \"item_relationships\".\"target_entity_type\"\n\t\t\t\tWHEN 'item' THEN (\"item_relationships\".\"target_item_id\" IS NOT NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'npc' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NOT NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'faction' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NOT NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'site' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NOT NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'quest' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NOT NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'conflict' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NOT NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'narrative_destination' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NOT NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'world_concept' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NOT NULL)\n\t\t\t\tELSE FALSE\n\t\t\tEND\n\t\t\t"
         }
       },
       "isRLSEnabled": false
@@ -3026,7 +3178,8 @@
           "name": "is_bidirectional",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
@@ -3762,7 +3915,8 @@
           "name": "failure_leads_to_retry",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": false
         },
         "failure_lesson_learned": {
           "name": "failure_lesson_learned",
@@ -4436,8 +4590,176 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.site_encounters": {
-      "name": "site_encounters",
+    "public.areas": {
+      "name": "areas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "danger_level": {
+          "name": "danger_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "atmosphere_type": {
+          "name": "atmosphere_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revelation_layers_summary": {
+          "name": "revelation_layers_summary",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "leadership": {
+          "name": "leadership",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "population": {
+          "name": "population",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_activity": {
+          "name": "primary_activity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cultural_notes": {
+          "name": "cultural_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hazards": {
+          "name": "hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rumors": {
+          "name": "rumors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defenses": {
+          "name": "defenses",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "embedding_id": {
+          "name": "embedding_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "areas_region_id_regions_id_fk": {
+          "name": "areas_region_id_regions_id_fk",
+          "tableFrom": "areas",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "areas_embedding_id_embeddings_id_fk": {
+          "name": "areas_embedding_id_embeddings_id_fk",
+          "tableFrom": "areas",
+          "tableTo": "embeddings",
+          "columnsFrom": [
+            "embedding_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "areas_name_unique": {
+          "name": "areas_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.regions": {
+      "name": "regions",
       "schema": "",
       "columns": {
         "id": {
@@ -4476,38 +4798,254 @@
           "primaryKey": false,
           "notNull": true
         },
-        "site_id": {
-          "name": "site_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "encounter_type": {
-          "name": "encounter_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "danger_level": {
           "name": "danger_level",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "difficulty": {
-          "name": "difficulty",
+        "type": {
+          "name": "type",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "creatures": {
-          "name": "creatures",
+        "atmosphere_type": {
+          "name": "atmosphere_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revelation_layers_summary": {
+          "name": "revelation_layers_summary",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },
-        "treasure": {
-          "name": "treasure",
+        "economy": {
+          "name": "economy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "history": {
+          "name": "history",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "population": {
+          "name": "population",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cultural_notes": {
+          "name": "cultural_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hazards": {
+          "name": "hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rumors": {
+          "name": "rumors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secrets": {
+          "name": "secrets",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defenses": {
+          "name": "defenses",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "embedding_id": {
+          "name": "embedding_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "regions_embedding_id_embeddings_id_fk": {
+          "name": "regions_embedding_id_embeddings_id_fk",
+          "tableFrom": "regions",
+          "tableTo": "embeddings",
+          "columnsFrom": [
+            "embedding_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "regions_name_unique": {
+          "name": "regions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.site_encounters": {
+      "name": "site_encounters",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounter_vibe": {
+          "name": "encounter_vibe",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objective_type": {
+          "name": "objective_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objective_details": {
+          "name": "objective_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "has_timer": {
+          "name": "has_timer",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "timer_value": {
+          "name": "timer_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timer_unit": {
+          "name": "timer_unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timer_consequence": {
+          "name": "timer_consequence",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "core_enemy_groups": {
+          "name": "core_enemy_groups",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "synergy_description": {
+          "name": "synergy_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "encounter_category": {
+          "name": "encounter_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recommended_proficiency_bonus": {
+          "name": "recommended_proficiency_bonus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "special_variations": {
+          "name": "special_variations",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "non_combat_options": {
+          "name": "non_combat_options",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounter_specific_environment_notes": {
+          "name": "encounter_specific_environment_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interactive_elements": {
+          "name": "interactive_elements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "treasure_or_rewards": {
+          "name": "treasure_or_rewards",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
@@ -4550,13 +5088,6 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "site_encounters_name_unique": {
-          "name": "site_encounters_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        },
         "site_encounters_site_id_name_unique": {
           "name": "site_encounters_site_id_name_unique",
           "nullsNotDistinct": false,
@@ -4567,7 +5098,24 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "chk_timer_details_if_has_timer": {
+          "name": "chk_timer_details_if_has_timer",
+          "value": "NOT \"site_encounters\".\"has_timer\" OR (\"site_encounters\".\"timer_value\" IS NOT NULL AND \"site_encounters\".\"timer_unit\" IS NOT NULL)"
+        },
+        "chk_no_timer_details_if_no_timer": {
+          "name": "chk_no_timer_details_if_no_timer",
+          "value": "\"site_encounters\".\"has_timer\" OR (\"site_encounters\".\"timer_value\" IS NULL AND \"site_encounters\".\"timer_unit\" IS NULL AND \"site_encounters\".\"timer_consequence\" IS NULL)"
+        },
+        "chk_objective_details_for_non_deathmatch": {
+          "name": "chk_objective_details_for_non_deathmatch",
+          "value": "\"site_encounters\".\"objective_type\" = 'DEATHMATCH' OR \"site_encounters\".\"objective_details\" IS NOT NULL"
+        },
+        "chk_proficiency_bonus_range": {
+          "name": "chk_proficiency_bonus_range",
+          "value": "\"site_encounters\".\"recommended_proficiency_bonus\" IS NULL OR (\"site_encounters\".\"recommended_proficiency_bonus\" >= 2 AND \"site_encounters\".\"recommended_proficiency_bonus\" <= 6)"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.site_links": {
@@ -5033,481 +5581,6 @@
       "uniqueConstraints": {
         "sites_name_unique": {
           "name": "sites_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.areas": {
-      "name": "areas",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gm_notes": {
-          "name": "gm_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "region_id": {
-          "name": "region_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "danger_level": {
-          "name": "danger_level",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "atmosphere_type": {
-          "name": "atmosphere_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "revelation_layers_summary": {
-          "name": "revelation_layers_summary",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "leadership": {
-          "name": "leadership",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "population": {
-          "name": "population",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "primary_activity": {
-          "name": "primary_activity",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "cultural_notes": {
-          "name": "cultural_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "hazards": {
-          "name": "hazards",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "points_of_interest": {
-          "name": "points_of_interest",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "rumors": {
-          "name": "rumors",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "defenses": {
-          "name": "defenses",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "embedding_id": {
-          "name": "embedding_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "areas_region_id_regions_id_fk": {
-          "name": "areas_region_id_regions_id_fk",
-          "tableFrom": "areas",
-          "tableTo": "regions",
-          "columnsFrom": [
-            "region_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "areas_embedding_id_embeddings_id_fk": {
-          "name": "areas_embedding_id_embeddings_id_fk",
-          "tableFrom": "areas",
-          "tableTo": "embeddings",
-          "columnsFrom": [
-            "embedding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "areas_name_unique": {
-          "name": "areas_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.region_connections": {
-      "name": "region_connections",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gm_notes": {
-          "name": "gm_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "region_id": {
-          "name": "region_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "other_region_id": {
-          "name": "other_region_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "connection_type": {
-          "name": "connection_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "route_type": {
-          "name": "route_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "travel_difficulty": {
-          "name": "travel_difficulty",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "travel_time": {
-          "name": "travel_time",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "controlling_faction_id": {
-          "name": "controlling_faction_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "travel_hazards": {
-          "name": "travel_hazards",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "points_of_interest": {
-          "name": "points_of_interest",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "region_connections_region_id_regions_id_fk": {
-          "name": "region_connections_region_id_regions_id_fk",
-          "tableFrom": "region_connections",
-          "tableTo": "regions",
-          "columnsFrom": [
-            "region_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "region_connections_other_region_id_regions_id_fk": {
-          "name": "region_connections_other_region_id_regions_id_fk",
-          "tableFrom": "region_connections",
-          "tableTo": "regions",
-          "columnsFrom": [
-            "other_region_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "region_connections_controlling_faction_id_factions_id_fk": {
-          "name": "region_connections_controlling_faction_id_factions_id_fk",
-          "tableFrom": "region_connections",
-          "tableTo": "factions",
-          "columnsFrom": [
-            "controlling_faction_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "region_connections_region_id_other_region_id_connection_type_unique": {
-          "name": "region_connections_region_id_other_region_id_connection_type_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "region_id",
-            "other_region_id",
-            "connection_type"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {
-        "chk_no_self_region_connection": {
-          "name": "chk_no_self_region_connection",
-          "value": "COALESCE(\"region_connections\".\"region_id\" != \"region_connections\".\"other_region_id\", TRUE)"
-        }
-      },
-      "isRLSEnabled": false
-    },
-    "public.regions": {
-      "name": "regions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gm_notes": {
-          "name": "gm_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "danger_level": {
-          "name": "danger_level",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "atmosphere_type": {
-          "name": "atmosphere_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "revelation_layers_summary": {
-          "name": "revelation_layers_summary",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "economy": {
-          "name": "economy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "history": {
-          "name": "history",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "population": {
-          "name": "population",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "cultural_notes": {
-          "name": "cultural_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "hazards": {
-          "name": "hazards",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "points_of_interest": {
-          "name": "points_of_interest",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "rumors": {
-          "name": "rumors",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "secrets": {
-          "name": "secrets",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "defenses": {
-          "name": "defenses",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "embedding_id": {
-          "name": "embedding_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "regions_embedding_id_embeddings_id_fk": {
-          "name": "regions_embedding_id_embeddings_id_fk",
-          "tableFrom": "regions",
-          "tableTo": "embeddings",
-          "columnsFrom": [
-            "embedding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "regions_name_unique": {
-          "name": "regions_name_unique",
           "nullsNotDistinct": false,
           "columns": [
             "name"
