@@ -1,6 +1,6 @@
 {
-  "id": "dd3bc5ce-54cf-4797-b832-d62fec96c7b8",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "33b71617-65d6-4588-8a1a-776bed5c957e",
+  "prevId": "dd3bc5ce-54cf-4797-b832-d62fec96c7b8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -3460,8 +3460,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "current_location_id": {
-          "name": "current_location_id",
+        "current_site_id": {
+          "name": "current_site_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -3583,12 +3583,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npcs_current_location_id_sites_id_fk": {
-          "name": "npcs_current_location_id_sites_id_fk",
+        "npcs_current_site_id_sites_id_fk": {
+          "name": "npcs_current_site_id_sites_id_fk",
           "tableFrom": "npcs",
           "tableTo": "sites",
           "columnsFrom": [
-            "current_location_id"
+            "current_site_id"
           ],
           "columnsTo": [
             "id"

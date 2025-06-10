@@ -1,6 +1,6 @@
 {
-  "id": "dd3bc5ce-54cf-4797-b832-d62fec96c7b8",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "936e1f5e-ba40-462a-946f-29454998876e",
+  "prevId": "b1a768a6-7850-442d-8e6c-366b0eb9431f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -3283,9 +3283,33 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_current": {
+          "name": "is_current",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "unique_current_per_npc": {
+          "name": "unique_current_per_npc",
+          "columns": [
+            {
+              "expression": "npc_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"npc_sites\".\"is_current\" = true",
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "npc_sites_npc_id_npcs_id_fk": {
           "name": "npc_sites_npc_id_npcs_id_fk",
@@ -3460,12 +3484,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "current_location_id": {
-          "name": "current_location_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "current_goals": {
           "name": "current_goals",
           "type": "text[]",
@@ -3583,19 +3601,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npcs_current_location_id_sites_id_fk": {
-          "name": "npcs_current_location_id_sites_id_fk",
-          "tableFrom": "npcs",
-          "tableTo": "sites",
-          "columnsFrom": [
-            "current_location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "npcs_embedding_id_embeddings_id_fk": {
           "name": "npcs_embedding_id_embeddings_id_fk",
           "tableFrom": "npcs",
