@@ -1,3 +1,5 @@
+-- Custom SQL migration file, put your code below! --
+
 CREATE MATERIALIZED VIEW search_index AS
 
 -- Select and process data from region_search_data_view
@@ -357,6 +359,7 @@ SELECT
     'destinationInvolvement', related_destination_involvement,
     'questHooks', related_quest_hooks,
     'questStageDeliveries', related_quest_stage_deliveries,
+    'stageInvolvement', related_stage_involvement,
     'worldConceptLinks', related_world_concept_links,
     'outgoingRelationships', related_outgoing_relationships,
     'incomingRelationships', related_incoming_relationships
@@ -374,6 +377,7 @@ SELECT
     'destinationInvolvement', related_destination_involvement,
     'questHooks', related_quest_hooks,
     'questStageDeliveries', related_quest_stage_deliveries,
+    'stageInvolvement', related_stage_involvement,
     'worldConceptLinks', related_world_concept_links,
     'outgoingRelationships', related_outgoing_relationships,
     'incomingRelationships', related_incoming_relationships
@@ -392,6 +396,7 @@ SELECT
       'destinationInvolvement', related_destination_involvement,
       'questHooks', related_quest_hooks,
       'questStageDeliveries', related_quest_stage_deliveries,
+      'stageInvolvement', related_stage_involvement,
       'worldConceptLinks', related_world_concept_links,
       'outgoingRelationships', related_outgoing_relationships,
       'incomingRelationships', related_incoming_relationships
@@ -414,6 +419,7 @@ SELECT
     'stages', related_stages,
     'hooks', related_hooks,
     'participantInvolvement', related_participant_involvement,
+    'stageNpcInvolvement', related_stage_npc_involvement,
     'destinationContributions', related_destination_contributions,
     'consequences', related_consequences,
     'narrativeEvents', related_narrative_events,
@@ -430,6 +436,7 @@ SELECT
     'stages', related_stages,
     'hooks', related_hooks,
     'participantInvolvement', related_participant_involvement,
+    'stageNpcInvolvement', related_stage_npc_involvement,
     'destinationContributions', related_destination_contributions,
     'consequences', related_consequences,
     'narrativeEvents', related_narrative_events,
@@ -447,6 +454,7 @@ SELECT
       'stages', related_stages,
       'hooks', related_hooks,
       'participantInvolvement', related_participant_involvement,
+      'stageNpcInvolvement', related_stage_npc_involvement,
       'destinationContributions', related_destination_contributions,
       'consequences', related_consequences,
       'narrativeEvents', related_narrative_events,

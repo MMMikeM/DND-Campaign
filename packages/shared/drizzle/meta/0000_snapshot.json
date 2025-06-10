@@ -1,5 +1,5 @@
 {
-  "id": "dd3bc5ce-54cf-4797-b832-d62fec96c7b8",
+  "id": "05bad79f-a0a7-4502-ae7e-69ba3eb2beb7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -3283,9 +3283,33 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_current": {
+          "name": "is_current",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "unique_current_per_npc": {
+          "name": "unique_current_per_npc",
+          "columns": [
+            {
+              "expression": "npc_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"npc_sites\".\"is_current\" = true",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "npc_sites_npc_id_npcs_id_fk": {
           "name": "npc_sites_npc_id_npcs_id_fk",
@@ -3460,12 +3484,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "current_location_id": {
-          "name": "current_location_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "current_goals": {
           "name": "current_goals",
           "type": "text[]",
@@ -3583,19 +3601,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npcs_current_location_id_sites_id_fk": {
-          "name": "npcs_current_location_id_sites_id_fk",
-          "tableFrom": "npcs",
-          "tableTo": "sites",
-          "columnsFrom": [
-            "current_location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "npcs_embedding_id_embeddings_id_fk": {
           "name": "npcs_embedding_id_embeddings_id_fk",
           "tableFrom": "npcs",
@@ -3617,6 +3622,116 @@
           "nullsNotDistinct": false,
           "columns": [
             "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.npc_stage_involvement": {
+      "name": "npc_stage_involvement",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_stage_id": {
+          "name": "quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_in_stage": {
+          "name": "role_in_stage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "involvement_details": {
+          "name": "involvement_details",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_optional": {
+          "name": "is_optional",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_stage_involvement_npc_id_npcs_id_fk": {
+          "name": "npc_stage_involvement_npc_id_npcs_id_fk",
+          "tableFrom": "npc_stage_involvement",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_stage_involvement_quest_stage_id_quest_stages_id_fk": {
+          "name": "npc_stage_involvement_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "npc_stage_involvement",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "npc_stage_involvement_npc_id_quest_stage_id_unique": {
+          "name": "npc_stage_involvement_npc_id_quest_stage_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "quest_stage_id"
           ]
         }
       },
@@ -3666,6 +3781,12 @@
         },
         "site_id": {
           "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivery_npc_id": {
+          "name": "delivery_npc_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -3764,6 +3885,19 @@
           "tableTo": "sites",
           "columnsFrom": [
             "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_stages_delivery_npc_id_npcs_id_fk": {
+          "name": "quest_stages_delivery_npc_id_npcs_id_fk",
+          "tableFrom": "quest_stages",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "delivery_npc_id"
           ],
           "columnsTo": [
             "id"
