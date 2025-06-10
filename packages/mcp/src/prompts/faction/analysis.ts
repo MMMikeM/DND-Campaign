@@ -7,6 +7,12 @@ import type {
 	PoliticalLandscapeAnalysis,
 } from "./types"
 
+// Helper function to count occurrences using Object.groupBy
+function countBy<T>(items: T[], extractor: (item: T) => string): Record<string, number> {
+	const grouped = Object.groupBy(items, extractor)
+	return Object.fromEntries(Object.entries(grouped).map(([key, items]) => [key, items?.length ?? 0]))
+}
+
 export function analyzePoliticalLandscape({
 	existingFactions,
 	existingAgendas,
@@ -29,15 +35,8 @@ export function analyzePoliticalLandscape({
 	}
 
 	// Analyze faction type distribution
-	const factionTypeDistribution = existingFactions.reduce(
-		(acc, faction) => {
-			faction.type.forEach((type) => {
-				acc[type] = (acc[type] || 0) + 1
-			})
-			return acc
-		},
-		{} as Record<string, number>,
-	)
+	const allFactionTypes = existingFactions.flatMap((faction) => faction.type)
+	const factionTypeDistribution = countBy(allFactionTypes, (type) => type)
 
 	// Identify underrepresented faction types
 	const underrepresentedTypes = [
@@ -58,13 +57,7 @@ export function analyzePoliticalLandscape({
 	}
 
 	// Analyze alignment distribution
-	const alignmentDistribution = existingFactions.reduce(
-		(acc, faction) => {
-			acc[faction.publicAlignment] = (acc[faction.publicAlignment] || 0) + 1
-			return acc
-		},
-		{} as Record<string, number>,
-	)
+	const alignmentDistribution = countBy(existingFactions, (faction) => faction.publicAlignment)
 
 	// Look for alignment gaps
 	const allAlignments = [

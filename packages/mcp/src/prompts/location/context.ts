@@ -1,21 +1,7 @@
 import { db, logger } from "../.."
 import { analyzeLocationLandscape } from "./analysis"
 import { generateLocationConnectionSuggestions } from "./suggestions"
-import type {
-	CampaignThemes,
-	EncounterForAnalysis,
-	EnhancedLocationCreationArgs,
-	FactionInfluenceForAnalysis,
-	ForeshadowingSeedForAnalysis,
-	ItemHistoryForAnalysis,
-	LinkForAnalysis,
-	NearbyEntitiesForLocation,
-	NPCSiteAssociationForAnalysis,
-	QuestStageForAnalysis,
-	RegionForAnalysis,
-	SecretForAnalysis,
-	SiteForAnalysis,
-} from "./types"
+import type { CampaignThemes, EnhancedLocationCreationArgs, NearbyEntitiesForLocation } from "./types"
 
 export async function gatherLocationCreationContext(args: EnhancedLocationCreationArgs) {
 	logger.info("Gathering location creation context", args)
@@ -35,6 +21,12 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				},
 				encounters: { columns: { id: true, name: true, objectiveType: true, encounterCategory: true } },
 				secrets: { columns: { id: true, secretType: true, difficultyToDiscover: true } },
+				npcAssociations: {
+					with: {
+						npc: { columns: { id: true, name: true, occupation: true } },
+					},
+					columns: { associationType: true },
+				},
 			},
 			columns: {
 				id: true,
@@ -289,104 +281,42 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		const campaignThemes: CampaignThemes = {
 			relevantQuests,
-			activeConflicts: activeConflicts.map((c) => ({
-				...c,
-				participants: c.participants.map((p) => ({
-					faction: p.faction,
-					npc: p.npc,
-				})),
-			})),
-			foreshadowingElements: foreshadowingSeeds.map((fs) => ({
-				id: fs.id,
-				targetEntityType: fs.targetEntityType,
-				subtlety: fs.subtlety,
-				narrativeWeight: fs.narrativeWeight,
-				description: fs.description,
-				sourceSite: fs.sourceSite,
-				targetSite: fs.targetSite,
-			})),
+			activeConflicts,
+			foreshadowingElements: foreshadowingSeeds,
 		}
 
 		// Generate analysis and suggestions
 		const locationAnalysis = analyzeLocationLandscape({
-			existingSites: existingSites.map((s) => ({
-				...s,
-				encounters: s.encounters.map((e) => ({
-					objectiveType: e.objectiveType,
-					encounterCategory: e.encounterCategory,
-				})),
-				secrets: s.secrets.map((sec) => ({
-					secretType: sec.secretType,
-				})),
-			})),
-			existingEncounters: existingEncounters.map((e) => ({
-				objectiveType: e.objectiveType,
-				encounterCategory: e.encounterCategory,
-			})),
-			existingSecrets: existingSecrets.map((s) => ({
-				secretType: s.secretType,
-			})),
-			factionInfluence: factionInfluence.map((fi) => ({
-				influenceLevel: fi.influenceLevel,
-				faction: { id: fi.faction.id, name: fi.faction.name },
-				site: fi.site,
-				area: fi.area,
-				region: fi.region,
-			})),
-			questStages: questStages.map((qs) => ({
-				stageType: qs.stageType,
-				stageImportance: qs.stageImportance,
-				site: qs.site,
-			})),
-			activeConflicts: activeConflicts.map((ac) => ({
-				name: ac.name,
-				participants: ac.participants.map((p) => ({
-					faction: p.faction,
-					npc: p.npc,
-				})),
-			})),
+			existingSites,
+			existingEncounters,
+			existingSecrets,
+			factionInfluence,
+			questStages,
+			activeConflicts,
 		})
 
 		const connectionSuggestions = generateLocationConnectionSuggestions(
 			args,
-			existingSites,
+			existingSites.map((s) => ({
+				...s,
+				npcs: s.npcAssociations,
+			})),
 			availableRegions,
 			existingLinks,
 		)
 
 		return {
 			nameConflicts,
-			existingSites: existingSites.map((s) => ({
-				...s,
-				encounters: s.encounters.map((e) => ({
-					id: e.id,
-					name: e.name,
-					objectiveType: e.objectiveType,
-					encounterCategory: e.encounterCategory,
-				})),
-				secrets: s.secrets.map((sec) => ({
-					id: sec.id,
-					secretType: sec.secretType,
-					difficultyToDiscover: sec.difficultyToDiscover,
-				})),
-				npcs: s.npcs.map((n) => ({
-					associationType: n.associationType,
-					npc: {
-						id: n.npc.id,
-						name: n.npc.name,
-						occupation: n.npc.occupation,
-					},
-				})),
-			})) as SiteForAnalysis[],
-			availableRegions: availableRegions as RegionForAnalysis[],
-			existingEncounters: existingEncounters as EncounterForAnalysis[],
-			existingSecrets: existingSecrets as SecretForAnalysis[],
-			existingLinks: existingLinks as LinkForAnalysis[],
-			npcSiteAssociations: npcSiteAssociations as NPCSiteAssociationForAnalysis[],
-			factionInfluence: factionInfluence as FactionInfluenceForAnalysis[],
-			questStages: questStages as QuestStageForAnalysis[],
-			foreshadowingSeeds: foreshadowingSeeds as ForeshadowingSeedForAnalysis[],
-			itemHistory: itemHistory as ItemHistoryForAnalysis[],
+			existingSites,
+			availableRegions,
+			existingEncounters,
+			existingSecrets,
+			existingLinks,
+			npcSiteAssociations,
+			factionInfluence,
+			questStages,
+			foreshadowingSeeds,
+			itemHistory,
 			nearbyEntities,
 			campaignThemes,
 			locationAnalysis,

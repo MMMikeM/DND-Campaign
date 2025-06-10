@@ -1,3 +1,4 @@
+import { search } from "fast-fuzzy"
 import type {
 	EnhancedLocationCreationArgs,
 	LinkForAnalysis,
@@ -83,47 +84,53 @@ export function generateLocationConnectionSuggestions(
 	}
 
 	// Type-based connection suggestions
-	if (args.type_hint) {
+	if (args.type_hint && args.type_hint !== "" && args.type_hint !== undefined) {
+		const typeHint = args.type_hint
 		const relatedSites = existingSites.filter((site) => {
 			// Find sites that would logically connect to this type
-			const connectionType = getAppropriateConnectionType(args.type_hint!, site.type)
+			const connectionType = getAppropriateConnectionType(typeHint, site.type)
 			return connectionType !== "near" // Only include meaningful connections
 		})
 
-		suggestions.typeBasedConnections = relatedSites.slice(0, 5).map((site) => {
-			const connectionType = getAppropriateConnectionType(args.type_hint!, site.type)
-			return `${connectionType} ${site.name} (${site.type}) - ${getStrategicReason(args.type_hint!)}`
+		suggestions.typeBasedConnections = relatedSites.map((site) => {
+			const connectionType = getAppropriateConnectionType(typeHint, site.type)
+			return `${connectionType} ${site.name} (${site.type}) - ${getStrategicReason(typeHint)}`
 		})
 	}
 
-	// Regional connection suggestions
+	// Regional connection suggestions with fuzzy matching
 	if (args.region_hint) {
-		const matchingRegions = availableRegions.filter((region) =>
-			region.name.toLowerCase().includes(args.region_hint!.toLowerCase()),
-		)
+		const regionHint = args.region_hint
+		// Use fuzzy search to find matching regions
+		const regionNames = availableRegions.map((r) => r.name)
+		const fuzzyMatches = search(regionHint, regionNames, { threshold: 0.6 })
+
+		const matchingRegions = availableRegions.filter((region) => fuzzyMatches.includes(region.name))
 
 		suggestions.regionalConnections = matchingRegions.flatMap((region) => {
 			const regionSites = existingSites.filter((site) => site.area?.region.name === region.name)
 
-			return regionSites.slice(0, 3).map((site) => {
+			return regionSites.map((site) => {
 				const role = getRegionalRole(args.type_hint)
 				return `Connect to ${site.name} in ${region.name} - serves as ${role}`
 			})
 		})
 	}
 
-	// Purpose-based connections
+	// Purpose-based connections with fuzzy matching
 	if (args.purpose_hint) {
 		const purposeKeywords = args.purpose_hint.toLowerCase().split(" ")
 
 		const relatedSites = existingSites.filter((site) => {
 			const siteDescription = site.description.join(" ").toLowerCase()
 			const siteFeatures = site.features.join(" ").toLowerCase()
+			const searchableText = `${siteDescription} ${siteFeatures}`
 
-			return purposeKeywords.some((keyword) => siteDescription.includes(keyword) || siteFeatures.includes(keyword))
+			// Use fuzzy search on the combined text
+			return purposeKeywords.some((keyword) => search(keyword, [searchableText], { threshold: 0.4 }).length > 0)
 		})
 
-		suggestions.purposeBasedConnections = relatedSites.slice(0, 4).map((site) => {
+		suggestions.purposeBasedConnections = relatedSites.map((site) => {
 			return `Functional connection to ${site.name} - shared ${args.purpose_hint} purpose`
 		})
 	}
@@ -134,7 +141,7 @@ export function generateLocationConnectionSuggestions(
 		(type) => !existingLinkTypes.includes(type),
 	)
 
-	if (underrepresentedLinkTypes.length > 0) {
+	if (underrepresentedLinkTypes?.[0]) {
 		suggestions.strategicPositioning.push(
 			`Consider ${underrepresentedLinkTypes[0]} connection - underrepresented link type`,
 		)
@@ -150,21 +157,24 @@ export function generateLocationConnectionSuggestions(
 	})
 
 	const isolatedSites = siteConnectionCounts.filter((sc) => sc.connectionCount === 0)
-	if (isolatedSites.length > 0) {
-		suggestions.strategicPositioning.push(
-			`Connect to isolated ${isolatedSites[0].site.name} - currently has no connections`,
-		)
+	if (isolatedSites?.[0]) {
+		const firstIsolatedSite = isolatedSites[0]
+		if (firstIsolatedSite) {
+			suggestions.strategicPositioning.push(
+				`Connect to isolated ${firstIsolatedSite.site.name} - currently has no connections`,
+			)
+		}
 	}
 
 	// Unique connection opportunities
 	// Look for atmosphere-based connections
-	if (availableRegions.length > 0) {
-		const atmosphereTypes = [...new Set(availableRegions.map((r) => r.atmosphereType))]
+	if (availableRegions?.[0]) {
+		const atmosphereTypes = Array.from(new Set(availableRegions.map((r) => r.atmosphereType)))
 
 		atmosphereTypes.forEach((atmosphere) => {
 			const sitesInAtmosphere = existingSites.filter((site) => site.area?.region)
 
-			if (sitesInAtmosphere.length > 0) {
+			if (sitesInAtmosphere?.[0]) {
 				const atmosphereContribution = getAtmosphereContribution(atmosphere, args.type_hint)
 				suggestions.uniqueConnectionOpportunities.push(
 					`${atmosphere} atmosphere connection - ${atmosphereContribution}`,
@@ -175,29 +185,35 @@ export function generateLocationConnectionSuggestions(
 
 	// Look for encounter-based connections
 	const encounterSites = existingSites.filter((site) => site.encounters.length > 0)
-	if (encounterSites.length > 0) {
-		const encounterType = encounterSites[0].encounters[0].objectiveType
-		suggestions.uniqueConnectionOpportunities.push(
-			`Encounter chain connection - link to ${encounterSites[0].name} with ${encounterType} encounter`,
-		)
+	if (encounterSites?.[0]) {
+		const [firstEncounterSite] = encounterSites
+		if (firstEncounterSite?.encounters?.[0]) {
+			suggestions.uniqueConnectionOpportunities.push(
+				`Encounter chain connection - link to ${firstEncounterSite.name} with ${firstEncounterSite.encounters[0].objectiveType} encounter`,
+			)
+		}
 	}
 
 	// Look for secret-based connections
 	const secretSites = existingSites.filter((site) => site.secrets.length > 0)
-	if (secretSites.length > 0) {
-		const secretType = secretSites[0].secrets[0].secretType
-		suggestions.uniqueConnectionOpportunities.push(
-			`Mystery connection - link to ${secretSites[0].name} with ${secretType} secret`,
-		)
+	if (secretSites?.[0]) {
+		const [firstSecretSite] = secretSites
+		if (firstSecretSite?.secrets?.[0]) {
+			suggestions.uniqueConnectionOpportunities.push(
+				`Mystery connection - link to ${firstSecretSite.name} with ${firstSecretSite.secrets[0].secretType} secret`,
+			)
+		}
 	}
 
 	// NPC-based connection opportunities
 	const npcSites = existingSites.filter((site) => site.npcs.length > 0)
-	if (npcSites.length > 0) {
-		const npcOccupation = npcSites[0].npcs[0].npc.occupation
-		suggestions.uniqueConnectionOpportunities.push(
-			`Social connection - link through ${npcOccupation} at ${npcSites[0].name}`,
-		)
+	if (npcSites?.[0]) {
+		const [firstNpcSite] = npcSites
+		if (firstNpcSite?.npcs?.[0]) {
+			suggestions.uniqueConnectionOpportunities.push(
+				`Social connection - link through ${firstNpcSite.npcs[0].npc.occupation} at ${firstNpcSite.name}`,
+			)
+		}
 	}
 
 	return suggestions
