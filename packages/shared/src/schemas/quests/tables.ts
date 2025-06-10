@@ -10,9 +10,8 @@ import { regions, sites } from "../regions/tables"
 import { enums as questEnums } from "./enums"
 import * as stageModule from "./stages/tables"
 
-const { enums: stageEnums, questStages, stageDecisions } = stageModule
-
-export { questStages, stageDecisions }
+const { enums: stageEnums, questStages, stageDecisions, npcStageInvolvement } = stageModule
+export { questStages, stageDecisions, npcStageInvolvement }
 
 const {
 	hookTypes,
