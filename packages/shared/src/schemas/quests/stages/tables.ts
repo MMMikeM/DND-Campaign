@@ -4,6 +4,7 @@ import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../../db/utils"
 import { embeddings } from "../../embeddings/tables"
+import { npcs } from "../../npc/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
 import { enums } from "./enums"
@@ -21,6 +22,7 @@ export const questStages = pgTable("quest_stages", {
 
 	questId: cascadeFk("quest_id", () => quests.id),
 	siteId: nullableFk("site_id", sites.id),
+	deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
 	stageOrder: integer("stage_order").notNull(),
 	name: string("name").unique(),
 	dramatic_question: string("dramatic_question"),
@@ -77,4 +79,23 @@ export const stageDecisions = pgTable(
 			sql`(${t.failure_leads_to_retry} = FALSE) OR (${t.failure_lesson_learned} IS NOT NULL)`,
 		),
 	],
+)
+
+export const npcStageInvolvement = pgTable(
+	"npc_stage_involvement",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		npcId: cascadeFk("npc_id", npcs.id),
+		questStageId: cascadeFk("quest_stage_id", questStages.id),
+
+		roleInStage: string("role_in_stage"),
+		involvementDetails: list("involvement_details"),
+		isOptional: boolean("is_optional").notNull().default(false),
+	},
+	(t) => [unique().on(t.npcId, t.questStageId)],
 )
