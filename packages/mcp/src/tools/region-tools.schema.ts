@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
-	regionTables: { regions, areas, sites, regionConnections, siteEncounters, siteLinks, siteSecrets, enums },
+	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, enums },
 } = tables
 
 type TableNames = CreateTableNames<typeof tables.regionTables>
@@ -13,7 +13,6 @@ export const tableEnum = [
 	"regions",
 	"areas",
 	"sites",
-	"regionConnections",
 	"siteLinks",
 	"siteEncounters",
 	"siteSecrets",
@@ -101,7 +100,7 @@ export const schemas = {
 		movementRoutes: (s) => s.describe("Movement routes for this site"),
 		name: (s) => s.describe("Specific name of this location"),
 		sightLines: (s) => s.describe("Sight lines for this site"),
-		siteType: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
+		type: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
 		smells: (s) => s.describe("Distinctive odors and scents"),
 		soundscape: (s) => s.describe("Characteristic sounds and acoustic elements"),
 		tacticalPositions: (s) => s.describe("Tactical positions for this site"),
@@ -128,29 +127,6 @@ export const schemas = {
 			"Tactical battlemap locations where encounters and combat take place. Sites MUST include a battlemap image with complete metadata as they represent specific combat environments.",
 		),
 
-	regionConnections: createInsertSchema(regionConnections, {
-		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
-		controllingFactionId: (s) => s.describe("ID of faction controlling this region"),
-		routeType: z.enum(enums.routeTypes).describe("Route type (road, river, air, sea)"),
-		travelDifficulty: z.enum(enums.travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
-		travelHazards: (s) => s.describe("Travel hazards for this region"),
-		travelTime: (s) => s.describe("Travel time for this region"),
-		connectionType: z.enum(enums.connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
-		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
-		description: (s) => s.describe("How these regions interact and current dynamics"),
-		gmNotes: (s) => s.describe("GM notes for this connection"),
-		otherRegionId: id.describe("Required ID of secondary region in this relationship"),
-		regionId: id.describe("Required ID of primary region in this relationship"),
-		tags: (s) => s.describe("Tags for this connection"),
-	})
-		.omit({ id: true })
-		.strict()
-		.describe("Political, economic, and geographical relationships between different regions")
-		.refine((data) => data.regionId !== data.otherRegionId, {
-			message: "A region cannot have a connection with itself",
-			path: ["otherRegionId"],
-		}),
-
 	siteLinks: createInsertSchema(siteLinks, {
 		creativePrompts: (s) => s.describe("Story ideas involving travel or interaction"),
 		description: (s) => s.describe("Physical connections and proximity between sites"),
@@ -169,17 +145,34 @@ export const schemas = {
 		}),
 
 	siteEncounters: createInsertSchema(siteEncounters, {
-		creativePrompts: (s) => s.describe("Variations and alternative approaches"),
-		creatures: (s) => s.describe("Enemies, NPCs, or beings involved"),
-		dangerLevel: z.enum(enums.dangerLevels).describe("Threat level (safe, low, moderate, high, deadly)"),
-		description: (s) => s.describe("Setup and possible outcomes in point form"),
-		difficulty: z.enum(enums.difficultyLevels).describe("Challenge level (easy, medium, hard)"),
-		encounterType: z.enum(enums.encounterTypes).describe("Interaction type (combat, social, puzzle, trap)"),
-		gmNotes: (s) => s.describe("GM notes for this encounter"),
 		name: (s) => s.describe("Distinctive title for this encounter"),
 		siteId: id.describe("Required ID of site where this encounter occurs"),
+
+		encounterVibe: (s) => s.describe("Vibe of this encounter"),
+		creativePrompts: (s) => s.describe("Variations and alternative approaches"),
+		gmNotes: (s) => s.describe("GM notes for this encounter"),
 		tags: (s) => s.describe("Tags for this encounter"),
-		treasure: (s) => s.describe("Rewards and valuable items obtainable"),
+
+		objectiveType: z.enum(enums.objectiveTypes).describe("Type of objective for this encounter"),
+		objectiveDetails: (s) => s.describe("Details of the objective for this encounter"),
+		hasTimer: z.boolean().describe("Whether this encounter has a timer"),
+		timerValue: (s) => s.describe("Value of the timer for this encounter"),
+		timerUnit: (s) => s.describe("Unit of the timer for this encounter"),
+		timerConsequence: (s) => s.describe("Consequence of the timer for this encounter"),
+
+		coreEnemyGroups: (s) => s.describe("Core enemy groups for this encounter"),
+		synergyDescription: (s) => s.describe("Synergy description for this encounter"),
+
+		encounterCategory: z.enum(enums.objectiveTypes).describe("Category of this encounter"),
+		recommendedProficiencyBonus: (s) => s.describe("Recommended proficiency bonus for this encounter"),
+
+		specialVariations: (s) => s.describe("Special variations for this encounter"),
+		nonCombatOptions: (s) => s.describe("Non-combat options for this encounter"),
+
+		encounterSpecificEnvironmentNotes: (s) => s.describe("Specific environment notes for this encounter"),
+		interactiveElements: (s) => s.describe("Interactive elements for this encounter"),
+
+		treasureOrRewards: (s) => s.describe("Treasure or rewards for this encounter"),
 	})
 		.omit({ id: true, embeddingId: true })
 		.strict()

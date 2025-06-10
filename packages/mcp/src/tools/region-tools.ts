@@ -50,17 +50,9 @@ export const entityGetters = createEntityGetters({
 				area: { columns: { name: true, id: true } },
 				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
-				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+				npcAssociations: { with: { npc: { columns: { name: true, id: true } } } },
 			},
 		}),
-	all_region_connections: () =>
-		db.query.regionConnections.findMany({
-			with: {
-				sourceRegion: { columns: { name: true, id: true } },
-				targetRegion: { columns: { name: true, id: true } },
-			},
-		}),
-
 	all_site_encounters: () =>
 		db.query.siteEncounters.findMany({
 			with: {
@@ -106,27 +98,15 @@ export const entityGetters = createEntityGetters({
 		db.query.sites.findFirst({
 			where: (sites, { eq }) => eq(sites.id, id),
 			with: {
-				items: true,
 				secrets: true,
 				encounters: true,
 				area: { columns: { id: true, name: true } },
-				npcs: { with: { npc: { columns: { name: true, id: true } } } },
+				npcAssociations: { with: { npc: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
 			},
 		}),
-	region_connection_by_id: (id: number) =>
-		db.query.regionConnections.findFirst({
-			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
-			with: {
-				sourceRegion: {
-					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } } },
-				},
-				targetRegion: {
-					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } } },
-				},
-			},
-		}),
+
 	site_link_by_id: (id: number) =>
 		db.query.siteLinks.findFirst({
 			where: (siteLinks, { eq }) => eq(siteLinks.id, id),

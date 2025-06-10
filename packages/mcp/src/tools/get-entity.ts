@@ -33,7 +33,7 @@ const formatResponse = (message: string, isError = false): ToolHandlerReturn => 
 	content: [{ type: "text", text: message }],
 })
 
-export const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => {
+const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => {
 	logger.info(`Received arguments for get_entity: ${JSON.stringify(args)}`)
 	const parseResult = getEntitySchema.safeParse(args)
 	if (!parseResult.success) {

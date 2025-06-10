@@ -246,7 +246,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 				relatedFactions: {
 					with: { faction: { columns: { name: true, type: true } } },
 				},
-				relatedSites: {
+				siteAssociations: {
 					with: { site: { columns: { name: true, type: true } } },
 				},
 				outgoingRelationships: {
@@ -281,7 +281,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 				role: rel.role,
 				loyalty: rel.loyalty,
 			})),
-			location_context: npc.relatedSites.map((rel) => ({
+			location_context: npc.siteAssociations.map((rel) => ({
 				site_name: rel.site?.name || "Unknown",
 				site_type: rel.site?.type || "Unknown",
 				description: rel.description,
@@ -328,7 +328,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 					},
 					encounters: true,
 					secrets: true,
-					npcs: {
+					npcAssociations: {
 						with: { npc: { columns: { name: true, occupation: true } } },
 					},
 				},
@@ -366,7 +366,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 					type: secret.secretType,
 					difficulty: secret.difficultyToDiscover,
 				})),
-				npcs_present: site.npcs.map((rel) => ({
+				npcs_present: site.npcAssociations.map((rel) => ({
 					name: rel.npc.name,
 					occupation: rel.npc.occupation,
 					description: rel.description,

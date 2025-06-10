@@ -12,6 +12,7 @@ export const entityGetters = createEntityGetters({
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
 	all_faction_influence: () => db.query.factionInfluence.findMany({}),
+	all_region_connections: () => db.query.regionConnections.findMany({}),
 	faction_by_id: (id: number) =>
 		db.query.factions.findFirst({
 			where: (factions, { eq }) => eq(factions.id, id),
@@ -50,6 +51,18 @@ export const entityGetters = createEntityGetters({
 		db.query.factionInfluence.findFirst({
 			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
 			with: { faction: true, region: true, area: true, site: true },
+		}),
+	region_connection_by_id: (id: number) =>
+		db.query.regionConnections.findFirst({
+			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
+			with: {
+				sourceRegion: {
+					with: { incomingRelations: { with: { sourceRegion: { columns: { name: true, id: true } } } } },
+				},
+				targetRegion: {
+					with: { outgoingRelations: { with: { targetRegion: { columns: { name: true, id: true } } } } },
+				},
+			},
 		}),
 })
 

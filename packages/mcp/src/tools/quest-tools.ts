@@ -14,6 +14,7 @@ export const entityGetters = createEntityGetters({
 	all_quest_hooks: () => db.query.questHooks.findMany({}),
 	all_quest_participant_involvement: () => db.query.questParticipantInvolvement.findMany({}),
 	all_quest_relationships: () => db.query.questRelationships.findMany({}),
+	all_npc_stage_involvement: () => db.query.npcStageInvolvement.findMany({}),
 
 	quest_by_id: (id: number) =>
 		db.query.quests.findFirst({
@@ -80,6 +81,14 @@ export const entityGetters = createEntityGetters({
 			with: {
 				sourceQuest: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
+			},
+		}),
+	npc_stage_involvement_by_id: (id: number) =>
+		db.query.npcStageInvolvement.findFirst({
+			where: (npcStageInvolvement, { eq }) => eq(npcStageInvolvement.id, id),
+			with: {
+				questStage: { columns: { name: true, id: true } },
+				npc: { columns: { name: true, id: true } },
 			},
 		}),
 })
