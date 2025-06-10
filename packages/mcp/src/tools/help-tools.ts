@@ -1,11 +1,9 @@
 import { search } from "fast-fuzzy"
 import { logger } from ".."
 import zodToMCP from "../zodToMcp"
-import { toolSchema } from "./help-tools.schema"
+import { schemas } from "./help-tools.schema"
 import {
 	conflicts,
-	context,
-	// embeddings,
 	events,
 	factions,
 	fuzzySearch,
@@ -26,11 +24,9 @@ function isStringArray(value: unknown): value is string[] {
 const handler = async (args?: Record<string, unknown>) => {
 	const category = args?.category as string | undefined
 	const toolName = args?.tool as string | undefined
-
+	// What's the deal
 	const categories = {
 		conflicts: conflicts.tools,
-		context: context.tools,
-		// embeddings: embeddings.tools,
 		events: events.tools,
 		factions: factions.tools,
 		fuzzySearch: fuzzySearch.tools,
@@ -225,7 +221,7 @@ ${tool.name}({
 export const helpToolDefinitions: Record<string, ToolDefinition> = {
 	help: {
 		description: "Get help with available tools, organized by category or detailed info about a specific tool",
-		inputSchema: zodToMCP(toolSchema),
+		inputSchema: zodToMCP(schemas.help),
 		handler,
 	},
 }

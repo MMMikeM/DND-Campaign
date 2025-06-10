@@ -7,8 +7,6 @@ import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./types"
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
 export type Schema<T extends string> = Record<T, z.ZodObject>
 
-export const camelToSnakeCase = (str: string) => str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
-
 export const id = z.coerce.number()
 export const optionalId = z.coerce.number().optional()
 

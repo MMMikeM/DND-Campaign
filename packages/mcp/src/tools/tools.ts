@@ -3,7 +3,6 @@ import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
 import { conflictToolDefinitions } from "./conflict-tools"
-import { contextToolDefinitions } from "./context-tools"
 import { eventToolDefinitions } from "./events-tools"
 import { factionToolDefinitions } from "./faction-tools"
 import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
@@ -41,10 +40,8 @@ export const regions = extractToolsAndHandlers(regionToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
 export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
-export const context = extractToolsAndHandlers(contextToolDefinitions)
 export const narrative = extractToolsAndHandlers(narrativeToolDefinitions)
 export const worldbuilding = extractToolsAndHandlers(worldbuildingToolDefinitions)
-// export const embeddings = extractToolsAndHandlers(embeddingToolDefinitions)
 export const events = extractToolsAndHandlers(eventToolDefinitions)
 export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
 export const items = extractToolsAndHandlers(itemToolDefinitions)
@@ -56,7 +53,6 @@ export function registerToolHandlers(server: Server) {
 	const tools = [
 		...help.tools,
 		...getEntity.tools,
-		...context.tools,
 		...factions.tools,
 		...regions.tools,
 		...npcs.tools,
@@ -68,13 +64,11 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.tools,
 		...items.tools,
 		...fuzzySearch.tools,
-		// ...embeddings.tools,
 	]
 
 	const allToolHandlers = {
 		...help.handlers,
 		...getEntity.handlers,
-		...context.handlers,
 		...factions.handlers,
 		...regions.handlers,
 		...npcs.handlers,
@@ -86,7 +80,6 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.handlers,
 		...items.handlers,
 		...fuzzySearch.handlers,
-		// ...embeddings.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))

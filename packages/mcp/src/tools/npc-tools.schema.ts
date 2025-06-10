@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
 	npcTables: { npcs, npcRelationships, npcFactions, npcSites, enums },
@@ -27,7 +27,6 @@ export const schemas = {
 		capability: z.enum(enums.cprScores).describe("Competence level (low, medium, high)"),
 		complexityProfile: z.enum(enums.characterComplexityProfiles).describe("Character complexity archetype"),
 		currentGoals: (s) => s.describe("Current objectives and motivations"),
-		currentLocationId: optionalId.describe("ID of the site where this NPC is currently located"),
 		dialogue: (s) => s.describe("Signature phrases and speech patterns for roleplaying"),
 		disposition: (s) => s.describe("Default attitude toward strangers"),
 		drives: (s) => s.describe("Core motivations and desires that inspire actions"),
@@ -80,6 +79,7 @@ export const schemas = {
 		npcId: id.describe("ID of the NPC who can be found here"),
 		siteId: id.describe("ID of the site where this NPC can be encountered"),
 		associationType: z.enum(enums.siteAssociationTypes).describe("Type of association with this site"),
+		isCurrent: z.boolean().describe("Whether this is the NPC's current location"),
 		description: (s) => s.describe("How and why the NPC frequents this place and their activities"),
 		creativePrompts: (s) => s.describe("Story hooks involving this NPC at this site"),
 		gmNotes: (s) => s.describe("GM-only notes about this site association"),
