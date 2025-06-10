@@ -347,6 +347,7 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(dpi.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dpi.id IS NOT NULL), '[]'::jsonb) AS related_destination_involvement,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qh.id, 'source', qh.source, 'hook_content', qh.hook_content)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_quest_hooks,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'quest', jsonb_build_object('id', q_stage_delivery.id, 'name', q_stage_delivery.name))) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_quest_stage_deliveries,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(nsi.*), 'stage', jsonb_build_object('id', si.id, 'name', si.name), 'quest', jsonb_build_object('id', q_involvement.id, 'name', q_involvement.name))) FILTER (WHERE nsi.id IS NOT NULL), '[]'::jsonb) AS related_stage_involvement,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_out.*), 'relatedNpc', jsonb_build_object('id', rn_out.id, 'name', rn_out.name))) FILTER (WHERE nr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships
@@ -371,6 +372,9 @@ LEFT JOIN quest_hooks qh ON qh.delivery_npc_id = n.id
 LEFT JOIN quests q_delivery ON qh.quest_id = q_delivery.id
 LEFT JOIN quest_stages qs ON qs.delivery_npc_id = n.id
 LEFT JOIN quests q_stage_delivery ON qs.quest_id = q_stage_delivery.id
+LEFT JOIN npc_stage_involvement nsi ON nsi.npc_id = n.id
+LEFT JOIN quest_stages si ON nsi.quest_stage_id = si.id
+LEFT JOIN quests q_involvement ON si.quest_id = q_involvement.id
 LEFT JOIN world_concept_links wcl ON wcl.npc_id = n.id
 LEFT JOIN npc_relationships nr_out ON nr_out.npc_id = n.id
 LEFT JOIN npcs rn_out ON nr_out.related_npc_id = rn_out.id
@@ -392,13 +396,14 @@ SELECT
   COALESCE(jsonb_build_object('id', pq.id, 'name', pq.name), '{}'::jsonb) AS related_parent_quest,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(qr_out.*), 'targetQuest', jsonb_build_object('id', tq.id, 'name', tq.name))) FILTER (WHERE qr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(qr_in.*), 'sourceQuest', jsonb_build_object('id', sq.id, 'name', sq.name))) FILTER (WHERE qr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'stage_order', qs.stage_order, 'stage_type', qs.stage_type)) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_stages,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'stage_order', qs.stage_order, 'stage_type', qs.stage_type, 'deliveryNpc', CASE WHEN qs.delivery_npc_id IS NOT NULL THEN jsonb_build_object('id', dn.id, 'name', dn.name) END)) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_stages,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('hook', to_jsonb(qh.*), 'site', CASE WHEN qh.site_id IS NOT NULL THEN jsonb_build_object('id', h_s.id, 'name', h_s.name) END, 'faction', CASE WHEN qh.faction_id IS NOT NULL THEN jsonb_build_object('id', h_f.id, 'name', h_f.name) END, 'deliveryNpc', CASE WHEN qh.delivery_npc_id IS NOT NULL THEN jsonb_build_object('id', h_n.id, 'name', h_n.name) END)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_hooks,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'involvement', to_jsonb(qpi.*),
     'npc', CASE WHEN qpi.npc_id IS NOT NULL THEN jsonb_build_object('id', p_n.id, 'name', p_n.name) END,
     'faction', CASE WHEN qpi.faction_id IS NOT NULL THEN jsonb_build_object('id', p_f.id, 'name', p_f.name) END
   )) FILTER (WHERE qpi.id IS NOT NULL), '[]'::jsonb) AS related_participant_involvement,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(nsi.*), 'npc', jsonb_build_object('id', si_n.id, 'name', si_n.name), 'stage', jsonb_build_object('id', si_s.id, 'name', si_s.name))) FILTER (WHERE nsi.id IS NOT NULL), '[]'::jsonb) AS related_stage_npc_involvement,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('role', to_jsonb(dqr.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dqr.id IS NOT NULL), '[]'::jsonb) AS related_destination_contributions,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c.id, 'description', c.description)) FILTER (WHERE c.id IS NOT NULL), '[]'::jsonb) AS related_consequences,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ne.id, 'description', ne.description)) FILTER (WHERE ne.id IS NOT NULL), '[]'::jsonb) AS related_narrative_events,
@@ -414,6 +419,7 @@ LEFT JOIN quests tq ON qr_out.related_quest_id = tq.id
 LEFT JOIN quest_relationships qr_in ON qr_in.related_quest_id = q.id
 LEFT JOIN quests sq ON qr_in.quest_id = sq.id
 LEFT JOIN quest_stages qs ON qs.quest_id = q.id
+LEFT JOIN npcs dn ON qs.delivery_npc_id = dn.id
 LEFT JOIN quest_hooks qh ON qh.quest_id = q.id
 LEFT JOIN sites h_s ON qh.site_id = h_s.id
 LEFT JOIN factions h_f ON qh.faction_id = h_f.id
@@ -421,6 +427,9 @@ LEFT JOIN npcs h_n ON qh.delivery_npc_id = h_n.id
 LEFT JOIN quest_participant_involvement qpi ON qpi.quest_id = q.id
 LEFT JOIN npcs p_n ON qpi.npc_id = p_n.id
 LEFT JOIN factions p_f ON qpi.faction_id = p_f.id
+LEFT JOIN npc_stage_involvement nsi ON nsi.quest_stage_id IN (SELECT id FROM quest_stages WHERE quest_id = q.id)
+LEFT JOIN npcs si_n ON nsi.npc_id = si_n.id
+LEFT JOIN quest_stages si_s ON nsi.quest_stage_id = si_s.id
 LEFT JOIN destination_quest_roles dqr ON dqr.quest_id = q.id
 LEFT JOIN narrative_destinations nd ON dqr.destination_id = nd.id
 LEFT JOIN consequences c ON c.trigger_quest_id = q.id

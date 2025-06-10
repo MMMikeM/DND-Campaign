@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS vector;
-
 CREATE TABLE "conflict_participants" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"creative_prompts" text[] NOT NULL,
@@ -444,6 +442,7 @@ CREATE TABLE "npc_sites" (
 	"npc_id" integer NOT NULL,
 	"site_id" integer NOT NULL,
 	"association_type" text NOT NULL,
+	"is_current" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "npc_sites_npc_id_site_id_association_type_unique" UNIQUE("npc_id","site_id","association_type")
 );
 --> statement-breakpoint
@@ -469,7 +468,6 @@ CREATE TABLE "npcs" (
 	"quirk" text NOT NULL,
 	"social_status" text NOT NULL,
 	"availability" text NOT NULL,
-	"current_site_id" integer,
 	"current_goals" text[] NOT NULL,
 	"appearance" text[] NOT NULL,
 	"avoid_topics" text[] NOT NULL,
@@ -492,6 +490,20 @@ CREATE TABLE "npcs" (
 	CONSTRAINT "npcs_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
+CREATE TABLE "npc_stage_involvement" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	"description" text[] NOT NULL,
+	"gm_notes" text[] NOT NULL,
+	"tags" text[] NOT NULL,
+	"npc_id" integer NOT NULL,
+	"quest_stage_id" integer NOT NULL,
+	"role_in_stage" text NOT NULL,
+	"involvement_details" text[] NOT NULL,
+	"is_optional" boolean DEFAULT false NOT NULL,
+	CONSTRAINT "npc_stage_involvement_npc_id_quest_stage_id_unique" UNIQUE("npc_id","quest_stage_id")
+);
+--> statement-breakpoint
 CREATE TABLE "quest_stages" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"creative_prompts" text[] NOT NULL,
@@ -500,6 +512,7 @@ CREATE TABLE "quest_stages" (
 	"tags" text[] NOT NULL,
 	"quest_id" integer NOT NULL,
 	"site_id" integer,
+	"delivery_npc_id" integer,
 	"stage_order" integer NOT NULL,
 	"name" text NOT NULL,
 	"dramatic_question" text NOT NULL,
@@ -931,10 +944,12 @@ ALTER TABLE "npc_relationships" ADD CONSTRAINT "npc_relationships_npc_id_npcs_id
 ALTER TABLE "npc_relationships" ADD CONSTRAINT "npc_relationships_related_npc_id_npcs_id_fk" FOREIGN KEY ("related_npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_sites" ADD CONSTRAINT "npc_sites_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_sites" ADD CONSTRAINT "npc_sites_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "npcs" ADD CONSTRAINT "npcs_current_location_id_sites_id_fk" FOREIGN KEY ("current_location_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npcs" ADD CONSTRAINT "npcs_embedding_id_embeddings_id_fk" FOREIGN KEY ("embedding_id") REFERENCES "public"."embeddings"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_stage_involvement" ADD CONSTRAINT "npc_stage_involvement_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_stage_involvement" ADD CONSTRAINT "npc_stage_involvement_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_delivery_npc_id_npcs_id_fk" FOREIGN KEY ("delivery_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_embedding_id_embeddings_id_fk" FOREIGN KEY ("embedding_id") REFERENCES "public"."embeddings"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stage_decisions" ADD CONSTRAINT "stage_decisions_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stage_decisions" ADD CONSTRAINT "stage_decisions_from_stage_id_quest_stages_id_fk" FOREIGN KEY ("from_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -970,4 +985,5 @@ ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_faction_id
 ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_conflict_id_major_conflicts_id_fk" FOREIGN KEY ("conflict_id") REFERENCES "public"."major_conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concepts" ADD CONSTRAINT "world_concepts_embedding_id_embeddings_id_fk" FOREIGN KEY ("embedding_id") REFERENCES "public"."embeddings"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "world_concepts" ADD CONSTRAINT "world_concepts_embedding_id_embeddings_id_fk" FOREIGN KEY ("embedding_id") REFERENCES "public"."embeddings"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+CREATE UNIQUE INDEX "unique_current_per_npc" ON "npc_sites" USING btree ("npc_id") WHERE "npc_sites"."is_current" = true;
