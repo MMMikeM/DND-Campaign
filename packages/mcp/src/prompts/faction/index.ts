@@ -1,7 +1,7 @@
 /**
  * Faction Creation
  *
- * Provides the "create-faction-enhanced" prompt for generating detailed factions
+ * Provides the "create-faction" prompt for generating detailed factions
  * with comprehensive political analysis, relationship mapping, territorial influence,
  * and narrative integration suggestions based on existing campaign context.
  */
@@ -120,8 +120,8 @@ Generate specific, actionable content that a GM can immediately use in their cam
 }
 
 // Create the prompt definition
-export const enhancedFactionPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-faction-enhanced": {
+export const factionPromptDefinitions: Record<string, PromptDefinition> = {
+	"create-faction": {
 		description:
 			"Create a detailed faction with comprehensive political analysis, relationship mapping, and campaign integration suggestions",
 		schema: factionCreationSchema,

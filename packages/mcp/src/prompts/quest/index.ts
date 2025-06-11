@@ -1,7 +1,7 @@
 /**
  * Quest Creation
  *
- * Provides the "create-quest-enhanced" prompt for generating complex adventures
+ * Provides the "create-quest" prompt for generating complex adventures
  * with multi-stage development, faction involvement analysis, and automatic
  * integration with existing storylines and campaign conflicts.
  */
@@ -87,8 +87,8 @@ Ensure the quest feels naturally embedded in the campaign world, creates meaning
 	}
 }
 
-export const enhancedQuestPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-quest-enhanced": {
+export const questPromptDefinitions: Record<string, PromptDefinition> = {
+	"create-quest": {
 		description: "Create a quest with full campaign context, NPC integration, and narrative consequences",
 		schema: questCreationSchema,
 		handler: createTypedHandler(questCreationSchema, enhancedQuestCreationHandler),

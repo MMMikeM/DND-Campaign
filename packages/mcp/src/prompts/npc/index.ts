@@ -1,7 +1,7 @@
 /**
  * NPC Creation
  *
- * Provides the "create-npc-enhanced" prompt for generating detailed NPCs
+ * Provides the "create-npc" prompt for generating detailed NPCs
  * with automatic relationship mapping, faction affiliations, quest hook
  * suggestions, and full campaign integration based on existing context.
  */
@@ -87,8 +87,8 @@ Generate an NPC that not only fits the specified hints but leverages the provide
 	}
 }
 
-export const enhancedNpcPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-npc-enhanced": {
+export const npcPromptDefinitions: Record<string, PromptDefinition> = {
+	create_npc: {
 		description: "Create NPC with comprehensive campaign context, relationship mapping, and narrative integration",
 		schema: enhancedNpcCreationSchema,
 		handler: createTypedHandler(enhancedNpcCreationSchema, enhancedNPCCreationHandler),
