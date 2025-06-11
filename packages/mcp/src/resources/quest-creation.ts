@@ -31,7 +31,6 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 		const contextData = {
 			target_quest: {
 				name: questName,
-				creation_timestamp: new Date().toISOString(),
 			},
 			campaign_state: {
 				active_quests: activeQuests.map((quest) => ({
@@ -63,8 +62,16 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather quest creation context", { error, questName })
-		throw new Error(`Failed to gather context for quest: ${questName}`)
+		logger.error("Failed to gather quest creation context", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			questName,
+			uri,
+		})
+		throw new Error(`Failed to gather context for quest: ${questName} - ${error instanceof Error ? error.message : String(error)}`)
 	}
 }
 
