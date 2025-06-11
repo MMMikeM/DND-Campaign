@@ -8,7 +8,7 @@
 import type { EntityTypeInfo, PromptHelpData } from "./types"
 
 export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
-	"create-npc-enhanced": {
+	"create-npc": {
 		description: "Create NPCs with rich campaign context and relationship suggestions",
 		purpose: "Generate detailed NPCs that automatically integrate with your existing campaign",
 		arguments: {
@@ -36,7 +36,7 @@ export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
 		},
 	},
 
-	"create-faction-enhanced": {
+	"create-faction": {
 		description: "Create factions with political context and territorial relationships",
 		purpose: "Generate detailed factions that naturally fit into your campaign's power structure",
 		arguments: {
@@ -64,7 +64,7 @@ export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
 		},
 	},
 
-	"create-location-enhanced": {
+	"create-location": {
 		description: "Create locations with geographic context and faction control",
 		purpose: "Generate detailed locations that seamlessly integrate with your world geography",
 		arguments: {
@@ -92,7 +92,7 @@ export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
 		},
 	},
 
-	"create-quest-enhanced": {
+	"create-quest": {
 		description: "Create quests with narrative connections and multi-layered complexity",
 		purpose: "Generate detailed quests that tie into your existing campaign storylines",
 		arguments: {
@@ -126,25 +126,25 @@ export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
 export const ENTITY_TYPES: EntityTypeInfo[] = [
 	{
 		type: "npc",
-		prompt: "create-npc-enhanced",
+		prompt: "create-npc",
 		title: "📝 NPCs (Non-Player Characters)",
 		description: "Create rich, connected NPCs with automatic relationship suggestions",
 	},
 	{
 		type: "faction",
-		prompt: "create-faction-enhanced",
+		prompt: "create-faction",
 		title: "⚔️ Factions (Organizations)",
 		description: "Generate political organizations with territory and power dynamics",
 	},
 	{
 		type: "location",
-		prompt: "create-location-enhanced",
+		prompt: "create-location",
 		title: "🏰 Locations (Places)",
 		description: "Build detailed locations with geographic and political integration",
 	},
 	{
 		type: "quest",
-		prompt: "create-quest-enhanced",
+		prompt: "create-quest",
 		title: "⚡ Quests (Adventures)",
 		description: "Design multi-layered quests with narrative consequences",
 	},

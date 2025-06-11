@@ -1,7 +1,7 @@
 /**
  * Location Creation
  *
- * Provides the "create-location-enhanced" prompt for generating geographic locations
+ * Provides the "create-location" prompt for generating geographic locations
  * with faction control analysis, cultural integration, and automatic connection
  * suggestions within the campaign's political landscape.
  */
@@ -110,8 +110,8 @@ Generate a location that not only fits the specified hints but leverages the pro
 }
 
 // Create the prompt definition
-export const enhancedLocationPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-location-enhanced": {
+export const locationPromptDefinitions: Record<string, PromptDefinition> = {
+	"create-location": {
 		description: "Create a location with full geographic context, faction control, and campaign integration",
 		schema: enhancedLocationCreationSchema,
 		arguments: extractArgsFromZodSchema(enhancedLocationCreationSchema),

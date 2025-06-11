@@ -8,19 +8,19 @@
 import { z } from "zod/v4"
 import { logger } from ".."
 import { enhancedCampaignPrompts } from "./campaign"
-import { enhancedFactionPromptDefinitions } from "./faction/index"
+import { factionPromptDefinitions } from "./faction/index"
 import { promptHelpDefinitions } from "./help"
-import { enhancedLocationPromptDefinitions } from "./location/index"
-import { enhancedNpcPromptDefinitions } from "./npc/index"
-import { enhancedQuestPromptDefinitions } from "./quest"
+import { locationPromptDefinitions } from "./location/index"
+import { npcPromptDefinitions } from "./npc/index"
+import { questPromptDefinitions } from "./quest"
 
 // Combine all prompt definitions
 export const prompts = {
-	...enhancedNpcPromptDefinitions,
+	...npcPromptDefinitions,
 	...enhancedCampaignPrompts,
-	...enhancedQuestPromptDefinitions,
-	...enhancedFactionPromptDefinitions,
-	...enhancedLocationPromptDefinitions,
+	...questPromptDefinitions,
+	...factionPromptDefinitions,
+	...locationPromptDefinitions,
 	...promptHelpDefinitions,
 }
 
