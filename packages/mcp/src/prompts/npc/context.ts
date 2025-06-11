@@ -317,7 +317,14 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 
 		return context
 	} catch (error) {
-		logger.error("Error gathering NPC creation context:", error)
-		throw new Error("Failed to gather NPC creation context")
+		logger.error("Error gathering NPC creation context:", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			npcArgs: args,
+		})
+		throw new Error(`Failed to gather NPC creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`)
 	}
 }

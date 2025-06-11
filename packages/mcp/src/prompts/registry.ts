@@ -53,11 +53,23 @@ export async function executePrompt(name: string, args: Record<string, unknown>)
 		return await promptDef.handler(validatedArgs)
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			logger.error(`Validation error in prompt ${name}:`, error.flatten())
-			throw new Error(`Invalid arguments: ${error.message}`)
+			logger.error(`Validation error in prompt ${name}:`, {
+				validationError: error.flatten(),
+				promptName: name,
+				providedArgs: args,
+			})
+			throw new Error(`Invalid arguments for prompt "${name}": ${error.message}`)
 		}
 
-		logger.error(`Error executing prompt ${name}:`, error)
+		logger.error(`Error executing prompt ${name}:`, {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			promptName: name,
+			args,
+		})
 		throw error
 	}
 }

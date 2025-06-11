@@ -27,7 +27,15 @@ export function registerPromptHandlers(server: Server) {
 			const result = await executePrompt(name, promptArgs)
 			return result
 		} catch (error) {
-			logger.error(`Error in prompt ${name}:`, error)
+			logger.error(`Error in prompt ${name}:`, {
+				error: error instanceof Error ? {
+					name: error.name,
+					message: error.message,
+					stack: error.stack,
+				} : error,
+				promptName: name,
+				promptArgs,
+			})
 			throw error
 		}
 	})

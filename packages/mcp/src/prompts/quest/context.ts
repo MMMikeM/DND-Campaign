@@ -250,8 +250,15 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 
 		return context
 	} catch (error) {
-		logger.error("Error gathering quest creation context:", error)
-		throw new Error("Failed to gather quest creation context")
+		logger.error("Error gathering quest creation context:", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			questArgs: args,
+		})
+		throw new Error(`Failed to gather quest creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`)
 	}
 }
 
@@ -287,7 +294,14 @@ async function gatherFactionContext(factionHint?: string) {
 			members: factionNPCs,
 		}
 	} catch (error) {
-		logger.error("Error gathering faction context:", error)
+		logger.error("Error gathering faction context:", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			factionHint,
+		})
 		return null
 	}
 }
