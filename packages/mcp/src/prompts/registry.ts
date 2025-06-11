@@ -25,6 +25,16 @@ export const prompts = {
 }
 
 /**
+ * A serializable representation of the prompts for the MCP client.
+ * This excludes non-serializable fields like the handler function and Zod schema.
+ */
+export const listablePrompts = Object.entries(prompts).map(([name, { description, arguments: args }]) => ({
+	name,
+	description,
+	arguments: args,
+}))
+
+/**
  * Execute a specific prompt
  */
 export async function executePrompt(name: string, args: Record<string, unknown>) {
