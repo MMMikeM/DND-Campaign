@@ -15,6 +15,7 @@ export const maps = pgTable("maps", {
 })
 
 export const mapDetails = pgTable("map_details", {
+	id: pk(),
 	mapId: cascadeFk("map_id", maps.id),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
@@ -33,3 +34,7 @@ export const mapDetails = pgTable("map_details", {
 	environmentalHazards: list("environmental_hazards"),
 	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
+
+export const enums = {
+	imageFormats,
+}
