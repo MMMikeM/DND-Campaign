@@ -29,6 +29,13 @@
       "when": 1749554568354,
       "tag": "0003_materialized-view",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749619632846,
+      "tag": "0004_confused_dust",
+      "breakpoints": true
     }
   ]
 }
