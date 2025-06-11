@@ -48,6 +48,7 @@ export const entityGetters = createEntityGetters({
 			},
 			with: {
 				area: { columns: { name: true, id: true } },
+				map: { columns: { name: true, id: true } },
 				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
 				npcAssociations: { with: { npc: { columns: { name: true, id: true } } } },
@@ -127,7 +128,7 @@ export const entityGetters = createEntityGetters({
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 	manage_region: {
 		description:
-			"Manage region-related entities. IMPORTANT: Sites represent tactical battlemap locations and MUST include battlemap image data (battlemapImage, imageFormat, imageSize, imageWidth, imageHeight) when creating new sites.",
+			"Manage region-related entities. Sites are tactical locations and MUST be linked to an existing map via `mapId` on creation.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_region", tables.regionTables, tableEnum, schemas),
 		annotations: {

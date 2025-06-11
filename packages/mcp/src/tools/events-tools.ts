@@ -45,5 +45,12 @@ export const eventToolDefinitions: Record<"manage_event", ToolDefinition> = {
 		description: "Manage event-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_event", tables.eventTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Events",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

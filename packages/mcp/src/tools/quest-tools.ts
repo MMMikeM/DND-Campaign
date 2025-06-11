@@ -98,5 +98,12 @@ export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
 		description: "Manage quest-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_quest", tables.questTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Quests",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

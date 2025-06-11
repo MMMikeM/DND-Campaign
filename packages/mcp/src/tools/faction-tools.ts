@@ -71,5 +71,12 @@ export const factionToolDefinitions: Record<"manage_faction", ToolDefinition> = 
 		description: "Manage faction-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_faction", tables.factionTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Factions",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

@@ -56,5 +56,12 @@ export const narrativeToolDefinitions: Record<"manage_narrative", ToolDefinition
 		description: "Manage narrative-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_narrative", tables.narrativeTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Narrative",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

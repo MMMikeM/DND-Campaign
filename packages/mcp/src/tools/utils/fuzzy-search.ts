@@ -42,5 +42,12 @@ export const fuzzySearchToolDefinitions: Record<"fuzzy_search", ToolDefinition> 
 			const { rows } = await searchBySimilarity(searchTerm)
 			return createResponse(rows as any)
 		},
+		annotations: {
+			title: "Fuzzy Search",
+			readOnlyHint: true,
+			destructiveHint: false,
+			idempotentHint: true,
+			openWorldHint: false,
+		},
 	},
 }
