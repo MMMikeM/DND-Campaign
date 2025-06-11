@@ -9,6 +9,7 @@ import * as questStageRelations from "../schemas/quests/stages/relations"
 import * as regionRelations from "../schemas/regions/relations"
 import * as worldbuildingRelations from "../schemas/worldbuilding/relations"
 import * as foreshadowingRelations from "./foreshadowing/relations"
+import * as mapRelations from "./maps/relations"
 
 export const relations = {
 	conflictRelations,
@@ -22,6 +23,7 @@ export const relations = {
 	questStageRelations,
 	regionRelations,
 	worldbuildingRelations,
+	mapRelations,
 }
 
 import * as conflictTables from "../schemas/conflict/tables"
@@ -36,6 +38,7 @@ import * as questTables from "../schemas/quests/tables"
 import * as regionTables from "../schemas/regions/tables"
 import * as worldbuildingTables from "../schemas/worldbuilding/tables"
 import * as foreshadowingTables from "./foreshadowing/tables"
+import * as mapTables from "./maps/tables"
 
 export const tables = {
 	conflictTables,
@@ -50,4 +53,5 @@ export const tables = {
 	questStageTables,
 	regionTables,
 	worldbuildingTables,
+	mapTables,
 }
