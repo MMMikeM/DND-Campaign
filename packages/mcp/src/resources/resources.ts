@@ -3,9 +3,10 @@ import {
 	ListResourcesRequestSchema,
 	ListResourceTemplatesRequestSchema,
 	ReadResourceRequestSchema,
+	type Resource,
 } from "@modelcontextprotocol/sdk/types.js"
-import { db, logger } from ".."
-import { campaignResourceDefinitions } from "./campaign-resources"
+import { logger } from ".."
+import { campaignResourceDefinitions } from "."
 import type { CampaignResourceHandlers, ResourceContent } from "./resource-types"
 
 // Create resource handlers
@@ -14,85 +15,18 @@ const createResourceHandlers = (): CampaignResourceHandlers => {
 		logger.info("Listing available campaign resources")
 
 		try {
-			// Get some real campaign entities to create actual resources
-			const [factions, npcs, sites, regions] = await Promise.all([
-				db.query.factions.findMany({
-					columns: { id: true, name: true },
-					limit: 3,
-				}),
-				db.query.npcs.findMany({
-					columns: { id: true, name: true },
-					limit: 3,
-				}),
-				db.query.sites.findMany({
-					columns: { id: true, name: true },
-					limit: 3,
-				}),
-				db.query.regions.findMany({
-					columns: { id: true, name: true },
-					limit: 2,
-				}),
-			])
+			const allResources: Resource[] = []
+			const listerPromises = Object.values(campaignResourceDefinitions)
+				.filter((def) => def.lister && typeof def.lister === "function")
+				.map((def) => def.lister!())
 
-			const resources = []
-
-			// Add example template resources
-			resources.push(
-				{
-					uri: "campaign://npc-creation/example-character",
-					name: "Example NPC Creation Context",
-					description: "Example of campaign context for creating a new NPC",
-					mimeType: "application/json",
-				},
-				{
-					uri: "campaign://quest-creation/example-quest",
-					name: "Example Quest Creation Context",
-					description: "Example of campaign state for designing a new quest",
-					mimeType: "application/json",
-				},
-			)
-
-			// Add real faction response resources
-			for (const faction of factions) {
-				resources.push({
-					uri: `campaign://faction-response/${encodeURIComponent(faction.name)}`,
-					name: `${faction.name} Response Context`,
-					description: `Detailed information about ${faction.name} for generating authentic responses`,
-					mimeType: "application/json",
-				})
+			const resourceLists = await Promise.all(listerPromises)
+			for (const resourceList of resourceLists) {
+				allResources.push(...resourceList)
 			}
 
-			// Add real NPC dialogue resources
-			for (const npc of npcs) {
-				resources.push({
-					uri: `campaign://npc-dialogue-context/${npc.id}`,
-					name: `${npc.name} Dialogue Context`,
-					description: `Complete profile and relationships for ${npc.name} dialogue generation`,
-					mimeType: "application/json",
-				})
-			}
-
-			// Add real location resources
-			for (const site of sites) {
-				resources.push({
-					uri: `campaign://location-context/${encodeURIComponent(site.name)}`,
-					name: `${site.name} Location Context`,
-					description: `Detailed information about ${site.name} for scene setting`,
-					mimeType: "application/json",
-				})
-			}
-
-			for (const region of regions) {
-				resources.push({
-					uri: `campaign://location-context/${encodeURIComponent(region.name)}`,
-					name: `${region.name} Regional Context`,
-					description: `Regional information about ${region.name} for campaign context`,
-					mimeType: "application/json",
-				})
-			}
-
-			logger.info(`Returning ${resources.length} campaign resources`)
-			return resources
+			logger.info(`Returning ${allResources.length} campaign resources`)
+			return allResources
 		} catch (error) {
 			logger.error("Error gathering campaign resources", { error })
 			// Return example resources as fallback
