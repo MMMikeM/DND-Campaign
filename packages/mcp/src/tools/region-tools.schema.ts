@@ -69,41 +69,22 @@ export const schemas = {
 
 	sites: createInsertSchema(sites, {
 		areaId: id.describe("Required ID of area this site is located within"),
-		battlemapImage: (s) =>
-			s.describe(
-				"REQUIRED: Battlemap image data for this site (base64 encoded binary data). Sites represent tactical combat locations and must include a battlemap image.",
-			),
-		chokePoints: (s) => s.describe("Choke points for this site"),
+
 		climate: (s) => s.describe("Weather patterns (temperate, tropical, arid, etc.)"),
-		coverOptions: (s) => s.describe("Cover options for this site"),
 		creativePrompts: (s) => s.describe("Scene ideas and narrative opportunities"),
 		creatures: (s) => s.describe("Inhabitants, wildlife, and monsters found here"),
 		description: (s) => s.describe("Visual details and layout in point form"),
 		descriptors: (s) => s.describe("Evocative adjectives for quick reference"),
-		difficultTerrain: (s) => s.describe("Difficult terrain for this site"),
-		elevationFeatures: (s) => s.describe("Elevation features for this site"),
 		environment: (s) => s.describe("Setting context (urban, rural, wilderness, underground)"),
-		environmentalHazards: (s) => s.describe("Environmental hazards for this site"),
 		features: (s) => s.describe("Notable objects and distinct elements"),
 		gmNotes: (s) => s.describe("GM notes for this site"),
-		imageFormat: z
-			.enum(enums.imageFormats)
-			.describe("REQUIRED: Image format (png, jpg, webp) - must match the battlemap image format"),
-		imageHeight: (s) =>
-			s.describe("REQUIRED: Image height in pixels - must be provided when uploading battlemap image"),
-		imageSize: (s) => s.describe("REQUIRED: Image size in bytes - must be provided when uploading battlemap image"),
-		imageWidth: (s) => s.describe("REQUIRED: Image width in pixels - must be provided when uploading battlemap image"),
 		intendedSiteFunction: z.enum(enums.siteFunctions).describe("Function of this site"),
-		interactiveElements: (s) => s.describe("Interactive elements for this site"),
 		lightingDescription: (s) => s.describe("Illumination quality and sources"),
 		mood: (s) => s.describe("Emotional atmosphere (peaceful, tense, eerie, vibrant)"),
-		movementRoutes: (s) => s.describe("Movement routes for this site"),
 		name: (s) => s.describe("Specific name of this location"),
-		sightLines: (s) => s.describe("Sight lines for this site"),
 		type: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
 		smells: (s) => s.describe("Distinctive odors and scents"),
 		soundscape: (s) => s.describe("Characteristic sounds and acoustic elements"),
-		tacticalPositions: (s) => s.describe("Tactical positions for this site"),
 		tags: (s) => s.describe("Tags for this site"),
 		terrain: (s) => s.describe("Physical landscape (rocky, forested, marshy, etc.)"),
 		treasures: (s) => s.describe("Valuables and collectibles that might be found"),
@@ -111,18 +92,7 @@ export const schemas = {
 	})
 		.omit({ id: true, embeddingId: true })
 		.strict()
-		.refine((data) => {
-			const missing = []
-			if (!data.battlemapImage) missing.push("battlemapImage (base64 encoded image data)")
-			if (!data.imageFormat) missing.push("imageFormat (png/jpg/webp)")
-			if (!data.imageSize) missing.push("imageSize (bytes)")
-			if (!data.imageWidth) missing.push("imageWidth (pixels)")
-			if (!data.imageHeight) missing.push("imageHeight (pixels)")
 
-			return {
-				message: `Sites represent tactical battlemap locations and MUST include all image fields. Missing: ${missing.join(", ")}. All sites require a complete battlemap image with metadata for tactical combat.`,
-			}
-		})
 		.describe(
 			"Tactical battlemap locations where encounters and combat take place. Sites MUST include a battlemap image with complete metadata as they represent specific combat environments.",
 		),
