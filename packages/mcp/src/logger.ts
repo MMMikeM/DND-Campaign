@@ -3,35 +3,49 @@ import pino from "pino"
 const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/server.log"
 
 export const createLogger = () => {
+	// Create a custom error serializer that handles all error properties
+	const errorSerializer = (err: any) => {
+		if (err instanceof Error) {
+			return {
+				type: err.constructor.name,
+				name: err.name,
+				message: err.message,
+				stack: err.stack,
+				// Include any additional properties on the error object
+				...Object.getOwnPropertyNames(err).reduce((acc, key) => {
+					if (!['name', 'message', 'stack'].includes(key)) {
+						acc[key] = (err as any)[key]
+					}
+					return acc
+				}, {} as any)
+			}
+		}
+		return err
+	}
+
+	// Simplified transport configuration - always log to file
 	const transport = pino.transport({
 		targets: [
-			// Pretty print to console only in development
-			...(process.env.NODE_ENV !== "production"
-				? [
-						{
-							target: "pino-pretty",
-							options: {
-								colorize: true,
-								ignore: "pid,hostname", // Optional: hide pid and hostname
-								translateTime: "SYS:standard", // Use system's standard time format
-							},
-							level: "debug", // Log level for console output
-						},
-					]
-				: []),
-			// Always write to the log file
 			{
 				target: "pino/file",
-				options: { destination: LOG_FILE, mkdir: true, ignore: "pid,hostname" }, // mkdir: true ensures the directory exists
-				level: "info", // Log level for file output (adjust as needed)
+				level: "debug",
+				options: { 
+					destination: LOG_FILE,
+					mkdir: true,
+					sync: false  // Use async writing for better performance
+				}
 			},
-		],
+		]
 	})
 
 	const logger = pino(
 		{
-			level: process.env.LOG_LEVEL || "debug", // Default log level, can be overridden by env var
-			timestamp: pino.stdTimeFunctions.isoTime, // Use ISO time format
+			level: "debug", // Always use debug level to capture all logs
+			timestamp: pino.stdTimeFunctions.isoTime,
+			serializers: {
+				error: errorSerializer,
+				err: errorSerializer,
+			},
 		},
 		transport,
 	)
@@ -40,7 +54,11 @@ export const createLogger = () => {
 		logger.info("SIGINT received")
 		process.exit(0)
 	})
-	logger.info("Logger initialized")
+	
+	logger.info("Logger initialized", {
+		logFile: LOG_FILE,
+		logLevel: "debug"
+	})
 
 	return logger
 }
