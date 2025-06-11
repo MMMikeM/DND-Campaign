@@ -69,5 +69,12 @@ export const itemToolDefinitions: Record<"manage_items", ToolDefinition> = {
 		description: "Manage item-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_items", tables.itemTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Items",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

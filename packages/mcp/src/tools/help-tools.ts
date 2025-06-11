@@ -223,5 +223,12 @@ export const helpToolDefinitions: Record<string, ToolDefinition> = {
 		description: "Get help with available tools, organized by category or detailed info about a specific tool",
 		inputSchema: zodToMCP(schemas.help),
 		handler,
+		annotations: {
+			title: "Help",
+			readOnlyHint: true,
+			destructiveHint: false,
+			idempotentHint: true,
+			openWorldHint: false,
+		},
 	},
 }

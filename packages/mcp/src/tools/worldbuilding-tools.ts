@@ -60,5 +60,12 @@ export const worldToolDefinitions: Record<"manage_worldbuilding", ToolDefinition
 		description: "Manage worldbuilding-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_worldbuilding", tables.worldbuildingTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Worldbuilding",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

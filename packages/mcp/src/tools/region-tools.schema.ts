@@ -69,6 +69,7 @@ export const schemas = {
 
 	sites: createInsertSchema(sites, {
 		areaId: id.describe("Required ID of area this site is located within"),
+		mapId: id.describe("Required ID of the map this site is associated with"),
 
 		climate: (s) => s.describe("Weather patterns (temperate, tropical, arid, etc.)"),
 		creativePrompts: (s) => s.describe("Scene ideas and narrative opportunities"),
@@ -92,9 +93,8 @@ export const schemas = {
 	})
 		.omit({ id: true, embeddingId: true })
 		.strict()
-
 		.describe(
-			"Tactical battlemap locations where encounters and combat take place. Sites MUST include a battlemap image with complete metadata as they represent specific combat environments.",
+			"Tactical locations where encounters and combat take place. Each site must be linked to a map.",
 		),
 
 	siteLinks: createInsertSchema(siteLinks, {

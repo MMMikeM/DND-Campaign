@@ -36,5 +36,12 @@ export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDe
 		description: "Manage foreshadowing-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_foreshadowing", tables.foreshadowingTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Foreshadowing",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

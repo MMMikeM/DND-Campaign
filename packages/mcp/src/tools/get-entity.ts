@@ -107,5 +107,12 @@ export const getEntityToolDefinition: Record<string, ToolDefinition> = {
 		description: getEntitySchema.description ?? "Get any entity by type and optional ID",
 		inputSchema: zodToMCP(getEntitySchema),
 		handler: getEntityHandler,
+		annotations: {
+			title: "Get Entity",
+			readOnlyHint: true,
+			destructiveHint: false,
+			idempotentHint: true,
+			openWorldHint: false,
+		},
 	},
 }

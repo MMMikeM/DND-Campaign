@@ -40,5 +40,12 @@ export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> 
 		description: "Manage conflict-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_conflict", tables.conflictTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Conflicts",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }

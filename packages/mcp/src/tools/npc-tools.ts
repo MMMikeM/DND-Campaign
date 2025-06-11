@@ -64,5 +64,12 @@ export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
 		description: "Manage NPC-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_npc", tables.npcTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage NPCs",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
 	},
 }
