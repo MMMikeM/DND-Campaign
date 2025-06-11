@@ -31,7 +31,6 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 		const contextData = {
 			target_npc: {
 				name: npcName,
-				creation_timestamp: new Date().toISOString(),
 			},
 			campaign_context: {
 				existing_npcs: existingNpcs.map((npc) => ({
@@ -63,8 +62,16 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather NPC creation context", { error, npcName })
-		throw new Error(`Failed to gather context for NPC: ${npcName}`)
+		logger.error("Failed to gather NPC creation context", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			npcName,
+			uri,
+		})
+		throw new Error(`Failed to gather context for NPC: ${npcName} - ${error instanceof Error ? error.message : String(error)}`)
 	}
 }
 
