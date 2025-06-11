@@ -1,5 +1,5 @@
 import { integer, pgTable } from "drizzle-orm/pg-core"
-import { bytea, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { embeddings } from "../embeddings/tables"
 
 const imageFormats = ["png", "jpg", "webp"] as const
@@ -15,9 +15,7 @@ export const maps = pgTable("maps", {
 })
 
 export const mapDetails = pgTable("map_details", {
-	mapId: string("map_id")
-		.primaryKey()
-		.references(() => maps.id, { onDelete: "cascade" }),
+	mapId: cascadeFk("map_id", maps.id),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
