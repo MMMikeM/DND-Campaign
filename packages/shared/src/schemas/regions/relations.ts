@@ -6,6 +6,7 @@ import { consequences } from "../events/tables"
 import { factionInfluence, factions, regionConnections } from "../factions/tables"
 import { foreshadowingSeeds } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
+import { maps } from "../maps/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcSites } from "../npc/tables"
 import { questHooks, questStages, quests } from "../quests/tables"
@@ -88,6 +89,10 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	itemHistory: many(itemNotableHistory, { relationName: "siteItemHistory" }),
 	itemRelationships: many(itemRelationships, { relationName: "siteItemRelationships" }),
 
+	map: one(maps, {
+		fields: [sites.mapId],
+		references: [maps.id],
+	}),
 	embedding: one(embeddings, {
 		fields: [sites.embeddingId],
 		references: [embeddings.id],

@@ -17,7 +17,6 @@ const objectiveTypes = [
 ] as const
 
 const difficultyLevels = ["easy", "medium", "hard"] as const
-const imageFormats = ["png", "jpg", "webp"] as const
 const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
 const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
 const siteFunctions = [
@@ -120,7 +119,6 @@ export const enums = {
 	atmosphereTypes,
 	difficultyLevels,
 	dangerLevels,
-	imageFormats,
 	linkTypes,
 	objectiveTypes,
 	regionTypes,
