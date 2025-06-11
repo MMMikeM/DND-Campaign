@@ -15,26 +15,27 @@ import { type QuestCreationArgs, questCreationSchema } from "./types"
 async function enhancedQuestCreationHandler(args: QuestCreationArgs) {
 	logger.info("Executing enhanced quest creation prompt", args)
 
-	const context = await gatherQuestCreationContext(args)
+	try {
+		const context = await gatherQuestCreationContext(args)
 
-	return {
-		messages: [
-			{
-				role: "user" as const,
-				content: {
-					type: "resource" as const,
-					resource: {
-						uri: `campaign://creation-context/quest-${args.name}`,
-						text: JSON.stringify(context, null, 2),
-						mimeType: "application/json",
+		return {
+			messages: [
+				{
+					role: "user" as const,
+					content: {
+						type: "resource" as const,
+						resource: {
+							uri: `campaign://creation-context/quest-${args.name}`,
+							text: JSON.stringify(context, null, 2),
+							mimeType: "application/json",
+						},
 					},
 				},
-			},
-			{
-				role: "user" as const,
-				content: {
-					type: "text" as const,
-					text: `Create Quest: "${args.name}"
+				{
+					role: "user" as const,
+					content: {
+						type: "text" as const,
+						text: `Create Quest: "${args.name}"
 
 Type hint: ${args.type_hint || "No preference"}
 Level hint: ${args.level_hint || "No preference"}
@@ -81,9 +82,20 @@ Using the comprehensive campaign context provided, generate a complete quest tha
 - Contingency plans for common player approaches or unexpected solutions
 
 Ensure the quest feels naturally embedded in the campaign world, creates meaningful consequences regardless of outcome, and provides rich opportunities for player agency and character development while advancing the broader narrative themes.`,
+					},
 				},
-			},
-		],
+			],
+		}
+	} catch (error) {
+		logger.error("Error in enhanced quest creation handler:", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			questArgs: args,
+		})
+		throw error
 	}
 }
 

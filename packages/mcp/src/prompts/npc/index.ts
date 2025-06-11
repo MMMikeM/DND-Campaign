@@ -14,26 +14,27 @@ import { type EnhancedNpcCreationArgs, enhancedNpcCreationSchema } from "./types
 async function enhancedNPCCreationHandler(args: EnhancedNpcCreationArgs) {
 	logger.info("Executing enhanced NPC creation prompt", args)
 
-	const context = await gatherNPCCreationContext(args)
+	try {
+		const context = await gatherNPCCreationContext(args)
 
-	return {
-		messages: [
-			{
-				role: "user" as const,
-				content: {
-					type: "resource" as const,
-					resource: {
-						uri: `campaign://creation-context/npc-${args.name}`,
-						text: JSON.stringify(context, null, 2),
-						mimeType: "application/json",
+		return {
+			messages: [
+				{
+					role: "user" as const,
+					content: {
+						type: "resource" as const,
+						resource: {
+							uri: `campaign://creation-context/npc-${args.name}`,
+							text: JSON.stringify(context, null, 2),
+							mimeType: "application/json",
+						},
 					},
 				},
-			},
-			{
-				role: "user" as const,
-				content: {
-					type: "text" as const,
-					text: `Create NPC: "${args.name}"
+				{
+					role: "user" as const,
+					content: {
+						type: "text" as const,
+						text: `Create NPC: "${args.name}"
 
 Location hint: ${args.location_hint || "No preference"}
 Faction hint: ${args.faction_hint || "No preference"}  
@@ -81,9 +82,20 @@ Using the comprehensive campaign context provided, generate a complete NPC that 
 - Social positioning within their community and broader campaign world
 
 Generate an NPC that not only fits the specified hints but leverages the provided context to create meaningful connections, address campaign gaps, and provide rich opportunities for player interaction across social, political, and narrative dimensions.`,
+					},
 				},
-			},
-		],
+			],
+		}
+	} catch (error) {
+		logger.error("Failed to execute enhanced NPC creation prompt:", {
+			error: error instanceof Error ? {
+				name: error.name,
+				message: error.message,
+				stack: error.stack,
+			} : error,
+			npcArgs: args,
+		})
+		throw error
 	}
 }
 
