@@ -11,15 +11,18 @@ export { enums } from "./enums"
 const {
 	areaTypes,
 	atmosphereTypes,
-	difficultyLevels,
+	connectionTypes,
 	dangerLevels,
+	difficultyLevels,
+	encounterCategories,
 	linkTypes,
 	objectiveTypes,
 	regionTypes,
+	routeTypes,
 	secretTypes,
 	siteFunctions,
 	siteTypes,
-	encounterCategories,
+	travelDifficulties,
 } = enums
 
 export const regions = pgTable("regions", {
@@ -33,7 +36,6 @@ export const regions = pgTable("regions", {
 	dangerLevel: oneOf("danger_level", dangerLevels),
 	type: oneOf("type", regionTypes),
 
-	// New fields from schema updates plan
 	atmosphereType: oneOf("atmosphere_type", atmosphereTypes),
 	revelationLayersSummary: list("revelation_layers_summary"),
 
@@ -48,6 +50,34 @@ export const regions = pgTable("regions", {
 	secrets: list("secrets"),
 	security: list("defenses"),
 })
+
+export const regionConnections = pgTable(
+	"region_connections",
+	{
+		id: pk(),
+		name: string("name").unique(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
+
+		regionId: cascadeFk("region_id", regions.id),
+		otherRegionId: nullableFk("other_region_id", regions.id),
+
+		connectionType: oneOf("connection_type", connectionTypes),
+		routeType: oneOf("route_type", routeTypes),
+		travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
+
+		travelTime: string("travel_time"),
+
+		travelHazards: list("travel_hazards"),
+		pointsOfInterest: list("points_of_interest"),
+	},
+	(t) => [
+		unique().on(t.regionId, t.otherRegionId, t.connectionType),
+		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
+	],
+)
 
 export const areas = pgTable("areas", {
 	id: pk(),

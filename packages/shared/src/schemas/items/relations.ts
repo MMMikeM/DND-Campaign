@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm"
 import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
-import { narrativeDestinations } from "../narrative/tables"
+import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"

@@ -116,6 +116,10 @@ const atmosphereTypes = [
 
 const encounterCategories = ["combat", "puzzle", "trap", "social", "exploration_hazard"] as const
 
+const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
+const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
+const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
+
 export const enums = {
 	areaTypes,
 	atmosphereTypes,
@@ -128,4 +132,7 @@ export const enums = {
 	siteFunctions,
 	siteTypes,
 	encounterCategories,
+	connectionTypes,
+	routeTypes,
+	travelDifficulties,
 }

@@ -6,13 +6,13 @@ import { itemRelationships } from "../items/tables"
 import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
-import { conceptRelationships, worldConceptLinks, worldConcepts } from "./tables"
+import { worldConceptLinks, worldConceptRelationships, worldConcepts } from "./tables"
 
 export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
-	sourceOfConceptRelationships: many(conceptRelationships, {
+	sourceOfConceptRelationships: many(worldConceptRelationships, {
 		relationName: "sourceConceptInRelationship",
 	}),
-	targetInConceptRelationships: many(conceptRelationships, {
+	targetInConceptRelationships: many(worldConceptRelationships, {
 		relationName: "targetConceptInRelationship",
 	}),
 	links: many(worldConceptLinks, {
@@ -21,14 +21,14 @@ export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
 	itemRelationships: many(itemRelationships, { relationName: "worldConceptItemRelationships" }),
 }))
 
-export const conceptRelationshipsRelations = relations(conceptRelationships, ({ one }) => ({
+export const worldConceptRelationshipsRelations = relations(worldConceptRelationships, ({ one }) => ({
 	sourceConcept: one(worldConcepts, {
-		fields: [conceptRelationships.sourceConceptId],
+		fields: [worldConceptRelationships.sourceConceptId],
 		references: [worldConcepts.id],
 		relationName: "sourceConceptInRelationship",
 	}),
 	targetConcept: one(worldConcepts, {
-		fields: [conceptRelationships.targetConceptId],
+		fields: [worldConceptRelationships.targetConceptId],
 		references: [worldConcepts.id],
 		relationName: "targetConceptInRelationship",
 	}),

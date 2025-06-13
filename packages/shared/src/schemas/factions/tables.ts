@@ -135,34 +135,3 @@ export const factionInfluence = pgTable(
 		),
 	],
 )
-
-const { connectionTypes, routeTypes, travelDifficulties } = enums
-
-export const regionConnections = pgTable(
-	"region_connections",
-	{
-		id: pk(),
-		name: string("name").unique(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
-
-		regionId: cascadeFk("region_id", regions.id),
-		otherRegionId: nullableFk("other_region_id", regions.id),
-		controllingFactionId: nullableFk("controlling_faction_id", () => factions.id),
-
-		connectionType: oneOf("connection_type", connectionTypes),
-		routeType: oneOf("route_type", routeTypes),
-		travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
-
-		travelTime: string("travel_time"),
-
-		travelHazards: list("travel_hazards"),
-		pointsOfInterest: list("points_of_interest"),
-	},
-	(t) => [
-		unique().on(t.regionId, t.otherRegionId, t.connectionType),
-		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
-	],
-)
