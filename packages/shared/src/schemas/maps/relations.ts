@@ -4,7 +4,7 @@ import { sites } from "../regions/tables"
 import { mapDetails, maps } from "./tables"
 
 export const mapsRelations = relations(maps, ({ one }) => ({
-	details: one(mapDetails, {
+	mapDetails: one(mapDetails, {
 		fields: [maps.id],
 		references: [mapDetails.mapId],
 	}),

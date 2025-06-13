@@ -27,7 +27,6 @@ export const relations = {
 }
 
 import * as conflictTables from "../schemas/conflict/tables"
-import * as embeddingTables from "../schemas/embeddings/tables"
 import * as eventTables from "../schemas/events/tables"
 import * as factionTables from "../schemas/factions/tables"
 import * as itemTables from "../schemas/items/tables"
@@ -42,7 +41,6 @@ import * as mapTables from "./maps/tables"
 
 export const tables = {
 	conflictTables,
-	embeddingTables,
 	eventTables,
 	factionTables,
 	foreshadowingTables,

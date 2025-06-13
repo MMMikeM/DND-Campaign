@@ -16,6 +16,7 @@ const {
 	conflictStatuses,
 	participantRolesInConflict,
 	tensionLevels,
+	questImpacts,
 } = enums
 
 export const conflicts = pgTable("conflicts", {
@@ -41,6 +42,7 @@ export const conflicts = pgTable("conflicts", {
 	currentTensionLevel: oneOf("tension_level", tensionLevels),
 
 	natures: manyOf("natures", conflictNatures),
+	questImpacts: manyOf("quest_impacts", questImpacts),
 })
 
 export const conflictParticipants = pgTable(
