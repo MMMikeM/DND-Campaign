@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, pgTable, unique, uniqueIndex } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
+import { cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
 import { enums } from "./enums"
@@ -27,33 +26,33 @@ const {
 
 export const npcs = pgTable("npcs", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	name: string("name").unique(),
-
 	alignment: oneOf("alignment", alignments),
-	disposition: string("disposition"),
 	gender: oneOf("gender", genders),
 	race: oneOf("race", races),
 	trustLevel: oneOf("trust_level", trustLevels),
 	wealth: oneOf("wealth", wealthLevels),
 	adaptability: oneOf("adaptability", adaptabilityLevels),
-
 	complexityProfile: oneOf("complexity_profile", characterComplexityProfiles),
 	playerPerceptionGoal: oneOf("player_perception_goal", playerPerceptionGoals),
+	availability: oneOf("availability", availabilityLevels),
+	capability: oneOf("capability", cprScores),
+	proactivity: oneOf("proactivity", cprScores),
+	relatability: oneOf("relatability", cprScores),
 
+	disposition: string("disposition"),
 	age: string("age"),
 	attitude: string("attitude"),
 	occupation: string("occupation"),
 	quirk: string("quirk"),
 	socialStatus: string("social_status"),
 
-	availability: oneOf("availability", availabilityLevels),
 	currentGoals: list("current_goals"),
-
 	appearance: list("appearance"),
 	avoidTopics: list("avoid_topics"),
 	background: list("background"),
@@ -68,12 +67,6 @@ export const npcs = pgTable("npcs", {
 	rumours: list("rumours"),
 	secrets: list("secrets"),
 	voiceNotes: list("voice_notes"),
-
-	capability: oneOf("capability", cprScores),
-	proactivity: oneOf("proactivity", cprScores),
-	relatability: oneOf("relatability", cprScores),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const npcSites = pgTable(
@@ -89,6 +82,7 @@ export const npcSites = pgTable(
 		siteId: cascadeFk("site_id", sites.id),
 
 		associationType: oneOf("association_type", siteAssociationTypes),
+
 		isCurrent: boolean("is_current").notNull().default(false),
 	},
 	(t) => [
@@ -108,10 +102,11 @@ export const npcFactions = pgTable(
 
 		npcId: cascadeFk("npc_id", npcs.id),
 		factionId: cascadeFk("faction_id", factions.id),
+
 		loyalty: oneOf("loyalty", trustLevels),
+		role: oneOf("role", npcFactionRoles),
 
 		justification: string("justification"),
-		role: oneOf("role", npcFactionRoles),
 		rank: string("rank"),
 
 		secrets: list("secrets"),
@@ -130,6 +125,7 @@ export const npcRelationships = pgTable(
 
 		npcId: cascadeFk("npc_id", npcs.id),
 		relatedNpcId: cascadeFk("related_npc_id", npcs.id),
+
 		relationshipType: oneOf("relationship_type", relationshipTypes),
 		strength: oneOf("strength", relationshipStrengths),
 
@@ -137,8 +133,6 @@ export const npcRelationships = pgTable(
 		narrativeTensions: list("narrative_tensions"),
 		sharedGoals: list("shared_goals"),
 		relationshipDynamics: list("relationship_dynamics"),
-
-		isBidirectional: boolean("is_bidirectional").notNull().default(false),
 	},
 	(t) => [
 		unique().on(t.npcId, t.relatedNpcId, t.relationshipType),

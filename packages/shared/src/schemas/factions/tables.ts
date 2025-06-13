@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
@@ -32,31 +31,28 @@ export const factions = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		publicAlignment: oneOf("public_alignment", alignments),
-		secretAlignment: nullableOneOf("secret_alignment", alignments),
+		hqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
+
 		size: oneOf("size", factionSizes),
 		wealth: oneOf("wealth", wealthLevels),
 		reach: oneOf("reach", reachLevels),
 		type: manyOf("type", factionTypes),
+		transparencyLevel: oneOf("transparency_level", transparencyLevels),
+		publicAlignment: oneOf("public_alignment", alignments),
+		secretAlignment: nullableOneOf("secret_alignment", alignments),
+
+		publicPerception: string("public_perception"),
 		publicGoal: string("public_goal"),
 		secretGoal: nullableString("secret_goal"),
 
-		publicPerception: string("public_perception"),
-		transparencyLevel: oneOf("transparency_level", transparencyLevels),
-
 		values: list("values"),
 		history: list("history"),
-
 		symbols: list("symbols"),
 		rituals: list("rituals"),
 		taboos: list("taboos"),
 		aesthetics: list("aesthetics"),
 		jargon: list("jargon"),
 		recognitionSigns: list("recognition_signs"),
-
-		primaryHqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
-
-		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [
 		check(
@@ -77,16 +73,16 @@ export const factionAgendas = pgTable(
 		tags: list("tags"),
 
 		factionId: cascadeFk("faction_id", factions.id),
+
 		agendaType: oneOf("agenda_type", agendaTypes),
 		currentStage: oneOf("current_stage", agendaStages),
 		importance: oneOf("importance", agendaImportance),
+
 		ultimateAim: string("ultimate_aim"),
 		moralAmbiguity: string("moral_ambiguity"),
 
 		approach: list("approach"),
 		storyHooks: list("story_hooks"),
-
-		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [unique().on(t.factionId, t.name)],
 )
@@ -102,6 +98,7 @@ export const factionDiplomacy = pgTable(
 
 		factionId: cascadeFk("faction_id", factions.id),
 		otherFactionId: cascadeFk("other_faction_id", factions.id),
+
 		strength: oneOf("strength", relationshipStrengths),
 		diplomaticStatus: oneOf("diplomatic_status", diplomaticStatuses),
 	},
@@ -118,9 +115,11 @@ export const factionInfluence = pgTable(
 		tags: list("tags"),
 
 		factionId: cascadeFk("faction_id", factions.id),
+
 		regionId: nullableFk("region_id", () => regions.id),
 		areaId: nullableFk("area_id", () => areas.id),
 		siteId: nullableFk("site_id", sites.id),
+
 		influenceLevel: oneOf("influence_level", influenceLevels),
 
 		presenceTypes: list("presence_types"),
@@ -151,13 +150,14 @@ export const regionConnections = pgTable(
 
 		regionId: cascadeFk("region_id", regions.id),
 		otherRegionId: nullableFk("other_region_id", regions.id),
-		connectionType: oneOf("connection_type", connectionTypes),
+		controllingFactionId: nullableFk("controlling_faction_id", () => factions.id),
 
-		// Merged from regionConnectionDetails
+		connectionType: oneOf("connection_type", connectionTypes),
 		routeType: oneOf("route_type", routeTypes),
 		travelDifficulty: oneOf("travel_difficulty", travelDifficulties),
+
 		travelTime: string("travel_time"),
-		controllingFactionId: nullableFk("controlling_faction_id", () => factions.id),
+
 		travelHazards: list("travel_hazards"),
 		pointsOfInterest: list("points_of_interest"),
 	},

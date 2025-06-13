@@ -22,6 +22,8 @@ const conflictClarity = [
 	"no_discernible_good_option",
 ] as const
 
+const tensionLevels = ["low", "building", "high", "breaking"] as const
+
 export const enums = {
 	conflictClarity,
 	conflictNatures,
@@ -29,4 +31,5 @@ export const enums = {
 	conflictStatuses,
 	participantRolesInConflict,
 	questImpacts,
+	tensionLevels,
 }

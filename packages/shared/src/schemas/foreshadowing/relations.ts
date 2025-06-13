@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
@@ -9,78 +8,73 @@ import { npcs } from "../npc/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { worldConcepts } from "../worldbuilding/tables"
-import { foreshadowingSeeds } from "./tables"
+import { foreshadowing } from "./tables"
 
-export const foreshadowingSeedsRelations = relations(foreshadowingSeeds, ({ one }) => ({
+export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) => ({
 	targetQuest: one(quests, {
-		fields: [foreshadowingSeeds.targetQuestId],
+		fields: [foreshadowing.targetQuestId],
 		references: [quests.id],
 		relationName: "foreshadowedQuest",
 	}),
 	targetNpc: one(npcs, {
-		fields: [foreshadowingSeeds.targetNpcId],
+		fields: [foreshadowing.targetNpcId],
 		references: [npcs.id],
 		relationName: "foreshadowedNpc",
 	}),
 	targetNarrativeEvent: one(narrativeEvents, {
-		fields: [foreshadowingSeeds.targetNarrativeEventId],
+		fields: [foreshadowing.targetNarrativeEventId],
 		references: [narrativeEvents.id],
 		relationName: "foreshadowedEvent",
 	}),
-	targetMajorConflict: one(majorConflicts, {
-		fields: [foreshadowingSeeds.targetMajorConflictId],
-		references: [majorConflicts.id],
+	targetMajorConflict: one(conflicts, {
+		fields: [foreshadowing.targetMajorConflictId],
+		references: [conflicts.id],
 		relationName: "foreshadowedConflict",
 	}),
 	targetItem: one(items, {
-		fields: [foreshadowingSeeds.targetItemId],
+		fields: [foreshadowing.targetItemId],
 		references: [items.id],
 		relationName: "foreshadowedItem",
 	}),
 	targetNarrativeDestination: one(narrativeDestinations, {
-		fields: [foreshadowingSeeds.targetNarrativeDestinationId],
+		fields: [foreshadowing.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "foreshadowedDestination",
 	}),
 	targetWorldConcept: one(worldConcepts, {
-		fields: [foreshadowingSeeds.targetWorldConceptId],
+		fields: [foreshadowing.targetWorldConceptId],
 		references: [worldConcepts.id],
 		relationName: "foreshadowedWorldConcept",
 	}),
 	targetFaction: one(factions, {
-		fields: [foreshadowingSeeds.targetFactionId],
+		fields: [foreshadowing.targetFactionId],
 		references: [factions.id],
 		relationName: "foreshadowedFaction",
 	}),
 	targetSite: one(sites, {
-		fields: [foreshadowingSeeds.targetSiteId],
+		fields: [foreshadowing.targetSiteId],
 		references: [sites.id],
 		relationName: "foreshadowedSite",
 	}),
 
 	sourceQuest: one(quests, {
-		fields: [foreshadowingSeeds.sourceQuestId],
+		fields: [foreshadowing.sourceQuestId],
 		references: [quests.id],
 		relationName: "questForeshadowingSeeds",
 	}),
 	sourceQuestStage: one(questStages, {
-		fields: [foreshadowingSeeds.sourceQuestStageId],
+		fields: [foreshadowing.sourceQuestStageId],
 		references: [questStages.id],
 		relationName: "stageForeshadowingSeeds",
 	}),
 	sourceSite: one(sites, {
-		fields: [foreshadowingSeeds.sourceSiteId],
+		fields: [foreshadowing.sourceSiteId],
 		references: [sites.id],
 		relationName: "siteForeshadowingSeeds",
 	}),
 	sourceNpc: one(npcs, {
-		fields: [foreshadowingSeeds.sourceNpcId],
+		fields: [foreshadowing.sourceNpcId],
 		references: [npcs.id],
 		relationName: "npcForeshadowingSeeds",
-	}),
-
-	embedding: one(embeddings, {
-		fields: [foreshadowingSeeds.embeddingId],
-		references: [embeddings.id],
 	}),
 }))

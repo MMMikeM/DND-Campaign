@@ -3,7 +3,6 @@
 import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { regions, sites } from "../regions/tables"
@@ -25,6 +24,7 @@ const {
 	trustLevels,
 	urgencyLevels,
 	visibilityLevels,
+	questHookSourceTypes,
 } = questEnums
 
 export const quests = pgTable("quests", {
@@ -54,8 +54,6 @@ export const quests = pgTable("quests", {
 
 	prerequisiteQuestId: integer("parent_id").references((): AnyPgColumn => quests.id),
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const questRelationships = pgTable(
@@ -85,19 +83,37 @@ export const questHooks = pgTable(
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", quests.id),
+
+		hookSourceType: oneOf("hook_source_type", questHookSourceTypes),
 		siteId: nullableFk("site_id", sites.id),
 		factionId: nullableFk("faction_id", factions.id),
-		source: string("source"),
+		deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
+
 		hookType: oneOf("hook_type", hookTypes),
 		presentationStyle: oneOf("presentation_style", presentationStyles),
+		trustRequired: oneOf("trust_required", trustLevels),
+
+		source: string("source"),
+		npcRelationshipToParty: string("npc_relationship_to_party"),
+		dialogueHint: string("dialogue_hint"),
+
 		hookContent: list("hook_content"),
 		discoveryConditions: list("discovery_conditions"),
-		deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
-		npcRelationshipToParty: string("npc_relationship_to_party"),
-		trustRequired: oneOf("trust_required", trustLevels),
-		dialogueHint: string("dialogue_hint"),
 	},
-	(t) => [unique().on(t.questId, t.source, t.hookType)],
+	(t) => [
+		unique().on(t.questId, t.source, t.hookType),
+		check(
+			"chk_quest_hook_source_exclusive",
+			sql`
+			CASE ${t.hookSourceType}
+				WHEN 'site' THEN (${t.siteId} IS NOT NULL AND ${t.factionId} IS NULL AND ${t.deliveryNpcId} IS NULL)
+				WHEN 'faction' THEN (${t.siteId} IS NULL AND ${t.factionId} IS NOT NULL AND ${t.deliveryNpcId} IS NULL)
+				WHEN 'npc' THEN (${t.siteId} IS NULL AND ${t.factionId} IS NULL AND ${t.deliveryNpcId} IS NOT NULL)
+				ELSE FALSE
+			END
+			`,
+		),
+	],
 )
 
 export const questParticipantInvolvement = pgTable(
@@ -112,8 +128,11 @@ export const questParticipantInvolvement = pgTable(
 		questId: cascadeFk("quest_id", quests.id),
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
+
 		roleInQuest: string("role_in_quest"),
+
 		importanceInQuest: oneOf("importance_in_quest", participantImportanceLevels),
+
 		involvementDetails: list("involvement_details"),
 	},
 	(t) => [

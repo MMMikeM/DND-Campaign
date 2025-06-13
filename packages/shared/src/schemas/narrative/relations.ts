@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { itemRelationships } from "../items/tables"
 import { npcs } from "../npc/tables"
@@ -16,13 +15,13 @@ import {
 
 export const narrativeDestinationsRelations = relations(narrativeDestinations, ({ one, many }) => ({
 	region: one(regions, {
-		fields: [narrativeDestinations.primaryRegionId],
+		fields: [narrativeDestinations.regionId],
 		references: [regions.id],
 		relationName: "regionNarrativeDestinations",
 	}),
-	conflict: one(majorConflicts, {
-		fields: [narrativeDestinations.relatedConflictId],
-		references: [majorConflicts.id],
+	conflict: one(conflicts, {
+		fields: [narrativeDestinations.conflictId],
+		references: [conflicts.id],
 		relationName: "conflictNarrativeDestinations",
 	}),
 
@@ -32,11 +31,6 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 	}),
 	itemRelationships: many(itemRelationships, { relationName: "narrativeDestinationItemRelationships" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "narrativeDestinationWorldConceptLinks" }),
-
-	embedding: one(embeddings, {
-		fields: [narrativeDestinations.embeddingId],
-		references: [embeddings.id],
-	}),
 }))
 
 export const destinationRelationshipsRelations = relations(destinationRelationships, ({ one }) => ({

@@ -1,19 +1,18 @@
 // conflict/relations.ts
 import { relations } from "drizzle-orm"
-import { embeddings } from "../embeddings/tables"
 import { consequences } from "../events/tables"
 import { factions } from "../factions/tables"
-import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
 import { regions } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
-import { conflictParticipants, majorConflicts } from "./tables"
+import { conflictParticipants, conflicts } from "./tables"
 
-export const majorConflictsRelations = relations(majorConflicts, ({ one, many }) => ({
+export const majorConflictsRelations = relations(conflicts, ({ one, many }) => ({
 	primaryRegion: one(regions, {
-		fields: [majorConflicts.primaryRegionId],
+		fields: [conflicts.regionId],
 		references: [regions.id],
 		relationName: "regionConflicts",
 	}),
@@ -21,20 +20,15 @@ export const majorConflictsRelations = relations(majorConflicts, ({ one, many })
 	consequences: many(consequences, { relationName: "consequencesByConflict" }),
 	affectedByConsequences: many(consequences, { relationName: "consequencesAffectingConflict" }),
 	narrativeDestinations: many(narrativeDestinations, { relationName: "conflictNarrativeDestinations" }),
-	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "foreshadowedConflict" }),
+	foreshadowingSeeds: many(foreshadowing, { relationName: "foreshadowedConflict" }),
 	itemRelationships: many(itemRelationships, { relationName: "conflictItemRelationships" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "conflictWorldConceptLinks" }),
-
-	embedding: one(embeddings, {
-		fields: [majorConflicts.embeddingId],
-		references: [embeddings.id],
-	}),
 }))
 
 export const conflictParticipantsRelations = relations(conflictParticipants, ({ one }) => ({
-	conflict: one(majorConflicts, {
+	conflict: one(conflicts, {
 		fields: [conflictParticipants.conflictId],
-		references: [majorConflicts.id],
+		references: [conflicts.id],
 		relationName: "conflictParticipants",
 	}),
 	faction: one(factions, {

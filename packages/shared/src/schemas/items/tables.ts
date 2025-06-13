@@ -2,8 +2,7 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -19,26 +18,26 @@ const { itemRelationshipTypes, itemTypes, narrativeRoles, perceivedSimplicityLev
 
 export const items = pgTable("items", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	name: string("name").unique(),
+	relatedQuestId: nullableFk("related_quest_id", quests.id),
+
 	itemType: oneOf("item_type", itemTypes),
 	rarity: oneOf("rarity", rarityLevels),
-
 	narrativeRole: oneOf("narrative_role", narrativeRoles),
 	perceivedSimplicity: oneOf("perceived_simplicity", perceivedSimplicityLevels),
 
 	significance: string("significance"),
 	loreSignificance: string("lore_significance"),
-	mechanicalEffects: list("mechanical_effects"),
 
 	creationPeriod: nullableString("creation_period"),
 	placeOfOrigin: nullableString("place_of_origin"),
-	relatedQuestId: nullableFk("related_quest_id", quests.id),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
+
+	mechanicalEffects: list("mechanical_effects"),
 })
 
 export const itemRelationships = pgTable(
@@ -52,14 +51,14 @@ export const itemRelationships = pgTable(
 
 		sourceItemId: cascadeFk("source_item_id", items.id),
 
-		// Polymorphic relationship - only one of these should be populated
 		targetEntityType: oneOf("target_entity_type", targetEntityTypes),
+
 		targetItemId: nullableFk("target_item_id", items.id),
 		targetNpcId: nullableFk("target_npc_id", npcs.id),
 		targetFactionId: nullableFk("target_faction_id", factions.id),
 		targetSiteId: nullableFk("target_site_id", sites.id),
 		targetQuestId: nullableFk("target_quest_id", quests.id),
-		targetConflictId: nullableFk("target_conflict_id", majorConflicts.id),
+		targetConflictId: nullableFk("target_conflict_id", conflicts.id),
 		targetNarrativeDestinationId: nullableFk("target_narrative_destination_id", narrativeDestinations.id),
 		targetWorldConceptId: nullableFk("target_world_concept_id", worldConcepts.id),
 
@@ -107,9 +106,10 @@ export const itemNotableHistory = pgTable("item_notable_history", {
 	tags: list("tags"),
 
 	itemId: cascadeFk("item_id", items.id),
+	keyNpcId: nullableFk("key_npc_id", npcs.id),
+	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
+
 	eventDescription: string("event_description"),
 	timeframe: string("timeframe"),
-	keyNpcId: nullableFk("key_npc_id", npcs.id),
 	npcRoleInEvent: string("npc_role_in_event"),
-	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
 })

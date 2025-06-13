@@ -3,8 +3,7 @@
 import { sql } from "drizzle-orm"
 import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
@@ -18,25 +17,24 @@ const { arcImportanceLevels, arcTypes, destinationRelationshipTypes, destination
 
 export const narrativeDestinations = pgTable("narrative_destinations", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	name: string("name").unique(),
+	regionId: nullableFk("primary_region_id", regions.id),
+	conflictId: nullableFk("related_conflict_id", conflicts.id),
+
 	type: oneOf("type", arcTypes),
 	status: oneOf("status", destinationStatuses),
+	intendedEmotionalArc: oneOf("intended_emotional_arc", emotionalArcs),
 
 	promise: string("promise"),
 	payoff: string("payoff"),
 
 	themes: list("themes"),
 	foreshadowingElements: list("foreshadowing_elements"),
-	intendedEmotionalArc: oneOf("intended_emotional_arc", emotionalArcs),
-	primaryRegionId: nullableFk("primary_region_id", regions.id),
-	relatedConflictId: nullableFk("related_conflict_id", majorConflicts.id),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const destinationQuestRoles = pgTable(
@@ -50,8 +48,11 @@ export const destinationQuestRoles = pgTable(
 
 		destinationId: cascadeFk("destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
+
 		role: oneOf("role", questRoles),
+
 		sequenceInArc: integer("sequence_in_arc"),
+
 		contributionDetails: list("contribution_details"),
 	},
 	(t) => [unique().on(t.destinationId, t.questId)],
@@ -68,7 +69,9 @@ export const destinationRelationships = pgTable(
 
 		sourceDestinationId: cascadeFk("source_destination_id", narrativeDestinations.id),
 		relatedDestinationId: cascadeFk("related_destination_id", narrativeDestinations.id),
+
 		relationshipType: oneOf("relationship_type", destinationRelationshipTypes),
+
 		relationshipDetails: list("relationship_details"),
 	},
 	(t) => [
@@ -87,10 +90,14 @@ export const destinationParticipantInvolvement = pgTable(
 		tags: list("tags"),
 
 		destinationId: cascadeFk("destination_id", narrativeDestinations.id),
+
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
+
 		roleInArc: string("role_in_arc"),
+
 		arcImportance: oneOf("arc_importance", arcImportanceLevels),
+
 		involvementDetails: list("involvement_details"),
 	},
 	(t) => [

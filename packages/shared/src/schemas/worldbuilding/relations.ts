@@ -1,7 +1,6 @@
 // worldbuilding/relations.ts
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { itemRelationships } from "../items/tables"
 import { npcs } from "../npc/tables"
@@ -9,12 +8,7 @@ import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { conceptRelationships, worldConceptLinks, worldConcepts } from "./tables"
 
-export const worldConceptsRelations = relations(worldConcepts, ({ one, many }) => ({
-	embedding: one(embeddings, {
-		fields: [worldConcepts.embeddingId],
-		references: [embeddings.id],
-	}),
-
+export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
 	sourceOfConceptRelationships: many(conceptRelationships, {
 		relationName: "sourceConceptInRelationship",
 	}),
@@ -47,7 +41,6 @@ export const worldConceptLinksRelations = relations(worldConceptLinks, ({ one })
 		relationName: "worldConceptLinks",
 	}),
 
-	// Polymorphic relations to different entity types
 	linkedRegion: one(regions, {
 		fields: [worldConceptLinks.regionId],
 		references: [regions.id],
@@ -68,9 +61,9 @@ export const worldConceptLinksRelations = relations(worldConceptLinks, ({ one })
 		references: [quests.id],
 		relationName: "questWorldConceptLinks",
 	}),
-	linkedConflict: one(majorConflicts, {
+	linkedConflict: one(conflicts, {
 		fields: [worldConceptLinks.conflictId],
-		references: [majorConflicts.id],
+		references: [conflicts.id],
 		relationName: "conflictWorldConceptLinks",
 	}),
 }))

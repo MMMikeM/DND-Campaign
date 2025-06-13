@@ -48,6 +48,18 @@ const playerImpactFeels = [
 	"just_consequence",
 ] as const
 
+export const consequenceTriggerTypes = ["decision", "quest", "conflict"] as const
+export const consequenceAffectedEntityTypes = [
+	"faction",
+	"region",
+	"area",
+	"site",
+	"npc",
+	"narrative_destination",
+	"conflict",
+	"quest",
+] as const
+
 export const enums = {
 	consequenceSources,
 	consequenceTimeframe,
@@ -58,4 +70,6 @@ export const enums = {
 	narrativePlacements,
 	playerImpactFeels,
 	rhythmEffects,
+	consequenceTriggerTypes,
+	consequenceAffectedEntityTypes,
 }

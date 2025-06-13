@@ -29,6 +29,8 @@ const conceptRelationshipTypes = [
 
 const conceptLinkStrengths = ["tenuous", "moderate", "strong", "defining"] as const
 
+const currentEffectivenessLevels = ["failing", "struggling", "stable", "thriving", "dominant"] as const
+
 export const enums = {
 	complexityProfiles,
 	conceptLinkStrengths,
@@ -37,4 +39,5 @@ export const enums = {
 	conceptStatuses,
 	conceptTypes,
 	moralClarity,
+	currentEffectivenessLevels,
 }

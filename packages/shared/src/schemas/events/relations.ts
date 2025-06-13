@@ -1,7 +1,6 @@
 // world/relations.ts
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -26,11 +25,6 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one }) => 
 		references: [quests.id],
 		relationName: "questEvents",
 	}),
-
-	embedding: one(embeddings, {
-		fields: [narrativeEvents.embeddingId],
-		references: [embeddings.id],
-	}),
 }))
 
 export const consequencesRelations = relations(consequences, ({ one }) => ({
@@ -44,9 +38,9 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		references: [stageDecisions.id],
 		relationName: "consequencesByDecision",
 	}),
-	triggerConflict: one(majorConflicts, {
+	triggerConflict: one(conflicts, {
 		fields: [consequences.triggerConflictId],
-		references: [majorConflicts.id],
+		references: [conflicts.id],
 		relationName: "consequencesByConflict",
 	}),
 
@@ -80,9 +74,9 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		references: [npcs.id],
 		relationName: "consequencesAffectingNpc",
 	}),
-	affectedConflict: one(majorConflicts, {
+	affectedConflict: one(conflicts, {
 		fields: [consequences.affectedConflictId],
-		references: [majorConflicts.id],
+		references: [conflicts.id],
 		relationName: "consequencesAffectingConflict",
 	}),
 
@@ -90,10 +84,5 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		fields: [consequences.futureQuestId],
 		references: [quests.id],
 		relationName: "consequenceLeadsToQuest",
-	}),
-
-	embedding: one(embeddings, {
-		fields: [consequences.embeddingId],
-		references: [embeddings.id],
 	}),
 }))
