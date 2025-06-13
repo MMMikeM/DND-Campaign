@@ -78,6 +78,7 @@ export const questHooks = pgTable(
 	"quest_hooks",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),

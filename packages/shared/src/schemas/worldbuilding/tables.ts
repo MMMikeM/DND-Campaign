@@ -24,12 +24,12 @@ const {
 
 export const worldConcepts = pgTable("world_concepts", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	name: string("name").unique(),
 	conceptType: oneOf("concept_type", conceptTypes),
 
 	complexityProfile: oneOf("complexity_profile", complexityProfiles),

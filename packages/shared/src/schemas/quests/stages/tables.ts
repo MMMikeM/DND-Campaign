@@ -15,6 +15,7 @@ const { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageI
 
 export const questStages = pgTable("quest_stages", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
@@ -24,7 +25,6 @@ export const questStages = pgTable("quest_stages", {
 	siteId: nullableFk("site_id", sites.id),
 	deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
 	stageOrder: integer("stage_order").notNull(),
-	name: string("name").unique(),
 	dramatic_question: string("dramatic_question"),
 
 	stageType: oneOf("stage_type", stageTypes),
@@ -45,6 +45,7 @@ export const stageDecisions = pgTable(
 	"stage_decisions",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),
@@ -58,7 +59,6 @@ export const stageDecisions = pgTable(
 		toStageId: nullableFk("to_stage_id", questStages.id),
 		conditionType: oneOf("condition_type", conditionTypes),
 		decisionType: oneOf("decision_type", decisionTypes),
-		name: string("name"),
 
 		ambiguityLevel: oneOf("ambiguity_level", ambiguityLevels),
 		conditionValue: string("condition_value"),

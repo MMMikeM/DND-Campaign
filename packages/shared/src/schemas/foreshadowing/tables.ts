@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
-import { list, manyOf, nullableFk, nullableString, oneOf, pk } from "../../db/utils"
+import { list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { majorConflicts } from "../conflict/tables"
 import { embeddings } from "../embeddings/tables"
 import { narrativeEvents } from "../events/tables"
@@ -23,6 +23,7 @@ export const foreshadowingSeeds = pgTable(
 	"foreshadowing_seeds",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),

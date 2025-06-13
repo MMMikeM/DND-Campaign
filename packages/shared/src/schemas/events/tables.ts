@@ -30,12 +30,12 @@ export const narrativeEvents = pgTable(
 	"narrative_events",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		name: string("name").unique(),
 		eventType: oneOf("event_type", eventTypes),
 
 		intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
@@ -72,12 +72,12 @@ export const consequences = pgTable(
 	"consequences",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		name: string("name").unique(),
 
 		consequenceType: oneOf("consequence_type", consequenceTypes),
 		severity: oneOf("severity", impactSeverity),

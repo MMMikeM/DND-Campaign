@@ -26,12 +26,12 @@ export const factions = pgTable(
 	"factions",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		name: string("name").unique(),
 		publicAlignment: oneOf("public_alignment", alignments),
 		secretAlignment: nullableOneOf("secret_alignment", alignments),
 		size: oneOf("size", factionSizes),
@@ -70,13 +70,13 @@ export const factionAgendas = pgTable(
 	"faction_agendas",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		factionId: cascadeFk("faction_id", factions.id),
-		name: string("name").unique(),
 		agendaType: oneOf("agenda_type", agendaTypes),
 		currentStage: oneOf("current_stage", agendaStages),
 		importance: oneOf("importance", agendaImportance),
@@ -143,6 +143,7 @@ export const regionConnections = pgTable(
 	"region_connections",
 	{
 		id: pk(),
+		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		gmNotes: list("gm_notes"),

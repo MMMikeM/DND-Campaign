@@ -1,42 +1,57 @@
 import { type AnyPgColumn, customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
 
-export const list = (description: string) => text(description).array().notNull()
+const list = (description: string) => text(description).array().notNull()
 
-export const nullableFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
+const nullableFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
 	const refThunk =
 		typeof referencedColumnOrThunk === "function" ? referencedColumnOrThunk : () => referencedColumnOrThunk
 
 	return integer(description).references(refThunk, { onDelete: "set null" })
 }
 
-export const cascadeFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
+const cascadeFk = (description: string, referencedColumnOrThunk: PgColumn | (() => AnyPgColumn)) => {
 	const refThunk =
 		typeof referencedColumnOrThunk === "function" ? referencedColumnOrThunk : () => referencedColumnOrThunk
 	return integer(description).references(refThunk, { onDelete: "cascade" }).notNull()
 }
 
-export const string = (description: string) => text(description).notNull()
+const string = (description: string) => text(description).notNull()
 
-export const nullableString = (description: string) => text(description)
+const nullableString = (description: string) => text(description)
 
-export const oneOf = (description: string, options: readonly [string, ...string[]]) =>
+const oneOf = (description: string, options: readonly [string, ...string[]]) =>
 	text(description, { enum: options }).notNull()
 
-export const nullableOneOf = (description: string, options: readonly [string, ...string[]]) =>
+const nullableOneOf = (description: string, options: readonly [string, ...string[]]) =>
 	text(description, { enum: options })
 
-export const manyOf = (description: string, options: readonly [string, ...string[]]) =>
+const manyOf = (description: string, options: readonly [string, ...string[]]) =>
 	text(description, { enum: options }).array().notNull()
 
-export const pk = () => serial("id").primaryKey()
+const pk = () => serial("id").primaryKey()
 
-export const embeddingVector = (name: string = "embedding") => {
+const embeddingVector = (name: string = "embedding") => {
 	return vector(name, { dimensions: 3072 })
 }
 
 // Custom bytea type for binary image data
-export const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
+const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
 	dataType() {
 		return "bytea"
 	},
 })
+
+
+export {
+	list,
+	nullableFk,
+	cascadeFk,
+	string,
+	nullableString,
+	oneOf,
+	nullableOneOf,
+	manyOf,
+	pk,
+	embeddingVector,
+	bytea,
+}
