@@ -1,3 +1,4 @@
+// factions/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
@@ -31,7 +32,7 @@ export const factions = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		hqSiteId: nullableFk("primary_hq_site_id", () => sites.id),
+		hqSiteId: nullableFk("hq_site_id", () => sites.id),
 
 		size: oneOf("size", factionSizes),
 		wealth: oneOf("wealth", wealthLevels),

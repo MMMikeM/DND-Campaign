@@ -49,12 +49,12 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		relationName: "questDecisions",
 	}),
 	fromStage: one(questStages, {
-		fields: [stageDecisions.fromStageId],
+		fields: [stageDecisions.fromQuestStageId],
 		references: [questStages.id],
 		relationName: "decisionsFromStage",
 	}),
 	toStage: one(questStages, {
-		fields: [stageDecisions.toStageId],
+		fields: [stageDecisions.toQuestStageId],
 		references: [questStages.id],
 		relationName: "decisionsToStage",
 	}),

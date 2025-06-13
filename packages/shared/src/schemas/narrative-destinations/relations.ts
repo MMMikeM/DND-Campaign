@@ -8,9 +8,9 @@ import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { worldConceptLinks } from "../world-concepts/tables"
 import {
-	destinationParticipantInvolvement,
-	destinationQuestRoles,
-	destinationRelationships,
+	narrativeDestinationParticipants,
+	narrativeDestinationQuestRoles,
+	narrativeDestinationRelationships,
 	narrativeDestinations,
 } from "./tables"
 
@@ -26,11 +26,11 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 		relationName: "conflictNarrativeDestinations",
 	}),
 
-	sourceOfRelationships: many(destinationRelationships, { relationName: "sourceDestination" }),
-	targetOfRelationships: many(destinationRelationships, { relationName: "targetDestination" }),
+	sourceOfRelationships: many(narrativeDestinationRelationships, { relationName: "sourceDestination" }),
+	targetOfRelationships: many(narrativeDestinationRelationships, { relationName: "targetDestination" }),
 
-	questRoles: many(destinationQuestRoles, { relationName: "destinationQuestRoles" }),
-	participantInvolvement: many(destinationParticipantInvolvement, {
+	questRoles: many(narrativeDestinationQuestRoles, { relationName: "destinationQuestRoles" }),
+	participantInvolvement: many(narrativeDestinationParticipants, {
 		relationName: "destinationParticipantInvolvement",
 	}),
 	itemRelationships: many(itemRelationships, { relationName: "narrativeDestinationItemRelationships" }),
@@ -38,45 +38,45 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 	foreshadowing: many(foreshadowing, { relationName: "foreshadowedNarrativeDestination" }),
 }))
 
-export const destinationRelationshipsRelations = relations(destinationRelationships, ({ one }) => ({
+export const destinationRelationshipsRelations = relations(narrativeDestinationRelationships, ({ one }) => ({
 	sourceDestination: one(narrativeDestinations, {
-		fields: [destinationRelationships.sourceDestinationId],
+		fields: [narrativeDestinationRelationships.sourceNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "sourceDestination",
 	}),
 	targetDestination: one(narrativeDestinations, {
-		fields: [destinationRelationships.targetDestinationId],
+		fields: [narrativeDestinationRelationships.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "targetDestination",
 	}),
 }))
 
-export const destinationQuestRolesRelations = relations(destinationQuestRoles, ({ one }) => ({
+export const destinationQuestRolesRelations = relations(narrativeDestinationQuestRoles, ({ one }) => ({
 	destination: one(narrativeDestinations, {
-		fields: [destinationQuestRoles.destinationId],
+		fields: [narrativeDestinationQuestRoles.narrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "destinationQuestRoles",
 	}),
 	quest: one(quests, {
-		fields: [destinationQuestRoles.questId],
+		fields: [narrativeDestinationQuestRoles.questId],
 		references: [quests.id],
 		relationName: "questDestinationRoles",
 	}),
 }))
 
-export const destinationParticipantInvolvementRelations = relations(destinationParticipantInvolvement, ({ one }) => ({
+export const destinationParticipantInvolvementRelations = relations(narrativeDestinationParticipants, ({ one }) => ({
 	destination: one(narrativeDestinations, {
-		fields: [destinationParticipantInvolvement.destinationId],
+		fields: [narrativeDestinationParticipants.narrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "destinationParticipantInvolvement",
 	}),
 	npc: one(npcs, {
-		fields: [destinationParticipantInvolvement.npcId],
+		fields: [narrativeDestinationParticipants.npcId],
 		references: [npcs.id],
 		relationName: "npcDestinationInvolvement",
 	}),
 	faction: one(factions, {
-		fields: [destinationParticipantInvolvement.factionId],
+		fields: [narrativeDestinationParticipants.factionId],
 		references: [factions.id],
 		relationName: "factionDestinationInvolvement",
 	}),

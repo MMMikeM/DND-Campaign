@@ -52,7 +52,7 @@ export const quests = pgTable("quests", {
 	themes: list("themes"),
 	inspirations: list("inspirations"),
 
-	prerequisiteQuestId: integer("parent_id").references((): AnyPgColumn => quests.id),
+	prerequisiteQuestId: integer("prerequisite_quest_id").references((): AnyPgColumn => quests.id),
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
 })
 

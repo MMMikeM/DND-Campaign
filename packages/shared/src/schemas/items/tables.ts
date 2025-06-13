@@ -109,7 +109,7 @@ export const itemNotableHistory = pgTable("item_notable_history", {
 
 	itemId: cascadeFk("item_id", items.id),
 	keyNpcId: nullableFk("key_npc_id", npcs.id),
-	eventLocationSiteId: nullableFk("event_location_site_id", sites.id),
+	locationSiteId: nullableFk("location_site_id", sites.id),
 
 	eventDescription: string("event_description"),
 	timeframe: string("timeframe"),

@@ -1,3 +1,4 @@
+// npcs/tables.ts
 import { sql } from "drizzle-orm"
 import { boolean, check, pgTable, unique, uniqueIndex } from "drizzle-orm/pg-core"
 import { cascadeFk, list, oneOf, pk, string } from "../../db/utils"

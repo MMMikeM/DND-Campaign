@@ -20,6 +20,7 @@ const {
 	conceptTypes,
 	moralClarity,
 	currentEffectivenessLevels,
+	targetEntityTypes,
 } = enums
 
 export const worldConcepts = pgTable("world_concepts", {
@@ -86,16 +87,16 @@ export const worldConceptRelationships = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		sourceConceptId: cascadeFk("source_concept_id", worldConcepts.id),
-		targetConceptId: cascadeFk("target_concept_id", worldConcepts.id),
+		sourceWorldConceptId: cascadeFk("source_world_concept_id", worldConcepts.id),
+		targetWorldConceptId: cascadeFk("target_world_concept_id", worldConcepts.id),
 		relationshipType: oneOf("relationship_type", conceptRelationshipTypes),
 
 		relationshipDetails: nullableString("relationship_details"),
 		strength: oneOf("strength", ["weak", "moderate", "strong"] as const),
 	},
 	(t) => [
-		unique().on(t.sourceConceptId, t.targetConceptId, t.relationshipType),
-		check("no_self_relationship", sql`${t.sourceConceptId} != ${t.targetConceptId}`),
+		unique().on(t.sourceWorldConceptId, t.targetWorldConceptId, t.relationshipType),
+		check("no_self_relationship", sql`${t.sourceWorldConceptId} != ${t.targetWorldConceptId}`),
 	],
 )
 
@@ -108,8 +109,9 @@ export const worldConceptLinks = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		conceptId: cascadeFk("concept_id", worldConcepts.id),
+		worldConceptId: cascadeFk("world_concept_id", worldConcepts.id),
 
+		targetEntityType: oneOf("target_entity_type", targetEntityTypes),
 		regionId: nullableFk("region_id", regions.id),
 		factionId: nullableFk("faction_id", factions.id),
 		npcId: nullableFk("npc_id", npcs.id),

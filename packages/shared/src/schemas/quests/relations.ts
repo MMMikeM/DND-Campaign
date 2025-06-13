@@ -3,13 +3,13 @@ import { relations } from "drizzle-orm"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
-import { destinationQuestRoles } from "../narrative-destinations/tables"
+import { narrativeDestinationQuestRoles } from "../narrative-destinations/tables"
 import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
 import { worldConceptLinks } from "../world-concepts/tables"
 import { questStages } from "./stages/tables"
-import { questHooks, questParticipantInvolvement, questRelationships, quests } from "./tables"
+import { questHooks, questParticipants, questRelationships, quests } from "./tables"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {
@@ -26,8 +26,8 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	stages: many(questStages, { relationName: "questStages" }),
 
 	hooks: many(questHooks, { relationName: "questHooks" }),
-	participantInvolvement: many(questParticipantInvolvement, { relationName: "questParticipants" }),
-	destinationContributions: many(destinationQuestRoles, { relationName: "questDestinationRoles" }),
+	participants: many(questParticipants, { relationName: "questParticipants" }),
+	narrativeDestinationContributions: many(narrativeDestinationQuestRoles, { relationName: "questDestinationRoles" }),
 
 	consequences: many(consequences, {
 		relationName: "consequencesByQuest",
@@ -76,19 +76,19 @@ export const questHooksRelations = relations(questHooks, ({ one }) => ({
 	}),
 }))
 
-export const questParticipantInvolvementRelations = relations(questParticipantInvolvement, ({ one }) => ({
+export const questParticipantsRelations = relations(questParticipants, ({ one }) => ({
 	quest: one(quests, {
-		fields: [questParticipantInvolvement.questId],
+		fields: [questParticipants.questId],
 		references: [quests.id],
 		relationName: "questParticipants",
 	}),
 	npc: one(npcs, {
-		fields: [questParticipantInvolvement.npcId],
+		fields: [questParticipants.npcId],
 		references: [npcs.id],
 		relationName: "npcQuestParticipation",
 	}),
 	faction: one(factions, {
-		fields: [questParticipantInvolvement.factionId],
+		fields: [questParticipants.factionId],
 		references: [factions.id],
 		relationName: "factionQuestParticipation",
 	}),

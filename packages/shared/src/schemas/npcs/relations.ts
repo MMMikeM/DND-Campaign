@@ -3,7 +3,7 @@ import { conflictParticipants } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
-import { destinationParticipantInvolvement } from "../narrative-destinations/tables"
+import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcStageInvolvement } from "../quests/stages/tables"
 import { questHooks, questStages } from "../quests/tables"
@@ -25,7 +25,7 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	sourceOfForeshadowing: many(foreshadowing, { relationName: "npcForeshadowingSeeds" }),
 	itemHistory: many(itemNotableHistory, { relationName: "npcItemHistory" }),
 	itemRelationships: many(itemRelationships, { relationName: "npcItemRelationships" }),
-	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "npcDestinationInvolvement" }),
+	destinationInvolvement: many(narrativeDestinationParticipants, { relationName: "npcDestinationInvolvement" }),
 	questHooks: many(questHooks, { relationName: "npcQuestHooks" }),
 	questStageDeliveries: many(questStages, { relationName: "npcQuestStageDeliveries" }),
 	stageInvolvement: many(npcStageInvolvement, { relationName: "npcStageInvolvement" }),

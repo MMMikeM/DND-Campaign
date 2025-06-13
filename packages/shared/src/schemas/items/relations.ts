@@ -22,8 +22,8 @@ export const itemsRelations = relations(items, ({ many, one }) => ({
 		relationName: "item",
 	}),
 
-	stage: one(questStages, {
-		fields: [items.stageId],
+	questStage: one(questStages, {
+		fields: [items.questStageId],
 		references: [questStages.id],
 		relationName: "stageItems",
 	}),
@@ -96,8 +96,8 @@ export const itemNotableHistoryRelations = relations(itemNotableHistory, ({ one 
 		references: [npcs.id],
 		relationName: "npcItemHistory",
 	}),
-	eventLocationSite: one(sites, {
-		fields: [itemNotableHistory.eventLocationSiteId],
+	locationSite: one(sites, {
+		fields: [itemNotableHistory.locationSiteId],
 		references: [sites.id],
 		relationName: "siteItemHistory",
 	}),

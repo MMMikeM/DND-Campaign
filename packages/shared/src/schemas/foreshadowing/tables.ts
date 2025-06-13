@@ -19,7 +19,7 @@ export { enums } from "./enums"
 const { discoverySubtlety, foreshadowedEntityType, narrativeWeight, seedDeliveryMethods } = enums
 
 export const foreshadowing = pgTable(
-	"foreshadowing_seeds",
+	"foreshadowing",
 	{
 		id: pk(),
 		name: string("name").unique(),
