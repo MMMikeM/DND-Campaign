@@ -22,24 +22,17 @@ const factionTypes = [
 
 const transparencyLevels = ["transparent", "secretive", "deceptive"] as const
 
-const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
-const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
-const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
-
 export const enums = {
 	agendaImportance,
 	agendaStages,
 	agendaTypes,
 	alignments,
-	connectionTypes,
 	diplomaticStatuses,
 	factionSizes,
 	factionTypes,
 	influenceLevels,
 	reachLevels,
 	relationshipStrengths,
-	routeTypes,
 	transparencyLevels,
-	travelDifficulties,
 	wealthLevels,
 }

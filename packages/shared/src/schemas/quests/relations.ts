@@ -1,10 +1,10 @@
 // quests/relations.ts
 import { relations } from "drizzle-orm"
-import { consequences, narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
-import { destinationQuestRoles } from "../narrative/tables"
+import { destinationQuestRoles } from "../narrative-destinations/tables"
+import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npc/tables"
 import { regions, sites } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"

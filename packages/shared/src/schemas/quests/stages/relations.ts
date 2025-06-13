@@ -1,8 +1,8 @@
 // quests/stages/relations.ts
 import { relations } from "drizzle-orm"
-import { consequences, narrativeEvents } from "../../events/tables"
 import { foreshadowing } from "../../foreshadowing/tables"
 import { items } from "../../items/tables"
+import { consequences, narrativeEvents } from "../../narrative-events/tables"
 import { npcs } from "../../npc/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
