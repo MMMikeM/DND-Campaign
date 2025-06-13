@@ -1,3 +1,4 @@
+
 {
 	"name": "tome-master",
 	"version": "1.0.0",
@@ -27,10 +28,10 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@biomejs/biome": "2.0.0-beta.5",
+		"@biomejs/biome": "catalog:",
 		"@types/node": "catalog:",
 		"knip": "^5.58.1",
-		"turbo": "^2.5.3",
+		"turbo": "^2.5.4",
 		"typescript": "catalog:"
 	},
 	"engines": {
