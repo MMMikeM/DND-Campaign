@@ -8,11 +8,11 @@ import { createEntityGettersFactory } from "./utils/types"
 const createEntityGetters = createEntityGettersFactory(tables.foreshadowingTables)
 
 export const entityGetters = createEntityGetters({
-	all_foreshadowing_seeds: () => db.query.foreshadowingSeeds.findMany({}),
+	all_foreshadowing: () => db.query.foreshadowing.findMany({}),
 
-	foreshadowing_seed_by_id: (id: number) =>
-		db.query.foreshadowingSeeds.findFirst({
-			where: (foreshadowingSeeds, { eq }) => eq(foreshadowingSeeds.id, id),
+	foreshadowing_by_id: (id: number) =>
+		db.query.foreshadowing.findFirst({
+			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
 			with: {
 				sourceNpc: { columns: { name: true, id: true } },
 				sourceSite: { columns: { name: true, id: true } },
@@ -20,7 +20,7 @@ export const entityGetters = createEntityGetters({
 				sourceQuestStage: { columns: { name: true, id: true } },
 				targetFaction: { columns: { name: true, id: true } },
 				targetItem: { columns: { name: true, id: true } },
-				targetMajorConflict: { columns: { name: true, id: true } },
+				targetConflict: { columns: { name: true, id: true } },
 				targetNarrativeDestination: { columns: { name: true, id: true } },
 				targetNpc: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },

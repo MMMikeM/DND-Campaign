@@ -143,7 +143,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		})
 
 		// Get foreshadowing seeds related to sites
-		const foreshadowingSeeds = await db.query.foreshadowingSeeds.findMany({
+		const foreshadowingSeeds = await db.query.foreshadowing.findMany({
 			where: (fs, { or, isNotNull }) => or(isNotNull(fs.sourceSiteId), isNotNull(fs.targetSiteId)),
 			with: {
 				sourceSite: { columns: { id: true, name: true } },
@@ -260,7 +260,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			limit: 10,
 		})
 
-		const activeConflicts = await db.query.majorConflicts.findMany({
+		const activeConflicts = await db.query.conflicts.findMany({
 			where: (conflicts, { eq }) => eq(conflicts.status, "active"),
 			with: {
 				participants: {

@@ -8,11 +8,11 @@ import { createEntityGettersFactory } from "./utils/types"
 const createEntityGetters = createEntityGettersFactory(tables.conflictTables)
 
 export const entityGetters = createEntityGetters({
-	all_major_conflicts: () => db.query.majorConflicts.findMany({}),
+	all_conflicts: () => db.query.conflicts.findMany({}),
 	all_conflict_participants: () => db.query.conflictParticipants.findMany({}),
-	major_conflict_by_id: (id: number) =>
-		db.query.majorConflicts.findFirst({
-			where: (majorConflicts, { eq }) => eq(majorConflicts.id, id),
+	conflict_by_id: (id: number) =>
+		db.query.conflicts.findFirst({
+			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
 				affectedByConsequences: true,
 				consequences: true,

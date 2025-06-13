@@ -16,6 +16,27 @@ const {
 	},
 } = tables
 
+const {
+	ambiguityLevels,
+	conditionTypes,
+	decisionTypes,
+	hookTypes,
+	moralSpectrumFocus,
+	pacingRoles,
+	playerExperienceGoals,
+	relationshipTypes,
+	stageImportanceLevels,
+	stageTypes,
+	visibilityLevels,
+	urgencyLevels,
+	complexityLevels,
+	participantImportanceLevels,
+	presentationStyles,
+	questHookSourceTypes,
+	questTypes,
+	trustLevels,
+} = enums
+
 type TableNames = CreateTableNames<typeof tables.questTables>
 
 export const tableEnum = [
@@ -40,19 +61,19 @@ export const schemas = {
 		name: (s) => s.describe("Title or identifier revealed to players"),
 		regionId: optionalId.describe("ID of region where quest primarily takes place"),
 		mood: (s) => s.describe("Emotional tone and atmosphere (tense, mysterious, celebratory, etc.)"),
-		urgency: z.enum(enums.urgencyLevels).describe("Time pressure (background, developing, urgent, critical)"),
-		visibility: z.enum(enums.visibilityLevels).describe("How known this quest is (hidden, rumored, known, featured)"),
-		type: z.enum(enums.questTypes).describe("Campaign significance (main, side, faction, character, generic)"),
-		moralSpectrumFocus: z.enum(enums.moralSpectrumFocus).describe("Moral complexity of the quest"),
-		intendedPacingRole: z.enum(enums.pacingRoles).describe("Role in campaign pacing"),
-		primaryPlayerExperienceGoal: z.enum(enums.playerExperienceGoals).describe("Primary experience goal for players"),
+		urgency: z.enum(urgencyLevels).describe("Time pressure (background, developing, urgent, critical)"),
+		visibility: z.enum(visibilityLevels).describe("How known this quest is (hidden, rumored, known, featured)"),
+		type: z.enum(questTypes).describe("Campaign significance (main, side, faction, character, generic)"),
+		moralSpectrumFocus: z.enum(moralSpectrumFocus).describe("Moral complexity of the quest"),
+		intendedPacingRole: z.enum(pacingRoles).describe("Role in campaign pacing"),
+		primaryPlayerExperienceGoal: z.enum(playerExperienceGoals).describe("Primary experience goal for players"),
 		prerequisiteQuestId: optionalId.describe("ID of quest that must be completed first"),
 		otherUnlockConditionsNotes: (s) =>
 			s.optional().describe("Additional unlock conditions not covered by prerequisite quest"),
 		gmNotes: (s) => s.describe("GM-only information about this quest"),
 		tags: (s) => s.describe("Tags for this quest"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Adventures with objectives, rewards, and narrative impact that drive the campaign forward"),
 
@@ -60,7 +81,7 @@ export const schemas = {
 		questId: id.describe("ID of the primary quest in this relationship"),
 		relatedQuestId: optionalId.describe("ID of the secondary quest in this relationship"),
 		relationshipType: z
-			.enum(enums.relationshipTypes)
+			.enum(relationshipTypes)
 			.describe("Connection type (prerequisite, sequel, parallel, alternative, hidden_connection)"),
 		description: (s) => s.describe("How these quests interconnect narratively in point form"),
 		creativePrompts: (s) => s.describe("Ideas for emphasizing connections between quests"),
@@ -77,21 +98,21 @@ export const schemas = {
 		dramatic_moments: (s) => s.describe("Key emotional or high-tension scenes"),
 		dramatic_question: (s) => s.describe("Central conflict or tension driving this stage"),
 		encounters: (s) => s.describe("Challenges, combats, or social interactions in this stage"),
-		intendedComplexityLevel: z.enum(enums.complexityLevels).describe("Intended complexity level for this stage"),
+		intendedComplexityLevel: z.enum(complexityLevels).describe("Intended complexity level for this stage"),
 		name: (s) => s.describe("Title or identifier for this quest segment"),
 		objectives: (s) => s.describe("Goals players need to complete in this stage"),
 		questId: id.describe("ID of parent quest this stage belongs to"),
 		sensory_elements: (s) => s.describe("Descriptive details for immersion (sights, sounds, smells)"),
 		siteId: optionalId.describe("ID of site where this stage takes place"),
-		stageImportance: z.enum(enums.stageImportanceLevels).describe("Importance of this stage to the overall quest"),
+		stageImportance: z.enum(stageImportanceLevels).describe("Importance of this stage to the overall quest"),
 		stageOrder: (s) => s.describe("Numerical order or sequence position within quest"),
-		stageType: z.enum(enums.stageTypes).describe("Type of stage (revelation_point, decision_point, etc.)"),
+		stageType: z.enum(stageTypes).describe("Type of stage (revelation_point, decision_point, etc.)"),
 		creativePrompts: (s) => s.describe("Ideas for running this stage or adapting to player approaches"),
 		description: (s) => s.describe("Key events and plot developments in this segment in point form"),
 		gmNotes: (s) => s.describe("GM-only information about this stage"),
 		tags: (s) => s.describe("Tags for this stage"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
 
@@ -100,11 +121,11 @@ export const schemas = {
 		fromStageId: id.describe("ID of stage where this decision occurs"),
 		toStageId: optionalId.describe("ID of stage this decision leads to if taken"),
 		conditionType: z
-			.enum(enums.conditionTypes)
+			.enum(conditionTypes)
 			.describe("Trigger type (choice, skill_check, item, npc_relation, faction, etc.)"),
-		decisionType: z.enum(enums.decisionTypes).describe("Nature of choice (moral_choice, tactical_decision, etc.)"),
+		decisionType: z.enum(decisionTypes).describe("Nature of choice (moral_choice, tactical_decision, etc.)"),
 		name: (s) => s.describe("Identifier for this pivotal moment"),
-		ambiguityLevel: z.enum(enums.ambiguityLevels).describe("How clear the best choice is"),
+		ambiguityLevel: z.enum(ambiguityLevels).describe("How clear the best choice is"),
 		conditionValue: (s) => s.describe("Parameters, DCs, or requirements"),
 		successDescription: (s) => s.describe("What happens when players succeed or take intended path"),
 		failureDescription: (s) => s.describe("Consequences when players fail or choose differently"),
@@ -136,13 +157,15 @@ export const schemas = {
 		siteId: optionalId.describe("ID of site where this hook can be discovered"),
 		factionId: optionalId.describe("ID of faction involved in this hook"),
 		source: (s) => s.describe("Source of the hook information"),
-		hookType: z.enum(enums.hookTypes).describe("Type of hook (rumor, npc_interaction, location_discovery)"),
-		presentationStyle: z.enum(enums.presentationStyles).describe("How to present this hook"),
+		hookSourceType: z.enum(questHookSourceTypes).describe("Type of hook source"),
+		name: (s) => s.describe("Name of the hook"),
+		hookType: z.enum(hookTypes).describe("Type of hook (rumor, npc_interaction, location_discovery)"),
+		presentationStyle: z.enum(presentationStyles).describe("How to present this hook"),
 		hookContent: (s) => s.describe("Content of the hook"),
 		discoveryConditions: (s) => s.describe("Conditions for discovering this hook"),
 		deliveryNpcId: optionalId.describe("ID of NPC who delivers this hook"),
 		npcRelationshipToParty: (s) => s.describe("Relationship of the delivery NPC to the party"),
-		trustRequired: z.enum(enums.trustLevels).describe("Trust level required for this hook"),
+		trustRequired: z.enum(trustLevels).describe("Trust level required for this hook"),
 		dialogueHint: (s) => s.describe("Dialogue hint for this hook"),
 		description: (s) => s.describe("Description of this hook"),
 		creativePrompts: (s) => s.describe("Ideas for presenting this hook"),
@@ -158,7 +181,7 @@ export const schemas = {
 		npcId: optionalId.describe("ID of NPC involved (either npcId or factionId must be provided)"),
 		factionId: optionalId.describe("ID of faction involved (either npcId or factionId must be provided)"),
 		roleInQuest: (s) => s.describe("Role of the participant in the quest"),
-		importanceInQuest: z.enum(enums.participantImportanceLevels).describe("Importance level of this participant"),
+		importanceInQuest: z.enum(participantImportanceLevels).describe("Importance level of this participant"),
 		involvementDetails: (s) => s.describe("Details about how this participant is involved"),
 		creativePrompts: (s) => s.describe("Ideas for using this participant"),
 		description: (s) => s.describe("Description of the participant's involvement"),
@@ -181,6 +204,8 @@ export const schemas = {
 		description: (s) => s.describe("Description of the NPC's involvement"),
 		gmNotes: (s) => s.describe("GM-only notes about this NPC involvement"),
 		tags: (s) => s.describe("Tags for this NPC involvement"),
-		isOptional: (s) => s.describe("Whether this NPC is optional or required"),
-	}),
+	})
+		.omit({ id: true })
+		.strict()
+		.describe("Defines how NPCs are involved in quest stages"),
 } as const satisfies Schema<TableNames[number]>

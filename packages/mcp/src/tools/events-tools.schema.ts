@@ -7,6 +7,20 @@ const {
 	eventTables: { narrativeEvents, consequences, enums },
 } = tables
 
+const {
+	consequenceAffectedEntityTypes,
+	consequenceSources,
+	consequenceTimeframe,
+	consequenceVisibility,
+	impactSeverity,
+	rhythmEffects,
+	consequenceTriggerTypes,
+	consequenceTypes,
+	eventTypes,
+	narrativePlacements,
+	playerImpactFeels,
+} = enums
+
 type TableNames = CreateTableNames<typeof tables.eventTables>
 
 export const tableEnum = ["narrativeEvents", "consequences"] as const satisfies TableNames
@@ -17,13 +31,13 @@ export const schemas = {
 		creativePrompts: (s) => s.describe("Ideas for GMs to implement or enhance this event"),
 		description: (s) => s.describe("Detailed description of the event in point form"),
 		escalation_details: (s) => s.optional().describe("Specific details if eventType is 'escalation'"),
-		eventType: z.enum(enums.eventTypes).describe("Type of event (complication, escalation, twist)"),
+		eventType: z.enum(eventTypes).describe("Type of event (complication, escalation, twist)"),
 		gmNotes: (s) => s.describe("GM-only notes about running this event effectively"),
-		impactSeverity: z.enum(enums.impactSeverity).describe("Magnitude of the event's impact (minor, moderate, major)"),
-		intendedRhythmEffect: z.enum(enums.rhythmEffects).describe("The intended rhythm effect of the event"),
+		impactSeverity: z.enum(impactSeverity).describe("Magnitude of the event's impact (minor, moderate, major)"),
+		intendedRhythmEffect: z.enum(rhythmEffects).describe("The intended rhythm effect of the event"),
 		name: (s) => s.describe("Unique name for this narrative event"),
 		narrativePlacement: z
-			.enum(enums.narrativePlacements)
+			.enum(narrativePlacements)
 			.describe("When the event typically occurs in a narrative arc (early, middle, climax, denouement)"),
 		questStageId: optionalId.describe("ID of the quest stage where this event primarily occurs (if applicable)"),
 		relatedQuestId: optionalId.describe("ID of the quest this event relates to broadly (if applicable)"),
@@ -31,7 +45,7 @@ export const schemas = {
 		triggeringDecisionId: optionalId.describe("ID of the stage decision that triggers this event (if applicable)"),
 		twist_reveal_details: (s) => s.optional().describe("Specific details if eventType is 'twist'"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Narrative events like complications, escalations, or twists that affect the story")
 		.refine(
@@ -48,6 +62,8 @@ export const schemas = {
 		),
 
 	consequences: createInsertSchema(consequences, {
+		affectedEntityType: z.enum(consequenceAffectedEntityTypes).describe("Type of entity affected by this consequence"),
+		triggerEntityType: z.enum(consequenceTriggerTypes).describe("Type of entity that triggers this consequence"),
 		affectedAreaId: optionalId.describe("ID of the area that is affected by this consequence"),
 		affectedConflictId: optionalId.describe("ID of the conflict that is affected by this consequence"),
 		affectedDestinationId: optionalId.describe("ID of the narrative destination that is affected by this consequence"),
@@ -61,23 +77,23 @@ export const schemas = {
 				.describe(
 					"Description of the impact of this consequence on the conflict (required if affectedConflictId is set)",
 				),
-		consequenceType: z.enum(enums.consequenceTypes).describe("Type of the consequence"),
+		consequenceType: z.enum(consequenceTypes).describe("Type of the consequence"),
 		creativePrompts: (s) => s.describe("Ideas for GMs to implement or enhance this consequence"),
 		description: (s) => s.describe("Detailed description of the consequence in point form"),
 		futureQuestId: optionalId.describe("ID of the future quest that is affected by this consequence"),
 		gmNotes: (s) => s.describe("GM-only notes about running this consequence effectively"),
 		name: (s) => s.describe("Name of the consequence"),
-		playerImpactFeel: z.enum(enums.playerImpactFeels).describe("How the player feels about this consequence"),
-		severity: z.enum(enums.impactSeverity).describe("Severity of the consequence"),
-		sourceType: z.enum(enums.consequenceSources).describe("Type of the source of the consequence"),
+		playerImpactFeel: z.enum(playerImpactFeels).describe("How the player feels about this consequence"),
+		severity: z.enum(impactSeverity).describe("Severity of the consequence"),
+		sourceType: z.enum(consequenceSources).describe("Type of the source of the consequence"),
 		tags: (s) => s.describe("Tags for this consequence"),
-		timeframe: z.enum(enums.consequenceTimeframe).describe("Timeframe of the consequence"),
+		timeframe: z.enum(consequenceTimeframe).describe("Timeframe of the consequence"),
 		triggerConflictId: optionalId.describe("ID of the conflict that triggers this consequence"),
 		triggerDecisionId: optionalId.describe("ID of the decision that triggers this consequence"),
 		triggerQuestId: optionalId.describe("ID of the quest that triggers this consequence"),
-		visibility: z.enum(enums.consequenceVisibility).describe("Visibility of the consequence"),
+		visibility: z.enum(consequenceVisibility).describe("Visibility of the consequence"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Consequences that affect the game world")
 		.refine(

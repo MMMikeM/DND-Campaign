@@ -7,19 +7,24 @@ const {
 	itemTables: { items, itemNotableHistory, itemRelationships, enums },
 } = tables
 
+const { itemTypes, rarityLevels, itemRelationshipTypes, narrativeRoles, perceivedSimplicityLevels, targetEntityTypes } =
+	enums
+
 type TableNames = CreateTableNames<typeof tables.itemTables>
 
 export const tableEnum = ["items", "itemNotableHistory", "itemRelationships"] as const satisfies TableNames
 
 export const schemas = {
 	items: createInsertSchema(items, {
+		gmNotes: (s) => s.describe("GM-only information about this item"),
+		tags: (s) => s.describe("Tags for this item"),
+		narrativeRole: z.enum(narrativeRoles).describe("Role of the item in the narrative"),
+		perceivedSimplicity: z.enum(perceivedSimplicityLevels).describe("How simple the item is to use"),
 		name: (s) => s.describe("Distinctive name or title of the item"),
 		itemType: z
-			.enum(enums.itemTypes)
+			.enum(itemTypes)
 			.describe("Item category (weapon, armor, tool, treasure, document, key_item, consumable)"),
-		rarity: z
-			.enum(enums.rarityLevels)
-			.describe("Rarity level (common, uncommon, rare, very_rare, legendary, artifact)"),
+		rarity: z.enum(rarityLevels).describe("Rarity level (common, uncommon, rare, very_rare, legendary, artifact)"),
 		description: (s) => s.describe("Physical attributes, history, and properties in point form"),
 		loreSignificance: (s) => s.describe("Historical and cultural importance of this item"),
 		mechanicalEffects: (s) => s.describe("Game mechanical effects and abilities of this item"),
@@ -29,7 +34,7 @@ export const schemas = {
 		placeOfOrigin: (s) => s.optional().describe("Where this item was originally created"),
 		relatedQuestId: optionalId.describe("ID of quest this item is related to"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Interactive objects that players can acquire, use, and leverage in the narrative"),
 
@@ -43,13 +48,14 @@ export const schemas = {
 		eventDescription: (s) => s.describe("Description of the event that occurred to the item"),
 		eventLocationSiteId: optionalId.describe("ID of the site where the event occurred"),
 		keyNpcId: optionalId.describe("ID of the NPC who is the key figure in this event"),
-		npcRoleInEvent: (s) => s.describe("Role of the NPC in the event"),
+		npcRoleInEvent: z.enum(narrativeRoles).describe("Role of the NPC in the event"),
 	})
 		.omit({ id: true })
 		.strict()
 		.describe("Historical events and ownership changes for items"),
 
 	itemRelationships: createInsertSchema(itemRelationships, {
+		targetEntityType: z.enum(targetEntityTypes).describe("Type of entity this relationship belongs to"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
 		description: (s) => s.describe("Description of the relationship in point form"),
 		gmNotes: (s) => s.describe("GM-only information about this relationship"),
@@ -63,7 +69,7 @@ export const schemas = {
 		targetNarrativeDestinationId: optionalId.describe("ID of related narrative destination"),
 		targetQuestId: optionalId.describe("ID of related quest"),
 		relationshipDetails: (s) => s.optional().describe("Details about the relationship between entities"),
-		relationshipType: z.enum(enums.itemRelationshipTypes).describe("Type of relationship"),
+		relationshipType: z.enum(itemRelationshipTypes).describe("Type of relationship"),
 		sourceItemId: id.describe("ID of item this relationship belongs to"),
 	})
 		.omit({ id: true })

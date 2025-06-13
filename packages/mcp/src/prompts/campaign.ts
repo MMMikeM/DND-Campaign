@@ -11,7 +11,6 @@ import { tables } from "@tome-master/shared"
 import { eq, sql } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
-import { gatherNPCCreationContext } from "./npc"
 import { gatherQuestCreationContext } from "./quest"
 import {
 	createPromptResult,

@@ -7,6 +7,20 @@ const {
 	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, enums },
 } = tables
 
+const {
+	atmosphereTypes,
+	dangerLevels,
+	regionTypes,
+	areaTypes,
+	siteFunctions,
+	linkTypes,
+	objectiveTypes,
+	difficultyLevels,
+	encounterCategories,
+	secretTypes,
+	siteTypes,
+} = enums
+
 type TableNames = CreateTableNames<typeof tables.regionTables>
 
 export const tableEnum = [
@@ -20,10 +34,10 @@ export const tableEnum = [
 
 export const schemas = {
 	regions: createInsertSchema(regions, {
-		atmosphereType: z.enum(enums.atmosphereTypes).describe("Atmosphere type (dark, light, neutral, etc.)"),
+		atmosphereType: z.enum(atmosphereTypes).describe("Atmosphere type (dark, light, neutral, etc.)"),
 		creativePrompts: (s) => s.describe("Adventure hooks and campaign ideas for this region"),
 		culturalNotes: (s) => s.describe("Traditions, customs, and social behaviors in point form"),
-		dangerLevel: z.enum(enums.dangerLevels).describe("Threat assessment (safe, low, moderate, high, deadly)"),
+		dangerLevel: z.enum(dangerLevels).describe("Threat assessment (safe, low, moderate, high, deadly)"),
 		description: (s) => s.describe("Physical features and atmosphere in point form"),
 		economy: (s) => s.describe("Industries, trade goods, and economic activities"),
 		gmNotes: (s) => s.describe("GM notes for this region"),
@@ -37,14 +51,14 @@ export const schemas = {
 		secrets: (s) => s.describe("Hidden truths and undiscovered elements known to few"),
 		security: (s) => s.describe("Military presence, law enforcement, and safety measures"),
 		tags: (s) => s.describe("Tags for this region"),
-		type: z.enum(enums.regionTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
+		type: z.enum(regionTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Major geographic areas that provide settings for adventures and define the campaign world"),
 
 	areas: createInsertSchema(areas, {
-		atmosphereType: z.enum(enums.atmosphereTypes).describe("Atmosphere type (dark, light, neutral, etc.)"),
+		atmosphereType: z.enum(atmosphereTypes).describe("Atmosphere type (dark, light, neutral, etc.)"),
 		creativePrompts: (s) => s.describe("Adventure hooks and campaign ideas for this area"),
 		culturalNotes: (s) => s.describe("Traditions, customs, and social behaviors in point form"),
 		dangerLevel: (s) => s.describe("Threat assessment (safe, low, moderate, high, deadly)"),
@@ -61,9 +75,9 @@ export const schemas = {
 		revelationLayersSummary: (s) => s.describe("Summary of revelation layers for this area"),
 		rumors: (s) => s.describe("Gossip and stories circulating among locals and travelers"),
 		tags: (s) => s.describe("Tags for this area"),
-		type: z.enum(enums.areaTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
+		type: z.enum(areaTypes).describe("Classification (city, forest, mountain, desert, etc.)"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Subdivisions within regions that have distinct identities and adventure opportunities"),
 
@@ -79,11 +93,11 @@ export const schemas = {
 		environment: (s) => s.describe("Setting context (urban, rural, wilderness, underground)"),
 		features: (s) => s.describe("Notable objects and distinct elements"),
 		gmNotes: (s) => s.describe("GM notes for this site"),
-		intendedSiteFunction: z.enum(enums.siteFunctions).describe("Function of this site"),
+		intendedSiteFunction: z.enum(siteFunctions).describe("Function of this site"),
 		lightingDescription: (s) => s.describe("Illumination quality and sources"),
 		mood: (s) => s.describe("Emotional atmosphere (peaceful, tense, eerie, vibrant)"),
 		name: (s) => s.describe("Specific name of this location"),
-		type: z.enum(enums.siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
+		type: z.enum(siteTypes).describe("Category (building, fortress, cave, ruins, etc.)"),
 		smells: (s) => s.describe("Distinctive odors and scents"),
 		soundscape: (s) => s.describe("Characteristic sounds and acoustic elements"),
 		tags: (s) => s.describe("Tags for this site"),
@@ -91,17 +105,15 @@ export const schemas = {
 		treasures: (s) => s.describe("Valuables and collectibles that might be found"),
 		weather: (s) => s.describe("Typical meteorological conditions and effects"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
-		.describe(
-			"Tactical locations where encounters and combat take place. Each site must be linked to a map.",
-		),
+		.describe("Tactical locations where encounters and combat take place. Each site must be linked to a map."),
 
 	siteLinks: createInsertSchema(siteLinks, {
 		creativePrompts: (s) => s.describe("Story ideas involving travel or interaction"),
 		description: (s) => s.describe("Physical connections and proximity between sites"),
 		gmNotes: (s) => s.describe("GM notes for this link"),
-		linkType: z.enum(enums.linkTypes).describe("Connection type (adjacent, connected, visible from)"),
+		linkType: z.enum(linkTypes).describe("Connection type (adjacent, connected, visible from)"),
 		otherSiteId: id.describe("Required ID of secondary site in this relationship"),
 		siteId: id.describe("Required ID of primary site in this relationship"),
 		tags: (s) => s.describe("Tags for this link"),
@@ -123,7 +135,7 @@ export const schemas = {
 		gmNotes: (s) => s.describe("GM notes for this encounter"),
 		tags: (s) => s.describe("Tags for this encounter"),
 
-		objectiveType: z.enum(enums.objectiveTypes).describe("Type of objective for this encounter"),
+		objectiveType: z.enum(objectiveTypes).describe("Type of objective for this encounter"),
 		objectiveDetails: (s) => s.describe("Details of the objective for this encounter"),
 		hasTimer: z.boolean().describe("Whether this encounter has a timer"),
 		timerValue: (s) => s.describe("Value of the timer for this encounter"),
@@ -133,7 +145,7 @@ export const schemas = {
 		coreEnemyGroups: (s) => s.describe("Core enemy groups for this encounter"),
 		synergyDescription: (s) => s.describe("Synergy description for this encounter"),
 
-		encounterCategory: z.enum(enums.objectiveTypes).describe("Category of this encounter"),
+		encounterCategory: z.enum(encounterCategories).describe("Category of this encounter"),
 		recommendedProficiencyBonus: (s) => s.describe("Recommended proficiency bonus for this encounter"),
 
 		specialVariations: (s) => s.describe("Special variations for this encounter"),
@@ -144,7 +156,7 @@ export const schemas = {
 
 		treasureOrRewards: (s) => s.describe("Treasure or rewards for this encounter"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Challenges, interactions, and events that players can experience at specific locations"),
 
@@ -152,16 +164,14 @@ export const schemas = {
 		consequences: (s) => s.describe("Immediate and long-term effects of discovery"),
 		creativePrompts: (s) => s.describe("Ways to foreshadow or reveal this secret"),
 		description: (s) => s.describe("What the secret entails and its significance in point form"),
-		difficultyToDiscover: z
-			.enum(enums.difficultyLevels)
-			.describe("Discovery challenge (obvious through nearly impossible)"),
+		difficultyToDiscover: z.enum(difficultyLevels).describe("Discovery challenge (obvious through nearly impossible)"),
 		discoveryMethod: (s) => s.describe("Actions or checks that could reveal this secret"),
 		gmNotes: (s) => s.describe("GM notes for this secret"),
-		secretType: z.enum(enums.secretTypes).describe("Category (historical, hidden area, concealed item, true purpose)"),
+		secretType: z.enum(secretTypes).describe("Category (historical, hidden area, concealed item, true purpose)"),
 		siteId: id.describe("Required ID of site where this secret exists"),
 		tags: (s) => s.describe("Tags for this secret"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Hidden information and concealed areas that reward player exploration and investigation"),
 } as const satisfies Schema<TableNames[number]>

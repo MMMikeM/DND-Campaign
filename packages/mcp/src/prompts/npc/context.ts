@@ -92,7 +92,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		})
 
 		// Get major conflicts with participants
-		const activeConflicts = await db.query.majorConflicts.findMany({
+		const activeConflicts = await db.query.conflicts.findMany({
 			with: {
 				participants: {
 					with: {
@@ -153,7 +153,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		})
 
 		// Get foreshadowing seeds for story integration
-		const foreshadowingSeeds = await db.query.foreshadowingSeeds.findMany({
+		const foreshadowingSeeds = await db.query.foreshadowing.findMany({
 			where: (fs, { or }) => or(isNotNull(fs.sourceNpcId), isNotNull(fs.targetNpcId)),
 			with: {
 				sourceNpc: { columns: { id: true, name: true } },
@@ -318,13 +318,18 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		return context
 	} catch (error) {
 		logger.error("Error gathering NPC creation context:", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			npcArgs: args,
 		})
-		throw new Error(`Failed to gather NPC creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`)
+		throw new Error(
+			`Failed to gather NPC creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`,
+		)
 	}
 }

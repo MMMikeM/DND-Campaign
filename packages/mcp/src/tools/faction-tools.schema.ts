@@ -7,6 +7,24 @@ const {
 	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, regionConnections, enums },
 } = tables
 
+const {
+	alignments,
+	factionSizes,
+	wealthLevels,
+	reachLevels,
+	transparencyLevels,
+	agendaImportance,
+	agendaStages,
+	agendaTypes,
+	connectionTypes,
+	diplomaticStatuses,
+	factionTypes,
+	influenceLevels,
+	relationshipStrengths,
+	travelDifficulties,
+	routeTypes,
+} = enums
+
 type TableNames = CreateTableNames<typeof tables.factionTables>
 
 export const tableEnum = [
@@ -20,16 +38,16 @@ export const tableEnum = [
 export const schemas = {
 	factions: createInsertSchema(factions, {
 		name: (s) => s.describe("Distinctive name for this faction"),
-		publicAlignment: z.enum(enums.alignments).describe("Publicly known moral stance"),
-		secretAlignment: z.enum(enums.alignments).optional().describe("Hidden true alignment (if different from public)"),
-		size: z.enum(enums.factionSizes).describe("Membership scale (tiny, small, medium, large, massive)"),
-		wealth: z.enum(enums.wealthLevels).describe("Economic resources and financial power"),
-		reach: z.enum(enums.reachLevels).describe("Geographic influence (local, regional, national, continental, global)"),
-		type: (s) => s.describe("Faction categories (guild, cult, tribe, noble_house, etc.)"),
+		publicAlignment: z.enum(alignments).describe("Publicly known moral stance"),
+		secretAlignment: z.enum(alignments).optional().describe("Hidden true alignment (if different from public)"),
+		size: z.enum(factionSizes).describe("Membership scale (tiny, small, medium, large, massive)"),
+		wealth: z.enum(wealthLevels).describe("Economic resources and financial power"),
+		reach: z.enum(reachLevels).describe("Geographic influence (local, regional, national, continental, global)"),
+		type: z.enum(factionTypes).describe("Faction categories (guild, cult, tribe, noble_house, etc.)"),
 		publicGoal: (s) => s.describe("Openly stated objectives and mission"),
 		secretGoal: (s) => s.optional().describe("Hidden agenda known only to inner circle"),
 		publicPerception: (s) => s.describe("How the general population views this faction"),
-		transparencyLevel: z.enum(enums.transparencyLevels).describe("How open the faction is about its activities"),
+		transparencyLevel: z.enum(transparencyLevels).describe("How open the faction is about its activities"),
 		values: (s) => s.describe("Core beliefs and principles that guide decisions"),
 		history: (s) => s.describe("Founding story and major historical events"),
 		symbols: (s) => s.describe("Emblems, colors, and visual identifiers"),
@@ -38,22 +56,22 @@ export const schemas = {
 		aesthetics: (s) => s.describe("Visual style and cultural preferences"),
 		jargon: (s) => s.describe("Specialized terminology and speech patterns"),
 		recognitionSigns: (s) => s.describe("Secret signals and identification methods"),
-		primaryHqSiteId: optionalId.describe("ID of the faction's main headquarters site"),
+		hqSiteId: optionalId.describe("ID of the faction's main headquarters site"),
 		creativePrompts: (s) => s.describe("GM ideas for using this faction in campaigns"),
 		description: (s) => s.describe("Overview of the faction's role and characteristics"),
 		gmNotes: (s) => s.describe("GM-only information about this faction"),
 		tags: (s) => s.describe("Tags for this faction"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Organizations with shared goals, resources, and influence that shape the political landscape"),
 
 	factionAgendas: createInsertSchema(factionAgendas, {
 		factionId: id.describe("ID of the faction this agenda belongs to"),
 		name: (s) => s.describe("Name of this specific agenda"),
-		agendaType: z.enum(enums.agendaTypes).describe("Category of agenda (economic, military, political, etc.)"),
-		currentStage: z.enum(enums.agendaStages).describe("Current progress stage"),
-		importance: z.enum(enums.agendaImportance).describe("Priority level within the faction"),
+		agendaType: z.enum(agendaTypes).describe("Category of agenda (economic, military, political, etc.)"),
+		currentStage: z.enum(agendaStages).describe("Current progress stage"),
+		importance: z.enum(agendaImportance).describe("Priority level within the faction"),
 		ultimateAim: (s) => s.describe("Final goal this agenda seeks to achieve"),
 		moralAmbiguity: (s) => s.describe("Ethical complexity and moral implications"),
 		approach: (s) => s.describe("Methods and strategies being used"),
@@ -63,15 +81,15 @@ export const schemas = {
 		gmNotes: (s) => s.describe("GM-only information about this agenda"),
 		tags: (s) => s.describe("Tags for this agenda"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Specific goals and projects that factions are actively pursuing"),
 
 	factionDiplomacy: createInsertSchema(factionDiplomacy, {
 		factionId: id.describe("ID of the primary faction in this relationship"),
 		otherFactionId: id.describe("ID of the secondary faction in this relationship"),
-		strength: z.enum(enums.relationshipStrengths).describe("Intensity of the relationship"),
-		diplomaticStatus: z.enum(enums.diplomaticStatuses).describe("Type of diplomatic relationship"),
+		strength: z.enum(relationshipStrengths).describe("Intensity of the relationship"),
+		diplomaticStatus: z.enum(diplomaticStatuses).describe("Type of diplomatic relationship"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
 		description: (s) => s.describe("Details about this diplomatic relationship"),
 		gmNotes: (s) => s.describe("GM-only information about this relationship"),
@@ -92,7 +110,7 @@ export const schemas = {
 		),
 		areaId: optionalId.describe("ID of area where influence is exerted (mutually exclusive with regionId and siteId)"),
 		siteId: optionalId.describe("ID of site where influence is exerted (mutually exclusive with regionId and areaId)"),
-		influenceLevel: z.enum(enums.influenceLevels).describe("Degree of control or influence"),
+		influenceLevel: z.enum(influenceLevels).describe("Degree of control or influence"),
 		presenceTypes: (s) => s.describe("Types of faction presence in this location"),
 		presenceDetails: (s) => s.describe("Specific details about how the faction operates here"),
 		priorities: (s) => s.describe("What the faction prioritizes in this location"),
@@ -109,13 +127,14 @@ export const schemas = {
 			path: ["regionId", "areaId", "siteId"],
 		}),
 	regionConnections: createInsertSchema(regionConnections, {
+		name: (s) => s.describe("Name of this connection"),
 		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
 		controllingFactionId: (s) => s.describe("ID of faction controlling this region"),
-		routeType: z.enum(enums.routeTypes).describe("Route type (road, river, air, sea)"),
-		travelDifficulty: z.enum(enums.travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
+		routeType: z.enum(routeTypes).describe("Route type (road, river, air, sea)"),
+		travelDifficulty: z.enum(travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
 		travelHazards: (s) => s.describe("Travel hazards for this region"),
 		travelTime: (s) => s.describe("Travel time for this region"),
-		connectionType: z.enum(enums.connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
+		connectionType: z.enum(connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
 		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
 		description: (s) => s.describe("How these regions interact and current dynamics"),
 		gmNotes: (s) => s.describe("GM notes for this connection"),

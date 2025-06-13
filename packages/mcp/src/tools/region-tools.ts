@@ -48,7 +48,7 @@ export const entityGetters = createEntityGetters({
 			},
 			with: {
 				area: { columns: { name: true, id: true } },
-				map: { columns: { name: true, id: true } },
+				map: { with: { mapDetails: true } },
 				incomingRelations: { with: { sourceSite: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetSite: { columns: { name: true, id: true } } } },
 				npcAssociations: { with: { npc: { columns: { name: true, id: true } } } },

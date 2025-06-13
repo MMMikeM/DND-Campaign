@@ -121,11 +121,6 @@ async function startServer() {
 }
 
 startServer().catch((err) => {
-	logger.fatal({ err }, "Unhandled error during server startup")
-	logger.fatal("Unhandled error", {
-		// Keep original fatal log for detailed error info
-		error: err instanceof Error ? err.message : String(err),
-		stack: err instanceof Error ? err.stack : undefined,
-	})
+	logger.error("Unhandled error during server startup", { err })
 	process.exit(1)
 })
