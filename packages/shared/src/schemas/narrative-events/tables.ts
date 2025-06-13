@@ -43,7 +43,7 @@ export const narrativeEvents = pgTable(
 		impactSeverity: oneOf("impact_severity", impactSeverity),
 
 		questStageId: nullableFk("quest_stage_id", questStages.id),
-		triggeringDecisionId: nullableFk("triggering_decision_id", stageDecisions.id),
+		triggeringStageDecisionId: nullableFk("triggering_stage_decision_id", stageDecisions.id),
 		relatedQuestId: nullableFk("related_quest_id", quests.id),
 
 		complication_details: nullableString("complication_details"),
@@ -83,7 +83,7 @@ export const consequences = pgTable(
 		sourceType: oneOf("source_type", consequenceSources),
 
 		triggerEntityType: nullableOneOf("trigger_entity_type", consequenceTriggerTypes),
-		triggerDecisionId: nullableFk("trigger_decision_id", stageDecisions.id),
+		triggerStageDecisionId: nullableFk("trigger_stage_decision_id", stageDecisions.id),
 		triggerQuestId: nullableFk("trigger_quest_id", quests.id),
 		triggerConflictId: nullableFk("trigger_conflict_id", conflicts.id),
 
@@ -104,10 +104,10 @@ export const consequences = pgTable(
 			"chk_consequence_trigger_exclusive",
 			sql`
 			CASE ${t.triggerEntityType}
-				WHEN 'decision' THEN (${t.triggerDecisionId} IS NOT NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NULL)
-				WHEN 'quest' THEN (${t.triggerDecisionId} IS NULL AND ${t.triggerQuestId} IS NOT NULL AND ${t.triggerConflictId} IS NULL)
-				WHEN 'conflict' THEN (${t.triggerDecisionId} IS NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NOT NULL)
-				ELSE (${t.triggerDecisionId} IS NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NULL)
+				WHEN 'decision' THEN (${t.triggerStageDecisionId} IS NOT NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NULL)
+				WHEN 'quest' THEN (${t.triggerStageDecisionId} IS NULL AND ${t.triggerQuestId} IS NOT NULL AND ${t.triggerConflictId} IS NULL)
+				WHEN 'conflict' THEN (${t.triggerStageDecisionId} IS NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NOT NULL)
+				ELSE (${t.triggerStageDecisionId} IS NULL AND ${t.triggerQuestId} IS NULL AND ${t.triggerConflictId} IS NULL)
 			END
 			`,
 		),

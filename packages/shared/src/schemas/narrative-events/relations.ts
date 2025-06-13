@@ -16,8 +16,8 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 		relationName: "stageEvents",
 	}),
 
-	triggeringDecision: one(stageDecisions, {
-		fields: [narrativeEvents.triggeringDecisionId],
+	triggeringStageDecision: one(stageDecisions, {
+		fields: [narrativeEvents.triggeringStageDecisionId],
 		references: [stageDecisions.id],
 		relationName: "decisionTriggeredEvents",
 	}),
@@ -35,8 +35,8 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		references: [quests.id],
 		relationName: "consequencesByQuest",
 	}),
-	triggerDecision: one(stageDecisions, {
-		fields: [consequences.triggerDecisionId],
+	triggerStageDecision: one(stageDecisions, {
+		fields: [consequences.triggerStageDecisionId],
 		references: [stageDecisions.id],
 		relationName: "consequencesByDecision",
 	}),

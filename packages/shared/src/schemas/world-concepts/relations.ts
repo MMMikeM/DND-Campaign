@@ -22,21 +22,21 @@ export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
 }))
 
 export const worldConceptRelationshipsRelations = relations(worldConceptRelationships, ({ one }) => ({
-	sourceConcept: one(worldConcepts, {
-		fields: [worldConceptRelationships.sourceConceptId],
+	sourceWorldConcept: one(worldConcepts, {
+		fields: [worldConceptRelationships.sourceWorldConceptId],
 		references: [worldConcepts.id],
-		relationName: "sourceConceptInRelationship",
+		relationName: "sourceWorldConceptInRelationship",
 	}),
-	targetConcept: one(worldConcepts, {
-		fields: [worldConceptRelationships.targetConceptId],
+	targetWorldConcept: one(worldConcepts, {
+		fields: [worldConceptRelationships.targetWorldConceptId],
 		references: [worldConcepts.id],
-		relationName: "targetConceptInRelationship",
+		relationName: "targetWorldConceptInRelationship",
 	}),
 }))
 
 export const worldConceptLinksRelations = relations(worldConceptLinks, ({ one }) => ({
 	worldConcept: one(worldConcepts, {
-		fields: [worldConceptLinks.conceptId],
+		fields: [worldConceptLinks.worldConceptId],
 		references: [worldConcepts.id],
 		relationName: "worldConceptLinks",
 	}),

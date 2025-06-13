@@ -7,7 +7,7 @@ import { itemNotableHistory, itemRelationships } from "../items/tables"
 import { maps } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
-import { npcSites } from "../npcs/tables"
+import { npcSiteAssociations } from "../npcs/tables"
 import { questHooks, questStages, quests } from "../quests/tables"
 import { worldConceptLinks } from "../world-concepts/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -62,7 +62,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 
 	encounters: many(siteEncounters, { relationName: "siteEncounters" }),
 	secrets: many(siteSecrets, { relationName: "siteSecrets" }),
-	npcAssociations: many(npcSites, { relationName: "siteNpcs" }),
+	npcAssociations: many(npcSiteAssociations, { relationName: "siteNpcs" }),
 	questStages: many(questStages, { relationName: "siteQuestStages" }),
 	questHooks: many(questHooks, { relationName: "siteQuestHooks" }),
 	consequences: many(consequences, { relationName: "consequencesAtSite" }),

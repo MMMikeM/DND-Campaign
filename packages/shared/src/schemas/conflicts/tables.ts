@@ -27,7 +27,7 @@ export const conflicts = pgTable("conflicts", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	regionId: nullableFk("primary_region_id", regions.id),
+	regionId: nullableFk("region_id", regions.id),
 
 	cause: string("cause"),
 	moralDilemma: string("moral_dilemma"),

@@ -23,7 +23,7 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	regionId: nullableFk("primary_region_id", regions.id),
+	regionId: nullableFk("region_id", regions.id),
 	conflictId: nullableFk("related_conflict_id", conflicts.id),
 
 	type: oneOf("type", arcTypes),
@@ -37,8 +37,8 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 	foreshadowingElements: list("foreshadowing_elements"),
 })
 
-export const destinationQuestRoles = pgTable(
-	"destination_quest_roles",
+export const narrativeDestinationQuestRoles = pgTable(
+	"narrative_destination_quest_roles",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -46,7 +46,7 @@ export const destinationQuestRoles = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		destinationId: cascadeFk("destination_id", narrativeDestinations.id),
+		narrativeDestinationId: cascadeFk("destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
 
 		role: oneOf("role", questRoles),
@@ -55,11 +55,11 @@ export const destinationQuestRoles = pgTable(
 
 		contributionDetails: list("contribution_details"),
 	},
-	(t) => [unique().on(t.destinationId, t.questId)],
+	(t) => [unique().on(t.narrativeDestinationId, t.questId)],
 )
 
-export const destinationRelationships = pgTable(
-	"destination_relationships",
+export const narrativeDestinationRelationships = pgTable(
+	"narrative_destination_relationships",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -67,21 +67,24 @@ export const destinationRelationships = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		sourceDestinationId: cascadeFk("source_destination_id", narrativeDestinations.id),
-		targetDestinationId: cascadeFk("target_destination_id", narrativeDestinations.id),
+		sourceNarrativeDestinationId: cascadeFk("source_destination_id", narrativeDestinations.id),
+		targetNarrativeDestinationId: cascadeFk("target_destination_id", narrativeDestinations.id),
 
 		relationshipType: oneOf("relationship_type", destinationRelationshipTypes),
 
 		relationshipDetails: list("relationship_details"),
 	},
 	(t) => [
-		unique().on(t.sourceDestinationId, t.targetDestinationId),
-		check("chk_no_self_destination_relationship", sql`${t.sourceDestinationId} != ${t.targetDestinationId}`),
+		unique().on(t.sourceNarrativeDestinationId, t.targetNarrativeDestinationId),
+		check(
+			"chk_no_self_destination_relationship",
+			sql`${t.sourceNarrativeDestinationId} != ${t.targetNarrativeDestinationId}`,
+		),
 	],
 )
 
-export const destinationParticipantInvolvement = pgTable(
-	"destination_participant_involvement",
+export const narrativeDestinationParticipants = pgTable(
+	"narrative_destination_participants",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -89,7 +92,7 @@ export const destinationParticipantInvolvement = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		destinationId: cascadeFk("destination_id", narrativeDestinations.id),
+		narrativeDestinationId: cascadeFk("narrative_destination_id", narrativeDestinations.id),
 
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),

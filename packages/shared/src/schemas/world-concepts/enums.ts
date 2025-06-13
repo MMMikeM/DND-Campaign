@@ -31,6 +31,8 @@ const conceptLinkStrengths = ["tenuous", "moderate", "strong", "defining"] as co
 
 const currentEffectivenessLevels = ["failing", "struggling", "stable", "thriving", "dominant"] as const
 
+const targetEntityTypes = ["region", "faction", "npc", "conflict", "quest"] as const
+
 export const enums = {
 	complexityProfiles,
 	conceptLinkStrengths,
@@ -40,4 +42,5 @@ export const enums = {
 	conceptTypes,
 	moralClarity,
 	currentEffectivenessLevels,
+	targetEntityTypes,
 }
