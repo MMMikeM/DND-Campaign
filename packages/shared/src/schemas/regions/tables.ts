@@ -24,12 +24,12 @@ const {
 
 export const regions = pgTable("regions", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	name: string("name").unique(),
 
 	dangerLevel: oneOf("danger_level", dangerLevels),
 	type: oneOf("type", regionTypes),
@@ -53,13 +53,13 @@ export const regions = pgTable("regions", {
 
 export const areas = pgTable("areas", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	regionId: cascadeFk("region_id", regions.id),
-	name: string("name").unique(),
 	type: oneOf("type", areaTypes),
 	dangerLevel: oneOf("danger_level", dangerLevels),
 
@@ -81,6 +81,7 @@ export const areas = pgTable("areas", {
 
 export const sites = pgTable("sites", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
@@ -89,10 +90,8 @@ export const sites = pgTable("sites", {
 	areaId: cascadeFk("area_id", () => areas.id),
 	type: oneOf("site_type", siteTypes),
 
-	// New field from schema updates plan
 	intendedSiteFunction: oneOf("intended_site_function", siteFunctions),
 
-	name: string("name").unique(),
 	terrain: string("terrain"),
 	climate: string("climate"),
 	mood: string("mood"),
@@ -136,7 +135,7 @@ export const siteEncounters = pgTable(
 	"site_encounters",
 	{
 		id: pk(),
-		name: string("name"),
+		name: string("name").unique(),
 		siteId: cascadeFk("site_id", sites.id),
 
 		encounterVibe: list("encounter_vibe"),

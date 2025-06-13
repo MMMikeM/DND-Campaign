@@ -6,7 +6,7 @@ const imageFormats = ["png", "jpg", "webp"] as const
 
 export const maps = pgTable("maps", {
 	id: pk(),
-	name: string("name").unique().notNull(),
+	fileName: string("file_name").unique(),
 	mapImage: bytea("map_image").notNull(),
 	imageFormat: oneOf("image_format", imageFormats).notNull(),
 	imageSize: integer("image_size").notNull(),
@@ -16,6 +16,7 @@ export const maps = pgTable("maps", {
 
 export const mapDetails = pgTable("map_details", {
 	id: pk(),
+	name: string("name").unique(),
 	mapId: cascadeFk("map_id", maps.id),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
