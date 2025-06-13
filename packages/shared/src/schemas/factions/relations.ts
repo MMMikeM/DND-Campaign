@@ -15,17 +15,17 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),
 	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }),
 
-	agendas: many(factionAgendas, { relationName: "factionAgendas" }),
-	members: many(npcFactionMemberships, { relationName: "factionMembers" }),
-	questHooks: many(questHooks, { relationName: "factionQuestHooks" }),
-	questParticipation: many(questParticipants, { relationName: "factionQuestParticipation" }),
-	influence: many(factionInfluence, { relationName: "factionInfluence" }),
-	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
-	consequences: many(consequences, { relationName: "consequencesAffectingFaction" }),
-	destinationInvolvement: many(narrativeDestinationParticipants, { relationName: "factionDestinationInvolvement" }),
-	foreshadowingSeeds: many(foreshadowing, { relationName: "foreshadowedFaction" }),
-	itemRelationships: many(itemRelationships, { relationName: "factionItemRelationships" }),
-	worldConceptLinks: many(worldConceptLinks, { relationName: "factionWorldConceptLinks" }),
+	agendas: many(factionAgendas),
+	members: many(npcFactionMemberships),
+	questHooks: many(questHooks),
+	questParticipation: many(questParticipants),
+	influence: many(factionInfluence),
+	conflicts: many(conflictParticipants),
+	consequences: many(consequences),
+	destinationInvolvement: many(narrativeDestinationParticipants),
+	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForFaction" }),
+	itemRelationships: many(itemRelationships),
+	worldConceptLinks: many(worldConceptLinks),
 
 	primaryHqSite: one(sites, {
 		fields: [factions.hqSiteId],
@@ -51,7 +51,6 @@ export const factionAgendaRelations = relations(factionAgendas, ({ one }) => ({
 	faction: one(factions, {
 		fields: [factionAgendas.factionId],
 		references: [factions.id],
-		relationName: "factionAgendas",
 	}),
 }))
 
@@ -59,21 +58,17 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 	faction: one(factions, {
 		fields: [factionInfluence.factionId],
 		references: [factions.id],
-		relationName: "factionInfluence",
 	}),
 	region: one(regions, {
 		fields: [factionInfluence.regionId],
 		references: [regions.id],
-		relationName: "influenceInRegion",
 	}),
 	area: one(areas, {
 		fields: [factionInfluence.areaId],
 		references: [areas.id],
-		relationName: "influenceInArea",
 	}),
 	site: one(sites, {
 		fields: [factionInfluence.siteId],
 		references: [sites.id],
-		relationName: "influenceAtSite",
 	}),
 }))

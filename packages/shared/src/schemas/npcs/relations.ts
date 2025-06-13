@@ -15,21 +15,21 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	outgoingRelationships: many(npcRelationships, { relationName: "sourceNpc" }),
 	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
 
-	factionMemberships: many(npcFactionMemberships, { relationName: "npcFactionMemberships" }),
-	siteAssociations: many(npcSiteAssociations, { relationName: "npcSiteAssociations" }),
+	factionMemberships: many(npcFactionMemberships),
+	siteAssociations: many(npcSiteAssociations),
 
 	// Relations from other schemas that reference this NPC
-	conflictParticipation: many(conflictParticipants, { relationName: "npcConflicts" }),
-	affectedByConsequences: many(consequences, { relationName: "consequencesAffectingNpc" }),
-	targetOfForeshadowing: many(foreshadowing, { relationName: "foreshadowedNpc" }),
-	sourceOfForeshadowing: many(foreshadowing, { relationName: "npcForeshadowingSeeds" }),
-	itemHistory: many(itemNotableHistory, { relationName: "npcItemHistory" }),
-	itemRelationships: many(itemRelationships, { relationName: "npcItemRelationships" }),
-	destinationInvolvement: many(narrativeDestinationParticipants, { relationName: "npcDestinationInvolvement" }),
-	questHooks: many(questHooks, { relationName: "npcQuestHooks" }),
-	questStageDeliveries: many(questStages, { relationName: "npcQuestStageDeliveries" }),
-	stageInvolvement: many(npcStageInvolvement, { relationName: "npcStageInvolvement" }),
-	worldConceptLinks: many(worldConceptLinks, { relationName: "npcWorldConceptLinks" }),
+	conflictParticipation: many(conflictParticipants),
+	affectedByConsequences: many(consequences),
+	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromNpc" }),
+	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
+	itemHistory: many(itemNotableHistory),
+	itemRelationships: many(itemRelationships),
+	destinationInvolvement: many(narrativeDestinationParticipants),
+	questHooks: many(questHooks),
+	questStageDeliveries: many(questStages),
+	stageInvolvement: many(npcStageInvolvement),
+	worldConceptLinks: many(worldConceptLinks),
 }))
 
 export const npcRelationshipsRelations = relations(npcRelationships, ({ one }) => ({
@@ -49,12 +49,10 @@ export const npcFactionMembershipsRelations = relations(npcFactionMemberships, (
 	npc: one(npcs, {
 		fields: [npcFactionMemberships.npcId],
 		references: [npcs.id],
-		relationName: "npcFactionMemberships",
 	}),
 	faction: one(factions, {
 		fields: [npcFactionMemberships.factionId],
 		references: [factions.id],
-		relationName: "factionMembers",
 	}),
 }))
 
@@ -62,11 +60,9 @@ export const npcSiteAssociationsRelations = relations(npcSiteAssociations, ({ on
 	npc: one(npcs, {
 		fields: [npcSiteAssociations.npcId],
 		references: [npcs.id],
-		relationName: "npcSiteAssociations",
 	}),
 	site: one(sites, {
 		fields: [npcSiteAssociations.siteId],
 		references: [sites.id],
-		relationName: "siteNpcs",
 	}),
 }))

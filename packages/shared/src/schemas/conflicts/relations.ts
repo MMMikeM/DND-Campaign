@@ -14,31 +14,27 @@ export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 	primaryRegion: one(regions, {
 		fields: [conflicts.regionId],
 		references: [regions.id],
-		relationName: "regionConflicts",
 	}),
-	participants: many(conflictParticipants, { relationName: "conflictParticipants" }),
-	consequences: many(consequences, { relationName: "consequencesByConflict" }),
-	affectedByConsequences: many(consequences, { relationName: "consequencesAffectingConflict" }),
-	narrativeDestinations: many(narrativeDestinations, { relationName: "conflictNarrativeDestinations" }),
-	foreshadowingSeeds: many(foreshadowing, { relationName: "foreshadowedConflict" }),
-	itemRelationships: many(itemRelationships, { relationName: "conflictItemRelationships" }),
-	worldConceptLinks: many(worldConceptLinks, { relationName: "conflictWorldConceptLinks" }),
+	participants: many(conflictParticipants),
+	consequences: many(consequences),
+	affectedByConsequences: many(consequences),
+	narrativeDestinations: many(narrativeDestinations),
+	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForConflict" }),
+	itemRelationships: many(itemRelationships),
+	worldConceptLinks: many(worldConceptLinks),
 }))
 
 export const conflictParticipantsRelations = relations(conflictParticipants, ({ one }) => ({
 	conflict: one(conflicts, {
 		fields: [conflictParticipants.conflictId],
 		references: [conflicts.id],
-		relationName: "conflictParticipants",
 	}),
 	faction: one(factions, {
 		fields: [conflictParticipants.factionId],
 		references: [factions.id],
-		relationName: "factionConflicts",
 	}),
 	npc: one(npcs, {
 		fields: [conflictParticipants.npcId],
 		references: [npcs.id],
-		relationName: "npcConflicts",
 	}),
 }))

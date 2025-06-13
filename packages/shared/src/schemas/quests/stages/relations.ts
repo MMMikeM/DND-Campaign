@@ -12,17 +12,14 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	quest: one(quests, {
 		fields: [questStages.questId],
 		references: [quests.id],
-		relationName: "questStages",
 	}),
 	site: one(sites, {
 		fields: [questStages.siteId],
 		references: [sites.id],
-		relationName: "siteQuestStages",
 	}),
 	deliveryNpc: one(npcs, {
 		fields: [questStages.deliveryNpcId],
 		references: [npcs.id],
-		relationName: "npcQuestStageDeliveries",
 	}),
 	decisionsFrom: many(stageDecisions, {
 		relationName: "decisionsFromStage",
@@ -30,23 +27,16 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	decisionsTo: many(stageDecisions, {
 		relationName: "decisionsToStage",
 	}),
-	items: many(items, { relationName: "stageItems" }),
-	narrativeEvents: many(narrativeEvents, {
-		relationName: "stageEvents",
-	}),
-	npcInvolvement: many(npcStageInvolvement, {
-		relationName: "stageNpcInvolvement",
-	}),
-	foreshadowingSeeds: many(foreshadowing, {
-		relationName: "stageForeshadowingSeeds",
-	}),
+	items: many(items),
+	narrativeEvents: many(narrativeEvents),
+	npcInvolvement: many(npcStageInvolvement),
+	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromQuestStage" }),
 }))
 
 export const stageDecisionsRelations = relations(stageDecisions, ({ one, many }) => ({
 	quest: one(quests, {
 		fields: [stageDecisions.questId],
 		references: [quests.id],
-		relationName: "questDecisions",
 	}),
 	fromStage: one(questStages, {
 		fields: [stageDecisions.fromQuestStageId],
@@ -59,21 +49,17 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 		relationName: "decisionsToStage",
 	}),
 
-	triggeredEvents: many(narrativeEvents, {
-		relationName: "decisionTriggeredEvents",
-	}),
-	consequences: many(consequences, { relationName: "consequencesByDecision" }),
+	triggeredEvents: many(narrativeEvents),
+	consequences: many(consequences),
 }))
 
 export const npcStageInvolvementRelations = relations(npcStageInvolvement, ({ one }) => ({
 	npc: one(npcs, {
 		fields: [npcStageInvolvement.npcId],
 		references: [npcs.id],
-		relationName: "npcStageInvolvement",
 	}),
 	questStage: one(questStages, {
 		fields: [npcStageInvolvement.questStageId],
 		references: [questStages.id],
-		relationName: "stageNpcInvolvement",
 	}),
 }))

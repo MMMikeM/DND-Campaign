@@ -13,77 +13,63 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	questStage: one(questStages, {
 		fields: [narrativeEvents.questStageId],
 		references: [questStages.id],
-		relationName: "stageEvents",
 	}),
 
 	triggeringStageDecision: one(stageDecisions, {
 		fields: [narrativeEvents.triggeringStageDecisionId],
 		references: [stageDecisions.id],
-		relationName: "decisionTriggeredEvents",
 	}),
 	relatedQuest: one(quests, {
 		fields: [narrativeEvents.relatedQuestId],
 		references: [quests.id],
-		relationName: "questEvents",
 	}),
-	foreshadowing: many(foreshadowing, { relationName: "foreshadowedNarrativeEvent" }),
+	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNarrativeEvent" }),
 }))
 
 export const consequencesRelations = relations(consequences, ({ one }) => ({
 	triggerQuest: one(quests, {
 		fields: [consequences.triggerQuestId],
 		references: [quests.id],
-		relationName: "consequencesByQuest",
 	}),
 	triggerStageDecision: one(stageDecisions, {
 		fields: [consequences.triggerStageDecisionId],
 		references: [stageDecisions.id],
-		relationName: "consequencesByDecision",
 	}),
 	triggerConflict: one(conflicts, {
 		fields: [consequences.triggerConflictId],
 		references: [conflicts.id],
-		relationName: "consequencesByConflict",
 	}),
 
 	affectedDestination: one(narrativeDestinations, {
 		fields: [consequences.affectedDestinationId],
 		references: [narrativeDestinations.id],
-		relationName: "consequencesAffectingDestination",
 	}),
 	affectedFaction: one(factions, {
 		fields: [consequences.affectedFactionId],
 		references: [factions.id],
-		relationName: "consequencesAffectingFaction",
 	}),
 	affectedRegion: one(regions, {
 		fields: [consequences.affectedRegionId],
 		references: [regions.id],
-		relationName: "consequencesAffectingRegion",
 	}),
 	affectedArea: one(areas, {
 		fields: [consequences.affectedAreaId],
 		references: [areas.id],
-		relationName: "consequencesInArea",
 	}),
 	affectedSite: one(sites, {
 		fields: [consequences.affectedSiteId],
 		references: [sites.id],
-		relationName: "consequencesAtSite",
 	}),
 	affectedNpc: one(npcs, {
 		fields: [consequences.affectedNpcId],
 		references: [npcs.id],
-		relationName: "consequencesAffectingNpc",
 	}),
 	affectedConflict: one(conflicts, {
 		fields: [consequences.affectedConflictId],
 		references: [conflicts.id],
-		relationName: "consequencesAffectingConflict",
 	}),
 	affectedQuest: one(quests, {
 		fields: [consequences.affectedQuestId],
 		references: [quests.id],
-		relationName: "consequencesAffectingQuest",
 	}),
 }))
