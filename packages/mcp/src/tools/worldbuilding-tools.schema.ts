@@ -9,14 +9,25 @@ const {
 
 type TableNames = CreateTableNames<typeof tables.worldbuildingTables>
 
+const {
+	complexityProfiles,
+	conceptLinkStrengths,
+	conceptRelationshipTypes,
+	conceptScopes,
+	conceptStatuses,
+	conceptTypes,
+	currentEffectivenessLevels,
+	moralClarity,
+} = enums
+
 export const tableEnum = ["worldConcepts", "conceptRelationships", "worldConceptLinks"] as const satisfies TableNames
 
 export const schemas = {
 	worldConcepts: createInsertSchema(worldConcepts, {
 		name: (s) => s.describe("Distinctive name for this world concept"),
-		conceptType: z.enum(enums.conceptTypes).describe("Category of concept (cultural, political, religious, etc.)"),
-		complexityProfile: z.enum(enums.complexityProfiles).describe("How complex this concept is"),
-		moralClarity: z.enum(enums.moralClarity).describe("Moral clarity of this concept"),
+		conceptType: z.enum(conceptTypes).describe("Category of concept (cultural, political, religious, etc.)"),
+		complexityProfile: z.enum(complexityProfiles).describe("How complex this concept is"),
+		moralClarity: z.enum(moralClarity).describe("Moral clarity of this concept"),
 		summary: (s) => s.describe("Brief overview of this concept"),
 		surfaceImpression: (s) => s.optional().describe("What people initially think about this concept"),
 		livedRealityDetails: (s) => s.optional().describe("What it's actually like to experience this concept"),
@@ -39,13 +50,11 @@ export const schemas = {
 		membership: (s) => s.describe("Who belongs to or participates in this concept"),
 		rules: (s) => s.describe("Rules or guidelines associated with this concept"),
 		modernAdaptations: (s) => s.describe("How this concept has adapted to modern times"),
-		currentEffectiveness: z
-			.enum(["failing", "struggling", "stable", "thriving", "dominant"] as const)
-			.describe("Current effectiveness of this concept"),
+		currentEffectiveness: z.enum(currentEffectivenessLevels).describe("Current effectiveness of this concept"),
 		institutionalChallenges: (s) => s.describe("Current challenges facing this concept"),
 		culturalEvolution: (s) => s.describe("How this concept has evolved culturally"),
-		scope: z.enum(enums.conceptScopes).describe("Geographic scope of this concept"),
-		status: z.enum(enums.conceptStatuses).describe("Current status of this concept"),
+		scope: z.enum(conceptScopes).describe("Geographic scope of this concept"),
+		status: z.enum(conceptStatuses).describe("Current status of this concept"),
 		timeframe: (s) => s.describe("Time period this concept relates to"),
 		startYear: (s) => s.optional().describe("Year this concept began"),
 		endYear: (s) => s.optional().describe("Year this concept ended"),
@@ -58,17 +67,16 @@ export const schemas = {
 		gmNotes: (s) => s.describe("GM-only information about this concept"),
 		tags: (s) => s.describe("Tags for this concept"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Cultural, political, religious, and historical concepts that shape the world"),
 
 	conceptRelationships: createInsertSchema(conceptRelationships, {
 		sourceConceptId: id.describe("ID of the source concept in this relationship"),
 		targetConceptId: id.describe("ID of the target concept in this relationship"),
-		relationshipType: z.enum(enums.conceptRelationshipTypes).describe("Type of relationship between concepts"),
+		relationshipType: z.enum(conceptRelationshipTypes).describe("Type of relationship between concepts"),
 		relationshipDetails: (s) => s.optional().describe("Details about the relationship"),
 		strength: z.enum(["weak", "moderate", "strong"] as const).describe("Strength of the relationship"),
-		isBidirectional: z.boolean().describe("Whether this relationship applies in both directions"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
 		description: (s) => s.describe("Description of this relationship"),
 		gmNotes: (s) => s.describe("GM-only information about this relationship"),
@@ -90,7 +98,7 @@ export const schemas = {
 		conflictId: optionalId.describe("ID of conflict linked to this concept"),
 		questId: optionalId.describe("ID of quest linked to this concept"),
 		linkRoleOrTypeText: (s) => s.describe("Description of the link role or type"),
-		linkStrength: z.enum(enums.conceptLinkStrengths).describe("Strength of the link"),
+		linkStrength: z.enum(conceptLinkStrengths).describe("Strength of the link"),
 		linkDetailsText: (s) => s.describe("Details about the link"),
 		creativePrompts: (s) => s.describe("GM ideas for using this link"),
 		description: (s) => s.describe("Description of this link"),

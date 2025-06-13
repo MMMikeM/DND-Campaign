@@ -4,32 +4,33 @@ import { z } from "zod/v4"
 import { type CreateTableNames, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	foreshadowingTables: { foreshadowingSeeds, enums },
+	foreshadowingTables: { foreshadowing, enums },
 } = tables
+
+const { foreshadowedEntityType, discoverySubtlety, narrativeWeight, seedDeliveryMethods } = enums
 
 type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
 
-export const tableEnum = ["foreshadowingSeeds"] as const satisfies TableNames
+export const tableEnum = ["foreshadowing"] as const satisfies TableNames
 
 export const schemas = {
-	foreshadowingSeeds: createInsertSchema(foreshadowingSeeds, {
+	foreshadowing: createInsertSchema(foreshadowing, {
 		description: (s) => s.describe("Description of this foreshadowing seed"),
 		tags: (s) => s.describe("Tags for this foreshadowing seed"),
 		sourceNpcId: optionalId.describe("ID of the NPC that is the source of this foreshadowing seed"),
 		sourceSiteId: optionalId.describe("ID of the site that is the source of this foreshadowing seed"),
 		sourceQuestId: optionalId.describe("ID of the quest that is the source of this foreshadowing seed"),
 		sourceQuestStageId: optionalId.describe("ID of the quest stage that is the source of this foreshadowing seed"),
-		suggestedDeliveryMethods: (s) => s.describe("Suggested methods for delivering this foreshadowing seed"),
-		targetEntityType: z
-			.enum(enums.foreshadowedEntityType)
-			.describe("Type of entity this foreshadowing seed points toward"),
+		suggestedDeliveryMethods: z
+			.enum(seedDeliveryMethods)
+			.describe("Suggested methods for delivering this foreshadowing seed"),
+		targetEntityType: z.enum(foreshadowedEntityType).describe("Type of entity this foreshadowing seed points toward"),
 		targetAbstractDetail: (s) =>
 			s.optional().describe("Abstract detail about the target entity (for abstract_theme or specific_reveal types)"),
 		targetFactionId: optionalId.describe("ID of the faction that is the target of this foreshadowing seed"),
 		targetItemId: optionalId.describe("ID of the item that is the target of this foreshadowing seed"),
-		targetMajorConflictId: optionalId.describe(
-			"ID of the major conflict that is the target of this foreshadowing seed",
-		),
+		name: (s) => s.describe("Name of this foreshadowing seed"),
+		targetConflictId: optionalId.describe("ID of the conflict that is the target of this foreshadowing seed"),
 		targetNarrativeDestinationId: optionalId.describe(
 			"ID of the narrative destination that is the target of this foreshadowing seed",
 		),
@@ -40,17 +41,13 @@ export const schemas = {
 			"ID of the narrative event that is the target of this foreshadowing seed",
 		),
 		targetSiteId: optionalId.describe("ID of the site that is the target of this foreshadowing seed"),
-		subtlety: z
-			.enum(enums.discoverySubtlety)
-			.describe("How noticeable this element is (obvious, moderate, subtle, hidden)"),
-		narrativeWeight: z
-			.enum(enums.narrativeWeight)
-			.describe("Importance to the story (minor, supporting, major, crucial)"),
+		subtlety: z.enum(discoverySubtlety).describe("How noticeable this element is (obvious, moderate, subtle, hidden)"),
+		narrativeWeight: z.enum(narrativeWeight).describe("Importance to the story (minor, supporting, major, crucial)"),
 
 		gmNotes: (s) => s.describe("GM-only information about this element"),
 		creativePrompts: (s) => s.describe("Ideas for presenting and integrating this element"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Clues, foreshadowing, and discoverable information that players can find through investigation")
 		.refine(
@@ -63,8 +60,8 @@ export const schemas = {
 						return data.targetNpcId !== undefined
 					case "narrative_event":
 						return data.targetNarrativeEventId !== undefined
-					case "major_conflict":
-						return data.targetMajorConflictId !== undefined
+					case "conflict":
+						return data.targetConflictId !== undefined
 					case "item":
 						return data.targetItemId !== undefined
 					case "narrative_destination":

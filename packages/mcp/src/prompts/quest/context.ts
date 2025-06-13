@@ -18,7 +18,7 @@ import {
 import type { QuestContext, QuestCreationArgs } from "./types"
 
 const {
-	conflictTables: { majorConflicts },
+	conflictTables: { conflicts },
 	factionTables: { factions },
 	npcTables: { npcFactions },
 	questTables: { quests },
@@ -175,9 +175,9 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 					.then((res) => res.map((n) => ({ ...n, id: String(n.id) }))),
 
 				// Get active conflicts for quest integration
-				db.query.majorConflicts
+				db.query.conflicts
 					.findMany({
-						where: eq(majorConflicts.status, "active"),
+						where: eq(conflicts.status, "active"),
 						columns: {
 							id: true,
 							name: true,
@@ -251,14 +251,19 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 		return context
 	} catch (error) {
 		logger.error("Error gathering quest creation context:", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			questArgs: args,
 		})
-		throw new Error(`Failed to gather quest creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`)
+		throw new Error(
+			`Failed to gather quest creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`,
+		)
 	}
 }
 
@@ -295,11 +300,14 @@ async function gatherFactionContext(factionHint?: string) {
 		}
 	} catch (error) {
 		logger.error("Error gathering faction context:", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			factionHint,
 		})
 		return null

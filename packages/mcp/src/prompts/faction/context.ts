@@ -243,7 +243,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 		}
 
 		// Get active conflicts for political analysis
-		const activeConflicts = await db.query.majorConflicts.findMany({
+		const activeConflicts = await db.query.conflicts.findMany({
 			where: (conflicts, { eq }) => eq(conflicts.status, "active"),
 			with: {
 				participants: {

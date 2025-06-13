@@ -28,6 +28,7 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 	schemas: TS,
 ): ToolHandler {
 	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
+		logger.info(`Creating manage entity handler for ${categoryToolName} with args ${JSON.stringify(args)}`)
 		if (!args) {
 			logger.error(`No arguments provided to ${categoryToolName} handler.`)
 			return createErrorResponse(`Aguments provided to ${categoryToolName} are malformed`)
@@ -66,7 +67,8 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			const parsedData = schemas[tableName.data].safeParse(args?.data)
 
 			if (!parsedData.success) {
-				return createErrorResponse(`Invalid data '${args?.data}' provided to ${categoryToolName} handler.`)
+
+				return createErrorResponse(`Invalid data '${JSON.stringify(args?.data)}' provided to ${categoryToolName} handler. ${parsedData.error.message}`)
 			}
 
 			const createData = parsedData.data

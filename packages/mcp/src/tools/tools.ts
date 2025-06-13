@@ -9,6 +9,7 @@ import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { getEntityToolDefinition } from "./get-entity"
 import { helpToolDefinitions } from "./help-tools"
 import { itemToolDefinitions } from "./items-tools"
+import { mapToolDefinitions } from "./map-tools"
 import { narrativeToolDefinitions } from "./narrative-tools"
 import { npcToolDefinitions } from "./npc-tools"
 import { questToolDefinitions } from "./quest-tools"
@@ -48,6 +49,7 @@ export const items = extractToolsAndHandlers(itemToolDefinitions)
 export const help = extractToolsAndHandlers(helpToolDefinitions)
 export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
 export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
+export const maps = extractToolsAndHandlers(mapToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
 	const tools = [
@@ -64,6 +66,7 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.tools,
 		...items.tools,
 		...fuzzySearch.tools,
+		...maps.tools,
 	]
 
 	const allToolHandlers = {
@@ -80,6 +83,7 @@ export function registerToolHandlers(server: Server) {
 		...foreshadowing.handlers,
 		...items.handlers,
 		...fuzzySearch.handlers,
+		...maps.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
@@ -103,7 +107,7 @@ export function registerToolHandlers(server: Server) {
 				],
 			}
 		} catch (error) {
-			logger.error(`Error calling tool ${name}:`, error as Record<string, unknown>)
+			logger.error("Error calling tool", { err: error, tool: name, args })
 			return {
 				isError: true,
 				content: [

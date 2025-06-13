@@ -1,4 +1,5 @@
-import { Resource } from "@modelcontextprotocol/sdk/types.js"
+import type { Resource } from "@modelcontextprotocol/sdk/types.js"
+import sharp from "sharp"
 import { db, logger } from ".."
 import type { ResourceDefinition, ResourceHandler, ResourceLister } from "./resource-types"
 
@@ -25,7 +26,25 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 			throw new Error(`Map image data is missing for map ID: ${mapId}`)
 		}
 
-		const blob = map.mapImage.toString("base64")
+		const pipeline = sharp(map.mapImage).resize(1536, 1536, {
+			fit: "inside",
+			withoutEnlargement: true,
+		})
+
+		switch (map.imageFormat) {
+			case "jpeg":
+				pipeline.jpeg({ quality: 60, progressive: true })
+				break
+			case "png":
+				pipeline.png({ compressionLevel: 8, adaptiveFiltering: true })
+				break
+			case "webp":
+				pipeline.webp({ quality: 60 })
+				break
+		}
+
+		const processedImageBuffer = await pipeline.toBuffer()
+		const blob = processedImageBuffer.toString("base64")
 		const mimeType = `image/${map.imageFormat}`
 
 		return {
@@ -34,21 +53,23 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 			blob,
 		}
 	} catch (error) {
-		logger.error("Failed to fetch map resource", { error, mapId })
+		logger.error("Failed to fetch map resource", { err: error, mapId })
 		throw new Error(`Failed to fetch map resource for ID: ${mapId}`)
 	}
 }
 
 const listMaps: ResourceLister = async (): Promise<Resource[]> => {
 	const maps = await db.query.maps.findMany({
-		columns: { id: true, name: true },
+		columns: { id: true, fileName: true },
+		with: { details: { columns: { name: true } } },
+		where: (maps, { isNotNull }) => isNotNull(maps.mapImage),
 		limit: 5,
 	})
 	return maps.map(
 		(map): Resource => ({
 			uri: `campaign://map/${map.id}`,
-			name: `${map.name} (Map)`,
-			description: `Battlemap image for ${map.name}`,
+			name: `${map.fileName} (Map)`,
+			description: `Battlemap image for ${map.details.name}`,
 			mimeType: "image/*",
 		}),
 	)

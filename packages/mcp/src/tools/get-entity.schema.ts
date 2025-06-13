@@ -3,12 +3,12 @@ import { z } from "zod/v4"
 
 const allTableNames = [
 	...Object.keys(tables.conflictTables),
-	...Object.keys(tables.embeddingTables),
 	...Object.keys(tables.eventTables),
 	...Object.keys(tables.factionTables),
 	...Object.keys(tables.foreshadowingTables),
 	...Object.keys(tables.itemTables),
 	...Object.keys(tables.narrativeTables),
+	...Object.keys(tables.mapTables),
 	...Object.keys(tables.npcTables),
 	...Object.keys(tables.questTables),
 	...Object.keys(tables.regionTables),

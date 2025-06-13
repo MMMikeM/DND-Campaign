@@ -1,63 +1,55 @@
-import pino from "pino"
+import winston from "winston"
 
 const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/server.log"
 
-export const createLogger = () => {
-	// Create a custom error serializer that handles all error properties
-	const errorSerializer = (err: any) => {
-		if (err instanceof Error) {
-			return {
-				type: err.constructor.name,
-				name: err.name,
-				message: err.message,
-				stack: err.stack,
-				// Include any additional properties on the error object
-				...Object.getOwnPropertyNames(err).reduce((acc, key) => {
-					if (!['name', 'message', 'stack'].includes(key)) {
-						acc[key] = (err as any)[key]
+const errorFormat = winston.format(info => {
+	if (info instanceof Error) {
+		return {
+			...info,
+			message: info.message,
+			stack: info.stack,
+			...Object.getOwnPropertyNames(info).reduce(
+				(acc, key) => {
+					if (!["name", "message", "stack"].includes(key)) {
+						acc[key] = (info as any)[key]
 					}
 					return acc
-				}, {} as any)
-			}
+				},
+				{} as Record<string, any>,
+			),
 		}
-		return err
 	}
+	return info
+})
 
-	// Simplified transport configuration - always log to file
-	const transport = pino.transport({
-		targets: [
-			{
-				target: "pino/file",
-				level: "debug",
-				options: { 
-					destination: LOG_FILE,
-					mkdir: true,
-					sync: false  // Use async writing for better performance
-				}
-			},
-		]
+export const createLogger = () => {
+	const logger = winston.createLogger({
+		level: "debug",
+		format: winston.format.combine(
+			winston.format.timestamp({ format: "isoDateTime" }),
+			errorFormat(),
+			winston.format.json(),
+		),
+		transports: [
+			new winston.transports.File({
+				filename: LOG_FILE,
+				tailable: true,
+				maxsize: 10 * 1024 * 1024, // 10MB
+				maxFiles: 5,
+			}),
+		],
+		exceptionHandlers: [new winston.transports.File({ filename: LOG_FILE })],
+		rejectionHandlers: [new winston.transports.File({ filename: LOG_FILE })],
 	})
-
-	const logger = pino(
-		{
-			level: "debug", // Always use debug level to capture all logs
-			timestamp: pino.stdTimeFunctions.isoTime,
-			serializers: {
-				error: errorSerializer,
-				err: errorSerializer,
-			},
-		},
-		transport,
-	)
 
 	process.on("SIGINT", () => {
-		logger.info("SIGINT received")
-		process.exit(0)
+		logger.info("SIGINT received, shutting down gracefully.")
+		logger.end(() => process.exit(0))
 	})
-	
+
 	logger.info("Logger initialized", {
 		logFile: LOG_FILE,
-		logLevel: "debug"
+		logLevel: "debug",
 	})
 
 	return logger

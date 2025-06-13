@@ -4,15 +4,25 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	conflictTables: { majorConflicts, conflictParticipants, enums },
+	conflictTables: { conflicts, conflictParticipants, enums },
 } = tables
+
+const {
+	conflictClarity,
+	conflictNatures,
+	conflictScopes,
+	conflictStatuses,
+	participantRolesInConflict,
+	questImpacts,
+	tensionLevels,
+} = enums
 
 type TableNames = CreateTableNames<typeof tables.conflictTables>
 
-export const tableEnum = ["majorConflicts", "conflictParticipants"] as const satisfies TableNames
+export const tableEnum = ["conflicts", "conflictParticipants"] as const satisfies TableNames
 
 export const schemas = {
-	majorConflicts: createInsertSchema(majorConflicts, {
+	conflicts: createInsertSchema(conflicts, {
 		gmNotes: (s) => s.describe("GM notes for this conflict"),
 		tags: (s) => s.describe("Tags for this conflict"),
 		description: (s) => s.describe("Core conflict elements and dynamics in point form"),
@@ -21,18 +31,17 @@ export const schemas = {
 		hiddenTruths: (s) => s.describe("Secret factors unknown to most participants"),
 		creativePrompts: (s) => s.describe("GM ideas for involving players in this conflict"),
 		name: (s) => s.describe("Distinctive title for this conflict"),
-		scope: (s) => s.describe("Geographic reach (local, regional, global)"),
-		clarityOfRightWrong: (s) => s.describe("How clear the conflict is about right and wrong"),
-		currentTensionLevel: (s) => s.describe("How tense the conflict is currently"),
-		natures: (s) => s.describe("List of types (political, military, mystical, social, etc.)"),
-		status: z
-			.enum(enums.conflictStatuses)
-			.describe("Current state (brewing, active, escalating, deescalating, resolved)"),
+		scope: z.enum(conflictScopes).describe("Geographic reach (local, regional, global)"),
+		clarityOfRightWrong: z.enum(conflictClarity).describe("How clear the conflict is about right and wrong"),
+		currentTensionLevel: z.enum(tensionLevels).describe("How tense the conflict is currently"),
+		natures: z.enum(conflictNatures).describe("List of types (political, military, mystical, social, etc.)"),
+		status: z.enum(conflictStatuses).describe("Current state (brewing, active, escalating, deescalating, resolved)"),
 		cause: (s) => s.describe("Root event or situation that triggered the conflict"),
-		primaryRegionId: optionalId.describe("ID of main region affected by this conflict"),
+		regionId: optionalId.describe("ID of main region affected by this conflict"),
 		moralDilemma: (s) => s.describe("Central ethical question posed by the conflict"),
+		questImpacts: z.enum(questImpacts).describe("How this conflict affects quests"),
 	})
-		.omit({ id: true, embeddingId: true })
+		.omit({ id: true })
 		.strict()
 		.describe("Large-scale struggles between factions that shape the campaign world and provide complex moral choices"),
 
@@ -45,7 +54,7 @@ export const schemas = {
 		),
 		npcId: optionalId.describe("ID of NPC participating in the conflict (either factionId or npcId must be provided)"),
 		role: z
-			.enum(enums.participantRolesInConflict)
+			.enum(participantRolesInConflict)
 			.describe("Role of the participant in the conflict (instigator, opponent, ally, neutral, etc.)"),
 		creativePrompts: (s) => s.describe("GM ideas for involving players with this participant"),
 		description: (s) => s.describe("Participant's involvement and dynamics in point form"),

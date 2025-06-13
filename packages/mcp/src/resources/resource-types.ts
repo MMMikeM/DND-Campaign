@@ -4,7 +4,7 @@ export type ResourceContent = {
 	uri: string
 	mimeType?: string
 	text?: string
-	blob?: string
+	blob?: string | Buffer
 }
 
 export type ResourceHandler = (uri: string) => Promise<ResourceContent | ResourceContent[]>
