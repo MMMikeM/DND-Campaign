@@ -15,41 +15,37 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {
 		fields: [quests.regionId],
 		references: [regions.id],
-		relationName: "regionQuests",
 	}),
-	dependencies: many(questRelationships, {
-		relationName: "questDependencies",
+	outgoingRelationships: many(questRelationships, {
+		relationName: "questOutgoingRelationships",
 	}),
-	dependents: many(questRelationships, {
-		relationName: "questDependents",
+	incomingRelationships: many(questRelationships, {
+		relationName: "questIncomingRelationships",
 	}),
-	stages: many(questStages, { relationName: "questStages" }),
+	stages: many(questStages),
 
-	hooks: many(questHooks, { relationName: "questHooks" }),
-	participants: many(questParticipants, { relationName: "questParticipants" }),
-	narrativeDestinationContributions: many(narrativeDestinationQuestRoles, { relationName: "questDestinationRoles" }),
+	hooks: many(questHooks),
+	participants: many(questParticipants),
+	narrativeDestinationContributions: many(narrativeDestinationQuestRoles),
 
-	consequences: many(consequences, {
-		relationName: "consequencesByQuest",
-	}),
-	triggeredEvents: many(narrativeEvents, {
-		relationName: "questEvents",
-	}),
-	foreshadowingSeeds: many(foreshadowing, { relationName: "questForeshadowingSeeds" }),
-	itemRelationships: many(itemRelationships, { relationName: "questItemRelationships" }),
-	worldConceptLinks: many(worldConceptLinks, { relationName: "questWorldConceptLinks" }),
+	consequences: many(consequences),
+	triggeredEvents: many(narrativeEvents),
+	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromQuest" }),
+	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForQuest" }),
+	itemRelationships: many(itemRelationships),
+	worldConceptLinks: many(worldConceptLinks),
 }))
 
 export const questRelationshipsRelations = relations(questRelationships, ({ one }) => ({
 	sourceQuest: one(quests, {
 		fields: [questRelationships.sourceQuestId],
 		references: [quests.id],
-		relationName: "questDependencies",
+		relationName: "questOutgoingRelationships",
 	}),
 	targetQuest: one(quests, {
 		fields: [questRelationships.targetQuestId],
 		references: [quests.id],
-		relationName: "questDependents",
+		relationName: "questIncomingRelationships",
 	}),
 }))
 
@@ -57,22 +53,18 @@ export const questHooksRelations = relations(questHooks, ({ one }) => ({
 	quest: one(quests, {
 		fields: [questHooks.questId],
 		references: [quests.id],
-		relationName: "questHooks",
 	}),
 	site: one(sites, {
 		fields: [questHooks.siteId],
 		references: [sites.id],
-		relationName: "siteQuestHooks",
 	}),
 	faction: one(factions, {
 		fields: [questHooks.factionId],
 		references: [factions.id],
-		relationName: "factionQuestHooks",
 	}),
 	deliveryNpc: one(npcs, {
 		fields: [questHooks.deliveryNpcId],
 		references: [npcs.id],
-		relationName: "npcQuestHooks",
 	}),
 }))
 
@@ -80,16 +72,13 @@ export const questParticipantsRelations = relations(questParticipants, ({ one })
 	quest: one(quests, {
 		fields: [questParticipants.questId],
 		references: [quests.id],
-		relationName: "questParticipants",
 	}),
 	npc: one(npcs, {
 		fields: [questParticipants.npcId],
 		references: [npcs.id],
-		relationName: "npcQuestParticipation",
 	}),
 	faction: one(factions, {
 		fields: [questParticipants.factionId],
 		references: [factions.id],
-		relationName: "factionQuestParticipation",
 	}),
 }))
