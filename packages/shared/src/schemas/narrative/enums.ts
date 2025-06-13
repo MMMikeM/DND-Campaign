@@ -1,8 +1,5 @@
-import { discoverySubtlety, narrativeWeight } from "../shared-enums"
-
 const questRoles = ["introduction", "complication", "rising_action", "climax", "resolution", "epilogue"] as const
 const arcTypes = ["main", "faction", "character", "side"] as const
-const foreshadowingTypes = ["document", "conversation", "object", "environmental", "vision", "rumor"] as const
 const emotionalArcs = [
 	"triumph_over_adversity",
 	"tragic_fall",
@@ -29,9 +26,6 @@ export const enums = {
 	arcTypes,
 	destinationRelationshipTypes,
 	destinationStatuses,
-	discoverySubtlety,
 	emotionalArcs,
-	foreshadowingTypes,
-	narrativeWeight,
 	questRoles,
 }

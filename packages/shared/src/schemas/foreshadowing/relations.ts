@@ -26,8 +26,8 @@ export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) =>
 		references: [narrativeEvents.id],
 		relationName: "foreshadowedEvent",
 	}),
-	targetMajorConflict: one(conflicts, {
-		fields: [foreshadowing.targetMajorConflictId],
+	targetConflict: one(conflicts, {
+		fields: [foreshadowing.targetConflictId],
 		references: [conflicts.id],
 		relationName: "foreshadowedConflict",
 	}),

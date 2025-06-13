@@ -10,7 +10,7 @@ import { regions } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
 import { conflictParticipants, conflicts } from "./tables"
 
-export const majorConflictsRelations = relations(conflicts, ({ one, many }) => ({
+export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 	primaryRegion: one(regions, {
 		fields: [conflicts.regionId],
 		references: [regions.id],

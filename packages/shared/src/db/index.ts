@@ -36,7 +36,6 @@ export function initializeDatabase(connectionString: string) {
 		...tables.npcTables,
 		...tables.questTables,
 		...tables.regionTables,
-		...tables.embeddingTables,
 		...tables.eventTables,
 		...tables.itemTables,
 		...tables.mapTables,
