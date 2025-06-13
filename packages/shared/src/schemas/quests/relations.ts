@@ -5,9 +5,9 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
 import { destinationQuestRoles } from "../narrative-destinations/tables"
 import { consequences, narrativeEvents } from "../narrative-events/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
-import { worldConceptLinks } from "../worldbuilding/tables"
+import { worldConceptLinks } from "../world-concepts/tables"
 import { questStages } from "./stages/tables"
 import { questHooks, questParticipantInvolvement, questRelationships, quests } from "./tables"
 
@@ -42,12 +42,12 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 
 export const questRelationshipsRelations = relations(questRelationships, ({ one }) => ({
 	sourceQuest: one(quests, {
-		fields: [questRelationships.questId],
+		fields: [questRelationships.sourceQuestId],
 		references: [quests.id],
 		relationName: "questDependencies",
 	}),
 	targetQuest: one(quests, {
-		fields: [questRelationships.relatedQuestId],
+		fields: [questRelationships.targetQuestId],
 		references: [quests.id],
 		relationName: "questDependents",
 	}),

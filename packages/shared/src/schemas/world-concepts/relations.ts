@@ -1,9 +1,9 @@
 // worldbuilding/relations.ts
 import { relations } from "drizzle-orm"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { itemRelationships } from "../items/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { worldConceptLinks, worldConceptRelationships, worldConcepts } from "./tables"

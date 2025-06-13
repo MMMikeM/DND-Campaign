@@ -1,14 +1,15 @@
 // world/relations.ts
 import { relations } from "drizzle-orm"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
+import { foreshadowing } from "../foreshadowing/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { questStages, quests, stageDecisions } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { consequences, narrativeEvents } from "./tables"
 
-export const narrativeEventsRelations = relations(narrativeEvents, ({ one }) => ({
+export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many }) => ({
 	questStage: one(questStages, {
 		fields: [narrativeEvents.questStageId],
 		references: [questStages.id],
@@ -25,6 +26,7 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one }) => 
 		references: [quests.id],
 		relationName: "questEvents",
 	}),
+	foreshadowing: many(foreshadowing, { relationName: "foreshadowedNarrativeEvent" }),
 }))
 
 export const consequencesRelations = relations(consequences, ({ one }) => ({
@@ -47,7 +49,7 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 	affectedDestination: one(narrativeDestinations, {
 		fields: [consequences.affectedDestinationId],
 		references: [narrativeDestinations.id],
-		relationName: "consequencesForDestination",
+		relationName: "consequencesAffectingDestination",
 	}),
 	affectedFaction: one(factions, {
 		fields: [consequences.affectedFactionId],
@@ -57,7 +59,7 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 	affectedRegion: one(regions, {
 		fields: [consequences.affectedRegionId],
 		references: [regions.id],
-		relationName: "consequencesInRegion",
+		relationName: "consequencesAffectingRegion",
 	}),
 	affectedArea: one(areas, {
 		fields: [consequences.affectedAreaId],
@@ -79,10 +81,9 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		references: [conflicts.id],
 		relationName: "consequencesAffectingConflict",
 	}),
-
-	futureQuest: one(quests, {
-		fields: [consequences.futureQuestId],
+	affectedQuest: one(quests, {
+		fields: [consequences.affectedQuestId],
 		references: [quests.id],
-		relationName: "consequenceLeadsToQuest",
+		relationName: "consequencesAffectingQuest",
 	}),
 }))

@@ -1,16 +1,16 @@
 // regions/relations.ts
 import { relations } from "drizzle-orm"
-import { conflicts } from "../conflict/tables"
-import { factionInfluence, factions, regionConnections } from "../factions/tables"
+import { conflicts } from "../conflicts/tables"
+import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
 import { maps } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
-import { npcSites } from "../npc/tables"
+import { npcSites } from "../npcs/tables"
 import { questHooks, questStages, quests } from "../quests/tables"
-import { worldConceptLinks } from "../worldbuilding/tables"
-import { areas, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
+import { worldConceptLinks } from "../world-concepts/tables"
+import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
 
 export const regionsRelations = relations(regions, ({ many }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
@@ -39,19 +39,14 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 
 export const regionConnectionsRelations = relations(regionConnections, ({ one }) => ({
 	sourceRegion: one(regions, {
-		fields: [regionConnections.regionId],
+		fields: [regionConnections.sourceRegionId],
 		references: [regions.id],
 		relationName: "sourceRegion",
 	}),
 	targetRegion: one(regions, {
-		fields: [regionConnections.otherRegionId],
+		fields: [regionConnections.targetRegionId],
 		references: [regions.id],
 		relationName: "targetRegion",
-	}),
-	controllingFaction: one(factions, {
-		fields: [regionConnections.controllingFactionId],
-		references: [factions.id],
-		relationName: "controlledRegionConnections",
 	}),
 }))
 
@@ -86,12 +81,12 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 
 export const siteLinksRelations = relations(siteLinks, ({ one }) => ({
 	sourceSite: one(sites, {
-		fields: [siteLinks.siteId],
+		fields: [siteLinks.sourceSiteId],
 		references: [sites.id],
 		relationName: "sourceSite",
 	}),
 	targetSite: one(sites, {
-		fields: [siteLinks.otherSiteId],
+		fields: [siteLinks.targetSiteId],
 		references: [sites.id],
 		relationName: "targetSite",
 	}),

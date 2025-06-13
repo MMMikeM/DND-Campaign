@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { narrativeEvents } from "../narrative-events/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { worldConcepts } from "../worldbuilding/tables"
+import { worldConcepts } from "../world-concepts/tables"
 import { foreshadowing } from "./tables"
 
 export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) => ({
@@ -24,7 +24,7 @@ export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) =>
 	targetNarrativeEvent: one(narrativeEvents, {
 		fields: [foreshadowing.targetNarrativeEventId],
 		references: [narrativeEvents.id],
-		relationName: "foreshadowedEvent",
+		relationName: "foreshadowedNarrativeEvent",
 	}),
 	targetConflict: one(conflicts, {
 		fields: [foreshadowing.targetConflictId],
@@ -39,7 +39,7 @@ export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) =>
 	targetNarrativeDestination: one(narrativeDestinations, {
 		fields: [foreshadowing.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
-		relationName: "foreshadowedDestination",
+		relationName: "foreshadowedNarrativeDestination",
 	}),
 	targetWorldConcept: one(worldConcepts, {
 		fields: [foreshadowing.targetWorldConceptId],
@@ -65,7 +65,7 @@ export const foreshadowingSeedsRelations = relations(foreshadowing, ({ one }) =>
 	sourceQuestStage: one(questStages, {
 		fields: [foreshadowing.sourceQuestStageId],
 		references: [questStages.id],
-		relationName: "stageForeshadowingSeeds",
+		relationName: "questStageForeshadowingSeeds",
 	}),
 	sourceSite: one(sites, {
 		fields: [foreshadowing.sourceSiteId],

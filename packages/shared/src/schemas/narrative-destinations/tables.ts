@@ -1,11 +1,11 @@
-// narrative/tables.ts
+// narrative-destinations/tables.ts
 
 import { sql } from "drizzle-orm"
 import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
@@ -68,15 +68,15 @@ export const destinationRelationships = pgTable(
 		tags: list("tags"),
 
 		sourceDestinationId: cascadeFk("source_destination_id", narrativeDestinations.id),
-		relatedDestinationId: cascadeFk("related_destination_id", narrativeDestinations.id),
+		targetDestinationId: cascadeFk("target_destination_id", narrativeDestinations.id),
 
 		relationshipType: oneOf("relationship_type", destinationRelationshipTypes),
 
 		relationshipDetails: list("relationship_details"),
 	},
 	(t) => [
-		unique().on(t.sourceDestinationId, t.relatedDestinationId),
-		check("chk_no_self_destination_relationship", sql`${t.sourceDestinationId} != ${t.relatedDestinationId}`),
+		unique().on(t.sourceDestinationId, t.targetDestinationId),
+		check("chk_no_self_destination_relationship", sql`${t.sourceDestinationId} != ${t.targetDestinationId}`),
 	],
 )
 

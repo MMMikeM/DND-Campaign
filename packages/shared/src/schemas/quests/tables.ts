@@ -4,7 +4,7 @@ import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
 import { enums as questEnums } from "./enums"
 import * as stageModule from "./stages/tables"
@@ -65,11 +65,14 @@ export const questRelationships = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		questId: cascadeFk("quest_id", quests.id),
-		relatedQuestId: nullableFk("related_quest_id", quests.id),
+		sourceQuestId: cascadeFk("source_quest_id", quests.id),
+		targetQuestId: cascadeFk("target_quest_id", quests.id),
 		relationshipType: oneOf("relationship_type", relationshipTypes),
 	},
-	(t) => [unique().on(t.questId, t.relatedQuestId)],
+	(t) => [
+		unique().on(t.sourceQuestId, t.targetQuestId),
+		check("no_self_relationship", sql`${t.sourceQuestId} != ${t.targetQuestId}`),
+	],
 )
 
 export const questHooks = pgTable(
@@ -116,8 +119,8 @@ export const questHooks = pgTable(
 	],
 )
 
-export const questParticipantInvolvement = pgTable(
-	"quest_participant_involvement",
+export const questParticipants = pgTable(
+	"quest_participants",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),

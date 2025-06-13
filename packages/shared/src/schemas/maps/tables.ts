@@ -1,3 +1,4 @@
+// maps/tables.ts
 import { integer, pgTable } from "drizzle-orm/pg-core"
 import { bytea, cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 

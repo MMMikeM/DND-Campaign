@@ -2,13 +2,14 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
+import { questStages } from "../quests/stages/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { worldConcepts } from "../worldbuilding/tables"
+import { worldConcepts } from "../world-concepts/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
@@ -24,7 +25,8 @@ export const items = pgTable("items", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	relatedQuestId: nullableFk("related_quest_id", quests.id),
+	questId: nullableFk("quest_id", quests.id),
+	questStageId: nullableFk("quest_stage_id", questStages.id),
 
 	itemType: oneOf("item_type", itemTypes),
 	rarity: oneOf("rarity", rarityLevels),

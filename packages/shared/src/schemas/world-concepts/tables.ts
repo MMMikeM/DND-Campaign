@@ -1,10 +1,10 @@
-// worldbuilding/tables.ts
+// world-concepts/tables.ts
 import { sql } from "drizzle-orm"
 import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
