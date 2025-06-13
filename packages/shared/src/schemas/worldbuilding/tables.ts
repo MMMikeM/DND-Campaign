@@ -1,9 +1,8 @@
 // worldbuilding/tables.ts
 import { sql } from "drizzle-orm"
-import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { quests } from "../quests/tables"
@@ -20,6 +19,7 @@ const {
 	conceptStatuses,
 	conceptTypes,
 	moralClarity,
+	currentEffectivenessLevels,
 } = enums
 
 export const worldConcepts = pgTable("world_concepts", {
@@ -59,13 +59,7 @@ export const worldConcepts = pgTable("world_concepts", {
 	membership: list("membership"),
 	rules: list("rules"),
 	modernAdaptations: list("modern_adaptations"),
-	currentEffectiveness: oneOf("current_effectiveness", [
-		"failing",
-		"struggling",
-		"stable",
-		"thriving",
-		"dominant",
-	] as const),
+	currentEffectiveness: oneOf("current_effectiveness", currentEffectivenessLevels),
 	institutionalChallenges: list("institutional_challenges"),
 	culturalEvolution: list("cultural_evolution"),
 
@@ -81,8 +75,6 @@ export const worldConcepts = pgTable("world_concepts", {
 	modernConsequences: list("modern_consequences"),
 
 	questHooks: list("quest_hooks"),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const conceptRelationships = pgTable(
@@ -100,7 +92,6 @@ export const conceptRelationships = pgTable(
 
 		relationshipDetails: nullableString("relationship_details"),
 		strength: oneOf("strength", ["weak", "moderate", "strong"] as const),
-		isBidirectional: boolean("is_bidirectional"),
 	},
 	(t) => [
 		unique().on(t.sourceConceptId, t.targetConceptId, t.relationshipType),
@@ -122,7 +113,7 @@ export const worldConceptLinks = pgTable(
 		regionId: nullableFk("region_id", regions.id),
 		factionId: nullableFk("faction_id", factions.id),
 		npcId: nullableFk("npc_id", npcs.id),
-		conflictId: nullableFk("conflict_id", majorConflicts.id),
+		conflictId: nullableFk("conflict_id", conflicts.id),
 		questId: nullableFk("quest_id", quests.id),
 
 		linkRoleOrTypeText: string("link_role_or_type_text"),

@@ -1,6 +1,5 @@
 import { integer, pgTable } from "drizzle-orm/pg-core"
-import { bytea, cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
+import { bytea, cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 
 const imageFormats = ["png", "jpg", "webp"] as const
 
@@ -17,13 +16,13 @@ export const maps = pgTable("maps", {
 export const mapDetails = pgTable("map_details", {
 	id: pk(),
 	name: string("name").unique(),
-	mapId: cascadeFk("map_id", maps.id),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	// Battlemap Tactical Analysis
+	mapId: cascadeFk("map_id", maps.id),
+
 	coverOptions: list("cover_options"),
 	elevationFeatures: list("elevation_features"),
 	movementRoutes: list("movement_routes"),
@@ -33,7 +32,6 @@ export const mapDetails = pgTable("map_details", {
 	tacticalPositions: list("tactical_positions"),
 	interactiveElements: list("interactive_elements"),
 	environmentalHazards: list("environmental_hazards"),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const enums = {

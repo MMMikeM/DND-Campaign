@@ -114,6 +114,8 @@ const atmosphereTypes = [
 	"wonder_awe",
 ] as const
 
+const encounterCategories = ["combat", "puzzle", "trap", "social", "exploration_hazard"] as const
+
 export const enums = {
 	areaTypes,
 	atmosphereTypes,
@@ -125,4 +127,5 @@ export const enums = {
 	secretTypes,
 	siteFunctions,
 	siteTypes,
+	encounterCategories,
 }

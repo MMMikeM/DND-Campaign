@@ -1,9 +1,8 @@
 // quests/relations.ts
 import { relations } from "drizzle-orm"
-import { embeddings } from "../embeddings/tables"
 import { consequences, narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
-import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
 import { destinationQuestRoles } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -36,14 +35,9 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	triggeredEvents: many(narrativeEvents, {
 		relationName: "questEvents",
 	}),
-	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "questForeshadowingSeeds" }),
+	foreshadowingSeeds: many(foreshadowing, { relationName: "questForeshadowingSeeds" }),
 	itemRelationships: many(itemRelationships, { relationName: "questItemRelationships" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "questWorldConceptLinks" }),
-
-	embedding: one(embeddings, {
-		fields: [quests.embeddingId],
-		references: [embeddings.id],
-	}),
 }))
 
 export const questRelationshipsRelations = relations(questRelationships, ({ one }) => ({

@@ -3,7 +3,6 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../../db/utils"
-import { embeddings } from "../../embeddings/tables"
 import { npcs } from "../../npc/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
@@ -21,24 +20,24 @@ export const questStages = pgTable("quest_stages", {
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	questId: cascadeFk("quest_id", () => quests.id),
 	siteId: nullableFk("site_id", sites.id),
 	deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
+
+	questId: cascadeFk("quest_id", () => quests.id),
+
 	stageOrder: integer("stage_order").notNull(),
+
 	dramatic_question: string("dramatic_question"),
 
 	stageType: oneOf("stage_type", stageTypes),
 	intendedComplexityLevel: oneOf("intended_complexity_level", complexityLevels),
+	stageImportance: oneOf("stage_importance", stageImportanceLevels),
 
 	objectives: list("objectives"),
 	completionPaths: list("completion_paths"),
 	encounters: list("encounters"),
 	dramatic_moments: list("dramatic_moments"),
 	sensory_elements: list("sensory_elements"),
-
-	stageImportance: oneOf("stage_importance", stageImportanceLevels),
-
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const stageDecisions = pgTable(
@@ -51,23 +50,22 @@ export const stageDecisions = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		questId: cascadeFk("quest_id", () => {
-			const { quests } = require("../tables")
-			return quests.id
-		}),
+		questId: cascadeFk("quest_id", () => quests.id),
 		fromStageId: cascadeFk("from_stage_id", questStages.id),
+
 		toStageId: nullableFk("to_stage_id", questStages.id),
+
 		conditionType: oneOf("condition_type", conditionTypes),
 		decisionType: oneOf("decision_type", decisionTypes),
-
 		ambiguityLevel: oneOf("ambiguity_level", ambiguityLevels),
-		conditionValue: string("condition_value"),
+
+		options: list("options"),
 		successDescription: list("success_description"),
 		failureDescription: list("failure_description"),
 		narrativeTransition: list("narrative_transition"),
 		potential_player_reactions: list("potential_player_reactions"),
-		options: list("options"),
 
+		conditionValue: string("condition_value"),
 		failure_leads_to_retry: boolean("failure_leads_to_retry").notNull().default(false),
 		failure_lesson_learned: nullableString("failure_lesson_learned"),
 	},
@@ -94,8 +92,8 @@ export const npcStageInvolvement = pgTable(
 		questStageId: cascadeFk("quest_stage_id", questStages.id),
 
 		roleInStage: string("role_in_stage"),
+
 		involvementDetails: list("involvement_details"),
-		isOptional: boolean("is_optional").notNull().default(false),
 	},
 	(t) => [unique().on(t.npcId, t.questStageId)],
 )

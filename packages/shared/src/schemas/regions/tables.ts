@@ -3,7 +3,6 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
 import { maps } from "../maps/tables"
 import { enums } from "./enums"
 
@@ -20,6 +19,7 @@ const {
 	secretTypes,
 	siteFunctions,
 	siteTypes,
+	encounterCategories,
 } = enums
 
 export const regions = pgTable("regions", {
@@ -29,7 +29,6 @@ export const regions = pgTable("regions", {
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
-
 
 	dangerLevel: oneOf("danger_level", dangerLevels),
 	type: oneOf("type", regionTypes),
@@ -48,7 +47,6 @@ export const regions = pgTable("regions", {
 	rumors: list("rumors"),
 	secrets: list("secrets"),
 	security: list("defenses"),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const areas = pgTable("areas", {
@@ -76,7 +74,6 @@ export const areas = pgTable("areas", {
 	pointsOfInterest: list("points_of_interest"),
 	rumors: list("rumors"),
 	defenses: list("defenses"),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const sites = pgTable("sites", {
@@ -108,7 +105,6 @@ export const sites = pgTable("sites", {
 	descriptors: list("descriptors"),
 
 	mapId: cascadeFk("map_id", maps.id).unique(),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })
 
 export const siteLinks = pgTable(
@@ -153,7 +149,7 @@ export const siteEncounters = pgTable(
 		coreEnemyGroups: list("core_enemy_groups"),
 		synergyDescription: nullableString("synergy_description"),
 
-		encounterCategory: oneOf("encounter_category", ["combat", "puzzle", "trap", "social", "exploration_hazard"]),
+		encounterCategory: oneOf("encounter_category", encounterCategories),
 		recommendedProficiencyBonus: integer("recommended_proficiency_bonus"),
 
 		specialVariations: list("special_variations"),
@@ -163,8 +159,6 @@ export const siteEncounters = pgTable(
 		interactiveElements: list("interactive_elements"),
 
 		treasureOrRewards: list("treasure_or_rewards"),
-
-		embeddingId: nullableFk("embedding_id", embeddings.id),
 	},
 	(t) => [
 		unique().on(t.siteId, t.name),
@@ -199,5 +193,4 @@ export const siteSecrets = pgTable("site_secrets", {
 	difficultyToDiscover: oneOf("difficulty", difficultyLevels),
 	discoveryMethod: list("discovery_method"),
 	consequences: list("consequences"),
-	embeddingId: nullableFk("embedding_id", embeddings.id),
 })

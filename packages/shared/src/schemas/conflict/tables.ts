@@ -2,7 +2,6 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { embeddings } from "../embeddings/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npc/tables"
 import { regions } from "../regions/tables"
@@ -10,32 +9,38 @@ import { enums } from "./enums"
 
 export { enums } from "./enums"
 
-const { conflictClarity, conflictNatures, conflictScopes, conflictStatuses, participantRolesInConflict } = enums
+const {
+	conflictClarity,
+	conflictNatures,
+	conflictScopes,
+	conflictStatuses,
+	participantRolesInConflict,
+	tensionLevels,
+} = enums
 
-export const majorConflicts = pgTable("major_conflicts", {
+export const conflicts = pgTable("conflicts", {
 	id: pk(),
+	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
-	primaryRegionId: nullableFk("primary_region_id", regions.id),
-	name: string("name").unique(),
-	scope: oneOf("scope", conflictScopes),
-	natures: manyOf("natures", conflictNatures),
-	status: oneOf("status", conflictStatuses),
+	regionId: nullableFk("primary_region_id", regions.id),
 
 	cause: string("cause"),
-	stakes: list("stakes"),
-
 	moralDilemma: string("moral_dilemma"),
+
+	stakes: list("stakes"),
 	possibleOutcomes: list("possible_outcomes"),
 	hiddenTruths: list("hidden_truths"),
 
+	scope: oneOf("scope", conflictScopes),
+	status: oneOf("status", conflictStatuses),
 	clarityOfRightWrong: oneOf("clarity_of_right_wrong", conflictClarity),
-	currentTensionLevel: oneOf("tension_level", ["low", "building", "high", "breaking"]),
+	currentTensionLevel: oneOf("tension_level", tensionLevels),
 
-	embeddingId: nullableFk("embedding_id", embeddings.id),
+	natures: manyOf("natures", conflictNatures),
 })
 
 export const conflictParticipants = pgTable(
@@ -47,15 +52,16 @@ export const conflictParticipants = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		conflictId: cascadeFk("conflict_id", majorConflicts.id),
-
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
+
+		conflictId: cascadeFk("conflict_id", conflicts.id),
 
 		role: oneOf("role", participantRolesInConflict),
 
 		motivation: string("motivation"),
 		publicStance: string("public_stance"),
+
 		secretStance: nullableString("secret_stance"),
 	},
 	(t) => [

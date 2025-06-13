@@ -25,6 +25,8 @@ const playerExperienceGoals = [
 	"emotional_impact",
 ] as const
 
+export const questHookSourceTypes = ["site", "faction", "npc"] as const
+
 export const enums = {
 	hookTypes,
 	moralSpectrumFocus,
@@ -37,4 +39,5 @@ export const enums = {
 	trustLevels,
 	urgencyLevels,
 	visibilityLevels,
+	questHookSourceTypes,
 }

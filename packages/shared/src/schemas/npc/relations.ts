@@ -1,9 +1,8 @@
 import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
 import { consequences } from "../events/tables"
 import { factions } from "../factions/tables"
-import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelationships } from "../items/tables"
 import { destinationParticipantInvolvement } from "../narrative/tables"
 import { npcStageInvolvement } from "../quests/stages/tables"
@@ -12,7 +11,7 @@ import { sites } from "../regions/tables"
 import { worldConceptLinks } from "../worldbuilding/tables"
 import { npcFactions, npcRelationships, npcSites, npcs } from "./tables"
 
-export const npcsRelations = relations(npcs, ({ many, one }) => ({
+export const npcsRelations = relations(npcs, ({ many }) => ({
 	outgoingRelationships: many(npcRelationships, { relationName: "sourceNpc" }),
 	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
 
@@ -22,8 +21,8 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	// Relations from other schemas that reference this NPC
 	conflictParticipation: many(conflictParticipants, { relationName: "npcConflicts" }),
 	affectedByConsequences: many(consequences, { relationName: "consequencesAffectingNpc" }),
-	targetOfForeshadowing: many(foreshadowingSeeds, { relationName: "foreshadowedNpc" }),
-	sourceOfForeshadowing: many(foreshadowingSeeds, { relationName: "npcForeshadowingSeeds" }),
+	targetOfForeshadowing: many(foreshadowing, { relationName: "foreshadowedNpc" }),
+	sourceOfForeshadowing: many(foreshadowing, { relationName: "npcForeshadowingSeeds" }),
 	itemHistory: many(itemNotableHistory, { relationName: "npcItemHistory" }),
 	itemRelationships: many(itemRelationships, { relationName: "npcItemRelationships" }),
 	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "npcDestinationInvolvement" }),
@@ -31,11 +30,6 @@ export const npcsRelations = relations(npcs, ({ many, one }) => ({
 	questStageDeliveries: many(questStages, { relationName: "npcQuestStageDeliveries" }),
 	stageInvolvement: many(npcStageInvolvement, { relationName: "npcStageInvolvement" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "npcWorldConceptLinks" }),
-
-	embedding: one(embeddings, {
-		fields: [npcs.embeddingId],
-		references: [embeddings.id],
-	}),
 }))
 
 export const characterRelationshipsRelations = relations(npcRelationships, ({ one }) => ({

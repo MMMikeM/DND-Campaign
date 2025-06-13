@@ -1,8 +1,7 @@
 // quests/stages/relations.ts
 import { relations } from "drizzle-orm"
-import { embeddings } from "../../embeddings/tables"
 import { consequences, narrativeEvents } from "../../events/tables"
-import { foreshadowingSeeds } from "../../foreshadowing/tables"
+import { foreshadowing } from "../../foreshadowing/tables"
 import { items } from "../../items/tables"
 import { npcs } from "../../npc/tables"
 import { sites } from "../../regions/tables"
@@ -38,13 +37,8 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	npcInvolvement: many(npcStageInvolvement, {
 		relationName: "stageNpcInvolvement",
 	}),
-	foreshadowingSeeds: many(foreshadowingSeeds, {
+	foreshadowingSeeds: many(foreshadowing, {
 		relationName: "stageForeshadowingSeeds",
-	}),
-
-	embedding: one(embeddings, {
-		fields: [questStages.embeddingId],
-		references: [embeddings.id],
 	}),
 }))
 

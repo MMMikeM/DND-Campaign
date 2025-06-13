@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { majorConflicts } from "../conflict/tables"
+import { conflicts } from "../conflict/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative/tables"
 import { npcs } from "../npc/tables"
@@ -55,9 +55,9 @@ export const itemRelationshipsRelations = relations(itemRelationships, ({ one })
 		references: [quests.id],
 	}),
 
-	targetConflict: one(majorConflicts, {
+	targetConflict: one(conflicts, {
 		fields: [itemRelationships.targetConflictId],
-		references: [majorConflicts.id],
+		references: [conflicts.id],
 	}),
 
 	targetNarrativeDestination: one(narrativeDestinations, {

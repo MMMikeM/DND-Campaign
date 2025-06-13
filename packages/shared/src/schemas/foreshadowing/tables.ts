@@ -3,8 +3,7 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
 import { list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { majorConflicts } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
+import { conflicts } from "../conflict/tables"
 import { narrativeEvents } from "../events/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
@@ -19,7 +18,7 @@ export { enums } from "./enums"
 
 const { discoverySubtlety, foreshadowedEntityType, narrativeWeight, seedDeliveryMethods } = enums
 
-export const foreshadowingSeeds = pgTable(
+export const foreshadowing = pgTable(
 	"foreshadowing_seeds",
 	{
 		id: pk(),
@@ -30,10 +29,11 @@ export const foreshadowingSeeds = pgTable(
 		tags: list("tags"),
 
 		targetEntityType: oneOf("target_entity_type", foreshadowedEntityType),
+
 		targetQuestId: nullableFk("target_quest_id", quests.id),
 		targetNpcId: nullableFk("target_npc_id", npcs.id),
 		targetNarrativeEventId: nullableFk("target_narrative_event_id", narrativeEvents.id),
-		targetMajorConflictId: nullableFk("target_major_conflict_id", majorConflicts.id),
+		targetMajorConflictId: nullableFk("target_major_conflict_id", conflicts.id),
 		targetItemId: nullableFk("target_item_id", items.id),
 		targetNarrativeDestinationId: nullableFk("target_narrative_destination_id", narrativeDestinations.id),
 		targetWorldConceptId: nullableFk("target_world_concept_id", worldConcepts.id),
@@ -41,16 +41,14 @@ export const foreshadowingSeeds = pgTable(
 		targetSiteId: nullableFk("target_site_id", sites.id),
 		targetAbstractDetail: nullableString("target_abstract_detail"),
 
-		suggestedDeliveryMethods: manyOf("suggested_delivery_methods", seedDeliveryMethods),
-		subtlety: oneOf("subtlety", discoverySubtlety),
-		narrativeWeight: oneOf("narrative_weight", narrativeWeight),
-
 		sourceQuestId: nullableFk("source_quest_id", quests.id),
 		sourceQuestStageId: nullableFk("source_quest_stage_id", questStages.id),
 		sourceSiteId: nullableFk("source_site_id", sites.id),
 		sourceNpcId: nullableFk("source_npc_id", npcs.id),
 
-		embeddingId: nullableFk("embedding_id", embeddings.id),
+		subtlety: oneOf("subtlety", discoverySubtlety),
+		narrativeWeight: oneOf("narrative_weight", narrativeWeight),
+		suggestedDeliveryMethods: manyOf("suggested_delivery_methods", seedDeliveryMethods),
 	},
 	(t) => [
 		check(

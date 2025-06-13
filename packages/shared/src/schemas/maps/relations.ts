@@ -1,6 +1,5 @@
 // maps/relations.ts
 import { relations } from "drizzle-orm"
-import { embeddings } from "../embeddings/tables"
 import { sites } from "../regions/tables"
 import { mapDetails, maps } from "./tables"
 
@@ -19,9 +18,5 @@ export const mapDetailsRelations = relations(mapDetails, ({ one }) => ({
 	map: one(maps, {
 		fields: [mapDetails.mapId],
 		references: [maps.id],
-	}),
-	embedding: one(embeddings, {
-		fields: [mapDetails.embeddingId],
-		references: [embeddings.id],
 	}),
 }))

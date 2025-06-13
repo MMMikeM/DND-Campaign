@@ -1,9 +1,8 @@
 // factions/relations.ts
 import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflict/tables"
-import { embeddings } from "../embeddings/tables"
 import { consequences } from "../events/tables"
-import { foreshadowingSeeds } from "../foreshadowing/tables"
+import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
 import { destinationParticipantInvolvement } from "../narrative/tables"
 import { npcFactions } from "../npc/tables"
@@ -25,19 +24,14 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
 	consequences: many(consequences, { relationName: "consequencesAffectingFaction" }),
 	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "factionDestinationInvolvement" }),
-	foreshadowingSeeds: many(foreshadowingSeeds, { relationName: "foreshadowedFaction" }),
+	foreshadowingSeeds: many(foreshadowing, { relationName: "foreshadowedFaction" }),
 	itemRelationships: many(itemRelationships, { relationName: "factionItemRelationships" }),
 	worldConceptLinks: many(worldConceptLinks, { relationName: "factionWorldConceptLinks" }),
 
 	primaryHqSite: one(sites, {
-		fields: [factions.primaryHqSiteId],
+		fields: [factions.hqSiteId],
 		references: [sites.id],
 		relationName: "factionHq",
-	}),
-
-	embedding: one(embeddings, {
-		fields: [factions.embeddingId],
-		references: [embeddings.id],
 	}),
 }))
 
@@ -59,10 +53,6 @@ export const factionAgendaRelations = relations(factionAgendas, ({ one }) => ({
 		fields: [factionAgendas.factionId],
 		references: [factions.id],
 		relationName: "factionAgendas",
-	}),
-	embedding: one(embeddings, {
-		fields: [factionAgendas.embeddingId],
-		references: [embeddings.id],
 	}),
 }))
 
