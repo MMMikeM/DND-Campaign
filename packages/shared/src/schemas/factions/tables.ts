@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
-import { areas, regions, sites } from "../regions/tables"
+import { areas, regionConnections, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
@@ -96,13 +96,13 @@ export const factionDiplomacy = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		factionId: cascadeFk("faction_id", factions.id),
-		otherFactionId: cascadeFk("other_faction_id", factions.id),
+		sourceFactionId: cascadeFk("source_faction_id", factions.id),
+		targetFactionId: cascadeFk("target_faction_id", factions.id),
 
 		strength: oneOf("strength", relationshipStrengths),
 		diplomaticStatus: oneOf("diplomatic_status", diplomaticStatuses),
 	},
-	(t) => [unique().on(t.factionId, t.otherFactionId)],
+	(t) => [unique().on(t.sourceFactionId, t.targetFactionId)],
 )
 
 export const factionInfluence = pgTable(
@@ -119,6 +119,7 @@ export const factionInfluence = pgTable(
 		regionId: nullableFk("region_id", () => regions.id),
 		areaId: nullableFk("area_id", () => areas.id),
 		siteId: nullableFk("site_id", sites.id),
+		regionConnectionId: nullableFk("region_connection_id", () => regionConnections.id),
 
 		influenceLevel: oneOf("influence_level", influenceLevels),
 

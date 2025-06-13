@@ -1,14 +1,14 @@
 // factions/relations.ts
 import { relations } from "drizzle-orm"
-import { conflictParticipants } from "../conflict/tables"
+import { conflictParticipants } from "../conflicts/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelationships } from "../items/tables"
 import { destinationParticipantInvolvement } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
-import { npcFactions } from "../npc/tables"
-import { questHooks, questParticipantInvolvement } from "../quests/tables"
+import { npcFactionMemberships } from "../npcs/tables"
+import { questHooks, questParticipants } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { worldConceptLinks } from "../worldbuilding/tables"
+import { worldConceptLinks } from "../world-concepts/tables"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
@@ -16,11 +16,10 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }),
 
 	agendas: many(factionAgendas, { relationName: "factionAgendas" }),
-	members: many(npcFactions, { relationName: "factionMembers" }),
+	members: many(npcFactionMemberships, { relationName: "factionMembers" }),
 	questHooks: many(questHooks, { relationName: "factionQuestHooks" }),
-	questParticipation: many(questParticipantInvolvement, { relationName: "factionQuestParticipation" }),
+	questParticipation: many(questParticipants, { relationName: "factionQuestParticipation" }),
 	influence: many(factionInfluence, { relationName: "factionInfluence" }),
-
 	conflicts: many(conflictParticipants, { relationName: "factionConflicts" }),
 	consequences: many(consequences, { relationName: "consequencesAffectingFaction" }),
 	destinationInvolvement: many(destinationParticipantInvolvement, { relationName: "factionDestinationInvolvement" }),
@@ -37,12 +36,12 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 
 export const factionDiplomacyRelations = relations(factionDiplomacy, ({ one }) => ({
 	sourceFaction: one(factions, {
-		fields: [factionDiplomacy.factionId],
+		fields: [factionDiplomacy.sourceFactionId],
 		references: [factions.id],
 		relationName: "sourceFaction",
 	}),
 	targetFaction: one(factions, {
-		fields: [factionDiplomacy.otherFactionId],
+		fields: [factionDiplomacy.targetFactionId],
 		references: [factions.id],
 		relationName: "targetFaction",
 	}),

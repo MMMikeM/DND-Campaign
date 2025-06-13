@@ -1,9 +1,9 @@
-// conflict/tables.ts
+// conflicts/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
 import { enums } from "./enums"
 

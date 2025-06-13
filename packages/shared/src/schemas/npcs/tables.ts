@@ -69,8 +69,8 @@ export const npcs = pgTable("npcs", {
 	voiceNotes: list("voice_notes"),
 })
 
-export const npcSites = pgTable(
-	"npc_sites",
+export const npcSiteAssociations = pgTable(
+	"npc_site_associations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -91,8 +91,8 @@ export const npcSites = pgTable(
 	],
 )
 
-export const npcFactions = pgTable(
-	"npc_factions",
+export const npcFactionMemberships = pgTable(
+	"npc_faction_memberships",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
@@ -123,8 +123,8 @@ export const npcRelationships = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		npcId: cascadeFk("npc_id", npcs.id),
-		relatedNpcId: cascadeFk("related_npc_id", npcs.id),
+		sourceNpcId: cascadeFk("source_npc_id", npcs.id),
+		targetNpcId: cascadeFk("target_npc_id", npcs.id),
 
 		relationshipType: oneOf("relationship_type", relationshipTypes),
 		strength: oneOf("strength", relationshipStrengths),
@@ -135,7 +135,7 @@ export const npcRelationships = pgTable(
 		relationshipDynamics: list("relationship_dynamics"),
 	},
 	(t) => [
-		unique().on(t.npcId, t.relatedNpcId, t.relationshipType),
-		check("no_self_relationship", sql`${t.npcId} != ${t.relatedNpcId}`),
+		unique().on(t.sourceNpcId, t.targetNpcId, t.relationshipType),
+		check("no_self_relationship", sql`${t.sourceNpcId} != ${t.targetNpcId}`),
 	],
 )

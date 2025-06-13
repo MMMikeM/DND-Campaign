@@ -1,14 +1,15 @@
 import { relations } from "drizzle-orm"
-import { conflicts } from "../conflict/tables"
+import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
-import { npcs } from "../npc/tables"
+import { npcs } from "../npcs/tables"
+import { questStages } from "../quests/stages/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { worldConcepts } from "../worldbuilding/tables"
+import { worldConcepts } from "../world-concepts/tables"
 import { itemNotableHistory, itemRelationships, items } from "./tables"
 
-export const itemsRelations = relations(items, ({ many }) => ({
+export const itemsRelations = relations(items, ({ many, one }) => ({
 	sourceOfRelationships: many(itemRelationships, {
 		relationName: "sourceItem",
 	}),
@@ -19,6 +20,12 @@ export const itemsRelations = relations(items, ({ many }) => ({
 
 	notableHistory: many(itemNotableHistory, {
 		relationName: "item",
+	}),
+
+	stage: one(questStages, {
+		fields: [items.stageId],
+		references: [questStages.id],
+		relationName: "stageItems",
 	}),
 }))
 
@@ -38,36 +45,43 @@ export const itemRelationshipsRelations = relations(itemRelationships, ({ one })
 	targetNpc: one(npcs, {
 		fields: [itemRelationships.targetNpcId],
 		references: [npcs.id],
+		relationName: "npcItemRelationships",
 	}),
 
 	targetFaction: one(factions, {
 		fields: [itemRelationships.targetFactionId],
 		references: [factions.id],
+		relationName: "factionItemRelationships",
 	}),
 
 	targetSite: one(sites, {
 		fields: [itemRelationships.targetSiteId],
 		references: [sites.id],
+		relationName: "siteItemRelationships",
 	}),
 
 	targetQuest: one(quests, {
 		fields: [itemRelationships.targetQuestId],
 		references: [quests.id],
+		relationName: "questItemRelationships",
 	}),
 
 	targetConflict: one(conflicts, {
 		fields: [itemRelationships.targetConflictId],
 		references: [conflicts.id],
+		relationName: "conflictItemRelationships",
 	}),
 
 	targetNarrativeDestination: one(narrativeDestinations, {
 		fields: [itemRelationships.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
+		relationName: "narrativeDestinationItemRelationships",
 	}),
 
 	targetWorldConcept: one(worldConcepts, {
 		fields: [itemRelationships.targetWorldConceptId],
 		references: [worldConcepts.id],
+		relationName: "worldConceptItemRelationships",
 	}),
 }))
 

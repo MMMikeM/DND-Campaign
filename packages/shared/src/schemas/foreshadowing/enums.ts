@@ -1,4 +1,4 @@
-import { discoverySubtlety } from "../shared-enums"
+import { discoverySubtlety, narrativeWeight } from "../shared-enums"
 
 const seedDeliveryMethods = [
 	"npc_dialogue",
@@ -30,4 +30,5 @@ export const enums = {
 	discoverySubtlety,
 	foreshadowedEntityType,
 	seedDeliveryMethods,
+	narrativeWeight,
 }

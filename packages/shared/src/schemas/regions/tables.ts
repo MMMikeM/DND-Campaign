@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableString, oneOf, pk, string } from "../../db/utils"
 import { maps } from "../maps/tables"
 import { enums } from "./enums"
 
@@ -61,8 +61,8 @@ export const regionConnections = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		regionId: cascadeFk("region_id", regions.id),
-		otherRegionId: nullableFk("other_region_id", regions.id),
+		sourceRegionId: cascadeFk("source_region_id", regions.id),
+		targetRegionId: cascadeFk("target_region_id", regions.id),
 
 		connectionType: oneOf("connection_type", connectionTypes),
 		routeType: oneOf("route_type", routeTypes),
@@ -74,8 +74,8 @@ export const regionConnections = pgTable(
 		pointsOfInterest: list("points_of_interest"),
 	},
 	(t) => [
-		unique().on(t.regionId, t.otherRegionId, t.connectionType),
-		check("chk_no_self_region_connection", sql`COALESCE(${t.regionId} != ${t.otherRegionId}, TRUE)`),
+		unique().on(t.sourceRegionId, t.targetRegionId, t.connectionType),
+		check("chk_no_self_region_connection", sql`${t.sourceRegionId} != ${t.targetRegionId}`),
 	],
 )
 
@@ -146,14 +146,14 @@ export const siteLinks = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		siteId: cascadeFk("site_id", sites.id),
-		otherSiteId: nullableFk("other_site_id", sites.id),
+		sourceSiteId: cascadeFk("source_site_id", sites.id),
+		targetSiteId: cascadeFk("target_site_id", sites.id),
 
 		linkType: oneOf("link_type", linkTypes),
 	},
 	(t) => [
-		unique().on(t.siteId, t.otherSiteId, t.linkType),
-		check("chk_no_self_site_link", sql`COALESCE(${t.siteId} != ${t.otherSiteId}, TRUE)`),
+		unique().on(t.sourceSiteId, t.targetSiteId, t.linkType),
+		check("chk_no_self_site_link", sql`${t.sourceSiteId} != ${t.targetSiteId}`),
 	],
 )
 

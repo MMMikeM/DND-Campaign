@@ -3,7 +3,7 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../../db/utils"
-import { npcs } from "../../npc/tables"
+import { npcs } from "../../npcs/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
 import { enums } from "./enums"
