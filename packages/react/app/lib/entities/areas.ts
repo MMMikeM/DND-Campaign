@@ -9,14 +9,28 @@ const areaConfig = {
 			with: {
 				region: { columns: { id: true, name: true } },
 				sites: {
-					columns: { id: true, name: true, siteType: true },
+					columns: { id: true, name: true, type: true },
 				},
-				territorialControl: {
+				consequences: {
 					with: {
-						faction: { columns: { name: true, id: true } },
+						affectedArea: { columns: { id: true, name: true } },
+						affectedConflict: { columns: { id: true, name: true } },
+						affectedDestination: { columns: { id: true, name: true } },
+						affectedNpc: { columns: { id: true, name: true } },
+						affectedRegion: { columns: { id: true, name: true } },
+						affectedFaction: { columns: { id: true, name: true } },
+						affectedSite: { columns: { id: true, name: true } },
+						affectedQuest: { columns: { id: true, name: true } },
+						triggerConflict: { columns: { id: true, name: true } },
+						triggerStageDecision: { columns: { id: true, name: true } },
+						triggerQuest: { columns: { id: true, name: true } },
 					},
 				},
-				worldChanges: { columns: { id: true, name: true } },
+				factionInfluence: {
+					with: {
+						faction: { columns: { id: true, name: true } },
+					},
+				},
 			},
 		}),
 	getAll: () => db.query.areas.findMany({ with: { region: { columns: { id: true, name: true } } } }),

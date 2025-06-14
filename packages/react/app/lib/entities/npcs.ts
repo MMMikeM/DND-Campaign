@@ -8,39 +8,21 @@ const npcConfig = {
 		db.query.npcs.findFirst({
 			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
-				relatedItems: true,
-				relatedFactions: { with: { faction: { columns: { name: true, id: true } } } },
-				relatedQuests: { with: { quest: { columns: { name: true, id: true } } } },
-				incomingRelationships: { with: { sourceNpc: { columns: { name: true, id: true } } } },
-				outgoingRelationships: { with: { targetNpc: { columns: { name: true, id: true } } } },
-				relatedClues: {
-					with: {
-						stage: {
-							columns: { name: true, id: true },
-							with: { quest: { columns: { name: true, id: true } } },
-						},
-					},
-				},
-				relatedSites: {
-					with: {
-						site: {
-							columns: { name: true, id: true },
-							with: {
-								area: { columns: { name: true, id: true }, with: { region: { columns: { name: true, id: true } } } },
-							},
-						},
-					},
-				},
-				relatedQuestHooks: {
-					with: {
-						hook: {
-							with: {
-								quest: { columns: { name: true, id: true } },
-								stage: { columns: { name: true, id: true } },
-							},
-						},
-					},
-				},
+				incomingRelations: { with: { sourceNpc: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetNpc: { columns: { name: true, id: true } } } },
+				affectedByConsequences: true,
+				conflictParticipation: true,
+				narrativeDestinationInvolvement: true,
+				factionMemberships: true,
+				foreshadowingSource: true,
+				foreshadowingTarget: true,
+				itemHistory: true,
+				itemRelations: true,
+				questHooks: true,
+				questStageDeliveries: true,
+				siteAssociations: true,
+				stageInvolvement: true,
+				worldConceptLinks: true,
 			},
 		}),
 
@@ -78,8 +60,8 @@ export const getNpc = async (slug: string) => {
 	}
 
 	const unified = unifyRelations(byId)
-		.from({ property: "incomingRelationships", key: "sourceNpc" })
-		.with({ property: "outgoingRelationships", key: "targetNpc" })
+		.from({ property: "incomingRelations", key: "sourceNpc" })
+		.with({ property: "outgoingRelations", key: "targetNpc" })
 		.to({ property: "relations", key: "npc" })
 
 	if (unified) {
