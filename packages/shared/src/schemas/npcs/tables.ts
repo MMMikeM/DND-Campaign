@@ -115,8 +115,8 @@ export const npcFactionMemberships = pgTable(
 	(t) => [unique().on(t.npcId, t.factionId)],
 )
 
-export const npcRelationships = pgTable(
-	"npc_relationships",
+export const npcRelations = pgTable(
+	"npc_relations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),

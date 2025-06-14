@@ -2,11 +2,11 @@
 import { relations } from "drizzle-orm"
 import { foreshadowing } from "../../foreshadowing/tables"
 import { items } from "../../items/tables"
-import { consequences, narrativeEvents } from "../../narrative-events/tables"
+import { consequences, narrativeEvents } from "../../narrative-events/tables" // Assuming consequences might be needed
 import { npcs } from "../../npcs/tables"
 import { sites } from "../../regions/tables"
 import { quests } from "../tables"
-import { npcStageInvolvement, questStages, stageDecisions } from "./tables"
+import { npcStageInvolvement, questStageDecisions, questStages } from "./tables"
 
 export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	quest: one(quests, {
@@ -21,30 +21,28 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 		fields: [questStages.deliveryNpcId],
 		references: [npcs.id],
 	}),
-	decisionsFrom: many(stageDecisions, {
-		relationName: "decisionsFromStage",
-	}),
-	decisionsTo: many(stageDecisions, {
-		relationName: "decisionsToStage",
-	}),
+
+	outgoingDecisions: many(questStageDecisions, { relationName: "decisionsFromStage" }),
+	incomingDecisions: many(questStageDecisions, { relationName: "decisionsToStage" }),
+
 	items: many(items),
 	narrativeEvents: many(narrativeEvents),
 	npcInvolvement: many(npcStageInvolvement),
 	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromQuestStage" }),
 }))
 
-export const stageDecisionsRelations = relations(stageDecisions, ({ one, many }) => ({
+export const questStageDecisionsRelations = relations(questStageDecisions, ({ one, many }) => ({
 	quest: one(quests, {
-		fields: [stageDecisions.questId],
+		fields: [questStageDecisions.questId],
 		references: [quests.id],
 	}),
 	fromStage: one(questStages, {
-		fields: [stageDecisions.fromQuestStageId],
+		fields: [questStageDecisions.fromQuestStageId],
 		references: [questStages.id],
 		relationName: "decisionsFromStage",
 	}),
 	toStage: one(questStages, {
-		fields: [stageDecisions.toQuestStageId],
+		fields: [questStageDecisions.toQuestStageId],
 		references: [questStages.id],
 		relationName: "decisionsToStage",
 	}),
@@ -54,12 +52,12 @@ export const stageDecisionsRelations = relations(stageDecisions, ({ one, many })
 }))
 
 export const npcStageInvolvementRelations = relations(npcStageInvolvement, ({ one }) => ({
-	npc: one(npcs, {
-		fields: [npcStageInvolvement.npcId],
-		references: [npcs.id],
-	}),
 	questStage: one(questStages, {
 		fields: [npcStageInvolvement.questStageId],
 		references: [questStages.id],
+	}),
+	npc: one(npcs, {
+		fields: [npcStageInvolvement.npcId],
+		references: [npcs.id],
 	}),
 }))

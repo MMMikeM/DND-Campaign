@@ -2,18 +2,18 @@ import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemNotableHistory, itemRelationships } from "../items/tables"
+import { itemNotableHistory, itemRelations } from "../items/tables"
 import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcStageInvolvement } from "../quests/stages/tables"
 import { questHooks, questStages } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { worldConceptLinks } from "../world-concepts/tables"
-import { npcFactionMemberships, npcRelationships, npcSiteAssociations, npcs } from "./tables"
+import { npcFactionMemberships, npcRelations, npcSiteAssociations, npcs } from "./tables"
 
 export const npcsRelations = relations(npcs, ({ many }) => ({
-	outgoingRelationships: many(npcRelationships, { relationName: "sourceNpc" }),
-	incomingRelationships: many(npcRelationships, { relationName: "targetNpc" }),
+	outgoingRelations: many(npcRelations, { relationName: "sourceNpc" }),
+	incomingRelations: many(npcRelations, { relationName: "targetNpc" }),
 
 	factionMemberships: many(npcFactionMemberships),
 	siteAssociations: many(npcSiteAssociations),
@@ -24,7 +24,7 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromNpc" }),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
 	itemHistory: many(itemNotableHistory),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	questHooks: many(questHooks),
 	questStageDeliveries: many(questStages),
@@ -32,14 +32,14 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	worldConceptLinks: many(worldConceptLinks),
 }))
 
-export const npcRelationshipsRelations = relations(npcRelationships, ({ one }) => ({
+export const npcRelationshipsRelations = relations(npcRelations, ({ one }) => ({
 	sourceNpc: one(npcs, {
-		fields: [npcRelationships.sourceNpcId],
+		fields: [npcRelations.sourceNpcId],
 		references: [npcs.id],
 		relationName: "sourceNpc",
 	}),
 	targetNpc: one(npcs, {
-		fields: [npcRelationships.targetNpcId],
+		fields: [npcRelations.targetNpcId],
 		references: [npcs.id],
 		relationName: "targetNpc",
 	}),

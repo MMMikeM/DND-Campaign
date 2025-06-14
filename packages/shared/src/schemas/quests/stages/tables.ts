@@ -40,8 +40,8 @@ export const questStages = pgTable("quest_stages", {
 	sensory_elements: list("sensory_elements"),
 })
 
-export const stageDecisions = pgTable(
-	"stage_decisions",
+export const questStageDecisions = pgTable(
+	"quest_stage_decisions",
 	{
 		id: pk(),
 		name: string("name").unique(),
@@ -80,7 +80,7 @@ export const stageDecisions = pgTable(
 )
 
 export const npcStageInvolvement = pgTable(
-	"npc_stage_involvement",
+	"npc_quest_stage_involvement",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),

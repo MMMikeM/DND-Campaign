@@ -58,8 +58,8 @@ export const narrativeDestinationQuestRoles = pgTable(
 	(t) => [unique().on(t.narrativeDestinationId, t.questId)],
 )
 
-export const narrativeDestinationRelationships = pgTable(
-	"narrative_destination_relationships",
+export const narrativeDestinationRelations = pgTable(
+	"narrative_destination_relations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),

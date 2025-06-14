@@ -9,8 +9,8 @@ import { regions, sites } from "../regions/tables"
 import { enums as questEnums } from "./enums"
 import * as stageModule from "./stages/tables"
 
-const { enums: stageEnums, questStages, stageDecisions, npcStageInvolvement } = stageModule
-export { questStages, stageDecisions, npcStageInvolvement }
+const { enums: stageEnums, questStages, questStageDecisions, npcStageInvolvement } = stageModule
+export { questStages, questStageDecisions, npcStageInvolvement }
 
 const {
 	hookTypes,
@@ -56,8 +56,8 @@ export const quests = pgTable("quests", {
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
 })
 
-export const questRelationships = pgTable(
-	"quest_relationships",
+export const questRelations = pgTable(
+	"quest_relations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
