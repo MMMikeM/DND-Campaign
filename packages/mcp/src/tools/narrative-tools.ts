@@ -9,44 +9,48 @@ const createEntityGetters = createEntityGettersFactory(tables.narrativeTables)
 
 export const entityGetters = createEntityGetters({
 	all_narrative_destinations: () => db.query.narrativeDestinations.findMany({}),
-	all_destination_participant_involvement: () => db.query.destinationParticipantInvolvement.findMany({}),
-	all_destination_quest_roles: () => db.query.destinationQuestRoles.findMany({}),
-	all_destination_relationships: () => db.query.destinationRelationships.findMany({}),
-	destination_participant_involvement_by_id: (id: number) =>
-		db.query.destinationParticipantInvolvement.findFirst({
-			where: (destinationParticipantInvolvement, { eq }) => eq(destinationParticipantInvolvement.id, id),
+	all_narrative_destination_participants: () => db.query.narrativeDestinationParticipants.findMany({}),
+	all_narrative_destination_quest_roles: () => db.query.narrativeDestinationQuestRoles.findMany({}),
+	all_narrative_destination_relationships: () => db.query.narrativeDestinationRelationships.findMany({}),
+
+	narrative_destination_by_id: (id: number) =>
+		db.query.narrativeDestinations.findFirst({
+			where: (narrativeDestinations, { eq }) => eq(narrativeDestinations.id, id),
+			with: {
+				foreshadowingTarget: true,
+				incomingRelationships: true,
+				itemRelationships: true,
+				outgoingRelationships: true,
+				participantInvolvement: true,
+				questRoles: true,
+				region: true,
+				worldConceptLinks: true,
+				conflict: true,
+			},
+		}),
+	narrative_destination_quest_role_by_id: (id: number) =>
+		db.query.narrativeDestinationQuestRoles.findFirst({
+			where: (narrativeDestinationQuestRoles, { eq }) => eq(narrativeDestinationQuestRoles.id, id),
+			with: {
+				destination: true,
+				quest: true,
+			},
+		}),
+	narrative_destination_participant_by_id: (id: number) =>
+		db.query.narrativeDestinationParticipants.findFirst({
+			where: (narrativeDestinationParticipants, { eq }) => eq(narrativeDestinationParticipants.id, id),
 			with: {
 				destination: true,
 				faction: true,
 				npc: true,
 			},
 		}),
-	destination_quest_role_by_id: (id: number) =>
-		db.query.destinationQuestRoles.findFirst({
-			where: (destinationQuestRoles, { eq }) => eq(destinationQuestRoles.id, id),
+	narrative_destination_relationship_by_id: (id: number) =>
+		db.query.narrativeDestinationRelationships.findFirst({
+			where: (narrativeDestinationRelationships, { eq }) => eq(narrativeDestinationRelationships.id, id),
 			with: {
-				destination: true,
-				quest: true,
-			},
-		}),
-	destination_relationship_by_id: (id: number) =>
-		db.query.destinationRelationships.findFirst({
-			where: (destinationRelationships, { eq }) => eq(destinationRelationships.id, id),
-			with: {
-				relatedDestination: true,
 				sourceDestination: true,
-			},
-		}),
-	narrative_destination_by_id: (id: number) =>
-		db.query.narrativeDestinations.findFirst({
-			where: (narrativeDestinations, { eq }) => eq(narrativeDestinations.id, id),
-			with: {
-				conflict: true,
-				itemRelationships: true,
-				participantInvolvement: true,
-				questRoles: true,
-				region: true,
-				worldConceptLinks: true,
+				targetDestination: true,
 			},
 		}),
 })

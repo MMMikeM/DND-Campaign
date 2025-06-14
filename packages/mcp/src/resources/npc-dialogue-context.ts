@@ -33,7 +33,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 		const npc = await db.query.npcs.findFirst({
 			where: eq(tables.npcTables.npcs.id, npcId),
 			with: {
-				relatedFactions: {
+				factionMemberships: {
 					with: { faction: { columns: { name: true, type: true } } },
 				},
 				siteAssociations: {
@@ -65,7 +65,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 				trust_level: npc.trustLevel,
 				disposition: npc.disposition,
 			},
-			faction_affiliations: npc.relatedFactions.map((rel) => ({
+			faction_affiliations: npc.factionMemberships.map((rel) => ({
 				faction_name: rel.faction?.name || "Unknown",
 				faction_type: rel.faction?.type || "Unknown",
 				role: rel.role,

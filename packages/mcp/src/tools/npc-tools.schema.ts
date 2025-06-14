@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
-	npcTables: { npcs, npcRelationships, npcFactions, npcSites, enums },
+	npcTables: { npcs, npcRelationships, npcFactionMemberships, npcSiteAssociations, enums },
 } = tables
 
 const {
@@ -27,7 +27,12 @@ const {
 
 type TableNames = CreateTableNames<typeof tables.npcTables>
 
-export const tableEnum = ["npcs", "npcRelationships", "npcFactions", "npcSites"] as const satisfies TableNames
+export const tableEnum = [
+	"npcs",
+	"npcRelationships",
+	"npcFactionMemberships",
+	"npcSiteAssociations",
+] as const satisfies TableNames
 
 export const schemas = {
 	npcs: createInsertSchema(npcs, {
@@ -76,7 +81,7 @@ export const schemas = {
 		.strict()
 		.describe("Characters with distinct personalities who interact with players as allies, enemies, or contacts"),
 
-	npcFactions: createInsertSchema(npcFactions, {
+	npcFactionMemberships: createInsertSchema(npcFactionMemberships, {
 		npcId: id.describe("ID of the NPC in this relationship"),
 		factionId: id.describe("ID of the faction this NPC belongs to"),
 		justification: (s) => s.describe("Reason for allegiance (belief, gain, blackmail, family ties)"),
@@ -93,7 +98,7 @@ export const schemas = {
 		.strict()
 		.describe("Establishes NPC membership in factions, creating loyalties that influence their actions"),
 
-	npcSites: createInsertSchema(npcSites, {
+	npcSiteAssociations: createInsertSchema(npcSiteAssociations, {
 		npcId: id.describe("ID of the NPC who can be found here"),
 		siteId: id.describe("ID of the site where this NPC can be encountered"),
 		associationType: z.enum(siteAssociationTypes).describe("Type of association with this site"),
@@ -108,8 +113,8 @@ export const schemas = {
 		.describe("Maps where NPCs can be encountered, helping GMs place characters consistently in the world"),
 
 	npcRelationships: createInsertSchema(npcRelationships, {
-		npcId: id.describe("ID of the primary NPC in this relationship"),
-		relatedNpcId: id.describe("ID of the secondary NPC in this relationship"),
+		sourceNpcId: id.describe("ID of the primary NPC in this relationship"),
+		targetNpcId: id.describe("ID of the secondary NPC in this relationship"),
 		relationshipType: z.enum(relationshipTypes).describe("Connection type (family, friend, rival, mentor, enemy)"),
 		strength: z
 			.enum(relationshipStrengths)
@@ -126,8 +131,8 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Defines connections between NPCs, creating social networks and potential storylines")
-		.refine((data) => data.npcId !== data.relatedNpcId, {
+		.refine((data) => data.sourceNpcId !== data.targetNpcId, {
 			message: "An NPC cannot have a relationship with itself",
-			path: ["relatedNpcId"],
+			path: ["targetNpcId"],
 		}),
 } as const satisfies Schema<TableNames[number]>

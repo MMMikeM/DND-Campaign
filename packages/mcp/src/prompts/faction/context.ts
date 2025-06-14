@@ -79,7 +79,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 		})
 
 		// Get narrative arc participation
-		const narrativeParticipation = await db.query.destinationParticipantInvolvement.findMany({
+		const narrativeParticipation = await db.query.narrativeDestinationParticipants.findMany({
 			where: (dpi, { isNotNull }) => isNotNull(dpi.factionId),
 			with: {
 				faction: { columns: { id: true, name: true } },
@@ -94,7 +94,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 		})
 
 		// Get quest involvement context
-		const questParticipation = await db.query.questParticipantInvolvement.findMany({
+		const questParticipation = await db.query.questParticipants.findMany({
 			where: (qpi, { isNotNull }) => isNotNull(qpi.factionId),
 			with: {
 				faction: { columns: { id: true, name: true } },
@@ -126,7 +126,6 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 		// Get regional control and travel routes
 		const regionConnections = await db.query.regionConnections.findMany({
 			with: {
-				controllingFaction: { columns: { id: true, name: true } },
 				sourceRegion: { columns: { id: true, name: true } },
 				targetRegion: { columns: { id: true, name: true } },
 			},
@@ -180,12 +179,12 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 				},
 			})
 
-			const relatedNPCs = await db.query.npcSites.findMany({
+			const relatedNPCs = await db.query.npcSiteAssociations.findMany({
 				where:
 					relatedSites.length > 0
-						? (npcSites, { inArray }) =>
+						? (npcSiteAssociations, { inArray }) =>
 								inArray(
-									npcSites.siteId,
+									npcSiteAssociations.siteId,
 									relatedSites.map((s) => s.id),
 								)
 						: undefined,

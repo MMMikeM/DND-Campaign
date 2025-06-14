@@ -6,9 +6,9 @@ import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool
 const {
 	narrativeTables: {
 		narrativeDestinations,
-		destinationQuestRoles,
-		destinationRelationships,
-		destinationParticipantInvolvement,
+		narrativeDestinationQuestRoles,
+		narrativeDestinationRelationships,
+		narrativeDestinationParticipants,
 		enums,
 	},
 } = tables
@@ -20,9 +20,9 @@ type TableNames = CreateTableNames<typeof tables.narrativeTables>
 
 export const tableEnum = [
 	"narrativeDestinations",
-	"destinationQuestRoles",
-	"destinationRelationships",
-	"destinationParticipantInvolvement",
+	"narrativeDestinationQuestRoles",
+	"narrativeDestinationRelationships",
+	"narrativeDestinationParticipants",
 ] as const satisfies TableNames
 
 export const schemas = {
@@ -46,8 +46,8 @@ export const schemas = {
 		.strict()
 		.describe("Major storylines that span multiple quests, providing campaign structure and thematic depth"),
 
-	destinationQuestRoles: createInsertSchema(destinationQuestRoles, {
-		destinationId: id.describe("ID of destination this quest role belongs to"),
+	narrativeDestinationQuestRoles: createInsertSchema(narrativeDestinationQuestRoles, {
+		narrativeDestinationId: id.describe("ID of the narrative destination"),
 		questId: id.describe("ID of quest that forms part of this arc"),
 		role: z.enum(questRoles).describe("Quest's function in the arc (introduction, complication, climax, etc.)"),
 		sequenceInArc: (s) => s.describe("Order of this quest within the narrative arc"),
@@ -61,9 +61,9 @@ export const schemas = {
 		.strict()
 		.describe("Links quests to narrative arcs, defining how individual adventures build toward larger stories"),
 
-	destinationRelationships: createInsertSchema(destinationRelationships, {
-		sourceDestinationId: id.describe("ID of the source narrative destination"),
-		relatedDestinationId: id.describe("ID of the related narrative destination"),
+	narrativeDestinationRelationships: createInsertSchema(narrativeDestinationRelationships, {
+		sourceNarrativeDestinationId: id.describe("ID of the source narrative destination"),
+		targetNarrativeDestinationId: id.describe("ID of the target narrative destination"),
 		relationshipType: z.enum(destinationRelationshipTypes).describe("Type of relationship between destinations"),
 		relationshipDetails: (s) => s.describe("Details about the relationship between destinations"),
 		creativePrompts: (s) => s.describe("Ideas for using this relationship"),
@@ -73,14 +73,10 @@ export const schemas = {
 	})
 		.omit({ id: true })
 		.strict()
-		.describe("Relationships between narrative destinations")
-		.refine((data) => data.sourceDestinationId !== data.relatedDestinationId, {
-			message: "A destination cannot have a relationship with itself",
-			path: ["relatedDestinationId"],
-		}),
+		.describe("Relationships between narrative destinations"),
 
-	destinationParticipantInvolvement: createInsertSchema(destinationParticipantInvolvement, {
-		destinationId: id.describe("ID of the narrative destination"),
+	narrativeDestinationParticipants: createInsertSchema(narrativeDestinationParticipants, {
+		narrativeDestinationId: id.describe("ID of the narrative destination"),
 		npcId: optionalId.describe("ID of the NPC involved (either npcId or factionId must be provided)"),
 		factionId: optionalId.describe("ID of the faction involved (either npcId or factionId must be provided)"),
 		roleInArc: (s) => s.describe("Role of the participant in the narrative arc"),

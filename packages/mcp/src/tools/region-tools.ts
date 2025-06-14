@@ -123,6 +123,21 @@ export const entityGetters = createEntityGetters({
 		}),
 	site_secret_by_id: (id: number) =>
 		db.query.siteSecrets.findFirst({ where: (siteSecrets, { eq }) => eq(siteSecrets.id, id), with: { site: true } }),
+	all_region_connections: () =>
+		db.query.regionConnections.findMany({
+			with: {
+				sourceRegion: { columns: { name: true, id: true } },
+				targetRegion: { columns: { name: true, id: true } },
+			},
+		}),
+	region_connection_by_id: (id: number) =>
+		db.query.regionConnections.findFirst({
+			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
+			with: {
+				sourceRegion: { columns: { name: true, id: true } },
+				targetRegion: { columns: { name: true, id: true } },
+			},
+		}),
 })
 
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {

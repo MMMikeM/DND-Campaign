@@ -18,10 +18,10 @@ export const entityGetters = createEntityGetters({
 				notableHistory: {
 					with: {
 						keyNpc: { columns: { name: true, id: true } },
-						eventLocationSite: { columns: { name: true, id: true } },
+						locationSite: { columns: { name: true, id: true } },
 					},
 				},
-				sourceOfRelationships: {
+				outgoingRelationships: {
 					with: {
 						targetConflict: { columns: { name: true, id: true } },
 						targetFaction: { columns: { name: true, id: true } },
@@ -33,7 +33,7 @@ export const entityGetters = createEntityGetters({
 						targetNarrativeDestination: { columns: { name: true, id: true } },
 					},
 				},
-				targetOfRelationships: {
+				incomingRelationships: {
 					with: {
 						sourceItem: { columns: { name: true, id: true } },
 					},

@@ -97,7 +97,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		})
 
 		// Get NPC site associations
-		const npcSiteAssociations = await db.query.npcSites.findMany({
+		const npcSiteAssociations = await db.query.npcSiteAssociations.findMany({
 			with: {
 				npc: { columns: { id: true, name: true, occupation: true, alignment: true } },
 				site: { columns: { id: true, name: true, type: true } },
@@ -160,10 +160,10 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get item history at locations
 		const itemHistory = await db.query.itemNotableHistory.findMany({
-			where: (inh, { isNotNull }) => isNotNull(inh.eventLocationSiteId),
+			where: (inh, { isNotNull }) => isNotNull(inh.locationSiteId),
 			with: {
 				item: { columns: { id: true, name: true, itemType: true } },
-				eventLocationSite: { columns: { id: true, name: true, type: true } },
+				locationSite: { columns: { id: true, name: true, type: true } },
 			},
 			columns: {
 				id: true,
@@ -217,10 +217,10 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				})
 
 				// Get NPCs in nearby sites
-				const nearbyNPCs = await db.query.npcSites.findMany({
-					where: (npcSites, { inArray }) =>
+				const nearbyNPCs = await db.query.npcSiteAssociations.findMany({
+					where: (npcSiteAssociations, { inArray }) =>
 						inArray(
-							npcSites.siteId,
+							npcSiteAssociations.siteId,
 							nearbySites.map((s) => s.id),
 						),
 					with: { npc: { columns: { id: true, name: true, occupation: true } } },

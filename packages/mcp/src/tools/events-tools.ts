@@ -17,7 +17,7 @@ export const entityGetters = createEntityGetters({
 			with: {
 				questStage: { columns: { name: true, id: true } },
 				relatedQuest: { columns: { name: true, id: true } },
-				triggeringDecision: { columns: { name: true, id: true } },
+				triggeringStageDecision: { columns: { name: true, id: true } },
 			},
 		}),
 
@@ -28,10 +28,10 @@ export const entityGetters = createEntityGetters({
 				affectedConflict: true,
 				affectedDestination: true,
 				affectedNpc: true,
-				futureQuest: true,
+				affectedQuest: true,
 				triggerConflict: true,
 				triggerQuest: true,
-				triggerDecision: true,
+				triggerStageDecision: true,
 				affectedRegion: true,
 				affectedArea: true,
 				affectedSite: true,

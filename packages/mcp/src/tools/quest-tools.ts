@@ -12,7 +12,7 @@ export const entityGetters = createEntityGetters({
 	all_quest_stages: () => db.query.questStages.findMany({}),
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
 	all_quest_hooks: () => db.query.questHooks.findMany({}),
-	all_quest_participant_involvement: () => db.query.questParticipantInvolvement.findMany({}),
+	all_quest_participants: () => db.query.questParticipants.findMany({}),
 	all_quest_relationships: () => db.query.questRelationships.findMany({}),
 	all_npc_stage_involvement: () => db.query.npcStageInvolvement.findMany({}),
 
@@ -20,9 +20,16 @@ export const entityGetters = createEntityGetters({
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
-				dependencies: true,
-				dependents: true,
-				destinationContributions: true,
+				consequences: true,
+				foreshadowingSource: true,
+				foreshadowingTarget: true,
+				hooks: true,
+				incomingRelationships: true,
+				itemRelationships: true,
+				narrativeDestinationContributions: true,
+				outgoingRelationships: true,
+				participants: true,
+				worldConceptLinks: true,
 				triggeredEvents: true,
 				stages: true,
 				region: { columns: { name: true, id: true } },
@@ -68,9 +75,9 @@ export const entityGetters = createEntityGetters({
 				quest: { columns: { name: true, id: true } },
 			},
 		}),
-	quest_participant_involvement_by_id: (id: number) =>
-		db.query.questParticipantInvolvement.findFirst({
-			where: (questParticipantInvolvement, { eq }) => eq(questParticipantInvolvement.id, id),
+	quest_participant_by_id: (id: number) =>
+		db.query.questParticipants.findFirst({
+			where: (questParticipants, { eq }) => eq(questParticipants.id, id),
 			with: {
 				quest: { columns: { name: true, id: true } },
 			},
