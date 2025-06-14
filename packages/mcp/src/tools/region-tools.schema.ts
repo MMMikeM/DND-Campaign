@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
-	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, enums },
+	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, regionConnections, enums },
 } = tables
 
 const {
@@ -19,6 +19,9 @@ const {
 	encounterCategories,
 	secretTypes,
 	siteTypes,
+	routeTypes,
+	travelDifficulties,
+	connectionTypes,
 } = enums
 
 type TableNames = CreateTableNames<typeof tables.regionTables>
@@ -56,6 +59,24 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Major geographic areas that provide settings for adventures and define the campaign world"),
+	regionConnections: createInsertSchema(regionConnections, {
+		name: (s) => s.describe("Name of this connection"),
+		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
+		routeType: z.enum(routeTypes).describe("Route type (road, river, air, sea)"),
+		travelDifficulty: z.enum(travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
+		travelHazards: (s) => s.describe("Travel hazards for this region"),
+		travelTime: (s) => s.describe("Travel time for this region"),
+		connectionType: z.enum(connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
+		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
+		description: (s) => s.describe("How these regions interact and current dynamics"),
+		gmNotes: (s) => s.describe("GM notes for this connection"),
+		sourceRegionId: id.describe("Required ID of primary region in this relationship"),
+		targetRegionId: id.describe("Required ID of secondary region in this relationship"),
+		tags: (s) => s.describe("Tags for this connection"),
+	})
+		.omit({ id: true })
+		.strict()
+		.describe("Political, economic, and geographical relationships between different regions"),
 
 	areas: createInsertSchema(areas, {
 		atmosphereType: z.enum(atmosphereTypes).describe("Atmosphere type (dark, light, neutral, etc.)"),
@@ -114,16 +135,16 @@ export const schemas = {
 		description: (s) => s.describe("Physical connections and proximity between sites"),
 		gmNotes: (s) => s.describe("GM notes for this link"),
 		linkType: z.enum(linkTypes).describe("Connection type (adjacent, connected, visible from)"),
-		otherSiteId: id.describe("Required ID of secondary site in this relationship"),
-		siteId: id.describe("Required ID of primary site in this relationship"),
+		targetSiteId: id.describe("Required ID of secondary site in this relationship"),
+		sourceSiteId: id.describe("Required ID of primary site in this relationship"),
 		tags: (s) => s.describe("Tags for this link"),
 	})
 		.omit({ id: true })
 		.strict()
 		.describe("Physical and narrative connections between locations that players can traverse")
-		.refine((data) => data.siteId !== data.otherSiteId, {
+		.refine((data) => data.sourceSiteId !== data.targetSiteId, {
 			message: "A site cannot have a link with itself",
-			path: ["otherSiteId"],
+			path: ["targetSiteId"],
 		}),
 
 	siteEncounters: createInsertSchema(siteEncounters, {

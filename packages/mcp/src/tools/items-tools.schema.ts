@@ -32,7 +32,8 @@ export const schemas = {
 		creativePrompts: (s) => s.describe("GM ideas for using this item as a narrative element"),
 		creationPeriod: (s) => s.optional().describe("When this item was created"),
 		placeOfOrigin: (s) => s.optional().describe("Where this item was originally created"),
-		relatedQuestId: optionalId.describe("ID of quest this item is related to"),
+		questId: optionalId.describe("ID of quest this item is related to"),
+		questStageId: optionalId.describe("ID of quest stage this item is related to"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -46,7 +47,7 @@ export const schemas = {
 		gmNotes: (s) => s.describe("GM-only information about this historical event"),
 		tags: (s) => s.describe("Tags for this historical event"),
 		eventDescription: (s) => s.describe("Description of the event that occurred to the item"),
-		eventLocationSiteId: optionalId.describe("ID of the site where the event occurred"),
+		locationSiteId: optionalId.describe("ID of the site where the event occurred"),
 		keyNpcId: optionalId.describe("ID of the NPC who is the key figure in this event"),
 		npcRoleInEvent: z.enum(narrativeRoles).describe("Role of the NPC in the event"),
 	})

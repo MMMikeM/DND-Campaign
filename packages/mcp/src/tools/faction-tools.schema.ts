@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, regionConnections, enums },
+	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, enums },
 } = tables
 
 const {
@@ -16,13 +16,10 @@ const {
 	agendaImportance,
 	agendaStages,
 	agendaTypes,
-	connectionTypes,
 	diplomaticStatuses,
 	factionTypes,
 	influenceLevels,
 	relationshipStrengths,
-	travelDifficulties,
-	routeTypes,
 } = enums
 
 type TableNames = CreateTableNames<typeof tables.factionTables>
@@ -32,7 +29,6 @@ export const tableEnum = [
 	"factionAgendas",
 	"factionDiplomacy",
 	"factionInfluence",
-	"regionConnections",
 ] as const satisfies TableNames
 
 export const schemas = {
@@ -86,8 +82,8 @@ export const schemas = {
 		.describe("Specific goals and projects that factions are actively pursuing"),
 
 	factionDiplomacy: createInsertSchema(factionDiplomacy, {
-		factionId: id.describe("ID of the primary faction in this relationship"),
-		otherFactionId: id.describe("ID of the secondary faction in this relationship"),
+		sourceFactionId: id.describe("ID of the primary faction in this relationship"),
+		targetFactionId: id.describe("ID of the secondary faction in this relationship"),
 		strength: z.enum(relationshipStrengths).describe("Intensity of the relationship"),
 		diplomaticStatus: z.enum(diplomaticStatuses).describe("Type of diplomatic relationship"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
@@ -98,9 +94,9 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Political relationships between factions that create alliances, rivalries, and conflicts")
-		.refine((data) => data.factionId !== data.otherFactionId, {
+		.refine((data) => data.sourceFactionId !== data.targetFactionId, {
 			message: "A faction cannot have a diplomatic relationship with itself",
-			path: ["otherFactionId"],
+			path: ["targetFactionId"],
 		}),
 
 	factionInfluence: createInsertSchema(factionInfluence, {
@@ -126,23 +122,4 @@ export const schemas = {
 			message: "Exactly one of regionId, areaId, or siteId must be provided",
 			path: ["regionId", "areaId", "siteId"],
 		}),
-	regionConnections: createInsertSchema(regionConnections, {
-		name: (s) => s.describe("Name of this connection"),
-		pointsOfInterest: (s) => s.describe("Points of interest for this region"),
-		controllingFactionId: (s) => s.describe("ID of faction controlling this region"),
-		routeType: z.enum(routeTypes).describe("Route type (road, river, air, sea)"),
-		travelDifficulty: z.enum(travelDifficulties).describe("Travel difficulty (easy, moderate, hard)"),
-		travelHazards: (s) => s.describe("Travel hazards for this region"),
-		travelTime: (s) => s.describe("Travel time for this region"),
-		connectionType: z.enum(connectionTypes).describe("Relationship type (allied, hostile, trade, rivals)"),
-		creativePrompts: (s) => s.describe("Adventure ideas involving travel or conflict"),
-		description: (s) => s.describe("How these regions interact and current dynamics"),
-		gmNotes: (s) => s.describe("GM notes for this connection"),
-		otherRegionId: id.describe("Required ID of secondary region in this relationship"),
-		regionId: id.describe("Required ID of primary region in this relationship"),
-		tags: (s) => s.describe("Tags for this connection"),
-	})
-		.omit({ id: true })
-		.strict()
-		.describe("Political, economic, and geographical relationships between different regions"),
 } as const satisfies Schema<TableNames[number]>

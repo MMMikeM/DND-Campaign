@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	worldbuildingTables: { worldConcepts, conceptRelationships, worldConceptLinks, enums },
+	worldbuildingTables: { worldConcepts, worldConceptRelationships, worldConceptLinks, enums },
 } = tables
 
 type TableNames = CreateTableNames<typeof tables.worldbuildingTables>
@@ -20,7 +20,11 @@ const {
 	moralClarity,
 } = enums
 
-export const tableEnum = ["worldConcepts", "conceptRelationships", "worldConceptLinks"] as const satisfies TableNames
+export const tableEnum = [
+	"worldConcepts",
+	"worldConceptRelationships",
+	"worldConceptLinks",
+] as const satisfies TableNames
 
 export const schemas = {
 	worldConcepts: createInsertSchema(worldConcepts, {
@@ -71,9 +75,9 @@ export const schemas = {
 		.strict()
 		.describe("Cultural, political, religious, and historical concepts that shape the world"),
 
-	conceptRelationships: createInsertSchema(conceptRelationships, {
-		sourceConceptId: id.describe("ID of the source concept in this relationship"),
-		targetConceptId: id.describe("ID of the target concept in this relationship"),
+	worldConceptRelationships: createInsertSchema(worldConceptRelationships, {
+		sourceWorldConceptId: id.describe("ID of the source concept in this relationship"),
+		targetWorldConceptId: id.describe("ID of the target concept in this relationship"),
 		relationshipType: z.enum(conceptRelationshipTypes).describe("Type of relationship between concepts"),
 		relationshipDetails: (s) => s.optional().describe("Details about the relationship"),
 		strength: z.enum(["weak", "moderate", "strong"] as const).describe("Strength of the relationship"),
@@ -85,13 +89,13 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Relationships between world concepts")
-		.refine((data) => data.sourceConceptId !== data.targetConceptId, {
+		.refine((data) => data.sourceWorldConceptId !== data.targetWorldConceptId, {
 			message: "A concept cannot have a relationship with itself",
-			path: ["targetConceptId"],
+			path: ["targetWorldConceptId"],
 		}),
 
 	worldConceptLinks: createInsertSchema(worldConceptLinks, {
-		conceptId: id.describe("ID of the world concept being linked"),
+		worldConceptId: id.describe("ID of the world concept being linked"),
 		regionId: optionalId.describe("ID of region linked to this concept"),
 		factionId: optionalId.describe("ID of faction linked to this concept"),
 		npcId: optionalId.describe("ID of NPC linked to this concept"),

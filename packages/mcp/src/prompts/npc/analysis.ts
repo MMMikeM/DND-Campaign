@@ -70,7 +70,7 @@ export function analyzeCampaignContext(
 	// Analyze narrative integration opportunities
 	const narrativeActiveNPCs = new Set([
 		...quests.flatMap((q) =>
-			q.participantInvolvement
+			q.participants
 				.filter((p) => p.npc)
 				.map((p) => p.npc?.id)
 				.filter(Boolean),

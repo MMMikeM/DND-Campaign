@@ -20,7 +20,7 @@ import type { QuestContext, QuestCreationArgs } from "./types"
 const {
 	conflictTables: { conflicts },
 	factionTables: { factions },
-	npcTables: { npcFactions },
+	npcTables: { npcFactionMemberships },
 	questTables: { quests },
 } = tables
 
@@ -282,8 +282,8 @@ async function gatherFactionContext(factionHint?: string) {
 		if (relatedFactions.length === 0) return null
 
 		// Get NPCs in the faction via junction table
-		const factionNPCRelations = await db.query.npcFactions.findMany({
-			where: inArray(npcFactions.factionId, factionIds),
+		const factionNPCRelations = await db.query.npcFactionMemberships.findMany({
+			where: inArray(npcFactionMemberships.factionId, factionIds),
 			with: {
 				npc: {
 					columns: { id: true, name: true, occupation: true, alignment: true },

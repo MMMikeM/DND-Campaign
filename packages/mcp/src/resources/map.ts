@@ -61,7 +61,7 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 const listMaps: ResourceLister = async (): Promise<Resource[]> => {
 	const maps = await db.query.maps.findMany({
 		columns: { id: true, fileName: true },
-		with: { details: { columns: { name: true } } },
+		with: { mapDetails: { columns: { name: true } } },
 		where: (maps, { isNotNull }) => isNotNull(maps.mapImage),
 		limit: 5,
 	})
@@ -69,7 +69,7 @@ const listMaps: ResourceLister = async (): Promise<Resource[]> => {
 		(map): Resource => ({
 			uri: `campaign://map/${map.id}`,
 			name: `${map.fileName} (Map)`,
-			description: `Battlemap image for ${map.details.name}`,
+			description: `Battlemap image for ${map.mapDetails?.name}`,
 			mimeType: "image/*",
 		}),
 	)

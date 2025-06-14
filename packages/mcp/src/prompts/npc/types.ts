@@ -115,7 +115,7 @@ export interface QuestForAnalysis {
 	type: string
 	urgency: string
 	visibility: string
-	participantInvolvement: Array<{
+	participants: Array<{
 		npc?: { id: number } | null
 		importanceInQuest: string
 	}>

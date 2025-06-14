@@ -18,7 +18,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		// Get existing NPCs with their faction affiliations and site associations
 		const existingNPCs = await db.query.npcs.findMany({
 			with: {
-				relatedFactions: {
+				factionMemberships: {
 					with: {
 						faction: { columns: { id: true, name: true } },
 					},
@@ -108,11 +108,11 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		// Get quests with participant involvement
 		const quests = await db.query.quests.findMany({
 			with: {
-				participantInvolvement: {
+				participants: {
 					with: {
 						npc: { columns: { id: true } },
 					},
-					columns: { importanceInQuest: true },
+					columns: { roleInQuest: true, involvementDetails: true, importanceInQuest: true },
 				},
 			},
 			columns: { id: true, name: true, type: true, urgency: true, visibility: true },
@@ -125,7 +125,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 					with: {
 						npc: { columns: { id: true } },
 					},
-					columns: { arcImportance: true },
+					columns: { roleInArc: true, involvementDetails: true, arcImportance: true },
 				},
 			},
 			columns: { id: true, name: true, type: true, status: true },
@@ -230,7 +230,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 						name: npc.name,
 						occupation: npc.occupation,
 						alignment: npc.alignment,
-						relatedFactions: npc.relatedFactions.map((nf) => ({
+						relatedFactions: npc.factionMemberships.map((nf) => ({
 							faction: { name: nf.faction.name },
 							role: nf.role,
 						})),
@@ -257,7 +257,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				id: npc.id,
 				complexityProfile: npc.complexityProfile,
 				playerPerceptionGoal: npc.playerPerceptionGoal,
-				relatedFactions: npc.relatedFactions,
+				relatedFactions: npc.factionMemberships,
 			})),
 			factions,
 			activeConflicts,
@@ -273,7 +273,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				name: npc.name,
 				occupation: npc.occupation,
 				alignment: npc.alignment,
-				relatedFactions: npc.relatedFactions.map((nf) => ({
+				relatedFactions: npc.factionMemberships.map((nf) => ({
 					faction: { name: nf.faction.name },
 					role: nf.role,
 				})),

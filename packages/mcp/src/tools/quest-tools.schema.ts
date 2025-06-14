@@ -10,7 +10,7 @@ const {
 		stageDecisions,
 		questRelationships,
 		questHooks,
-		questParticipantInvolvement,
+		questParticipants,
 		npcStageInvolvement,
 		enums,
 	},
@@ -45,7 +45,8 @@ export const tableEnum = [
 	"stageDecisions",
 	"questRelationships",
 	"questHooks",
-	"questParticipantInvolvement",
+	"questParticipants",
+	"npcStageInvolvement",
 ] as const satisfies TableNames
 
 export const schemas = {
@@ -78,8 +79,8 @@ export const schemas = {
 		.describe("Adventures with objectives, rewards, and narrative impact that drive the campaign forward"),
 
 	questRelationships: createInsertSchema(questRelationships, {
-		questId: id.describe("ID of the primary quest in this relationship"),
-		relatedQuestId: optionalId.describe("ID of the secondary quest in this relationship"),
+		sourceQuestId: id.describe("ID of the source quest in this relationship"),
+		targetQuestId: optionalId.describe("ID of the target quest in this relationship"),
 		relationshipType: z
 			.enum(relationshipTypes)
 			.describe("Connection type (prerequisite, sequel, parallel, alternative, hidden_connection)"),
@@ -118,8 +119,8 @@ export const schemas = {
 
 	stageDecisions: createInsertSchema(stageDecisions, {
 		questId: id.describe("ID of quest this decision belongs to"),
-		fromStageId: id.describe("ID of stage where this decision occurs"),
-		toStageId: optionalId.describe("ID of stage this decision leads to if taken"),
+		fromQuestStageId: id.describe("ID of stage where this decision occurs"),
+		toQuestStageId: optionalId.describe("ID of stage this decision leads to if taken"),
 		conditionType: z
 			.enum(conditionTypes)
 			.describe("Trigger type (choice, skill_check, item, npc_relation, faction, etc.)"),
@@ -147,9 +148,9 @@ export const schemas = {
 			message: "failure_lesson_learned is required when failure_leads_to_retry is true",
 			path: ["failure_lesson_learned"],
 		})
-		.refine((data) => data.fromStageId !== data.toStageId, {
+		.refine((data) => data.fromQuestStageId !== data.toQuestStageId, {
 			message: "A stage decision cannot loop back to the same stage",
-			path: ["toStageId"],
+			path: ["toQuestStageId"],
 		}),
 
 	questHooks: createInsertSchema(questHooks, {
@@ -176,7 +177,7 @@ export const schemas = {
 		.strict()
 		.describe("Ways for players to discover and begin quests"),
 
-	questParticipantInvolvement: createInsertSchema(questParticipantInvolvement, {
+	questParticipants: createInsertSchema(questParticipants, {
 		questId: id.describe("ID of quest this involvement belongs to"),
 		npcId: optionalId.describe("ID of NPC involved (either npcId or factionId must be provided)"),
 		factionId: optionalId.describe("ID of faction involved (either npcId or factionId must be provided)"),
