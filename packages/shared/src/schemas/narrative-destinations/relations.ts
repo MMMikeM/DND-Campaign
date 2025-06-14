@@ -35,12 +35,12 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 }))
 
 export const narrativeDestinationRelationTargets = relations(narrativeDestinationRelations, ({ one }) => ({
-	sourceDestination: one(narrativeDestinations, {
+	sourceNarrativeDestination: one(narrativeDestinations, {
 		fields: [narrativeDestinationRelations.sourceNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "sourceDestination",
 	}),
-	targetDestination: one(narrativeDestinations, {
+	targetNarrativeDestination: one(narrativeDestinations, {
 		fields: [narrativeDestinationRelations.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "targetDestination",
@@ -48,7 +48,7 @@ export const narrativeDestinationRelationTargets = relations(narrativeDestinatio
 }))
 
 export const destinationQuestRolesRelations = relations(narrativeDestinationQuestRoles, ({ one }) => ({
-	destination: one(narrativeDestinations, {
+	narrativeDestination: one(narrativeDestinations, {
 		fields: [narrativeDestinationQuestRoles.narrativeDestinationId],
 		references: [narrativeDestinations.id],
 	}),
@@ -59,7 +59,7 @@ export const destinationQuestRolesRelations = relations(narrativeDestinationQues
 }))
 
 export const destinationParticipantInvolvementRelations = relations(narrativeDestinationParticipants, ({ one }) => ({
-	destination: one(narrativeDestinations, {
+	narrativeDestination: one(narrativeDestinations, {
 		fields: [narrativeDestinationParticipants.narrativeDestinationId],
 		references: [narrativeDestinations.id],
 	}),

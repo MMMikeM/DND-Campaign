@@ -7,7 +7,7 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
-import { questStages, quests, stageDecisions } from "../quests/tables"
+import { questStageDecisions, questStages, quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
@@ -43,7 +43,7 @@ export const narrativeEvents = pgTable(
 		impactSeverity: oneOf("impact_severity", impactSeverity),
 
 		questStageId: nullableFk("quest_stage_id", questStages.id),
-		triggeringStageDecisionId: nullableFk("triggering_stage_decision_id", stageDecisions.id),
+		triggeringStageDecisionId: nullableFk("triggering_stage_decision_id", questStageDecisions.id),
 		relatedQuestId: nullableFk("related_quest_id", quests.id),
 
 		complication_details: nullableString("complication_details"),
@@ -83,7 +83,7 @@ export const consequences = pgTable(
 		sourceType: oneOf("source_type", consequenceSources),
 
 		triggerEntityType: nullableOneOf("trigger_entity_type", consequenceTriggerTypes),
-		triggerStageDecisionId: nullableFk("trigger_stage_decision_id", stageDecisions.id),
+		triggerStageDecisionId: nullableFk("trigger_stage_decision_id", questStageDecisions.id),
 		triggerQuestId: nullableFk("trigger_quest_id", quests.id),
 		triggerConflictId: nullableFk("trigger_conflict_id", conflicts.id),
 

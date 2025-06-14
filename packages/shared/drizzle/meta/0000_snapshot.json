@@ -1,5 +1,5 @@
 {
-  "id": "09bd8d9c-7421-40d7-9191-6246d60084a3",
+  "id": "e037d6f0-cbfd-4904-acc7-af4f41e40fcf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1324,8 +1324,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.item_relationships": {
-      "name": "item_relationships",
+    "public.item_relations": {
+      "name": "item_relations",
       "schema": "",
       "columns": {
         "id": {
@@ -1433,9 +1433,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "item_relationships_source_item_id_items_id_fk": {
-          "name": "item_relationships_source_item_id_items_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_source_item_id_items_id_fk": {
+          "name": "item_relations_source_item_id_items_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "items",
           "columnsFrom": [
             "source_item_id"
@@ -1446,9 +1446,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "item_relationships_target_item_id_items_id_fk": {
-          "name": "item_relationships_target_item_id_items_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_item_id_items_id_fk": {
+          "name": "item_relations_target_item_id_items_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "items",
           "columnsFrom": [
             "target_item_id"
@@ -1459,9 +1459,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_npc_id_npcs_id_fk": {
-          "name": "item_relationships_target_npc_id_npcs_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_npc_id_npcs_id_fk": {
+          "name": "item_relations_target_npc_id_npcs_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "npcs",
           "columnsFrom": [
             "target_npc_id"
@@ -1472,9 +1472,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_faction_id_factions_id_fk": {
-          "name": "item_relationships_target_faction_id_factions_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_faction_id_factions_id_fk": {
+          "name": "item_relations_target_faction_id_factions_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "factions",
           "columnsFrom": [
             "target_faction_id"
@@ -1485,9 +1485,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_site_id_sites_id_fk": {
-          "name": "item_relationships_target_site_id_sites_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_site_id_sites_id_fk": {
+          "name": "item_relations_target_site_id_sites_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "sites",
           "columnsFrom": [
             "target_site_id"
@@ -1498,9 +1498,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_quest_id_quests_id_fk": {
-          "name": "item_relationships_target_quest_id_quests_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_quest_id_quests_id_fk": {
+          "name": "item_relations_target_quest_id_quests_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "quests",
           "columnsFrom": [
             "target_quest_id"
@@ -1511,9 +1511,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_conflict_id_conflicts_id_fk": {
-          "name": "item_relationships_target_conflict_id_conflicts_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_conflict_id_conflicts_id_fk": {
+          "name": "item_relations_target_conflict_id_conflicts_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "conflicts",
           "columnsFrom": [
             "target_conflict_id"
@@ -1524,9 +1524,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_narrative_destination_id_narrative_destinations_id_fk": {
-          "name": "item_relationships_target_narrative_destination_id_narrative_destinations_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_narrative_destination_id_narrative_destinations_id_fk": {
+          "name": "item_relations_target_narrative_destination_id_narrative_destinations_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "narrative_destinations",
           "columnsFrom": [
             "target_narrative_destination_id"
@@ -1537,9 +1537,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_relationships_target_world_concept_id_world_concepts_id_fk": {
-          "name": "item_relationships_target_world_concept_id_world_concepts_id_fk",
-          "tableFrom": "item_relationships",
+        "item_relations_target_world_concept_id_world_concepts_id_fk": {
+          "name": "item_relations_target_world_concept_id_world_concepts_id_fk",
+          "tableFrom": "item_relations",
           "tableTo": "world_concepts",
           "columnsFrom": [
             "target_world_concept_id"
@@ -1553,8 +1553,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "item_relationships_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique": {
-          "name": "item_relationships_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique",
+        "item_relations_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique": {
+          "name": "item_relations_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_item_id",
@@ -1575,7 +1575,7 @@
       "checkConstraints": {
         "single_related_entity_exclusive_and_correct": {
           "name": "single_related_entity_exclusive_and_correct",
-          "value": "\n\t\t\tCASE \"item_relationships\".\"target_entity_type\"\n\t\t\t\tWHEN 'item' THEN (\"item_relationships\".\"target_item_id\" IS NOT NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'npc' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NOT NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'faction' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NOT NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'site' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NOT NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'quest' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NOT NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'conflict' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NOT NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'narrative_destination' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NOT NULL AND \"item_relationships\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'world_concept' THEN (\"item_relationships\".\"target_item_id\" IS NULL AND \"item_relationships\".\"target_npc_id\" IS NULL AND \"item_relationships\".\"target_faction_id\" IS NULL AND \"item_relationships\".\"target_site_id\" IS NULL AND \"item_relationships\".\"target_quest_id\" IS NULL AND \"item_relationships\".\"target_conflict_id\" IS NULL AND \"item_relationships\".\"target_narrative_destination_id\" IS NULL AND \"item_relationships\".\"target_world_concept_id\" IS NOT NULL)\n\t\t\t\tELSE FALSE\n\t\t\tEND\n\t\t\t"
+          "value": "\n\t\t\tCASE \"item_relations\".\"target_entity_type\"\n\t\t\t\tWHEN 'item' THEN (\"item_relations\".\"target_item_id\" IS NOT NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'npc' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NOT NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'faction' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NOT NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'site' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NOT NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'quest' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NOT NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'conflict' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NOT NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'narrative_destination' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NOT NULL AND \"item_relations\".\"target_world_concept_id\" IS NULL)\n\t\t\t\tWHEN 'world_concept' THEN (\"item_relations\".\"target_item_id\" IS NULL AND \"item_relations\".\"target_npc_id\" IS NULL AND \"item_relations\".\"target_faction_id\" IS NULL AND \"item_relations\".\"target_site_id\" IS NULL AND \"item_relations\".\"target_quest_id\" IS NULL AND \"item_relations\".\"target_conflict_id\" IS NULL AND \"item_relations\".\"target_narrative_destination_id\" IS NULL AND \"item_relations\".\"target_world_concept_id\" IS NOT NULL)\n\t\t\t\tELSE FALSE\n\t\t\tEND\n\t\t\t"
         }
       },
       "isRLSEnabled": false
@@ -2157,8 +2157,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.narrative_destination_relationships": {
-      "name": "narrative_destination_relationships",
+    "public.narrative_destination_relations": {
+      "name": "narrative_destination_relations",
       "schema": "",
       "columns": {
         "id": {
@@ -2218,9 +2218,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "narrative_destination_relationships_source_destination_id_narrative_destinations_id_fk": {
-          "name": "narrative_destination_relationships_source_destination_id_narrative_destinations_id_fk",
-          "tableFrom": "narrative_destination_relationships",
+        "narrative_destination_relations_source_destination_id_narrative_destinations_id_fk": {
+          "name": "narrative_destination_relations_source_destination_id_narrative_destinations_id_fk",
+          "tableFrom": "narrative_destination_relations",
           "tableTo": "narrative_destinations",
           "columnsFrom": [
             "source_destination_id"
@@ -2231,9 +2231,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "narrative_destination_relationships_target_destination_id_narrative_destinations_id_fk": {
-          "name": "narrative_destination_relationships_target_destination_id_narrative_destinations_id_fk",
-          "tableFrom": "narrative_destination_relationships",
+        "narrative_destination_relations_target_destination_id_narrative_destinations_id_fk": {
+          "name": "narrative_destination_relations_target_destination_id_narrative_destinations_id_fk",
+          "tableFrom": "narrative_destination_relations",
           "tableTo": "narrative_destinations",
           "columnsFrom": [
             "target_destination_id"
@@ -2247,8 +2247,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "narrative_destination_relationships_source_destination_id_target_destination_id_unique": {
-          "name": "narrative_destination_relationships_source_destination_id_target_destination_id_unique",
+        "narrative_destination_relations_source_destination_id_target_destination_id_unique": {
+          "name": "narrative_destination_relations_source_destination_id_target_destination_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_destination_id",
@@ -2260,7 +2260,7 @@
       "checkConstraints": {
         "chk_no_self_destination_relationship": {
           "name": "chk_no_self_destination_relationship",
-          "value": "\"narrative_destination_relationships\".\"source_destination_id\" != \"narrative_destination_relationships\".\"target_destination_id\""
+          "value": "\"narrative_destination_relations\".\"source_destination_id\" != \"narrative_destination_relations\".\"target_destination_id\""
         }
       },
       "isRLSEnabled": false
@@ -2566,10 +2566,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "consequences_trigger_stage_decision_id_stage_decisions_id_fk": {
-          "name": "consequences_trigger_stage_decision_id_stage_decisions_id_fk",
+        "consequences_trigger_stage_decision_id_quest_stage_decisions_id_fk": {
+          "name": "consequences_trigger_stage_decision_id_quest_stage_decisions_id_fk",
           "tableFrom": "consequences",
-          "tableTo": "stage_decisions",
+          "tableTo": "quest_stage_decisions",
           "columnsFrom": [
             "trigger_stage_decision_id"
           ],
@@ -2853,10 +2853,10 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "narrative_events_triggering_stage_decision_id_stage_decisions_id_fk": {
-          "name": "narrative_events_triggering_stage_decision_id_stage_decisions_id_fk",
+        "narrative_events_triggering_stage_decision_id_quest_stage_decisions_id_fk": {
+          "name": "narrative_events_triggering_stage_decision_id_quest_stage_decisions_id_fk",
           "tableFrom": "narrative_events",
-          "tableTo": "stage_decisions",
+          "tableTo": "quest_stage_decisions",
           "columnsFrom": [
             "triggering_stage_decision_id"
           ],
@@ -3020,8 +3020,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.npc_relationships": {
-      "name": "npc_relationships",
+    "public.npc_relations": {
+      "name": "npc_relations",
       "schema": "",
       "columns": {
         "id": {
@@ -3105,9 +3105,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npc_relationships_source_npc_id_npcs_id_fk": {
-          "name": "npc_relationships_source_npc_id_npcs_id_fk",
-          "tableFrom": "npc_relationships",
+        "npc_relations_source_npc_id_npcs_id_fk": {
+          "name": "npc_relations_source_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relations",
           "tableTo": "npcs",
           "columnsFrom": [
             "source_npc_id"
@@ -3118,9 +3118,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "npc_relationships_target_npc_id_npcs_id_fk": {
-          "name": "npc_relationships_target_npc_id_npcs_id_fk",
-          "tableFrom": "npc_relationships",
+        "npc_relations_target_npc_id_npcs_id_fk": {
+          "name": "npc_relations_target_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relations",
           "tableTo": "npcs",
           "columnsFrom": [
             "target_npc_id"
@@ -3134,8 +3134,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "npc_relationships_source_npc_id_target_npc_id_relationship_type_unique": {
-          "name": "npc_relationships_source_npc_id_target_npc_id_relationship_type_unique",
+        "npc_relations_source_npc_id_target_npc_id_relationship_type_unique": {
+          "name": "npc_relations_source_npc_id_target_npc_id_relationship_type_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_npc_id",
@@ -3148,7 +3148,7 @@
       "checkConstraints": {
         "no_self_relationship": {
           "name": "no_self_relationship",
-          "value": "\"npc_relationships\".\"source_npc_id\" != \"npc_relationships\".\"target_npc_id\""
+          "value": "\"npc_relations\".\"source_npc_id\" != \"npc_relations\".\"target_npc_id\""
         }
       },
       "isRLSEnabled": false
@@ -3530,8 +3530,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.npc_stage_involvement": {
-      "name": "npc_stage_involvement",
+    "public.npc_quest_stage_involvement": {
+      "name": "npc_quest_stage_involvement",
       "schema": "",
       "columns": {
         "id": {
@@ -3591,9 +3591,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npc_stage_involvement_npc_id_npcs_id_fk": {
-          "name": "npc_stage_involvement_npc_id_npcs_id_fk",
-          "tableFrom": "npc_stage_involvement",
+        "npc_quest_stage_involvement_npc_id_npcs_id_fk": {
+          "name": "npc_quest_stage_involvement_npc_id_npcs_id_fk",
+          "tableFrom": "npc_quest_stage_involvement",
           "tableTo": "npcs",
           "columnsFrom": [
             "npc_id"
@@ -3604,9 +3604,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "npc_stage_involvement_quest_stage_id_quest_stages_id_fk": {
-          "name": "npc_stage_involvement_quest_stage_id_quest_stages_id_fk",
-          "tableFrom": "npc_stage_involvement",
+        "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk": {
+          "name": "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "npc_quest_stage_involvement",
           "tableTo": "quest_stages",
           "columnsFrom": [
             "quest_stage_id"
@@ -3620,8 +3620,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "npc_stage_involvement_npc_id_quest_stage_id_unique": {
-          "name": "npc_stage_involvement_npc_id_quest_stage_id_unique",
+        "npc_quest_stage_involvement_npc_id_quest_stage_id_unique": {
+          "name": "npc_quest_stage_involvement_npc_id_quest_stage_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "npc_id",
@@ -3631,6 +3631,206 @@
       },
       "policies": {},
       "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quest_stage_decisions": {
+      "name": "quest_stage_decisions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_quest_stage_id": {
+          "name": "from_quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_quest_stage_id": {
+          "name": "to_quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "condition_type": {
+          "name": "condition_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "decision_type": {
+          "name": "decision_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ambiguity_level": {
+          "name": "ambiguity_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "options": {
+          "name": "options",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success_description": {
+          "name": "success_description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "failure_description": {
+          "name": "failure_description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_transition": {
+          "name": "narrative_transition",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "potential_player_reactions": {
+          "name": "potential_player_reactions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "condition_value": {
+          "name": "condition_value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "failure_leads_to_retry": {
+          "name": "failure_leads_to_retry",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "failure_lesson_learned": {
+          "name": "failure_lesson_learned",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_stage_decisions_quest_id_quests_id_fk": {
+          "name": "quest_stage_decisions_quest_id_quests_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk": {
+          "name": "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "from_quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk": {
+          "name": "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "to_quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quest_stage_decisions_name_unique": {
+          "name": "quest_stage_decisions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique": {
+          "name": "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "from_quest_stage_id",
+            "to_quest_stage_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_stage_decision_no_self_loop": {
+          "name": "chk_stage_decision_no_self_loop",
+          "value": "COALESCE(\"quest_stage_decisions\".\"from_quest_stage_id\" != \"quest_stage_decisions\".\"to_quest_stage_id\", TRUE)"
+        },
+        "chk_failure_retry_lesson": {
+          "name": "chk_failure_retry_lesson",
+          "value": "(\"quest_stage_decisions\".\"failure_leads_to_retry\" = FALSE) OR (\"quest_stage_decisions\".\"failure_lesson_learned\" IS NOT NULL)"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.quest_stages": {
@@ -3806,206 +4006,6 @@
       },
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.stage_decisions": {
-      "name": "stage_decisions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "creative_prompts": {
-          "name": "creative_prompts",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gm_notes": {
-          "name": "gm_notes",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "quest_id": {
-          "name": "quest_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "from_quest_stage_id": {
-          "name": "from_quest_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "to_quest_stage_id": {
-          "name": "to_quest_stage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "condition_type": {
-          "name": "condition_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "decision_type": {
-          "name": "decision_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ambiguity_level": {
-          "name": "ambiguity_level",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "options": {
-          "name": "options",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "success_description": {
-          "name": "success_description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "failure_description": {
-          "name": "failure_description",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "narrative_transition": {
-          "name": "narrative_transition",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "potential_player_reactions": {
-          "name": "potential_player_reactions",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "condition_value": {
-          "name": "condition_value",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "failure_leads_to_retry": {
-          "name": "failure_leads_to_retry",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "failure_lesson_learned": {
-          "name": "failure_lesson_learned",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "stage_decisions_quest_id_quests_id_fk": {
-          "name": "stage_decisions_quest_id_quests_id_fk",
-          "tableFrom": "stage_decisions",
-          "tableTo": "quests",
-          "columnsFrom": [
-            "quest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "stage_decisions_from_quest_stage_id_quest_stages_id_fk": {
-          "name": "stage_decisions_from_quest_stage_id_quest_stages_id_fk",
-          "tableFrom": "stage_decisions",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "from_quest_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "stage_decisions_to_quest_stage_id_quest_stages_id_fk": {
-          "name": "stage_decisions_to_quest_stage_id_quest_stages_id_fk",
-          "tableFrom": "stage_decisions",
-          "tableTo": "quest_stages",
-          "columnsFrom": [
-            "to_quest_stage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "stage_decisions_name_unique": {
-          "name": "stage_decisions_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        },
-        "stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique": {
-          "name": "stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "quest_id",
-            "from_quest_stage_id",
-            "to_quest_stage_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {
-        "chk_stage_decision_no_self_loop": {
-          "name": "chk_stage_decision_no_self_loop",
-          "value": "COALESCE(\"stage_decisions\".\"from_quest_stage_id\" != \"stage_decisions\".\"to_quest_stage_id\", TRUE)"
-        },
-        "chk_failure_retry_lesson": {
-          "name": "chk_failure_retry_lesson",
-          "value": "(\"stage_decisions\".\"failure_leads_to_retry\" = FALSE) OR (\"stage_decisions\".\"failure_lesson_learned\" IS NOT NULL)"
-        }
-      },
       "isRLSEnabled": false
     },
     "public.quest_hooks": {
@@ -4334,8 +4334,8 @@
       },
       "isRLSEnabled": false
     },
-    "public.quest_relationships": {
-      "name": "quest_relationships",
+    "public.quest_relations": {
+      "name": "quest_relations",
       "schema": "",
       "columns": {
         "id": {
@@ -4389,9 +4389,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quest_relationships_source_quest_id_quests_id_fk": {
-          "name": "quest_relationships_source_quest_id_quests_id_fk",
-          "tableFrom": "quest_relationships",
+        "quest_relations_source_quest_id_quests_id_fk": {
+          "name": "quest_relations_source_quest_id_quests_id_fk",
+          "tableFrom": "quest_relations",
           "tableTo": "quests",
           "columnsFrom": [
             "source_quest_id"
@@ -4402,9 +4402,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "quest_relationships_target_quest_id_quests_id_fk": {
-          "name": "quest_relationships_target_quest_id_quests_id_fk",
-          "tableFrom": "quest_relationships",
+        "quest_relations_target_quest_id_quests_id_fk": {
+          "name": "quest_relations_target_quest_id_quests_id_fk",
+          "tableFrom": "quest_relations",
           "tableTo": "quests",
           "columnsFrom": [
             "target_quest_id"
@@ -4418,8 +4418,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "quest_relationships_source_quest_id_target_quest_id_unique": {
-          "name": "quest_relationships_source_quest_id_target_quest_id_unique",
+        "quest_relations_source_quest_id_target_quest_id_unique": {
+          "name": "quest_relations_source_quest_id_target_quest_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_quest_id",
@@ -4431,7 +4431,7 @@
       "checkConstraints": {
         "no_self_relationship": {
           "name": "no_self_relationship",
-          "value": "\"quest_relationships\".\"source_quest_id\" != \"quest_relationships\".\"target_quest_id\""
+          "value": "\"quest_relations\".\"source_quest_id\" != \"quest_relations\".\"target_quest_id\""
         }
       },
       "isRLSEnabled": false
@@ -5803,8 +5803,8 @@
       },
       "isRLSEnabled": false
     },
-    "public.world_concept_relationships": {
-      "name": "world_concept_relationships",
+    "public.world_concept_relations": {
+      "name": "world_concept_relations",
       "schema": "",
       "columns": {
         "id": {
@@ -5870,9 +5870,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "world_concept_relationships_source_world_concept_id_world_concepts_id_fk": {
-          "name": "world_concept_relationships_source_world_concept_id_world_concepts_id_fk",
-          "tableFrom": "world_concept_relationships",
+        "world_concept_relations_source_world_concept_id_world_concepts_id_fk": {
+          "name": "world_concept_relations_source_world_concept_id_world_concepts_id_fk",
+          "tableFrom": "world_concept_relations",
           "tableTo": "world_concepts",
           "columnsFrom": [
             "source_world_concept_id"
@@ -5883,9 +5883,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "world_concept_relationships_target_world_concept_id_world_concepts_id_fk": {
-          "name": "world_concept_relationships_target_world_concept_id_world_concepts_id_fk",
-          "tableFrom": "world_concept_relationships",
+        "world_concept_relations_target_world_concept_id_world_concepts_id_fk": {
+          "name": "world_concept_relations_target_world_concept_id_world_concepts_id_fk",
+          "tableFrom": "world_concept_relations",
           "tableTo": "world_concepts",
           "columnsFrom": [
             "target_world_concept_id"
@@ -5899,8 +5899,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "world_concept_relationships_source_world_concept_id_target_world_concept_id_relationship_type_unique": {
-          "name": "world_concept_relationships_source_world_concept_id_target_world_concept_id_relationship_type_unique",
+        "world_concept_relations_source_world_concept_id_target_world_concept_id_relationship_type_unique": {
+          "name": "world_concept_relations_source_world_concept_id_target_world_concept_id_relationship_type_unique",
           "nullsNotDistinct": false,
           "columns": [
             "source_world_concept_id",
@@ -5913,7 +5913,7 @@
       "checkConstraints": {
         "no_self_relationship": {
           "name": "no_self_relationship",
-          "value": "\"world_concept_relationships\".\"source_world_concept_id\" != \"world_concept_relationships\".\"target_world_concept_id\""
+          "value": "\"world_concept_relations\".\"source_world_concept_id\" != \"world_concept_relations\".\"target_world_concept_id\""
         }
       },
       "isRLSEnabled": false
