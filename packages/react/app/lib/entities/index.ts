@@ -7,12 +7,12 @@ export * from "./areas"
 export * from "./conflicts"
 export * from "./factions"
 export * from "./foreshadowing"
-export * from "./narrative"
+export * from "./narrative-destinations"
 export * from "./npcs"
 export * from "./quests"
 export * from "./regions"
 export * from "./sites"
-export * from "./world"
+export * from "./world-concepts"
 
 export const updateMaterializedView = async () => await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
 

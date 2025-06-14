@@ -4,25 +4,26 @@ import addSlugs from "../utils/addSlugs"
 
 const foreshadowingConfig = {
 	findById: (id: number) =>
-		db.query.narrativeForeshadowing.findFirst({
+		db.query.foreshadowing.findFirst({
 			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
 			with: {
-				sourceStage: {
-					columns: { name: true, id: true },
-					with: { quest: { columns: { name: true, id: true } } },
-				},
-				sourceSite: { columns: { name: true, id: true } },
-				sourceNpc: { columns: { name: true, id: true } },
-				sourceFaction: { columns: { name: true, id: true } },
-				targetQuest: { columns: { name: true, id: true } },
-				targetTwist: { columns: { twistType: true, id: true } },
-				targetNpc: { columns: { name: true, id: true } },
-				targetArc: { columns: { name: true, id: true } },
+				sourceNpc: { columns: { id: true, name: true } },
+				sourceQuest: { columns: { id: true, name: true } },
+				sourceSite: { columns: { id: true, name: true } },
+				sourceQuestStage: { columns: { id: true, name: true } },
+				targetFaction: { columns: { id: true, name: true } },
+				targetNpc: { columns: { id: true, name: true } },
+				targetQuest: { columns: { id: true, name: true } },
+				targetSite: { columns: { id: true, name: true } },
+				targetWorldConcept: { columns: { id: true, name: true } },
+				targetConflict: { columns: { id: true, name: true } },
+				targetNarrativeDestination: { columns: { id: true, name: true } },
+				targetNarrativeEvent: { columns: { id: true, name: true } },
 			},
 		}),
-	getAll: () => db.query.narrativeForeshadowing.findMany({}),
+	getAll: () => db.query.foreshadowing.findMany({}),
 	getNamesAndIds: () =>
-		db.query.narrativeForeshadowing.findMany({
+		db.query.foreshadowing.findMany({
 			columns: {
 				id: true,
 				name: true,

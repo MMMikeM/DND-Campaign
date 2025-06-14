@@ -8,33 +8,47 @@ const regionConfig = {
 		db.query.regions.findFirst({
 			where: (regions, { eq }) => eq(regions.id, id),
 			with: {
-				territorialControl: {
+				factionInfluence: {
 					with: {
 						faction: { columns: { name: true, id: true } },
 					},
 				},
-				worldChanges: { columns: { id: true, name: true } },
 				incomingRelations: {
 					with: {
 						sourceRegion: { columns: { name: true, id: true } },
-						details: { with: { controllingFaction: { columns: { name: true, id: true } } } },
 					},
 				},
 				outgoingRelations: {
 					with: {
 						targetRegion: { columns: { name: true, id: true } },
-						details: { with: { controllingFaction: { columns: { name: true, id: true } } } },
 					},
 				},
 				areas: {
 					columns: { id: true, name: true, type: true },
 					with: {
 						sites: {
-							columns: { id: true, name: true, siteType: true },
+							columns: { id: true, name: true, type: true },
 						},
 					},
 				},
 				quests: { columns: { id: true, name: true } },
+				conflicts: { columns: { id: true, name: true } },
+				consequences: { columns: { id: true, name: true } },
+
+				narrativeDestinations: {
+					with: {
+						conflict: { columns: { id: true, name: true } },
+						worldConceptLinks: { with: { worldConcept: { columns: { id: true, name: true } } } },
+					},
+				},
+				worldConceptLinks: {
+					with: {
+						linkedRegion: { columns: { id: true, name: true } },
+						linkedFaction: { columns: { id: true, name: true } },
+						linkedNpc: { columns: { id: true, name: true } },
+						linkedQuest: { columns: { id: true, name: true } },
+					},
+				},
 			},
 		}),
 	getAll: () => db.query.regions.findMany({}),
