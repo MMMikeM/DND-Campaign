@@ -5,7 +5,7 @@ import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
-import { questStages, quests, stageDecisions } from "../quests/tables"
+import { questStageDecisions, questStages, quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { consequences, narrativeEvents } from "./tables"
 
@@ -15,9 +15,9 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 		references: [questStages.id],
 	}),
 
-	triggeringStageDecision: one(stageDecisions, {
+	triggeringStageDecision: one(questStageDecisions, {
 		fields: [narrativeEvents.triggeringStageDecisionId],
-		references: [stageDecisions.id],
+		references: [questStageDecisions.id],
 	}),
 	relatedQuest: one(quests, {
 		fields: [narrativeEvents.relatedQuestId],
@@ -31,16 +31,16 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 		fields: [consequences.triggerQuestId],
 		references: [quests.id],
 	}),
-	triggerStageDecision: one(stageDecisions, {
+	triggerStageDecision: one(questStageDecisions, {
 		fields: [consequences.triggerStageDecisionId],
-		references: [stageDecisions.id],
+		references: [questStageDecisions.id],
 	}),
 	triggerConflict: one(conflicts, {
 		fields: [consequences.triggerConflictId],
 		references: [conflicts.id],
 	}),
 
-	affectedDestination: one(narrativeDestinations, {
+	affectedNarrativeDestination: one(narrativeDestinations, {
 		fields: [consequences.affectedDestinationId],
 		references: [narrativeDestinations.id],
 	}),

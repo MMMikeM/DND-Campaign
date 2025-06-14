@@ -201,8 +201,8 @@ SELECT
     'foreshadowingSeeds', related_foreshadowing_seeds,
     'itemRelationships', related_item_relationships,
     'worldConceptLinks', related_world_concept_links,
-    'incomingRelationships', related_incoming_relationships,
-    'outgoingRelationships', related_outgoing_relationships
+    'incomingRelations', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
@@ -218,8 +218,8 @@ SELECT
     'foreshadowingSeeds', related_foreshadowing_seeds,
     'itemRelationships', related_item_relationships,
     'worldConceptLinks', related_world_concept_links,
-    'incomingRelationships', related_incoming_relationships,
-    'outgoingRelationships', related_outgoing_relationships
+    'incomingRelations', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
@@ -236,8 +236,8 @@ SELECT
       'foreshadowingSeeds', related_foreshadowing_seeds,
       'itemRelationships', related_item_relationships,
       'worldConceptLinks', related_world_concept_links,
-      'incomingRelationships', related_incoming_relationships,
-      'outgoingRelationships', related_outgoing_relationships
+      'incomingRelations', related_incoming_relationships,
+      'outgoingRelations', related_outgoing_relationships
     )
   ) AS content_tsv
 FROM faction_search_data_view
@@ -313,8 +313,8 @@ SELECT
     'questRoles', related_quest_roles,
     'participantInvolvement', related_participant_involvement,
     'itemRelationships', related_item_relationships,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
@@ -323,8 +323,8 @@ SELECT
     'questRoles', related_quest_roles,
     'participantInvolvement', related_participant_involvement,
     'itemRelationships', related_item_relationships,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
@@ -334,8 +334,8 @@ SELECT
       'questRoles', related_quest_roles,
       'participantInvolvement', related_participant_involvement,
       'itemRelationships', related_item_relationships,
-      'outgoingRelationships', related_outgoing_relationships,
-      'incomingRelationships', related_incoming_relationships
+      'outgoingRelations', related_outgoing_relationships,
+      'incomingRelations', related_incoming_relationships
     )
   ) AS content_tsv
 FROM narrative_destination_search_data_view
@@ -361,8 +361,8 @@ SELECT
     'questStageDeliveries', related_quest_stage_deliveries,
     'stageInvolvement', related_stage_involvement,
     'worldConceptLinks', related_world_concept_links,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
@@ -379,8 +379,8 @@ SELECT
     'questStageDeliveries', related_quest_stage_deliveries,
     'stageInvolvement', related_stage_involvement,
     'worldConceptLinks', related_world_concept_links,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships
   )) AS content,
   weighted_search_vector(
     entity_main,
@@ -398,8 +398,8 @@ SELECT
       'questStageDeliveries', related_quest_stage_deliveries,
       'stageInvolvement', related_stage_involvement,
       'worldConceptLinks', related_world_concept_links,
-      'outgoingRelationships', related_outgoing_relationships,
-      'incomingRelationships', related_incoming_relationships
+      'outgoingRelations', related_outgoing_relationships,
+      'incomingRelations', related_incoming_relationships
     )
   ) AS content_tsv
 FROM npc_search_data_view
@@ -414,8 +414,8 @@ SELECT
     'quest', entity_main,
     'region', related_region,
     'parentQuest', related_parent_quest,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships,
     'stages', related_stages,
     'hooks', related_hooks,
     'participantInvolvement', related_participant_involvement,
@@ -431,8 +431,8 @@ SELECT
   jsonb_deep_text_values(jsonb_build_object(
     'region', related_region,
     'parentQuest', related_parent_quest,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships,
     'stages', related_stages,
     'hooks', related_hooks,
     'participantInvolvement', related_participant_involvement,
@@ -449,8 +449,8 @@ SELECT
     jsonb_build_object(
       'region', related_region,
       'parentQuest', related_parent_quest,
-      'outgoingRelationships', related_outgoing_relationships,
-      'incomingRelationships', related_incoming_relationships,
+      'outgoingRelations', related_outgoing_relationships,
+      'incomingRelations', related_incoming_relationships,
       'stages', related_stages,
       'hooks', related_hooks,
       'participantInvolvement', related_participant_involvement,
@@ -505,23 +505,23 @@ SELECT
   jsonb_build_object(
     'item', entity_main,
     'relatedQuest', related_quest,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships,
     'notableHistory', related_notable_history
   ) AS raw_data,
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
     'relatedQuest', related_quest,
-    'outgoingRelationships', related_outgoing_relationships,
-    'incomingRelationships', related_incoming_relationships,
+    'outgoingRelations', related_outgoing_relationships,
+    'incomingRelations', related_incoming_relationships,
     'notableHistory', related_notable_history
   )) AS content,
   weighted_search_vector(
     entity_main,
     jsonb_build_object(
       'relatedQuest', related_quest,
-      'outgoingRelationships', related_outgoing_relationships,
-      'incomingRelationships', related_incoming_relationships,
+      'outgoingRelations', related_outgoing_relationships,
+      'incomingRelations', related_incoming_relationships,
       'notableHistory', related_notable_history
     )
   ) AS content_tsv
@@ -564,7 +564,7 @@ SELECT
   jsonb_build_object(
     'consequence', entity_main,
     'triggerQuest', related_trigger_quest,
-    'triggerDecision', related_trigger_decision,
+    'triggerDecision', related_trigger_stage_decision,
     'triggerConflict', related_trigger_conflict,
     'affectedFaction', related_affected_faction,
     'affectedRegion', related_affected_region,
@@ -578,7 +578,7 @@ SELECT
   jsonb_deep_text_values(entity_main) || ' ' ||
   jsonb_deep_text_values(jsonb_build_object(
     'triggerQuest', related_trigger_quest,
-    'triggerDecision', related_trigger_decision,
+    'triggerDecision', related_trigger_stage_decision,
     'triggerConflict', related_trigger_conflict,
     'affectedFaction', related_affected_faction,
     'affectedRegion', related_affected_region,
@@ -593,7 +593,7 @@ SELECT
     entity_main,
     jsonb_build_object(
       'triggerQuest', related_trigger_quest,
-      'triggerDecision', related_trigger_decision,
+      'triggerDecision', related_trigger_stage_decision,
       'triggerConflict', related_trigger_conflict,
       'affectedFaction', related_affected_faction,
       'affectedRegion', related_affected_region,

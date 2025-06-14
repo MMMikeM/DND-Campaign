@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1749903299391,
-      "tag": "0000_bumpy_blindfold",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1749903309286,
-      "tag": "0001_text-search",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1749903325026,
-      "tag": "0002_search-views",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1749903426794,
-      "tag": "0003_materialized-view",
+      "when": 1749908036409,
+      "tag": "0000_crazy_hobgoblin",
       "breakpoints": true
     }
   ]

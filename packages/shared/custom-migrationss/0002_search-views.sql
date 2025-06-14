@@ -557,7 +557,7 @@ SELECT
   to_jsonb(c.*) AS entity_main,
   -- Select specific columns based on entities/events.ts
   COALESCE(jsonb_build_object('id', tq.id, 'name', tq.name), '{}'::jsonb) AS related_trigger_quest,
-  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_decision,
+  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_stage_decision,
   COALESCE(jsonb_build_object('id', tc.id, 'name', tc.name), '{}'::jsonb) AS related_trigger_conflict,
   COALESCE(jsonb_build_object('id', af.id, 'name', af.name), '{}'::jsonb) AS related_affected_faction,
   COALESCE(jsonb_build_object('id', ar.id, 'name', ar.name), '{}'::jsonb) AS related_affected_region,
