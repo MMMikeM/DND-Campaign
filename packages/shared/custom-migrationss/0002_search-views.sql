@@ -413,7 +413,7 @@ SELECT
 FROM
   quests q
 LEFT JOIN regions r ON q.region_id = r.id
-LEFT JOIN quests pq ON q.prerequisite_quest_id = pq.id
+LEFT JOIN quests pq ON q.parent_quest_id = pq.id
 LEFT JOIN quest_relationships qr_out ON qr_out.source_quest_id = q.id
 LEFT JOIN quests tq ON qr_out.target_quest_id = tq.id
 LEFT JOIN quest_relationships qr_in ON qr_in.target_quest_id = q.id
@@ -557,7 +557,7 @@ SELECT
   to_jsonb(c.*) AS entity_main,
   -- Select specific columns based on entities/events.ts
   COALESCE(jsonb_build_object('id', tq.id, 'name', tq.name), '{}'::jsonb) AS related_trigger_quest,
-  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_stage_decision,
+  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_decision,
   COALESCE(jsonb_build_object('id', tc.id, 'name', tc.name), '{}'::jsonb) AS related_trigger_conflict,
   COALESCE(jsonb_build_object('id', af.id, 'name', af.name), '{}'::jsonb) AS related_affected_faction,
   COALESCE(jsonb_build_object('id', ar.id, 'name', ar.name), '{}'::jsonb) AS related_affected_region,
