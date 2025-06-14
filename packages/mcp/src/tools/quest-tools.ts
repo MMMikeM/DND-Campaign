@@ -13,7 +13,7 @@ export const entityGetters = createEntityGetters({
 	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
 	all_quest_hooks: () => db.query.questHooks.findMany({}),
 	all_quest_participants: () => db.query.questParticipants.findMany({}),
-	all_quest_relationships: () => db.query.questRelationships.findMany({}),
+	all_quest_relations: () => db.query.questRelations.findMany({}),
 	all_npc_stage_involvement: () => db.query.npcStageInvolvement.findMany({}),
 
 	quest_by_id: (id: number) =>
@@ -24,10 +24,10 @@ export const entityGetters = createEntityGetters({
 				foreshadowingSource: true,
 				foreshadowingTarget: true,
 				hooks: true,
-				incomingRelationships: true,
-				itemRelationships: true,
+				incomingRelations: true,
+				itemRelations: true,
 				narrativeDestinationContributions: true,
-				outgoingRelationships: true,
+				outgoingRelations: true,
 				participants: true,
 				worldConceptLinks: true,
 				triggeredEvents: true,
@@ -39,19 +39,19 @@ export const entityGetters = createEntityGetters({
 		db.query.questStages.findFirst({
 			where: (questStages, { eq }) => eq(questStages.id, id),
 			with: {
+				deliveryNpc: { columns: { name: true, id: true } },
+				foreshadowingSource: true,
+				npcInvolvement: true,
 				quest: { columns: { name: true, id: true } },
 				site: {
 					with: {
 						secrets: true,
-						territorialControl: true,
 						area: { columns: { name: true, id: true } },
-						items: { columns: { name: true, id: true } },
 						encounters: { columns: { name: true, id: true } },
-						npcs: { with: { npc: { columns: { name: true, id: true } } } },
 					},
 				},
-				decisionsFrom: true,
-				decisionsTo: true,
+				outgoingDecisions: { with: { toStage: true } },
+				incomingDecisions: { with: { fromStage: true } },
 				items: true,
 				narrativeEvents: true,
 			},
@@ -63,15 +63,17 @@ export const entityGetters = createEntityGetters({
 				quest: { columns: { name: true, id: true } },
 				fromStage: { columns: { name: true, id: true } },
 				toStage: { columns: { name: true, id: true } },
-				outcomes: true,
 				triggeredEvents: true,
-				worldChanges: true,
+				consequences: true,
 			},
 		}),
 	quest_hook_by_id: (id: number) =>
 		db.query.questHooks.findFirst({
 			where: (questHooks, { eq }) => eq(questHooks.id, id),
 			with: {
+				deliveryNpc: { columns: { name: true, id: true } },
+				faction: { columns: { name: true, id: true } },
+				site: { columns: { name: true, id: true } },
 				quest: { columns: { name: true, id: true } },
 			},
 		}),
@@ -80,11 +82,13 @@ export const entityGetters = createEntityGetters({
 			where: (questParticipants, { eq }) => eq(questParticipants.id, id),
 			with: {
 				quest: { columns: { name: true, id: true } },
+				faction: { columns: { name: true, id: true } },
+				npc: { columns: { name: true, id: true } },
 			},
 		}),
-	quest_relationship_by_id: (id: number) =>
-		db.query.questRelationships.findFirst({
-			where: (questRelationships, { eq }) => eq(questRelationships.id, id),
+	quest_relation_by_id: (id: number) =>
+		db.query.questRelations.findFirst({
+			where: (questRelations, { eq }) => eq(questRelations.id, id),
 			with: {
 				sourceQuest: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },

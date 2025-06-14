@@ -10,7 +10,7 @@ const createEntityGetters = createEntityGettersFactory(tables.itemTables)
 export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
 	all_item_notable_history: () => db.query.itemNotableHistory.findMany({}),
-	all_item_relationships: () => db.query.itemRelationships.findMany({}),
+	all_item_relations: () => db.query.itemRelations.findMany({}),
 	item_by_id: (id: number) =>
 		db.query.items.findFirst({
 			where: (items, { eq }) => eq(items.id, id),
@@ -21,7 +21,7 @@ export const entityGetters = createEntityGetters({
 						locationSite: { columns: { name: true, id: true } },
 					},
 				},
-				outgoingRelationships: {
+				outgoingRelations: {
 					with: {
 						targetConflict: { columns: { name: true, id: true } },
 						targetFaction: { columns: { name: true, id: true } },
@@ -33,7 +33,7 @@ export const entityGetters = createEntityGetters({
 						targetNarrativeDestination: { columns: { name: true, id: true } },
 					},
 				},
-				incomingRelationships: {
+				incomingRelations: {
 					with: {
 						sourceItem: { columns: { name: true, id: true } },
 					},
@@ -47,9 +47,9 @@ export const entityGetters = createEntityGetters({
 				item: { columns: { name: true, id: true } },
 			},
 		}),
-	item_relationship_by_id: (id: number) =>
-		db.query.itemRelationships.findFirst({
-			where: (itemRelationships, { eq }) => eq(itemRelationships.id, id),
+	item_relation_by_id: (id: number) =>
+		db.query.itemRelations.findFirst({
+			where: (itemRelations, { eq }) => eq(itemRelations.id, id),
 			with: {
 				targetConflict: true,
 				targetFaction: true,
