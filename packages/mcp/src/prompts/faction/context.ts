@@ -83,7 +83,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 			where: (dpi, { isNotNull }) => isNotNull(dpi.factionId),
 			with: {
 				faction: { columns: { id: true, name: true } },
-				destination: { columns: { id: true, name: true, type: true, status: true } },
+				narrativeDestination: { columns: { id: true, name: true, type: true, status: true } },
 			},
 			columns: {
 				id: true,

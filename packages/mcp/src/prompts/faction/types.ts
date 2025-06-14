@@ -48,7 +48,7 @@ export interface NarrativeParticipationForAnalysis {
 	arcImportance: string
 	involvementDetails: string[]
 	faction: { id: number; name: string } | null
-	destination: { id: number; name: string; type: string; status: string }
+	narrativeDestination: { id: number; name: string; type: string; status: string }
 }
 
 export interface ConflictForFactionAnalysis {

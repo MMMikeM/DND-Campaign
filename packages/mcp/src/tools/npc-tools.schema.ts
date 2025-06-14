@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
 
 const {
-	npcTables: { npcs, npcRelationships, npcFactionMemberships, npcSiteAssociations, enums },
+	npcTables: { npcs, npcRelations, npcFactionMemberships, npcSiteAssociations, enums },
 } = tables
 
 const {
@@ -29,7 +29,7 @@ type TableNames = CreateTableNames<typeof tables.npcTables>
 
 export const tableEnum = [
 	"npcs",
-	"npcRelationships",
+	"npcRelations",
 	"npcFactionMemberships",
 	"npcSiteAssociations",
 ] as const satisfies TableNames
@@ -112,7 +112,7 @@ export const schemas = {
 		.strict()
 		.describe("Maps where NPCs can be encountered, helping GMs place characters consistently in the world"),
 
-	npcRelationships: createInsertSchema(npcRelationships, {
+	npcRelations: createInsertSchema(npcRelations, {
 		sourceNpcId: id.describe("ID of the primary NPC in this relationship"),
 		targetNpcId: id.describe("ID of the secondary NPC in this relationship"),
 		relationshipType: z.enum(relationshipTypes).describe("Connection type (family, friend, rival, mentor, enemy)"),

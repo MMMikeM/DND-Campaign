@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	worldbuildingTables: { worldConcepts, worldConceptRelationships, worldConceptLinks, enums },
+	worldbuildingTables: { worldConcepts, worldConceptRelations, worldConceptLinks, enums },
 } = tables
 
 type TableNames = CreateTableNames<typeof tables.worldbuildingTables>
@@ -20,11 +20,7 @@ const {
 	moralClarity,
 } = enums
 
-export const tableEnum = [
-	"worldConcepts",
-	"worldConceptRelationships",
-	"worldConceptLinks",
-] as const satisfies TableNames
+export const tableEnum = ["worldConcepts", "worldConceptRelations", "worldConceptLinks"] as const satisfies TableNames
 
 export const schemas = {
 	worldConcepts: createInsertSchema(worldConcepts, {
@@ -75,7 +71,7 @@ export const schemas = {
 		.strict()
 		.describe("Cultural, political, religious, and historical concepts that shape the world"),
 
-	worldConceptRelationships: createInsertSchema(worldConceptRelationships, {
+	worldConceptRelations: createInsertSchema(worldConceptRelations, {
 		sourceWorldConceptId: id.describe("ID of the source concept in this relationship"),
 		targetWorldConceptId: id.describe("ID of the target concept in this relationship"),
 		relationshipType: z.enum(conceptRelationshipTypes).describe("Type of relationship between concepts"),

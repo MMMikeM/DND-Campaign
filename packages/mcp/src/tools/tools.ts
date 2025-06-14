@@ -9,8 +9,8 @@ import { getEntityToolDefinition } from "./get-entity"
 import { helpToolDefinitions } from "./help-tools"
 import { itemToolDefinitions } from "./items-tools"
 import { mapToolDefinitions } from "./map-tools"
-import { narrativeToolDefinitions } from "./narrative-destination-tools"
-import { eventToolDefinitions } from "./narrative-events-tools"
+import { narrativeDestinationToolDefinitions } from "./narrative-destination-tools"
+import { narrativeEventToolDefinitions } from "./narrative-events-tools"
 import { npcToolDefinitions } from "./npc-tools"
 import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
@@ -36,54 +36,54 @@ function extractToolsAndHandlers<T extends string>(definitions: Record<string, T
 	return { tools, handlers }
 }
 
+export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
 export const factions = extractToolsAndHandlers(factionToolDefinitions)
-export const regions = extractToolsAndHandlers(regionToolDefinitions)
+export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
+export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
+export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
+export const help = extractToolsAndHandlers(helpToolDefinitions)
+export const items = extractToolsAndHandlers(itemToolDefinitions)
+export const maps = extractToolsAndHandlers(mapToolDefinitions)
+export const narrativeDestinations = extractToolsAndHandlers(narrativeDestinationToolDefinitions)
+export const narrativeEvents = extractToolsAndHandlers(narrativeEventToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
-export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
-export const narrative = extractToolsAndHandlers(narrativeToolDefinitions)
+export const regions = extractToolsAndHandlers(regionToolDefinitions)
 export const worldbuilding = extractToolsAndHandlers(worldbuildingToolDefinitions)
-export const events = extractToolsAndHandlers(eventToolDefinitions)
-export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
-export const items = extractToolsAndHandlers(itemToolDefinitions)
-export const help = extractToolsAndHandlers(helpToolDefinitions)
-export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
-export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
-export const maps = extractToolsAndHandlers(mapToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
 	const tools = [
-		...help.tools,
-		...getEntity.tools,
+		...conflicts.tools,
 		...factions.tools,
-		...regions.tools,
+		...foreshadowing.tools,
+		...fuzzySearch.tools,
+		...getEntity.tools,
+		...help.tools,
+		...items.tools,
+		...maps.tools,
+		...narrativeDestinations.tools,
+		...narrativeEvents.tools,
 		...npcs.tools,
 		...quests.tools,
-		...conflicts.tools,
-		...narrative.tools,
+		...regions.tools,
 		...worldbuilding.tools,
-		...events.tools,
-		...foreshadowing.tools,
-		...items.tools,
-		...fuzzySearch.tools,
-		...maps.tools,
 	]
 
 	const allToolHandlers = {
-		...help.handlers,
-		...getEntity.handlers,
+		...conflicts.handlers,
 		...factions.handlers,
-		...regions.handlers,
+		...foreshadowing.handlers,
+		...fuzzySearch.handlers,
+		...getEntity.handlers,
+		...help.handlers,
+		...items.handlers,
+		...maps.handlers,
+		...narrativeDestinations.handlers,
+		...narrativeEvents.handlers,
 		...npcs.handlers,
 		...quests.handlers,
-		...conflicts.handlers,
-		...narrative.handlers,
+		...regions.handlers,
 		...worldbuilding.handlers,
-		...events.handlers,
-		...foreshadowing.handlers,
-		...items.handlers,
-		...fuzzySearch.handlers,
-		...maps.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))

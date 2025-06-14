@@ -10,7 +10,7 @@ const createEntityGetters = createEntityGettersFactory(tables.questTables)
 export const entityGetters = createEntityGetters({
 	all_quests: () => db.query.quests.findMany({}),
 	all_quest_stages: () => db.query.questStages.findMany({}),
-	all_stage_decisions: () => db.query.stageDecisions.findMany({}),
+	all_quest_stage_decisions: () => db.query.questStageDecisions.findMany({}),
 	all_quest_hooks: () => db.query.questHooks.findMany({}),
 	all_quest_participants: () => db.query.questParticipants.findMany({}),
 	all_quest_relations: () => db.query.questRelations.findMany({}),
@@ -56,8 +56,8 @@ export const entityGetters = createEntityGetters({
 				narrativeEvents: true,
 			},
 		}),
-	stage_decision_by_id: (id: number) =>
-		db.query.stageDecisions.findFirst({
+	quest_stage_decision_by_id: (id: number) =>
+		db.query.questStageDecisions.findFirst({
 			where: (stageDecisions, { eq }) => eq(stageDecisions.id, id),
 			with: {
 				quest: { columns: { name: true, id: true } },

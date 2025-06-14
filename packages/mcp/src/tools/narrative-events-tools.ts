@@ -1,6 +1,6 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./events-tools.schema"
+import { schemas, tableEnum } from "./narrative-events-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
@@ -17,7 +17,7 @@ export const entityGetters = createEntityGetters({
 			with: {
 				questStage: { columns: { name: true, id: true } },
 				relatedQuest: { columns: { name: true, id: true } },
-				triggeringStageDecision: { with: { fromStage: { columns: { name: true, id: true } } } },
+				triggeringStageDecision: true,
 			},
 		}),
 
@@ -26,7 +26,7 @@ export const entityGetters = createEntityGetters({
 			where: (consequences, { eq }) => eq(consequences.id, id),
 			with: {
 				affectedConflict: true,
-				affectedDestination: true,
+				affectedNarrativeDestination: true,
 				affectedNpc: true,
 				affectedQuest: true,
 				triggerConflict: true,
@@ -40,13 +40,13 @@ export const entityGetters = createEntityGetters({
 		}),
 })
 
-export const eventToolDefinitions: Record<"manage_event", ToolDefinition> = {
-	manage_event: {
+export const narrativeEventToolDefinitions: Record<"manage_narrative_event", ToolDefinition> = {
+	manage_narrative_event: {
 		description: "Manage event-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_event", tables.eventTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_narrative_event", tables.eventTables, tableEnum, schemas),
 		annotations: {
-			title: "Manage Events",
+			title: "Manage Narrative Events",
 			readOnlyHint: false,
 			destructiveHint: false,
 			idempotentHint: false,
