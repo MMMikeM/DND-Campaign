@@ -11,7 +11,7 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c.id, 'description', c.description)) FILTER (WHERE c.id IS NOT NULL), '[]'::jsonb) AS related_consequences,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', nd.id, 'name', nd.name)) FILTER (WHERE nd.id IS NOT NULL), '[]'::jsonb) AS related_narrative_destinations,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('influence', to_jsonb(fi.*), 'faction', jsonb_build_object('id', f.id, 'name', f.name))) FILTER (WHERE fi.id IS NOT NULL), '[]'::jsonb) AS related_faction_influence,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('connection', to_jsonb(rc.*), 'otherRegion', jsonb_build_object('id', rr.id, 'name', rr.name))) FILTER (WHERE rc.id IS NOT NULL), '[]'::jsonb) AS related_connections
 FROM
   regions r
@@ -27,11 +27,11 @@ LEFT JOIN
 LEFT JOIN
   quests q ON q.region_id = r.id
 LEFT JOIN
-  major_conflicts mc ON mc.primary_region_id = r.id
+  conflicts mc ON mc.region_id = r.id
 LEFT JOIN
   consequences c ON c.affected_region_id = r.id
 LEFT JOIN
-  narrative_destinations nd ON nd.primary_region_id = r.id
+  narrative_destinations nd ON nd.region_id = r.id
 LEFT JOIN
   faction_influence fi ON fi.region_id = r.id
 LEFT JOIN
@@ -39,10 +39,10 @@ LEFT JOIN
 LEFT JOIN
   world_concept_links wcl ON wcl.region_id = r.id
 LEFT JOIN
-  region_connections rc ON rc.region_id = r.id OR rc.other_region_id = r.id
+  region_connections rc ON rc.source_region_id = r.id OR rc.target_region_id = r.id
 LEFT JOIN
-  regions rr ON (rc.region_id = r.id AND rc.other_region_id = rr.id)
-            OR (rc.other_region_id = r.id AND rc.region_id = rr.id)
+  regions rr ON (rc.source_region_id = r.id AND rc.target_region_id = rr.id)
+            OR (rc.target_region_id = r.id AND rc.source_region_id = rr.id)
 GROUP BY
   r.id;
 
@@ -81,7 +81,7 @@ LEFT JOIN
 LEFT JOIN
   site_secrets sec ON sec.site_id = s.id
 LEFT JOIN
-  npc_sites ns ON ns.site_id = s.id
+  npc_site_associations ns ON ns.site_id = s.id
 LEFT JOIN
   npcs n ON n.id = ns.npc_id
 LEFT JOIN
@@ -95,27 +95,27 @@ LEFT JOIN
 LEFT JOIN
   consequences c ON c.affected_site_id = s.id
 LEFT JOIN
-  factions f_hq ON f_hq.primary_hq_site_id = s.id
+  factions f_hq ON f_hq.hq_site_id = s.id
 LEFT JOIN
   faction_influence fi ON fi.site_id = s.id
 LEFT JOIN
   factions f ON f.id = fi.faction_id
 LEFT JOIN
-  foreshadowing_seeds fs ON fs.source_site_id = s.id
+  foreshadowing fs ON fs.source_site_id = s.id
 LEFT JOIN
-  foreshadowing_seeds ft ON ft.target_site_id = s.id
+  foreshadowing ft ON ft.target_site_id = s.id
 LEFT JOIN
-  item_notable_history ih ON ih.event_location_site_id = s.id
+  item_notable_history ih ON ih.location_site_id = s.id
 LEFT JOIN
   item_relationships ir ON ir.target_site_id = s.id
 LEFT JOIN
-  site_links sr ON sr.site_id = s.id
+  site_links sr ON sr.source_site_id = s.id
 LEFT JOIN
-  sites ss ON ss.id = sr.other_site_id
+  sites ss ON ss.id = sr.target_site_id
 LEFT JOIN
-  site_links tr ON tr.other_site_id = s.id
+  site_links tr ON tr.target_site_id = s.id
 LEFT JOIN
-  sites ts ON ts.id = tr.site_id
+  sites ts ON ts.id = tr.source_site_id
 GROUP BY
   s.id, a.id, r.id;
 
@@ -167,11 +167,11 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', nd.id, 'name', nd.name)) FILTER (WHERE nd.id IS NOT NULL), '[]'::jsonb) AS related_narrative_destinations,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(fs.*)) FILTER (WHERE fs.id IS NOT NULL), '[]'::jsonb) AS related_foreshadowing_seeds,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links
 FROM
-  major_conflicts mc
+  conflicts mc
 LEFT JOIN
-  regions r ON mc.primary_region_id = r.id
+  regions r ON mc.region_id = r.id
 LEFT JOIN
   conflict_participants cp ON cp.conflict_id = mc.id
 LEFT JOIN
@@ -185,7 +185,7 @@ LEFT JOIN
 LEFT JOIN
   narrative_destinations nd ON nd.related_conflict_id = mc.id
 LEFT JOIN
-  foreshadowing_seeds fs ON fs.target_major_conflict_id = mc.id
+  foreshadowing fs ON fs.target_conflict_id = mc.id
 LEFT JOIN
   item_relationships ir ON ir.target_conflict_id = mc.id
 LEFT JOIN
@@ -218,34 +218,34 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(dpi.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dpi.id IS NOT NULL), '[]'::jsonb) AS related_destination_involvement,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(fs.*)) FILTER (WHERE fs.id IS NOT NULL), '[]'::jsonb) AS related_foreshadowing_seeds,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relation', to_jsonb(fd_in.*), 'sourceFaction', jsonb_build_object('id', sf.id, 'name', sf.name))) FILTER (WHERE fd_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relation', to_jsonb(fd_out.*), 'targetFaction', jsonb_build_object('id', tf.id, 'name', tf.name))) FILTER (WHERE fd_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships
 FROM
   factions f
-LEFT JOIN sites hq_site ON f.primary_hq_site_id = hq_site.id
+LEFT JOIN sites hq_site ON f.hq_site_id = hq_site.id
 LEFT JOIN faction_agendas fa ON fa.faction_id = f.id
-LEFT JOIN npc_factions nf ON nf.faction_id = f.id
+LEFT JOIN npc_faction_memberships nf ON nf.faction_id = f.id
 LEFT JOIN npcs n ON nf.npc_id = n.id
 LEFT JOIN quest_hooks qh ON qh.faction_id = f.id
-LEFT JOIN quest_participant_involvement qpi ON qpi.faction_id = f.id
+LEFT JOIN quest_participants qpi ON qpi.faction_id = f.id
 LEFT JOIN quests q ON qpi.quest_id = q.id
 LEFT JOIN faction_influence fi ON fi.faction_id = f.id
 LEFT JOIN regions r ON fi.region_id = r.id
 LEFT JOIN areas a ON fi.area_id = a.id
 LEFT JOIN sites s ON fi.site_id = s.id
 LEFT JOIN conflict_participants cp ON cp.faction_id = f.id
-LEFT JOIN major_conflicts mc ON cp.conflict_id = mc.id
+LEFT JOIN conflicts mc ON cp.conflict_id = mc.id
 LEFT JOIN consequences c ON c.affected_faction_id = f.id
-LEFT JOIN destination_participant_involvement dpi ON dpi.faction_id = f.id
-LEFT JOIN narrative_destinations nd ON dpi.destination_id = nd.id
-LEFT JOIN foreshadowing_seeds fs ON fs.target_faction_id = f.id
+LEFT JOIN narrative_destination_participants dpi ON dpi.faction_id = f.id
+LEFT JOIN narrative_destinations nd ON dpi.narrative_destination_id = nd.id
+LEFT JOIN foreshadowing fs ON fs.target_faction_id = f.id
 LEFT JOIN item_relationships ir ON ir.target_faction_id = f.id
 LEFT JOIN world_concept_links wcl ON wcl.faction_id = f.id
-LEFT JOIN faction_diplomacy fd_in ON fd_in.other_faction_id = f.id
-LEFT JOIN factions sf ON fd_in.faction_id = sf.id
-LEFT JOIN faction_diplomacy fd_out ON fd_out.faction_id = f.id
-LEFT JOIN factions tf ON fd_out.other_faction_id = tf.id
+LEFT JOIN faction_diplomacy fd_in ON fd_in.target_faction_id = f.id
+LEFT JOIN factions sf ON fd_in.source_faction_id = sf.id
+LEFT JOIN faction_diplomacy fd_out ON fd_out.source_faction_id = f.id
+LEFT JOIN factions tf ON fd_out.target_faction_id = tf.id
 GROUP BY
   f.id, hq_site.id;
 
@@ -272,7 +272,7 @@ SELECT
   COALESCE(jsonb_build_object('id', tf.id, 'name', tf.name), '{}'::jsonb) AS related_target_faction,
   COALESCE(jsonb_build_object('id', ts.id, 'name', ts.name), '{}'::jsonb) AS related_target_site
 FROM
-  foreshadowing_seeds fs
+  foreshadowing fs
 LEFT JOIN quests sq ON fs.source_quest_id = sq.id
 LEFT JOIN quest_stages sqs ON fs.source_quest_stage_id = sqs.id
 LEFT JOIN quests sq_stage ON sqs.quest_id = sq_stage.id
@@ -281,7 +281,7 @@ LEFT JOIN npcs sn ON fs.source_npc_id = sn.id
 LEFT JOIN quests tq ON fs.target_quest_id = tq.id
 LEFT JOIN npcs tn ON fs.target_npc_id = tn.id
 LEFT JOIN narrative_events tne ON fs.target_narrative_event_id = tne.id
-LEFT JOIN major_conflicts tmc ON fs.target_major_conflict_id = tmc.id
+LEFT JOIN conflicts tmc ON fs.target_conflict_id = tmc.id
 LEFT JOIN items ti ON fs.target_item_id = ti.id
 LEFT JOIN narrative_destinations tnd ON fs.target_narrative_destination_id = tnd.id
 LEFT JOIN world_concepts twc ON fs.target_world_concept_id = twc.id
@@ -312,17 +312,17 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(dr_in.*), 'sourceDestination', jsonb_build_object('id', sd_in.id, 'name', sd_in.name))) FILTER (WHERE dr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships
 FROM
   narrative_destinations nd
-LEFT JOIN regions r ON nd.primary_region_id = r.id
-LEFT JOIN major_conflicts mc ON nd.related_conflict_id = mc.id
-LEFT JOIN destination_quest_roles dqr ON dqr.destination_id = nd.id
+LEFT JOIN regions r ON nd.region_id = r.id
+LEFT JOIN conflicts mc ON nd.related_conflict_id = mc.id
+LEFT JOIN narrative_destination_quest_roles dqr ON dqr.narrative_destination_id = nd.id
 LEFT JOIN quests q ON dqr.quest_id = q.id
-LEFT JOIN destination_participant_involvement dpi ON dpi.destination_id = nd.id
+LEFT JOIN narrative_destination_participants dpi ON dpi.narrative_destination_id = nd.id
 LEFT JOIN npcs n ON dpi.npc_id = n.id
 LEFT JOIN factions f ON dpi.faction_id = f.id
 LEFT JOIN item_relationships ir ON ir.target_narrative_destination_id = nd.id
-LEFT JOIN destination_relationships dr_out ON dr_out.source_destination_id = nd.id
-LEFT JOIN narrative_destinations rd_out ON dr_out.related_destination_id = rd_out.id
-LEFT JOIN destination_relationships dr_in ON dr_in.related_destination_id = nd.id
+LEFT JOIN narrative_destination_relationships dr_out ON dr_out.source_destination_id = nd.id
+LEFT JOIN narrative_destinations rd_out ON dr_out.target_destination_id = rd_out.id
+LEFT JOIN narrative_destination_relationships dr_in ON dr_in.target_destination_id = nd.id
 LEFT JOIN narrative_destinations sd_in ON dr_in.source_destination_id = sd_in.id
 GROUP BY
   nd.id, r.id, mc.id;
@@ -348,26 +348,26 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qh.id, 'source', qh.source, 'hook_content', qh.hook_content)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_quest_hooks,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'quest', jsonb_build_object('id', q_stage_delivery.id, 'name', q_stage_delivery.name))) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_quest_stage_deliveries,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(nsi.*), 'stage', jsonb_build_object('id', si.id, 'name', si.name), 'quest', jsonb_build_object('id', q_involvement.id, 'name', q_involvement.name))) FILTER (WHERE nsi.id IS NOT NULL), '[]'::jsonb) AS related_stage_involvement,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_out.*), 'relatedNpc', jsonb_build_object('id', rn_out.id, 'name', rn_out.name))) FILTER (WHERE nr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships
 FROM
   npcs n
-LEFT JOIN npc_factions nf ON nf.npc_id = n.id
+LEFT JOIN npc_faction_memberships nf ON nf.npc_id = n.id
 LEFT JOIN factions f ON nf.faction_id = f.id
-LEFT JOIN npc_sites ns ON ns.npc_id = n.id
+LEFT JOIN npc_site_associations ns ON ns.npc_id = n.id
 LEFT JOIN sites s ON ns.site_id = s.id
 LEFT JOIN areas a ON s.area_id = a.id
 LEFT JOIN regions r ON a.region_id = r.id
 LEFT JOIN conflict_participants cp ON cp.npc_id = n.id
-LEFT JOIN major_conflicts mc ON cp.conflict_id = mc.id
+LEFT JOIN conflicts mc ON cp.conflict_id = mc.id
 LEFT JOIN consequences c ON c.affected_npc_id = n.id
-LEFT JOIN foreshadowing_seeds fs_target ON fs_target.target_npc_id = n.id
-LEFT JOIN foreshadowing_seeds fs_source ON fs_source.source_npc_id = n.id
+LEFT JOIN foreshadowing fs_target ON fs_target.target_npc_id = n.id
+LEFT JOIN foreshadowing fs_source ON fs_source.source_npc_id = n.id
 LEFT JOIN item_notable_history ih ON ih.key_npc_id = n.id
 LEFT JOIN item_relationships ir ON ir.target_npc_id = n.id
-LEFT JOIN destination_participant_involvement dpi ON dpi.npc_id = n.id
-LEFT JOIN narrative_destinations nd ON dpi.destination_id = nd.id
+LEFT JOIN narrative_destination_participants dpi ON dpi.npc_id = n.id
+LEFT JOIN narrative_destinations nd ON dpi.narrative_destination_id = nd.id
 LEFT JOIN quest_hooks qh ON qh.delivery_npc_id = n.id
 LEFT JOIN quests q_delivery ON qh.quest_id = q_delivery.id
 LEFT JOIN quest_stages qs ON qs.delivery_npc_id = n.id
@@ -376,10 +376,10 @@ LEFT JOIN npc_stage_involvement nsi ON nsi.npc_id = n.id
 LEFT JOIN quest_stages si ON nsi.quest_stage_id = si.id
 LEFT JOIN quests q_involvement ON si.quest_id = q_involvement.id
 LEFT JOIN world_concept_links wcl ON wcl.npc_id = n.id
-LEFT JOIN npc_relationships nr_out ON nr_out.npc_id = n.id
-LEFT JOIN npcs rn_out ON nr_out.related_npc_id = rn_out.id
-LEFT JOIN npc_relationships nr_in ON nr_in.related_npc_id = n.id
-LEFT JOIN npcs sn_in ON nr_in.npc_id = sn_in.id
+LEFT JOIN npc_relationships nr_out ON nr_out.source_npc_id = n.id
+LEFT JOIN npcs rn_out ON nr_out.target_npc_id = rn_out.id
+LEFT JOIN npc_relationships nr_in ON nr_in.target_npc_id = n.id
+LEFT JOIN npcs sn_in ON nr_in.source_npc_id = sn_in.id
 GROUP BY
   n.id;
 
@@ -409,32 +409,32 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ne.id, 'description', ne.description)) FILTER (WHERE ne.id IS NOT NULL), '[]'::jsonb) AS related_narrative_events,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(fs.*)) FILTER (WHERE fs.id IS NOT NULL), '[]'::jsonb) AS related_foreshadowing_seeds,
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
-  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links
+  COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links
 FROM
   quests q
 LEFT JOIN regions r ON q.region_id = r.id
-LEFT JOIN quests pq ON q.parent_id = pq.id
-LEFT JOIN quest_relationships qr_out ON qr_out.quest_id = q.id
-LEFT JOIN quests tq ON qr_out.related_quest_id = tq.id
-LEFT JOIN quest_relationships qr_in ON qr_in.related_quest_id = q.id
-LEFT JOIN quests sq ON qr_in.quest_id = sq.id
+LEFT JOIN quests pq ON q.prerequisite_quest_id = pq.id
+LEFT JOIN quest_relationships qr_out ON qr_out.source_quest_id = q.id
+LEFT JOIN quests tq ON qr_out.target_quest_id = tq.id
+LEFT JOIN quest_relationships qr_in ON qr_in.target_quest_id = q.id
+LEFT JOIN quests sq ON qr_in.source_quest_id = sq.id
 LEFT JOIN quest_stages qs ON qs.quest_id = q.id
 LEFT JOIN npcs dn ON qs.delivery_npc_id = dn.id
 LEFT JOIN quest_hooks qh ON qh.quest_id = q.id
 LEFT JOIN sites h_s ON qh.site_id = h_s.id
 LEFT JOIN factions h_f ON qh.faction_id = h_f.id
 LEFT JOIN npcs h_n ON qh.delivery_npc_id = h_n.id
-LEFT JOIN quest_participant_involvement qpi ON qpi.quest_id = q.id
+LEFT JOIN quest_participants qpi ON qpi.quest_id = q.id
 LEFT JOIN npcs p_n ON qpi.npc_id = p_n.id
 LEFT JOIN factions p_f ON qpi.faction_id = p_f.id
 LEFT JOIN npc_stage_involvement nsi ON nsi.quest_stage_id IN (SELECT id FROM quest_stages WHERE quest_id = q.id)
 LEFT JOIN npcs si_n ON nsi.npc_id = si_n.id
 LEFT JOIN quest_stages si_s ON nsi.quest_stage_id = si_s.id
-LEFT JOIN destination_quest_roles dqr ON dqr.quest_id = q.id
-LEFT JOIN narrative_destinations nd ON dqr.destination_id = nd.id
+LEFT JOIN narrative_destination_quest_roles dqr ON dqr.quest_id = q.id
+LEFT JOIN narrative_destinations nd ON dqr.narrative_destination_id = nd.id
 LEFT JOIN consequences c ON c.trigger_quest_id = q.id
 LEFT JOIN narrative_events ne ON ne.related_quest_id = q.id
-LEFT JOIN foreshadowing_seeds fs ON fs.source_quest_id = q.id OR fs.target_quest_id = q.id
+LEFT JOIN foreshadowing fs ON fs.source_quest_id = q.id OR fs.target_quest_id = q.id
 LEFT JOIN item_relationships ir ON ir.target_quest_id = q.id
 LEFT JOIN world_concept_links wcl ON wcl.quest_id = q.id
 GROUP BY
@@ -462,15 +462,15 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships
 FROM
   world_concepts wc
-LEFT JOIN concept_relationships cr_out ON cr_out.source_concept_id = wc.id
-LEFT JOIN world_concepts tc ON cr_out.target_concept_id = tc.id
-LEFT JOIN concept_relationships cr_in ON cr_in.target_concept_id = wc.id
-LEFT JOIN world_concepts sc ON cr_in.source_concept_id = sc.id
-LEFT JOIN world_concept_links wcl ON wcl.concept_id = wc.id
+LEFT JOIN world_concept_relationships cr_out ON cr_out.source_world_concept_id = wc.id
+LEFT JOIN world_concepts tc ON cr_out.target_world_concept_id = tc.id
+LEFT JOIN world_concept_relationships cr_in ON cr_in.target_world_concept_id = wc.id
+LEFT JOIN world_concepts sc ON cr_in.source_world_concept_id = sc.id
+LEFT JOIN world_concept_links wcl ON wcl.world_concept_id = wc.id
 LEFT JOIN regions lr ON wcl.region_id = lr.id
 LEFT JOIN factions lf ON wcl.faction_id = lf.id
 LEFT JOIN npcs ln ON wcl.npc_id = ln.id
-LEFT JOIN major_conflicts lmc ON wcl.conflict_id = lmc.id
+LEFT JOIN conflicts lmc ON wcl.conflict_id = lmc.id
 LEFT JOIN quests lq ON wcl.quest_id = lq.id
 LEFT JOIN item_relationships ir ON ir.target_world_concept_id = wc.id
 GROUP BY
@@ -504,25 +504,25 @@ SELECT
   COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'history', to_jsonb(ih.*),
     'keyNpc', CASE WHEN ih.key_npc_id IS NOT NULL THEN jsonb_build_object('id', hn.id, 'name', hn.name) END,
-    'eventLocationSite', CASE WHEN ih.event_location_site_id IS NOT NULL THEN jsonb_build_object('id', hs.id, 'name', hs.name) END
+    'eventLocationSite', CASE WHEN ih.location_site_id IS NOT NULL THEN jsonb_build_object('id', hs.id, 'name', hs.name) END
   )) FILTER (WHERE ih.id IS NOT NULL), '[]'::jsonb) AS related_notable_history
 FROM
   items i
-LEFT JOIN quests rq ON i.related_quest_id = rq.id
+LEFT JOIN quests rq ON i.quest_id = rq.id
 LEFT JOIN item_relationships ir_out ON ir_out.source_item_id = i.id
 LEFT JOIN items ti ON ir_out.target_item_id = ti.id
 LEFT JOIN npcs tn ON ir_out.target_npc_id = tn.id
 LEFT JOIN factions tf ON ir_out.target_faction_id = tf.id
 LEFT JOIN sites ts ON ir_out.target_site_id = ts.id
 LEFT JOIN quests tq ON ir_out.target_quest_id = tq.id
-LEFT JOIN major_conflicts tc ON ir_out.target_conflict_id = tc.id
+LEFT JOIN conflicts tc ON ir_out.target_conflict_id = tc.id
 LEFT JOIN narrative_destinations tnd ON ir_out.target_narrative_destination_id = tnd.id
 LEFT JOIN world_concepts twc ON ir_out.target_world_concept_id = twc.id
 LEFT JOIN item_relationships ir_in ON ir_in.target_item_id = i.id
 LEFT JOIN items si ON ir_in.source_item_id = si.id
 LEFT JOIN item_notable_history ih ON ih.item_id = i.id
 LEFT JOIN npcs hn ON ih.key_npc_id = hn.id
-LEFT JOIN sites hs ON ih.event_location_site_id = hs.id
+LEFT JOIN sites hs ON ih.location_site_id = hs.id
 GROUP BY
   i.id, rq.id;
 
@@ -542,7 +542,7 @@ FROM
   narrative_events ne
 LEFT JOIN quest_stages qs ON ne.quest_stage_id = qs.id
 LEFT JOIN quests sq ON qs.quest_id = sq.id
-LEFT JOIN stage_decisions sd ON ne.triggering_decision_id = sd.id
+LEFT JOIN stage_decisions sd ON ne.triggering_stage_decision_id = sd.id
 LEFT JOIN quests rq ON ne.related_quest_id = rq.id
 GROUP BY
   ne.id, qs.id, sq.id, sd.id, rq.id;
@@ -557,7 +557,7 @@ SELECT
   to_jsonb(c.*) AS entity_main,
   -- Select specific columns based on entities/events.ts
   COALESCE(jsonb_build_object('id', tq.id, 'name', tq.name), '{}'::jsonb) AS related_trigger_quest,
-  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_decision,
+  COALESCE(jsonb_build_object('id', td.id, 'name', td.name), '{}'::jsonb) AS related_trigger_stage_decision,
   COALESCE(jsonb_build_object('id', tc.id, 'name', tc.name), '{}'::jsonb) AS related_trigger_conflict,
   COALESCE(jsonb_build_object('id', af.id, 'name', af.name), '{}'::jsonb) AS related_affected_faction,
   COALESCE(jsonb_build_object('id', ar.id, 'name', ar.name), '{}'::jsonb) AS related_affected_region,
@@ -566,19 +566,19 @@ SELECT
   COALESCE(jsonb_build_object('id', an.id, 'name', an.name), '{}'::jsonb) AS related_affected_npc,
   COALESCE(jsonb_build_object('id', ad.id, 'name', ad.name), '{}'::jsonb) AS related_affected_destination,
   COALESCE(jsonb_build_object('id', ac.id, 'name', ac.name), '{}'::jsonb) AS related_affected_conflict,
-  COALESCE(jsonb_build_object('id', fq.id, 'name', fq.name), '{}'::jsonb) AS related_future_quest
+  COALESCE(jsonb_build_object('id', fq.id, 'name', fq.name), '{}'::jsonb) AS related_affected_quest
 FROM
   consequences c
 LEFT JOIN quests tq ON c.trigger_quest_id = tq.id
-LEFT JOIN stage_decisions td ON c.trigger_decision_id = td.id
-LEFT JOIN major_conflicts tc ON c.trigger_conflict_id = tc.id
+LEFT JOIN stage_decisions td ON c.trigger_stage_decision_id = td.id
+LEFT JOIN conflicts tc ON c.trigger_conflict_id = tc.id
 LEFT JOIN factions af ON c.affected_faction_id = af.id
 LEFT JOIN regions ar ON c.affected_region_id = ar.id
 LEFT JOIN areas aa ON c.affected_area_id = aa.id
 LEFT JOIN sites as_site ON c.affected_site_id = as_site.id
 LEFT JOIN npcs an ON c.affected_npc_id = an.id
 LEFT JOIN narrative_destinations ad ON c.affected_destination_id = ad.id
-LEFT JOIN major_conflicts ac ON c.affected_conflict_id = ac.id
-LEFT JOIN quests fq ON c.future_quest_id = fq.id
+LEFT JOIN conflicts ac ON c.affected_conflict_id = ac.id
+LEFT JOIN quests fq ON c.affected_quest_id = fq.id
 GROUP BY
   c.id, tq.id, td.id, tc.id, af.id, ar.id, aa.id, as_site.id, an.id, ad.id, ac.id, fq.id;

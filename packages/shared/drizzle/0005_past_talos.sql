@@ -1,1 +1,0 @@
-ALTER TABLE "map_details" ADD COLUMN "id" serial PRIMARY KEY NOT NULL;

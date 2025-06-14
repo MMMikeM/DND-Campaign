@@ -25,7 +25,7 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
 	itemHistory: many(itemNotableHistory),
 	itemRelationships: many(itemRelationships),
-	destinationInvolvement: many(narrativeDestinationParticipants),
+	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	questHooks: many(questHooks),
 	questStageDeliveries: many(questStages),
 	stageInvolvement: many(npcStageInvolvement),

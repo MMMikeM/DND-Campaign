@@ -46,7 +46,7 @@ export const narrativeDestinationQuestRoles = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		narrativeDestinationId: cascadeFk("destination_id", narrativeDestinations.id),
+		narrativeDestinationId: cascadeFk("narrative_destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
 
 		role: oneOf("role", questRoles),
