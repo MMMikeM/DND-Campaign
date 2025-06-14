@@ -7,8 +7,8 @@ const {
 	questTables: {
 		quests,
 		questStages,
-		stageDecisions,
-		questRelationships,
+		questStageDecisions,
+		questRelations,
 		questHooks,
 		questParticipants,
 		npcStageInvolvement,
@@ -42,8 +42,8 @@ type TableNames = CreateTableNames<typeof tables.questTables>
 export const tableEnum = [
 	"quests",
 	"questStages",
-	"stageDecisions",
-	"questRelationships",
+	"questStageDecisions",
+	"questRelations",
 	"questHooks",
 	"questParticipants",
 	"npcStageInvolvement",
@@ -78,7 +78,7 @@ export const schemas = {
 		.strict()
 		.describe("Adventures with objectives, rewards, and narrative impact that drive the campaign forward"),
 
-	questRelationships: createInsertSchema(questRelationships, {
+	questRelations: createInsertSchema(questRelations, {
 		sourceQuestId: id.describe("ID of the source quest in this relationship"),
 		targetQuestId: optionalId.describe("ID of the target quest in this relationship"),
 		relationshipType: z
@@ -117,7 +117,7 @@ export const schemas = {
 		.strict()
 		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
 
-	stageDecisions: createInsertSchema(stageDecisions, {
+	questStageDecisions: createInsertSchema(questStageDecisions, {
 		questId: id.describe("ID of quest this decision belongs to"),
 		fromQuestStageId: id.describe("ID of stage where this decision occurs"),
 		toQuestStageId: optionalId.describe("ID of stage this decision leads to if taken"),

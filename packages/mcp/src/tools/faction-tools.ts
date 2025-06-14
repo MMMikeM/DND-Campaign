@@ -29,8 +29,8 @@ export const entityGetters = createEntityGetters({
 					},
 				},
 				members: { with: { npc: { columns: { name: true, id: true } } } },
-				incomingRelationships: { with: { sourceFaction: { columns: { name: true, id: true } } } },
-				outgoingRelationships: { with: { targetFaction: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceFaction: { columns: { name: true, id: true } } } },
+				outgoingRelations: { with: { targetFaction: { columns: { name: true, id: true } } } },
 			},
 		}),
 	faction_diplomacy_by_id: (id: number) =>

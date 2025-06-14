@@ -7,7 +7,7 @@ const {
 	narrativeTables: {
 		narrativeDestinations,
 		narrativeDestinationQuestRoles,
-		narrativeDestinationRelationships,
+		narrativeDestinationRelations,
 		narrativeDestinationParticipants,
 		enums,
 	},
@@ -21,7 +21,7 @@ type TableNames = CreateTableNames<typeof tables.narrativeTables>
 export const tableEnum = [
 	"narrativeDestinations",
 	"narrativeDestinationQuestRoles",
-	"narrativeDestinationRelationships",
+	"narrativeDestinationRelations",
 	"narrativeDestinationParticipants",
 ] as const satisfies TableNames
 
@@ -61,7 +61,7 @@ export const schemas = {
 		.strict()
 		.describe("Links quests to narrative arcs, defining how individual adventures build toward larger stories"),
 
-	narrativeDestinationRelationships: createInsertSchema(narrativeDestinationRelationships, {
+	narrativeDestinationRelations: createInsertSchema(narrativeDestinationRelations, {
 		sourceNarrativeDestinationId: id.describe("ID of the source narrative destination"),
 		targetNarrativeDestinationId: id.describe("ID of the target narrative destination"),
 		relationshipType: z.enum(destinationRelationshipTypes).describe("Type of relationship between destinations"),

@@ -17,7 +17,7 @@ export const entityGetters = createEntityGetters({
 			with: {
 				questStage: { columns: { name: true, id: true } },
 				relatedQuest: { columns: { name: true, id: true } },
-				triggeringStageDecision: { columns: { name: true, id: true } },
+				triggeringStageDecision: { with: { fromStage: { columns: { name: true, id: true } } } },
 			},
 		}),
 

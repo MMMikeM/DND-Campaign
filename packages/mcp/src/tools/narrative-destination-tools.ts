@@ -1,6 +1,6 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
-import { schemas, tableEnum } from "./narrative-tools.schema"
+import { schemas, tableEnum } from "./narrative-destination-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
@@ -11,16 +11,16 @@ export const entityGetters = createEntityGetters({
 	all_narrative_destinations: () => db.query.narrativeDestinations.findMany({}),
 	all_narrative_destination_participants: () => db.query.narrativeDestinationParticipants.findMany({}),
 	all_narrative_destination_quest_roles: () => db.query.narrativeDestinationQuestRoles.findMany({}),
-	all_narrative_destination_relationships: () => db.query.narrativeDestinationRelationships.findMany({}),
+	all_narrative_destination_relations: () => db.query.narrativeDestinationRelations.findMany({}),
 
 	narrative_destination_by_id: (id: number) =>
 		db.query.narrativeDestinations.findFirst({
 			where: (narrativeDestinations, { eq }) => eq(narrativeDestinations.id, id),
 			with: {
 				foreshadowingTarget: true,
-				incomingRelationships: true,
-				itemRelationships: true,
-				outgoingRelationships: true,
+				incomingRelations: true,
+				itemRelations: true,
+				outgoingRelations: true,
 				participantInvolvement: true,
 				questRoles: true,
 				region: true,
@@ -45,9 +45,9 @@ export const entityGetters = createEntityGetters({
 				npc: true,
 			},
 		}),
-	narrative_destination_relationship_by_id: (id: number) =>
-		db.query.narrativeDestinationRelationships.findFirst({
-			where: (narrativeDestinationRelationships, { eq }) => eq(narrativeDestinationRelationships.id, id),
+	narrative_destination_relation_by_id: (id: number) =>
+		db.query.narrativeDestinationRelations.findFirst({
+			where: (narrativeDestinationRelations, { eq }) => eq(narrativeDestinationRelations.id, id),
 			with: {
 				sourceDestination: true,
 				targetDestination: true,

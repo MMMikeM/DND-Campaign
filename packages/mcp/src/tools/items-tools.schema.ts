@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
-	itemTables: { items, itemNotableHistory, itemRelationships, enums },
+	itemTables: { items, itemNotableHistory, itemRelations, enums },
 } = tables
 
 const { itemTypes, rarityLevels, itemRelationshipTypes, narrativeRoles, perceivedSimplicityLevels, targetEntityTypes } =
@@ -12,7 +12,7 @@ const { itemTypes, rarityLevels, itemRelationshipTypes, narrativeRoles, perceive
 
 type TableNames = CreateTableNames<typeof tables.itemTables>
 
-export const tableEnum = ["items", "itemNotableHistory", "itemRelationships"] as const satisfies TableNames
+export const tableEnum = ["items", "itemNotableHistory", "itemRelations"] as const satisfies TableNames
 
 export const schemas = {
 	items: createInsertSchema(items, {
@@ -55,7 +55,7 @@ export const schemas = {
 		.strict()
 		.describe("Historical events and ownership changes for items"),
 
-	itemRelationships: createInsertSchema(itemRelationships, {
+	itemRelations: createInsertSchema(itemRelations, {
 		targetEntityType: z.enum(targetEntityTypes).describe("Type of entity this relationship belongs to"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
 		description: (s) => s.describe("Description of the relationship in point form"),
