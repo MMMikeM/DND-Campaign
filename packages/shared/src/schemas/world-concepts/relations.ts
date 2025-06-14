@@ -3,32 +3,32 @@ import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelationships } from "../items/tables"
+import { itemRelations } from "../items/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
-import { worldConceptLinks, worldConceptRelationships, worldConcepts } from "./tables"
+import { worldConceptLinks, worldConceptRelations, worldConcepts } from "./tables"
 
 export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
-	outgoingRelationships: many(worldConceptRelationships, {
+	outgoingRelations: many(worldConceptRelations, {
 		relationName: "sourceWorldConceptInRelationship",
 	}),
-	incomingRelationships: many(worldConceptRelationships, {
+	incomingRelations: many(worldConceptRelations, {
 		relationName: "targetWorldConceptInRelationship",
 	}),
 	links: many(worldConceptLinks),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForWorldConcept" }),
 }))
 
-export const worldConceptRelationshipsRelations = relations(worldConceptRelationships, ({ one }) => ({
+export const worldConceptRelationTargets = relations(worldConceptRelations, ({ one }) => ({
 	sourceWorldConcept: one(worldConcepts, {
-		fields: [worldConceptRelationships.sourceWorldConceptId],
+		fields: [worldConceptRelations.sourceWorldConceptId],
 		references: [worldConcepts.id],
 		relationName: "sourceWorldConceptInRelationship",
 	}),
 	targetWorldConcept: one(worldConcepts, {
-		fields: [worldConceptRelationships.targetWorldConceptId],
+		fields: [worldConceptRelations.targetWorldConceptId],
 		references: [worldConcepts.id],
 		relationName: "targetWorldConceptInRelationship",
 	}),

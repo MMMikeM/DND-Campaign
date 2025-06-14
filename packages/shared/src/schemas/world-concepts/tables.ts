@@ -78,8 +78,8 @@ export const worldConcepts = pgTable("world_concepts", {
 	questHooks: list("quest_hooks"),
 })
 
-export const worldConceptRelationships = pgTable(
-	"world_concept_relationships",
+export const worldConceptRelations = pgTable(
+	"world_concept_relations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),

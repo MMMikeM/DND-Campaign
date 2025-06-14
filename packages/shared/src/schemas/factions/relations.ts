@@ -2,7 +2,7 @@
 import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelationships } from "../items/tables"
+import { itemRelations } from "../items/tables"
 import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships } from "../npcs/tables"
@@ -12,8 +12,8 @@ import { worldConceptLinks } from "../world-concepts/tables"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
-	outgoingRelationships: many(factionDiplomacy, { relationName: "sourceFaction" }),
-	incomingRelationships: many(factionDiplomacy, { relationName: "targetFaction" }),
+	outgoingRelations: many(factionDiplomacy, { relationName: "sourceFaction" }),
+	incomingRelations: many(factionDiplomacy, { relationName: "targetFaction" }),
 
 	agendas: many(factionAgendas),
 	members: many(npcFactionMemberships),
@@ -24,7 +24,7 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	consequences: many(consequences),
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForFaction" }),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 	worldConceptLinks: many(worldConceptLinks),
 
 	primaryHqSite: one(sites, {

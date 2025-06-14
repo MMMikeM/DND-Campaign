@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelationships } from "../items/tables"
+import { itemRelations } from "../items/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -10,7 +10,7 @@ import { worldConceptLinks } from "../world-concepts/tables"
 import {
 	narrativeDestinationParticipants,
 	narrativeDestinationQuestRoles,
-	narrativeDestinationRelationships,
+	narrativeDestinationRelations,
 	narrativeDestinations,
 } from "./tables"
 
@@ -24,24 +24,24 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 		references: [conflicts.id],
 	}),
 
-	outgoingRelationships: many(narrativeDestinationRelationships, { relationName: "sourceDestination" }),
-	incomingRelationships: many(narrativeDestinationRelationships, { relationName: "targetDestination" }),
+	outgoingRelations: many(narrativeDestinationRelations, { relationName: "sourceDestination" }),
+	incomingRelations: many(narrativeDestinationRelations, { relationName: "targetDestination" }),
 
 	questRoles: many(narrativeDestinationQuestRoles),
 	participantInvolvement: many(narrativeDestinationParticipants),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 	worldConceptLinks: many(worldConceptLinks),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNarrativeDestination" }),
 }))
 
-export const destinationRelationshipsRelations = relations(narrativeDestinationRelationships, ({ one }) => ({
+export const narrativeDestinationRelationTargets = relations(narrativeDestinationRelations, ({ one }) => ({
 	sourceDestination: one(narrativeDestinations, {
-		fields: [narrativeDestinationRelationships.sourceNarrativeDestinationId],
+		fields: [narrativeDestinationRelations.sourceNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "sourceDestination",
 	}),
 	targetDestination: one(narrativeDestinations, {
-		fields: [narrativeDestinationRelationships.targetNarrativeDestinationId],
+		fields: [narrativeDestinationRelations.targetNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 		relationName: "targetDestination",
 	}),

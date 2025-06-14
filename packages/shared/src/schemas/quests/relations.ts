@@ -2,25 +2,29 @@
 import { relations } from "drizzle-orm"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelationships } from "../items/tables"
+import { itemRelations } from "../items/tables"
 import { narrativeDestinationQuestRoles } from "../narrative-destinations/tables"
 import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
 import { worldConceptLinks } from "../world-concepts/tables"
+import * as stageModule from "./stages/relations"
 import { questStages } from "./stages/tables"
-import { questHooks, questParticipants, questRelationships, quests } from "./tables"
+import { questHooks, questParticipants, questRelations, quests } from "./tables"
+
+const { npcStageInvolvementRelations, questStagesRelations, questStageDecisionsRelations } = stageModule
+export { npcStageInvolvementRelations, questStagesRelations, questStageDecisionsRelations }
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {
 		fields: [quests.regionId],
 		references: [regions.id],
 	}),
-	outgoingRelationships: many(questRelationships, {
-		relationName: "questOutgoingRelationships",
+	outgoingRelations: many(questRelations, {
+		relationName: "questoutgoingRelations",
 	}),
-	incomingRelationships: many(questRelationships, {
-		relationName: "questIncomingRelationships",
+	incomingRelations: many(questRelations, {
+		relationName: "questincomingRelations",
 	}),
 	stages: many(questStages),
 
@@ -32,20 +36,20 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	triggeredEvents: many(narrativeEvents),
 	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromQuest" }),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForQuest" }),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 	worldConceptLinks: many(worldConceptLinks),
 }))
 
-export const questRelationshipsRelations = relations(questRelationships, ({ one }) => ({
+export const questRelationTargets = relations(questRelations, ({ one }) => ({
 	sourceQuest: one(quests, {
-		fields: [questRelationships.sourceQuestId],
+		fields: [questRelations.sourceQuestId],
 		references: [quests.id],
-		relationName: "questOutgoingRelationships",
+		relationName: "questoutgoingRelations",
 	}),
 	targetQuest: one(quests, {
-		fields: [questRelationships.targetQuestId],
+		fields: [questRelations.targetQuestId],
 		references: [quests.id],
-		relationName: "questIncomingRelationships",
+		relationName: "questincomingRelations",
 	}),
 }))
 

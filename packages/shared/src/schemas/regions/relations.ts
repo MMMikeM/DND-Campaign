@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemNotableHistory, itemRelationships } from "../items/tables"
+import { itemNotableHistory, itemRelations } from "../items/tables"
 import { maps } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
@@ -69,7 +69,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromSite" }),
 	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForSite" }),
 	itemHistory: many(itemNotableHistory),
-	itemRelationships: many(itemRelationships),
+	itemRelations: many(itemRelations),
 
 	map: one(maps, {
 		fields: [sites.mapId],

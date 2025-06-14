@@ -42,8 +42,8 @@ export const items = pgTable("items", {
 	mechanicalEffects: list("mechanical_effects"),
 })
 
-export const itemRelationships = pgTable(
-	"item_relationships",
+export const itemRelations = pgTable(
+	"item_relations",
 	{
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
