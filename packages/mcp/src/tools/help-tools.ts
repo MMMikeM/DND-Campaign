@@ -4,12 +4,12 @@ import zodToMCP from "../zodToMcp"
 import { schemas } from "./help-tools.schema"
 import {
 	conflicts,
-	events,
 	factions,
 	fuzzySearch,
 	getEntity,
 	items,
-	narrative,
+	narrativeDestinations,
+	narrativeEvents,
 	npcs,
 	quests,
 	regions,
@@ -27,12 +27,12 @@ const handler = async (args?: Record<string, unknown>) => {
 	// What's the deal
 	const categories = {
 		conflicts: conflicts.tools,
-		events: events.tools,
+		narrativeEvents: narrativeEvents.tools,
 		factions: factions.tools,
 		fuzzySearch: fuzzySearch.tools,
 		getEntity: getEntity.tools,
 		items: items.tools,
-		narrative: narrative.tools,
+		narrativeDestinations: narrativeDestinations.tools,
 		npcs: npcs.tools,
 		quests: quests.tools,
 		regions: regions.tools,

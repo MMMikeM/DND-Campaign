@@ -32,10 +32,10 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 			where: (factions, { eq }) => eq(factions.name, factionName),
 			with: {
 				agendas: true,
-				outgoingRelationships: {
+				outgoingRelations: {
 					with: { targetFaction: { columns: { name: true, type: true } } },
 				},
-				incomingRelationships: {
+				incomingRelations: {
 					with: { sourceFaction: { columns: { name: true, type: true } } },
 				},
 			},
@@ -68,13 +68,13 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 				ultimate_aim: agenda.ultimateAim,
 			})),
 			diplomatic_relations: {
-				allies: faction.outgoingRelationships
+				allies: faction.outgoingRelations
 					.filter((rel) => rel.diplomaticStatus === "ally")
 					.map((rel) => rel.targetFaction.name),
-				enemies: faction.outgoingRelationships
+				enemies: faction.outgoingRelations
 					.filter((rel) => rel.diplomaticStatus === "enemy")
 					.map((rel) => rel.targetFaction.name),
-				rivals: faction.outgoingRelationships
+				rivals: faction.outgoingRelations
 					.filter((rel) => rel.diplomaticStatus === "rival")
 					.map((rel) => rel.targetFaction.name),
 			},

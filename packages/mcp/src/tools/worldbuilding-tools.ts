@@ -9,14 +9,14 @@ const createEntityGetters = createEntityGettersFactory(tables.worldbuildingTable
 
 export const entityGetters = createEntityGetters({
 	all_world_concepts: () => db.query.worldConcepts.findMany({}),
-	all_world_concept_relationships: () => db.query.worldConceptRelationships.findMany({}),
+	all_world_concept_relations: () => db.query.worldConceptRelations.findMany({}),
 	all_world_concept_links: () => db.query.worldConceptLinks.findMany({}),
 
 	world_concept_by_id: (id: number) =>
 		db.query.worldConcepts.findFirst({
 			where: (worldConcepts, { eq }) => eq(worldConcepts.id, id),
 			with: {
-				itemRelationships: true,
+				itemRelations: true,
 				links: {
 					with: {
 						linkedConflict: true,
@@ -28,14 +28,14 @@ export const entityGetters = createEntityGetters({
 					},
 				},
 				foreshadowingTarget: true,
-				incomingRelationships: true,
-				outgoingRelationships: true,
+				incomingRelations: true,
+				outgoingRelations: true,
 			},
 		}),
 
-	world_concept_relationship_by_id: (id: number) =>
-		db.query.worldConceptRelationships.findFirst({
-			where: (worldConceptRelationships, { eq }) => eq(worldConceptRelationships.id, id),
+	world_concept_relation_by_id: (id: number) =>
+		db.query.worldConceptRelations.findFirst({
+			where: (worldConceptRelations, { eq }) => eq(worldConceptRelations.id, id),
 			with: {
 				sourceWorldConcept: true,
 				targetWorldConcept: true,

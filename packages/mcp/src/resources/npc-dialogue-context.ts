@@ -39,7 +39,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 				siteAssociations: {
 					with: { site: { columns: { name: true, type: true } } },
 				},
-				outgoingRelationships: {
+				outgoingRelations: {
 					with: { targetNpc: { columns: { name: true, occupation: true } } },
 				},
 			},
@@ -76,7 +76,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 				site_type: rel.site?.type || "Unknown",
 				description: rel.description,
 			})),
-			relationships: npc.outgoingRelationships.map((rel) => ({
+			relationships: npc.outgoingRelations.map((rel) => ({
 				related_npc: rel.targetNpc?.name || "Unknown",
 				occupation: rel.targetNpc?.occupation || "Unknown",
 				relationship_type: rel.relationshipType,

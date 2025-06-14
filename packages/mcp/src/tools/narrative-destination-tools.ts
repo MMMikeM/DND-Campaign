@@ -32,7 +32,7 @@ export const entityGetters = createEntityGetters({
 		db.query.narrativeDestinationQuestRoles.findFirst({
 			where: (narrativeDestinationQuestRoles, { eq }) => eq(narrativeDestinationQuestRoles.id, id),
 			with: {
-				destination: true,
+				narrativeDestination: true,
 				quest: true,
 			},
 		}),
@@ -40,7 +40,7 @@ export const entityGetters = createEntityGetters({
 		db.query.narrativeDestinationParticipants.findFirst({
 			where: (narrativeDestinationParticipants, { eq }) => eq(narrativeDestinationParticipants.id, id),
 			with: {
-				destination: true,
+				narrativeDestination: true,
 				faction: true,
 				npc: true,
 			},
@@ -49,19 +49,19 @@ export const entityGetters = createEntityGetters({
 		db.query.narrativeDestinationRelations.findFirst({
 			where: (narrativeDestinationRelations, { eq }) => eq(narrativeDestinationRelations.id, id),
 			with: {
-				sourceDestination: true,
-				targetDestination: true,
+				sourceNarrativeDestination: true,
+				targetNarrativeDestination: true,
 			},
 		}),
 })
 
-export const narrativeToolDefinitions: Record<"manage_narrative", ToolDefinition> = {
-	manage_narrative: {
+export const narrativeDestinationToolDefinitions: Record<"manage_narrative_destination", ToolDefinition> = {
+	manage_narrative_destination: {
 		description: "Manage narrative-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_narrative", tables.narrativeTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_narrative_destination", tables.narrativeTables, tableEnum, schemas),
 		annotations: {
-			title: "Manage Narrative",
+			title: "Manage Narrative Destination",
 			readOnlyHint: false,
 			destructiveHint: false,
 			idempotentHint: false,
