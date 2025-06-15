@@ -3,10 +3,10 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
+import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
-import { worldConceptLinks } from "../world-concepts/tables"
 import {
 	narrativeDestinationParticipants,
 	narrativeDestinationQuestRoles,
@@ -30,7 +30,7 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 	questRoles: many(narrativeDestinationQuestRoles),
 	participantInvolvement: many(narrativeDestinationParticipants),
 	itemRelations: many(itemRelations),
-	worldConceptLinks: many(worldConceptLinks),
+	loreLinks: many(loreLinks),
 	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNarrativeDestination" }),
 }))
 

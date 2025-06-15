@@ -41,17 +41,4 @@ const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
 	},
 })
 
-
-export {
-	list,
-	nullableFk,
-	cascadeFk,
-	string,
-	nullableString,
-	oneOf,
-	nullableOneOf,
-	manyOf,
-	pk,
-	embeddingVector,
-	bytea,
-}
+export { list, nullableFk, cascadeFk, string, nullableString, oneOf, nullableOneOf, manyOf, pk, embeddingVector, bytea }

@@ -39,7 +39,7 @@ const targetEntityTypes = [
 	"quest",
 	"conflict",
 	"narrative_destination",
-	"world_concept",
+	"lore",
 ] as const
 
 export const enums = {

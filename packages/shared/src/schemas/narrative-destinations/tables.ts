@@ -12,8 +12,14 @@ import { enums } from "./enums"
 
 export { enums } from "./enums"
 
-const { arcImportanceLevels, arcTypes, destinationRelationshipTypes, destinationStatuses, emotionalArcs, questRoles } =
-	enums
+const {
+	arcImportanceLevels,
+	arcTypes,
+	destinationRelationshipTypes,
+	destinationStatuses,
+	emotionalArcShapes,
+	questRolesInArc,
+} = enums
 
 export const narrativeDestinations = pgTable("narrative_destinations", {
 	id: pk(),
@@ -28,7 +34,7 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 
 	type: oneOf("type", arcTypes),
 	status: oneOf("status", destinationStatuses),
-	intendedEmotionalArc: oneOf("intended_emotional_arc", emotionalArcs),
+	intendedEmotionalArcShape: oneOf("intended_emotional_arc_shape", emotionalArcShapes),
 
 	promise: string("promise"),
 	payoff: string("payoff"),
@@ -49,7 +55,7 @@ export const narrativeDestinationQuestRoles = pgTable(
 		narrativeDestinationId: cascadeFk("narrative_destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
 
-		role: oneOf("role", questRoles),
+		role: oneOf("role", questRolesInArc),
 
 		sequenceInArc: integer("sequence_in_arc"),
 

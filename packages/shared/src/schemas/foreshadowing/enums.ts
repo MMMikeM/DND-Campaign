@@ -19,7 +19,7 @@ const foreshadowedEntityType = [
 	"conflict",
 	"item",
 	"narrative_destination",
-	"world_concept",
+	"lore",
 	"faction",
 	"site",
 	"abstract_theme",

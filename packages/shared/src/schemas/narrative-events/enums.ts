@@ -2,11 +2,11 @@ const impactSeverity = ["minor", "moderate", "major"] as const
 const eventTypes = ["complication", "escalation", "twist"] as const
 const narrativePlacements = ["early", "middle", "climax", "denouement"] as const
 const rhythmEffects = [
-	"spike_tension",
-	"introduce_mystery",
-	"provide_breather_twist",
-	"force_reassessment_of_plans",
-	"heighten_stakes",
+	"spike_immediate_tension",
+	"introduce_new_mystery",
+	"force_strategic_reassessment",
+	"escalate_existing_stakes",
+	"reveal_and_twist",
 ] as const
 
 const consequenceTypes = [

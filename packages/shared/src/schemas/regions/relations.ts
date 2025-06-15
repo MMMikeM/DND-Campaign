@@ -9,8 +9,8 @@ import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcSiteAssociations } from "../npcs/tables"
 import { questHooks, questStages, quests } from "../quests/tables"
-import { worldConceptLinks } from "../world-concepts/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
+import { loreLinks } from "../lore/tables"
 
 export const regionsRelations = relations(regions, ({ many }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
@@ -22,7 +22,7 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	consequences: many(consequences),
 	narrativeDestinations: many(narrativeDestinations),
 	factionInfluence: many(factionInfluence),
-	worldConceptLinks: many(worldConceptLinks),
+	loreLinks: many(loreLinks),	
 }))
 
 export const areasRelations = relations(areas, ({ one, many }) => ({
