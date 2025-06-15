@@ -66,8 +66,8 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	consequences: many(consequences),
 	factionHqs: many(factions, { relationName: "factionHq" }),
 	factionInfluence: many(factionInfluence),
-	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromSite" }),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForSite" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromSite" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForSite" }),
 	itemHistory: many(itemNotableHistory),
 	itemRelations: many(itemRelations),
 

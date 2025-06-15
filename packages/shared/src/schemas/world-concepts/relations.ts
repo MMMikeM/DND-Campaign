@@ -18,7 +18,7 @@ export const worldConceptsRelations = relations(worldConcepts, ({ many }) => ({
 	}),
 	links: many(worldConceptLinks),
 	itemRelations: many(itemRelations),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForWorldConcept" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForWorldConcept" }),
 }))
 
 export const worldConceptRelationTargets = relations(worldConceptRelations, ({ one }) => ({

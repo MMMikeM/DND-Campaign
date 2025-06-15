@@ -6,18 +6,18 @@ import * as regionRelations from "../schemas/regions/relations"
 import * as conflictRelations from "./conflicts/relations"
 import * as foreshadowingRelations from "./foreshadowing/relations"
 import * as mapRelations from "./maps/relations"
-import * as narrativeRelations from "./narrative-destinations/relations"
-import * as eventRelations from "./narrative-events/relations"
+import * as narrativeDestinationRelations from "./narrative-destinations/relations"
+import * as narrativeEventRelations from "./narrative-events/relations"
 import * as npcRelations from "./npcs/relations"
 import * as worldbuildingRelations from "./world-concepts/relations"
 
 export const relations = {
 	conflictRelations,
-	eventRelations,
+	narrativeEventRelations,
 	factionRelations,
 	foreshadowingRelations,
 	itemRelations,
-	narrativeRelations,
+	narrativeDestinationRelations,
 	npcRelations,
 	questRelations,
 	questStageRelations,
@@ -34,18 +34,18 @@ import * as regionTables from "../schemas/regions/tables"
 import * as conflictTables from "./conflicts/tables"
 import * as foreshadowingTables from "./foreshadowing/tables"
 import * as mapTables from "./maps/tables"
-import * as narrativeTables from "./narrative-destinations/tables"
-import * as eventTables from "./narrative-events/tables"
+import * as narrativeDestinationTables from "./narrative-destinations/tables"
+import * as narrativeEventTables from "./narrative-events/tables"
 import * as npcTables from "./npcs/tables"
 import * as worldbuildingTables from "./world-concepts/tables"
 
 export const tables = {
 	conflictTables,
-	eventTables,
+	narrativeEventTables,
 	factionTables,
 	foreshadowingTables,
 	itemTables,
-	narrativeTables,
+	narrativeDestinationTables,
 	npcTables,
 	questTables,
 	questStageTables,

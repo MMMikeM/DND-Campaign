@@ -11,16 +11,10 @@ import { worldConcepts } from "../world-concepts/tables"
 import { itemNotableHistory, itemRelations, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ many, one }) => ({
-	outgoingRelations: many(itemRelations, {
-		relationName: "sourceItem",
-	}),
-
-	incomingRelations: many(itemRelations, {
-		relationName: "targetItem",
-	}),
+	relations: many(itemRelations),
 
 	notableHistory: many(itemNotableHistory),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForItem" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForItem" }),
 
 	questStage: one(questStages, {
 		fields: [items.questStageId],
@@ -28,51 +22,49 @@ export const itemsRelations = relations(items, ({ many, one }) => ({
 	}),
 }))
 
-export const itemRelationTargets = relations(itemRelations, ({ one }) => ({
-	sourceItem: one(items, {
-		fields: [itemRelations.sourceItemId],
+export const itemRelationsRelations = relations(itemRelations, ({ one }) => ({
+	item: one(items, {
+		fields: [itemRelations.itemId],
 		references: [items.id],
-		relationName: "sourceItem",
 	}),
 
-	targetItem: one(items, {
-		fields: [itemRelations.targetItemId],
+	relatedItem: one(items, {
+		fields: [itemRelations.relatedItemId],
 		references: [items.id],
-		relationName: "targetItem",
 	}),
 
-	targetNpc: one(npcs, {
-		fields: [itemRelations.targetNpcId],
+	npc: one(npcs, {
+		fields: [itemRelations.npcId],
 		references: [npcs.id],
 	}),
 
-	targetFaction: one(factions, {
-		fields: [itemRelations.targetFactionId],
+	faction: one(factions, {
+		fields: [itemRelations.factionId],
 		references: [factions.id],
 	}),
 
-	targetSite: one(sites, {
-		fields: [itemRelations.targetSiteId],
+	site: one(sites, {
+		fields: [itemRelations.siteId],
 		references: [sites.id],
 	}),
 
-	targetQuest: one(quests, {
-		fields: [itemRelations.targetQuestId],
+	quest: one(quests, {
+		fields: [itemRelations.questId],
 		references: [quests.id],
 	}),
 
-	targetConflict: one(conflicts, {
-		fields: [itemRelations.targetConflictId],
+	conflict: one(conflicts, {
+		fields: [itemRelations.conflictId],
 		references: [conflicts.id],
 	}),
 
-	targetNarrativeDestination: one(narrativeDestinations, {
-		fields: [itemRelations.targetNarrativeDestinationId],
+	narrativeDestination: one(narrativeDestinations, {
+		fields: [itemRelations.narrativeDestinationId],
 		references: [narrativeDestinations.id],
 	}),
 
-	targetWorldConcept: one(worldConcepts, {
-		fields: [itemRelations.targetWorldConceptId],
+	worldConcept: one(worldConcepts, {
+		fields: [itemRelations.worldConceptId],
 		references: [worldConcepts.id],
 	}),
 }))

@@ -11,7 +11,7 @@ import { worldConceptLinks } from "../world-concepts/tables"
 import { conflictParticipants, conflicts } from "./tables"
 
 export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
-	primaryRegion: one(regions, {
+	region: one(regions, {
 		fields: [conflicts.regionId],
 		references: [regions.id],
 	}),
@@ -19,7 +19,7 @@ export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 	consequences: many(consequences),
 	affectedByConsequences: many(consequences),
 	narrativeDestinations: many(narrativeDestinations),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForConflict" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForConflict" }),
 	itemRelations: many(itemRelations),
 	worldConceptLinks: many(worldConceptLinks),
 }))
