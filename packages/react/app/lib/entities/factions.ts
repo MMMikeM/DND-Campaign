@@ -25,12 +25,12 @@ const factionConfig = {
 						triggerQuest: { columns: { id: true, name: true } },
 						affectedArea: { columns: { id: true, name: true } },
 						affectedConflict: { columns: { id: true, name: true } },
-						affectedDestination: { columns: { id: true, name: true } },
+						affectedNarrativeDestination: { columns: { id: true, name: true } },
 					},
 				},
 				narrativeDestinationInvolvement: {
 					with: {
-						destination: { columns: { id: true, name: true } },
+						narrativeDestination: { columns: { id: true, name: true } },
 						faction: { columns: { id: true, name: true } },
 						npc: { columns: { id: true, name: true } },
 					},

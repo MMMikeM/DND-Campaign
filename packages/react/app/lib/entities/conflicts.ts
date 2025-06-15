@@ -19,7 +19,7 @@ const conflictConfig = {
 						affectedArea: { columns: { id: true, name: true } },
 						affectedFaction: { columns: { id: true, name: true } },
 						affectedConflict: { columns: { id: true, name: true } },
-						affectedDestination: { columns: { id: true, name: true } },
+						affectedNarrativeDestination: { columns: { id: true, name: true } },
 						affectedNpc: { columns: { id: true, name: true } },
 						affectedRegion: { columns: { id: true, name: true } },
 						affectedSite: { columns: { id: true, name: true } },
@@ -67,14 +67,14 @@ const conflictConfig = {
 						},
 						participantInvolvement: {
 							with: {
-								destination: { columns: { id: true, name: true } },
+								narrativeDestination: { columns: { id: true, name: true } },
 								faction: { columns: { id: true, name: true } },
 								npc: { columns: { id: true, name: true } },
 							},
 						},
 						questRoles: {
 							with: {
-								destination: { columns: { id: true, name: true } },
+								narrativeDestination: { columns: { id: true, name: true } },
 								quest: { columns: { id: true, name: true } },
 							},
 						},

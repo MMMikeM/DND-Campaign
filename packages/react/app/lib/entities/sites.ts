@@ -16,7 +16,7 @@ const siteConfig = {
 				foreshadowingSource: true,
 				foreshadowingTarget: true,
 				itemHistory: true,
-				itemRelationships: true,
+				itemRelations: true,
 				questHooks: true,
 				map: true,
 				npcAssociations: true,
