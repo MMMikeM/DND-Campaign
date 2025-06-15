@@ -3,11 +3,11 @@ import { relations } from "drizzle-orm"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
+import { loreLinks } from "../lore/tables"
 import { narrativeDestinationQuestRoles } from "../narrative-destinations/tables"
 import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
-import { worldConceptLinks } from "../world-concepts/tables"
 import * as stageModule from "./stages/relations"
 import { questStages } from "./stages/tables"
 import { questHooks, questParticipants, questRelations, quests } from "./tables"
@@ -37,7 +37,7 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromQuest" }),
 	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForQuest" }),
 	itemRelations: many(itemRelations),
-	worldConceptLinks: many(worldConceptLinks),
+	loreLinks: many(loreLinks),
 }))
 
 export const questRelationTargets = relations(questRelations, ({ one }) => ({

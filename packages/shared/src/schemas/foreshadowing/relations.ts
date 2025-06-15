@@ -2,12 +2,12 @@ import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
+import { lore } from "../lore/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { questStages, quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { worldConcepts } from "../world-concepts/tables"
 import { foreshadowing } from "./tables"
 
 export const foreshadowingRelations = relations(foreshadowing, ({ one }) => ({
@@ -41,10 +41,10 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one }) => ({
 		references: [narrativeDestinations.id],
 		relationName: "foreshadowingForNarrativeDestination",
 	}),
-	targetWorldConcept: one(worldConcepts, {
-		fields: [foreshadowing.targetWorldConceptId],
-		references: [worldConcepts.id],
-		relationName: "foreshadowingForWorldConcept",
+	targetLore: one(lore, {
+		fields: [foreshadowing.targetLoreId],
+		references: [lore.id],
+		relationName: "foreshadowingForLore",
 	}),
 	targetFaction: one(factions, {
 		fields: [foreshadowing.targetFactionId],

@@ -3,12 +3,12 @@ import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
+import { loreLinks } from "../lore/tables"
 import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships } from "../npcs/tables"
 import { questHooks, questParticipants } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { worldConceptLinks } from "../world-concepts/tables"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
@@ -25,7 +25,7 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForFaction" }),
 	itemRelations: many(itemRelations),
-	worldConceptLinks: many(worldConceptLinks),
+	loreLinks: many(loreLinks),
 
 	primaryHqSite: one(sites, {
 		fields: [factions.hqSiteId],
