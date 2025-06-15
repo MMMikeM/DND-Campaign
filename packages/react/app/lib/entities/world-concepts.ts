@@ -7,7 +7,7 @@ const worldConceptConfig = {
 		db.query.worldConcepts.findFirst({
 			where: (changes, { eq }) => eq(changes.id, id),
 			with: {
-				itemRelationships: {
+				itemRelations: {
 					with: {
 						sourceItem: { columns: { id: true, name: true } },
 						targetConflict: { columns: { id: true, name: true } },
@@ -31,8 +31,8 @@ const worldConceptConfig = {
 					},
 				},
 				foreshadowingTarget: true,
-				incomingRelationships: { with: { sourceWorldConcept: { columns: { id: true, name: true } } } },
-				outgoingRelationships: { with: { targetWorldConcept: { columns: { id: true, name: true } } } },
+				incomingRelations: { with: { sourceWorldConcept: { columns: { id: true, name: true } } } },
+				outgoingRelations: { with: { targetWorldConcept: { columns: { id: true, name: true } } } },
 			},
 		}),
 	getAll: () => db.query.worldConcepts.findMany({}),

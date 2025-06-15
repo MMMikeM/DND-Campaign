@@ -9,8 +9,8 @@ const narrativeDestinationConfig = {
 			with: {
 				foreshadowingTarget: true,
 				conflict: { columns: { id: true, name: true } },
-				incomingRelations: { with: { sourceDestination: { columns: { id: true, name: true } } } },
-				outgoingRelations: { with: { targetDestination: { columns: { id: true, name: true } } } },
+				incomingRelations: { with: { sourceNarrativeDestination: { columns: { id: true, name: true } } } },
+				outgoingRelations: { with: { targetNarrativeDestination: { columns: { id: true, name: true } } } },
 				participantInvolvement: { with: { faction: { columns: { id: true, name: true } } } },
 				questRoles: { with: { quest: { columns: { id: true, name: true } } } },
 				region: { columns: { id: true, name: true } },
