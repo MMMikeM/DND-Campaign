@@ -21,21 +21,19 @@ export const entityGetters = createEntityGetters({
 						locationSite: { columns: { name: true, id: true } },
 					},
 				},
-				outgoingRelations: {
+				incomingForeshadowing: true,
+
+				questStage: true,
+				relations: {
 					with: {
-						targetConflict: { columns: { name: true, id: true } },
-						targetFaction: { columns: { name: true, id: true } },
-						targetNpc: { columns: { name: true, id: true } },
-						targetQuest: { columns: { name: true, id: true } },
-						targetSite: { columns: { name: true, id: true } },
-						targetWorldConcept: { columns: { name: true, id: true } },
-						targetItem: { columns: { name: true, id: true } },
-						targetNarrativeDestination: { columns: { name: true, id: true } },
-					},
-				},
-				incomingRelations: {
-					with: {
-						sourceItem: { columns: { name: true, id: true } },
+						conflict: true,
+						faction: true,
+						npc: true,
+						quest: true,
+						site: true,
+						lore: true,
+						item: true,
+						narrativeDestination: true,
 					},
 				},
 			},
@@ -51,15 +49,15 @@ export const entityGetters = createEntityGetters({
 		db.query.itemRelations.findFirst({
 			where: (itemRelations, { eq }) => eq(itemRelations.id, id),
 			with: {
-				targetConflict: true,
-				targetFaction: true,
-				targetNpc: true,
-				targetQuest: true,
-				targetSite: true,
-				targetWorldConcept: true,
-				targetItem: true,
-				targetNarrativeDestination: true,
-				sourceItem: true,
+				relatedItem: true,
+				conflict: true,
+				faction: true,
+				npc: true,
+				quest: true,
+				site: true,
+				lore: true,
+				item: true,
+				narrativeDestination: true,
 			},
 		}),
 })

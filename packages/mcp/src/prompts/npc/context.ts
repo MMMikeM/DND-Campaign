@@ -131,8 +131,8 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			columns: { id: true, name: true, type: true, status: true },
 		})
 
-		// Get world concepts with their links to other entities
-		const worldConcepts = await db.query.worldConcepts.findMany({
+		// Get lore with their links to other entities
+		const lore = await db.query.lore.findMany({
 			with: {
 				links: {
 					columns: {
@@ -147,7 +147,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			columns: {
 				id: true,
 				name: true,
-				conceptType: true,
+				loreType: true,
 				summary: true,
 			},
 		})
@@ -199,12 +199,11 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 					),
 				)
 
-				// Get cultural concepts relevant to the region
-				const culturalInfluences = worldConcepts.filter(
-					(concept) =>
-						concept.conceptType === "cultural" ||
-						concept.conceptType === "cultural_group" ||
-						concept.links.some((link) => link.regionId && regionIds.includes(link.regionId)),
+				// Get cultural lore relevant to the region
+				const culturalInfluences = lore.filter(
+					(loreItem) =>
+						loreItem.loreType === "cultural" ||
+						loreItem.links.some((link) => link.regionId && regionIds.includes(link.regionId)),
 				)
 
 				regionalContext = {
@@ -240,12 +239,12 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 						name: f.name,
 						type: f.type,
 					})),
-					culturalInfluences: culturalInfluences.map((concept) => ({
-						id: concept.id,
-						name: concept.name,
-						conceptType: concept.conceptType,
-						summary: concept.summary,
-						links: concept.links,
+					culturalInfluences: culturalInfluences.map((loreItem) => ({
+						id: loreItem.id,
+						name: loreItem.name,
+						loreType: loreItem.loreType,
+						summary: loreItem.summary,
+						links: loreItem.links,
 					})),
 				}
 			}
@@ -295,7 +294,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			activeConflicts,
 			quests,
 			narrativeArcs,
-			worldConcepts,
+			lore,
 			foreshadowingSeeds,
 			regionalContext,
 			campaignAnalysis,
@@ -310,7 +309,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			activeConflicts: activeConflicts.length,
 			quests: quests.length,
 			narrativeArcs: narrativeArcs.length,
-			worldConcepts: worldConcepts.length,
+			lore: lore.length,
 			foreshadowingSeeds: foreshadowingSeeds.length,
 			hasRegionalContext: !!regionalContext,
 		})

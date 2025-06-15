@@ -72,7 +72,7 @@ ${JSON.stringify(context.nearbyEntities, null, 2)}
 }
 
 **World Context Links:**
-${JSON.stringify(context.worldConceptLinks.slice(0, 5), null, 2)}
+			${JSON.stringify(context.loreLinks.slice(0, 5), null, 2)}
 
 **Regional Control:**
 ${JSON.stringify(context.regionConnections.slice(0, 5), null, 2)}

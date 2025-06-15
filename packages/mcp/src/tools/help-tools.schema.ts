@@ -16,7 +16,7 @@ const categoryEnum = z
 		"npcs",
 		"quests",
 		"regions",
-		"worldConcepts",
+		"lore",
 	])
 	.optional()
 	.describe("Optional category to filter tools")

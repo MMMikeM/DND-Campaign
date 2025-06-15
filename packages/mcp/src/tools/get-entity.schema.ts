@@ -12,7 +12,7 @@ const allTableNames = [
 	...Object.keys(tables.npcTables),
 	...Object.keys(tables.questTables),
 	...Object.keys(tables.regionTables),
-	...Object.keys(tables.worldConceptTables),
+	...Object.keys(tables.loreTables),
 ] as const
 
 export const getEntitySchema = z

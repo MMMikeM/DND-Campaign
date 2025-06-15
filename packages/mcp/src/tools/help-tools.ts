@@ -8,12 +8,12 @@ import {
 	fuzzySearch,
 	getEntity,
 	items,
+	lore,
 	narrativeDestinations,
 	narrativeEvents,
 	npcs,
 	quests,
 	regions,
-	worldbuilding,
 } from "./tools"
 import type { ToolDefinition } from "./utils/types"
 
@@ -36,7 +36,7 @@ const handler = async (args?: Record<string, unknown>) => {
 		npcs: npcs.tools,
 		quests: quests.tools,
 		regions: regions.tools,
-		worldbuilding: worldbuilding.tools,
+		lore: lore.tools,
 	}
 
 	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]

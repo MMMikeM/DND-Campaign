@@ -24,7 +24,7 @@ export const entityGetters = createEntityGetters({
 				targetNarrativeDestination: { columns: { name: true, id: true } },
 				targetNpc: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
-				targetWorldConcept: { columns: { name: true, id: true } },
+				targetLore: { columns: { name: true, id: true } },
 				targetNarrativeEvent: { columns: { name: true, id: true } },
 				targetSite: { columns: { name: true, id: true } },
 			},

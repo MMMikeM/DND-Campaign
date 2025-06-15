@@ -5,13 +5,13 @@ import { entityGetters as factionGetters } from "./faction-tools"
 import { entityGetters as foreshadowingGetters } from "./foreshadowing-tools"
 import { getEntitySchema } from "./get-entity.schema"
 import { entityGetters as itemsGetters } from "./items-tools"
+import { entityGetters as loreGetters } from "./lore-tools"
 import { entityGetters as narrativeGetters } from "./narrative-destination-tools"
 import { entityGetters as eventsGetters } from "./narrative-events-tools"
 import { entityGetters as npcGetters } from "./npc-tools"
 import { entityGetters as questGetters } from "./quest-tools"
 import { entityGetters as regionGetters } from "./region-tools"
 import type { ToolDefinition, ToolHandler, ToolHandlerReturn } from "./utils/types"
-import { entityGetters as worldbuildingGetters } from "./world-concept-tools"
 
 // Note: embedding-tools do not follow the standard getter pattern
 
@@ -25,7 +25,7 @@ const combinedGetters = {
 	...npcGetters,
 	...questGetters,
 	...regionGetters,
-	...worldbuildingGetters,
+	...loreGetters,
 }
 
 const formatResponse = (message: string, isError = false): ToolHandlerReturn => ({

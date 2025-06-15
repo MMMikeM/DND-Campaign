@@ -108,12 +108,12 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 			},
 		})
 
-		// Get world concept connections
-		const worldConceptLinks = await db.query.worldConceptLinks.findMany({
-			where: (wcl, { isNotNull }) => isNotNull(wcl.factionId),
+		// Get lore connections
+		const loreLinks = await db.query.loreLinks.findMany({
+			where: (ll, { isNotNull }) => isNotNull(ll.factionId),
 			with: {
 				linkedFaction: { columns: { id: true, name: true } },
-				worldConcept: { columns: { id: true, name: true, conceptType: true, status: true } },
+				lore: { columns: { id: true, name: true, loreType: true } },
 			},
 			columns: {
 				id: true,
@@ -282,7 +282,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 			existingDiplomacy,
 			narrativeParticipation,
 			questParticipation,
-			worldConceptLinks,
+			loreLinks,
 			regionConnections,
 			sites,
 			potentialMembers,
