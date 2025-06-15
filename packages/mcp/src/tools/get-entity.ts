@@ -11,7 +11,7 @@ import { entityGetters as npcGetters } from "./npc-tools"
 import { entityGetters as questGetters } from "./quest-tools"
 import { entityGetters as regionGetters } from "./region-tools"
 import type { ToolDefinition, ToolHandler, ToolHandlerReturn } from "./utils/types"
-import { entityGetters as worldbuildingGetters } from "./worldbuilding-tools"
+import { entityGetters as worldbuildingGetters } from "./world-concept-tools"
 
 // Note: embedding-tools do not follow the standard getter pattern
 

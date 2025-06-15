@@ -5,29 +5,8 @@
  * and entity matching capabilities.
  */
 
-import { sql } from "drizzle-orm"
-import { db } from "../.."
-
-/**
- * Fuzzy search function for better entity matching
- * Uses database function to find similar entities across multiple tables
- */
-export const searchBySimilarity = async (
-	searchTerm: string,
-	fuzzyWeight = 1.0,
-	similarityThreshold = 0.3,
-	maxLevenshtein = 2,
-	phoneticStrength = 2,
-) =>
-	await db.execute(sql`
-    SELECT id, name, source_table FROM search_fuzzy_combined(
-      ${searchTerm},
-      ${fuzzyWeight},
-      ${similarityThreshold},
-      ${maxLevenshtein},
-      ${phoneticStrength}
-    ) limit 5
-  `)
+// Re-export the centralized search function for backward compatibility
+export { searchBySimilarity } from "../../tools/utils/search"
 
 /**
  * Analyzes quest type patterns to suggest quest structures

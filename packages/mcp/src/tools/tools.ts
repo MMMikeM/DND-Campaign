@@ -16,7 +16,7 @@ import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
 import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
-import { worldToolDefinitions as worldbuildingToolDefinitions } from "./worldbuilding-tools"
+import { worldToolDefinitions as worldbuildingToolDefinitions } from "./world-concept-tools"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
