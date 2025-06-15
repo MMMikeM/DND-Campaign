@@ -8,6 +8,13 @@
       "when": 1749908036409,
       "tag": "0000_crazy_hobgoblin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749991887345,
+      "tag": "0001_pink_mongoose",
+      "breakpoints": true
     }
   ]
 }
