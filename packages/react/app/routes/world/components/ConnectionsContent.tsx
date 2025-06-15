@@ -80,5 +80,3 @@ export function ConnectionsContent({ change }: ConnectionsContentProps) {
 		</div>
 	)
 }
-
-export { ConnectionsContent }

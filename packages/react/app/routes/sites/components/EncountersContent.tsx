@@ -65,5 +65,3 @@ export const EncountersContent: React.FC<Site> = ({ encounters }) => {
 		</InfoCard>
 	)
 }
-
-export { EncountersContent }

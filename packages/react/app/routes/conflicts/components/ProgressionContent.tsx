@@ -48,5 +48,3 @@ export function ProgressionContent({ conflict }: ProgressionContentProps) {
 		</InfoCard>
 	)
 }
-
-export { ProgressionContent }

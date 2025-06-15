@@ -219,5 +219,3 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 		</div>
 	)
 }
-
-export { ConnectionsContent }

@@ -68,5 +68,3 @@ export const SecretsContent: React.FC<Site> = ({ secrets }) => {
 		</InfoCard>
 	)
 }
-
-export { SecretsContent }

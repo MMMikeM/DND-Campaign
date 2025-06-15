@@ -25,5 +25,3 @@ export const OverviewContent: React.FC<Site> = ({ description, features, creatur
 		</div>
 	)
 }
-
-export { OverviewContent }

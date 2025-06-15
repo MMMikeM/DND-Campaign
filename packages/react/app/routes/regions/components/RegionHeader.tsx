@@ -45,5 +45,3 @@ export const RegionHeader: React.FC<RegionHeaderProps> = ({ name, type, dangerLe
 		</div>
 	</div>
 )
-
-export { RegionHeader }

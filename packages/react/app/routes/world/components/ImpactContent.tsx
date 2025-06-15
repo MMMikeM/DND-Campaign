@@ -68,5 +68,3 @@ export function ImpactContent({ change }: { change: WorldChange }) {
 		</div>
 	)
 }
-
-export { ImpactContent }

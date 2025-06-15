@@ -33,5 +33,3 @@ export function QuestsContent({ arc }: QuestsContentProps) {
 		</InfoCard>
 	)
 }
-
-export { QuestsContent }

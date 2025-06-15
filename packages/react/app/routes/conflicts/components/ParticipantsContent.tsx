@@ -71,5 +71,3 @@ export function ParticipantsContent({ conflict }: ParticipantsContentProps) {
 		</InfoCard>
 	)
 }
-
-export { ParticipantsContent }

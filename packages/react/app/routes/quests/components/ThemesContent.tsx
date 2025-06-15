@@ -40,5 +40,3 @@ export const ThemesContent: React.FC<ThemesContentProps> = ({ quest }) => {
 		</div>
 	)
 }
-
-export { ThemesContent }

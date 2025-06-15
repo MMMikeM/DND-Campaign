@@ -28,5 +28,3 @@ export const LoreContent: React.FC<LoreContentProps> = ({ history, secrets, rumo
 		</div>
 	)
 }
-
-export { LoreContent }
