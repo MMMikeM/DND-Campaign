@@ -27,7 +27,7 @@ const linkVariants = cva(
 	},
 )
 
-export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof linkVariants> {
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof linkVariants> {
 	href: string
 }
 
@@ -41,5 +41,3 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 	},
 )
 Link.displayName = "Link"
-
-export { Link, linkVariants }

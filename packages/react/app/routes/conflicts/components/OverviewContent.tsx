@@ -4,36 +4,25 @@ import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
 
-interface OverviewContentProps {
-	conflict: Conflict
-}
+type OverviewContentProps = Pick<
+	Conflict,
+	"description" | "stakes" | "status" | "scope" | "natures" | "primaryRegion" | "narrativeDestinations"
+>
 
-export function OverviewContent({ conflict }: OverviewContentProps) {
-	const {
-		description,
-		stakes,
-		status,
-		scope,
-		nature,
-		primaryRegion,
-		cause,
-		creativePrompts,
-		hiddenTruths,
-		id,
-		moralDilemma,
-		name,
-		participants,
-		possibleOutcomes,
-		primaryRegionId,
-		progression,
-		slug,
-	} = conflict
-
+export function OverviewContent({
+	description,
+	stakes,
+	status,
+	scope,
+	natures,
+	primaryRegion,
+	narrativeDestinations,
+}: OverviewContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div className="flex items-center mb-4 col-span-2">
-				<Link href={`/regions/${primaryRegion.slug}`} className="text-primary hover:underline">
-					{primaryRegion.name}
+				<Link href={`/regions/${primaryRegion?.slug}`} className="text-primary hover:underline">
+					{primaryRegion?.name}
 				</Link>
 			</div>
 			<div className="space-y-6">
@@ -51,6 +40,17 @@ export function OverviewContent({ conflict }: OverviewContentProps) {
 					emptyMessage="No stakes defined."
 				>
 					<List items={stakes} spacing="sm" textColor="muted" />
+				</InfoCard>
+				<InfoCard
+					title="Narrative Destinations"
+					icon={<Icons.MapPin className="h-4 w-4 mr-2 text-green-600" />}
+					emptyMessage="No narrative destinations defined."
+				>
+					{narrativeDestinations.map((destination) => (
+						<Link key={destination.id} href={`/narrative-destinations/${destination.slug}`}>
+							{destination.name}
+						</Link>
+					))}
 				</InfoCard>
 			</div>
 		</div>

@@ -5,7 +5,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Area } from "~/lib/entities"
 
-export const SitesContent: React.FC<Area> = ({ sites }) => {
+export const SitesContent: React.FC<Pick<Area, "sites">> = ({ sites }) => {
 	return (
 		<InfoCard
 			title="Sites within this Area"
@@ -13,7 +13,7 @@ export const SitesContent: React.FC<Area> = ({ sites }) => {
 			emptyMessage="No specific sites listed within this area."
 			contentClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
 		>
-			{sites.map(({ name, siteType, id, slug }) => (
+			{sites.map(({ name, type, id, slug }) => (
 				<div key={`site-${id}`} className="border rounded p-4">
 					<Link href={`/sites/${slug}`}>
 						<h4 className="font-medium flex items-center">
@@ -22,7 +22,7 @@ export const SitesContent: React.FC<Area> = ({ sites }) => {
 						</h4>
 					</Link>
 					<BadgeWithTooltip variant="outline" className="mt-1 capitalize" tooltipContent={`Site type`}>
-						{siteType}
+						{type}
 					</BadgeWithTooltip>
 				</div>
 			))}

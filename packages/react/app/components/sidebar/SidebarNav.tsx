@@ -16,7 +16,8 @@ type Categories =
 	| "foreshadowing"
 	| "narrativeArcs"
 	| "worldChanges"
-export type ItemsData = Record<Categories, MenuItem[] | undefined>
+
+type ItemsData = Record<Categories, MenuItem[] | undefined>
 
 interface SidebarNavProps {
 	menuData: ItemsData

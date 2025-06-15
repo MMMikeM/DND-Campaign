@@ -3,33 +3,40 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import type { WorldChange } from "~/lib/entities"
-import { getWorldChange } from "~/lib/entities"
+import { getWorldConcept, type WorldConcept } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
-import ConnectionsContent from "./components/ConnectionsContent"
-
-import DetailsContent from "./components/DetailsContent"
-import ImpactContent from "./components/ImpactContent"
-import { getChangeSeverityVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
 		throw new Response("No slug provided", { status: 400 })
 	}
 
-	const change = await getWorldChange(params.slug)
-	if (!change) {
-		throw new Response("World State Change not found", { status: 404 })
+	const concept = await getWorldConcept(params.slug)
+	if (!concept) {
+		throw new Response("World Concept not found", { status: 404 })
 	}
 
-	return change
+	return concept
 }
 
-interface ChangeHeaderProps extends Pick<WorldChange, "name" | "changeType" | "severity" | "visibility" | "timeframe"> {
+interface ChangeHeaderProps
+	extends Pick<
+		WorldConcept,
+		"name" | "conceptType" | "moralClarity" | "currentEffectiveness" | "scope" | "status" | "timeframe"
+	> {
 	className?: string
 }
 
-export function Header({ name, changeType, severity, visibility, timeframe, className }: ChangeHeaderProps) {
+export function Header({
+	name,
+	conceptType,
+	moralClarity,
+	currentEffectiveness,
+	scope,
+	status,
+	timeframe,
+	className,
+}: ChangeHeaderProps) {
 	return (
 		<div className={className}>
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
@@ -39,23 +46,23 @@ export function Header({ name, changeType, severity, visibility, timeframe, clas
 			<div className="flex flex-wrap gap-2 mt-2">
 				<BadgeWithTooltip variant="outline" tooltipContent="Type of change" className="capitalize">
 					<Icons.Tag className="h-3.5 w-3.5 mr-1" />
-					{changeType}
+					{conceptType}
 				</BadgeWithTooltip>
 				<BadgeWithTooltip
-					variant={getChangeSeverityVariant(severity)}
-					tooltipContent={`Severity: ${severity}`}
+					variant={getChangeSeverityVariant(moralClarity)}
+					tooltipContent={`Severity: ${moralClarity}`}
 					className="capitalize"
 				>
 					<Icons.AlertTriangle className="h-3.5 w-3.5 mr-1" /> {/* Example icon */}
-					{severity}
+					{moralClarity}
 				</BadgeWithTooltip>
 				<BadgeWithTooltip variant="outline" tooltipContent="Visibility of the change" className="capitalize">
 					<Icons.Eye className="h-3.5 w-3.5 mr-1" />
-					{visibility}
+					{status}
 				</BadgeWithTooltip>
 				<BadgeWithTooltip variant="outline" tooltipContent="Timeframe of the change" className="capitalize">
 					<Icons.Clock className="h-3.5 w-3.5 mr-1" />
-					{timeframe}
+					{scope}
 				</BadgeWithTooltip>
 			</div>
 		</div>

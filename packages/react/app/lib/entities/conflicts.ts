@@ -7,7 +7,50 @@ const conflictConfig = {
 		db.query.conflicts.findFirst({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
+				primaryRegion: { columns: { name: true, id: true } },
+				itemRelations: {
+					columns: {
+						conflictId: false,
+						factionId: false,
+						npcId: false,
+						itemId: false,
+						questId: false,
+						relatedItemId: false,
+						siteId: false,
+						narrativeDestinationId: false,
+						worldConceptId: false,
+						entityType: false,
+					},
+					with: { item: { columns: { id: true, name: true } } },
+				},
+				narrativeDestinations: { columns: { id: true, name: true } },
+				worldConceptLinks: {
+					columns: {
+						conflictId: false,
+						factionId: false,
+						npcId: false,
+						questId: false,
+						regionId: false,
+						worldConceptId: false,
+						targetEntityType: false,
+					},
+					with: { worldConcept: { columns: { id: true, name: true } } },
+				},
 				affectedByConsequences: {
+					columns: {
+						affectedAreaId: false,
+						affectedFactionId: false,
+						affectedConflictId: false,
+						affectedNarrativeDestinationId: false,
+						affectedNpcId: false,
+						affectedRegionId: false,
+						affectedSiteId: false,
+						affectedQuestId: false,
+						affectedEntityType: false,
+						triggerConflictId: false,
+						triggerQuestId: false,
+						triggerStageDecisionId: false,
+					},
 					with: {
 						triggerConflict: { columns: { id: true, name: true } },
 						triggerStageDecision: { columns: { id: true, name: true } },
@@ -15,6 +58,19 @@ const conflictConfig = {
 					},
 				},
 				consequences: {
+					columns: {
+						affectedAreaId: false,
+						affectedFactionId: false,
+						affectedConflictId: false,
+						affectedNarrativeDestinationId: false,
+						affectedNpcId: false,
+						affectedRegionId: false,
+						affectedSiteId: false,
+						affectedQuestId: false,
+						triggerConflictId: false,
+						triggerQuestId: false,
+						triggerStageDecisionId: false,
+					},
 					with: {
 						affectedArea: { columns: { id: true, name: true } },
 						affectedFaction: { columns: { id: true, name: true } },
@@ -26,67 +82,24 @@ const conflictConfig = {
 						affectedQuest: { columns: { id: true, name: true } },
 					},
 				},
-				foreshadowingTarget: {
+				incomingForeshadowing: {
+					columns: {
+						sourceSiteId: false,
+						sourceNpcId: false,
+						sourceQuestId: false,
+						sourceQuestStageId: false,
+					},
 					with: {
 						sourceNpc: { columns: { id: true, name: true } },
 						sourceQuest: { columns: { id: true, name: true } },
 						sourceSite: { columns: { id: true, name: true } },
 						sourceQuestStage: { columns: { id: true, name: true } },
-						targetFaction: { columns: { id: true, name: true } },
-						targetNpc: { columns: { id: true, name: true } },
-						targetQuest: { columns: { id: true, name: true } },
-						targetSite: { columns: { id: true, name: true } },
-						targetWorldConcept: { columns: { id: true, name: true } },
-						targetItem: { columns: { id: true, name: true } },
-						targetConflict: { columns: { id: true, name: true } },
-						targetNarrativeDestination: { columns: { id: true, name: true } },
-						targetNarrativeEvent: { columns: { id: true, name: true } },
 					},
 				},
-				participants: { with: { faction: { columns: { name: true, id: true } } } },
-				primaryRegion: { columns: { name: true, id: true } },
-				itemRelations: {
+				participants: {
 					with: {
-						sourceItem: { columns: { id: true, name: true } },
-					},
-				},
-				narrativeDestinations: {
-					with: {
-						region: { columns: { id: true, name: true } },
-						worldConceptLinks: {
-							with: {
-								worldConcept: { columns: { id: true, name: true } },
-							},
-						},
-						conflict: { columns: { id: true, name: true } },
-						itemRelations: {
-							with: {
-								sourceItem: { columns: { id: true, name: true } },
-								targetItem: { columns: { id: true, name: true } },
-							},
-						},
-						participantInvolvement: {
-							with: {
-								narrativeDestination: { columns: { id: true, name: true } },
-								faction: { columns: { id: true, name: true } },
-								npc: { columns: { id: true, name: true } },
-							},
-						},
-						questRoles: {
-							with: {
-								narrativeDestination: { columns: { id: true, name: true } },
-								quest: { columns: { id: true, name: true } },
-							},
-						},
-					},
-				},
-				worldConceptLinks: {
-					with: {
-						linkedFaction: { columns: { id: true, name: true } },
-						linkedNpc: { columns: { id: true, name: true } },
-						linkedQuest: { columns: { id: true, name: true } },
-						linkedRegion: { columns: { id: true, name: true } },
-						worldConcept: { columns: { id: true, name: true } },
+						faction: { columns: { name: true, id: true } },
+						npc: { columns: { name: true, id: true } },
 					},
 				},
 			},
