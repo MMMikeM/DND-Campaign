@@ -14,7 +14,7 @@ export const toSlug = (text: string): string => {
 /**
  * Branded type for slugs to ensure type safety
  */
-export type Slug = string & { readonly __brand: "Slug" }
+export type Slug = string
 
 /**
  * Creates a slug from a string
@@ -45,7 +45,7 @@ type Sluggable = SluggableByName
 /**
  * Type with slug added to an identifiable object.
  */
-export type WithSlug<T extends Identifiable> = T & { slug: Slug }
+export type WithSlug<T extends Identifiable> = T & { slug?: Slug }
 
 /**
  * Check if an object is a plain object (not null, not array, not Date, etc.)
@@ -65,22 +65,16 @@ function isSluggable(obj: Record<string, unknown>): obj is Sluggable & Record<st
 }
 
 /**
- * Helper for recursively applying the WithSlugsAdded transformation
+ * Simplified type that represents the result of adding slugs to objects
+ * This avoids the complex recursive type that was causing TypeScript to expand the Slug type
  */
-type RecursivelyWithSlugsAdded<T> = T extends null | undefined
-	? T // Handle null/undefined
-	: T extends Array<infer U> // Handle arrays
-		? Array<RecursivelyWithSlugsAdded<U>>
-		: T extends Sluggable // Handle objects that are sluggable
-			? { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> } & { slug: Slug }
-			: T extends object // Handle other objects
-				? { [K in keyof T]: RecursivelyWithSlugsAdded<T[K]> }
-				: T // Handle primitives
-
-/**
- * Type that represents the result of adding slugs to objects
- */
-export type WithSlugsAdded<T> = RecursivelyWithSlugsAdded<T>
+export type WithSlugsAdded<T> = T extends (infer U)[]
+	? WithSlugsAdded<U>[]
+	: T extends object
+		? T extends Sluggable
+			? { [K in keyof T]: WithSlugsAdded<T[K]> } & { slug: Slug }
+			: { [K in keyof T]: WithSlugsAdded<T[K]> }
+		: T
 
 /**
  * Recursively processes objects in data to add slugs where needed

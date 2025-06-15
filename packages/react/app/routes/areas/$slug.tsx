@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
-import type { Route } from "./+types/$slug"
+import type { Route } from "../areas/+types"
 import { DetailsContent } from "./components/DetailsContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { SitesContent } from "./components/SitesContent"
@@ -22,38 +22,42 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
-	const area = loaderData
-	const { tab } = useParams()
-	const activeTab = tab || "overview"
-	const navigate = useNavigate()
-
 	const {
+		atmosphereType,
+		consequences,
 		creativePrompts,
 		culturalNotes,
 		dangerLevel,
 		defenses,
 		description,
+		factionInfluence,
+		gmNotes,
 		hazards,
 		id,
 		leadership,
 		name,
 		pointsOfInterest,
-		region,
 		population,
 		primaryActivity,
+		region,
+		regionId,
+		revelationLayersSummary,
 		rumors,
 		sites,
 		slug,
+		tags,
 		type,
-		territorialControl,
-		worldChanges,
-	} = area
+	} = loaderData as unknown as Awaited<ReturnType<typeof loader>>
+
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
 		navigate(`/areas/${slug}/${value === "overview" ? "" : value}`)
 	}
 
-	if (!area) {
+	if (!loaderData) {
 		return (
 			<div className="container mx-auto py-12 text-center">
 				<h2 className="text-2xl font-bold mb-4">Area Not Found</h2>
@@ -101,15 +105,22 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent {...area} />
+					<OverviewContent
+						description={description}
+						culturalNotes={culturalNotes}
+						pointsOfInterest={pointsOfInterest}
+						leadership={leadership}
+						population={population}
+						primaryActivity={primaryActivity}
+					/>
 				</TabsContent>
 
 				<TabsContent value="details">
-					<DetailsContent {...area} />
+					<DetailsContent creativePrompts={creativePrompts} hazards={hazards} defenses={defenses} rumors={rumors} />
 				</TabsContent>
 
 				<TabsContent value="sites">
-					<SitesContent {...area} />
+					<SitesContent sites={sites} />
 				</TabsContent>
 			</Tabs>
 		</div>

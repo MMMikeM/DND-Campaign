@@ -9,15 +9,15 @@ const worldConceptConfig = {
 			with: {
 				itemRelations: {
 					with: {
-						sourceItem: { columns: { id: true, name: true } },
-						targetConflict: { columns: { id: true, name: true } },
-						targetQuest: { columns: { id: true, name: true } },
-						targetFaction: { columns: { id: true, name: true } },
-						targetNpc: { columns: { id: true, name: true } },
-						targetSite: { columns: { id: true, name: true } },
-						targetItem: { columns: { id: true, name: true } },
-						targetNarrativeDestination: { columns: { id: true, name: true } },
-						targetWorldConcept: { columns: { id: true, name: true } },
+						item: { columns: { id: true, name: true } },
+						conflict: { columns: { id: true, name: true } },
+						quest: { columns: { id: true, name: true } },
+						faction: { columns: { id: true, name: true } },
+						npc: { columns: { id: true, name: true } },
+						site: { columns: { id: true, name: true } },
+						relatedItem: { columns: { id: true, name: true } },
+						narrativeDestination: { columns: { id: true, name: true } },
+						worldConcept: { columns: { id: true, name: true } },
 					},
 				},
 				links: {
@@ -30,7 +30,7 @@ const worldConceptConfig = {
 						worldConcept: { columns: { id: true, name: true } },
 					},
 				},
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 				incomingRelations: { with: { sourceWorldConcept: { columns: { id: true, name: true } } } },
 				outgoingRelations: { with: { targetWorldConcept: { columns: { id: true, name: true } } } },
 			},
