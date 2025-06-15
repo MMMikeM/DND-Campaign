@@ -5,7 +5,7 @@ import { createManageEntityHandler, createManageSchema } from "./utils/tool.util
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.eventTables)
+const createEntityGetters = createEntityGettersFactory(tables.narrativeEventTables)
 
 export const entityGetters = createEntityGetters({
 	all_narrative_events: () => db.query.narrativeEvents.findMany({}),
@@ -44,7 +44,7 @@ export const narrativeEventToolDefinitions: Record<"manage_narrative_event", Too
 	manage_narrative_event: {
 		description: "Manage event-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_narrative_event", tables.eventTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_narrative_event", tables.narrativeEventTables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Narrative Events",
 			readOnlyHint: false,

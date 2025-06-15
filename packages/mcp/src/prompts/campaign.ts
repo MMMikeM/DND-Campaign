@@ -8,9 +8,11 @@
  */
 
 import { tables } from "@tome-master/shared"
-import { eq, sql } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
+// Import centralized search function
+import { searchBySimilarity } from "../tools/utils/search"
 import { gatherQuestCreationContext } from "./quest"
 import {
 	createPromptResult,
@@ -20,23 +22,6 @@ import {
 	type GetPromptResult,
 	type PromptDefinition,
 } from "./types"
-
-const searchBySimilarity = async (
-	searchTerm: string,
-	fuzzyWeight = 1.0,
-	similarityThreshold = 0.3,
-	maxLevenshtein = 2,
-	phoneticStrength = 2,
-) =>
-	await db.execute(sql`
-    SELECT id, name, source_table FROM search_fuzzy_combined(
-      ${searchTerm},
-      ${fuzzyWeight},
-      ${similarityThreshold},
-      ${maxLevenshtein},
-      ${phoneticStrength}
-    ) limit 10
-  `)
 
 const fuzzySearchEntities = async (query: string, entityType?: string) => {
 	const { rows } = await searchBySimilarity(query)

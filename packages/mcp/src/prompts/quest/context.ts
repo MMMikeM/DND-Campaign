@@ -8,7 +8,8 @@
 import { tables } from "@tome-master/shared"
 import { eq, inArray } from "drizzle-orm"
 import { db, logger } from "../.."
-import { analyzeQuestTypePatterns, analyzeThemeCompatibility, searchBySimilarity } from "./analysis"
+import { searchBySimilarity } from "../../tools/utils/search"
+import { analyzeQuestTypePatterns, analyzeThemeCompatibility } from "./analysis"
 import {
 	generateQuestConnectionSuggestions,
 	suggestFutureHooks,
@@ -63,10 +64,12 @@ async function findFactionsByIds(factionIds: number[]) {
 }
 
 const findQuestConflicts = async (name: string) =>
-	(await searchBySimilarity(name)).rows.filter((row) => row.source_table === "quests").map(({ id }) => id as number)
+	(await searchBySimilarity(name, 1.0, 0.3, 2, 2, 5)).rows
+		.filter((row) => row.source_table === "quests")
+		.map(({ id }) => id as number)
 
 const findFactionMatches = async (factionHint: string) =>
-	(await searchBySimilarity(factionHint)).rows
+	(await searchBySimilarity(factionHint, 1.0, 0.3, 2, 2, 5)).rows
 		.filter((row) => row.source_table === "factions")
 		.map(({ id }) => id as number)
 

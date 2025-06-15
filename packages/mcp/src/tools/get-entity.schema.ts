@@ -3,16 +3,16 @@ import { z } from "zod/v4"
 
 const allTableNames = [
 	...Object.keys(tables.conflictTables),
-	...Object.keys(tables.eventTables),
+	...Object.keys(tables.narrativeEventTables),
 	...Object.keys(tables.factionTables),
 	...Object.keys(tables.foreshadowingTables),
 	...Object.keys(tables.itemTables),
-	...Object.keys(tables.narrativeTables),
+	...Object.keys(tables.narrativeDestinationTables),
 	...Object.keys(tables.mapTables),
 	...Object.keys(tables.npcTables),
 	...Object.keys(tables.questTables),
 	...Object.keys(tables.regionTables),
-	...Object.keys(tables.worldbuildingTables),
+	...Object.keys(tables.worldConceptTables),
 ] as const
 
 export const getEntitySchema = z

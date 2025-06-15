@@ -16,7 +16,7 @@ export const entityGetters = createEntityGetters({
 			with: {
 				affectedByConsequences: true,
 				consequences: true,
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 				itemRelations: true,
 				narrativeDestinations: true,
 				worldConceptLinks: true,

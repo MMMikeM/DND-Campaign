@@ -4,19 +4,19 @@ import type { Schema } from "./utils/tool.utils"
 // Update enum to include all categories that *have* tools
 const categoryEnum = z
 	.enum([
-		"npcs",
-		"factions",
-		"regions",
-		"quests",
 		"conflicts",
 		"context",
 		"embeddings",
-		"events",
+		"factions",
 		"fuzzySearch",
 		"getEntity",
 		"items",
-		"narrative",
-		"worldbuilding",
+		"narrativeDestinations",
+		"narrativeEvents",
+		"npcs",
+		"quests",
+		"regions",
+		"worldConcepts",
 	])
 	.optional()
 	.describe("Optional category to filter tools")

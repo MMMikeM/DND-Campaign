@@ -3,9 +3,9 @@ import { db } from "../index"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
-import { schemas, tableEnum } from "./worldbuilding-tools.schema"
+import { schemas, tableEnum } from "./world-concept-tools.schema"
 
-const createEntityGetters = createEntityGettersFactory(tables.worldbuildingTables)
+const createEntityGetters = createEntityGettersFactory(tables.worldConceptTables)
 
 export const entityGetters = createEntityGetters({
 	all_world_concepts: () => db.query.worldConcepts.findMany({}),
@@ -27,7 +27,7 @@ export const entityGetters = createEntityGetters({
 						worldConcept: true,
 					},
 				},
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 				incomingRelations: true,
 				outgoingRelations: true,
 			},
@@ -56,13 +56,13 @@ export const entityGetters = createEntityGetters({
 		}),
 })
 
-export const worldToolDefinitions: Record<"manage_worldbuilding", ToolDefinition> = {
-	manage_worldbuilding: {
+export const worldToolDefinitions: Record<"manage_world_concept", ToolDefinition> = {
+	manage_world_concept: {
 		description: "Manage worldbuilding-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_worldbuilding", tables.worldbuildingTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_world_concept", tables.worldConceptTables, tableEnum, schemas),
 		annotations: {
-			title: "Manage Worldbuilding",
+			title: "Manage World Concepts",
 			readOnlyHint: false,
 			destructiveHint: false,
 			idempotentHint: false,

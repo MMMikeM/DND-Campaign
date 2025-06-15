@@ -9,6 +9,7 @@ export type Schema<T extends string> = Record<T, z.ZodObject>
 
 export const id = z.coerce.number()
 export const optionalId = z.coerce.number().optional()
+export const list = z.array(z.string()).min(1).max(5)
 
 // --- Response Helpers ---
 
@@ -67,8 +68,9 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			const parsedData = schemas[tableName.data].safeParse(args?.data)
 
 			if (!parsedData.success) {
-
-				return createErrorResponse(`Invalid data '${JSON.stringify(args?.data)}' provided to ${categoryToolName} handler. ${parsedData.error.message}`)
+				return createErrorResponse(
+					`Invalid data '${JSON.stringify(args?.data)}' provided to ${categoryToolName} handler. ${parsedData.error.message}`,
+				)
 			}
 
 			const createData = parsedData.data

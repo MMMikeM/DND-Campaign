@@ -5,7 +5,7 @@ import { z } from "zod/v4"
  * Automatically adds (Required) or (Optional) to descriptions and handles array types
  */
 function zodToMCP<T extends z.ZodType>(schema: T): z.core.JSONSchema.BaseSchema {
-	const JSONSchema = z.toJSONSchema(schema)
+	const JSONSchema = z.toJSONSchema(schema, { target: "draft-7" })
 	return JSONSchema
 }
 

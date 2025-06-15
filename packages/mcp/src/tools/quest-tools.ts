@@ -21,8 +21,8 @@ export const entityGetters = createEntityGetters({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
 				consequences: true,
-				foreshadowingSource: true,
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
+				outgoingForeshadowing: true,
 				hooks: true,
 				incomingRelations: true,
 				itemRelations: true,
@@ -40,7 +40,7 @@ export const entityGetters = createEntityGetters({
 			where: (questStages, { eq }) => eq(questStages.id, id),
 			with: {
 				deliveryNpc: { columns: { name: true, id: true } },
-				foreshadowingSource: true,
+				outgoingForeshadowing: true,
 				npcInvolvement: true,
 				quest: { columns: { name: true, id: true } },
 				site: {
