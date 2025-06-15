@@ -23,7 +23,7 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 		fields: [narrativeEvents.relatedQuestId],
 		references: [quests.id],
 	}),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNarrativeEvent" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNarrativeEvent" }),
 }))
 
 export const consequencesRelations = relations(consequences, ({ one }) => ({
@@ -41,7 +41,7 @@ export const consequencesRelations = relations(consequences, ({ one }) => ({
 	}),
 
 	affectedNarrativeDestination: one(narrativeDestinations, {
-		fields: [consequences.affectedDestinationId],
+		fields: [consequences.affectedNarrativeDestinationId],
 		references: [narrativeDestinations.id],
 	}),
 	affectedFaction: one(factions, {

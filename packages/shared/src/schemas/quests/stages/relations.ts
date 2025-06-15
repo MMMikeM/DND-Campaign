@@ -28,7 +28,7 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	items: many(items),
 	narrativeEvents: many(narrativeEvents),
 	npcInvolvement: many(npcStageInvolvement),
-	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromQuestStage" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromQuestStage" }),
 }))
 
 export const questStageDecisionsRelations = relations(questStageDecisions, ({ one, many }) => ({

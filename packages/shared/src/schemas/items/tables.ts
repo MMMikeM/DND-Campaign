@@ -51,48 +51,48 @@ export const itemRelations = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		sourceItemId: cascadeFk("source_item_id", items.id),
+		itemId: cascadeFk("item_id", items.id),
 
-		targetEntityType: oneOf("target_entity_type", targetEntityTypes),
+		entityType: oneOf("entity_type", targetEntityTypes),
 
-		targetItemId: nullableFk("target_item_id", items.id),
-		targetNpcId: nullableFk("target_npc_id", npcs.id),
-		targetFactionId: nullableFk("target_faction_id", factions.id),
-		targetSiteId: nullableFk("target_site_id", sites.id),
-		targetQuestId: nullableFk("target_quest_id", quests.id),
-		targetConflictId: nullableFk("target_conflict_id", conflicts.id),
-		targetNarrativeDestinationId: nullableFk("target_narrative_destination_id", narrativeDestinations.id),
-		targetWorldConceptId: nullableFk("target_world_concept_id", worldConcepts.id),
+		relatedItemId: nullableFk("related_item_id", items.id),
+		npcId: nullableFk("npc_id", npcs.id),
+		factionId: nullableFk("faction_id", factions.id),
+		siteId: nullableFk("site_id", sites.id),
+		questId: nullableFk("quest_id", quests.id),
+		conflictId: nullableFk("conflict_id", conflicts.id),
+		narrativeDestinationId: nullableFk("narrative_destination_id", narrativeDestinations.id),
+		worldConceptId: nullableFk("world_concept_id", worldConcepts.id),
 
 		relationshipType: oneOf("relationship_type", itemRelationshipTypes),
 		relationshipDetails: nullableString("relationship_details"),
 	},
 	(t) => [
 		unique().on(
-			t.sourceItemId,
-			t.targetEntityType,
-			t.targetItemId,
-			t.targetNpcId,
-			t.targetFactionId,
-			t.targetSiteId,
-			t.targetQuestId,
-			t.targetConflictId,
-			t.targetNarrativeDestinationId,
-			t.targetWorldConceptId,
+			t.itemId,
+			t.entityType,
+			t.relatedItemId,
+			t.npcId,
+			t.factionId,
+			t.siteId,
+			t.questId,
+			t.conflictId,
+			t.narrativeDestinationId,
+			t.worldConceptId,
 			t.relationshipType,
 		),
 		check(
 			"single_related_entity_exclusive_and_correct",
 			sql`
-			CASE ${t.targetEntityType}
-				WHEN 'item' THEN (${t.targetItemId} IS NOT NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'npc' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NOT NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'faction' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NOT NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'site' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NOT NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'quest' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NOT NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'conflict' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NOT NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'narrative_destination' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NOT NULL AND ${t.targetWorldConceptId} IS NULL)
-				WHEN 'world_concept' THEN (${t.targetItemId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetQuestId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetWorldConceptId} IS NOT NULL)
+			CASE ${t.entityType}
+				WHEN 'item' THEN (${t.relatedItemId} IS NOT NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'npc' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'faction' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'site' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NOT NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'quest' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NOT NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'conflict' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NOT NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'narrative_destination' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NOT NULL AND ${t.worldConceptId} IS NULL)
+				WHEN 'world_concept' THEN (${t.relatedItemId} IS NULL AND ${t.npcId} IS NULL AND ${t.factionId} IS NULL AND ${t.siteId} IS NULL AND ${t.questId} IS NULL AND ${t.conflictId} IS NULL AND ${t.narrativeDestinationId} IS NULL AND ${t.worldConceptId} IS NOT NULL)
 				ELSE FALSE
 			END
 			`,

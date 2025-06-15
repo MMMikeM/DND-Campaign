@@ -21,8 +21,8 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	// Relations from other schemas that reference this NPC
 	conflictParticipation: many(conflictParticipants),
 	affectedByConsequences: many(consequences),
-	foreshadowingSource: many(foreshadowing, { relationName: "foreshadowingFromNpc" }),
-	foreshadowingTarget: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromNpc" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
 	itemHistory: many(itemNotableHistory),
 	itemRelations: many(itemRelations),
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
