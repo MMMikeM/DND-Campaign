@@ -72,5 +72,3 @@ export function DetailsContent({ change }: { change: WorldChange }) {
 		</div>
 	)
 }
-
-export { DetailsContent }

@@ -51,5 +51,3 @@ export const OverviewContent: React.FC<Area> = ({
 		</div>
 	)
 }
-
-export { OverviewContent }

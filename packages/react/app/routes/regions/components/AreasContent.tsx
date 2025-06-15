@@ -81,5 +81,3 @@ export const AreasContent: React.FC<AreasContentProps> = ({ areas, slug, economy
 		</>
 	)
 }
-
-export { AreasContent }

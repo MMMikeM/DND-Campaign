@@ -80,5 +80,3 @@ export const StagesContent: React.FC<StagesContentProps> = ({
 		</div>
 	)
 }
-
-export { StagesContent }

@@ -89,5 +89,3 @@ export const TwistsContent: React.FC<TwistsContentProps> = ({ quest }) => {
 		</div>
 	)
 }
-
-export { TwistsContent }

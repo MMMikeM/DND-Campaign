@@ -91,5 +91,3 @@ export function OverviewContent({ arc }: OverviewContentProps) {
 		</div>
 	)
 }
-
-export { OverviewContent }

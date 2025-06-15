@@ -43,5 +43,3 @@ export const DetailsContent: React.FC<DetailsContentProps> = ({ hazards, pointsO
 		</div>
 	)
 }
-
-export { DetailsContent }

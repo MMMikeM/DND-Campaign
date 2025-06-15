@@ -34,5 +34,3 @@ export const LinksContent: React.FC<Site> = ({ relations }) => {
 		</InfoCard>
 	)
 }
-
-export { LinksContent }

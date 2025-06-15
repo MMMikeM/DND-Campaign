@@ -47,5 +47,3 @@ export const SiteHeader: React.FC<Site> = ({ name, siteType, area, terrain, clim
 		</div>
 	)
 }
-
-export { SiteHeader }

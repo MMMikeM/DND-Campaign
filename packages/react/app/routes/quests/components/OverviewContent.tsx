@@ -120,5 +120,3 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({ quest }) => {
 		</div>
 	)
 }
-
-export { OverviewContent }

@@ -56,5 +56,3 @@ export function OverviewContent({ conflict }: OverviewContentProps) {
 		</div>
 	)
 }
-
-export { OverviewContent }

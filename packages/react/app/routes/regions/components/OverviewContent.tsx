@@ -101,5 +101,3 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({
 		</>
 	)
 }
-
-export { OverviewContent }

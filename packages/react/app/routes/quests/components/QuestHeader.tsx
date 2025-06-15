@@ -63,5 +63,3 @@ export const QuestHeader: React.FC<Quest> = ({ name, type, urgency, visibility, 
 		<p className="mt-4 text-muted-foreground italic">"{mood}"</p>
 	</div>
 )
-
-export { QuestHeader }

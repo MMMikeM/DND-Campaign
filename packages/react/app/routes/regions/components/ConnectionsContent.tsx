@@ -79,5 +79,3 @@ export function ConnectionsContent({ territorialControl, relations }: Connection
 		</div>
 	)
 }
-
-export { ConnectionsContent }
