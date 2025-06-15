@@ -36,7 +36,7 @@ export const schemas = {
 		),
 		targetNpcId: optionalId.describe("ID of the NPC that is the target of this foreshadowing seed"),
 		targetQuestId: optionalId.describe("ID of the quest that is the target of this foreshadowing seed"),
-		targetWorldConceptId: optionalId.describe("ID of the world concept that is the target of this foreshadowing seed"),
+		targetLoreId: optionalId.describe("ID of the lore that is the target of this foreshadowing seed"),
 		targetNarrativeEventId: optionalId.describe(
 			"ID of the narrative event that is the target of this foreshadowing seed",
 		),
@@ -66,8 +66,8 @@ export const schemas = {
 						return data.targetItemId !== undefined
 					case "narrative_destination":
 						return data.targetNarrativeDestinationId !== undefined
-					case "world_concept":
-						return data.targetWorldConceptId !== undefined
+					case "lore":
+						return data.targetLoreId !== undefined
 					case "faction":
 						return data.targetFactionId !== undefined
 					case "site":

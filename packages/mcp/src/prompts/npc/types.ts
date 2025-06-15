@@ -54,7 +54,7 @@ export interface RegionalContext {
 	culturalInfluences: Array<{
 		id: number
 		name: string
-		conceptType: string
+		loreType: string
 		summary: string
 		links: Array<{
 			regionId?: number | null

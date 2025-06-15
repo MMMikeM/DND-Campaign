@@ -66,7 +66,7 @@ Using the comprehensive campaign context provided, generate a complete NPC that 
 ## NARRATIVE POTENTIAL
 - Quest hooks and story opportunities that emerge from their background
 - Foreshadowing elements they could deliver or represent
-- Cultural or world concept connections that add thematic depth
+- Cultural or lore connections that add thematic depth
 - Knowledge, rumors, or secrets they possess about campaign events
 
 ## OPERATIONAL DETAILS
@@ -88,11 +88,14 @@ Generate an NPC that not only fits the specified hints but leverages the provide
 		}
 	} catch (error) {
 		logger.error("Failed to execute enhanced NPC creation prompt:", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			npcArgs: args,
 		})
 		throw error

@@ -25,7 +25,7 @@ export const entityGetters = createEntityGetters({
 				itemRelations: { with: { item: { columns: { name: true, id: true } } } },
 				siteAssociations: { with: { site: { columns: { name: true, id: true } } } },
 				stageInvolvement: { with: { questStage: { columns: { name: true, id: true } } } },
-				worldConceptLinks: { with: { worldConcept: { columns: { name: true, id: true } } } },
+				loreLinks: { with: { lore: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceNpc: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetNpc: { columns: { name: true, id: true } } } },
 				factionMemberships: { with: { faction: { columns: { name: true, id: true } } } },

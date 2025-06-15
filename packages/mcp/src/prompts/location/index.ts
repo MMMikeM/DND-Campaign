@@ -89,7 +89,7 @@ Using the comprehensive campaign context provided, generate a complete location 
 ## NARRATIVE INTEGRATION
 - Connections to ongoing conflicts, foreshadowing elements, and story arcs
 - NPC associations and potential character interactions
-- Historical significance and connections to items, events, or world concepts
+- Historical significance and connections to items, events, or lore
 - Plot hooks and story opportunities that emerge from the location's features
 
 ## REGIONAL CONTEXT
@@ -101,7 +101,7 @@ Using the comprehensive campaign context provided, generate a complete location 
 ## THEMATIC RESONANCE
 - Atmospheric elements that reinforce campaign themes and player emotions
 - Sensory details (sights, sounds, smells) that create immersive experiences
-- Symbolic elements that connect to larger narrative concepts
+- Symbolic elements that connect to larger lore themes
 - Mood and tone that complement the region's established atmosphere
 
 Generate a location that not only fits the specified hints but leverages the provided context to create meaningful connections, address campaign gaps, and provide rich opportunities for player engagement across combat, exploration, and narrative dimensions.`,

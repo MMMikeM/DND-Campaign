@@ -56,22 +56,22 @@ export const schemas = {
 		.describe("Historical events and ownership changes for items"),
 
 	itemRelations: createInsertSchema(itemRelations, {
-		targetEntityType: z.enum(targetEntityTypes).describe("Type of entity this relationship belongs to"),
 		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
 		description: (s) => s.describe("Description of the relationship in point form"),
 		gmNotes: (s) => s.describe("GM-only information about this relationship"),
 		tags: (s) => s.describe("Tags for this relationship"),
-		targetConflictId: optionalId.describe("ID of related conflict"),
-		targetFactionId: optionalId.describe("ID of related faction"),
-		targetItemId: optionalId.describe("ID of related item"),
-		targetNpcId: optionalId.describe("ID of related NPC"),
-		targetSiteId: optionalId.describe("ID of related site"),
-		targetWorldConceptId: optionalId.describe("ID of related world concept"),
-		targetNarrativeDestinationId: optionalId.describe("ID of related narrative destination"),
-		targetQuestId: optionalId.describe("ID of related quest"),
+		conflictId: optionalId.describe("ID of related conflict"),
+		factionId: optionalId.describe("ID of related faction"),
+		loreId: optionalId.describe("ID of related lore"),
+		npcId: optionalId.describe("ID of related NPC"),
+		questId: optionalId.describe("ID of related quest"),
+		siteId: optionalId.describe("ID of related site"),
+		itemId: id.describe("ID of item this relationship belongs to"),
+		narrativeDestinationId: optionalId.describe("ID of related narrative destination"),
+		entityType: z.enum(targetEntityTypes).describe("Type of entity this relationship belongs to"),
+		relatedItemId: optionalId.describe("ID of related item"),
 		relationshipDetails: (s) => s.optional().describe("Details about the relationship between entities"),
 		relationshipType: z.enum(itemRelationshipTypes).describe("Type of relationship"),
-		sourceItemId: id.describe("ID of item this relationship belongs to"),
 	})
 		.omit({ id: true })
 		.strict()

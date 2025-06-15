@@ -8,6 +8,7 @@ import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { getEntityToolDefinition } from "./get-entity"
 import { helpToolDefinitions } from "./help-tools"
 import { itemToolDefinitions } from "./items-tools"
+import { loreToolDefinitions } from "./lore-tools"
 import { mapToolDefinitions } from "./map-tools"
 import { narrativeDestinationToolDefinitions } from "./narrative-destination-tools"
 import { narrativeEventToolDefinitions } from "./narrative-events-tools"
@@ -16,7 +17,6 @@ import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
 import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
-import { worldToolDefinitions as worldbuildingToolDefinitions } from "./world-concept-tools"
 
 function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
@@ -43,13 +43,13 @@ export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
 export const getEntity = extractToolsAndHandlers(getEntityToolDefinition)
 export const help = extractToolsAndHandlers(helpToolDefinitions)
 export const items = extractToolsAndHandlers(itemToolDefinitions)
+export const lore = extractToolsAndHandlers(loreToolDefinitions)
 export const maps = extractToolsAndHandlers(mapToolDefinitions)
 export const narrativeDestinations = extractToolsAndHandlers(narrativeDestinationToolDefinitions)
 export const narrativeEvents = extractToolsAndHandlers(narrativeEventToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
 export const regions = extractToolsAndHandlers(regionToolDefinitions)
-export const worldbuilding = extractToolsAndHandlers(worldbuildingToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
 	const tools = [
@@ -60,13 +60,13 @@ export function registerToolHandlers(server: Server) {
 		...getEntity.tools,
 		...help.tools,
 		...items.tools,
+		...lore.tools,
 		...maps.tools,
 		...narrativeDestinations.tools,
 		...narrativeEvents.tools,
 		...npcs.tools,
 		...quests.tools,
 		...regions.tools,
-		...worldbuilding.tools,
 	]
 
 	const allToolHandlers = {
@@ -77,13 +77,13 @@ export function registerToolHandlers(server: Server) {
 		...getEntity.handlers,
 		...help.handlers,
 		...items.handlers,
+		...lore.handlers,
 		...maps.handlers,
 		...narrativeDestinations.handlers,
 		...narrativeEvents.handlers,
 		...npcs.handlers,
 		...quests.handlers,
 		...regions.handlers,
-		...worldbuilding.handlers,
 	}
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))

@@ -5,7 +5,7 @@ import { createManageEntityHandler, createManageSchema } from "./utils/tool.util
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.narrativeTables)
+const createEntityGetters = createEntityGettersFactory(tables.narrativeDestinationTables)
 
 export const entityGetters = createEntityGetters({
 	all_narrative_destinations: () => db.query.narrativeDestinations.findMany({}),
@@ -17,14 +17,14 @@ export const entityGetters = createEntityGetters({
 		db.query.narrativeDestinations.findFirst({
 			where: (narrativeDestinations, { eq }) => eq(narrativeDestinations.id, id),
 			with: {
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 				incomingRelations: true,
 				itemRelations: true,
 				outgoingRelations: true,
 				participantInvolvement: true,
 				questRoles: true,
 				region: true,
-				worldConceptLinks: true,
+				loreLinks: true,
 				conflict: true,
 			},
 		}),
@@ -59,7 +59,12 @@ export const narrativeDestinationToolDefinitions: Record<"manage_narrative_desti
 	manage_narrative_destination: {
 		description: "Manage narrative-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_narrative_destination", tables.narrativeTables, tableEnum, schemas),
+		handler: createManageEntityHandler(
+			"manage_narrative_destination",
+			tables.narrativeDestinationTables,
+			tableEnum,
+			schemas,
+		),
 		annotations: {
 			title: "Manage Narrative Destination",
 			readOnlyHint: false,

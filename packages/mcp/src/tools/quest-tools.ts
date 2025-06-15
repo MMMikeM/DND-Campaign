@@ -29,7 +29,7 @@ export const entityGetters = createEntityGetters({
 				narrativeDestinationContributions: true,
 				outgoingRelations: true,
 				participants: true,
-				worldConceptLinks: true,
+				loreLinks: true,
 				triggeredEvents: true,
 				stages: true,
 				region: { columns: { name: true, id: true } },
