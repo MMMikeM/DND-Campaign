@@ -12,6 +12,7 @@ export const entityGetters = createEntityGetters({
 	all_narrative_destination_participants: () => db.query.narrativeDestinationParticipants.findMany({}),
 	all_narrative_destination_quest_roles: () => db.query.narrativeDestinationQuestRoles.findMany({}),
 	all_narrative_destination_relations: () => db.query.narrativeDestinationRelations.findMany({}),
+	all_narrative_destination_outcomes: () => db.query.narrativeDestinationOutcomes.findMany({}),
 
 	narrative_destination_by_id: (id: number) =>
 		db.query.narrativeDestinations.findFirst({
@@ -51,6 +52,13 @@ export const entityGetters = createEntityGetters({
 			with: {
 				sourceNarrativeDestination: true,
 				targetNarrativeDestination: true,
+			},
+		}),
+	narrative_destination_outcome_by_id: (id: number) =>
+		db.query.narrativeDestinationOutcomes.findFirst({
+			where: (narrativeDestinationOutcomes, { eq }) => eq(narrativeDestinationOutcomes.id, id),
+			with: {
+				narrativeDestination: true,
 			},
 		}),
 })

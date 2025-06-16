@@ -113,9 +113,9 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		const factionInfluence = await db.query.factionInfluence.findMany({
 			with: {
 				faction: { columns: { id: true, name: true, type: true } },
-				region: { columns: { id: true, name: true } },
-				area: { columns: { id: true, name: true } },
-				site: { columns: { id: true, name: true } },
+				relatedRegion: { columns: { id: true, name: true } },
+				relatedArea: { columns: { id: true, name: true } },
+				relatedSite: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
@@ -144,7 +144,11 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get foreshadowing seeds related to sites
 		const foreshadowingSeeds = await db.query.foreshadowing.findMany({
-			where: (fs, { or, isNotNull }) => or(isNotNull(fs.sourceSiteId), isNotNull(fs.targetSiteId)),
+			where: (fs, { or, eq, and, isNotNull }) =>
+				or(
+					and(eq(fs.sourceEntityType, "site"), isNotNull(fs.sourceEntityId)),
+					and(eq(fs.targetEntityType, "site"), isNotNull(fs.targetEntityId)),
+				),
 			with: {
 				sourceSite: { columns: { id: true, name: true } },
 				targetSite: { columns: { id: true, name: true } },
@@ -152,6 +156,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			columns: {
 				id: true,
 				targetEntityType: true,
+				sourceEntityType: true,
 				subtlety: true,
 				narrativeWeight: true,
 				description: true,
@@ -204,15 +209,22 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 				// Get faction influence in the regions
 				const nearbyFactionInfluence = await db.query.factionInfluence.findMany({
-					where: (fi, { inArray, or }) =>
+					where: (fi, { inArray, or, eq, and }) =>
 						or(
-							inArray(fi.regionId, regionIds),
-							inArray(
-								fi.areaId,
-								nearbyAreas.map((a) => a.id),
+							and(eq(fi.relatedEntityType, "region"), inArray(fi.relatedEntityId, regionIds)),
+							and(
+								eq(fi.relatedEntityType, "area"),
+								inArray(
+									fi.relatedEntityId,
+									nearbyAreas.map((a) => a.id),
+								),
 							),
 						),
-					with: { faction: { columns: { id: true, name: true, type: true } } },
+					with: {
+						faction: { columns: { id: true, name: true, type: true } },
+						relatedRegion: { columns: { id: true, name: true } },
+						relatedArea: { columns: { id: true, name: true } },
+					},
 					columns: { id: true, influenceLevel: true },
 				})
 
@@ -290,7 +302,13 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			existingSites,
 			existingEncounters,
 			existingSecrets,
-			factionInfluence,
+			factionInfluence: factionInfluence.map((fi) => ({
+				influenceLevel: fi.influenceLevel,
+				faction: { id: fi.faction.id, name: fi.faction.name },
+				site: fi.relatedSite,
+				area: fi.relatedArea,
+				region: fi.relatedRegion,
+			})),
 			questStages,
 			activeConflicts,
 		})

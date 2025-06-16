@@ -14,6 +14,7 @@ export const entityGetters = createEntityGetters({
 		db.query.foreshadowing.findFirst({
 			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
 			with: {
+				sourceLore: { columns: { name: true, id: true } },
 				sourceNpc: { columns: { name: true, id: true } },
 				sourceSite: { columns: { name: true, id: true } },
 				sourceQuest: { columns: { name: true, id: true } },

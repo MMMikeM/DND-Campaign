@@ -20,6 +20,7 @@ const {
 	factionTypes,
 	influenceLevels,
 	relationshipStrengths,
+	relatedEntityTypes,
 } = enums
 
 type TableNames = CreateTableNames<typeof tables.factionTables>
@@ -101,11 +102,8 @@ export const schemas = {
 
 	factionInfluence: createInsertSchema(factionInfluence, {
 		factionId: id.describe("ID of the faction exerting influence"),
-		regionId: optionalId.describe(
-			"ID of region where influence is exerted (mutually exclusive with areaId and siteId)",
-		),
-		areaId: optionalId.describe("ID of area where influence is exerted (mutually exclusive with regionId and siteId)"),
-		siteId: optionalId.describe("ID of site where influence is exerted (mutually exclusive with regionId and areaId)"),
+		relatedEntityType: z.enum(relatedEntityTypes).describe("Type of entity this influence is exerted on"),
+		relatedEntityId: id.describe("ID of the entity this influence is exerted on"),
 		influenceLevel: z.enum(influenceLevels).describe("Degree of control or influence"),
 		presenceTypes: (s) => s.describe("Types of faction presence in this location"),
 		presenceDetails: (s) => s.describe("Specific details about how the faction operates here"),
@@ -118,8 +116,12 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Geographic areas where factions have power, control, or significant presence")
-		.refine((data) => [data.regionId, data.areaId, data.siteId].filter(Boolean).length === 1, {
-			message: "Exactly one of regionId, areaId, or siteId must be provided",
-			path: ["regionId", "areaId", "siteId"],
-		}),
+		.refine(
+			(data) =>
+				data.relatedEntityType === "region" || data.relatedEntityType === "area" || data.relatedEntityType === "site",
+			{
+				message: "relatedEntityType must be one of region, area, or site",
+				path: ["relatedEntityType"],
+			},
+		),
 } as const satisfies Schema<TableNames[number]>

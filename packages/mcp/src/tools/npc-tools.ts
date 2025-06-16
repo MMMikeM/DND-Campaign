@@ -22,7 +22,7 @@ export const entityGetters = createEntityGetters({
 				outgoingForeshadowing: true,
 				questHooks: { with: { quest: { columns: { name: true, id: true } } } },
 				itemHistory: { with: { item: { columns: { name: true, id: true } } } },
-				itemRelations: { with: { item: { columns: { name: true, id: true } } } },
+				itemRelations: { with: { sourceItem: { columns: { name: true, id: true } } } },
 				siteAssociations: { with: { site: { columns: { name: true, id: true } } } },
 				stageInvolvement: { with: { questStage: { columns: { name: true, id: true } } } },
 				loreLinks: { with: { lore: { columns: { name: true, id: true } } } },
