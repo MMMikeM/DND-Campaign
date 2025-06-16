@@ -12,7 +12,7 @@ const seedDeliveryMethods = [
 	" overheard_conversation",
 ] as const
 
-const foreshadowedEntityType = [
+const foreshadowedTargetType = [
 	"quest",
 	"npc",
 	"narrative_event",
@@ -26,9 +26,19 @@ const foreshadowedEntityType = [
 	"specific_reveal",
 ] as const
 
+const foreshadowingSourceType = [
+	"quest",
+	"quest_stage",
+	"site",
+	"npc",
+	"item_description",
+	"lore", // etc.
+] as const
+
 export const enums = {
 	discoverySubtlety,
-	foreshadowedEntityType,
-	seedDeliveryMethods,
 	narrativeWeight,
+	seedDeliveryMethods,
+	foreshadowedTargetType,
+	foreshadowingSourceType,
 }

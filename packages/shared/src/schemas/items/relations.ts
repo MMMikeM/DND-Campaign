@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -23,49 +23,74 @@ export const itemsRelations = relations(items, ({ many, one }) => ({
 }))
 
 export const itemRelationsRelations = relations(itemRelations, ({ one }) => ({
-	item: one(items, {
-		fields: [itemRelations.itemId],
+	sourceItem: one(items, {
+		fields: [itemRelations.sourceItemId],
 		references: [items.id],
 	}),
 
-	relatedItem: one(items, {
-		fields: [itemRelations.relatedItemId],
+	// Soft relations for polymorphic targetEntityType/targetEntityId
+	targetItem: one(items, {
+		relationName: "ItemRelationTargetItem",
+		fields: [itemRelations.targetEntityId],
 		references: [items.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'item'`,
 	}),
 
-	npc: one(npcs, {
-		fields: [itemRelations.npcId],
+	targetNpc: one(npcs, {
+		relationName: "ItemRelationTargetNpc",
+		fields: [itemRelations.targetEntityId],
 		references: [npcs.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'npc'`,
 	}),
 
-	faction: one(factions, {
-		fields: [itemRelations.factionId],
+	targetFaction: one(factions, {
+		relationName: "ItemRelationTargetFaction",
+		fields: [itemRelations.targetEntityId],
 		references: [factions.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'faction'`,
 	}),
 
-	site: one(sites, {
-		fields: [itemRelations.siteId],
+	targetSite: one(sites, {
+		relationName: "ItemRelationTargetSite",
+		fields: [itemRelations.targetEntityId],
 		references: [sites.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'site'`,
 	}),
 
-	quest: one(quests, {
-		fields: [itemRelations.questId],
+	targetQuest: one(quests, {
+		relationName: "ItemRelationTargetQuest",
+		fields: [itemRelations.targetEntityId],
 		references: [quests.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'quest'`,
 	}),
 
-	conflict: one(conflicts, {
-		fields: [itemRelations.conflictId],
+	targetConflict: one(conflicts, {
+		relationName: "ItemRelationTargetConflict",
+		fields: [itemRelations.targetEntityId],
 		references: [conflicts.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'conflict'`,
 	}),
 
-	narrativeDestination: one(narrativeDestinations, {
-		fields: [itemRelations.narrativeDestinationId],
+	targetNarrativeDestination: one(narrativeDestinations, {
+		relationName: "ItemRelationTargetNarrativeDestination",
+		fields: [itemRelations.targetEntityId],
 		references: [narrativeDestinations.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'narrative_destination'`,
 	}),
 
-	lore: one(lore, {
-		fields: [itemRelations.loreId],
+	targetLore: one(lore, {
+		relationName: "ItemRelationTargetLore",
+		fields: [itemRelations.targetEntityId],
 		references: [lore.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${itemRelations.targetEntityType} = 'lore'`,
 	}),
 }))
 

@@ -56,7 +56,6 @@ export const conflictParticipants = pgTable(
 
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
-
 		conflictId: cascadeFk("conflict_id", conflicts.id),
 
 		role: oneOf("role", participantRolesInConflict),

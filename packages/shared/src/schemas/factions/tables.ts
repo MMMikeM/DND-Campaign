@@ -1,8 +1,8 @@
 // factions/tables.ts
 import { sql } from "drizzle-orm"
-import { check, pgTable, unique } from "drizzle-orm/pg-core"
+import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
-import { areas, regionConnections, regions, sites } from "../regions/tables"
+import { sites } from "../regions/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
@@ -20,6 +20,7 @@ const {
 	relationshipStrengths,
 	transparencyLevels,
 	wealthLevels,
+	relatedEntityTypes,
 } = enums
 
 export const factions = pgTable(
@@ -106,34 +107,20 @@ export const factionDiplomacy = pgTable(
 	(t) => [unique().on(t.sourceFactionId, t.targetFactionId)],
 )
 
-export const factionInfluence = pgTable(
-	"faction_influence",
-	{
-		id: pk(),
-		creativePrompts: list("creative_prompts"),
-		description: list("description"),
-		gmNotes: list("gm_notes"),
-		tags: list("tags"),
+export const factionInfluence = pgTable("faction_influence", {
+	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
 
-		factionId: cascadeFk("faction_id", factions.id),
+	factionId: cascadeFk("faction_id", factions.id),
+	relatedEntityType: oneOf("related_entity_type", relatedEntityTypes),
+	relatedEntityId: integer("related_entity_id"),
 
-		regionId: nullableFk("region_id", () => regions.id),
-		areaId: nullableFk("area_id", () => areas.id),
-		siteId: nullableFk("site_id", sites.id),
-		regionConnectionId: nullableFk("region_connection_id", () => regionConnections.id),
+	influenceLevel: oneOf("influence_level", influenceLevels),
 
-		influenceLevel: oneOf("influence_level", influenceLevels),
-
-		presenceTypes: list("presence_types"),
-		presenceDetails: list("presence_details"),
-		priorities: list("priorities"),
-	},
-	(t) => [
-		check(
-			"region_or_area_or_site",
-			sql`(${t.regionId} IS NOT NULL AND ${t.areaId} IS NULL AND ${t.siteId} IS NULL) 
-			OR  (${t.regionId} IS NULL AND ${t.areaId} IS NOT NULL AND ${t.siteId} IS NULL) 
-			OR  (${t.regionId} IS NULL AND ${t.areaId} IS NULL AND ${t.siteId} IS NOT NULL)`,
-		),
-	],
-)
+	presenceTypes: list("presence_types"),
+	presenceDetails: list("presence_details"),
+	priorities: list("priorities"),
+})

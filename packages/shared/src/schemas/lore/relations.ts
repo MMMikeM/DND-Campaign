@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -20,24 +20,44 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 		references: [lore.id],
 	}),
 
-	linkedRegion: one(regions, {
-		fields: [loreLinks.regionId],
+	// Soft relations for polymorphic targetEntityType/targetEntityId
+	targetRegion: one(regions, {
+		relationName: "LoreLinkTargetRegion",
+		fields: [loreLinks.targetEntityId],
 		references: [regions.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'region'`,
 	}),
-	linkedNpc: one(npcs, {
-		fields: [loreLinks.npcId],
-		references: [npcs.id],
-	}),
-	linkedFaction: one(factions, {
-		fields: [loreLinks.factionId],
+
+	targetFaction: one(factions, {
+		relationName: "LoreLinkTargetFaction",
+		fields: [loreLinks.targetEntityId],
 		references: [factions.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'faction'`,
 	}),
-	linkedQuest: one(quests, {
-		fields: [loreLinks.questId],
-		references: [quests.id],
+
+	targetNpc: one(npcs, {
+		relationName: "LoreLinkTargetNpc",
+		fields: [loreLinks.targetEntityId],
+		references: [npcs.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'npc'`,
 	}),
-	linkedConflict: one(conflicts, {
-		fields: [loreLinks.conflictId],
+
+	targetConflict: one(conflicts, {
+		relationName: "LoreLinkTargetConflict",
+		fields: [loreLinks.targetEntityId],
 		references: [conflicts.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'conflict'`,
+	}),
+
+	targetQuest: one(quests, {
+		relationName: "LoreLinkTargetQuest",
+		fields: [loreLinks.targetEntityId],
+		references: [quests.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'quest'`,
 	}),
 }))

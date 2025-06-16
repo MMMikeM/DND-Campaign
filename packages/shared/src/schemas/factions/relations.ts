@@ -1,5 +1,5 @@
 // factions/relations.ts
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
@@ -8,7 +8,7 @@ import { narrativeDestinationParticipants } from "../narrative-destinations/tabl
 import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships } from "../npcs/tables"
 import { questHooks, questParticipants } from "../quests/tables"
-import { areas, regions, sites } from "../regions/tables"
+import { areas, regionConnections, regions, sites } from "../regions/tables"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({
@@ -59,16 +59,37 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 		fields: [factionInfluence.factionId],
 		references: [factions.id],
 	}),
-	region: one(regions, {
-		fields: [factionInfluence.regionId],
+
+	// Soft relations for polymorphic relatedEntityType/relatedEntityId
+	relatedRegion: one(regions, {
+		relationName: "FactionInfluenceRegion",
+		fields: [factionInfluence.relatedEntityId],
 		references: [regions.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${factionInfluence.relatedEntityType} = 'region'`,
 	}),
-	area: one(areas, {
-		fields: [factionInfluence.areaId],
+
+	relatedRegionConnection: one(regionConnections, {
+		relationName: "FactionInfluenceRegionConnection",
+		fields: [factionInfluence.relatedEntityId],
+		references: [regionConnections.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${factionInfluence.relatedEntityType} = 'region_connection'`,
+	}),
+
+	relatedArea: one(areas, {
+		relationName: "FactionInfluenceArea",
+		fields: [factionInfluence.relatedEntityId],
 		references: [areas.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${factionInfluence.relatedEntityType} = 'area'`,
 	}),
-	site: one(sites, {
-		fields: [factionInfluence.siteId],
+
+	relatedSite: one(sites, {
+		relationName: "FactionInfluenceSite",
+		fields: [factionInfluence.relatedEntityId],
 		references: [sites.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${factionInfluence.relatedEntityType} = 'site'`,
 	}),
 }))
