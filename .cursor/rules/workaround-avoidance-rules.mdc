@@ -8,6 +8,7 @@ alwaysApply: true
 2. Avoid using as assersions
 3. Prefer type inferrence wherever possible
 4. ALWAYS RELY ON TYPE INFERENCE WHERE POSSIBLE, AVOID TYPE DECLARATIONS UNLESS ABSOLUTELY NECESSARY
+5. Always avoid switch statements, prefering object lookups wth fallbacks
 
 ## Recognition
 1. Identify workarounds vs. proper fixes
