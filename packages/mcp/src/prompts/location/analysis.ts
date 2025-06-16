@@ -7,7 +7,7 @@ const {
 } = tables.regionTables
 const {
 	enums: { stageTypes },
-} = tables.questTables
+} = tables.questStageTables
 
 // Helper function to count occurrences of types
 function countTypes<T>(items: T[], extractor: (item: T) => string): Record<string, number> {

@@ -13,6 +13,7 @@ import { mapToolDefinitions } from "./map-tools"
 import { narrativeDestinationToolDefinitions } from "./narrative-destination-tools"
 import { narrativeEventToolDefinitions } from "./narrative-events-tools"
 import { npcToolDefinitions } from "./npc-tools"
+import { questStageToolDefinitions } from "./quest-stage-tools"
 import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
@@ -49,6 +50,7 @@ export const narrativeDestinations = extractToolsAndHandlers(narrativeDestinatio
 export const narrativeEvents = extractToolsAndHandlers(narrativeEventToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
+export const questStages = extractToolsAndHandlers(questStageToolDefinitions)
 export const regions = extractToolsAndHandlers(regionToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
@@ -66,6 +68,7 @@ export function registerToolHandlers(server: Server) {
 		...narrativeEvents.tools,
 		...npcs.tools,
 		...quests.tools,
+		...questStages.tools,
 		...regions.tools,
 	]
 
@@ -83,6 +86,7 @@ export function registerToolHandlers(server: Server) {
 		...narrativeEvents.handlers,
 		...npcs.handlers,
 		...quests.handlers,
+		...questStages.handlers,
 		...regions.handlers,
 	}
 
