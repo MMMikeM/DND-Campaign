@@ -9,12 +9,9 @@ const createEntityGetters = createEntityGettersFactory(tables.questTables)
 
 export const entityGetters = createEntityGetters({
 	all_quests: () => db.query.quests.findMany({}),
-	all_quest_stages: () => db.query.questStages.findMany({}),
-	all_quest_stage_decisions: () => db.query.questStageDecisions.findMany({}),
 	all_quest_hooks: () => db.query.questHooks.findMany({}),
 	all_quest_participants: () => db.query.questParticipants.findMany({}),
 	all_quest_relations: () => db.query.questRelations.findMany({}),
-	all_npc_stage_involvement: () => db.query.npcStageInvolvement.findMany({}),
 
 	quest_by_id: (id: number) =>
 		db.query.quests.findFirst({
@@ -35,38 +32,7 @@ export const entityGetters = createEntityGetters({
 				region: { columns: { name: true, id: true } },
 			},
 		}),
-	quest_stage_by_id: (id: number) =>
-		db.query.questStages.findFirst({
-			where: (questStages, { eq }) => eq(questStages.id, id),
-			with: {
-				deliveryNpc: { columns: { name: true, id: true } },
-				outgoingForeshadowing: true,
-				npcInvolvement: true,
-				quest: { columns: { name: true, id: true } },
-				site: {
-					with: {
-						secrets: true,
-						area: { columns: { name: true, id: true } },
-						encounters: { columns: { name: true, id: true } },
-					},
-				},
-				outgoingDecisions: { with: { toStage: true } },
-				incomingDecisions: { with: { fromStage: true } },
-				items: true,
-				narrativeEvents: true,
-			},
-		}),
-	quest_stage_decision_by_id: (id: number) =>
-		db.query.questStageDecisions.findFirst({
-			where: (stageDecisions, { eq }) => eq(stageDecisions.id, id),
-			with: {
-				quest: { columns: { name: true, id: true } },
-				fromStage: { columns: { name: true, id: true } },
-				toStage: { columns: { name: true, id: true } },
-				triggeredEvents: true,
-				consequences: true,
-			},
-		}),
+
 	quest_hook_by_id: (id: number) =>
 		db.query.questHooks.findFirst({
 			where: (questHooks, { eq }) => eq(questHooks.id, id),
@@ -92,14 +58,6 @@ export const entityGetters = createEntityGetters({
 			with: {
 				sourceQuest: { columns: { name: true, id: true } },
 				targetQuest: { columns: { name: true, id: true } },
-			},
-		}),
-	npc_stage_involvement_by_id: (id: number) =>
-		db.query.npcStageInvolvement.findFirst({
-			where: (npcStageInvolvement, { eq }) => eq(npcStageInvolvement.id, id),
-			with: {
-				questStage: { columns: { name: true, id: true } },
-				npc: { columns: { name: true, id: true } },
 			},
 		}),
 })
