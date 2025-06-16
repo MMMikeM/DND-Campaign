@@ -6,7 +6,7 @@ import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
 import { enums } from "./enums"
 
-export { enums } from "./enums"
+export { enums }
 
 const {
 	adaptabilityLevels,

@@ -6,11 +6,7 @@ import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
-import { enums as questEnums } from "./enums"
-import * as stageModule from "./stages/tables"
-
-const { enums: stageEnums, questStages, questStageDecisions, npcStageInvolvement } = stageModule
-export { questStages, questStageDecisions, npcStageInvolvement }
+import { enums } from "./enums"
 
 const {
 	hookTypes,
@@ -25,7 +21,7 @@ const {
 	urgencyLevels,
 	visibilityLevels,
 	questHookSourceTypes,
-} = questEnums
+} = enums
 
 export const quests = pgTable("quests", {
 	id: pk(),
@@ -149,7 +145,4 @@ export const questParticipants = pgTable(
 	],
 )
 
-export const enums = {
-	...stageEnums,
-	...questEnums,
-}
+export { enums }

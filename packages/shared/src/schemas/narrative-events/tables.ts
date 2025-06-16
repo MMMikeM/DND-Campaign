@@ -3,7 +3,8 @@
 import { sql } from "drizzle-orm"
 import { check, integer, pgTable } from "drizzle-orm/pg-core"
 import { list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
-import { questStageDecisions, questStages, quests } from "../quests/tables"
+import { quests } from "../quests/tables"
+import { questStageDecisions, questStages } from "../stages/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"

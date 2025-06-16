@@ -2,9 +2,9 @@
 import { integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { npcs } from "../npcs/tables"
-import { questStages } from "../quests/stages/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
+import { questStages } from "../stages/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"

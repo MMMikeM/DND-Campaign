@@ -4,13 +4,14 @@ import { conflicts } from "../conflicts/tables"
 import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelations } from "../items/tables"
+import { loreLinks } from "../lore/tables"
 import { maps } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcSiteAssociations } from "../npcs/tables"
-import { questHooks, questStages, quests } from "../quests/tables"
+import { questHooks, quests } from "../quests/tables"
+import { questStages } from "../stages/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
-import { loreLinks } from "../lore/tables"
 
 export const regionsRelations = relations(regions, ({ many }) => ({
 	outgoingRelations: many(regionConnections, { relationName: "sourceRegion" }),
@@ -22,7 +23,7 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	consequences: many(consequences),
 	narrativeDestinations: many(narrativeDestinations),
 	factionInfluence: many(factionInfluence),
-	loreLinks: many(loreLinks),	
+	loreLinks: many(loreLinks),
 }))
 
 export const areasRelations = relations(areas, ({ one, many }) => ({

@@ -6,9 +6,9 @@ import { itemNotableHistory, itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
-import { npcStageInvolvement } from "../quests/stages/tables"
-import { questHooks, questStages } from "../quests/tables"
+import { questHooks } from "../quests/tables"
 import { sites } from "../regions/tables"
+import { npcStageInvolvement, questStages } from "../stages/tables"
 import { npcFactionMemberships, npcRelations, npcSiteAssociations, npcs } from "./tables"
 
 export const npcsRelations = relations(npcs, ({ many }) => ({
