@@ -52,5 +52,6 @@
   "ignoreDependencies": [
     "@biomejs/biome"
   ],
-  "includeEntryExports": true
+  "includeEntryExports": true,
+  "ignoreExportsUsedInFile": true
 } 
