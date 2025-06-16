@@ -1,22 +1,14 @@
 // foreshadowing/tables.ts
 
 import { sql } from "drizzle-orm"
-import { check, pgTable } from "drizzle-orm/pg-core"
-import { list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
-import { conflicts } from "../conflicts/tables"
-import { factions } from "../factions/tables"
-import { items } from "../items/tables"
-import { lore } from "../lore/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { narrativeEvents } from "../narrative-events/tables"
-import { npcs } from "../npcs/tables"
-import { questStages, quests } from "../quests/tables"
-import { sites } from "../regions/tables"
+import { check, integer, pgTable } from "drizzle-orm/pg-core"
+import { list, manyOf, nullableOneOf, oneOf, pk, string } from "../../db/utils"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
 
-const { discoverySubtlety, foreshadowedEntityType, narrativeWeight, seedDeliveryMethods } = enums
+const { discoverySubtlety, narrativeWeight, seedDeliveryMethods, foreshadowedTargetType, foreshadowingSourceType } =
+	enums
 
 export const foreshadowing = pgTable(
 	"foreshadowing",
@@ -28,23 +20,11 @@ export const foreshadowing = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		targetEntityType: oneOf("target_entity_type", foreshadowedEntityType),
+		targetEntityType: oneOf("target_entity_type", foreshadowedTargetType),
+		targetEntityId: integer("target_entity_id"),
 
-		targetQuestId: nullableFk("target_quest_id", quests.id),
-		targetNpcId: nullableFk("target_npc_id", npcs.id),
-		targetNarrativeEventId: nullableFk("target_narrative_event_id", narrativeEvents.id),
-		targetConflictId: nullableFk("target_conflict_id", conflicts.id),
-		targetItemId: nullableFk("target_item_id", items.id),
-		targetNarrativeDestinationId: nullableFk("target_narrative_destination_id", narrativeDestinations.id),
-		targetLoreId: nullableFk("target_lore_id", lore.id),
-		targetFactionId: nullableFk("target_faction_id", factions.id),
-		targetSiteId: nullableFk("target_site_id", sites.id),
-		targetAbstractDetail: nullableString("target_abstract_detail"),
-
-		sourceQuestId: nullableFk("source_quest_id", quests.id),
-		sourceQuestStageId: nullableFk("source_quest_stage_id", questStages.id),
-		sourceSiteId: nullableFk("source_site_id", sites.id),
-		sourceNpcId: nullableFk("source_npc_id", npcs.id),
+		sourceEntityType: nullableOneOf("source_entity_type", foreshadowingSourceType),
+		sourceEntityId: integer("source_entity_id"),
 
 		subtlety: oneOf("subtlety", discoverySubtlety),
 		narrativeWeight: oneOf("narrative_weight", narrativeWeight),
@@ -52,23 +32,18 @@ export const foreshadowing = pgTable(
 	},
 	(t) => [
 		check(
-			"chk_foreshadowing_target_exclusive_and_correct",
+			"chk_abstract_target_has_text",
 			sql`
-		CASE ${t.targetEntityType}
-			WHEN 'quest' THEN (${t.targetQuestId} IS NOT NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'npc' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NOT NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'narrative_event' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NOT NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'conflict' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NOT NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'item' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NOT NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'narrative_destination' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NOT NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'lore' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NOT NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'faction' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NOT NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'site' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NOT NULL AND ${t.targetAbstractDetail} IS NULL)
-			WHEN 'abstract_theme' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NOT NULL)
-			WHEN 'specific_reveal' THEN (${t.targetQuestId} IS NULL AND ${t.targetNpcId} IS NULL AND ${t.targetNarrativeEventId} IS NULL AND ${t.targetConflictId} IS NULL AND ${t.targetItemId} IS NULL AND ${t.targetNarrativeDestinationId} IS NULL AND ${t.targetLoreId} IS NULL AND ${t.targetFactionId} IS NULL AND ${t.targetSiteId} IS NULL AND ${t.targetAbstractDetail} IS NOT NULL)
-			ELSE FALSE
-		END
-		`,
+                CASE 
+                    WHEN ${t.targetEntityType} IN ('abstract_theme', 'specific_reveal') 
+                    THEN (${t.targetEntityId} IS NOT NULL) -- For abstract, the text IS the ID.
+                    ELSE TRUE
+                END
+            `,
+		),
+		check(
+			"chk_source_duo_validity",
+			sql`(${t.sourceEntityType} IS NULL AND ${t.sourceEntityId} IS NULL) OR (${t.sourceEntityType} IS NOT NULL AND ${t.sourceEntityId} IS NOT NULL)`,
 		),
 	],
 )

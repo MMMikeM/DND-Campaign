@@ -5,6 +5,7 @@ import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
+import { consequences } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -38,6 +39,7 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 
 	promise: string("promise"),
 	payoff: string("payoff"),
+	stakes: list("stakes"),
 
 	themes: list("themes"),
 	foreshadowingElements: list("foreshadowing_elements"),
@@ -102,6 +104,7 @@ export const narrativeDestinationParticipants = pgTable(
 
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
+		npcOrFaction: oneOf("npc_or_faction", ["npc", "faction"]),
 
 		roleInArc: string("role_in_arc"),
 
@@ -112,8 +115,20 @@ export const narrativeDestinationParticipants = pgTable(
 	(t) => [
 		check(
 			"npc_or_faction_exclusive_participant",
-			sql`(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL)
-			 OR (${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)`,
+			sql` (${t.npcOrFaction} = 'npc' AND ${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL)
+        OR (${t.npcOrFaction} = 'faction' AND ${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)
+            `,
 		),
 	],
 )
+
+export const narrativeDestinationOutcomes = pgTable("narrative_destination_outcomes", {
+	id: pk(),
+	creativePrompts: list("creative_prompts"),
+	description: list("description"),
+	gmNotes: list("gm_notes"),
+	tags: list("tags"),
+	narrativeDestinationId: cascadeFk("narrative_destination_id", narrativeDestinations.id),
+	consequenceId: cascadeFk("consequence_id", consequences.id),
+	outcomeType: oneOf("outcome_type", ["Success", "Failure", "Mixed"]),
+})

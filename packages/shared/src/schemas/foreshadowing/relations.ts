@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
@@ -11,70 +11,120 @@ import { sites } from "../regions/tables"
 import { foreshadowing } from "./tables"
 
 export const foreshadowingRelations = relations(foreshadowing, ({ one }) => ({
+	// Target entity soft relations (what is being foreshadowed)
 	targetQuest: one(quests, {
-		fields: [foreshadowing.targetQuestId],
+		relationName: "ForeshadowingTargetQuest",
+		fields: [foreshadowing.targetEntityId],
 		references: [quests.id],
-		relationName: "foreshadowingForQuest",
-	}),
-	targetNpc: one(npcs, {
-		fields: [foreshadowing.targetNpcId],
-		references: [npcs.id],
-		relationName: "foreshadowingForNpc",
-	}),
-	targetNarrativeEvent: one(narrativeEvents, {
-		fields: [foreshadowing.targetNarrativeEventId],
-		references: [narrativeEvents.id],
-		relationName: "foreshadowingForNarrativeEvent",
-	}),
-	targetConflict: one(conflicts, {
-		fields: [foreshadowing.targetConflictId],
-		references: [conflicts.id],
-		relationName: "foreshadowingForConflict",
-	}),
-	targetItem: one(items, {
-		fields: [foreshadowing.targetItemId],
-		references: [items.id],
-		relationName: "foreshadowingForItem",
-	}),
-	targetNarrativeDestination: one(narrativeDestinations, {
-		fields: [foreshadowing.targetNarrativeDestinationId],
-		references: [narrativeDestinations.id],
-		relationName: "foreshadowingForNarrativeDestination",
-	}),
-	targetLore: one(lore, {
-		fields: [foreshadowing.targetLoreId],
-		references: [lore.id],
-		relationName: "foreshadowingForLore",
-	}),
-	targetFaction: one(factions, {
-		fields: [foreshadowing.targetFactionId],
-		references: [factions.id],
-		relationName: "foreshadowingForFaction",
-	}),
-	targetSite: one(sites, {
-		fields: [foreshadowing.targetSiteId],
-		references: [sites.id],
-		relationName: "foreshadowingForSite",
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'quest'`,
 	}),
 
-	sourceQuest: one(quests, {
-		fields: [foreshadowing.sourceQuestId],
-		references: [quests.id],
-		relationName: "foreshadowingFromQuest",
-	}),
-	sourceQuestStage: one(questStages, {
-		fields: [foreshadowing.sourceQuestStageId],
-		references: [questStages.id],
-		relationName: "foreshadowingFromQuestStage",
-	}),
-	sourceSite: one(sites, {
-		fields: [foreshadowing.sourceSiteId],
-		references: [sites.id],
-		relationName: "foreshadowingFromSite",
-	}),
-	sourceNpc: one(npcs, {
-		fields: [foreshadowing.sourceNpcId],
+	targetNpc: one(npcs, {
+		relationName: "ForeshadowingTargetNpc",
+		fields: [foreshadowing.targetEntityId],
 		references: [npcs.id],
-		relationName: "foreshadowingFromNpc",
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'npc'`,
 	}),
+
+	targetNarrativeEvent: one(narrativeEvents, {
+		relationName: "ForeshadowingTargetNarrativeEvent",
+		fields: [foreshadowing.targetEntityId],
+		references: [narrativeEvents.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'narrative_event'`,
+	}),
+
+	targetConflict: one(conflicts, {
+		relationName: "ForeshadowingTargetConflict",
+		fields: [foreshadowing.targetEntityId],
+		references: [conflicts.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'conflict'`,
+	}),
+
+	targetItem: one(items, {
+		relationName: "ForeshadowingTargetItem",
+		fields: [foreshadowing.targetEntityId],
+		references: [items.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'item'`,
+	}),
+
+	targetNarrativeDestination: one(narrativeDestinations, {
+		relationName: "ForeshadowingTargetNarrativeDestination",
+		fields: [foreshadowing.targetEntityId],
+		references: [narrativeDestinations.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'narrative_destination'`,
+	}),
+
+	targetLore: one(lore, {
+		relationName: "ForeshadowingTargetLore",
+		fields: [foreshadowing.targetEntityId],
+		references: [lore.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'lore'`,
+	}),
+
+	targetFaction: one(factions, {
+		relationName: "ForeshadowingTargetFaction",
+		fields: [foreshadowing.targetEntityId],
+		references: [factions.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'faction'`,
+	}),
+
+	targetSite: one(sites, {
+		relationName: "ForeshadowingTargetSite",
+		fields: [foreshadowing.targetEntityId],
+		references: [sites.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.targetEntityType} = 'site'`,
+	}),
+
+	// Source entity soft relations (where the foreshadowing comes from)
+	sourceQuest: one(quests, {
+		relationName: "ForeshadowingSourceQuest",
+		fields: [foreshadowing.sourceEntityId],
+		references: [quests.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.sourceEntityType} = 'quest'`,
+	}),
+
+	sourceQuestStage: one(questStages, {
+		relationName: "ForeshadowingSourceQuestStage",
+		fields: [foreshadowing.sourceEntityId],
+		references: [questStages.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.sourceEntityType} = 'quest_stage'`,
+	}),
+
+	sourceSite: one(sites, {
+		relationName: "ForeshadowingSourceSite",
+		fields: [foreshadowing.sourceEntityId],
+		references: [sites.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.sourceEntityType} = 'site'`,
+	}),
+
+	sourceNpc: one(npcs, {
+		relationName: "ForeshadowingSourceNpc",
+		fields: [foreshadowing.sourceEntityId],
+		references: [npcs.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.sourceEntityType} = 'npc'`,
+	}),
+
+	sourceLore: one(lore, {
+		relationName: "ForeshadowingSourceLore",
+		fields: [foreshadowing.sourceEntityId],
+		references: [lore.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${foreshadowing.sourceEntityType} = 'lore'`,
+	}),
+
+	// Note: 'item_description' and 'abstract_theme'/'specific_reveal' don't map to specific tables
+	// These are handled as text values in the application layer
 }))
