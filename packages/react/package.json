@@ -74,7 +74,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@react-router/dev": "^7.6.2",
+    "@react-router/dev": "7.5.3",
     "@tailwindcss/vite": "^4.1.10",
     "@types/node": "catalog:",
     "@types/react": "^19.1.8",

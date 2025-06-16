@@ -1,8 +1,9 @@
+import path from "node:path"
 import { reactRouter } from "@react-router/dev/vite"
 import tailwindcss from "@tailwindcss/vite"
+// import { reactRouterDevTools } from "react-router-devtools"
 import { defineConfig } from "vite"
 import tsconfigPaths from "vite-tsconfig-paths"
-import path from "node:path"
 
 export default defineConfig({
 	plugins: [
@@ -22,6 +23,7 @@ export default defineConfig({
 				})
 			},
 		},
+		// reactRouterDevTools(),
 		reactRouter(),
 		tsconfigPaths(),
 	],
@@ -33,13 +35,9 @@ export default defineConfig({
 			"@ui": path.resolve(__dirname, "./app/components/ui"),
 			"@hooks": path.resolve(__dirname, "./app/hooks"),
 			"@lib": path.resolve(__dirname, "./app/lib"),
-
-			// "better-sqlite3": "better-sqlite3/lib/index.js",
 		},
 	},
-	// Handle SQLite and other native dependencies
 	ssr: {
-		// Mark better-sqlite3 as external to avoid bundling issues
-		external: ["better-sqlite3", "better-sqlite3/lib/index.js", "node:fs", "node:path"],
+		external: ["node:fs", "node:path"],
 	},
 })
