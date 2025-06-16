@@ -1,5 +1,5 @@
 import { tables } from "@tome-master/shared"
-import { isNotNull, like } from "drizzle-orm"
+import { like } from "drizzle-orm"
 import { db, logger } from "../.."
 import { analyzeCampaignContext } from "./analysis"
 import { generateNPCCreationSuggestions } from "./suggestions"
@@ -50,9 +50,9 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				influence: {
 					with: {
 						faction: { columns: { id: true, name: true } },
-						site: { columns: { id: true, name: true } },
-						area: { columns: { id: true, name: true } },
-						region: { columns: { id: true, name: true } },
+						relatedSite: { columns: { id: true, name: true } },
+						relatedArea: { columns: { id: true, name: true } },
+						relatedRegion: { columns: { id: true, name: true } },
 					},
 					columns: { influenceLevel: true },
 				},
@@ -92,7 +92,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		})
 
 		// Get major conflicts with participants
-		const activeConflicts = await db.query.conflicts.findMany({
+		const conflicts = await db.query.conflicts.findMany({
 			with: {
 				participants: {
 					with: {
@@ -135,10 +135,14 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		const lore = await db.query.lore.findMany({
 			with: {
 				links: {
+					with: {
+						targetRegion: { columns: { id: true, name: true } },
+						targetFaction: { columns: { id: true, name: true } },
+						targetNpc: { columns: { id: true, name: true } },
+					},
 					columns: {
-						regionId: true,
-						factionId: true,
-						npcId: true,
+						targetEntityType: true,
+						targetEntityId: true,
 						linkStrength: true,
 						linkRoleOrTypeText: true,
 					},
@@ -153,8 +157,12 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 		})
 
 		// Get foreshadowing seeds for story integration
-		const foreshadowingSeeds = await db.query.foreshadowing.findMany({
-			where: (fs, { or }) => or(isNotNull(fs.sourceNpcId), isNotNull(fs.targetNpcId)),
+		const foreshadowing = await db.query.foreshadowing.findMany({
+			where: (fs, { or, eq, and, isNotNull }) =>
+				or(
+					and(eq(fs.sourceEntityType, "npc"), isNotNull(fs.sourceEntityId)),
+					and(eq(fs.targetEntityType, "npc"), isNotNull(fs.targetEntityId)),
+				),
 			with: {
 				sourceNpc: { columns: { id: true, name: true } },
 				targetNpc: { columns: { id: true, name: true } },
@@ -162,6 +170,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			columns: {
 				id: true,
 				targetEntityType: true,
+				sourceEntityType: true,
 				subtlety: true,
 				narrativeWeight: true,
 				description: true,
@@ -193,9 +202,9 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				const regionalFactions = factions.filter((faction) =>
 					faction.influence.some(
 						(inf) =>
-							(inf.site && locationIds.includes(inf.site.id)) ||
-							(inf.area && areaIds.includes(inf.area.id)) ||
-							(inf.region && regionIds.includes(inf.region.id)),
+							(inf.relatedSite && locationIds.includes(inf.relatedSite.id)) ||
+							(inf.relatedArea && areaIds.includes(inf.relatedArea.id)) ||
+							(inf.relatedRegion && regionIds.includes(inf.relatedRegion.id)),
 					),
 				)
 
@@ -203,7 +212,10 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				const culturalInfluences = lore.filter(
 					(loreItem) =>
 						loreItem.loreType === "cultural" ||
-						loreItem.links.some((link) => link.regionId && regionIds.includes(link.regionId)),
+						loreItem.links.some(
+							(link) =>
+								link.targetEntityType === "region" && link.targetEntityId && regionIds.includes(link.targetEntityId),
+						),
 				)
 
 				regionalContext = {
@@ -259,7 +271,7 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 				relatedFactions: npc.factionMemberships,
 			})),
 			factions,
-			activeConflicts,
+			conflicts,
 			quests,
 			narrativeArcs,
 		)
@@ -291,11 +303,11 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			existingNPCs,
 			factions,
 			locations,
-			activeConflicts,
+			activeConflicts: conflicts,
 			quests,
 			narrativeArcs,
 			lore,
-			foreshadowingSeeds,
+			foreshadowingSeeds: foreshadowing,
 			regionalContext,
 			campaignAnalysis,
 			relationshipSuggestions,
@@ -306,11 +318,11 @@ export async function gatherNPCCreationContext(args: EnhancedNpcCreationArgs) {
 			existingNPCs: existingNPCs.length,
 			factions: factions.length,
 			locations: locations.length,
-			activeConflicts: activeConflicts.length,
+			activeConflicts: conflicts.length,
 			quests: quests.length,
 			narrativeArcs: narrativeArcs.length,
 			lore: lore.length,
-			foreshadowingSeeds: foreshadowingSeeds.length,
+			foreshadowingSeeds: foreshadowing.length,
 			hasRegionalContext: !!regionalContext,
 		})
 

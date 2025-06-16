@@ -52,9 +52,10 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 		const existingInfluence = await db.query.factionInfluence.findMany({
 			with: {
 				faction: { columns: { id: true, name: true } },
-				region: { columns: { id: true, name: true } },
-				area: { columns: { id: true, name: true } },
-				site: { columns: { id: true, name: true } },
+				relatedArea: { columns: { id: true, name: true } },
+				relatedRegionConnection: { columns: { id: true, name: true } },
+				relatedRegion: { columns: { id: true, name: true } },
+				relatedSite: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
@@ -110,9 +111,9 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 
 		// Get lore connections
 		const loreLinks = await db.query.loreLinks.findMany({
-			where: (ll, { isNotNull }) => isNotNull(ll.factionId),
+			where: (ll, { eq }) => eq(ll.targetEntityType, "faction"),
 			with: {
-				linkedFaction: { columns: { id: true, name: true } },
+				targetFaction: { columns: { id: true, name: true } },
 				lore: { columns: { id: true, name: true, loreType: true } },
 			},
 			columns: {
@@ -197,14 +198,18 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 			const relatedFactions = await db.query.factionInfluence.findMany({
 				where:
 					relatedSites.length > 0
-						? (factionInfluence, { inArray }) =>
-								inArray(
-									factionInfluence.siteId,
-									relatedSites.map((s) => s.id),
+						? (factionInfluence, { inArray, eq, and }) =>
+								and(
+									eq(factionInfluence.relatedEntityType, "site"),
+									inArray(
+										factionInfluence.relatedEntityId,
+										relatedSites.map((s) => s.id),
+									),
 								)
 						: undefined,
 				with: {
 					faction: { columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true } },
+					relatedSite: { columns: { id: true, name: true } },
 				},
 				columns: {
 					id: true,

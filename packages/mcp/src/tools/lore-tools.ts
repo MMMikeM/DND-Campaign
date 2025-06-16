@@ -18,12 +18,12 @@ export const entityGetters = createEntityGetters({
 				itemRelations: true,
 				links: {
 					with: {
-						linkedConflict: true,
-						linkedFaction: true,
-						linkedNpc: true,
-						linkedQuest: true,
-						linkedRegion: true,
 						lore: true,
+						targetConflict: true,
+						targetFaction: true,
+						targetNpc: true,
+						targetQuest: true,
+						targetRegion: true,
 					},
 				},
 				incomingForeshadowing: true,
@@ -34,12 +34,12 @@ export const entityGetters = createEntityGetters({
 		db.query.loreLinks.findFirst({
 			where: (loreLinks, { eq }) => eq(loreLinks.id, id),
 			with: {
-				linkedConflict: true,
-				linkedFaction: true,
-				linkedNpc: true,
-				linkedQuest: true,
-				linkedRegion: true,
 				lore: true,
+				targetConflict: true,
+				targetFaction: true,
+				targetNpc: true,
+				targetQuest: true,
+				targetRegion: true,
 			},
 		}),
 })

@@ -22,10 +22,11 @@ export const entityGetters = createEntityGetters({
 				questParticipation: true,
 				influence: {
 					with: {
-						area: { columns: { name: true, id: true } },
+						relatedArea: { columns: { name: true, id: true } },
+						relatedSite: { columns: { name: true, id: true } },
+						relatedRegion: { columns: { name: true, id: true } },
+						relatedRegionConnection: { columns: { name: true, id: true } },
 						faction: { columns: { name: true, id: true } },
-						region: { columns: { name: true, id: true } },
-						site: { columns: { name: true, id: true } },
 					},
 				},
 				members: { with: { npc: { columns: { name: true, id: true } } } },
@@ -49,7 +50,13 @@ export const entityGetters = createEntityGetters({
 	faction_influence_by_id: (id: number) =>
 		db.query.factionInfluence.findFirst({
 			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
-			with: { faction: true, region: true, area: true, site: true },
+			with: {
+				faction: true,
+				relatedArea: true,
+				relatedSite: true,
+				relatedRegion: true,
+				relatedRegionConnection: true,
+			},
 		}),
 })
 

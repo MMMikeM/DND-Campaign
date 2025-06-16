@@ -31,7 +31,6 @@ export const entityGetters = createEntityGetters({
 				affectedQuest: true,
 				triggerConflict: true,
 				triggerQuest: true,
-				triggerStageDecision: true,
 				affectedRegion: true,
 				affectedArea: true,
 				affectedSite: true,

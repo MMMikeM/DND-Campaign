@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, list, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	narrativeEventTables: { narrativeEvents, consequences, enums },
@@ -147,21 +147,12 @@ export const schemas = {
 		triggerEntityType: z
 			.enum(consequenceTriggerTypes)
 			.describe("The specific type of in-game element that caused this consequence."),
-		triggerStageDecisionId: optionalId.describe("The ID of the specific player choice that set this in motion."),
-		triggerQuestId: optionalId.describe("The ID of the Quest whose success or failure triggered this."),
-		triggerConflictId: optionalId.describe("The ID of the wider Conflict whose changing state triggered this."),
 
 		affectedEntityType: z
 			.enum(consequenceAffectedEntityTypes)
 			.describe("The specific type of in-game element that this consequence impacts."),
-		affectedFactionId: optionalId.describe("The faction whose status, power, or attitude changes."),
-		affectedRegionId: optionalId.describe("The region that is geographically or politically altered."),
-		affectedAreaId: optionalId.describe("The smaller area within a region that is altered."),
-		affectedSiteId: optionalId.describe("The specific dungeon, city, or location that changes."),
-		affectedNpcId: optionalId.describe("The NPC whose status, goals, or relationship to the party changes."),
-		affectedNarrativeDestinationId: optionalId.describe("The story arc whose premise or payoff is now altered."),
-		affectedConflictId: optionalId.describe("The main conflict whose balance of power or nature has shifted."),
-		affectedQuestId: optionalId.describe("A future or ongoing quest that is now altered, blocked, or unlocked."),
+		affectedEntityId: id.describe("The ID of the entity that this consequence impacts."),
+		triggerEntityId: id.describe("The ID of the entity that caused this consequence."),
 		conflictImpactDescription: (s) =>
 			s
 				.optional()
@@ -180,48 +171,12 @@ export const schemas = {
 		)
 		.refine(
 			(data) => {
-				// Must have at least one trigger source or be a world event/player choice/time passage
-				const hasTrigger = data.triggerStageDecisionId || data.triggerQuestId || data.triggerConflictId
-				const isWorldEvent = [
-					"world_event",
-					"player_choice",
-					"time_passage",
-					"quest_completion_affecting_conflict",
-				].includes(data.sourceType)
-				return hasTrigger || isWorldEvent
+				if (data.triggerEntityType === "conflict") return data.conflictImpactDescription !== undefined
+				return true
 			},
 			{
-				message: "Consequence must have a trigger source or be a world event type",
-				path: ["sourceType"],
-			},
-		)
-		.refine(
-			(data) => {
-				// Must have at least one effect defined
-				return (
-					data.affectedFactionId ||
-					data.affectedRegionId ||
-					data.affectedAreaId ||
-					data.affectedSiteId ||
-					data.affectedNpcId ||
-					data.affectedNarrativeDestinationId ||
-					data.affectedConflictId ||
-					data.affectedQuestId
-				)
-			},
-			{
-				message: "Consequence must have at least one effect defined",
-				path: ["consequenceType"],
-			},
-		)
-		.refine(
-			(data) => {
-				// If affecting a conflict, must have impact description
-				return !data.affectedConflictId || data.conflictImpactDescription
-			},
-			{
-				message: "Conflict impact description required when affecting a conflict",
-				path: ["conflictImpactDescription"],
+				message: "Conflict impact description is required when trigger entity type is conflict",
+				path: ["triggerEntityType"],
 			},
 		),
 } as const satisfies Schema<TableNames[number]>

@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	conflictTables: { conflicts, conflictParticipants, enums },
@@ -27,38 +27,34 @@ export const schemas = {
 			s.describe(
 				"A short, evocative title that sets the tone for the entire struggle (e.g., 'The Silent War,' 'The Sunken Crown Succession').",
 			),
-		description: (s) =>
-			s.describe(
-				"A high-level summary outlining the central struggle, key players, and the fundamental tension driving the conflict.",
-			),
-		creativePrompts: (s) =>
-			s.describe("Ideas for Narrative Destinations or specific quests that stem directly from this conflict."),
-		gmNotes: (s) =>
-			s.describe(
-				"Behind-the-scenes notes, potential future escalations, or mechanical considerations for running this conflict.",
-			),
-		tags: (s) => s.describe("Keywords for filtering and organization (e.g., 'War for the Throne,' 'Magical Plague')."),
+		description: list.describe(
+			"A high-level summary outlining the central struggle, key players, and the fundamental tension driving the conflict.",
+		),
+		creativePrompts: list.describe(
+			"Ideas for Narrative Destinations or specific quests that stem directly from this conflict.",
+		),
+		gmNotes: list.describe(
+			"Behind-the-scenes notes, potential future escalations, or mechanical considerations for running this conflict.",
+		),
+		tags: list.describe("Keywords for filtering and organization (e.g., 'War for the Throne,' 'Magical Plague')."),
 
 		cause: (s) =>
 			s.describe(
 				"The inciting incident or long-brewing situation that ignited this struggle. The 'first domino' to fall.",
 			),
-		stakes: (s) =>
-			s.describe(
-				"The tangible and intangible consequences of victory or defeat for all involved. What is truly on the line?",
-			),
+		stakes: list.describe(
+			"The tangible and intangible consequences of victory or defeat for all involved. What is truly on the line?",
+		),
 		moralDilemma: (s) =>
 			s.describe(
 				"The core, often unanswerable, ethical question the conflict forces upon the players and the world. The 'Sophie's Choice' at the heart of the struggle.",
 			),
-		possibleOutcomes: (s) =>
-			s.describe(
-				"A few potential resolutions, ranging from clear victory/defeat to messy stalemates. How could the world change based on the outcome?",
-			),
-		hiddenTruths: (s) =>
-			s.describe(
-				"Crucial secrets or unknown variables that, if revealed, could drastically alter the conflict's dynamics. The core of the investigative/mystery element.",
-			),
+		possibleOutcomes: list.describe(
+			"A few potential resolutions, ranging from clear victory/defeat to messy stalemates. How could the world change based on the outcome?",
+		),
+		hiddenTruths: list.describe(
+			"Crucial secrets or unknown variables that, if revealed, could drastically alter the conflict's dynamics. The core of the investigative/mystery element.",
+		),
 
 		scope: z
 			.enum(conflictScopes)
@@ -81,12 +77,12 @@ export const schemas = {
 				"The 'emotional temperature' of the conflict. Does it create an atmosphere of background anxiety, immediate danger, or open panic?",
 			),
 		natures: z
-			.enum(conflictNatures)
+			.array(z.enum(conflictNatures))
 			.describe(
 				"The dominant arenas where the conflict plays out. Determines the types of challenges players will face (e.g., battles for Military, diplomacy for Political, investigation for Mystical).",
 			),
 		questImpacts: z
-			.enum(questImpacts)
+			.array(z.enum(questImpacts))
 			.describe(
 				"The way this overarching conflict actively shapes or disrupts quests, providing context, urgency, or obstacles.",
 			),
@@ -100,17 +96,16 @@ export const schemas = {
 		),
 
 	conflictParticipants: createInsertSchema(conflictParticipants, {
-		description: (s) =>
-			s.describe(
-				"Key actions, resources, and influence this participant brings to the conflict. What are they *doing* to win?",
-			),
-		creativePrompts: (s) =>
-			s.describe(
-				"Ideas for how players might interact with, be hired by, or come into opposition with this specific participant.",
-			),
-		gmNotes: (s) =>
-			s.describe("GM notes about this participant's secret weaknesses, hidden resources, or likely future moves."),
-		tags: (s) => s.describe("Keywords for this participant's role (e.g., 'Traitor,' 'Financier,' 'Propagandist')."),
+		description: list.describe(
+			"Key actions, resources, and influence this participant brings to the conflict. What are they *doing* to win?",
+		),
+		creativePrompts: list.describe(
+			"Ideas for how players might interact with, be hired by, or come into opposition with this specific participant.",
+		),
+		gmNotes: list.describe(
+			"GM notes about this participant's secret weaknesses, hidden resources, or likely future moves.",
+		),
+		tags: list.describe("Keywords for this participant's role (e.g., 'Traitor,' 'Financier,' 'Propagandist')."),
 
 		conflictId: id.describe("ID of the major conflict this participant is involved in."),
 		factionId: optionalId.describe(
