@@ -6,7 +6,7 @@ import { cascadeFk, list, nullableString, oneOf, pk, string } from "../../db/uti
 import { maps } from "../maps/tables"
 import { enums } from "./enums"
 
-export { enums } from "./enums"
+export { enums }
 
 const {
 	areaTypes,

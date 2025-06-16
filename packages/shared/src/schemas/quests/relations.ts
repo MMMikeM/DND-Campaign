@@ -8,12 +8,8 @@ import { narrativeDestinationQuestRoles } from "../narrative-destinations/tables
 import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
-import * as stageModule from "./stages/relations"
-import { questStages } from "./stages/tables"
+import { questStages } from "../stages/tables"
 import { questHooks, questParticipants, questRelations, quests } from "./tables"
-
-const { npcStageInvolvementRelations, questStagesRelations, questStageDecisionsRelations } = stageModule
-export { npcStageInvolvementRelations, questStagesRelations, questStageDecisionsRelations }
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
 	region: one(regions, {

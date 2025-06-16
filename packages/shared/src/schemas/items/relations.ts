@@ -5,9 +5,9 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { lore } from "../lore/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
-import { questStages } from "../quests/stages/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
+import { questStages } from "../stages/tables"
 import { itemNotableHistory, itemRelations, items } from "./tables"
 
 export const itemsRelations = relations(items, ({ many, one }) => ({

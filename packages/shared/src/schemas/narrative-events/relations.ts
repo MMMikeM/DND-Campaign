@@ -5,8 +5,9 @@ import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
-import { questStageDecisions, questStages, quests } from "../quests/tables"
+import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
+import { questStageDecisions, questStages } from "../stages/tables"
 import { consequences, narrativeEvents } from "./tables"
 
 export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many }) => ({
