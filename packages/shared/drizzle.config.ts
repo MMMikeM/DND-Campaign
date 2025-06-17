@@ -8,6 +8,10 @@ export default defineConfig({
 	dbCredentials: {
 		url: dbUrl,
 	},
-	schema: ["/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/tables.ts"],
+	schema: [
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/tables.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/views.ts",
+		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/search-view.ts",
+	],
 	out: "./drizzle",
 })

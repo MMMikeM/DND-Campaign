@@ -53,3 +53,31 @@ export const tables = {
 	loreTables,
 	mapTables,
 }
+
+import * as conflictViews from "./conflicts/views"
+import * as factionViews from "./factions/views"
+import * as foreshadowingViews from "./foreshadowing/views"
+import * as itemViews from "./items/views"
+import * as loreViews from "./lore/views"
+import * as narrativeDestinationViews from "./narrative-destinations/views"
+import * as narrativeEventViews from "./narrative-events/views"
+import * as npcViews from "./npcs/views"
+import * as questViews from "./quests/views"
+import * as regionViews from "./regions/views"
+import { searchIndex } from "./search-view"
+import * as stageViews from "./stages/views"
+
+export const views = {
+	conflictViews,
+	factionViews,
+	foreshadowingViews,
+	itemViews,
+	loreViews,
+	narrativeDestinationViews,
+	narrativeEventViews,
+	npcViews,
+	questViews,
+	regionViews,
+	stageViews,
+	searchIndex,
+}

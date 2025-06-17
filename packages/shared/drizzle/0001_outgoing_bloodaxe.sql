@@ -75,17 +75,12 @@ CREATE TABLE "faction_influence" (
 	"gm_notes" text[] NOT NULL,
 	"tags" text[] NOT NULL,
 	"faction_id" integer NOT NULL,
-	"region_id" integer,
-	"area_id" integer,
-	"site_id" integer,
-	"region_connection_id" integer,
+	"related_entity_type" text NOT NULL,
+	"related_entity_id" integer,
 	"influence_level" text NOT NULL,
 	"presence_types" text[] NOT NULL,
 	"presence_details" text[] NOT NULL,
-	"priorities" text[] NOT NULL,
-	CONSTRAINT "region_or_area_or_site" CHECK (("faction_influence"."region_id" IS NOT NULL AND "faction_influence"."area_id" IS NULL AND "faction_influence"."site_id" IS NULL) 
-			OR  ("faction_influence"."region_id" IS NULL AND "faction_influence"."area_id" IS NOT NULL AND "faction_influence"."site_id" IS NULL) 
-			OR  ("faction_influence"."region_id" IS NULL AND "faction_influence"."area_id" IS NULL AND "faction_influence"."site_id" IS NOT NULL))
+	"priorities" text[] NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "factions" (
@@ -126,40 +121,21 @@ CREATE TABLE "foreshadowing" (
 	"gm_notes" text[] NOT NULL,
 	"tags" text[] NOT NULL,
 	"target_entity_type" text NOT NULL,
-	"target_quest_id" integer,
-	"target_npc_id" integer,
-	"target_narrative_event_id" integer,
-	"target_conflict_id" integer,
-	"target_item_id" integer,
-	"target_narrative_destination_id" integer,
-	"target_world_concept_id" integer,
-	"target_faction_id" integer,
-	"target_site_id" integer,
-	"target_abstract_detail" text,
-	"source_quest_id" integer,
-	"source_quest_stage_id" integer,
-	"source_site_id" integer,
-	"source_npc_id" integer,
+	"target_entity_id" integer,
+	"source_entity_type" text,
+	"source_entity_id" integer,
 	"subtlety" text NOT NULL,
 	"narrative_weight" text NOT NULL,
 	"suggested_delivery_methods" text[] NOT NULL,
 	CONSTRAINT "foreshadowing_name_unique" UNIQUE("name"),
-	CONSTRAINT "chk_foreshadowing_target_exclusive_and_correct" CHECK (
-		CASE "foreshadowing"."target_entity_type"
-			WHEN 'quest' THEN ("foreshadowing"."target_quest_id" IS NOT NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'npc' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NOT NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'narrative_event' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NOT NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'conflict' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NOT NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'item' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NOT NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'narrative_destination' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NOT NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'world_concept' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NOT NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'faction' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NOT NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'site' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NOT NULL AND "foreshadowing"."target_abstract_detail" IS NULL)
-			WHEN 'abstract_theme' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NOT NULL)
-			WHEN 'specific_reveal' THEN ("foreshadowing"."target_quest_id" IS NULL AND "foreshadowing"."target_npc_id" IS NULL AND "foreshadowing"."target_narrative_event_id" IS NULL AND "foreshadowing"."target_conflict_id" IS NULL AND "foreshadowing"."target_item_id" IS NULL AND "foreshadowing"."target_narrative_destination_id" IS NULL AND "foreshadowing"."target_world_concept_id" IS NULL AND "foreshadowing"."target_faction_id" IS NULL AND "foreshadowing"."target_site_id" IS NULL AND "foreshadowing"."target_abstract_detail" IS NOT NULL)
-			ELSE FALSE
-		END
-		)
+	CONSTRAINT "chk_abstract_target_has_text" CHECK (
+                CASE 
+                    WHEN "foreshadowing"."target_entity_type" IN ('abstract_theme', 'specific_reveal') 
+                    THEN ("foreshadowing"."target_entity_id" IS NOT NULL) -- For abstract, the text IS the ID.
+                    ELSE TRUE
+                END
+            ),
+	CONSTRAINT "chk_source_duo_validity" CHECK (("foreshadowing"."source_entity_type" IS NULL AND "foreshadowing"."source_entity_id" IS NULL) OR ("foreshadowing"."source_entity_type" IS NOT NULL AND "foreshadowing"."source_entity_id" IS NOT NULL))
 );
 --> statement-breakpoint
 CREATE TABLE "item_notable_history" (
@@ -183,31 +159,11 @@ CREATE TABLE "item_relations" (
 	"gm_notes" text[] NOT NULL,
 	"tags" text[] NOT NULL,
 	"source_item_id" integer NOT NULL,
-	"target_entity_type" text NOT NULL,
-	"target_item_id" integer,
-	"target_npc_id" integer,
-	"target_faction_id" integer,
-	"target_site_id" integer,
-	"target_quest_id" integer,
-	"target_conflict_id" integer,
-	"target_narrative_destination_id" integer,
-	"target_world_concept_id" integer,
 	"relationship_type" text NOT NULL,
+	"target_entity_type" text NOT NULL,
+	"target_entity_id" integer,
 	"relationship_details" text,
-	CONSTRAINT "item_relations_source_item_id_target_entity_type_target_item_id_target_npc_id_target_faction_id_target_site_id_target_quest_id_target_conflict_id_target_narrative_destination_id_target_world_concept_id_relationship_type_unique" UNIQUE("source_item_id","target_entity_type","target_item_id","target_npc_id","target_faction_id","target_site_id","target_quest_id","target_conflict_id","target_narrative_destination_id","target_world_concept_id","relationship_type"),
-	CONSTRAINT "single_related_entity_exclusive_and_correct" CHECK (
-			CASE "item_relations"."target_entity_type"
-				WHEN 'item' THEN ("item_relations"."target_item_id" IS NOT NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'npc' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NOT NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'faction' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NOT NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'site' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NOT NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'quest' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NOT NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'conflict' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NOT NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'narrative_destination' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NOT NULL AND "item_relations"."target_world_concept_id" IS NULL)
-				WHEN 'world_concept' THEN ("item_relations"."target_item_id" IS NULL AND "item_relations"."target_npc_id" IS NULL AND "item_relations"."target_faction_id" IS NULL AND "item_relations"."target_site_id" IS NULL AND "item_relations"."target_quest_id" IS NULL AND "item_relations"."target_conflict_id" IS NULL AND "item_relations"."target_narrative_destination_id" IS NULL AND "item_relations"."target_world_concept_id" IS NOT NULL)
-				ELSE FALSE
-			END
-			)
+	CONSTRAINT "item_relations_source_item_id_target_entity_type_target_entity_id_relationship_type_unique" UNIQUE("source_item_id","target_entity_type","target_entity_id","relationship_type")
 );
 --> statement-breakpoint
 CREATE TABLE "items" (
@@ -231,6 +187,53 @@ CREATE TABLE "items" (
 	CONSTRAINT "items_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
+CREATE TABLE "lore" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"summary" text NOT NULL,
+	"lore_type" text NOT NULL,
+	"tags" text[] NOT NULL,
+	"surface_impression" text NOT NULL,
+	"lived_reality" text NOT NULL,
+	"hidden_truths" text NOT NULL,
+	"modern_relevance" text NOT NULL,
+	"aesthetics_and_symbols" text[] NOT NULL,
+	"interactions_and_rules" text[] NOT NULL,
+	"connections_to_world" text[] NOT NULL,
+	"core_tenets_and_traditions" text[] NOT NULL,
+	"history_and_legacy" text[] NOT NULL,
+	"conflicting_narratives" text[] NOT NULL,
+	"quest_hooks" text[] NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	"gm_notes" text[] NOT NULL,
+	CONSTRAINT "lore_name_unique" UNIQUE("name")
+);
+--> statement-breakpoint
+CREATE TABLE "lore_links" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	"description" text[] NOT NULL,
+	"gm_notes" text[] NOT NULL,
+	"tags" text[] NOT NULL,
+	"lore_id" integer NOT NULL,
+	"link_strength" text NOT NULL,
+	"target_entity_type" text NOT NULL,
+	"target_entity_id" integer,
+	"link_role_or_type_text" text NOT NULL,
+	"link_details_text" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "maps" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"file_name" text NOT NULL,
+	"map_image" "bytea" NOT NULL,
+	"image_format" text NOT NULL,
+	"image_size" integer NOT NULL,
+	"image_width" integer NOT NULL,
+	"image_height" integer NOT NULL,
+	CONSTRAINT "maps_file_name_unique" UNIQUE("file_name")
+);
+--> statement-breakpoint
 CREATE TABLE "map_details" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -251,15 +254,15 @@ CREATE TABLE "map_details" (
 	CONSTRAINT "map_details_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
-CREATE TABLE "maps" (
+CREATE TABLE "narrative_destination_outcomes" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"file_name" text NOT NULL,
-	"map_image" "bytea" NOT NULL,
-	"image_format" text NOT NULL,
-	"image_size" integer NOT NULL,
-	"image_width" integer NOT NULL,
-	"image_height" integer NOT NULL,
-	CONSTRAINT "maps_file_name_unique" UNIQUE("file_name")
+	"creative_prompts" text[] NOT NULL,
+	"description" text[] NOT NULL,
+	"gm_notes" text[] NOT NULL,
+	"tags" text[] NOT NULL,
+	"narrative_destination_id" integer NOT NULL,
+	"consequence_id" integer NOT NULL,
+	"outcome_type" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "narrative_destination_participants" (
@@ -271,11 +274,13 @@ CREATE TABLE "narrative_destination_participants" (
 	"narrative_destination_id" integer NOT NULL,
 	"npc_id" integer,
 	"faction_id" integer,
+	"npc_or_faction" text NOT NULL,
 	"role_in_arc" text NOT NULL,
 	"arc_importance" text NOT NULL,
 	"involvement_details" text[] NOT NULL,
-	CONSTRAINT "npc_or_faction_exclusive_participant" CHECK (("narrative_destination_participants"."npc_id" IS NOT NULL AND "narrative_destination_participants"."faction_id" IS NULL)
-			 OR ("narrative_destination_participants"."npc_id" IS NULL AND "narrative_destination_participants"."faction_id" IS NOT NULL))
+	CONSTRAINT "npc_or_faction_exclusive_participant" CHECK ( ("narrative_destination_participants"."npc_or_faction" = 'npc' AND "narrative_destination_participants"."npc_id" IS NOT NULL AND "narrative_destination_participants"."faction_id" IS NULL)
+        OR ("narrative_destination_participants"."npc_or_faction" = 'faction' AND "narrative_destination_participants"."npc_id" IS NULL AND "narrative_destination_participants"."faction_id" IS NOT NULL)
+            )
 );
 --> statement-breakpoint
 CREATE TABLE "narrative_destination_quest_roles" (
@@ -317,9 +322,10 @@ CREATE TABLE "narrative_destinations" (
 	"related_conflict_id" integer,
 	"type" text NOT NULL,
 	"status" text NOT NULL,
-	"intended_emotional_arc" text NOT NULL,
+	"intended_emotional_arc_shape" text NOT NULL,
 	"promise" text NOT NULL,
 	"payoff" text NOT NULL,
+	"stakes" text[] NOT NULL,
 	"themes" text[] NOT NULL,
 	"foreshadowing_elements" text[] NOT NULL,
 	CONSTRAINT "narrative_destinations_name_unique" UNIQUE("name")
@@ -339,44 +345,13 @@ CREATE TABLE "consequences" (
 	"player_impact_feel" text NOT NULL,
 	"source_type" text NOT NULL,
 	"trigger_entity_type" text,
-	"trigger_stage_decision_id" integer,
-	"trigger_quest_id" integer,
-	"trigger_conflict_id" integer,
-	"affected_entity_type" text,
-	"affected_faction_id" integer,
-	"affected_region_id" integer,
-	"affected_area_id" integer,
-	"affected_site_id" integer,
-	"affected_npc_id" integer,
-	"affected_destination_id" integer,
-	"affected_conflict_id" integer,
-	"affected_quest_id" integer,
+	"trigger_entity_id" integer,
+	"affected_entity_type" text NOT NULL,
+	"affected_entity_id" integer,
 	"conflict_impact_description" text,
 	CONSTRAINT "consequences_name_unique" UNIQUE("name"),
-	CONSTRAINT "chk_consequence_trigger_exclusive" CHECK (
-			CASE "consequences"."trigger_entity_type"
-				WHEN 'decision' THEN ("consequences"."trigger_stage_decision_id" IS NOT NULL AND "consequences"."trigger_quest_id" IS NULL AND "consequences"."trigger_conflict_id" IS NULL)
-				WHEN 'quest' THEN ("consequences"."trigger_stage_decision_id" IS NULL AND "consequences"."trigger_quest_id" IS NOT NULL AND "consequences"."trigger_conflict_id" IS NULL)
-				WHEN 'conflict' THEN ("consequences"."trigger_stage_decision_id" IS NULL AND "consequences"."trigger_quest_id" IS NULL AND "consequences"."trigger_conflict_id" IS NOT NULL)
-				ELSE ("consequences"."trigger_stage_decision_id" IS NULL AND "consequences"."trigger_quest_id" IS NULL AND "consequences"."trigger_conflict_id" IS NULL)
-			END
-			),
-	CONSTRAINT "chk_consequence_affected_exclusive" CHECK (
-			CASE "consequences"."affected_entity_type"
-				WHEN 'faction' THEN ("consequences"."affected_faction_id" IS NOT NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'region' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NOT NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'area' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NOT NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'site' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NOT NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'npc' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NOT NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'narrative_destination' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NOT NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'conflict' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NOT NULL AND "consequences"."affected_quest_id" IS NULL)
-				WHEN 'quest' THEN ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NOT NULL)
-				ELSE ("consequences"."affected_faction_id" IS NULL AND "consequences"."affected_region_id" IS NULL AND "consequences"."affected_area_id" IS NULL AND "consequences"."affected_site_id" IS NULL AND "consequences"."affected_npc_id" IS NULL AND "consequences"."affected_destination_id" IS NULL AND "consequences"."affected_conflict_id" IS NULL AND "consequences"."affected_quest_id" IS NULL)
-			END
-			),
-	CONSTRAINT "chk_consequence_conflict_impact_description_if_conflict_affected" CHECK (
-			("consequences"."affected_conflict_id" IS NULL) OR ("consequences"."conflict_impact_description" IS NOT NULL)
-			)
+	CONSTRAINT "chk_trigger_duo_validity" CHECK (("consequences"."trigger_entity_type" IS NULL AND "consequences"."trigger_entity_id" IS NULL) OR ("consequences"."trigger_entity_type" IS NOT NULL AND "consequences"."trigger_entity_id" IS NOT NULL)),
+	CONSTRAINT "chk_conflict_impact_description_required" CHECK (("consequences"."affected_entity_type" != 'conflict') OR ("consequences"."conflict_impact_description" IS NOT NULL))
 );
 --> statement-breakpoint
 CREATE TABLE "narrative_events" (
@@ -495,69 +470,6 @@ CREATE TABLE "npcs" (
 	"secrets" text[] NOT NULL,
 	"voice_notes" text[] NOT NULL,
 	CONSTRAINT "npcs_name_unique" UNIQUE("name")
-);
---> statement-breakpoint
-CREATE TABLE "npc_quest_stage_involvement" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"description" text[] NOT NULL,
-	"gm_notes" text[] NOT NULL,
-	"tags" text[] NOT NULL,
-	"npc_id" integer NOT NULL,
-	"quest_stage_id" integer NOT NULL,
-	"role_in_stage" text NOT NULL,
-	"involvement_details" text[] NOT NULL,
-	CONSTRAINT "npc_quest_stage_involvement_npc_id_quest_stage_id_unique" UNIQUE("npc_id","quest_stage_id")
-);
---> statement-breakpoint
-CREATE TABLE "quest_stage_decisions" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"description" text[] NOT NULL,
-	"gm_notes" text[] NOT NULL,
-	"tags" text[] NOT NULL,
-	"quest_id" integer NOT NULL,
-	"from_quest_stage_id" integer NOT NULL,
-	"to_quest_stage_id" integer,
-	"condition_type" text NOT NULL,
-	"decision_type" text NOT NULL,
-	"ambiguity_level" text NOT NULL,
-	"options" text[] NOT NULL,
-	"success_description" text[] NOT NULL,
-	"failure_description" text[] NOT NULL,
-	"narrative_transition" text[] NOT NULL,
-	"potential_player_reactions" text[] NOT NULL,
-	"condition_value" text NOT NULL,
-	"failure_leads_to_retry" boolean DEFAULT false NOT NULL,
-	"failure_lesson_learned" text,
-	CONSTRAINT "quest_stage_decisions_name_unique" UNIQUE("name"),
-	CONSTRAINT "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique" UNIQUE("quest_id","from_quest_stage_id","to_quest_stage_id"),
-	CONSTRAINT "chk_stage_decision_no_self_loop" CHECK (COALESCE("quest_stage_decisions"."from_quest_stage_id" != "quest_stage_decisions"."to_quest_stage_id", TRUE)),
-	CONSTRAINT "chk_failure_retry_lesson" CHECK (("quest_stage_decisions"."failure_leads_to_retry" = FALSE) OR ("quest_stage_decisions"."failure_lesson_learned" IS NOT NULL))
-);
---> statement-breakpoint
-CREATE TABLE "quest_stages" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"description" text[] NOT NULL,
-	"gm_notes" text[] NOT NULL,
-	"tags" text[] NOT NULL,
-	"site_id" integer,
-	"delivery_npc_id" integer,
-	"quest_id" integer NOT NULL,
-	"stage_order" integer NOT NULL,
-	"dramatic_question" text NOT NULL,
-	"stage_type" text NOT NULL,
-	"intended_complexity_level" text NOT NULL,
-	"stage_importance" text NOT NULL,
-	"objectives" text[] NOT NULL,
-	"completion_paths" text[] NOT NULL,
-	"encounters" text[] NOT NULL,
-	"dramatic_moments" text[] NOT NULL,
-	"sensory_elements" text[] NOT NULL,
-	CONSTRAINT "quest_stages_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE "quest_hooks" (
@@ -799,91 +711,67 @@ CREATE TABLE "sites" (
 	CONSTRAINT "sites_map_id_unique" UNIQUE("map_id")
 );
 --> statement-breakpoint
-CREATE TABLE "world_concept_links" (
+CREATE TABLE "npc_quest_stage_involvement" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	"description" text[] NOT NULL,
 	"gm_notes" text[] NOT NULL,
 	"tags" text[] NOT NULL,
-	"world_concept_id" integer NOT NULL,
-	"target_entity_type" text NOT NULL,
-	"region_id" integer,
-	"faction_id" integer,
-	"npc_id" integer,
-	"conflict_id" integer,
-	"quest_id" integer,
-	"link_role_or_type_text" text NOT NULL,
-	"link_strength" text NOT NULL,
-	"link_details_text" text NOT NULL,
-	CONSTRAINT "chk_world_concept_link_has_target" CHECK (
-			"world_concept_links"."region_id" IS NOT NULL OR
-			"world_concept_links"."faction_id" IS NOT NULL OR
-			"world_concept_links"."npc_id" IS NOT NULL OR
-			"world_concept_links"."conflict_id" IS NOT NULL OR
-			"world_concept_links"."quest_id" IS NOT NULL
-		)
+	"npc_id" integer NOT NULL,
+	"quest_stage_id" integer NOT NULL,
+	"role_in_stage" text NOT NULL,
+	"involvement_details" text[] NOT NULL,
+	CONSTRAINT "npc_quest_stage_involvement_npc_id_quest_stage_id_unique" UNIQUE("npc_id","quest_stage_id")
 );
 --> statement-breakpoint
-CREATE TABLE "world_concept_relations" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"creative_prompts" text[] NOT NULL,
-	"description" text[] NOT NULL,
-	"gm_notes" text[] NOT NULL,
-	"tags" text[] NOT NULL,
-	"source_world_concept_id" integer NOT NULL,
-	"target_world_concept_id" integer NOT NULL,
-	"relationship_type" text NOT NULL,
-	"relationship_details" text,
-	"strength" text NOT NULL,
-	CONSTRAINT "world_concept_relations_source_world_concept_id_target_world_concept_id_relationship_type_unique" UNIQUE("source_world_concept_id","target_world_concept_id","relationship_type"),
-	CONSTRAINT "no_self_relationship" CHECK ("world_concept_relations"."source_world_concept_id" != "world_concept_relations"."target_world_concept_id")
-);
---> statement-breakpoint
-CREATE TABLE "world_concepts" (
+CREATE TABLE "quest_stage_decisions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"creative_prompts" text[] NOT NULL,
 	"description" text[] NOT NULL,
 	"gm_notes" text[] NOT NULL,
 	"tags" text[] NOT NULL,
-	"concept_type" text NOT NULL,
-	"complexity_profile" text NOT NULL,
-	"moral_clarity" text NOT NULL,
-	"summary" text NOT NULL,
-	"surface_impression" text,
-	"lived_reality_details" text,
-	"hidden_truths_or_depths" text,
-	"additional_details" text[] NOT NULL,
-	"social_structure" text,
-	"core_values" text[] NOT NULL,
-	"traditions" text[] NOT NULL,
-	"languages" text[] NOT NULL,
-	"adaptation_strategies" text[] NOT NULL,
-	"defining_characteristics" text[] NOT NULL,
-	"major_events" text[] NOT NULL,
-	"lasting_institutions" text[] NOT NULL,
-	"conflicting_narratives" text[] NOT NULL,
-	"historical_grievances" text[] NOT NULL,
-	"ending_causes" text[] NOT NULL,
-	"historical_lessons" text[] NOT NULL,
-	"purpose" text,
-	"structure" text,
-	"membership" text[] NOT NULL,
-	"rules" text[] NOT NULL,
-	"modern_adaptations" text[] NOT NULL,
-	"current_effectiveness" text NOT NULL,
-	"institutional_challenges" text[] NOT NULL,
-	"cultural_evolution" text[] NOT NULL,
-	"scope" text NOT NULL,
-	"status" text NOT NULL,
-	"timeframe" text NOT NULL,
-	"start_year" integer,
-	"end_year" integer,
-	"modern_relevance" text NOT NULL,
-	"current_challenges" text[] NOT NULL,
-	"modern_consequences" text[] NOT NULL,
-	"quest_hooks" text[] NOT NULL,
-	CONSTRAINT "world_concepts_name_unique" UNIQUE("name")
+	"quest_id" integer NOT NULL,
+	"from_quest_stage_id" integer NOT NULL,
+	"to_quest_stage_id" integer,
+	"condition_type" text NOT NULL,
+	"decision_type" text NOT NULL,
+	"ambiguity_level" text NOT NULL,
+	"options" text[] NOT NULL,
+	"success_description" text[] NOT NULL,
+	"failure_description" text[] NOT NULL,
+	"narrative_transition" text[] NOT NULL,
+	"potential_player_reactions" text[] NOT NULL,
+	"condition_value" text NOT NULL,
+	"failure_leads_to_retry" boolean DEFAULT false NOT NULL,
+	"failure_lesson_learned" text,
+	CONSTRAINT "quest_stage_decisions_name_unique" UNIQUE("name"),
+	CONSTRAINT "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique" UNIQUE("quest_id","from_quest_stage_id","to_quest_stage_id"),
+	CONSTRAINT "chk_stage_decision_no_self_loop" CHECK (COALESCE("quest_stage_decisions"."from_quest_stage_id" != "quest_stage_decisions"."to_quest_stage_id", TRUE)),
+	CONSTRAINT "chk_failure_retry_lesson" CHECK (("quest_stage_decisions"."failure_leads_to_retry" = FALSE) OR ("quest_stage_decisions"."failure_lesson_learned" IS NOT NULL))
+);
+--> statement-breakpoint
+CREATE TABLE "quest_stages" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"creative_prompts" text[] NOT NULL,
+	"description" text[] NOT NULL,
+	"gm_notes" text[] NOT NULL,
+	"tags" text[] NOT NULL,
+	"site_id" integer,
+	"delivery_npc_id" integer,
+	"quest_id" integer NOT NULL,
+	"stage_order" integer NOT NULL,
+	"dramatic_question" text NOT NULL,
+	"stage_type" text NOT NULL,
+	"intended_complexity_level" text NOT NULL,
+	"stage_importance" text NOT NULL,
+	"objectives" text[] NOT NULL,
+	"completion_paths" text[] NOT NULL,
+	"encounters" text[] NOT NULL,
+	"dramatic_moments" text[] NOT NULL,
+	"sensory_elements" text[] NOT NULL,
+	CONSTRAINT "quest_stages_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 ALTER TABLE "conflict_participants" ADD CONSTRAINT "conflict_participants_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -894,39 +782,17 @@ ALTER TABLE "faction_agendas" ADD CONSTRAINT "faction_agendas_faction_id_faction
 ALTER TABLE "faction_diplomacy" ADD CONSTRAINT "faction_diplomacy_source_faction_id_factions_id_fk" FOREIGN KEY ("source_faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_diplomacy" ADD CONSTRAINT "faction_diplomacy_target_faction_id_factions_id_fk" FOREIGN KEY ("target_faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_area_id_areas_id_fk" FOREIGN KEY ("area_id") REFERENCES "public"."areas"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "faction_influence" ADD CONSTRAINT "faction_influence_region_connection_id_region_connections_id_fk" FOREIGN KEY ("region_connection_id") REFERENCES "public"."region_connections"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "factions" ADD CONSTRAINT "factions_hq_site_id_sites_id_fk" FOREIGN KEY ("hq_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_quest_id_quests_id_fk" FOREIGN KEY ("target_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_npc_id_npcs_id_fk" FOREIGN KEY ("target_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_narrative_event_id_narrative_events_id_fk" FOREIGN KEY ("target_narrative_event_id") REFERENCES "public"."narrative_events"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_conflict_id_conflicts_id_fk" FOREIGN KEY ("target_conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_item_id_items_id_fk" FOREIGN KEY ("target_item_id") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_narrative_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("target_narrative_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_world_concept_id_world_concepts_id_fk" FOREIGN KEY ("target_world_concept_id") REFERENCES "public"."world_concepts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_faction_id_factions_id_fk" FOREIGN KEY ("target_faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_target_site_id_sites_id_fk" FOREIGN KEY ("target_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_source_quest_id_quests_id_fk" FOREIGN KEY ("source_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_source_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("source_quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_source_site_id_sites_id_fk" FOREIGN KEY ("source_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "foreshadowing" ADD CONSTRAINT "foreshadowing_source_npc_id_npcs_id_fk" FOREIGN KEY ("source_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "item_notable_history" ADD CONSTRAINT "item_notable_history_item_id_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."items"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "item_notable_history" ADD CONSTRAINT "item_notable_history_key_npc_id_npcs_id_fk" FOREIGN KEY ("key_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "item_notable_history" ADD CONSTRAINT "item_notable_history_location_site_id_sites_id_fk" FOREIGN KEY ("location_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_source_item_id_items_id_fk" FOREIGN KEY ("source_item_id") REFERENCES "public"."items"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_item_id_items_id_fk" FOREIGN KEY ("target_item_id") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_npc_id_npcs_id_fk" FOREIGN KEY ("target_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_faction_id_factions_id_fk" FOREIGN KEY ("target_faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_site_id_sites_id_fk" FOREIGN KEY ("target_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_quest_id_quests_id_fk" FOREIGN KEY ("target_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_conflict_id_conflicts_id_fk" FOREIGN KEY ("target_conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_narrative_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("target_narrative_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "item_relations" ADD CONSTRAINT "item_relations_target_world_concept_id_world_concepts_id_fk" FOREIGN KEY ("target_world_concept_id") REFERENCES "public"."world_concepts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "lore_links" ADD CONSTRAINT "lore_links_lore_id_lore_id_fk" FOREIGN KEY ("lore_id") REFERENCES "public"."lore"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "map_details" ADD CONSTRAINT "map_details_map_id_maps_id_fk" FOREIGN KEY ("map_id") REFERENCES "public"."maps"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "narrative_destination_outcomes" ADD CONSTRAINT "narrative_destination_outcomes_narrative_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("narrative_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "narrative_destination_outcomes" ADD CONSTRAINT "narrative_destination_outcomes_consequence_id_consequences_id_fk" FOREIGN KEY ("consequence_id") REFERENCES "public"."consequences"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_destination_participants" ADD CONSTRAINT "narrative_destination_participants_narrative_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("narrative_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_destination_participants" ADD CONSTRAINT "narrative_destination_participants_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_destination_participants" ADD CONSTRAINT "narrative_destination_participants_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -936,17 +802,6 @@ ALTER TABLE "narrative_destination_relations" ADD CONSTRAINT "narrative_destinat
 ALTER TABLE "narrative_destination_relations" ADD CONSTRAINT "narrative_destination_relations_target_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("target_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_destinations" ADD CONSTRAINT "narrative_destinations_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_destinations" ADD CONSTRAINT "narrative_destinations_related_conflict_id_conflicts_id_fk" FOREIGN KEY ("related_conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_trigger_stage_decision_id_quest_stage_decisions_id_fk" FOREIGN KEY ("trigger_stage_decision_id") REFERENCES "public"."quest_stage_decisions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_trigger_quest_id_quests_id_fk" FOREIGN KEY ("trigger_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_trigger_conflict_id_conflicts_id_fk" FOREIGN KEY ("trigger_conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_faction_id_factions_id_fk" FOREIGN KEY ("affected_faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_region_id_regions_id_fk" FOREIGN KEY ("affected_region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_area_id_areas_id_fk" FOREIGN KEY ("affected_area_id") REFERENCES "public"."areas"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_site_id_sites_id_fk" FOREIGN KEY ("affected_site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_npc_id_npcs_id_fk" FOREIGN KEY ("affected_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_destination_id_narrative_destinations_id_fk" FOREIGN KEY ("affected_destination_id") REFERENCES "public"."narrative_destinations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_conflict_id_conflicts_id_fk" FOREIGN KEY ("affected_conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "consequences" ADD CONSTRAINT "consequences_affected_quest_id_quests_id_fk" FOREIGN KEY ("affected_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_events" ADD CONSTRAINT "narrative_events_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_events" ADD CONSTRAINT "narrative_events_triggering_stage_decision_id_quest_stage_decisions_id_fk" FOREIGN KEY ("triggering_stage_decision_id") REFERENCES "public"."quest_stage_decisions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "narrative_events" ADD CONSTRAINT "narrative_events_related_quest_id_quests_id_fk" FOREIGN KEY ("related_quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -956,14 +811,6 @@ ALTER TABLE "npc_relations" ADD CONSTRAINT "npc_relations_source_npc_id_npcs_id_
 ALTER TABLE "npc_relations" ADD CONSTRAINT "npc_relations_target_npc_id_npcs_id_fk" FOREIGN KEY ("target_npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_site_associations" ADD CONSTRAINT "npc_site_associations_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "npc_site_associations" ADD CONSTRAINT "npc_site_associations_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "npc_quest_stage_involvement" ADD CONSTRAINT "npc_quest_stage_involvement_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "npc_quest_stage_involvement" ADD CONSTRAINT "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("from_quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("to_quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_delivery_npc_id_npcs_id_fk" FOREIGN KEY ("delivery_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "quest_hooks" ADD CONSTRAINT "quest_hooks_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -984,12 +831,12 @@ ALTER TABLE "site_links" ADD CONSTRAINT "site_links_target_site_id_sites_id_fk" 
 ALTER TABLE "site_secrets" ADD CONSTRAINT "site_secrets_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sites" ADD CONSTRAINT "sites_area_id_areas_id_fk" FOREIGN KEY ("area_id") REFERENCES "public"."areas"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sites" ADD CONSTRAINT "sites_map_id_maps_id_fk" FOREIGN KEY ("map_id") REFERENCES "public"."maps"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_world_concept_id_world_concepts_id_fk" FOREIGN KEY ("world_concept_id") REFERENCES "public"."world_concepts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_region_id_regions_id_fk" FOREIGN KEY ("region_id") REFERENCES "public"."regions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_faction_id_factions_id_fk" FOREIGN KEY ("faction_id") REFERENCES "public"."factions"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_conflict_id_conflicts_id_fk" FOREIGN KEY ("conflict_id") REFERENCES "public"."conflicts"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_links" ADD CONSTRAINT "world_concept_links_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_relations" ADD CONSTRAINT "world_concept_relations_source_world_concept_id_world_concepts_id_fk" FOREIGN KEY ("source_world_concept_id") REFERENCES "public"."world_concepts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "world_concept_relations" ADD CONSTRAINT "world_concept_relations_target_world_concept_id_world_concepts_id_fk" FOREIGN KEY ("target_world_concept_id") REFERENCES "public"."world_concepts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_quest_stage_involvement" ADD CONSTRAINT "npc_quest_stage_involvement_npc_id_npcs_id_fk" FOREIGN KEY ("npc_id") REFERENCES "public"."npcs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "npc_quest_stage_involvement" ADD CONSTRAINT "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("from_quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stage_decisions" ADD CONSTRAINT "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk" FOREIGN KEY ("to_quest_stage_id") REFERENCES "public"."quest_stages"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_site_id_sites_id_fk" FOREIGN KEY ("site_id") REFERENCES "public"."sites"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_delivery_npc_id_npcs_id_fk" FOREIGN KEY ("delivery_npc_id") REFERENCES "public"."npcs"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quest_stages" ADD CONSTRAINT "quest_stages_quest_id_quests_id_fk" FOREIGN KEY ("quest_id") REFERENCES "public"."quests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE UNIQUE INDEX "unique_current_per_npc" ON "npc_site_associations" USING btree ("npc_id") WHERE "npc_site_associations"."is_current" = true;

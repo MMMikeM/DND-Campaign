@@ -5,7 +5,7 @@ import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { maps } from "../maps/tables"
+import { mapFiles } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcSiteAssociations } from "../npcs/tables"
@@ -72,9 +72,9 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	itemHistory: many(itemNotableHistory),
 	itemRelations: many(itemRelations),
 
-	map: one(maps, {
+	map: one(mapFiles, {
 		fields: [sites.mapId],
-		references: [maps.id],
+		references: [mapFiles.id],
 	}),
 }))
 
