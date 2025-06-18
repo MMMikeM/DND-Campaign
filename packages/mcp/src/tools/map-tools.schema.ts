@@ -4,19 +4,19 @@ import { z } from "zod/v4"
 import { type CreateTableNames, id, list, type Schema } from "./utils/tool.utils"
 
 const mapTables = {
-	mapDetails: tables.mapTables.mapDetails,
+	maps: tables.mapTables.maps,
 }
 
 // const { imageFormats } = tables.mapTables.enums
 
-const { mapDetails } = mapTables
+const { maps } = mapTables
 
 type TableNames = CreateTableNames<typeof mapTables>
 
-export const tableEnum = ["mapDetails"] as const satisfies TableNames
+export const tableEnum = ["maps"] as const satisfies TableNames
 
 export const schemas = {
-	mapDetails: createInsertSchema(mapDetails, {
+	maps: createInsertSchema(maps, {
 		name: (s) => s.describe("Name of the map"),
 		mapId: id.describe("Required ID of the map these details belong to"),
 		creativePrompts: list.describe("Adventure hooks and creative ideas inspired by the map"),

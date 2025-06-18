@@ -1,11 +1,29 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./foreshadowing-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createEnhancedPolymorphicConfig, createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.foreshadowingTables)
+
+// Configure polymorphic validation for foreshadowing table
+const { foreshadowedTargetType, foreshadowingSourceType } = tables.foreshadowingTables.enums
+const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
+const polymorphicConfig = polymorphicHelper.fromEnums("foreshadowing", [
+	{
+		typeField: "targetEntityType",
+		idField: "targetEntityId",
+		enumValues: foreshadowedTargetType,
+		exclude: ["abstract_theme", "specific_reveal"],
+	},
+	{
+		typeField: "sourceEntityType",
+		idField: "sourceEntityId",
+		enumValues: foreshadowingSourceType,
+		exclude: ["item_description"],
+	},
+])
 
 export const entityGetters = createEntityGetters({
 	all_foreshadowing: () => db.query.foreshadowing.findMany({}),
@@ -36,7 +54,13 @@ export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDe
 	manage_foreshadowing: {
 		description: "Manage foreshadowing-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_foreshadowing", tables.foreshadowingTables, tableEnum, schemas),
+		handler: createManageEntityHandler(
+			"manage_foreshadowing",
+			tables.foreshadowingTables,
+			tableEnum,
+			schemas,
+			polymorphicConfig,
+		),
 		annotations: {
 			title: "Manage Foreshadowing",
 			readOnlyHint: false,

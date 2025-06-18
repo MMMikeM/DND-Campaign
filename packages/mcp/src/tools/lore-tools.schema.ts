@@ -9,7 +9,7 @@ const {
 
 type TableNames = CreateTableNames<typeof tables.loreTables>
 
-const { loreTypes, loreLinkStrengths, targetEntityTypes } = enums
+const { loreTypes, linkStrengths, targetEntityTypes } = enums
 
 export const tableEnum = ["lore", "loreLinks"] as const satisfies TableNames
 
@@ -43,18 +43,20 @@ export const schemas = {
 		.describe("Cultural, political, religious, and historical lore that shapes the world"),
 
 	loreLinks: createInsertSchema(loreLinks, {
-		loreId: id.describe("ID of the lore being linked"),
-		targetEntityId: id.describe("ID of the entity linked to this lore"),
-		targetEntityType: z.enum(targetEntityTypes).describe("Type of entity linked to this lore"),
-		linkRoleOrTypeText: (s) => s.describe("Description of the link role or type"),
-		linkStrength: z.enum(loreLinkStrengths).describe("Strength of the link"),
-		linkDetailsText: (s) => s.describe("Details about the link"),
-		creativePrompts: list.describe("GM ideas for using this link"),
-		description: list.describe("Description of this link"),
-		gmNotes: list.describe("GM-only information about this link"),
-		tags: list.describe("Tags for this link"),
+		loreId: id.describe("ID of the source lore entry"),
+		targetEntityId: id.describe("ID of the target entity being linked to"),
+		targetEntityType: z
+			.enum(targetEntityTypes)
+			.describe("Type of target entity (region, faction, npc, conflict, quest, lore)"),
+		linkRoleOrTypeText: (s) => s.describe("Description of the relationship role or type"),
+		linkStrength: z.enum(linkStrengths).describe("Strength of the connection (tenuous, moderate, strong, defining)"),
+		linkDetailsText: (s) => s.describe("Detailed explanation of the relationship"),
+		creativePrompts: list.describe("GM ideas for using this connection"),
+		description: list.describe("Description of this relationship"),
+		gmNotes: list.describe("GM-only information about this connection"),
+		tags: list.describe("Tags categorizing this relationship"),
 	})
 		.omit({ id: true })
 		.strict()
-		.describe("Links between lore and other entities"),
+		.describe("Connects lore to other entities like factions, NPCs, regions, etc."),
 } as const satisfies Schema<TableNames[number]>

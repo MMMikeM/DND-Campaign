@@ -55,15 +55,18 @@ export const regions = extractToolsAndHandlers(regionToolDefinitions)
 
 export function registerToolHandlers(server: Server) {
 	const tools = [
+		// Utility tools
+		...help.tools,
+		...getEntity.tools,
+		...fuzzySearch.tools,
+		...maps.tools,
+
+		// Manage tools
 		...conflicts.tools,
 		...factions.tools,
 		...foreshadowing.tools,
-		...fuzzySearch.tools,
-		...getEntity.tools,
-		...help.tools,
 		...items.tools,
 		...lore.tools,
-		...maps.tools,
 		...narrativeDestinations.tools,
 		...narrativeEvents.tools,
 		...npcs.tools,
@@ -73,15 +76,18 @@ export function registerToolHandlers(server: Server) {
 	]
 
 	const allToolHandlers = {
+		// Utility tools
+		...help.handlers,
+		...getEntity.handlers,
+		...fuzzySearch.handlers,
+		...maps.handlers,
+
+		// Manage tools
 		...conflicts.handlers,
 		...factions.handlers,
 		...foreshadowing.handlers,
-		...fuzzySearch.handlers,
-		...getEntity.handlers,
-		...help.handlers,
 		...items.handlers,
 		...lore.handlers,
-		...maps.handlers,
 		...narrativeDestinations.handlers,
 		...narrativeEvents.handlers,
 		...npcs.handlers,
@@ -89,6 +95,9 @@ export function registerToolHandlers(server: Server) {
 		...questStages.handlers,
 		...regions.handlers,
 	}
+
+	logger.info("MCP Tools", { tools })
+	logger.info("MCP Tool handlers", { handlers: allToolHandlers })
 
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
 

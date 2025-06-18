@@ -128,7 +128,9 @@ export const schemas = {
 	})
 		.omit({ id: true })
 		.strict()
-		.describe("Tactical locations where encounters and combat take place. Each site must be linked to a map."),
+		.describe(
+			"Tactical locations where encounters and combat take place. Each site must be linked to a pre-existing map.",
+		),
 
 	siteLinks: createInsertSchema(siteLinks, {
 		creativePrompts: (s) => s.describe("Story ideas involving travel or interaction"),

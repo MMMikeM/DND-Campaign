@@ -10,20 +10,20 @@ import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const mapTables = {
-	mapDetails: tables.mapTables.mapDetails,
+	maps: tables.mapTables.maps,
 }
 
 const createEntityGetters = createEntityGettersFactory(mapTables)
 
 export const entityGetters = createEntityGetters({
-	all_map_details: () =>
-		db.query.mapDetails.findMany({
+	all_maps: () =>
+		db.query.maps.findMany({
 			with: { map: { columns: { id: true }, with: { site: { columns: { id: true, name: true } } } } },
 		}),
 
-	map_detail_by_id: (id: number) =>
-		db.query.mapDetails.findFirst({
-			where: (mapDetails, { eq }) => eq(mapDetails.mapId, id),
+	map_by_id: (id: number) =>
+		db.query.maps.findFirst({
+			where: (maps, { eq }) => eq(maps.id, id),
 			with: { map: { columns: { id: true }, with: { site: { columns: { id: true, name: true } } } } },
 		}),
 })
@@ -46,7 +46,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 		const newMaps = await Promise.all(
 			imageFiles.map(async (fileName) => {
 				const mapName = parse(fileName).name
-				const existingMap = await db.query.maps.findFirst({
+				const existingMap = await db.query.mapFiles.findFirst({
 					where: (maps, { eq }) => eq(maps.fileName, mapName),
 				})
 
@@ -62,7 +62,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 				const { width, height } = imageSize(mapImage)
 
 				const [newMap] = await db
-					.insert(tables.mapTables.maps)
+					.insert(tables.mapTables.mapFiles)
 					.values({
 						fileName: mapName,
 						mapImage,

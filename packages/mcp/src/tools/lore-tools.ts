@@ -1,11 +1,23 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./lore-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createEnhancedPolymorphicConfig, createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.loreTables)
+
+// Configure polymorphic validation for loreLinks table
+const { targetEntityTypes } = tables.loreTables.enums
+const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
+const polymorphicConfig = polymorphicHelper.fromEnums("loreLinks", [
+	{
+		typeField: "targetEntityType",
+		idField: "targetEntityId",
+		enumValues: targetEntityTypes,
+		// No exclusions needed - all target entity types map to tables
+	},
+])
 
 export const entityGetters = createEntityGetters({
 	all_lore: () => db.query.lore.findMany({}),
@@ -15,18 +27,19 @@ export const entityGetters = createEntityGetters({
 		db.query.lore.findFirst({
 			where: (lore, { eq }) => eq(lore.id, id),
 			with: {
+				incomingForeshadowing: true,
 				itemRelations: true,
 				links: {
 					with: {
-						lore: true,
-						targetConflict: true,
-						targetFaction: true,
-						targetNpc: true,
-						targetQuest: true,
-						targetRegion: true,
+						targetConflict: { columns: { name: true, id: true } },
+						targetFaction: { columns: { name: true, id: true } },
+						targetNpc: { columns: { name: true, id: true } },
+						targetQuest: { columns: { name: true, id: true } },
+						targetRegion: { columns: { name: true, id: true } },
+						targetLore: { columns: { name: true, id: true } },
+						lore: { columns: { name: true, id: true } },
 					},
 				},
-				incomingForeshadowing: true,
 			},
 		}),
 
@@ -34,12 +47,13 @@ export const entityGetters = createEntityGetters({
 		db.query.loreLinks.findFirst({
 			where: (loreLinks, { eq }) => eq(loreLinks.id, id),
 			with: {
-				lore: true,
-				targetConflict: true,
-				targetFaction: true,
-				targetNpc: true,
-				targetQuest: true,
-				targetRegion: true,
+				targetConflict: { columns: { name: true, id: true } },
+				targetFaction: { columns: { name: true, id: true } },
+				targetNpc: { columns: { name: true, id: true } },
+				targetQuest: { columns: { name: true, id: true } },
+				targetRegion: { columns: { name: true, id: true } },
+				targetLore: { columns: { name: true, id: true } },
+				lore: { columns: { name: true, id: true } },
 			},
 		}),
 })
@@ -48,7 +62,7 @@ export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 	manage_lore: {
 		description: "Manage lore-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_lore", tables.loreTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_lore", tables.loreTables, tableEnum, schemas, polymorphicConfig),
 		annotations: {
 			title: "Manage Lore",
 			readOnlyHint: false,

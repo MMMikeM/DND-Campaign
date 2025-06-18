@@ -1,11 +1,23 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./items-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createEnhancedPolymorphicConfig, createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.itemTables)
+
+// Configure polymorphic validation for itemRelations table
+const { targetEntityTypes } = tables.itemTables.enums
+const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
+const polymorphicConfig = polymorphicHelper.fromEnums("itemRelations", [
+	{
+		typeField: "targetEntityType",
+		idField: "targetEntityId",
+		enumValues: targetEntityTypes,
+		// No exclusions needed - all target entity types map to tables
+	},
+])
 
 export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
@@ -64,7 +76,7 @@ export const itemToolDefinitions: Record<"manage_items", ToolDefinition> = {
 	manage_items: {
 		description: "Manage item-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_items", tables.itemTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_items", tables.itemTables, tableEnum, schemas, polymorphicConfig),
 		annotations: {
 			title: "Manage Items",
 			readOnlyHint: false,
