@@ -14,12 +14,12 @@ import { enums } from "./enums"
 export { enums } from "./enums"
 
 const {
-	arcImportanceLevels,
-	arcTypes,
+	destinationImportance,
+	destinationTypes,
 	destinationRelationshipTypes,
 	destinationStatuses,
-	emotionalArcShapes,
-	questRolesInArc,
+	emotionalShapes,
+	narrativeRoles,
 } = enums
 
 export const narrativeDestinations = pgTable("narrative_destinations", {
@@ -31,18 +31,16 @@ export const narrativeDestinations = pgTable("narrative_destinations", {
 	tags: list("tags"),
 
 	regionId: nullableFk("region_id", regions.id),
-	conflictId: nullableFk("related_conflict_id", conflicts.id),
+	conflictId: nullableFk("conflict_id", conflicts.id),
 
-	type: oneOf("type", arcTypes),
+	type: oneOf("type", destinationTypes),
 	status: oneOf("status", destinationStatuses),
-	intendedEmotionalArcShape: oneOf("intended_emotional_arc_shape", emotionalArcShapes),
+	emotionalShape: oneOf("emotional_shape", emotionalShapes),
 
 	promise: string("promise"),
 	payoff: string("payoff"),
 	stakes: list("stakes"),
-
 	themes: list("themes"),
-	foreshadowingElements: list("foreshadowing_elements"),
 })
 
 export const narrativeDestinationQuestRoles = pgTable(
@@ -57,9 +55,8 @@ export const narrativeDestinationQuestRoles = pgTable(
 		narrativeDestinationId: cascadeFk("narrative_destination_id", narrativeDestinations.id),
 		questId: cascadeFk("quest_id", quests.id),
 
-		role: oneOf("role", questRolesInArc),
-
-		sequenceInArc: integer("sequence_in_arc"),
+		narrativeRole: oneOf("narrative_role", narrativeRoles),
+		sequence: integer("sequence"),
 
 		contributionDetails: list("contribution_details"),
 	},
@@ -74,13 +71,10 @@ export const narrativeDestinationRelations = pgTable(
 		description: list("description"),
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
-
 		sourceNarrativeDestinationId: cascadeFk("source_destination_id", narrativeDestinations.id),
 		targetNarrativeDestinationId: cascadeFk("target_destination_id", narrativeDestinations.id),
-
 		relationshipType: oneOf("relationship_type", destinationRelationshipTypes),
-
-		relationshipDetails: list("relationship_details"),
+		relationshipDetails: list("relationship_details"), // CHANGED to list for more detail
 	},
 	(t) => [
 		unique().on(t.sourceNarrativeDestinationId, t.targetNarrativeDestinationId),
@@ -104,19 +98,18 @@ export const narrativeDestinationParticipants = pgTable(
 
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
-		npcOrFaction: oneOf("npc_or_faction", ["npc", "faction"]),
+		participantType: oneOf("participant_type", ["npc", "faction"]),
 
-		roleInArc: string("role_in_arc"),
-
-		arcImportance: oneOf("arc_importance", arcImportanceLevels),
+		narrativeRole: string("narrative_role"),
+		importance: oneOf("importance", destinationImportance),
 
 		involvementDetails: list("involvement_details"),
 	},
 	(t) => [
 		check(
 			"npc_or_faction_exclusive_participant",
-			sql` (${t.npcOrFaction} = 'npc' AND ${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL)
-        OR (${t.npcOrFaction} = 'faction' AND ${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)
+			sql` (${t.participantType} = 'npc' AND ${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL)
+        OR (${t.participantType} = 'faction' AND ${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)
             `,
 		),
 	],

@@ -4,7 +4,7 @@ import { enums } from "./enums"
 
 export { enums } from "./enums"
 
-const { loreTypes, loreLinkStrengths, targetEntityTypes } = enums
+const { loreTypes, linkStrengths, targetEntityTypes } = enums
 
 export const lore = pgTable("lore", {
 	id: pk(),
@@ -38,7 +38,7 @@ export const loreLinks = pgTable("lore_links", {
 
 	loreId: cascadeFk("lore_id", lore.id),
 
-	linkStrength: oneOf("link_strength", loreLinkStrengths),
+	linkStrength: oneOf("link_strength", linkStrengths),
 	targetEntityType: oneOf("target_entity_type", targetEntityTypes),
 	targetEntityId: integer("target_entity_id"),
 
