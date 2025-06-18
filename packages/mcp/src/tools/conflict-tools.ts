@@ -14,8 +14,8 @@ export const entityGetters = createEntityGetters({
 		db.query.conflicts.findFirst({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
-				affectedByConsequences: true,
-				consequences: true,
+				affectingConsequences: true,
+				triggeredConsequences: true,
 				incomingForeshadowing: true,
 				itemRelations: true,
 				narrativeDestinations: true,

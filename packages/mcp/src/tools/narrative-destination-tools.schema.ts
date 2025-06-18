@@ -15,12 +15,12 @@ const {
 } = tables
 
 const {
-	arcTypes,
+	destinationTypes,
 	destinationStatuses,
-	arcImportanceLevels,
+	destinationImportance,
 	destinationRelationshipTypes,
-	emotionalArcShapes,
-	questRolesInArc,
+	emotionalShapes,
+	narrativeRoles,
 } = enums
 
 type TableNames = CreateTableNames<typeof tables.narrativeDestinationTables>
@@ -51,13 +51,13 @@ export const schemas = {
 		themes: list.describe(
 			"The central ideas this arc explores (e.g., Loyalty vs. Duty, Sacrifice, The Cost of Power). Use these themes to guide character challenges and moral dilemmas within the arc.",
 		),
-		intendedEmotionalArcShape: z
-			.enum(emotionalArcShapes)
+		emotionalShape: z
+			.enum(emotionalShapes)
 			.describe(
 				"The desired emotional trajectory for the players. This is a pacing tool to shape the arc's tone, e.g., building from a low point (Rally from Defeat) or showing the cost of a win (Victory to Consequence).",
 			),
 		type: z
-			.enum(arcTypes)
+			.enum(destinationTypes)
 			.describe(
 				"Classifies the arc's primary focus. Is this advancing the Main Plot, a Faction's agenda, a specific Character's personal journey, or an optional Side story? Helps in organizing plot threads.",
 			),
@@ -66,9 +66,6 @@ export const schemas = {
 			.describe("The current state of this story arc for the players. Tracks its real-time progress in the campaign."),
 		conflictId: optionalId.describe(
 			"The overarching Conflict that provides this arc's stakes and thematic context. Why does this 'chapter' matter to the 'novel' as a whole?",
-		),
-		foreshadowingElements: list.describe(
-			"List the specific clues, symbols, or NPC dialogues planted WITHIN this arc that set up FUTURE arcs. These are the 'Chekhov's Guns' for later payoffs.",
 		),
 		regionId: optionalId.describe("The primary geographical stage where this story arc unfolds."),
 		creativePrompts: list.describe(
@@ -90,12 +87,12 @@ export const schemas = {
 	narrativeDestinationQuestRoles: createInsertSchema(narrativeDestinationQuestRoles, {
 		narrativeDestinationId: id.describe("The story arc (Chapter) this quest belongs to."),
 		questId: id.describe("The specific quest (Scene) being linked to the arc."),
-		role: z
-			.enum(questRolesInArc) // Using revised enum
+		narrativeRole: z
+			.enum(narrativeRoles) // Using revised enum
 			.describe(
 				"Defines the quest's structural purpose. 'Setup' establishes the Promise. 'Progress' quests are the Try/Fail cycles. 'Payoff' delivers the arc's climax. 'Epilogue' handles the aftermath.",
 			),
-		sequenceInArc: (s) =>
+		sequence: (s) =>
 			s.describe(
 				"The intended chronological placement of this quest within the arc. Essential for building logical progression and escalating stakes towards the payoff.",
 			),
@@ -145,14 +142,14 @@ export const schemas = {
 	narrativeDestinationParticipants: createInsertSchema(narrativeDestinationParticipants, {
 		narrativeDestinationId: id.describe("The story arc this entity is involved in."),
 		npcId: optionalId.describe("ID of the NPC playing a key role in this arc."),
-		npcOrFaction: z.enum(["npc", "faction"]).describe("Whether the participant is an NPC or a faction."),
+		participantType: z.enum(["npc", "faction"]).describe("Whether the participant is an NPC or a faction."),
 		factionId: optionalId.describe("ID of the faction playing a key role in this arc."),
-		roleInArc: (s) =>
+		narrativeRole: (s) =>
 			s.describe(
 				"The participant's narrative function in THIS chapter (e.g., Mentor, Antagonist, Victim, Quest Giver, Obstacle, False Ally). This role can change in other arcs.",
 			),
-		arcImportance: z
-			.enum(arcImportanceLevels)
+		importance: z
+			.enum(destinationImportance)
 			.describe(
 				"How central is this participant to the arc's Promise and Payoff? A 'Central' character is indispensable to this arc's plot.",
 			),

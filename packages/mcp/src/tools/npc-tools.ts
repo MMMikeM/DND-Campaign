@@ -17,7 +17,7 @@ export const entityGetters = createEntityGetters({
 		db.query.npcs.findFirst({
 			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
-				affectedByConsequences: true,
+				affectingConsequences: true,
 				incomingForeshadowing: true,
 				outgoingForeshadowing: true,
 				questHooks: { with: { quest: { columns: { name: true, id: true } } } },

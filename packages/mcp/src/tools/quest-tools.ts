@@ -17,7 +17,8 @@ export const entityGetters = createEntityGetters({
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
-				consequences: true,
+				affectingConsequences: true,
+				triggeredConsequences: true,
 				incomingForeshadowing: true,
 				outgoingForeshadowing: true,
 				hooks: true,

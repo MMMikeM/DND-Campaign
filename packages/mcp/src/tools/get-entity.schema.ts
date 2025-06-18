@@ -1,23 +1,15 @@
 import { tables } from "@tome-master/shared"
 import { z } from "zod/v4"
 
-const allTableNames = [
-	...Object.keys(tables.conflictTables),
-	...Object.keys(tables.narrativeEventTables),
-	...Object.keys(tables.factionTables),
-	...Object.keys(tables.foreshadowingTables),
-	...Object.keys(tables.itemTables),
-	...Object.keys(tables.narrativeDestinationTables),
-	...Object.keys(tables.mapTables),
-	...Object.keys(tables.npcTables),
-	...Object.keys(tables.questTables),
-	...Object.keys(tables.regionTables),
-	...Object.keys(tables.loreTables),
-] as const
+const camelToSnake = (str: string) => str.replace(/([A-Z])/g, "_$1").toLowerCase()
+
+const combinedTableNames = Object.values(tables).flatMap((tableList) =>
+	Object.keys(tableList).map((table) => camelToSnake(table)),
+)
 
 export const getEntitySchema = z
 	.object({
-		entity_type: z.enum(allTableNames as [string, ...string[]]).describe("The type of entity to retrieve"),
+		entity_type: z.enum(combinedTableNames as [string, ...string[]]).describe("The type of entity to retrieve"),
 		id: z
 			.number()
 			.optional()

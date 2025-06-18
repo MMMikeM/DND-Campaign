@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, enums },
@@ -40,24 +40,24 @@ export const schemas = {
 		size: z.enum(factionSizes).describe("Membership scale (tiny, small, medium, large, massive)"),
 		wealth: z.enum(wealthLevels).describe("Economic resources and financial power"),
 		reach: z.enum(reachLevels).describe("Geographic influence (local, regional, national, continental, global)"),
-		type: z.enum(factionTypes).describe("Faction categories (guild, cult, tribe, noble_house, etc.)"),
+		type: z.array(z.enum(factionTypes)).describe("Faction categories (guild, cult, tribe, noble_house, etc.)"),
 		publicGoal: (s) => s.describe("Openly stated objectives and mission"),
 		secretGoal: (s) => s.optional().describe("Hidden agenda known only to inner circle"),
 		publicPerception: (s) => s.describe("How the general population views this faction"),
 		transparencyLevel: z.enum(transparencyLevels).describe("How open the faction is about its activities"),
-		values: (s) => s.describe("Core beliefs and principles that guide decisions"),
-		history: (s) => s.describe("Founding story and major historical events"),
-		symbols: (s) => s.describe("Emblems, colors, and visual identifiers"),
-		rituals: (s) => s.describe("Ceremonies and traditional practices"),
-		taboos: (s) => s.describe("Forbidden actions and cultural restrictions"),
-		aesthetics: (s) => s.describe("Visual style and cultural preferences"),
-		jargon: (s) => s.describe("Specialized terminology and speech patterns"),
-		recognitionSigns: (s) => s.describe("Secret signals and identification methods"),
+		values: list.describe("Core beliefs and principles that guide decisions"),
+		history: list.describe("Founding story and major historical events"),
+		symbols: list.describe("Emblems, colors, and visual identifiers"),
+		rituals: list.describe("Ceremonies and traditional practices"),
+		taboos: list.describe("Forbidden actions and cultural restrictions"),
+		aesthetics: list.describe("Visual style and cultural preferences"),
+		jargon: list.describe("Specialized terminology and speech patterns"),
+		recognitionSigns: list.describe("Secret signals and identification methods"),
 		hqSiteId: optionalId.describe("ID of the faction's main headquarters site"),
-		creativePrompts: (s) => s.describe("GM ideas for using this faction in campaigns"),
-		description: (s) => s.describe("Overview of the faction's role and characteristics"),
-		gmNotes: (s) => s.describe("GM-only information about this faction"),
-		tags: (s) => s.describe("Tags for this faction"),
+		creativePrompts: list.describe("GM ideas for using this faction in campaigns"),
+		description: list.describe("Overview of the faction's role and characteristics"),
+		gmNotes: list.describe("GM-only information about this faction"),
+		tags: list.describe("Tags for this faction"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -71,12 +71,12 @@ export const schemas = {
 		importance: z.enum(agendaImportance).describe("Priority level within the faction"),
 		ultimateAim: (s) => s.describe("Final goal this agenda seeks to achieve"),
 		moralAmbiguity: (s) => s.describe("Ethical complexity and moral implications"),
-		approach: (s) => s.describe("Methods and strategies being used"),
-		storyHooks: (s) => s.describe("Ways this agenda can involve player characters"),
-		creativePrompts: (s) => s.describe("GM ideas for developing this agenda"),
-		description: (s) => s.describe("Details about this agenda"),
-		gmNotes: (s) => s.describe("GM-only information about this agenda"),
-		tags: (s) => s.describe("Tags for this agenda"),
+		approach: list.describe("Methods and strategies being used"),
+		storyHooks: list.describe("Ways this agenda can involve player characters"),
+		creativePrompts: list.describe("GM ideas for developing this agenda"),
+		description: list.describe("Details about this agenda"),
+		gmNotes: list.describe("GM-only information about this agenda"),
+		tags: list.describe("Tags for this agenda"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -87,10 +87,10 @@ export const schemas = {
 		targetFactionId: id.describe("ID of the secondary faction in this relationship"),
 		strength: z.enum(relationshipStrengths).describe("Intensity of the relationship"),
 		diplomaticStatus: z.enum(diplomaticStatuses).describe("Type of diplomatic relationship"),
-		creativePrompts: (s) => s.describe("GM ideas for using this relationship"),
-		description: (s) => s.describe("Details about this diplomatic relationship"),
-		gmNotes: (s) => s.describe("GM-only information about this relationship"),
-		tags: (s) => s.describe("Tags for this relationship"),
+		creativePrompts: list.describe("GM ideas for using this relationship"),
+		description: list.describe("Details about this diplomatic relationship"),
+		gmNotes: list.describe("GM-only information about this relationship"),
+		tags: list.describe("Tags for this relationship"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -105,13 +105,13 @@ export const schemas = {
 		relatedEntityType: z.enum(relatedEntityTypes).describe("Type of entity this influence is exerted on"),
 		relatedEntityId: id.describe("ID of the entity this influence is exerted on"),
 		influenceLevel: z.enum(influenceLevels).describe("Degree of control or influence"),
-		presenceTypes: (s) => s.describe("Types of faction presence in this location"),
-		presenceDetails: (s) => s.describe("Specific details about how the faction operates here"),
-		priorities: (s) => s.describe("What the faction prioritizes in this location"),
-		creativePrompts: (s) => s.describe("GM ideas for using this influence"),
-		description: (s) => s.describe("Details about this influence"),
-		gmNotes: (s) => s.describe("GM-only information about this influence"),
-		tags: (s) => s.describe("Tags for this influence"),
+		presenceTypes: list.describe("Types of faction presence in this location"),
+		presenceDetails: list.describe("Specific details about how the faction operates here"),
+		priorities: list.describe("What the faction prioritizes in this location"),
+		creativePrompts: list.describe("GM ideas for using this influence"),
+		description: list.describe("Details about this influence"),
+		gmNotes: list.describe("GM-only information about this influence"),
+		tags: list.describe("Tags for this influence"),
 	})
 		.omit({ id: true })
 		.strict()
