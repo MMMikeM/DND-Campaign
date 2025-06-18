@@ -1,69 +1,135 @@
-import type { CampaignAnalysis, EnhancedNpcCreationArgs, RegionalContext, RelationshipSuggestions } from "./types"
+import type { Context } from "../baseContext"
+import { getNpcContentGaps } from "./analysis"
+import type { EnhancedNpcCreationArgs } from "./types"
 
-interface NPCForSuggestions {
-	id: number
-	name: string
-	occupation: string
-	alignment: string
-	relatedFactions: Array<{ faction: { name: string }; role: string }>
-}
+export function generateNPCCreationSuggestions({ args, context }: { args: EnhancedNpcCreationArgs; context: Context }) {
+	const gaps = getNpcContentGaps(context)
 
-interface FactionForSuggestions {
-	id: number
-	name: string
-	type: string[]
-}
+	const existingNPCs = context.npcs
 
-export function generateNPCCreationSuggestions({
-	args,
-	existingNPCs,
-	factions,
-	regionalContext,
-	campaignAnalysis,
-}: {
-	args: EnhancedNpcCreationArgs
-	existingNPCs: NPCForSuggestions[]
-	factions: FactionForSuggestions[]
-	regionalContext: RegionalContext | null
-	campaignAnalysis: CampaignAnalysis
-}): RelationshipSuggestions {
-	const suggestions: RelationshipSuggestions = {
+	const suggestions: Record<
+		"targetNPCs" | "factionOpportunities" | "narrativeHooks" | "characterComplexity",
+		unknown[]
+	> = {
 		targetNPCs: [],
 		factionOpportunities: [],
 		narrativeHooks: [],
 		characterComplexity: [],
 	}
 
-	// Regional relationship suggestions
-	if (regionalContext?.regionalNPCs) {
-		const regionalCandidates = regionalContext.regionalNPCs
-		regionalCandidates.forEach((npc) => {
+	const { sites, areas, regions } = context.locations
+
+	// 1. Location-based suggestions (NPCs, Factions, Hooks)
+	sites.forEach((site) => {
+		site.npcAssociations.forEach((assoc) => {
 			suggestions.targetNPCs.push({
-				npc: { id: npc.id, name: npc.name, occupation: npc.occupation },
-				suggestedRelationshipTypes: ["ally", "rival", "contact", "friend"],
-				reasoning: `Regional connection - both operate in the same area`,
+				npc: {
+					id: assoc.npc.id,
+					name: assoc.npc.name,
+					occupation: assoc.npc.occupation,
+				},
+				suggestedRelationshipTypes: ["ally", "rival", "contact"],
+				reasoning: `Regional connection - both associated with the site "${site.name}".`,
 			})
 		})
-	}
+	})
 
-	// Suggest faction affiliations based on hints and gaps
+	const influentialFactions = new Map<string, { type: "area" | "region"; name: string }>()
+
+	areas.forEach((area) => {
+		area.factionInfluence.forEach((influence) => {
+			if (influence.faction) {
+				influentialFactions.set(influence.faction.name, { type: "area", name: area.name })
+			}
+		})
+	})
+	regions.forEach((region) => {
+		region.factionInfluence.forEach((influence) => {
+			if (influence.faction) {
+				influentialFactions.set(influence.faction.name, { type: "region", name: region.name })
+			}
+		})
+	})
+
+	influentialFactions.forEach((source, factionName) => {
+		suggestions.factionOpportunities.push({
+			faction: factionName,
+			role: "member",
+			reasoning: `This faction is influential in the ${source.type} "${source.name}".`,
+		})
+	})
+
+	regions.forEach((region) => {
+		region.conflicts.forEach((conflict) => {
+			suggestions.narrativeHooks.push(
+				`Connect to the ongoing conflict: "${conflict.name}" in the ${region.name} region. The NPC could be a participant, victim, or profiteer.`,
+			)
+		})
+		region.quests.forEach((quest) => {
+			suggestions.narrativeHooks.push(
+				`Tie into the existing quest: "${quest.name}" in the ${region.name} region. The NPC could offer a new lead, be a surprise obstacle, or hold a key piece of information.`,
+			)
+		})
+	})
+
+	// 2. Hint-based suggestions (Faction, Occupation, Relationship)
 	if (args.faction_hint) {
-		const matchingFactions = factions.filter(
-			(f) =>
-				f.name.toLowerCase().includes(args.faction_hint?.toLowerCase() || "") ||
-				f.type.some((t) => t.toLowerCase().includes(args.faction_hint?.toLowerCase() || "")),
+		const lowerHint = args.faction_hint.toLowerCase()
+		const matchingFactions = context.factions.filter(
+			(f) => f.name.toLowerCase().includes(lowerHint) || f.type.some((t) => t.toLowerCase().includes(lowerHint)),
 		)
 		matchingFactions.forEach((faction) => {
 			suggestions.factionOpportunities.push({
 				faction: faction.name,
 				role: args.role_hint || "member",
-				reasoning: `Matches faction hint: ${args.faction_hint}`,
+				reasoning: `Matches faction hint: "${args.faction_hint}".`,
+			})
+
+			const factionMembers = existingNPCs.filter((npc) =>
+				npc.factionMemberships.some((m) => m.faction.id === faction.id),
+			)
+
+			factionMembers.forEach((member) => {
+				suggestions.targetNPCs.push({
+					npc: { id: member.id, name: member.name, occupation: member.occupation || "Unknown" },
+					suggestedRelationshipTypes: ["comrade", "rival_within_faction", "mentor", "protege"],
+					reasoning: `Potential connection through shared allegiance to ${faction.name}.`,
+				})
 			})
 		})
 	}
 
-	// Fill faction representation gaps
-	campaignAnalysis.factionRepresentationGaps.forEach((gap) => {
+	if (args.occupation) {
+		const relatedNPCs = existingNPCs.filter((npc) =>
+			npc.occupation?.toLowerCase().includes(args.occupation?.toLowerCase() || ""),
+		)
+
+		relatedNPCs.forEach((npc) => {
+			suggestions.targetNPCs.push({
+				npc: { id: npc.id, name: npc.name, occupation: npc.occupation || "Unknown" },
+				suggestedRelationshipTypes: ["mentor", "rival", "former_colleague"],
+				reasoning: `Professional connection through similar occupation: ${npc.occupation}.`,
+			})
+		})
+	}
+
+	if (args.relationship_hint) {
+		const hintWords = args.relationship_hint.toLowerCase().split(/\s+/)
+		const potentialTargets = existingNPCs.filter((npc) =>
+			hintWords.some((word) => npc.name.toLowerCase().includes(word) || npc.occupation?.toLowerCase().includes(word)),
+		)
+
+		potentialTargets.forEach((npc) => {
+			suggestions.targetNPCs.push({
+				npc: { id: npc.id, name: npc.name, occupation: npc.occupation || "Unknown" },
+				suggestedRelationshipTypes: ["family", "mentor", "friend", "rival", "enemy"],
+				reasoning: `Matches relationship hint: "${args.relationship_hint}".`,
+			})
+		})
+	}
+
+	// 3. Campaign Analysis-based suggestions (Gaps & Opportunities)
+	gaps.factionMembership.forEach((gap) => {
 		const factionName = gap.split(" needs ")[0]
 		if (factionName) {
 			suggestions.factionOpportunities.push({
@@ -74,53 +140,25 @@ export function generateNPCCreationSuggestions({
 		}
 	})
 
-	// Generate occupation-based relationship suggestions
-	if (args.occupation) {
-		const relatedNPCs = existingNPCs.filter((npc) =>
-			npc.occupation.toLowerCase().includes(args.occupation?.toLowerCase() || ""),
-		)
+	if (gaps.complexityProfile.length > 0) {
+		suggestions.characterComplexity = gaps.complexityProfile.map((gap) => `Consider creating: ${gap}`)
+	}
 
-		relatedNPCs.forEach((npc) => {
-			suggestions.targetNPCs.push({
-				npc: { id: npc.id, name: npc.name, occupation: npc.occupation },
-				suggestedRelationshipTypes: ["mentor", "rival", "former_colleague"],
-				reasoning: `Professional connection through similar occupation`,
-			})
+	if (gaps.locationGaps.length > 0) {
+		gaps.locationGaps.forEach((gap) => {
+			suggestions.narrativeHooks.push(`World-building opportunity: ${gap} This NPC could be a catalyst for change.`)
 		})
 	}
 
-	// Generate relationship hint-based suggestions
-	if (args.relationship_hint) {
-		const hintWords = args.relationship_hint.toLowerCase().split(/\s+/)
-		const potentialTargets = existingNPCs.filter((npc) =>
-			hintWords.some((word) => npc.name.toLowerCase().includes(word) || npc.occupation.toLowerCase().includes(word)),
-		)
-
-		potentialTargets.forEach((npc) => {
-			suggestions.targetNPCs.push({
-				npc: { id: npc.id, name: npc.name, occupation: npc.occupation },
-				suggestedRelationshipTypes: ["family", "mentor", "friend", "rival", "enemy"],
-				reasoning: `Matches relationship hint: ${args.relationship_hint}`,
-			})
-		})
-	}
-
-	// Add complexity guidance
-	if (campaignAnalysis.complexityGaps.length > 0) {
-		suggestions.characterComplexity = campaignAnalysis.complexityGaps.map((gap) => `Consider creating: ${gap}`)
-	}
-
-	// Add narrative integration hooks
-	if (campaignAnalysis.narrativeIntegrationOpportunities.length > 0) {
+	if (gaps.narrativeIntegrationOpportunities.length > 0) {
 		suggestions.narrativeHooks.push(
 			"Consider connections to existing but underutilized NPCs",
 			"Look for ways to tie into dormant storylines",
 		)
 	}
 
-	// Add player perception guidance
-	if (campaignAnalysis.playerPerceptionGaps.length > 0) {
-		suggestions.narrativeHooks.push(...campaignAnalysis.playerPerceptionGaps)
+	if (gaps.playerPerceptionGoal.length > 0) {
+		suggestions.narrativeHooks.push(...gaps.playerPerceptionGoal)
 	}
 
 	return suggestions

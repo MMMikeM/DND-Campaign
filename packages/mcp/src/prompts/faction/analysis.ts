@@ -1,3 +1,4 @@
+import { tables } from "@tome-master/shared"
 import type {
 	ConflictForFactionAnalysis,
 	FactionAgendaForAnalysis,
@@ -6,6 +7,8 @@ import type {
 	NarrativeParticipationForAnalysis,
 	PoliticalLandscapeAnalysis,
 } from "./types"
+
+const { enums } = tables.factionTables
 
 // Helper function to count occurrences using Object.groupBy
 function countBy<T>(items: T[], extractor: (item: T) => string): Record<string, number> {
@@ -26,7 +29,7 @@ export function analyzePoliticalLandscape({
 	activeConflicts: ConflictForFactionAnalysis[]
 	narrativeParticipation: NarrativeParticipationForAnalysis[]
 }): PoliticalLandscapeAnalysis {
-	const analysis: PoliticalLandscapeAnalysis = {
+	const analysis: Record<keyof PoliticalLandscapeAnalysis, string[]> = {
 		powerVacuums: [],
 		alignmentGaps: [],
 		territorialOpportunities: [],
@@ -39,18 +42,7 @@ export function analyzePoliticalLandscape({
 	const factionTypeDistribution = countBy(allFactionTypes, (type) => type)
 
 	// Identify underrepresented faction types
-	const underrepresentedTypes = [
-		"guild",
-		"cult",
-		"tribe",
-		"noble_house",
-		"mercantile",
-		"religious",
-		"military",
-		"criminal",
-		"political",
-		"arcane",
-	].filter((type) => (factionTypeDistribution[type] || 0) < 2)
+	const underrepresentedTypes = enums.factionTypes.filter((type) => (factionTypeDistribution[type] || 0) < 2)
 
 	if (underrepresentedTypes.length > 0) {
 		analysis.powerVacuums.push(`Limited representation in ${underrepresentedTypes.join(", ")} faction types`)
@@ -60,17 +52,7 @@ export function analyzePoliticalLandscape({
 	const alignmentDistribution = countBy(existingFactions, (faction) => faction.publicAlignment)
 
 	// Look for alignment gaps
-	const allAlignments = [
-		"lawful good",
-		"neutral good",
-		"chaotic good",
-		"lawful neutral",
-		"true neutral",
-		"chaotic neutral",
-		"lawful evil",
-		"neutral evil",
-		"chaotic evil",
-	]
+	const allAlignments = enums.alignments
 
 	const underrepresentedAlignments = allAlignments.filter((alignment) => !alignmentDistribution[alignment])
 
@@ -80,9 +62,7 @@ export function analyzePoliticalLandscape({
 
 	// Analyze agenda coverage
 	const agendaTypes = existingAgendas.map((agenda) => agenda.agendaType)
-	const agendaGaps = ["economic", "military", "political", "social", "occult", "technological"].filter(
-		(type) => !agendaTypes.includes(type),
-	)
+	const agendaGaps = enums.agendaTypes.filter((type) => !agendaTypes.includes(type))
 
 	if (agendaGaps.length > 0) {
 		analysis.powerVacuums.push(`No active agendas in ${agendaGaps.join(", ")} spheres`)

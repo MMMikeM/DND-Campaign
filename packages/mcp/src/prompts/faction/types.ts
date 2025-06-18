@@ -44,8 +44,8 @@ export interface FactionDiplomacyForAnalysis {
 
 export interface NarrativeParticipationForAnalysis {
 	id: number
-	roleInArc: string
-	arcImportance: string
+	narrativeRole: string
+	importance: string
 	involvementDetails: string[]
 	faction: { id: number; name: string } | null
 	narrativeDestination: { id: number; name: string; type: string; status: string }
