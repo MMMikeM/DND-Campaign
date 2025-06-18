@@ -73,7 +73,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:",
     "@react-router/dev": "7.5.3",
     "@tailwindcss/vite": "^4.1.10",
     "@types/node": "catalog:",
