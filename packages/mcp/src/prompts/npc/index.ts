@@ -7,98 +7,121 @@
  */
 
 import { logger } from "../.."
-import { createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
-import { gatherNPCCreationContext } from "./context"
+import { createTextMessage, createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
+import { getBaseNPCContext } from "./context"
 import { type EnhancedNpcCreationArgs, enhancedNpcCreationSchema } from "./types"
 
 async function enhancedNPCCreationHandler(args: EnhancedNpcCreationArgs) {
 	logger.info("Executing enhanced NPC creation prompt", args)
 
-	try {
-		const context = await gatherNPCCreationContext(args)
+	const context = await getBaseNPCContext(args)
 
-		return {
-			messages: [
-				{
-					role: "user" as const,
-					content: {
-						type: "resource" as const,
-						resource: {
-							uri: `campaign://creation-context/npc-${args.name}`,
-							text: JSON.stringify(context, null, 2),
-							mimeType: "application/json",
-						},
+	// The new, refined prompt string
+	let prompt = `
+You are a master storyteller and world-builder acting as a Dungeon Master's assistant. Your primary function is to populate a detailed campaign world using a suite of specialized tools.
+
+**Your Core Task:**
+A user wants to create a new Non-Player Character (NPC). Your job is to analyze their request and the provided campaign context, and then use the available tools to create the NPC and fully integrate them into the world.
+
+**Your Reasoning Process (Follow these steps):**
+
+1.  **Analyze Context & Identify Opportunities:**
+    *   Review the provided campaign context: existing NPCs, factions, conflicts, and lore.
+    *   Pay close attention to the 'campaignAnalysis' and 'relationshipSuggestions' sections. These are your primary hints for identifying narrative gaps and potential connections.
+    *   Synthesize the user's hints (name, location, role) with the contextual opportunities.
+
+2.  **Create the Core NPC:**
+    *   First, you **must** call the \`manage_npc.create_npc\` tool to establish the foundational character.
+    *   Use the context and hints to populate the NPC's core attributes (description, personality, goals, etc.) thoughtfully. Ground them in the world.
+
+3.  **Establish Connections (CRUCIAL):**
+    *   A newly created NPC is isolated. Your most important follow-up task is to weave them into the campaign's fabric by creating relationships.
+    *   Based on the context and relationship suggestions, determine if the new NPC should have affiliations with factions, relationships with other NPCs, or associations with specific locations.
+    *   For **each** necessary connection, you **must** make a separate tool call if data is available:
+`
+
+	if (context.factions?.length) {
+		prompt += `
+    *   Available factions: ${context.factions
+			?.map((faction) => {
+				return `\`
+        Faction: \`${faction.name}\` (Id: \`${faction.id}\`)
+        Headquarters: \`${faction.primaryHqSite?.name}\` (Id: \`${faction.primaryHqSite?.id}\`)
+        Agendas: ${faction.agendas
+					.map(
+						(agenda) => `
+          Description: \`${agenda.description}\`
+          Current Stage: \`${agenda.currentStage}\`
+          Importance: \`${agenda.importance}\`
+        `,
+					)
+					.join(", ")}
+        Influence: ${faction.influence
+					.map(
+						(influence) => `
+          Level: \`${influence.influenceLevel}\`
+          ${influence.relatedSite ? `Site: \`${influence.relatedSite?.name}\` (Id: \`${influence.relatedSite?.id}\`)` : ""}
+          ${influence.relatedArea ? `Area: \`${influence.relatedArea?.name}\` (Id: \`${influence.relatedArea?.id}\`)` : ""}
+          ${influence.relatedRegion ? `Region: \`${influence.relatedRegion?.name}\` (Id: \`${influence.relatedRegion?.id}\`)` : ""}
+          ${influence.relatedRegionConnection ? `Region Connection: \`${influence.relatedRegionConnection?.connectionType}\` (Id: \`${influence.relatedRegionConnection?.id}\`)` : ""}
+        `,
+					)
+					.join(", ")}
+        Members: ${faction.members.length}
+            ${faction.members
+							.map((member) => {
+								return `\`
+              ${member.npc.name}\` (Id: \`${member.npc.id}\`)
+              Role: \`${member.role}\`
+              `
+							})
+							.join(", ")}
+        `
+			})
+			.join(", ")}
+  `
+	}
+
+	if (context.npcs?.length) {
+		prompt += `
+    *   Available NPCs: ${context.npcs?.map((npc) => npc.name).join(", ")}
+  `
+	}
+
+	if (context.locations?.sites?.length) {
+		prompt += `
+    *   Available sites: ${context.locations.sites?.map((site) => site.name).join(", ")}
+  `
+	}
+
+	prompt += `
+4.  **Create Optional Connections:**
+    *   \`manage_conflict\` on the \`conflict_participant\` table
+    *   \`manage_narrative_event\` on the \`narrative_event_consequence\` table
+    *   \`manage_foreshadowing\` on the \`foreshadowing\` table
+    *   \`manage_item\` on the \`item_relation\` table
+    *   \`manage_narrative_destination\` on the \`narrative_destination_participant\` table
+    *   \`manage_quest\` on the \`quest_hook\` table
+    *   \`manage_quest\` on the \`quest_stage_delivery\` table
+    *   \`manage_stage\` on the \`stage_involvement\` table
+    *   \`manage_lore\` on the \`lore_link\` table
+  `
+
+	return {
+		messages: [
+			{
+				role: "user" as const,
+				content: {
+					type: "resource" as const,
+					resource: {
+						uri: `campaign://creation-context/npc-${args.name}`,
+						text: JSON.stringify(context, null, 2),
+						mimeType: "application/json",
 					},
 				},
-				{
-					role: "user" as const,
-					content: {
-						type: "text" as const,
-						text: `Create NPC: "${args.name}"
-
-Location hint: ${args.location_hint || "No preference"}
-Faction hint: ${args.faction_hint || "No preference"}  
-Role hint: ${args.role_hint || "No preference"}
-Relationship hint: ${args.relationship_hint || "No preference"}
-Occupation: ${args.occupation || "Flexible"}
-Alignment: ${args.alignment || "Flexible"}
-
-Using the comprehensive campaign context provided, generate a complete NPC that integrates seamlessly into the existing social, political, and narrative landscape:
-
-## CHARACTER FOUNDATION
-- Race, age, and basic physical appearance that fits the campaign world
-- Occupation and social status that fills identified campaign gaps
-- Moral alignment and complexity profile that balances the NPC roster
-- Distinctive visual traits, mannerisms, and speech patterns for memorable roleplay
-
-## PERSONALITY & PSYCHOLOGY
-- Core personality traits, drives, and fears that create engaging interactions
-- Hidden motivations, secrets, and personal goals that add narrative depth
-- Adaptability, proactivity, and social dynamics that define their agency
-- Player perception goal (trustworthy ally, mystery figure, comic relief, etc.)
-
-## CAMPAIGN INTEGRATION
-- Specific faction affiliations with role, rank, and loyalty level
-- Current location and site associations that make narrative sense
-- Relationships with existing NPCs that create interesting story potential
-- Connections to active conflicts, quests, and narrative arcs
-
-## NARRATIVE POTENTIAL
-- Quest hooks and story opportunities that emerge from their background
-- Foreshadowing elements they could deliver or represent
-- Cultural or lore connections that add thematic depth
-- Knowledge, rumors, or secrets they possess about campaign events
-
-## OPERATIONAL DETAILS
-- Wealth level, availability, and practical considerations for GM use
-- Dialogue samples and voice notes for consistent roleplay
-- Preferred topics of conversation and subjects they avoid
-- Current goals and how they might evolve based on campaign events
-
-## RELATIONSHIP DYNAMICS
-- Suggested relationships with existing NPCs (see relationship suggestions in context)
-- How they interact with different faction members and affiliations
-- Potential romantic, mentorship, rivalry, or alliance opportunities
-- Social positioning within their community and broader campaign world
-
-Generate an NPC that not only fits the specified hints but leverages the provided context to create meaningful connections, address campaign gaps, and provide rich opportunities for player interaction across social, political, and narrative dimensions.`,
-					},
-				},
-			],
-		}
-	} catch (error) {
-		logger.error("Failed to execute enhanced NPC creation prompt:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			npcArgs: args,
-		})
-		throw error
+			},
+			createTextMessage("user", prompt),
+		],
 	}
 }
 
@@ -111,4 +134,4 @@ export const npcPromptDefinitions: Record<string, PromptDefinition> = {
 	},
 }
 
-export { gatherNPCCreationContext }
+export { getBaseNPCContext as gatherNPCCreationContext }
