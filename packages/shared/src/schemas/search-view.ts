@@ -141,7 +141,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'hooks', ${questSearchDataView.hooks},
         'participants', ${questSearchDataView.participants},
         'narrativeDestinationContributions', ${questSearchDataView.narrativeDestinationContributions},
-        'consequences', ${questSearchDataView.consequences},
+        'affectingConsequences', ${questSearchDataView.affectingConsequences},
+        'triggeredConsequences', ${questSearchDataView.triggeredConsequences},
         'triggeredEvents', ${questSearchDataView.triggeredEvents},
         'foreshadowing', jsonb_build_object(
           'outgoing', ${questSearchDataView.outgoingForeshadowing}, 

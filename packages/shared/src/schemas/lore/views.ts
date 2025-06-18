@@ -21,7 +21,8 @@ export const loreSearchDataView = pgView("lore_search_data_view").as((qb) =>
 					'faction', CASE WHEN ${loreLinks.targetEntityType} = 'faction' THEN jsonb_build_object('id', lf.id, 'name', lf.name) END,
 					'npc', CASE WHEN ${loreLinks.targetEntityType} = 'npc' THEN jsonb_build_object('id', ln.id, 'name', ln.name) END,
 					'conflict', CASE WHEN ${loreLinks.targetEntityType} = 'conflict' THEN jsonb_build_object('id', lc.id, 'name', lc.name) END,
-					'quest', CASE WHEN ${loreLinks.targetEntityType} = 'quest' THEN jsonb_build_object('id', lq.id, 'name', lq.name) END
+					'quest', CASE WHEN ${loreLinks.targetEntityType} = 'quest' THEN jsonb_build_object('id', lq.id, 'name', lq.name) END,
+					'lore', CASE WHEN ${loreLinks.targetEntityType} = 'lore' THEN jsonb_build_object('id', ll.id, 'name', ll.name) END
 				)) FILTER (WHERE ${loreLinks.id} IS NOT NULL), '[]'::jsonb)`.as("links"),
 			itemRelations:
 				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemRelations}.*)) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -51,6 +52,7 @@ export const loreSearchDataView = pgView("lore_search_data_view").as((qb) =>
 			sql`${quests} AS lq`,
 			sql`${loreLinks.targetEntityType} = 'quest' AND ${loreLinks.targetEntityId} = lq.id`,
 		)
+		.leftJoin(sql`${lore} AS ll`, sql`${loreLinks.targetEntityType} = 'lore' AND ${loreLinks.targetEntityId} = ll.id`)
 		.leftJoin(
 			itemRelations,
 			sql`${itemRelations.targetEntityType} = 'lore' AND ${itemRelations.targetEntityId} = ${lore.id}`,
