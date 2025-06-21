@@ -65,6 +65,7 @@ export const entityGetters = createEntityGetters({
 
 export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
 	manage_quest: {
+		enums: tables.questTables.enums,
 		description: "Manage quest-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_quest", tables.questTables, tableEnum, schemas),

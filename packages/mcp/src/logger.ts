@@ -2,7 +2,7 @@ import winston from "winston"
 
 const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/server.log"
 
-const errorFormat = winston.format(info => {
+const errorFormat = winston.format((info) => {
 	if (info instanceof Error) {
 		return {
 			...info,

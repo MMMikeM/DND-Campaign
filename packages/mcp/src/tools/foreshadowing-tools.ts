@@ -52,6 +52,7 @@ export const entityGetters = createEntityGetters({
 
 export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDefinition> = {
 	manage_foreshadowing: {
+		enums: tables.foreshadowingTables.enums,
 		description: "Manage foreshadowing-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler(

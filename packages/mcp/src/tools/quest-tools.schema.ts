@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	questTables: { quests, questRelations, questHooks, questParticipants, enums },
@@ -28,14 +28,14 @@ export const tableEnum = ["quests", "questRelations", "questHooks", "questPartic
 
 export const schemas = {
 	quests: createInsertSchema(quests, {
-		creativePrompts: (s) => s.describe("Ideas for plot developments and player involvement"),
-		description: (s) => s.describe("Core narrative elements and storyline in point form"),
-		failureOutcomes: (s) => s.describe("Consequences if players fail to complete the quest"),
-		successOutcomes: (s) => s.describe("Results and world changes upon successful completion"),
-		inspirations: (s) => s.describe("Reference materials that influenced this quest design"),
-		objectives: (s) => s.describe("Specific tasks players must accomplish to progress"),
-		rewards: (s) => s.describe("Items, reputation, and benefits for completion"),
-		themes: (s) => s.describe("Underlying motifs and emotional elements explored"),
+		creativePrompts: list.describe("Ideas for plot developments and player involvement"),
+		description: list.describe("Core narrative elements and storyline in point form"),
+		failureOutcomes: list.describe("Consequences if players fail to complete the quest"),
+		successOutcomes: list.describe("Results and world changes upon successful completion"),
+		inspirations: list.describe("Reference materials that influenced this quest design"),
+		objectives: list.describe("Specific tasks players must accomplish to progress"),
+		rewards: list.describe("Items, reputation, and benefits for completion"),
+		themes: list.describe("Underlying motifs and emotional elements explored"),
 		name: (s) => s.describe("Title or identifier revealed to players"),
 		regionId: optionalId.describe("ID of region where quest primarily takes place"),
 		mood: (s) => s.describe("Emotional tone and atmosphere (tense, mysterious, celebratory, etc.)"),
@@ -48,8 +48,8 @@ export const schemas = {
 		prerequisiteQuestId: optionalId.describe("ID of quest that must be completed first"),
 		otherUnlockConditionsNotes: (s) =>
 			s.optional().describe("Additional unlock conditions not covered by prerequisite quest"),
-		gmNotes: (s) => s.describe("GM-only information about this quest"),
-		tags: (s) => s.describe("Tags for this quest"),
+		gmNotes: list.describe("GM-only information about this quest"),
+		tags: list.describe("Tags for this quest"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -61,10 +61,10 @@ export const schemas = {
 		relationshipType: z
 			.enum(relationshipTypes)
 			.describe("Connection type (prerequisite, sequel, parallel, alternative, hidden_connection)"),
-		description: (s) => s.describe("How these quests interconnect narratively in point form"),
-		creativePrompts: (s) => s.describe("Ideas for emphasizing connections between quests"),
-		gmNotes: (s) => s.describe("GM-only notes about this relationship"),
-		tags: (s) => s.describe("Tags for this relationship"),
+		description: list.describe("How these quests interconnect narratively in point form"),
+		creativePrompts: list.describe("Ideas for emphasizing connections between quests"),
+		gmNotes: list.describe("GM-only notes about this relationship"),
+		tags: list.describe("Tags for this relationship"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -79,16 +79,16 @@ export const schemas = {
 		name: (s) => s.describe("Name of the hook"),
 		hookType: z.enum(hookTypes).describe("Type of hook (rumor, npc_interaction, location_discovery)"),
 		presentationStyle: z.enum(presentationStyles).describe("How to present this hook"),
-		hookContent: (s) => s.describe("Content of the hook"),
-		discoveryConditions: (s) => s.describe("Conditions for discovering this hook"),
+		hookContent: list.describe("Content of the hook"),
+		discoveryConditions: list.describe("Conditions for discovering this hook"),
 		deliveryNpcId: optionalId.describe("ID of NPC who delivers this hook"),
 		npcRelationshipToParty: (s) => s.describe("Relationship of the delivery NPC to the party"),
 		trustRequired: z.enum(trustLevels).describe("Trust level required for this hook"),
 		dialogueHint: (s) => s.describe("Dialogue hint for this hook"),
-		description: (s) => s.describe("Description of this hook"),
-		creativePrompts: (s) => s.describe("Ideas for presenting this hook"),
-		gmNotes: (s) => s.describe("GM-only notes about this hook"),
-		tags: (s) => s.describe("Tags for this hook"),
+		description: list.describe("Description of this hook"),
+		creativePrompts: list.describe("Ideas for presenting this hook"),
+		gmNotes: list.describe("GM-only notes about this hook"),
+		tags: list.describe("Tags for this hook"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -100,11 +100,11 @@ export const schemas = {
 		factionId: optionalId.describe("ID of faction involved (either npcId or factionId must be provided)"),
 		roleInQuest: (s) => s.describe("Role of the participant in the quest"),
 		importanceInQuest: z.enum(participantImportanceLevels).describe("Importance level of this participant"),
-		involvementDetails: (s) => s.describe("Details about how this participant is involved"),
-		creativePrompts: (s) => s.describe("Ideas for using this participant"),
-		description: (s) => s.describe("Description of the participant's involvement"),
-		gmNotes: (s) => s.describe("GM-only notes about this participant"),
-		tags: (s) => s.describe("Tags for this participant involvement"),
+		involvementDetails: list.describe("Details about how this participant is involved"),
+		creativePrompts: list.describe("Ideas for using this participant"),
+		description: list.describe("Description of the participant's involvement"),
+		gmNotes: list.describe("GM-only notes about this participant"),
+		tags: list.describe("Tags for this participant involvement"),
 	})
 		.omit({ id: true })
 		.strict()

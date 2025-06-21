@@ -27,8 +27,8 @@ export const entityGetters = createEntityGetters({
 						encounters: { columns: { name: true, id: true } },
 					},
 				},
-				outgoingDecisions: { with: { toStage: true } },
-				incomingDecisions: { with: { fromStage: true } },
+				outgoingDecisions: { with: { targetStage: true } },
+				incomingDecisions: { with: { sourceStage: true } },
 				items: true,
 				narrativeEvents: true,
 			},
@@ -38,8 +38,8 @@ export const entityGetters = createEntityGetters({
 			where: (stageDecisions, { eq }) => eq(stageDecisions.id, id),
 			with: {
 				quest: { columns: { name: true, id: true } },
-				fromStage: { columns: { name: true, id: true } },
-				toStage: { columns: { name: true, id: true } },
+				sourceStage: { columns: { name: true, id: true } },
+				targetStage: { columns: { name: true, id: true } },
 				triggeredEvents: true,
 				consequences: true,
 			},
@@ -54,11 +54,12 @@ export const entityGetters = createEntityGetters({
 		}),
 })
 
-export const questStageToolDefinitions: Record<"manage_quest_stage", ToolDefinition> = {
-	manage_quest_stage: {
-		description: "Manage quest-stage-related entities.",
+export const questStageToolDefinitions: Record<"manage_stage", ToolDefinition> = {
+	manage_stage: {
+		enums: tables.questStageTables.enums,
+		description: "Manage quest stage-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_quest_stage", tables.questStageTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_stage", tables.questStageTables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Quest Stages",
 			readOnlyHint: false,

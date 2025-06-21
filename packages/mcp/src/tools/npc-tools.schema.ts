@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, type Schema } from "./utils/tool.utils"
 
 const {
 	npcTables: { npcs, npcRelations, npcFactionMemberships, npcSiteAssociations, enums },
@@ -41,41 +41,41 @@ export const schemas = {
 			.describe("Response to new situations (rigid, reluctant, flexible, opportunistic)"),
 		age: (s) => s.describe("Approximate age or age range"),
 		alignment: z.enum(alignments).describe("Moral stance (lawful good through chaotic evil)"),
-		appearance: (s) => s.describe("Physical traits, clothing, and distinctive features in point form"),
+		appearance: list.describe("Physical traits, clothing, and distinctive features in point form"),
 		attitude: (s) => s.describe("General outlook and typical emotional state"),
 		availability: z.enum(availabilityLevels).describe("How often this NPC can be encountered"),
-		avoidTopics: (s) => s.describe("Subjects that make this NPC uncomfortable or defensive"),
-		background: (s) => s.describe("Life history and formative experiences"),
-		biases: (s) => s.describe("Prejudices and preconceptions that affect judgment"),
+		avoidTopics: list.describe("Subjects that make this NPC uncomfortable or defensive"),
+		background: list.describe("Life history and formative experiences"),
+		biases: list.describe("Prejudices and preconceptions that affect judgment"),
 		capability: z.enum(cprScores).describe("Competence level (low, medium, high)"),
 		complexityProfile: z.enum(characterComplexityProfiles).describe("Character complexity archetype"),
-		currentGoals: (s) => s.describe("Current objectives and motivations"),
-		dialogue: (s) => s.describe("Signature phrases and speech patterns for roleplaying"),
+		currentGoals: list.describe("Current objectives and motivations"),
+		dialogue: list.describe("Signature phrases and speech patterns for roleplaying"),
 		disposition: (s) => s.describe("Default attitude toward strangers"),
-		drives: (s) => s.describe("Core motivations and desires that inspire actions"),
-		fears: (s) => s.describe("Specific phobias and threats that concern this NPC"),
+		drives: list.describe("Core motivations and desires that inspire actions"),
+		fears: list.describe("Specific phobias and threats that concern this NPC"),
 		gender: z.enum(genders).describe("Gender identity (male, female, non-humanoid)"),
-		knowledge: (s) => s.describe("Information and secrets players might discover"),
-		mannerisms: (s) => s.describe("Distinctive gestures and behavioral quirks"),
+		knowledge: list.describe("Information and secrets players might discover"),
+		mannerisms: list.describe("Distinctive gestures and behavioral quirks"),
 		name: (s) => s.describe("Full name or primary identifier"),
 		occupation: (s) => s.describe("Profession, role, or primary activity"),
-		personalityTraits: (s) => s.describe("Key character aspects and psychological qualities"),
+		personalityTraits: list.describe("Key character aspects and psychological qualities"),
 		playerPerceptionGoal: z.enum(playerPerceptionGoals).describe("Intended player perception of this NPC"),
-		preferredTopics: (s) => s.describe("Subjects this NPC eagerly discusses"),
+		preferredTopics: list.describe("Subjects this NPC eagerly discusses"),
 		proactivity: z.enum(cprScores).describe("Initiative level (low, medium, high)"),
 		quirk: (s) => s.describe("Single odd habit or trait that stands out"),
 		race: z.enum(races).describe("Species or ancestry (human, elf, dwarf, etc.)"),
 		relatability: z.enum(cprScores).describe("How relatable this NPC is (low, medium, high)"),
-		rumours: (s) => s.describe("Gossip and stories others tell about this character"),
-		secrets: (s) => s.describe("Hidden information unknown to most others"),
+		rumours: list.describe("Gossip and stories others tell about this character"),
+		secrets: list.describe("Hidden information unknown to most others"),
 		socialStatus: z.enum(npcStatuses).describe("Position in social hierarchy"),
 		trustLevel: z.enum(trustLevels).describe("Willingness to trust others (none, low, medium, high)"),
-		voiceNotes: (s) => s.describe("Vocal qualities and accent for roleplaying"),
+		voiceNotes: list.describe("Vocal qualities and accent for roleplaying"),
 		wealth: z.enum(wealthLevels).describe("Economic status (destitute, poor, moderate, rich, wealthy)"),
-		creativePrompts: (s) => s.describe("GM ideas for using this NPC in the campaign"),
-		description: (s) => s.describe("Key characteristics and role in point form"),
-		gmNotes: (s) => s.describe("GM-only information about this NPC"),
-		tags: (s) => s.describe("Tags for this NPC"),
+		creativePrompts: list.describe("GM ideas for using this NPC in the campaign"),
+		description: list.describe("Key characteristics and role in point form"),
+		gmNotes: list.describe("GM-only information about this NPC"),
+		tags: list.describe("Tags for this NPC"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -88,11 +88,11 @@ export const schemas = {
 		loyalty: z.enum(trustLevels).describe("Dedication level to faction's interests"),
 		rank: (s) => s.describe("Formal title or hierarchical position"),
 		role: z.enum(npcFactionRoles).describe("Function within faction (leader, enforcer, spy, advisor)"),
-		secrets: (s) => s.describe("Hidden information about their faction involvement"),
-		creativePrompts: (s) => s.describe("GM ideas for using this faction relationship"),
-		description: (s) => s.describe("Description of this faction relationship"),
-		gmNotes: (s) => s.describe("GM-only notes about this faction relationship"),
-		tags: (s) => s.describe("Tags for this faction relationship"),
+		secrets: list.describe("Hidden information about their faction involvement"),
+		creativePrompts: list.describe("GM ideas for using this faction relationship"),
+		description: list.describe("Description of this faction relationship"),
+		gmNotes: list.describe("GM-only notes about this faction relationship"),
+		tags: list.describe("Tags for this faction relationship"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -103,10 +103,10 @@ export const schemas = {
 		siteId: id.describe("ID of the site where this NPC can be encountered"),
 		associationType: z.enum(siteAssociationTypes).describe("Type of association with this site"),
 		isCurrent: z.boolean().describe("Whether this is the NPC's current location"),
-		description: (s) => s.describe("How and why the NPC frequents this place and their activities"),
-		creativePrompts: (s) => s.describe("Story hooks involving this NPC at this site"),
-		gmNotes: (s) => s.describe("GM-only notes about this site association"),
-		tags: (s) => s.describe("Tags for this site association"),
+		description: list.describe("How and why the NPC frequents this place and their activities"),
+		creativePrompts: list.describe("Story hooks involving this NPC at this site"),
+		gmNotes: list.describe("GM-only notes about this site association"),
+		tags: list.describe("Tags for this site association"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -119,14 +119,14 @@ export const schemas = {
 		strength: z
 			.enum(relationshipStrengths)
 			.describe("Relationship intensity (weak, moderate, friendly, strong, unbreakable, hostile, war)"),
-		creativePrompts: (s) => s.describe("Story possibilities involving both NPCs"),
-		description: (s) => s.describe("Current relationship status and visible dynamics"),
-		gmNotes: (s) => s.describe("GM-only notes about this relationship"),
-		history: (s) => s.describe("Past interactions and shared experiences"),
-		narrativeTensions: (s) => s.describe("Points of conflict or dramatic potential"),
-		relationshipDynamics: (s) => s.describe("How these NPCs typically interact with each other"),
-		sharedGoals: (s) => s.describe("Common objectives uniting these NPCs"),
-		tags: (s) => s.describe("Tags for this relationship"),
+		creativePrompts: list.describe("Story possibilities involving both NPCs"),
+		description: list.describe("Current relationship status and visible dynamics"),
+		gmNotes: list.describe("GM-only notes about this relationship"),
+		history: list.describe("Past interactions and shared experiences"),
+		narrativeTensions: list.describe("Points of conflict or dramatic potential"),
+		relationshipDynamics: list.describe("How these NPCs typically interact with each other"),
+		sharedGoals: list.describe("Common objectives uniting these NPCs"),
+		tags: list.describe("Tags for this relationship"),
 	})
 		.omit({ id: true })
 		.strict()

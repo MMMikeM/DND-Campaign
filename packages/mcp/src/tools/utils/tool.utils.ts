@@ -275,8 +275,21 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 				const entityName = createData?.name || tableName.data
 				return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
 			} catch (error) {
-				logger.error(`Database error creating ${tableName.data}: ${error}`)
-				return createErrorResponse(`Database error: Failed to create ${tableName.data}`)
+				logger.error(`Database error creating ${tableName.data}`, {
+					error:
+						error instanceof Error
+							? {
+									name: error.name,
+									message: error.message,
+									stack: error.stack,
+								}
+							: error,
+					tableName: tableName.data,
+					data: createData,
+				})
+				return createErrorResponse(
+					`Database error: Failed to create ${tableName.data}. ${error instanceof Error ? error.message : "Unknown error"}`,
+				)
 			}
 		}
 
@@ -329,8 +342,22 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 
 				return createResponse(`Successfully updated ${tableName.data} with ID: ${args.id}`)
 			} catch (error) {
-				logger.error(`Database error updating ${tableName.data}: ${error}`)
-				return createErrorResponse(`Database error: Failed to update ${tableName.data}`)
+				logger.error(`Database error updating ${tableName.data}`, {
+					error:
+						error instanceof Error
+							? {
+									name: error.name,
+									message: error.message,
+									stack: error.stack,
+								}
+							: error,
+					tableName: tableName.data,
+					data: dataToUpdate,
+				})
+
+				return createErrorResponse(
+					`Database error: Failed to update ${tableName.data}. ${error instanceof Error ? error.message : "Unknown error"}`,
+				)
 			}
 		}
 		return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)

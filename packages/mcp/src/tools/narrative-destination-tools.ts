@@ -65,7 +65,8 @@ export const entityGetters = createEntityGetters({
 
 export const narrativeDestinationToolDefinitions: Record<"manage_narrative_destination", ToolDefinition> = {
 	manage_narrative_destination: {
-		description: "Manage narrative-related entities.",
+		enums: tables.narrativeDestinationTables.enums,
+		description: "Manage narrative destination-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler(
 			"manage_narrative_destination",
@@ -74,7 +75,7 @@ export const narrativeDestinationToolDefinitions: Record<"manage_narrative_desti
 			schemas,
 		),
 		annotations: {
-			title: "Manage Narrative Destination",
+			title: "Manage Narrative Destinations",
 			readOnlyHint: false,
 			destructiveHint: false,
 			idempotentHint: false,

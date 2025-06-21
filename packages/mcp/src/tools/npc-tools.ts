@@ -62,6 +62,7 @@ export const entityGetters = createEntityGetters({
 
 export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
 	manage_npc: {
+		enums: tables.npcTables.enums,
 		description: "Manage NPC-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_npc", tables.npcTables, tableEnum, schemas),
