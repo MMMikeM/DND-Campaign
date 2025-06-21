@@ -1,72 +1,46 @@
 import * as Icons from "lucide-react"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import type { WorldChange } from "~/lib/entities"
-import { getChangeSeverityVariant } from "../utils"
+import type { Lore } from "~/lib/entities"
 
-const getVisibilityVariant = (visibility: string): "default" | "destructive" | "outline" | "secondary" => {
-	switch (visibility) {
-		case "public":
-			return "default"
-		case "secret":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}
+type DetailsContentProps = Pick<
+	Lore,
+	| "summary"
+	| "surfaceImpression"
+	| "livedReality"
+	| "hiddenTruths"
+	| "core_tenets_and_traditions"
+	| "history_and_legacy"
+>
 
-export function DetailsContent({ change }: { change: WorldChange }) {
-	const { description, changeType, severity, visibility, sourceType, timeframe } = change
-
+export function DetailsContent({
+	summary,
+	surfaceImpression,
+	livedReality,
+	hiddenTruths,
+	core_tenets_and_traditions,
+	history_and_legacy,
+}: DetailsContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div className="space-y-6">
-				<InfoCard
-					title="Description"
-					icon={<Icons.ScrollText className="h-4 w-4 mr-2 text-blue-600" />}
-					emptyMessage="No description provided."
-				>
-					{description && description.length > 0 && <List items={description} spacing="sm" textColor="muted" />}
+				<InfoCard title="Summary" icon={<Icons.ScrollText className="h-4 w-4 mr-2" />}>
+					<p className="text-sm text-muted-foreground">{summary}</p>
 				</InfoCard>
+				<InfoCard title="Surface Impression" icon={<Icons.Eye className="h-4 w-4 mr-2" />}>
+					<p className="text-sm text-muted-foreground">{surfaceImpression}</p>
+				</InfoCard>
+				<InfoCard title="Lived Reality" icon={<Icons.Users className="h-4 w-4 mr-2" />}>
+					<p className="text-sm text-muted-foreground">{livedReality}</p>
+				</InfoCard>
+				<p className="text-sm text-muted-foreground">{hiddenTruths}</p>
 			</div>
-
 			<div className="space-y-6">
-				<InfoCard title="Attributes" icon={<Icons.Info className="h-4 w-4 mr-2 text-indigo-600" />}>
-					<div className="space-y-3 p-4">
-						<div className="flex justify-between items-center">
-							<span className="font-medium text-sm">Type</span>
-							<span className="text-muted-foreground text-sm capitalize">{changeType}</span>
-						</div>
-						<div className="flex justify-between items-center">
-							<span className="font-medium text-sm">Severity</span>
-							<BadgeWithTooltip
-								variant={getChangeSeverityVariant(severity)}
-								tooltipContent={`Severity: ${severity}`}
-								className="capitalize"
-							>
-								{severity}
-							</BadgeWithTooltip>
-						</div>
-						<div className="flex justify-between items-center">
-							<span className="font-medium text-sm">Visibility</span>
-							<BadgeWithTooltip
-								variant={getVisibilityVariant(visibility)}
-								tooltipContent={`Visibility: ${visibility}`}
-								className="capitalize"
-							>
-								{visibility}
-							</BadgeWithTooltip>
-						</div>
-						<div className="flex justify-between items-center">
-							<span className="font-medium text-sm">Timeframe</span>
-							<span className="text-muted-foreground text-sm capitalize">{timeframe}</span>
-						</div>
-						<div className="flex justify-between items-center">
-							<span className="font-medium text-sm">Source Type</span>
-							<span className="text-muted-foreground text-sm capitalize">{sourceType}</span>
-						</div>
-					</div>
+				<InfoCard title="Core Tenets & Traditions" icon={<Icons.BookOpen className="h-4 w-4 mr-2" />}>
+					<List items={core_tenets_and_traditions} />
+				</InfoCard>
+				<InfoCard title="History & Legacy" icon={<Icons.Landmark className="h-4 w-4 mr-2" />}>
+					<List items={history_and_legacy} />
 				</InfoCard>
 			</div>
 		</div>
