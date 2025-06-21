@@ -25,8 +25,8 @@ async function campaignContextHandler(args: CampaignContextArgs) {
 		getNpcContext(),
 	])
 
-	const questContext = await getQuestContext(args.questName)
-	const factionContext = await getFactionContext(args.factionName)
+	const questContext = await getQuestContext()
+	const factionContext = await getFactionContext()
 
 	const context = {
 		lore,

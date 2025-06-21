@@ -1,10 +1,20 @@
 import { tables } from "@tome-master/shared"
+import { logger } from "../.."
 import type { Context } from "../baseContext"
 import { countBy, getUnderrepresentedKeys } from "../utils"
 
 const { enums } = tables.npcTables
 
-export function getNpcContentGaps({ conflicts, factions, npcs, quests, narrativeDestinations, locations }: Context) {
+export function getNpcContentGaps({
+	conflicts,
+	factions,
+	npcs,
+	quests,
+	narrativeDestinations,
+	regions,
+	areas,
+	sites,
+}: Context) {
 	const gaps: Record<
 		| "complexityProfile"
 		| "playerPerceptionGoal"
@@ -58,7 +68,7 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, narrative
 	if (underrepresentedFactions.length > 0) {
 		gaps.factionMembership = underrepresentedFactions.map(
 			(faction) =>
-				`${faction} needs more NPC representation (${factionMembershipDistribution[faction] ?? 0} current members)`,
+				`${faction} needs more NPC representation (${factionMembershipDistribution[faction]?.count ?? 0} current members)`,
 		)
 	}
 
@@ -89,8 +99,6 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, narrative
 	}
 
 	// Analyze location gaps
-	const { sites, areas, regions } = locations
-
 	if (regions.length > 0) {
 		regions.forEach((region) => {
 			if (region.areas.length < 2) {
@@ -136,6 +144,9 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, narrative
 
 	// Analyze conflict dynamics
 	const conflictStatusDistribution = countBy(conflicts, (c) => c.status, tables.conflictTables.enums.conflictStatuses)
+
+	logger.info("Conflict status distribution", conflictStatusDistribution)
+
 	if (conflictStatusDistribution.active.count < 1) {
 		gaps.conflictGaps.push(
 			"There are no 'active' conflicts, which may reduce tension. Consider introducing a new immediate threat.",
@@ -146,6 +157,8 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, narrative
 			"There are few 'brewing' conflicts. Consider adding foreshadowing for future threats and political tensions.",
 		)
 	}
+
+	logger.info("NPC Content Gaps", { gaps })
 
 	return gaps
 }

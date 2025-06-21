@@ -1,4 +1,3 @@
-import { fuzzy } from "fast-fuzzy"
 import { db } from ".."
 
 // Common column configurations organized by entity type
@@ -195,144 +194,98 @@ const COMMON_COLUMNS = {
 		sourceRegionId: true,
 		targetRegionId: true,
 	},
+
+	factionAgenda: {
+		id: true,
+		name: true,
+		agendaType: true,
+		currentStage: true,
+		importance: true,
+		ultimateAim: true,
+		description: true,
+	},
+
+	factionDiplomacy: {
+		id: true,
+		strength: true,
+		diplomaticStatus: true,
+		description: true,
+	},
 } as const
 
-export const getLocationContext = async (location?: string) => {
-	const siteWith = {
-		npcAssociations: {
-			with: {
-				npc: { columns: COMMON_COLUMNS.npc.basic },
-			},
-			columns: { associationType: true, isCurrent: true, id: true },
-		},
-		secrets: {
-			columns: { secretType: true, difficultyToDiscover: true, description: true, id: true },
-		},
-		encounters: {
-			columns: { name: true, encounterCategory: true, id: true },
-		},
-		area: {
-			columns: COMMON_COLUMNS.idAndName,
-			with: { region: { columns: COMMON_COLUMNS.idAndName } },
-		},
-	} as const
-
-	const areaWith = {
-		consequences: {
-			columns: COMMON_COLUMNS.consequences,
-		},
-		factionInfluence: {
-			columns: COMMON_COLUMNS.factionInfluence,
-			with: {
-				faction: {
-					columns: COMMON_COLUMNS.faction.basic,
-				},
-			},
-		},
-		region: {
-			columns: COMMON_COLUMNS.idAndName,
-		},
-	} as const
-
-	const regionWith = {
-		conflicts: {
-			columns: { id: true, name: true, description: true },
-		},
-		consequences: {
-			columns: COMMON_COLUMNS.consequences,
-		},
-		factionInfluence: {
-			columns: COMMON_COLUMNS.factionInfluence,
-			with: {
-				faction: {
-					columns: COMMON_COLUMNS.faction.basic,
-				},
-			},
-		},
-		quests: {
-			columns: COMMON_COLUMNS.quest.basic,
-		},
-		narrativeDestinations: {
-			columns: { id: true, name: true, description: true, type: true },
-		},
-		areas: {
-			columns: COMMON_COLUMNS.area.basic,
-		},
-	} as const
-
-	if (!location) {
-		const sites = await db.query.sites.findMany({
-			columns: COMMON_COLUMNS.site.detailed,
-			with: siteWith,
-		})
-		const areas = await db.query.areas.findMany({
-			with: areaWith,
-			columns: COMMON_COLUMNS.area.detailed,
-		})
-		const regions = await db.query.regions.findMany({
-			with: regionWith,
-			columns: COMMON_COLUMNS.region.detailed,
-		})
-		return {
-			sites,
-			areas,
-			regions,
-		}
-	}
-
-	const sites = await db.query.sites.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-	})
-
-	const areas = await db.query.areas.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-		with: { region: { columns: COMMON_COLUMNS.idAndName } },
-	})
-
-	const regions = await db.query.regions.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-	})
-
-	const matchedSites = sites.filter((site) => fuzzy(site.name, location) > 0.5)
-	const matchedAreas = areas.filter((area) => fuzzy(area.name, location) > 0.5)
-	const matchedRegions = regions.filter((region) => fuzzy(region.name, location) > 0.5)
-
-	const siteDetails = await db.query.sites.findMany({
-		where: (sites, { inArray }) =>
-			inArray(
-				sites.id,
-				matchedSites.map((site) => site.id),
-			),
-		with: siteWith,
+export const getSiteContext = async () =>
+	await db.query.sites.findMany({
 		columns: COMMON_COLUMNS.site.detailed,
+		with: {
+			npcAssociations: {
+				with: {
+					npc: { columns: COMMON_COLUMNS.npc.basic },
+				},
+				columns: { associationType: true, isCurrent: true, id: true },
+			},
+			secrets: {
+				columns: { secretType: true, difficultyToDiscover: true, description: true, id: true },
+			},
+			encounters: {
+				columns: { name: true, encounterCategory: true, id: true },
+			},
+			area: {
+				columns: COMMON_COLUMNS.idAndName,
+				with: { region: { columns: COMMON_COLUMNS.idAndName } },
+			},
+		},
 	})
 
-	const areaDetails = await db.query.areas.findMany({
-		where: (areas, { inArray }) =>
-			inArray(
-				areas.id,
-				matchedAreas.map((area) => area.id),
-			),
-		with: areaWith,
+export const getAreaContext = async () =>
+	await db.query.areas.findMany({
+		with: {
+			consequences: {
+				columns: COMMON_COLUMNS.consequences,
+			},
+			factionInfluence: {
+				columns: COMMON_COLUMNS.factionInfluence,
+				with: {
+					faction: {
+						columns: COMMON_COLUMNS.faction.basic,
+					},
+				},
+			},
+			region: {
+				columns: COMMON_COLUMNS.idAndName,
+			},
+		},
 		columns: COMMON_COLUMNS.area.detailed,
 	})
 
-	const regionDetails = await db.query.regions.findMany({
-		where: (regions, { inArray }) =>
-			inArray(
-				regions.id,
-				matchedRegions.map((region) => region.id),
-			),
-		with: regionWith,
+export const getRegionContext = async () =>
+	await db.query.regions.findMany({
+		with: {
+			conflicts: {
+				columns: { id: true, name: true, description: true },
+			},
+			consequences: {
+				columns: COMMON_COLUMNS.consequences,
+			},
+			factionInfluence: {
+				columns: COMMON_COLUMNS.factionInfluence,
+				with: {
+					faction: {
+						columns: COMMON_COLUMNS.faction.basic,
+					},
+				},
+			},
+			quests: {
+				columns: COMMON_COLUMNS.quest.basic,
+			},
+			narrativeDestinations: {
+				columns: { id: true, name: true, description: true, type: true },
+			},
+			areas: {
+				columns: COMMON_COLUMNS.area.basic,
+			},
+		},
 		columns: COMMON_COLUMNS.region.detailed,
 	})
-
-	return {
-		sites: siteDetails,
-		areas: areaDetails,
-		regions: regionDetails,
-	}
-}
 
 export const getLoreContext = async () => {
 	return await db.query.lore.findMany({
@@ -351,129 +304,90 @@ export const getForehadowingContext = async () => {
 	})
 }
 
-export const getFactionContext = async (factionName?: string) => {
-	const factionWith = {
-		agendas: { columns: { description: true, currentStage: true, importance: true } },
-		influence: {
-			columns: { id: true, influenceLevel: true },
-			with: {
-				faction: { columns: COMMON_COLUMNS.idAndName },
-				relatedArea: { columns: COMMON_COLUMNS.idAndName },
-				relatedRegion: { columns: COMMON_COLUMNS.idAndName },
-				relatedSite: { columns: COMMON_COLUMNS.idAndName },
-				relatedRegionConnection: {
-					columns: COMMON_COLUMNS.regionConnection,
+export const getFactionContext = async () => {
+	return db.query.factions.findMany({
+		columns: COMMON_COLUMNS.faction.detailed,
+		with: {
+			members: {
+				columns: { role: true },
+				with: { npc: { columns: { id: true, name: true, occupation: true } } },
+			},
+			influence: {
+				columns: {
+					influenceLevel: true,
+					presenceTypes: true,
+					priorities: true,
+				},
+				with: {
+					site: { columns: COMMON_COLUMNS.idAndName },
+					area: { columns: COMMON_COLUMNS.idAndName },
+					region: { columns: COMMON_COLUMNS.idAndName },
+					regionConnection: { columns: COMMON_COLUMNS.idAndName },
+				},
+			},
+			agendas: {
+				columns: COMMON_COLUMNS.factionAgenda,
+			},
+			incomingRelations: {
+				columns: COMMON_COLUMNS.factionDiplomacy,
+				with: {
+					sourceFaction: { columns: COMMON_COLUMNS.faction.basic },
+				},
+			},
+			outgoingRelations: {
+				columns: COMMON_COLUMNS.factionDiplomacy,
+				with: {
+					targetFaction: { columns: COMMON_COLUMNS.faction.basic },
+				},
+			},
+			primaryHqSite: {
+				columns: COMMON_COLUMNS.site.basic,
+				with: {
+					area: {
+						columns: COMMON_COLUMNS.area.basic,
+					},
 				},
 			},
 		},
-		primaryHqSite: { columns: COMMON_COLUMNS.idAndName },
-		members: {
-			columns: COMMON_COLUMNS.factionMembership,
-			with: {
-				npc: { columns: COMMON_COLUMNS.idAndName },
-			},
-		},
-	} as const
-
-	if (!factionName) {
-		return await db.query.factions.findMany({
-			columns: COMMON_COLUMNS.faction.detailed,
-			with: factionWith,
-		})
-	}
-
-	const factionNames = await db.query.factions.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-	})
-
-	const matchedFactions = factionNames.filter((faction) => fuzzy(faction.name, factionName) > 0.5)
-
-	return await db.query.factions.findMany({
-		where: (factions, { inArray }) =>
-			inArray(
-				factions.id,
-				matchedFactions.map((faction) => faction.id),
-			),
-		columns: COMMON_COLUMNS.faction.detailed,
-		with: factionWith,
 	})
 }
 
-export const getNpcContext = async (npcName?: string) => {
-	const npcWith = {
-		questStageDeliveries: true,
-		stageInvolvement: true,
-		questHooks: true,
-		factionMemberships: {
-			columns: COMMON_COLUMNS.factionMembership,
-			with: { faction: { columns: COMMON_COLUMNS.idAndName } },
-		},
-		siteAssociations: { columns: { id: true, associationType: true, isCurrent: true, description: true } },
-	} as const
-	if (!npcName) {
-		return await db.query.npcs.findMany({
-			columns: COMMON_COLUMNS.npc.detailed,
-			with: npcWith,
-		})
-	}
-
-	const npcNames = await db.query.npcs.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-	})
-
-	const matchedNpcs = npcNames.filter((npc) => fuzzy(npc.name, npcName) > 0.5)
-
+export const getNpcContext = async () => {
 	return await db.query.npcs.findMany({
-		where: (npcs, { inArray }) =>
-			inArray(
-				npcs.id,
-				matchedNpcs.map((npc) => npc.id),
-			),
-		with: npcWith,
 		columns: COMMON_COLUMNS.npc.detailed,
+		with: {
+			questStageDeliveries: true,
+			stageInvolvement: true,
+			questHooks: true,
+			factionMemberships: {
+				columns: COMMON_COLUMNS.factionMembership,
+				with: { faction: { columns: COMMON_COLUMNS.idAndName } },
+			},
+			siteAssociations: { columns: { id: true, associationType: true, isCurrent: true, description: true } },
+		},
 	})
 }
 
-export const getQuestContext = async (questName?: string) => {
-	const questWith = {
-		hooks: {
-			columns: { id: true, hookType: true, description: true },
-		},
-		triggeredConsequences: {
-			columns: COMMON_COLUMNS.consequences,
-		},
-		affectingConsequences: {
-			columns: COMMON_COLUMNS.consequences,
-		},
-		participants: {
-			columns: COMMON_COLUMNS.questParticipant,
-			with: {
-				npc: { columns: COMMON_COLUMNS.idAndName },
+export const getQuestContext = async () => {
+	return await db.query.quests.findMany({
+		columns: COMMON_COLUMNS.quest.detailed,
+		with: {
+			hooks: {
+				columns: { id: true, hookType: true, description: true },
+			},
+			triggeredConsequences: {
+				columns: COMMON_COLUMNS.consequences,
+			},
+			affectingConsequences: {
+				columns: COMMON_COLUMNS.consequences,
+			},
+			participants: {
+				columns: COMMON_COLUMNS.questParticipant,
+				with: {
+					npc: { columns: COMMON_COLUMNS.idAndName },
+				},
 			},
 		},
-	} as const
-
-	if (!questName) {
-		return await db.query.quests.findMany({
-			columns: COMMON_COLUMNS.quest.detailed,
-			with: questWith,
-		})
-	}
-
-	const questNames = await db.query.quests.findMany({
-		columns: COMMON_COLUMNS.idAndName,
-	})
-
-	const matchedQuests = questNames.filter((quest) => fuzzy(quest.name, questName) > 0.5)
-
-	return await db.query.quests.findMany({
-		where: (quests, { inArray }) =>
-			inArray(
-				quests.id,
-				matchedQuests.map((quest) => quest.id),
-			),
-		with: questWith,
-		columns: COMMON_COLUMNS.quest.detailed,
 	})
 }
 
@@ -516,7 +430,9 @@ export const getConflictContext = async () => {
 }
 
 export type Context = {
-	locations: Awaited<ReturnType<typeof getLocationContext>>
+	sites: Awaited<ReturnType<typeof getSiteContext>>
+	areas: Awaited<ReturnType<typeof getAreaContext>>
+	regions: Awaited<ReturnType<typeof getRegionContext>>
 	npcs: Awaited<ReturnType<typeof getNpcContext>>
 	factions: Awaited<ReturnType<typeof getFactionContext>>
 	conflicts: Awaited<ReturnType<typeof getConflictContext>>
@@ -525,8 +441,10 @@ export type Context = {
 }
 
 export const getFullContext = async (): Promise<Context> => {
-	const [locations, npcs, factions, conflicts, quests, narrativeDestinations] = await Promise.all([
-		getLocationContext(),
+	const [sites, areas, regions, npcs, factions, conflicts, quests, narrativeDestinations] = await Promise.all([
+		getSiteContext(),
+		getAreaContext(),
+		getRegionContext(),
 		getNpcContext(),
 		getFactionContext(),
 		getConflictContext(),
@@ -535,7 +453,9 @@ export const getFullContext = async (): Promise<Context> => {
 	])
 
 	return {
-		locations,
+		sites,
+		areas,
+		regions,
 		npcs,
 		factions,
 		conflicts,

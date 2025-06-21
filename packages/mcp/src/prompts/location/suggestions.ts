@@ -86,13 +86,13 @@ export function generateLocationConnectionSuggestions(
 	// Type-based connection suggestions
 	if (args.type_hint && args.type_hint !== "" && args.type_hint !== undefined) {
 		const typeHint = args.type_hint
-		const relatedSites = existingSites.filter((site) => {
+		const sites = existingSites.filter((site) => {
 			// Find sites that would logically connect to this type
 			const connectionType = getAppropriateConnectionType(typeHint, site.type)
 			return connectionType !== "near" // Only include meaningful connections
 		})
 
-		suggestions.typeBasedConnections = relatedSites.map((site) => {
+		suggestions.typeBasedConnections = sites.map((site) => {
 			const connectionType = getAppropriateConnectionType(typeHint, site.type)
 			return `${connectionType} ${site.name} (${site.type}) - ${getStrategicReason(typeHint)}`
 		})
@@ -121,7 +121,7 @@ export function generateLocationConnectionSuggestions(
 	if (args.purpose_hint) {
 		const purposeKeywords = args.purpose_hint.toLowerCase().split(" ")
 
-		const relatedSites = existingSites.filter((site) => {
+		const sites = existingSites.filter((site) => {
 			const siteDescription = site.description.join(" ").toLowerCase()
 			const siteFeatures = site.features.join(" ").toLowerCase()
 			const searchableText = `${siteDescription} ${siteFeatures}`
@@ -130,7 +130,7 @@ export function generateLocationConnectionSuggestions(
 			return purposeKeywords.some((keyword) => search(keyword, [searchableText], { threshold: 0.4 }).length > 0)
 		})
 
-		suggestions.purposeBasedConnections = relatedSites.map((site) => {
+		suggestions.purposeBasedConnections = sites.map((site) => {
 			return `Functional connection to ${site.name} - shared ${args.purpose_hint} purpose`
 		})
 	}

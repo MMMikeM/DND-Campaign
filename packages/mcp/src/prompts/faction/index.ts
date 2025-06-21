@@ -7,14 +7,7 @@
  */
 
 import { logger } from "../.."
-import {
-	createPromptResult,
-	createResourceMessage,
-	createTextMessage,
-	createTypedHandler,
-	extractArgsFromZodSchema,
-	type PromptDefinition,
-} from "../types"
+import { createTextMessage, createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
 import { gatherFactionCreationContext } from "./context"
 import { type FactionCreationArgs, factionCreationSchema } from "./types"
 
@@ -23,100 +16,79 @@ async function enhancedFactionCreationHandler(args: FactionCreationArgs) {
 
 	const context = await gatherFactionCreationContext(args)
 
-	return createPromptResult([
-		createResourceMessage(
-			"user",
-			`campaign://creation-context/faction-${args.name}`,
-			JSON.stringify(context, null, 2),
-			"application/json",
-		),
-		createTextMessage(
-			"user",
-			`Create a detailed faction with the name "${args.name}" using the following context:
+	// The new, refined prompt string
+	let prompt = `
+You are a master storyteller and world-builder acting as a Dungeon Master's assistant. Your primary function is to populate a detailed campaign world using a suite of specialized tools.
 
-**Faction Creation Parameters:**
-${JSON.stringify(args, null, 2)}
+**Your Core Task:**
+A user wants to create a new Faction. Your job is to analyze their request and the provided campaign context, and then use the available tools to create the Faction and fully integrate them into the world.
 
-**Campaign Political Landscape Analysis:**
-${JSON.stringify(context.politicalAnalysis, null, 2)}
+**Your Reasoning Process (Follow these steps):**
 
-**Relationship Suggestions:**
-${JSON.stringify(context.relationshipSuggestions, null, 2)}
+1.  **Analyze Context & Identify Opportunities:**
+    *   Review the provided campaign context: existing NPCs, factions, conflicts, and lore.
+    *   Pay close attention to the 'politicalAnalysis' and 'relationshipSuggestions' sections. These are your primary hints for identifying narrative gaps and potential connections.
+    *   Synthesize the user's hints (name, location, type) with the contextual opportunities.
 
-**Existing Factions (for relationship context):**
-${JSON.stringify(context.existingFactions.slice(0, 10), null, 2)}
+2.  **Create the Core Faction:**
+    *   First, you **must** call the \`manage_faction\` tool with \`create\` on the \`faction\` table to establish the foundational entity.
+    *   Use the context and hints to populate the Faction's core attributes (description, goals, etc.) thoughtfully. Ground them in the world.
 
-**Current Political Activities:**
-- Active Agendas: ${context.existingAgendas.length}
-- Diplomatic Relationships: ${context.existingDiplomacy.length}
-- Territorial Influence Points: ${context.existingInfluence.length}
-- Active Conflicts: ${context.activeConflicts.length}
-- Narrative Arc Involvement: ${context.narrativeParticipation.length}
-
-${
-	context.nameConflicts.length > 0
-		? `
-**⚠️ Name Conflicts Found:**
-${context.nameConflicts.map((c) => `- ${c.name} (${c.type.join(", ")})`).join("\n")}
+3.  **Establish Connections (CRUCIAL):**
+    *   A newly created Faction is isolated. Your most important follow-up task is to weave them into the campaign's fabric by creating relationships and influence.
+    *   Based on the context and relationship suggestions, determine if the new Faction should have diplomatic ties, members, or territorial influence.
+    *   For **each** necessary connection, you **must** make a separate tool call if data is available:
 `
-		: ""
-}
+	if (context.factions?.length) {
+		prompt += `
+    *   Available factions: ${context.factions
+			?.map((faction) => {
+				return `\`
+        Faction: \`${faction.name}\` (Id: \`${faction.id}\`)
+        `
+			})
+			.join(", ")}
+  `
+	}
 
-${
-	context.nearbyEntities
-		? `
-**Nearby Entities (Location: ${args.location_hint}):**
-${JSON.stringify(context.nearbyEntities, null, 2)}
-`
-		: ""
-}
+	if (context.npcs?.length) {
+		prompt += `
+    *   Available NPCs for membership: ${context.npcs?.map((npc) => npc.name).join(", ")}
+  `
+	}
 
-**World Context Links:**
-			${JSON.stringify(context.loreLinks.slice(0, 5), null, 2)}
+	if (context.sites?.length) {
+		prompt += `
+    *   Available sites for HQs/influence: ${context.sites?.map((site) => site.name).join(", ")}
+  `
+	}
 
-**Regional Control:**
-${JSON.stringify(context.regionConnections.slice(0, 5), null, 2)}
+	prompt += `
+4.  **Create Optional Connections:**
+    *   \`manage_faction\` on the \`faction_agenda\` table to define goals.
+    *   \`manage_faction\` on the \`faction_diplomacy\` table to set relations.
+    *   \`manage_faction\` on the \`faction_influence\` table to claim territory.
+    *   \`manage_faction\` on the \`faction_member\` table to add NPCs.
+    *   \`manage_conflict\` on the \`conflict_participant\` table.
+    *   \`manage_narrative_destination\` on the \`narrative_destination_participant\` table.
+  `
 
-**Available NPCs for Potential Membership:**
-${JSON.stringify(context.potentialMembers.slice(0, 8), null, 2)}
-
-Please create a comprehensive faction that includes:
-
-1. **Core Identity & Values**
-   - Faction name, type, and public/secret alignments
-   - Core values, beliefs, and organizational culture
-   - Public goals vs. hidden agendas
-   - Symbols, rituals, and identifying characteristics
-
-2. **Political Integration**
-   - Relationships with existing factions (allies, enemies, neutral)
-   - Position in current conflicts and narrative arcs
-   - Territorial interests and influence zones
-   - Diplomatic opportunities and rivalries
-
-3. **Organizational Structure**
-   - Leadership hierarchy and key figures
-   - Membership requirements and recruitment methods
-   - Internal politics and power dynamics
-   - Resources, wealth, and capabilities
-
-4. **Campaign Integration**
-   - How this faction advances ongoing storylines
-   - Quest hooks and player interaction opportunities
-   - Potential conflicts and alliance opportunities
-   - Long-term narrative potential
-
-5. **Operational Details**
-   - Primary activities and methods
-   - Headquarters location and secondary bases
-   - Communication networks and information gathering
-   - Current projects and immediate goals
-
-The faction should feel naturally integrated into the existing political landscape while offering new opportunities for player engagement and narrative development.
-
-Generate specific, actionable content that a GM can immediately use in their campaign, including potential plot hooks, NPC suggestions for faction members, and ways this faction intersects with existing campaign elements.`,
-		),
-	])
+	return {
+		messages: [
+			{
+				role: "user" as const,
+				content: {
+					type: "resource" as const,
+					resource: {
+						uri: `campaign://creation-context/faction-${args.name}`,
+						text: JSON.stringify(context, null, 2),
+						mimeType: "application/json",
+					},
+				},
+			},
+			createTextMessage("user", prompt),
+		],
+	}
 }
 
 // Create the prompt definition
