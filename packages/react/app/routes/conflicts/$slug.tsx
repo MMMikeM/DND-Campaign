@@ -5,13 +5,14 @@ import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Conflict } from "~/lib/entities"
 import { getConflict } from "~/lib/entities"
+import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
 import { ConsequencesContent } from "./components/ConsequencesContent"
 import { ForeshadowingContent } from "./components/ForeshadowingContent"
 import { ItemsContent } from "./components/ItemsContent"
+import { LoreContent } from "./components/LoreContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { ParticipantsContent } from "./components/ParticipantsContent"
-import { WorldConceptsContent } from "./components/WorldConceptsContent"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -54,10 +55,6 @@ export function Header({ name, scope, natures, status, className }: ConflictHead
 	)
 }
 
-const titleToCamelCase = (title: string) => {
-	return title[0].toLowerCase() + title.slice(1).replace(/ /g, "_")
-}
-
 const tabs = [
 	"Overview",
 	"Participants",
@@ -65,40 +62,39 @@ const tabs = [
 	"Items",
 	"Narrative Destinations",
 	"Region",
-	"World Concepts",
+	"Lore",
 	"Foreshadowing",
 	"Consequences",
 ]
 
 export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 	const {
-		affectedByConsequences,
+		affectingConsequences,
 		cause,
 		clarityOfRightWrong,
-		consequences,
 		creativePrompts,
 		currentTensionLevel,
 		description,
-		incomingForeshadowing,
 		gmNotes,
 		hiddenTruths,
 		id,
+		incomingForeshadowing,
 		itemRelations,
+		loreLinks,
 		moralDilemma,
 		name,
 		narrativeDestinations,
 		natures,
 		participants,
 		possibleOutcomes,
-		primaryRegion,
 		questImpacts,
-		regionId,
+		region,
 		scope,
 		slug,
 		stakes,
 		status,
 		tags,
-		worldConceptLinks,
+		triggeredConsequences,
 	} = loaderData
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
@@ -141,13 +137,13 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 						status={status}
 						scope={scope}
 						natures={natures}
-						primaryRegion={primaryRegion}
+						primaryRegion={region}
 						narrativeDestinations={narrativeDestinations}
 					/>
 				</TabsContent>
 
 				<TabsContent value="consequences" className="animate-in fade-in-50 duration-300">
-					<ConsequencesContent consequences={consequences} affectedByConsequences={affectedByConsequences} />
+					<ConsequencesContent consequences={affectingConsequences} affectedByConsequences={triggeredConsequences} />
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">
@@ -162,8 +158,8 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 					<ParticipantsContent participants={participants} name={name} />
 				</TabsContent>
 
-				<TabsContent value="worldConcepts" className="animate-in fade-in-50 duration-300">
-					<WorldConceptsContent worldConceptLinks={worldConceptLinks} />
+				<TabsContent value="lore" className="animate-in fade-in-50 duration-300">
+					<LoreContent loreLinks={loreLinks} />
 				</TabsContent>
 			</Tabs>
 		</div>

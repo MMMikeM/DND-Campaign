@@ -27,8 +27,49 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { quest, stages }
 }
 
+// type q = keyof Route.ComponentProps["loaderData"]["quest"]
+// type s = keyof Route.ComponentProps["loaderData"]["stages"]
+
 export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	const { quest, stages } = loaderData
+	const {
+		loreLinks,
+		itemRelations,
+		id,
+		name,
+		creativePrompts,
+		description,
+		gmNotes,
+		tags,
+		visibility,
+		type,
+		regionId,
+		mood,
+		objectives,
+		urgency,
+		moralSpectrumFocus,
+		intendedPacingRole,
+		primaryPlayerExperienceGoal,
+		failureOutcomes,
+		successOutcomes,
+		rewards,
+		themes,
+		inspirations,
+		prerequisiteQuestId,
+		otherUnlockConditionsNotes,
+		relations,
+		region,
+		stages,
+		hooks,
+		participants,
+		narrativeDestinationContributions,
+		affectingConsequences,
+		triggeredEvents,
+		incomingForeshadowing,
+		stageTree,
+		slug,
+	} = quest
+
 	const { tab, stageSlug, stageTab } = useParams()
 
 	const activeTab = stageSlug ? "stages" : tab || "overview"
@@ -37,8 +78,6 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	const selectedStage = stageSlug ? quest.stages.find((stage) => stage.slug === stageSlug) : quest.stages[0] || null
 
 	const selectedStageId = selectedStage?.id || null
-
-	const { name, slug } = quest
 
 	const handleTabChange = (value: string) => {
 		if (value === "stages" && selectedStage) {

@@ -16,8 +16,17 @@ export default [
 		route("foreshadowing", "./routes/foreshadowing/index.tsx"),
 		route("foreshadowing/:slug/:tab?", "./routes/foreshadowing/$slug.tsx"),
 
-		route("narrative-arcs", "./routes/narrative-arcs/index.tsx"),
-		route("narrative-arcs/:slug/:tab?", "./routes/narrative-arcs/$slug.tsx"),
+		route("items", "./routes/items/index.tsx"),
+		route("items/:slug/:tab?", "./routes/items/$slug.tsx"),
+
+		route("lore", "./routes/lore/index.tsx"),
+		route("lore/:slug/:tab?", "./routes/lore/$slug.tsx"),
+
+		route("narrative-events", "./routes/narrative-events/index.tsx"),
+		route("narrative-events/:slug/:tab?", "./routes/narrative-events/$slug.tsx"),
+
+		route("narrative-destinations", "./routes/narrative-destinations/index.tsx"),
+		route("narrative-destinations/:slug/:tab?", "./routes/narrative-destinations/$slug.tsx"),
 
 		route("npcs", "./routes/npcs/index.tsx"),
 		route("npcs/:slug/:tab?", "./routes/npcs/$slug.tsx"),
@@ -33,9 +42,6 @@ export default [
 
 		route("sites", "./routes/sites/index.tsx"),
 		route("sites/:slug/:tab?", "./routes/sites/$slug.tsx"),
-
-		route("world", "./routes/world/index.tsx"),
-		route("world/:slug/:tab?", "./routes/world/$slug.tsx"),
 	]),
 	route("api/items", "./routes/api/items.ts"),
 	route("api/search", "./routes/api/search.ts"),

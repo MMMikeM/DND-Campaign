@@ -24,36 +24,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return npc
 }
 
-const getTrustVariant = (trust: string): "default" | "destructive" | "outline" | "secondary" => {
-	switch (trust) {
-		case "high":
-			return "default"
-		case "medium":
-			return "default"
-		case "low":
-			return "secondary"
-		case "none":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}
-
-const getAdaptabilityVariant = (adaptability: string): "default" | "destructive" | "outline" | "secondary" => {
-	switch (adaptability) {
-		case "opportunistic":
-			return "default"
-		case "flexible":
-			return "default"
-		case "reluctant":
-			return "secondary"
-		case "rigid":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}
-
 export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	const npc = loaderData
 	const { tab } = useParams()
@@ -61,42 +31,59 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
-		adaptability,
-		age,
+		loreLinks,
+		itemRelations,
+		questHooks,
+		id,
+		name,
+		creativePrompts,
+		description,
+		gmNotes,
+		tags,
+		secrets,
 		alignment,
-		appearance,
+		gender,
+		race,
+		trustLevel,
+		wealth,
+		adaptability,
+		complexityProfile,
+		playerPerceptionGoal,
+		availability,
+		capability,
+		proactivity,
+		relatability,
+		disposition,
+		age,
 		attitude,
+		occupation,
+		quirk,
+		socialStatus,
+		currentGoals,
+		appearance,
 		avoidTopics,
 		background,
 		biases,
 		dialogue,
-		disposition,
 		drives,
 		fears,
-		gender,
-		id,
 		knowledge,
 		mannerisms,
-		name,
-		occupation,
 		personalityTraits,
 		preferredTopics,
-		quirk,
-		race,
-		relatedSites,
-		relatedClues,
-		relatedFactions,
-		relatedItems,
-		relatedQuestHooks,
-		relatedQuests,
 		rumours,
-		secrets,
-		slug,
-		socialStatus,
-		trustLevel,
-		wealth,
-		relations,
 		voiceNotes,
+		relations,
+		factionMemberships,
+		siteAssociations,
+		conflictParticipation,
+		affectingConsequences,
+		incomingForeshadowing,
+		itemHistory,
+		narrativeDestinationInvolvement,
+		questStageDeliveries,
+		stageInvolvement,
+		slug,
 	} = npc
 
 	const handleTabChange = (value: string) => {
@@ -213,4 +200,34 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 			</Tabs>
 		</div>
 	)
+}
+
+const getTrustVariant = (trust: string): "default" | "destructive" | "outline" | "secondary" => {
+	switch (trust) {
+		case "high":
+			return "default"
+		case "medium":
+			return "default"
+		case "low":
+			return "secondary"
+		case "none":
+			return "destructive"
+		default:
+			return "outline"
+	}
+}
+
+const getAdaptabilityVariant = (adaptability: string): "default" | "destructive" | "outline" | "secondary" => {
+	switch (adaptability) {
+		case "opportunistic":
+			return "default"
+		case "flexible":
+			return "default"
+		case "reluctant":
+			return "secondary"
+		case "rigid":
+			return "destructive"
+		default:
+			return "outline"
+	}
 }
