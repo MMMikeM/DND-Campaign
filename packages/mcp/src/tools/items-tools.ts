@@ -72,11 +72,12 @@ export const entityGetters = createEntityGetters({
 		}),
 })
 
-export const itemToolDefinitions: Record<"manage_items", ToolDefinition> = {
-	manage_items: {
+export const itemToolDefinitions: Record<"manage_item", ToolDefinition> = {
+	manage_item: {
+		enums: tables.itemTables.enums,
 		description: "Manage item-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_items", tables.itemTables, tableEnum, schemas, polymorphicConfig),
+		handler: createManageEntityHandler("manage_item", tables.itemTables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Items",
 			readOnlyHint: false,

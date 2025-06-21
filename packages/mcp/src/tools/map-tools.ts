@@ -120,6 +120,7 @@ export const mapToolDefinitions: Record<
 	ToolDefinition
 > = {
 	manage_map_group: {
+		enums: tables.mapTables.enums,
 		description: "Manage map groups and their associated tactical details.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_map_group", mapTables, tableEnum, schemas),
@@ -132,6 +133,7 @@ export const mapToolDefinitions: Record<
 		},
 	},
 	manage_map_variant: {
+		enums: tables.mapTables.enums,
 		description: "Manage map assets and their associated tactical details.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_map_variant", mapTables, tableEnum, schemas),
@@ -144,6 +146,7 @@ export const mapToolDefinitions: Record<
 		},
 	},
 	synchronize_maps: {
+		enums: tables.mapTables.enums,
 		description: "Synchronize map images from a directory with the database.",
 		inputSchema: zodToMCP(syncMapsSchema),
 		handler: synchronizeMapsHandler,

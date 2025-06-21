@@ -59,7 +59,8 @@ export const entityGetters = createEntityGetters({
 
 export const narrativeEventToolDefinitions: Record<"manage_narrative_event", ToolDefinition> = {
 	manage_narrative_event: {
-		description: "Manage event-related entities.",
+		enums: tables.narrativeEventTables.enums,
+		description: "Manage narrative event-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler(
 			"manage_narrative_event",

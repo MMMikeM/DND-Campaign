@@ -142,6 +142,7 @@ export const entityGetters = createEntityGetters({
 
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 	manage_region: {
+		enums: tables.regionTables.enums,
 		description:
 			"Manage region-related entities. Sites are tactical locations and MUST be linked to an existing map via `mapId` on creation.",
 		inputSchema: createManageSchema(schemas, tableEnum),

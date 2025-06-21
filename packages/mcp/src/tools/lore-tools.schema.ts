@@ -33,8 +33,6 @@ export const schemas = {
 		history_and_legacy: list.describe("Key historical moments, origins, and lasting impact"),
 		conflicting_narratives: list.describe("Different viewpoints or propaganda about the concept"),
 
-		questHooks: list.describe("Quest hooks related to this lore"),
-
 		creativePrompts: list.describe("GM ideas for using this lore"),
 		gmNotes: list.describe("GM-only information about this lore"),
 	})

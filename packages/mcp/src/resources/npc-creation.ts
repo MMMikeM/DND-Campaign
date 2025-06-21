@@ -63,15 +63,20 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
 		logger.error("Failed to gather NPC creation context", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			npcName,
 			uri,
 		})
-		throw new Error(`Failed to gather context for NPC: ${npcName} - ${error instanceof Error ? error.message : String(error)}`)
+		throw new Error(
+			`Failed to gather context for NPC: ${npcName} - ${error instanceof Error ? error.message : String(error)}`,
+		)
 	}
 }
 

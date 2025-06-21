@@ -78,7 +78,7 @@ export const schemas = {
 			"The specific player choice that directly causes this event to happen.",
 		),
 
-		tags: (s) => s.describe("Keywords for searching and filtering (e.g., 'combat', 'social', 'betrayal', 'mystery')."),
+		tags: list.describe("Keywords for searching and filtering (e.g., 'combat', 'social', 'betrayal', 'mystery')."),
 	})
 		.omit({ id: true })
 		.strict()

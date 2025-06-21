@@ -10,6 +10,7 @@ export type baseTableWithId = PgTable & {
 export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
 
 export type ToolDefinition = {
+	enums?: Record<string, readonly string[]>
 	description: string
 	inputSchema: z.core.JSONSchema.BaseSchema
 	handler: ToolHandler

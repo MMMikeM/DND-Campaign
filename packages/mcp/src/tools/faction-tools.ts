@@ -7,18 +7,6 @@ import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.factionTables)
 
-// Configure polymorphic validation for factionInfluence table
-const { relatedEntityTypes } = tables.factionTables.enums
-const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
-const polymorphicConfig = polymorphicHelper.fromEnums("factionInfluence", [
-	{
-		typeField: "relatedEntityType",
-		idField: "relatedEntityId",
-		enumValues: relatedEntityTypes,
-		exclude: ["region_connection"], // This doesn't map to a table
-	},
-])
-
 export const entityGetters = createEntityGetters({
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
@@ -79,11 +67,12 @@ export const entityGetters = createEntityGetters({
 		}),
 })
 
-export const factionToolDefinitions: Record<"manage_factions", ToolDefinition> = {
-	manage_factions: {
+export const factionToolDefinitions: Record<"manage_faction", ToolDefinition> = {
+	manage_faction: {
+		enums: tables.factionTables.enums,
 		description: "Manage faction-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_factions", tables.factionTables, tableEnum, schemas, polymorphicConfig),
+		handler: createManageEntityHandler("manage_faction", tables.factionTables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Factions",
 			readOnlyHint: false,

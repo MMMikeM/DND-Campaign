@@ -37,6 +37,7 @@ export const entityGetters = createEntityGetters({
 
 export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> = {
 	manage_conflict: {
+		enums: tables.conflictTables.enums,
 		description: "Manage conflict-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_conflict", tables.conflictTables, tableEnum, schemas),

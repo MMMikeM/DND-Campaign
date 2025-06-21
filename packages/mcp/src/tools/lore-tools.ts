@@ -60,6 +60,7 @@ export const entityGetters = createEntityGetters({
 
 export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 	manage_lore: {
+		enums: tables.loreTables.enums,
 		description: "Manage lore-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_lore", tables.loreTables, tableEnum, schemas, polymorphicConfig),
