@@ -7,14 +7,14 @@ const narrativeDestinationConfig = {
 		db.query.narrativeDestinations.findFirst({
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 				conflict: { columns: { id: true, name: true } },
 				incomingRelations: { with: { sourceNarrativeDestination: { columns: { id: true, name: true } } } },
 				outgoingRelations: { with: { targetNarrativeDestination: { columns: { id: true, name: true } } } },
 				participantInvolvement: { with: { faction: { columns: { id: true, name: true } } } },
 				questRoles: { with: { quest: { columns: { id: true, name: true } } } },
 				region: { columns: { id: true, name: true } },
-				worldConceptLinks: { with: { worldConcept: { columns: { id: true, name: true } } } },
+				loreLinks: { with: { lore: { columns: { id: true, name: true } } } },
 				itemRelations: { with: { sourceItem: { columns: { id: true, name: true } } } },
 			},
 		}),

@@ -10,7 +10,7 @@ const narrativeEventConfig = {
 				questStage: { columns: { id: true, name: true } },
 				relatedQuest: { columns: { id: true, name: true } },
 				triggeringStageDecision: { columns: { id: true, name: true } },
-				foreshadowingTarget: true,
+				incomingForeshadowing: true,
 			},
 		}),
 	getAll: () => db.query.narrativeEvents.findMany({}),

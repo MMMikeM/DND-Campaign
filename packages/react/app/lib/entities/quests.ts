@@ -9,9 +9,8 @@ const questConfig = {
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
-				consequences: true,
-				foreshadowingSource: true,
-				foreshadowingTarget: true,
+				affectingConsequences: true,
+				incomingForeshadowing: true,
 				hooks: true,
 				itemRelations: true,
 				narrativeDestinationContributions: true,
@@ -21,7 +20,7 @@ const questConfig = {
 				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
 				triggeredEvents: true,
-				worldConceptLinks: true,
+				loreLinks: true,
 			},
 		}),
 	getAll: () =>

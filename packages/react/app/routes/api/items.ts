@@ -3,6 +3,7 @@ import {
 	getAllConflicts,
 	getAllFactions,
 	getAllForeshadowing,
+	getAllLore,
 	getAllMaps,
 	getAllNarrativeDestinations,
 	getAllNarrativeEvents,
@@ -10,7 +11,6 @@ import {
 	getAllQuests,
 	getAllRegions,
 	getAllSites,
-	getAllWorldConcepts,
 } from "~/lib/entities"
 import type { Route } from "./+types/items"
 
@@ -26,7 +26,7 @@ const fetchDataSources = {
 	quests: getAllQuests,
 	regions: getAllRegions,
 	sites: getAllSites,
-	worldConcepts: getAllWorldConcepts,
+	lore: getAllLore,
 }
 
 const fetchData = async () => {
