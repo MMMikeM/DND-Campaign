@@ -23,7 +23,7 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	conflicts: many(conflictParticipants),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedFaction" }),
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForFaction" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetFaction" }),
 	itemRelations: many(itemRelations),
 	loreLinks: many(loreLinks),
 

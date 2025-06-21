@@ -22,8 +22,8 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 		references: [npcs.id],
 	}),
 
-	outgoingDecisions: many(questStageDecisions, { relationName: "decisionsFromStage" }),
-	incomingDecisions: many(questStageDecisions, { relationName: "decisionsToStage" }),
+	outgoingDecisions: many(questStageDecisions, { relationName: "sourceStageForDecisions" }),
+	incomingDecisions: many(questStageDecisions, { relationName: "targetStageForDecisions" }),
 
 	items: many(items),
 	narrativeEvents: many(narrativeEvents),
@@ -35,16 +35,17 @@ export const questStageDecisionsRelations = relations(questStageDecisions, ({ on
 	quest: one(quests, {
 		fields: [questStageDecisions.questId],
 		references: [quests.id],
+		relationName: "questForStageDecision",
 	}),
-	fromStage: one(questStages, {
+	sourceStage: one(questStages, {
 		fields: [questStageDecisions.fromQuestStageId],
 		references: [questStages.id],
-		relationName: "decisionsFromStage",
+		relationName: "sourceStageForDecisions",
 	}),
-	toStage: one(questStages, {
+	targetStage: one(questStages, {
 		fields: [questStageDecisions.toQuestStageId],
 		references: [questStages.id],
-		relationName: "decisionsToStage",
+		relationName: "targetStageForDecisions",
 	}),
 
 	triggeredEvents: many(narrativeEvents),

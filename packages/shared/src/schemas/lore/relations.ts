@@ -11,7 +11,8 @@ import { lore, loreLinks } from "./tables"
 export const loreRelations = relations(lore, ({ many }) => ({
 	links: many(loreLinks, { relationName: "LoreLinkParent" }),
 	itemRelations: many(itemRelations),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForLore" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetLore" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "sourceLoreForForeshadowing" }),
 }))
 
 export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
@@ -68,5 +69,13 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 		references: [lore.id],
 		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
 		where: sql`${loreLinks.targetEntityType} = 'lore'`,
+	}),
+
+	targetForeshadowing: one(foreshadowing, {
+		fields: [loreLinks.targetEntityId],
+		references: [foreshadowing.id],
+		relationName: "targetForeshadowingForLoreLink",
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'foreshadowing'`,
 	}),
 }))

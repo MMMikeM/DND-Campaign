@@ -1,0 +1,1 @@
+ALTER TABLE "lore" DROP COLUMN "quest_hooks";

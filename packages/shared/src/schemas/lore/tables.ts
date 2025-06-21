@@ -24,7 +24,6 @@ export const lore = pgTable("lore", {
 	core_tenets_and_traditions: list("core_tenets_and_traditions"),
 	history_and_legacy: list("history_and_legacy"),
 	conflicting_narratives: list("conflicting_narratives"),
-	questHooks: list("quest_hooks"),
 	creativePrompts: list("creative_prompts"),
 	gmNotes: list("gm_notes"),
 })

@@ -2,7 +2,7 @@ import { relations, sql } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
-import { lore } from "../lore/tables"
+import { lore, loreLinks } from "../lore/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
@@ -11,7 +11,8 @@ import { sites } from "../regions/tables"
 import { questStages } from "../stages/tables"
 import { foreshadowing } from "./tables"
 
-export const foreshadowingRelations = relations(foreshadowing, ({ one }) => ({
+export const foreshadowingRelations = relations(foreshadowing, ({ one, many }) => ({
+	incomingLoreLinks: many(loreLinks, { relationName: "targetForeshadowingForLoreLink" }),
 	// Target entity soft relations (what is being foreshadowed)
 	targetQuest: one(quests, {
 		relationName: "ForeshadowingTargetQuest",
@@ -119,7 +120,7 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one }) => ({
 	}),
 
 	sourceLore: one(lore, {
-		relationName: "ForeshadowingSourceLore",
+		relationName: "sourceLoreForForeshadowing",
 		fields: [foreshadowing.sourceEntityId],
 		references: [lore.id],
 		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet

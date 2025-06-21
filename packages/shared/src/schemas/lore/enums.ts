@@ -10,7 +10,7 @@ const loreTypes = [
 ] as const
 
 const linkStrengths = ["tenuous", "moderate", "strong", "defining"] as const
-const targetEntityTypes = ["region", "faction", "npc", "conflict", "quest", "lore"] as const
+const targetEntityTypes = ["region", "faction", "npc", "conflict", "quest", "lore", "foreshadowing"] as const
 
 export const enums = {
 	loreTypes,
