@@ -113,9 +113,9 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		const factionInfluence = await db.query.factionInfluence.findMany({
 			with: {
 				faction: { columns: { id: true, name: true, type: true } },
-				relatedRegion: { columns: { id: true, name: true } },
-				relatedArea: { columns: { id: true, name: true } },
-				relatedSite: { columns: { id: true, name: true } },
+				region: { columns: { id: true, name: true } },
+				area: { columns: { id: true, name: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
@@ -222,8 +222,8 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 						),
 					with: {
 						faction: { columns: { id: true, name: true, type: true } },
-						relatedRegion: { columns: { id: true, name: true } },
-						relatedArea: { columns: { id: true, name: true } },
+						region: { columns: { id: true, name: true } },
+						area: { columns: { id: true, name: true } },
 					},
 					columns: { id: true, influenceLevel: true },
 				})
@@ -305,9 +305,9 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			factionInfluence: factionInfluence.map((fi) => ({
 				influenceLevel: fi.influenceLevel,
 				faction: { id: fi.faction.id, name: fi.faction.name },
-				site: fi.relatedSite,
-				area: fi.relatedArea,
-				region: fi.relatedRegion,
+				site: fi.site,
+				area: fi.area,
+				region: fi.region,
 			})),
 			questStages,
 			activeConflicts,

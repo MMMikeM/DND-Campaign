@@ -10,9 +10,11 @@ export const countBy = <const EnumKeys extends readonly string[], V>(
 	const grouped = Object.groupBy(items, extractor)
 	const result: Partial<Record<EnumKeys[number], { count: number; percentage: number }>> = {}
 	for (const key of enumForKeys ?? Object.keys(grouped)) {
+		const count = grouped[key]?.length ?? 0
+		const percentage = items.length ? (count / (items.length ?? 1)) * 100 : 0
 		result[key as EnumKeys[number]] = {
-			count: grouped[key]?.length ?? 0,
-			percentage: (grouped[key]?.length ?? 0) / items.length,
+			count,
+			percentage,
 		}
 	}
 
@@ -23,7 +25,7 @@ export const getUnderrepresentedKeys = <T extends Record<string, { count: number
 	distribution: T,
 ): (keyof T)[] => {
 	const sorted = Object.entries(distribution).toSorted(([, a], [, b]) => a.percentage - b.percentage)
-	return sorted.slice(0, Math.floor(sorted.length * 0.25)).map(([key]) => key as keyof T)
+	return sorted.slice(0, Math.ceil(sorted.length * 0.25)).map(([key]) => key as keyof T)
 }
 
 export const cleanObject = <T extends Record<string, unknown>>(obj: T): Partial<T> => {

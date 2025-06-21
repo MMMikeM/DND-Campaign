@@ -31,7 +31,7 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
     *   Synthesize the user's hints (name, location, role) with the contextual opportunities.
 
 2.  **Create the Core NPC:**
-    *   First, you **must** call the \`manage_npc.create_npc\` tool to establish the foundational character.
+    *   First, you **must** call the \`manage_npc\` tool with \`create\` on the \`npc\` table to establish the foundational character.
     *   Use the context and hints to populate the NPC's core attributes (description, personality, goals, etc.) thoughtfully. Ground them in the world.
 
 3.  **Establish Connections (CRUCIAL):**
@@ -60,10 +60,10 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
 					.map(
 						(influence) => `
           Level: \`${influence.influenceLevel}\`
-          ${influence.relatedSite ? `Site: \`${influence.relatedSite?.name}\` (Id: \`${influence.relatedSite?.id}\`)` : ""}
-          ${influence.relatedArea ? `Area: \`${influence.relatedArea?.name}\` (Id: \`${influence.relatedArea?.id}\`)` : ""}
-          ${influence.relatedRegion ? `Region: \`${influence.relatedRegion?.name}\` (Id: \`${influence.relatedRegion?.id}\`)` : ""}
-          ${influence.relatedRegionConnection ? `Region Connection: \`${influence.relatedRegionConnection?.connectionType}\` (Id: \`${influence.relatedRegionConnection?.id}\`)` : ""}
+          ${influence.site ? `Site: \`${influence.site?.name}\` (Id: \`${influence.site?.id}\`)` : ""}
+          ${influence.area ? `Area: \`${influence.area?.name}\` (Id: \`${influence.area?.id}\`)` : ""}
+          ${influence.region ? `Region: \`${influence.region?.name}\` (Id: \`${influence.region?.id}\`)` : ""}
+          ${influence.regionConnection ? `Region Connection: \`${influence.regionConnection?.name}\` (Id: \`${influence.regionConnection?.id}\`)` : ""}
         `,
 					)
 					.join(", ")}
@@ -88,9 +88,9 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
   `
 	}
 
-	if (context.locations?.sites?.length) {
+	if (context.sites?.length) {
 		prompt += `
-    *   Available sites: ${context.locations.sites?.map((site) => site.name).join(", ")}
+    *   Available sites: ${context.sites?.map((site) => site.name).join(", ")}
   `
 	}
 

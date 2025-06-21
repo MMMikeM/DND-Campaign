@@ -1,127 +1,219 @@
 import { tables } from "@tome-master/shared"
-import type {
-	ConflictForFactionAnalysis,
-	FactionAgendaForAnalysis,
-	FactionDiplomacyForAnalysis,
-	FactionForAnalysis,
-	NarrativeParticipationForAnalysis,
-	PoliticalLandscapeAnalysis,
-} from "./types"
+import { db, logger } from "../.."
+import { unifyRelations } from "../../unify"
+import type { Context } from "../baseContext"
+import { countBy, getUnderrepresentedKeys } from "../utils"
 
-const { enums } = tables.factionTables
+const { agendaTypes, alignments, diplomaticStatuses, factionTypes } = tables.factionTables.enums
 
-// Helper function to count occurrences using Object.groupBy
-function countBy<T>(items: T[], extractor: (item: T) => string): Record<string, number> {
-	const grouped = Object.groupBy(items, extractor)
-	return Object.fromEntries(Object.entries(grouped).map(([key, items]) => [key, items?.length ?? 0]))
-}
-
-export function analyzePoliticalLandscape({
-	existingFactions,
-	existingAgendas,
-	existingDiplomacy,
-	activeConflicts,
-	narrativeParticipation,
-}: {
-	existingFactions: FactionForAnalysis[]
-	existingAgendas: FactionAgendaForAnalysis[]
-	existingDiplomacy: FactionDiplomacyForAnalysis[]
-	activeConflicts: ConflictForFactionAnalysis[]
-	narrativeParticipation: NarrativeParticipationForAnalysis[]
-}): PoliticalLandscapeAnalysis {
-	const analysis: Record<keyof PoliticalLandscapeAnalysis, string[]> = {
-		powerVacuums: [],
+export function analyzePoliticalLandscape(context: Context) {
+	const gaps: Record<
+		| "factionTypes"
+		| "alignmentGaps"
+		| "agendaVariety"
+		| "diplomaticStance"
+		| "narrativeIntegration"
+		| "territorialPresence"
+		| "diplomaticOpenings"
+		| "narrativeIntegrationPotential",
+		string[]
+	> = {
+		factionTypes: [],
 		alignmentGaps: [],
-		territorialOpportunities: [],
+		agendaVariety: [],
+		diplomaticStance: [],
+		narrativeIntegration: [],
+		territorialPresence: [],
 		diplomaticOpenings: [],
 		narrativeIntegrationPotential: [],
 	}
 
-	// Analyze faction type distribution
-	const allFactionTypes = existingFactions.flatMap((faction) => faction.type)
-	const factionTypeDistribution = countBy(allFactionTypes, (type) => type)
+	const { factions, conflicts, narrativeDestinations } = context
 
-	// Identify underrepresented faction types
-	const underrepresentedTypes = enums.factionTypes.filter((type) => (factionTypeDistribution[type] || 0) < 2)
+	const agendas = factions.flatMap((f) => f.agendas)
+
+	const factionTypeDistribution = countBy(
+		factions.flatMap((f) => f.type),
+		(type) => type,
+		factionTypes,
+	)
+
+	const underrepresentedTypes = getUnderrepresentedKeys(factionTypeDistribution)
 
 	if (underrepresentedTypes.length > 0) {
-		analysis.powerVacuums.push(`Limited representation in ${underrepresentedTypes.join(", ")} faction types`)
+		gaps.factionTypes.push(`Limited representation in ${underrepresentedTypes.join(", ")} faction types`)
 	}
 
-	// Analyze alignment distribution
-	const alignmentDistribution = countBy(existingFactions, (faction) => faction.publicAlignment)
-
-	// Look for alignment gaps
-	const allAlignments = enums.alignments
-
-	const underrepresentedAlignments = allAlignments.filter((alignment) => !alignmentDistribution[alignment])
+	const alignmentDistribution = countBy(factions, (faction) => faction.publicAlignment, alignments)
+	const underrepresentedAlignments = getUnderrepresentedKeys(alignmentDistribution)
 
 	if (underrepresentedAlignments.length > 0) {
-		analysis.alignmentGaps.push(`Missing factions with ${underrepresentedAlignments.join(", ")} alignments`)
+		gaps.alignmentGaps.push(`Missing factions with ${underrepresentedAlignments.join(", ")} alignments`)
 	}
 
-	// Analyze agenda coverage
-	const agendaTypes = existingAgendas.map((agenda) => agenda.agendaType)
-	const agendaGaps = enums.agendaTypes.filter((type) => !agendaTypes.includes(type))
+	const agendaTypeDistribution = countBy(agendas, (agenda) => agenda.agendaType, agendaTypes)
+	const underrepresentedAgendas = getUnderrepresentedKeys(agendaTypeDistribution)
 
-	if (agendaGaps.length > 0) {
-		analysis.powerVacuums.push(`No active agendas in ${agendaGaps.join(", ")} spheres`)
+	if (underrepresentedAgendas.length > 0) {
+		gaps.agendaVariety.push(`No active agendas in ${underrepresentedAgendas.join(", ")} spheres`)
 	}
 
-	// Analyze diplomatic landscape
-	const diplomaticNetworkSize = existingDiplomacy.length
-	const factionCount = existingFactions.length
-	const expectedConnections = Math.floor((factionCount * (factionCount - 1)) / 4) // Rough estimate
+	const normalisedRelations = factions
+		.map((f) =>
+			unifyRelations(f)
+				.from({ property: "outgoingRelations", key: "targetFaction" })
+				.with({ property: "incomingRelations", key: "sourceFaction" })
+				.to({ property: "relations", key: "faction" }),
+		)
+		.map((r) => ({ ...r, relationCount: r.relations.length }))
 
-	if (diplomaticNetworkSize < expectedConnections) {
-		analysis.diplomaticOpenings.push("Underdeveloped diplomatic network - many factions lack formal relationships")
+	logger.info("Normalised relations", normalisedRelations)
+	const factionRelationCountDistribution = countBy(normalisedRelations, (f) => f.relationCount.toString())
+
+	logger.info("Faction relation count distribution", factionRelationCountDistribution)
+	const underrepresentedRelationCounts = getUnderrepresentedKeys(factionRelationCountDistribution)
+
+	if (underrepresentedRelationCounts.length > 0) {
+		gaps.diplomaticOpenings.push(`Underdeveloped diplomatic network - many factions lack formal relationships`)
 	}
+
+	const expectedConnections = Math.floor((factions.length * (factions.length - 1)) / 4) // Rough estimate
+
+	const lowRelationCountFactions = []
+	for (const [k, v] of Object.entries(factionRelationCountDistribution)) {
+		if (v.count < expectedConnections) {
+			lowRelationCountFactions.push(k)
+		}
+	}
+
+	lowRelationCountFactions.forEach((f) => {
+		gaps.diplomaticOpenings.push(`${f} has less than ${expectedConnections} relations`)
+	})
 
 	// Check for isolated factions
-	const connectedFactionIds = new Set([
-		...existingDiplomacy.map((d) => d.sourceFaction.id),
-		...existingDiplomacy.map((d) => d.targetFaction.id),
-	])
 
-	const isolatedFactions = existingFactions.filter((f) => !connectedFactionIds.has(f.id))
+	const isolatedFactions = factions.filter((f) => !factionRelationCountDistribution[f.id])
 
 	if (isolatedFactions.length > 0) {
-		analysis.diplomaticOpenings.push(`${isolatedFactions.length} factions lack formal diplomatic relationships`)
+		gaps.diplomaticOpenings.push(`${isolatedFactions.length} factions lack formal diplomatic relationships`)
 	}
 
 	// Analyze conflict participation
 	const activeConflictParticipants = new Set(
-		activeConflicts.flatMap((conflict) =>
-			conflict.participants.map((p) => p.faction?.id).filter((id): id is number => id !== null),
-		),
+		conflicts.flatMap((conflict) => conflict.participants.map((p) => p.faction?.id)).filter(Boolean),
 	)
 
-	const nonConflictFactions = existingFactions.filter((f) => !activeConflictParticipants.has(f.id))
+	const nonConflictFactions = factions.filter((f) => !activeConflictParticipants.has(f.id))
 
-	if (nonConflictFactions.length > existingFactions.length / 2) {
-		analysis.narrativeIntegrationPotential.push("Many factions not involved in current conflicts")
+	if (nonConflictFactions.length > factions.length / 2) {
+		gaps.narrativeIntegrationPotential.push("Many factions not involved in current conflicts")
 	}
 
 	// Analyze narrative arc participation
 	const narrativeParticipants = new Set(
-		narrativeParticipation.map((p) => p.faction?.id).filter((id): id is number => id !== null),
+		narrativeDestinations.flatMap((dest) => dest.participantInvolvement.map((p) => p.faction?.id)).filter(Boolean),
 	)
 
-	const nonNarrativeFactions = existingFactions.filter((f) => !narrativeParticipants.has(f.id))
+	const nonNarrativeFactions = factions.filter((f) => !narrativeParticipants.has(f.id))
 
 	if (nonNarrativeFactions.length > 0) {
-		analysis.narrativeIntegrationPotential.push(
-			`${nonNarrativeFactions.length} factions not involved in narrative arcs`,
-		)
+		gaps.narrativeIntegrationPotential.push(`${nonNarrativeFactions.length} factions not involved in narrative arcs`)
 	}
 
 	// Territory analysis - look for geographic clustering opportunities
-	const factionsWithLocations = existingFactions.filter((f) => f.primaryHqSite?.area)
-	const locationCoverage = factionsWithLocations.map((f) => f.primaryHqSite?.area?.name).filter(Boolean)
+	const factionsWithHeadquarters = factions.filter((f) => f.primaryHqSite?.area)
+	const locationCoverage = factionsWithHeadquarters.map((f) => f.primaryHqSite?.area?.name).filter(Boolean)
 
-	if (locationCoverage.length < existingFactions.length) {
-		analysis.territorialOpportunities.push("Some regions may lack major faction presence")
+	if (locationCoverage.length < factions.length) {
+		gaps.territorialPresence.push("Some regions may lack major faction presence")
 	}
 
-	return analysis
+	return gaps
+}
+
+export async function analyzeFactionGaps({ factions }: Context) {
+	const gaps = {
+		typeRepresentation: [] as string[],
+		alignmentRepresentation: [] as string[],
+		agendaVariety: [] as string[],
+		diplomaticStance: [] as string[],
+		narrativeIntegration: [] as string[],
+		territorialPresence: [] as string[],
+	}
+
+	// 1. Analyze Faction Type and Alignment Distribution
+	const allFactionTypes = factions.flatMap((f) => f.type)
+	const typeDistribution = countBy(allFactionTypes, (type) => type, factionTypes)
+	gaps.typeRepresentation = getUnderrepresentedKeys(typeDistribution).map(
+		(key) => `The world lacks factions of type: ${key}.`,
+	)
+
+	const alignmentDistribution = countBy(factions, (f) => f.publicAlignment, alignments)
+	gaps.alignmentRepresentation = getUnderrepresentedKeys(alignmentDistribution).map(
+		(key) => `There is a shortage of ${key} factions.`,
+	)
+
+	// 2. Analyze Agenda Variety
+	const allAgendas = factions.flatMap((f) => f.agendas)
+	const agendaTypeDistribution = countBy(allAgendas, (a) => a.agendaType, agendaTypes)
+	gaps.agendaVariety = getUnderrepresentedKeys(agendaTypeDistribution).map(
+		(key) => `Few factions are pursuing ${key} agendas.`,
+	)
+
+	// 3. Analyze Diplomatic Stance
+	const allDiplomacy = factions
+		.map((f) =>
+			unifyRelations(f)
+				.from({ property: "outgoingRelations", key: "targetFaction" })
+				.with({ property: "incomingRelations", key: "sourceFaction" })
+				.to({ property: "relations", key: "faction" }),
+		)
+		.flatMap((faction) => faction.relations.flatMap((r) => r.diplomaticStatus))
+
+	const diplomacyStatusDistribution = countBy(allDiplomacy, (d) => d, diplomaticStatuses)
+	if ((diplomacyStatusDistribution.ally?.percentage ?? 0) < 15) {
+		gaps.diplomaticStance.push("The political landscape is highly fragmented. More alliances could create stability.")
+	}
+	if ((diplomacyStatusDistribution.enemy?.percentage ?? 0) === 0) {
+		gaps.diplomaticStance.push('A lack of open enemies might indicate a "cold war" or hidden tensions brewing.')
+	}
+
+	// 4. Analyze Narrative Integration
+	const factionsInNarratives = await db.query.factions.findMany({
+		with: {
+			narrativeDestinationInvolvement: {
+				where: (nd, { exists }) => exists(nd.narrativeDestinationId),
+			},
+		},
+	})
+
+	const factionNarrativeCount = countBy(factionsInNarratives, (f) =>
+		f.narrativeDestinationInvolvement.length.toString(),
+	)
+
+	const underrepresentedFactions = getUnderrepresentedKeys(factionNarrativeCount)
+
+	if (underrepresentedFactions.length > 0) {
+		gaps.narrativeIntegration.push(
+			`${underrepresentedFactions.length} factions have low narrative connections. Consider integrating them.`,
+		)
+	}
+
+	// 5. Analyze Territorial Presence
+	const factionWithoutAreaInfluence = factions.filter((f) => !f.influence.some((i) => !i.area))
+
+	if (factionWithoutAreaInfluence.length > 3) {
+		gaps.territorialPresence.push(
+			`${factionWithoutAreaInfluence.map((f) => f.name).join(", ")} have no established influence or territory, making them seem disconnected from the world.`,
+		)
+	}
+
+	const factionsWithoutHq = factions.filter((f) => !f.primaryHqSite)
+	if (factionsWithoutHq.length > 3) {
+		gaps.territorialPresence.push(
+			`${factionsWithoutHq.map((f) => f.name).join(", ")} have no primary headquarters, making them seem disconnected from the world.`,
+		)
+	}
+
+	return gaps
 }

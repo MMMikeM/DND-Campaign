@@ -28,11 +28,14 @@ export function registerPromptHandlers(server: Server) {
 			return result
 		} catch (error) {
 			logger.error(`Error in prompt ${name}:`, {
-				error: error instanceof Error ? {
-					name: error.name,
-					message: error.message,
-					stack: error.stack,
-				} : error,
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
 				promptName: name,
 				promptArgs,
 			})

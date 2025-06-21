@@ -88,11 +88,14 @@ Ensure the quest feels naturally embedded in the campaign world, creates meaning
 		}
 	} catch (error) {
 		logger.error("Error in enhanced quest creation handler:", {
-			error: error instanceof Error ? {
-				name: error.name,
-				message: error.message,
-				stack: error.stack,
-			} : error,
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
 			questArgs: args,
 		})
 		throw error

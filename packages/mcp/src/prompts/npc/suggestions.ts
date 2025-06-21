@@ -5,7 +5,7 @@ import type { EnhancedNpcCreationArgs } from "./types"
 export function generateNPCCreationSuggestions({ args, context }: { args: EnhancedNpcCreationArgs; context: Context }) {
 	const gaps = getNpcContentGaps(context)
 
-	const existingNPCs = context.npcs
+	const { npcs, sites, areas, regions, conflicts, factions, narrativeDestinations, quests } = context
 
 	const suggestions: Record<
 		"targetNPCs" | "factionOpportunities" | "narrativeHooks" | "characterComplexity",
@@ -16,8 +16,6 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 		narrativeHooks: [],
 		characterComplexity: [],
 	}
-
-	const { sites, areas, regions } = context.locations
 
 	// 1. Location-based suggestions (NPCs, Factions, Hooks)
 	sites.forEach((site) => {
@@ -85,9 +83,7 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 				reasoning: `Matches faction hint: "${args.faction_hint}".`,
 			})
 
-			const factionMembers = existingNPCs.filter((npc) =>
-				npc.factionMemberships.some((m) => m.faction.id === faction.id),
-			)
+			const factionMembers = npcs.filter((npc) => npc.factionMemberships.some((m) => m.faction.id === faction.id))
 
 			factionMembers.forEach((member) => {
 				suggestions.targetNPCs.push({
@@ -100,7 +96,7 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 	}
 
 	if (args.occupation) {
-		const relatedNPCs = existingNPCs.filter((npc) =>
+		const relatedNPCs = npcs.filter((npc) =>
 			npc.occupation?.toLowerCase().includes(args.occupation?.toLowerCase() || ""),
 		)
 
@@ -115,7 +111,7 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 
 	if (args.relationship_hint) {
 		const hintWords = args.relationship_hint.toLowerCase().split(/\s+/)
-		const potentialTargets = existingNPCs.filter((npc) =>
+		const potentialTargets = npcs.filter((npc) =>
 			hintWords.some((word) => npc.name.toLowerCase().includes(word) || npc.occupation?.toLowerCase().includes(word)),
 		)
 

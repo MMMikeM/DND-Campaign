@@ -13,7 +13,7 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 	logger.info(`Fetching map resource for ID: ${mapId}`)
 
 	try {
-		const map = await db.query.maps.findFirst({
+		const map = await db.query.mapFiles.findFirst({
 			where: (maps, { eq }) => eq(maps.id, mapId),
 		})
 
@@ -59,7 +59,7 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 }
 
 const listMaps: ResourceLister = async (): Promise<Resource[]> => {
-	const maps = await db.query.maps.findMany({
+	const maps = await db.query.mapFiles.findMany({
 		columns: { id: true, fileName: true },
 		with: { mapDetails: { columns: { name: true } } },
 		where: (maps, { isNotNull }) => isNotNull(maps.mapImage),
