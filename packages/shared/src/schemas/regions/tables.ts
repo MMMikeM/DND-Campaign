@@ -3,7 +3,7 @@
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableString, oneOf, pk, string } from "../../db/utils"
-import { mapFiles } from "../maps/tables"
+import { mapGroups, mapVariants } from "../maps/tables"
 import { enums } from "./enums"
 
 export { enums }
@@ -134,7 +134,7 @@ export const sites = pgTable("sites", {
 	weather: list("weather"),
 	descriptors: list("descriptors"),
 
-	mapId: cascadeFk("map_id", mapFiles.id).unique(),
+	mapGroupId: cascadeFk("map_group_id", mapGroups.id).unique(),
 })
 
 export const siteLinks = pgTable(
@@ -163,6 +163,7 @@ export const siteEncounters = pgTable(
 		id: pk(),
 		name: string("name").unique(),
 		siteId: cascadeFk("site_id", sites.id),
+		mapVariantId: cascadeFk("map_variant_id", mapVariants.id),
 
 		encounterVibe: list("encounter_vibe"),
 		creativePrompts: list("creative_prompts"),

@@ -5,7 +5,7 @@ import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { maps } from "../maps/tables"
+import { mapGroups } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcSiteAssociations, npcs } from "../npcs/tables"
@@ -176,7 +176,9 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(site_item_relations.*)) FILTER (WHERE site_item_relations.id IS NOT NULL), '[]'::jsonb)`.as(
 					"item_relations",
 				),
-			map: sql`COALESCE(jsonb_build_object('id', ${maps.id}, 'name', ${maps.name}), '{}'::jsonb)`.as("map"),
+			mapGroup: sql`COALESCE(jsonb_build_object('id', ${mapGroups.id}, 'name', ${mapGroups.name}), '{}'::jsonb)`.as(
+				"map_group",
+			),
 		})
 		.from(sites)
 		.leftJoin(areas, sql`${sites.areaId} = ${areas.id}`)
@@ -215,6 +217,6 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 			sql`${itemRelations} AS site_item_relations`,
 			sql`site_item_relations.target_entity_type = 'site' AND site_item_relations.target_entity_id = ${sites.id}`,
 		)
-		.leftJoin(maps, sql`${sites.mapId} = ${maps.id}`)
-		.groupBy(sites.id, areas.id, regions.id, maps.id),
+		.leftJoin(mapGroups, sql`${sites.mapGroupId} = ${mapGroups.id}`)
+		.groupBy(sites.id, areas.id, regions.id, mapGroups.id),
 )

@@ -5,7 +5,7 @@ import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemNotableHistory, itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { mapFiles } from "../maps/tables"
+import { mapGroups, mapVariants } from "../maps/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
 import { npcSiteAssociations } from "../npcs/tables"
@@ -72,9 +72,9 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	itemHistory: many(itemNotableHistory),
 	itemRelations: many(itemRelations),
 
-	map: one(mapFiles, {
-		fields: [sites.mapId],
-		references: [mapFiles.id],
+	mapGroup: one(mapGroups, {
+		fields: [sites.mapGroupId],
+		references: [mapGroups.id],
 	}),
 }))
 
@@ -95,6 +95,10 @@ export const siteEncountersRelations = relations(siteEncounters, ({ one }) => ({
 	site: one(sites, {
 		fields: [siteEncounters.siteId],
 		references: [sites.id],
+	}),
+	mapVariant: one(mapVariants, {
+		fields: [siteEncounters.mapVariantId],
+		references: [mapVariants.id],
 	}),
 }))
 
