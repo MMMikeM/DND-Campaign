@@ -6,6 +6,7 @@ import { entityGetters as foreshadowingGetters } from "./foreshadowing-tools"
 import { getEntitySchema } from "./get-entity.schema"
 import { entityGetters as itemsGetters } from "./items-tools"
 import { entityGetters as loreGetters } from "./lore-tools"
+import { entityGetters as mapGetters } from "./map-tools"
 import { entityGetters as narrativeGetters } from "./narrative-destination-tools"
 import { entityGetters as eventsGetters } from "./narrative-events-tools"
 import { entityGetters as npcGetters } from "./npc-tools"
@@ -26,6 +27,7 @@ const combinedGetters = {
 	...questGetters,
 	...regionGetters,
 	...loreGetters,
+	...mapGetters,
 }
 
 const formatResponse = (message: string, isError = false): ToolHandlerReturn => ({

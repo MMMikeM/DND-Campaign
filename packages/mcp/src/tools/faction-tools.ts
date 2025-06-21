@@ -53,9 +53,9 @@ export const entityGetters = createEntityGetters({
 
 				influence: {
 					with: {
-						relatedRegion: { columns: { name: true, id: true } },
-						relatedArea: { columns: { name: true, id: true } },
-						relatedSite: { columns: { name: true, id: true } },
+						region: { columns: { name: true, id: true } },
+						area: { columns: { name: true, id: true } },
+						site: { columns: { name: true, id: true } },
 					},
 				},
 				incomingForeshadowing: true,
@@ -72,9 +72,9 @@ export const entityGetters = createEntityGetters({
 			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
 			with: {
 				faction: { columns: { name: true, id: true } },
-				relatedRegion: { columns: { name: true, id: true } },
-				relatedArea: { columns: { name: true, id: true } },
-				relatedSite: { columns: { name: true, id: true } },
+				region: { columns: { name: true, id: true } },
+				area: { columns: { name: true, id: true } },
+				site: { columns: { name: true, id: true } },
 			},
 		}),
 })

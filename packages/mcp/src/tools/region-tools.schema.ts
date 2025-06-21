@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, regionConnections, enums },
@@ -104,7 +104,7 @@ export const schemas = {
 
 	sites: createInsertSchema(sites, {
 		areaId: id.describe("Required ID of area this site is located within"),
-		mapId: id.describe("Required ID of the map this site is associated with"),
+		mapGroupId: id.describe("Required ID of the map variant this site is associated with"),
 
 		climate: (s) => s.describe("Weather patterns (temperate, tropical, arid, etc.)"),
 		creativePrompts: (s) => s.describe("Scene ideas and narrative opportunities"),
@@ -152,6 +152,7 @@ export const schemas = {
 	siteEncounters: createInsertSchema(siteEncounters, {
 		name: (s) => s.describe("Distinctive title for this encounter"),
 		siteId: id.describe("Required ID of site where this encounter occurs"),
+		mapVariantId: optionalId.describe("Optional ID of map variant where this encounter occurs"),
 
 		encounterVibe: (s) => s.describe("Vibe of this encounter"),
 		creativePrompts: (s) => s.describe("Variations and alternative approaches"),
