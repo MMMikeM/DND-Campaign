@@ -1,15 +1,15 @@
 import * as Icons from "lucide-react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
-import { Link } from "~/components/Link"
 import { List } from "~/components/List"
+import { Link } from "~/components/ui/link"
 import type { Faction } from "~/lib/entities"
 
-export function InfluenceContent({ relations, territorialControl }: Faction) {
+export function InfluenceContent({ relations, influence }: Pick<Faction, "relations" | "influence">) {
 	return (
 		<div className="space-y-6">
 			<FactionRelationsCard relations={relations} />
-			<FactionterritorialControlInfo territorialControl={territorialControl} />
+			<FactionterritorialControlInfo territorialControl={influence} />
 		</div>
 	)
 }

@@ -1,9 +1,9 @@
 import * as Icons from "lucide-react"
 import { useState } from "react"
-import { NavLink } from "react-router"
 import { InfoCard } from "~/components/InfoCard"
-import { Button } from "~/components/ui/button"
+import { List } from "~/components/List"
 import { Input } from "~/components/ui/input"
+import { Link } from "~/components/ui/link"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllFactions } from "~/lib/entities"
 import type { Route } from "./+types/index"
@@ -25,12 +25,6 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Factions</h1>
 					<p className="text-muted-foreground">Browse and manage factions in your campaign world</p>
 				</div>
-				<Button>
-					<NavLink to="/factions/new" className="flex items-center">
-						<span className="mr-2">New Faction</span>
-						<Icons.Flag className="h-4 w-4" />
-					</NavLink>
-				</Button>
 			</div>
 
 			<div className="mb-6">
@@ -51,7 +45,7 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 					const {
 						name,
 						type,
-						alignment,
+						publicAlignment,
 						size,
 						wealth,
 						reach,
@@ -61,22 +55,32 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 						description,
 						values,
 						history,
-						notes,
-						resources,
-						recruitment,
+						gmNotes,
+						creativePrompts,
+						aesthetics,
+						hqSiteId,
+						id,
+						jargon,
+						recognitionSigns,
+						rituals,
+						secretAlignment,
+						symbols,
+						taboos,
+						tags,
+						transparencyLevel,
 						slug,
 					} = faction
 
 					return (
-						<NavLink key={faction.id} to={`/factions/${slug}`}>
-							<InfoCard
-								title={name}
-								icon={<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />}
-								className="h-full hover:shadow-md transition-shadow"
-							>
+						<Link
+							key={faction.id}
+							href={`/factions/${slug}`}
+							className="block hover:shadow-lg transition-shadow rounded-lg"
+						>
+							<InfoCard title={name} icon={<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />} className="h-full">
 								<div className="p-4">
 									<p className="text-sm text-muted-foreground mb-2">{publicGoal}</p>
-									{description?.[0] && <p className="text-sm line-clamp-2">{description[0]}</p>}
+									<List items={description} />
 									{publicPerception && (
 										<p className="text-xs text-muted-foreground mt-2">
 											<span className="font-medium">Public Perception:</span> {publicPerception}
@@ -100,14 +104,11 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 										<div className="text-xs text-muted-foreground">
 											<span>{values?.length || 0} values</span>
 											<span className="mx-1">•</span>
-											<span>{resources?.length || 0} resources</span>
-											<span className="mx-1">•</span>
-											<span>{notes?.length || 0} notes</span>
 										</div>
 									</div>
 								</div>
 							</InfoCard>
-						</NavLink>
+						</Link>
 					)
 				})}
 			</div>

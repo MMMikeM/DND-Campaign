@@ -29,6 +29,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Faction({ loaderData }: Route.ComponentProps) {
+	const faction = loaderData
 	const {
 		aesthetics,
 		agendas,
@@ -69,7 +70,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		symbols,
 		transparencyLevel,
 		type,
-	} = loaderData
+	} = faction
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
 	const navigate = useNavigate()
