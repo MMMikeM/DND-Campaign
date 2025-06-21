@@ -6,7 +6,7 @@ import { itemNotableHistory, itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
 import { consequences } from "../narrative-events/tables"
-import { questHooks } from "../quests/tables"
+import { questHooks, questParticipants } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { npcStageInvolvement, questStages } from "../stages/tables"
 import { npcFactionMemberships, npcRelations, npcSiteAssociations, npcs } from "./tables"
@@ -21,13 +21,14 @@ export const npcsRelations = relations(npcs, ({ many }) => ({
 	// Relations from other schemas that reference this NPC
 	conflictParticipation: many(conflictParticipants),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedNpc" }),
-	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromNpc" }),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNpc" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNpc" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceNpc" }),
 	itemHistory: many(itemNotableHistory),
 	itemRelations: many(itemRelations),
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	questHooks: many(questHooks),
 	questStageDeliveries: many(questStages),
+	questParticipants: many(questParticipants),
 	stageInvolvement: many(npcStageInvolvement),
 	loreLinks: many(loreLinks),
 }))
