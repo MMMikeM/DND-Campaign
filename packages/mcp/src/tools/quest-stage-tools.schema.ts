@@ -9,10 +9,9 @@ const { ambiguityLevels, conditionTypes, decisionTypes, stageImportanceLevels, s
 
 type TableNames = CreateTableNames<typeof tables.questStageTables>
 
-export const tableEnum = [	"questStages", "questStageDecisions", "npcStageInvolvement"] as const satisfies TableNames
+export const tableEnum = ["questStages", "questStageDecisions", "npcStageInvolvement"] as const satisfies TableNames
 
 export const schemas = {
-
 	questStages: createInsertSchema(questStages, {
 		completionPaths: (s) => s.describe("Different approaches players might use to advance"),
 		deliveryNpcId: optionalId.describe("ID of NPC who delivers this stage"),

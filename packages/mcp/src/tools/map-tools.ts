@@ -10,21 +10,44 @@ import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const mapTables = {
-	maps: tables.mapTables.maps,
+	mapFiles: tables.mapTables.mapFiles,
+	mapGroups: tables.mapTables.mapGroups,
+	mapVariants: tables.mapTables.mapVariants,
 }
 
 const createEntityGetters = createEntityGettersFactory(mapTables)
 
 export const entityGetters = createEntityGetters({
-	all_maps: () =>
-		db.query.maps.findMany({
-			with: { map: { columns: { id: true }, with: { site: { columns: { id: true, name: true } } } } },
+	all_map_files: () =>
+		db.query.mapFiles.findMany({
+			with: { variant: { columns: { id: true } } },
+			columns: { fileName: true, id: true },
+			orderBy: (mapFiles, { asc }) => [asc(mapFiles.fileName)],
+		}),
+	all_map_groups: () =>
+		db.query.mapGroups.findMany({
+			with: { variants: true },
+		}),
+	all_map_variants: () =>
+		db.query.mapVariants.findMany({
+			with: { mapGroup: true, mapFile: true },
 		}),
 
-	map_by_id: (id: number) =>
-		db.query.maps.findFirst({
-			where: (maps, { eq }) => eq(maps.id, id),
-			with: { map: { columns: { id: true }, with: { site: { columns: { id: true, name: true } } } } },
+	map_group_by_id: (id: number) =>
+		db.query.mapGroups.findFirst({
+			where: (mapGroups, { eq }) => eq(mapGroups.id, id),
+			with: { variants: true },
+		}),
+	map_variant_by_id: (id: number) =>
+		db.query.mapVariants.findFirst({
+			where: (mapVariants, { eq }) => eq(mapVariants.id, id),
+			with: { mapGroup: true, mapFile: true },
+		}),
+	map_file_by_id: (id: number) =>
+		db.query.mapFiles.findFirst({
+			where: (mapFiles, { eq }) => eq(mapFiles.id, id),
+			with: { variant: { columns: { id: true } } },
+			columns: { id: true, fileName: true },
 		}),
 })
 
@@ -43,40 +66,43 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 			throw new Error("No new map images found to synchronize.")
 		}
 
-		const newMaps = await Promise.all(
-			imageFiles.map(async (fileName) => {
-				const mapName = parse(fileName).name
-				const existingMap = await db.query.mapFiles.findFirst({
-					where: (maps, { eq }) => eq(maps.fileName, mapName),
+		// Sort files alphabetically to ensure consistent ordering
+		const sortedImageFiles = imageFiles.sort()
+
+		const newMaps = []
+		for (const fileName of sortedImageFiles) {
+			const mapName = parse(fileName).name
+			const existingMap = await db.query.mapFiles.findFirst({
+				where: (maps, { eq }) => eq(maps.fileName, mapName),
+			})
+
+			if (existingMap) {
+				logger.info(`Map '${mapName}' already exists. Skipping.`)
+				newMaps.push(null)
+				continue
+			}
+
+			const filePath = join(directory, fileName)
+			const mapImage = await readFile(filePath)
+			const imageFormat = extname(fileName).slice(1) as "jpeg" | "png" | "webp"
+			const imageBytes = await stat(filePath).then((stats) => stats.size)
+			const { width, height } = imageSize(mapImage)
+
+			const [newMap] = await db
+				.insert(tables.mapTables.mapFiles)
+				.values({
+					fileName: mapName,
+					mapImage,
+					imageFormat,
+					imageHeight: height,
+					imageWidth: width,
+					imageSize: imageBytes,
 				})
+				.returning()
 
-				if (existingMap) {
-					logger.info(`Map '${mapName}' already exists. Skipping.`)
-					return null
-				}
-
-				const filePath = join(directory, fileName)
-				const mapImage = await readFile(filePath)
-				const imageFormat = extname(fileName).slice(1) as "jpeg" | "png" | "webp"
-				const imageBytes = await stat(filePath).then((stats) => stats.size)
-				const { width, height } = imageSize(mapImage)
-
-				const [newMap] = await db
-					.insert(tables.mapTables.mapFiles)
-					.values({
-						fileName: mapName,
-						mapImage,
-						imageFormat,
-						imageHeight: height,
-						imageWidth: width,
-						imageSize: imageBytes,
-					})
-					.returning()
-
-				logger.info(`Added new map: ${mapName}`)
-				return newMap
-			}),
-		)
+			logger.info(`Added new map: ${mapName}`)
+			newMaps.push(newMap)
+		}
 
 		const addedMaps = newMaps.filter(Boolean)
 		return {
@@ -89,11 +115,26 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 	}
 }
 
-export const mapToolDefinitions: Record<"manage_map" | "synchronize_maps", ToolDefinition> = {
-	manage_map: {
+export const mapToolDefinitions: Record<
+	"manage_map_group" | "manage_map_variant" | "synchronize_maps",
+	ToolDefinition
+> = {
+	manage_map_group: {
+		description: "Manage map groups and their associated tactical details.",
+		inputSchema: createManageSchema(schemas, tableEnum),
+		handler: createManageEntityHandler("manage_map_group", mapTables, tableEnum, schemas),
+		annotations: {
+			title: "Manage Map Groups",
+			readOnlyHint: false,
+			destructiveHint: false,
+			idempotentHint: false,
+			openWorldHint: false,
+		},
+	},
+	manage_map_variant: {
 		description: "Manage map assets and their associated tactical details.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_map", mapTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_map_variant", mapTables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Maps",
 			readOnlyHint: false,

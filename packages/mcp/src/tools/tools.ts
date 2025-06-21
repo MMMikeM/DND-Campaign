@@ -19,19 +19,19 @@ import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
 import type { ToolDefinition, ToolHandlerReturn } from "./utils/types"
 
-function extractToolsAndHandlers<T extends string>(definitions: Record<string, ToolDefinition>) {
+function extractToolsAndHandlers<T extends Record<string, ToolDefinition>>(definitions: T) {
 	const tools = Object.entries(definitions).map(([name, { description, inputSchema }]) => ({
 		name,
 		description,
 		inputSchema,
-	})) as Array<Tool & { name: T }>
+	})) as Array<Tool & { name: keyof T }>
 
 	const handlers = Object.entries(definitions).reduce(
 		(acc, [name, { handler }]) => {
-			acc[name] = handler
+			acc[name as keyof T] = handler
 			return acc
 		},
-		{} as Record<string, (args?: Record<string, unknown>) => Promise<ToolHandlerReturn>>,
+		{} as Record<keyof T, (args?: Record<string, unknown>) => Promise<ToolHandlerReturn>>,
 	)
 
 	return { tools, handlers }
