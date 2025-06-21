@@ -15,7 +15,44 @@ const mapConfig = {
 				},
 			},
 		}),
-	getAll: () => db.query.mapGroups.findMany({}),
+	getAll: () =>
+		db.query.mapGroups.findMany({
+			with: {
+				variants: {
+					with: {
+						mapFile: {
+							columns: {
+								fileName: true,
+								mapImage: true,
+								imageFormat: true,
+								imageSize: true,
+								imageWidth: true,
+								imageHeight: true,
+							},
+						},
+					},
+				},
+			},
+		}),
+	getAllMetadata: () =>
+		db.query.mapGroups.findMany({
+			with: {
+				variants: {
+					with: {
+						mapFile: {
+							columns: {
+								id: true,
+								fileName: true,
+								imageFormat: true,
+								imageSize: true,
+								imageWidth: true,
+								imageHeight: true,
+							},
+						},
+					},
+				},
+			},
+		}),
 	getNamesAndIds: () =>
 		db.query.mapGroups.findMany({
 			columns: {
@@ -27,6 +64,12 @@ const mapConfig = {
 
 export const getAllMaps = async () => {
 	const arcs = await mapConfig.getAll()
+
+	return addSlugs(arcs)
+}
+
+export const getAllMapsMetadata = async () => {
+	const arcs = await mapConfig.getAllMetadata()
 
 	return addSlugs(arcs)
 }

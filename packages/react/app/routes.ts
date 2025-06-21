@@ -16,17 +16,20 @@ export default [
 		route("foreshadowing", "./routes/foreshadowing/index.tsx"),
 		route("foreshadowing/:slug/:tab?", "./routes/foreshadowing/$slug.tsx"),
 
-		route("items", "./routes/items/index.tsx"),
-		route("items/:slug/:tab?", "./routes/items/$slug.tsx"),
+		// route("items", "./routes/items/index.tsx"),
+		// route("items/:slug/:tab?", "./routes/items/$slug.tsx"),
 
 		route("lore", "./routes/lore/index.tsx"),
 		route("lore/:slug/:tab?", "./routes/lore/$slug.tsx"),
 
+		route("maps", "./routes/maps/index.tsx"),
+		route("maps/:slug/:variantSlug?", "./routes/maps/$slug.tsx"),
+
 		route("narrative-events", "./routes/narrative-events/index.tsx"),
 		route("narrative-events/:slug/:tab?", "./routes/narrative-events/$slug.tsx"),
 
-		route("narrative-destinations", "./routes/narrative-destinations/index.tsx"),
-		route("narrative-destinations/:slug/:tab?", "./routes/narrative-destinations/$slug.tsx"),
+		// route("narrative-destinations", "./routes/narrative-destinations/index.tsx"),
+		// route("narrative-destinations/:slug/:tab?", "./routes/narrative-destinations/$slug.tsx"),
 
 		route("npcs", "./routes/npcs/index.tsx"),
 		route("npcs/:slug/:tab?", "./routes/npcs/$slug.tsx"),
@@ -45,4 +48,5 @@ export default [
 	]),
 	route("api/items", "./routes/api/items.ts"),
 	route("api/search", "./routes/api/search.ts"),
+	route("api/maps/images/:fileId", "./routes/api/maps/images/$fileId.tsx"),
 ] satisfies RouteConfig

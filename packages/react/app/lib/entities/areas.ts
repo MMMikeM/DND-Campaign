@@ -6,6 +6,9 @@ const areaConfig = {
 	findById: (id: number) =>
 		db.query.areas.findFirst({
 			where: (areas, { eq }) => eq(areas.id, id),
+			columns: {
+				regionId: false,
+			},
 			with: {
 				region: { columns: { id: true, name: true } },
 				sites: {
