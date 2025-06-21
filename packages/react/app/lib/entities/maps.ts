@@ -4,16 +4,20 @@ import addSlugs from "../utils/addSlugs"
 
 const mapConfig = {
 	findById: (id: number) =>
-		db.query.maps.findFirst({
+		db.query.mapGroups.findFirst({
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
-				mapDetails: true,
 				site: { columns: { id: true, name: true } },
+				variants: {
+					with: {
+						mapFile: true,
+					},
+				},
 			},
 		}),
-	getAll: () => db.query.maps.findMany({}),
+	getAll: () => db.query.mapGroups.findMany({}),
 	getNamesAndIds: () =>
-		db.query.mapDetails.findMany({
+		db.query.mapGroups.findMany({
 			columns: {
 				id: true,
 				name: true,

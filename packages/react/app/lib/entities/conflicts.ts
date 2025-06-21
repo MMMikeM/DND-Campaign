@@ -7,89 +7,38 @@ const conflictConfig = {
 		db.query.conflicts.findFirst({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
-				primaryRegion: { columns: { name: true, id: true } },
+				region: { columns: { name: true, id: true } },
 				itemRelations: {
-					columns: {
-						conflictId: false,
-						factionId: false,
-						npcId: false,
-						itemId: false,
-						questId: false,
-						relatedItemId: false,
-						siteId: false,
-						narrativeDestinationId: false,
-						worldConceptId: false,
-						entityType: false,
-					},
-					with: { item: { columns: { id: true, name: true } } },
+					with: { sourceItem: { columns: { id: true, name: true } } },
 				},
 				narrativeDestinations: { columns: { id: true, name: true } },
-				worldConceptLinks: {
+				loreLinks: {
 					columns: {
-						conflictId: false,
-						factionId: false,
-						npcId: false,
-						questId: false,
-						regionId: false,
-						worldConceptId: false,
 						targetEntityType: false,
 					},
-					with: { worldConcept: { columns: { id: true, name: true } } },
+					with: { lore: { columns: { id: true, name: true } } },
 				},
-				affectedByConsequences: {
-					columns: {
-						affectedAreaId: false,
-						affectedFactionId: false,
-						affectedConflictId: false,
-						affectedNarrativeDestinationId: false,
-						affectedNpcId: false,
-						affectedRegionId: false,
-						affectedSiteId: false,
-						affectedQuestId: false,
-						affectedEntityType: false,
-						triggerConflictId: false,
-						triggerQuestId: false,
-						triggerStageDecisionId: false,
-					},
+				affectingConsequences: {
 					with: {
 						triggerConflict: { columns: { id: true, name: true } },
-						triggerStageDecision: { columns: { id: true, name: true } },
 						triggerQuest: { columns: { id: true, name: true } },
 					},
 				},
-				consequences: {
-					columns: {
-						affectedAreaId: false,
-						affectedFactionId: false,
-						affectedConflictId: false,
-						affectedNarrativeDestinationId: false,
-						affectedNpcId: false,
-						affectedRegionId: false,
-						affectedSiteId: false,
-						affectedQuestId: false,
-						triggerConflictId: false,
-						triggerQuestId: false,
-						triggerStageDecisionId: false,
-					},
+				triggeredConsequences: {
 					with: {
+						affectedNarrativeDestination: { columns: { id: true, name: true } },
 						affectedArea: { columns: { id: true, name: true } },
 						affectedFaction: { columns: { id: true, name: true } },
-						affectedConflict: { columns: { id: true, name: true } },
-						affectedNarrativeDestination: { columns: { id: true, name: true } },
-						affectedNpc: { columns: { id: true, name: true } },
-						affectedRegion: { columns: { id: true, name: true } },
 						affectedSite: { columns: { id: true, name: true } },
 						affectedQuest: { columns: { id: true, name: true } },
+						affectedNpc: { columns: { id: true, name: true } },
+						affectedRegion: { columns: { id: true, name: true } },
+						affectedConflict: { columns: { id: true, name: true } },
 					},
 				},
 				incomingForeshadowing: {
-					columns: {
-						sourceSiteId: false,
-						sourceNpcId: false,
-						sourceQuestId: false,
-						sourceQuestStageId: false,
-					},
 					with: {
+						sourceLore: { columns: { id: true, name: true } },
 						sourceNpc: { columns: { id: true, name: true } },
 						sourceQuest: { columns: { id: true, name: true } },
 						sourceSite: { columns: { id: true, name: true } },
@@ -107,7 +56,7 @@ const conflictConfig = {
 	getAll: () =>
 		db.query.conflicts.findMany({
 			with: {
-				primaryRegion: { columns: { name: true } },
+				region: { columns: { name: true } },
 			},
 		}),
 	getNamesAndIds: () =>

@@ -22,7 +22,6 @@ const areaConfig = {
 						affectedSite: { columns: { id: true, name: true } },
 						affectedQuest: { columns: { id: true, name: true } },
 						triggerConflict: { columns: { id: true, name: true } },
-						triggerStageDecision: { columns: { id: true } },
 						triggerQuest: { columns: { id: true, name: true } },
 					},
 				},

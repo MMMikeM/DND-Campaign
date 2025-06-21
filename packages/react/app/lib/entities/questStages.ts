@@ -10,7 +10,7 @@ const getRawQuestStages = async (id: number) =>
 			quest: { columns: { name: true, id: true } },
 			site: { columns: { name: true, id: true } },
 			deliveryNpc: { columns: { name: true, id: true } },
-			foreshadowingSource: true,
+			outgoingForeshadowing: true,
 			npcInvolvement: true,
 			narrativeEvents: true,
 		},
@@ -18,7 +18,7 @@ const getRawQuestStages = async (id: number) =>
 
 export type RawQuestStage = Awaited<ReturnType<typeof getRawQuestStages>>[number]
 
-type StageBaseProps = Pick<RawQuestStage, "id" | "name" | "stageOrder" | "dramatic_question" | "site">
+type StageBaseProps = Pick<RawQuestStage, "id" | "name" | "stageOrder" | "dramatic_question">
 
 export type StageDecision = RawQuestStage["outgoingDecisions"][number]
 
@@ -61,7 +61,6 @@ export function buildStageTree(
 		name: stage.name,
 		stageOrder: stage.stageOrder,
 		dramatic_question: stage.dramatic_question,
-		site: stage.site,
 		branches,
 	}
 }

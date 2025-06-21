@@ -38,15 +38,12 @@ const regionConfig = {
 				narrativeDestinations: {
 					with: {
 						conflict: { columns: { id: true, name: true } },
-						worldConceptLinks: { with: { worldConcept: { columns: { id: true, name: true } } } },
+						loreLinks: { with: { lore: { columns: { id: true, name: true } } } },
 					},
 				},
-				worldConceptLinks: {
+				loreLinks: {
 					with: {
-						linkedRegion: { columns: { id: true, name: true } },
-						linkedFaction: { columns: { id: true, name: true } },
-						linkedNpc: { columns: { id: true, name: true } },
-						linkedQuest: { columns: { id: true, name: true } },
+						lore: { columns: { id: true, name: true } },
 					},
 				},
 			},

@@ -13,16 +13,13 @@ const factionConfig = {
 				members: { with: { npc: { columns: { name: true, id: true } } } },
 				incomingRelations: { with: { sourceFaction: { columns: { name: true, id: true } } } },
 				outgoingRelations: { with: { targetFaction: { columns: { name: true, id: true } } } },
-				consequences: {
+				affectingConsequences: {
 					with: {
 						affectedFaction: { columns: { id: true, name: true } },
 						affectedNpc: { columns: { id: true, name: true } },
 						affectedRegion: { columns: { id: true, name: true } },
 						affectedSite: { columns: { id: true, name: true } },
 						affectedQuest: { columns: { id: true, name: true } },
-						triggerConflict: { columns: { id: true, name: true } },
-						triggerStageDecision: { columns: { id: true, name: true } },
-						triggerQuest: { columns: { id: true, name: true } },
 						affectedArea: { columns: { id: true, name: true } },
 						affectedConflict: { columns: { id: true, name: true } },
 						affectedNarrativeDestination: { columns: { id: true, name: true } },
@@ -35,21 +32,13 @@ const factionConfig = {
 						npc: { columns: { id: true, name: true } },
 					},
 				},
-				foreshadowingTarget: {
+				incomingForeshadowing: {
 					with: {
 						sourceNpc: { columns: { id: true, name: true } },
 						sourceQuest: { columns: { id: true, name: true } },
 						sourceSite: { columns: { id: true, name: true } },
 						sourceQuestStage: { columns: { id: true, name: true } },
-						targetFaction: { columns: { id: true, name: true } },
-						targetNpc: { columns: { id: true, name: true } },
-						targetQuest: { columns: { id: true, name: true } },
-						targetSite: { columns: { id: true, name: true } },
-						targetWorldConcept: { columns: { id: true, name: true } },
-						targetConflict: { columns: { id: true, name: true } },
-						targetNarrativeDestination: { columns: { id: true, name: true } },
-						targetNarrativeEvent: { columns: { id: true, name: true } },
-						targetItem: { columns: { id: true, name: true } },
+						sourceLore: { columns: { id: true, name: true } },
 					},
 				},
 				influence: {
@@ -65,14 +54,9 @@ const factionConfig = {
 						sourceItem: { columns: { id: true, name: true } },
 					},
 				},
-				worldConceptLinks: {
+				loreLinks: {
 					with: {
-						linkedConflict: { columns: { id: true, name: true } },
-						linkedFaction: { columns: { id: true, name: true } },
-						linkedNpc: { columns: { id: true, name: true } },
-						linkedQuest: { columns: { id: true, name: true } },
-						linkedRegion: { columns: { id: true, name: true } },
-						worldConcept: { columns: { id: true, name: true } },
+						lore: { columns: { id: true, name: true } },
 					},
 				},
 				primaryHqSite: true,
