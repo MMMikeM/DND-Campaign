@@ -4,7 +4,7 @@ import {
 	getAllFactions,
 	getAllForeshadowing,
 	getAllLore,
-	getAllMaps,
+	getAllMapsMetadata,
 	getAllNarrativeDestinations,
 	getAllNarrativeEvents,
 	getAllNpcs,
@@ -19,7 +19,7 @@ const fetchDataSources = {
 	conflicts: getAllConflicts,
 	factions: getAllFactions,
 	foreshadowing: getAllForeshadowing,
-	maps: getAllMaps,
+	maps: getAllMapsMetadata,
 	narrativeDestinations: getAllNarrativeDestinations,
 	narrativeEvents: getAllNarrativeEvents,
 	npcs: getAllNpcs,
@@ -32,17 +32,27 @@ const fetchDataSources = {
 const fetchData = async () => {
 	const entries = await Promise.all(
 		Object.entries(fetchDataSources).map(async ([key, fetcher]) => {
-			const data = await fetcher()
-			return [key, data] as const
+			try {
+				console.log(`Fetching ${key}...`)
+				const data = await fetcher()
+				console.log(`Fetched ${data?.length || 0} ${key}`)
+				return [key, data] as const
+			} catch (error) {
+				console.error(`Error fetching ${key}:`, error)
+				return [key, null] as const
+			}
 		}),
 	)
+
+	// Log summary instead of trying to stringify everything
+	const summary = entries.map(([key, data]) => `${key}: ${data?.length || 0} items`).join(", ")
+	console.log(`Data fetch complete: ${summary}`)
 
 	return Object.fromEntries(entries)
 }
 
 export async function loader(_: Route.LoaderArgs) {
 	const fetchedData = await fetchData()
-
 	return Response.json(fetchedData)
 }
 
