@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1750142610734,
-      "tag": "0000_search-functions",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1750142665877,
-      "tag": "0001_outgoing_bloodaxe",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1750142674930,
-      "tag": "0002_curved_psynapse",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1750142690056,
-      "tag": "0003_fuzzy_marvel_apes",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1750142746646,
-      "tag": "0004_search-index",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1750245882077,
-      "tag": "0005_wakeful_roughhouse",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1750490596479,
-      "tag": "0006_gigantic_zodiak",
+      "when": 1750493996596,
+      "tag": "0000_talented_corsair",
       "breakpoints": true
     }
   ]

@@ -6,7 +6,7 @@ import { bytea, cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 
 const imageFormats = ["png", "jpg", "webp"] as const
 
-export const mapFiles = pgTable("maps", {
+export const mapFiles = pgTable("map_files", {
 	id: pk(),
 	fileName: string("file_name").unique(),
 	mapImage: bytea("map_image").notNull(),
@@ -16,7 +16,7 @@ export const mapFiles = pgTable("maps", {
 	imageHeight: integer("image_height").notNull(),
 })
 
-export const mapGroups = pgTable("map_relations", {
+export const mapGroups = pgTable("map_groups", {
 	id: pk(),
 	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
@@ -25,7 +25,7 @@ export const mapGroups = pgTable("map_relations", {
 })
 
 export const mapVariants = pgTable(
-	"map_details",
+	"map_variants",
 	{
 		id: pk(),
 		mapGroupId: cascadeFk("map_group_id", mapGroups.id),
