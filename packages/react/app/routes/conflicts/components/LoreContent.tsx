@@ -4,7 +4,7 @@ import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
 
-export function WorldConceptsContent({ worldConceptLinks }: Pick<Conflict, "worldConceptLinks">) {
+export function LoreContent({ loreLinks }: Pick<Conflict, "loreLinks">) {
 	return (
 		<InfoCard
 			title="World Concepts"
@@ -12,7 +12,7 @@ export function WorldConceptsContent({ worldConceptLinks }: Pick<Conflict, "worl
 			emptyMessage="No world concepts linked to this conflict."
 		>
 			<div className="space-y-4">
-				{worldConceptLinks.map(
+				{loreLinks.map(
 					({
 						id,
 						creativePrompts,
@@ -22,15 +22,15 @@ export function WorldConceptsContent({ worldConceptLinks }: Pick<Conflict, "worl
 						linkRoleOrTypeText,
 						linkStrength,
 						linkDetailsText,
-						worldConcept,
+						lore,
 					}) => (
 						<div key={id} className="border rounded p-4 bg-background dark:bg-muted/30">
 							<div className="flex justify-between items-start mb-3">
 								<Link
-									href={`/world-concepts/${worldConcept?.slug || worldConcept?.id}`}
+									href={`/world-concepts/${lore?.slug || lore?.id}`}
 									className="text-lg font-semibold text-primary hover:underline"
 								>
-									{worldConcept?.name}
+									{lore?.name}
 								</Link>
 							</div>
 

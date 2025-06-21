@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getWorldConcept, type WorldConcept } from "~/lib/entities"
+import { getLore, type Lore } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -11,20 +11,91 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("No slug provided", { status: 400 })
 	}
 
-	const concept = await getWorldConcept(params.slug)
-	if (!concept) {
-		throw new Response("World Concept not found", { status: 404 })
+	const lore = await getLore(params.slug)
+	if (!lore) {
+		throw new Response("Lore not found", { status: 404 })
 	}
 
-	return concept
+	return lore
 }
 
-interface ChangeHeaderProps
-	extends Pick<
-		WorldConcept,
-		"name" | "conceptType" | "moralClarity" | "currentEffectiveness" | "scope" | "status" | "timeframe"
-	> {
-	className?: string
+export default function LoreDetail({ loaderData }: Route.ComponentProps) {
+	const lore = loaderData
+	const {
+		itemRelations,
+		questHooks,
+		id,
+		name,
+		creativePrompts,
+		gmNotes,
+		tags,
+		summary,
+		loreType,
+		surfaceImpression,
+		livedReality,
+		hiddenTruths,
+		modernRelevance,
+		aesthetics_and_symbols,
+		interactions_and_rules,
+		connections_to_world,
+		core_tenets_and_traditions,
+		history_and_legacy,
+		conflicting_narratives,
+		links,
+		incomingForeshadowing,
+		slug,
+	} = lore
+	const { tab } = useParams()
+	const activeTab = tab || "details"
+	const navigate = useNavigate()
+
+	const handleTabChange = (value: string) => {
+		navigate(`/lore/${lore.slug}/${value === "details" ? "" : value}`)
+	}
+
+	return (
+		<div className="container mx-auto py-6 px-4 sm:px-6">
+			<div className="flex justify-between items-center mb-6">
+				<Button variant="outline" size="sm" asChild>
+					<NavLink to="/world" className="flex items-center">
+						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+						Back to World Changes
+					</NavLink>
+				</Button>
+			</div>
+
+			<Header {...lore} className="mb-6" />
+
+			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
+				<TabsList className="grid grid-cols-3 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+					<TabsTrigger value="details" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
+						Details
+					</TabsTrigger>
+					<TabsTrigger value="impact" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
+						Impact
+					</TabsTrigger>
+					<TabsTrigger
+						value="connections"
+						className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900"
+					>
+						Connections
+					</TabsTrigger>
+				</TabsList>
+
+				<TabsContent value="details" className="space-y-6 animate-in fade-in-50 duration-300">
+					<DetailsContent change={change} />
+				</TabsContent>
+
+				<TabsContent value="impact" className="animate-in fade-in-50 duration-300">
+					<ImpactContent change={change} />
+				</TabsContent>
+
+				<TabsContent value="connections" className="animate-in fade-in-50 duration-300">
+					<ConnectionsContent change={change} />
+				</TabsContent>
+			</Tabs>
+		</div>
+	)
 }
 
 export function Header({
@@ -65,61 +136,6 @@ export function Header({
 					{scope}
 				</BadgeWithTooltip>
 			</div>
-		</div>
-	)
-}
-
-export default function WorldChangeDetail({ loaderData }: Route.ComponentProps) {
-	const change = loaderData
-	const { tab } = useParams()
-	const activeTab = tab || "details"
-	const navigate = useNavigate()
-
-	const handleTabChange = (value: string) => {
-		navigate(`/world/${change.slug}/${value === "details" ? "" : value}`)
-	}
-
-	return (
-		<div className="container mx-auto py-6 px-4 sm:px-6">
-			<div className="flex justify-between items-center mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/world" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to World Changes
-					</NavLink>
-				</Button>
-			</div>
-
-			<Header {...change} className="mb-6" />
-
-			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
-				<TabsList className="grid grid-cols-3 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
-					<TabsTrigger value="details" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
-						Details
-					</TabsTrigger>
-					<TabsTrigger value="impact" className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
-						Impact
-					</TabsTrigger>
-					<TabsTrigger
-						value="connections"
-						className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900"
-					>
-						Connections
-					</TabsTrigger>
-				</TabsList>
-
-				<TabsContent value="details" className="space-y-6 animate-in fade-in-50 duration-300">
-					<DetailsContent change={change} />
-				</TabsContent>
-
-				<TabsContent value="impact" className="animate-in fade-in-50 duration-300">
-					<ImpactContent change={change} />
-				</TabsContent>
-
-				<TabsContent value="connections" className="animate-in fade-in-50 duration-300">
-					<ConnectionsContent change={change} />
-				</TabsContent>
-			</Tabs>
 		</div>
 	)
 }

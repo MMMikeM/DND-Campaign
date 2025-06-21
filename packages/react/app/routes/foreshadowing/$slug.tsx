@@ -9,26 +9,10 @@ import { type Foreshadowing, getForeshadowing } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { getForeshadowingSubtletyVariant } from "./utils"
 
-// --- Types and Interfaces ---
-
-interface DetailsContentProps {
-	item: Foreshadowing
-}
-
-interface ConnectionsContentProps {
-	item: Foreshadowing
-}
-
-interface SourceTargetInfo {
-	type: string
-	href: string | null
-	name: string
-	icon: React.ReactNode
-}
-
-// --- Helper Functions ---
-
-const getNarrativeWeightVariant = (weight: string): "default" | "destructive" | "outline" | "secondary" => {
+const getNarrativeWeightVariant = (weight: string): "default,
+destructive,
+outline,
+secondary" => {
 	switch (weight) {
 		case "crucial":
 			return "destructive"
@@ -48,12 +32,12 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("No slug provided", { status: 400 })
 	}
 
-	const item = await getForeshadowing(params.slug)
-	if (!item) {
+	const foreshadowing = await getForeshadowing(params.slug)
+	if (!foreshadowing) {
 		throw new Response("Foreshadowing item not found", { status: 404 })
 	}
 
-	return item
+	return foreshadowing
 }
 
 // --- Component Parts ---
@@ -242,12 +226,43 @@ function ConnectionsContent({ item }: ConnectionsContentProps) {
 	)
 }
 
-// --- Main Component ---
+
+
 
 export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps) {
-	const item = loaderData
+	const foreshadowing = loaderData
 
-	if (!item) {
+	const {
+		id,
+		name,
+		creativePrompts,
+		description,
+		gmNotes,
+		tags,
+		targetEntityType,
+		targetEntityId,
+		sourceEntityType,
+		sourceEntityId,
+		subtlety,
+		narrativeWeight,
+		suggestedDeliveryMethods,
+		targetQuest,
+		targetNpc,
+		targetNarrativeEvent,
+		targetConflict,
+		targetItem,
+		targetNarrativeDestination,
+		targetLore,
+		targetFaction,
+		targetSite,
+		sourceQuest,
+		sourceQuestStage,
+		sourceSite,
+		 slug, sourceNpc
+
+	} = foreshadowing
+
+	if (!foreshadowing) {
 		return <div>Error: Foreshadowing data could not be loaded.</div>
 	}
 
@@ -261,9 +276,9 @@ export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps
 					</NavLink>
 				</Button>
 			</div>
-			<Header {...item} />
-			<ConnectionsContent item={item} />
-			<DetailsContent item={item} />
+			<Header {...foreshadowing} />
+			<ConnectionsContent item={foreshadowing} />
+			<DetailsContent item={foreshadowing} />
 		</div>
 	)
 }

@@ -29,13 +29,53 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Faction({ loaderData }: Route.ComponentProps) {
-	const faction = loaderData
+	const {
+		aesthetics,
+		agendas,
+		affectingConsequences,
+		creativePrompts,
+		description,
+		gmNotes,
+		id,
+		incomingForeshadowing,
+		itemRelations,
+		loreLinks,
+		questHooks,
+		conflicts,
+		members,
+		questParticipation,
+		influence,
+		narrativeDestinationInvolvement,
+		primaryHqSite,
+		relations,
+		slug,
+		taboos,
+		values,
+		wealth,
+		tags,
+		history,
+		hqSiteId,
+		jargon,
+		name,
+		publicAlignment,
+		publicGoal,
+		publicPerception,
+		reach,
+		recognitionSigns,
+		rituals,
+		secretAlignment,
+		secretGoal,
+		size,
+		symbols,
+		transparencyLevel,
+		type,
+	} = loaderData
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
 	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
-		navigate(`/factions/${faction.slug}/${value === "overview" ? "" : value}`)
+		navigate(`/factions/${slug}/${value === "overview" ? "" : value}`)
 	}
 
 	return (
@@ -112,7 +152,14 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 	)
 }
 
-export function Header({ name, type, alignment, size, wealth, reach }: FactionType) {
+export function Header({
+	name,
+	type,
+	publicAlignment,
+	size,
+	wealth,
+	reach,
+}: Pick<FactionType, "name" | "type" | "size" | "wealth" | "reach" | "publicAlignment">) {
 	return (
 		<div className="flex flex-col items-start  gap-2">
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
@@ -125,7 +172,7 @@ export function Header({ name, type, alignment, size, wealth, reach }: FactionTy
 					{type}
 				</BadgeWithTooltip>
 
-				<AlignmentBadge alignment={alignment} />
+				<AlignmentBadge alignment={publicAlignment} />
 				<BadgeWithTooltip tooltipContent={"Size"} className={getSizeBadgeClasses(size)}>
 					{size}
 				</BadgeWithTooltip>

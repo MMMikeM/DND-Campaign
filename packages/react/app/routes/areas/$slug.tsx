@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
-import type { Route } from "../areas/+types"
+import type { Route } from "./+types/$slug"
 import { DetailsContent } from "./components/DetailsContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { SitesContent } from "./components/SitesContent"
@@ -20,6 +20,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	return area
 }
+
+const tabs = ["Overview", "Details", "Sites"]
 
 export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 	const {
@@ -47,7 +49,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 		slug,
 		tags,
 		type,
-	} = loaderData as unknown as Awaited<ReturnType<typeof loader>>
+	} = loaderData
 
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
@@ -98,10 +100,16 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 			</div>
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-				<TabsList className="grid grid-cols-3 mb-6">
-					<TabsTrigger value="overview">Overview</TabsTrigger>
-					<TabsTrigger value="details">Details</TabsTrigger>
-					<TabsTrigger value="sites">Sites</TabsTrigger>
+				<TabsList className="grid grid-cols-3 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+					{tabs.map((tab) => (
+						<TabsTrigger
+							key={tab}
+							value={titleToCamelCase(tab)}
+							className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900"
+						>
+							{tab}
+						</TabsTrigger>
+					))}
 				</TabsList>
 
 				<TabsContent value="overview">
