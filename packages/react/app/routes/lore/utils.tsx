@@ -16,3 +16,20 @@ export const getChangeSeverityVariant = (severity: string | null | undefined): B
 			return "secondary"
 	}
 }
+
+export const getLoreTypeVariant = (type: string | null | undefined): BadgeProps["variant"] => {
+	const typeLower = type?.toLowerCase()
+	if (typeLower === "history" || typeLower === "legend") {
+		return "default"
+	}
+	if (typeLower === "culture" || typeLower === "religion") {
+		return "secondary"
+	}
+	if (typeLower === "geography") {
+		return "outline"
+	}
+	if (typeLower === "item_lore" || typeLower === "character_backstory") {
+		return "destructive"
+	}
+	return "secondary"
+}

@@ -1,28 +1,25 @@
 import * as Icons from "lucide-react"
 import { useState } from "react"
 import { NavLink } from "react-router"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
-import { getAllWorldChanges } from "~/lib/entities"
+import { getAllLore } from "~/lib/entities"
 import type { Route } from "./+types/index"
-import { getChangeSeverityVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const changes = await getAllWorldChanges()
-	if (!changes) {
-		console.warn("No world state changes found or failed to load.")
-		return []
+	const lore = await getAllLore()
+	if (!lore) {
+		throw new Response("Lore not found", { status: 404 })
 	}
-	return changes
+	return lore
 }
 
-export default function WorldChangesIndex({ loaderData }: Route.ComponentProps) {
+export default function LoreIndex({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
-	const allChanges = loaderData ?? []
+	const allLore = loaderData
 
-	const filteredChanges = useSearchFilter(allChanges, searchTerm)
+	const filteredLore = useSearchFilter(allLore, searchTerm)
 
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
@@ -30,7 +27,7 @@ export default function WorldChangesIndex({ loaderData }: Route.ComponentProps) 
 				<div>
 					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-1 flex items-center">
 						<Icons.Globe className="h-6 w-6 mr-2 text-primary" />
-						World State Changes
+						Lore
 					</h1>
 					<p className="text-muted-foreground">Significant events altering the state of the world.</p>
 				</div>
@@ -45,36 +42,25 @@ export default function WorldChangesIndex({ loaderData }: Route.ComponentProps) 
 						className="pl-8"
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
-						aria-label="Search world state changes"
+						aria-label="Search lore"
 					/>
 				</div>
 			</div>
 
-			{filteredChanges.length > 0 ? (
+			{filteredLore.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredChanges.map((change) => (
-						<NavLink key={change.id} to={`/world/${change.slug}`} className="no-underline">
+					{filteredLore.map((lore) => (
+						<NavLink key={lore.id} to={`/lore/${lore.slug}`} className="no-underline">
 							<InfoCard
-								title={change.name}
+								title={lore.name}
 								icon={<Icons.History className="h-5 w-5 mr-2 text-blue-500" />}
 								className="h-full hover:shadow-md transition-shadow"
 							>
 								<div className="p-4">
-									<p className="text-sm text-muted-foreground mb-2">Type: {change.changeType ?? "N/A"}</p>{" "}
+									<p className="text-sm text-muted-foreground mb-2">Type: {lore.loreType ?? "N/A"}</p>{" "}
 									<p className="text-sm line-clamp-3">
-										{Array.isArray(change.description)
-											? change.description.join(" ")
-											: change.description || "No description."}
+										{Array.isArray(lore.summary) ? lore.summary.join(" ") : lore.summary || "No summary."}
 									</p>
-								</div>
-								<div className="border-t p-4">
-									<BadgeWithTooltip
-										variant={getChangeSeverityVariant(change.severity)}
-										tooltipContent={`Severity: ${change.severity ?? "Unknown"}`}
-										className="capitalize"
-									>
-										{change.severity ?? "Unknown"}
-									</BadgeWithTooltip>
 								</div>
 							</InfoCard>
 						</NavLink>
@@ -83,7 +69,7 @@ export default function WorldChangesIndex({ loaderData }: Route.ComponentProps) 
 			) : (
 				<div className="text-center py-12">
 					<Icons.Globe className="mx-auto h-12 w-12 text-muted-foreground" />
-					<h3 className="mt-2 text-lg font-medium">No world state changes found</h3>
+					<h3 className="mt-2 text-lg font-medium">No lore found</h3>
 					<p className="mt-1 text-muted-foreground">Try adjusting your search term.</p>
 				</div>
 			)}
