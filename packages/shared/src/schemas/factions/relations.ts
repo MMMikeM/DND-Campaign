@@ -61,7 +61,7 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 	}),
 
 	// Soft relations for polymorphic relatedEntityType/relatedEntityId
-	relatedRegion: one(regions, {
+	region: one(regions, {
 		relationName: "FactionInfluenceRegion",
 		fields: [factionInfluence.relatedEntityId],
 		references: [regions.id],
@@ -69,7 +69,7 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 		where: sql`${factionInfluence.relatedEntityType} = 'region'`,
 	}),
 
-	relatedRegionConnection: one(regionConnections, {
+	regionConnection: one(regionConnections, {
 		relationName: "FactionInfluenceRegionConnection",
 		fields: [factionInfluence.relatedEntityId],
 		references: [regionConnections.id],
@@ -77,7 +77,7 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 		where: sql`${factionInfluence.relatedEntityType} = 'region_connection'`,
 	}),
 
-	relatedArea: one(areas, {
+	area: one(areas, {
 		relationName: "FactionInfluenceArea",
 		fields: [factionInfluence.relatedEntityId],
 		references: [areas.id],
@@ -85,7 +85,7 @@ export const factionInfluenceRelations = relations(factionInfluence, ({ one }) =
 		where: sql`${factionInfluence.relatedEntityType} = 'area'`,
 	}),
 
-	relatedSite: one(sites, {
+	site: one(sites, {
 		relationName: "FactionInfluenceSite",
 		fields: [factionInfluence.relatedEntityId],
 		references: [sites.id],

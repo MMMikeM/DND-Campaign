@@ -74,7 +74,7 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'outgoing', ${siteSearchDataView.outgoingRelations}, 
           'incoming', ${siteSearchDataView.incomingRelations}
         ),
-        'map', ${siteSearchDataView.map}
+        'mapGroup', ${siteSearchDataView.mapGroup}
       )`.as("raw_data"),
 			content: sql<string>`jsonb_deep_text_values(${siteSearchDataView.entityMain}) || ' ' ||
       jsonb_deep_text_values(${siteSearchDataView.area}) || ' ' ||
