@@ -12,5 +12,6 @@
     "editor.wordWrap": "off"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.experimental.expandableHover": true
+  "typescript.experimental.expandableHover": true,
+  "typescript.experimental.useTsgo": false
 }
