@@ -30,8 +30,8 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 	questRoles: many(narrativeDestinationQuestRoles),
 	participantInvolvement: many(narrativeDestinationParticipants),
 	itemRelations: many(itemRelations),
-	loreLinks: many(loreLinks),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNarrativeDestination" }),
+	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetNarrativeDestination" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNarrativeDestination" }),
 }))
 
 export const narrativeDestinationRelationTargets = relations(narrativeDestinationRelations, ({ one }) => ({

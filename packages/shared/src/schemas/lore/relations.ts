@@ -3,6 +3,7 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
+import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -69,6 +70,14 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 		references: [lore.id],
 		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
 		where: sql`${loreLinks.targetEntityType} = 'lore'`,
+	}),
+
+	targetNarrativeDestination: one(narrativeDestinations, {
+		relationName: "LoreLinkTargetNarrativeDestination",
+		fields: [loreLinks.targetEntityId],
+		references: [narrativeDestinations.id],
+		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
+		where: sql`${loreLinks.targetEntityType} = 'narrative_destination'`,
 	}),
 
 	targetForeshadowing: one(foreshadowing, {
