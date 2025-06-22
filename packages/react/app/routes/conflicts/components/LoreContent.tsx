@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
 
@@ -64,54 +65,10 @@ export function LoreContent({ loreLinks }: Pick<Conflict, "loreLinks">) {
 								</div>
 							)}
 
-							{description && description.length > 0 && (
-								<div className="mb-3">
-									<h4 className="font-medium text-sm mb-1 flex items-center">
-										<Icons.FileText className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-										Description
-									</h4>
-									<List items={description} spacing="xs" textColor="muted" textSize="sm" />
-								</div>
-							)}
-
-							{creativePrompts && creativePrompts.length > 0 && (
-								<div className="mt-3">
-									<h4 className="font-medium text-sm mb-1 flex items-center">
-										<Icons.Lightbulb className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-										Creative Prompts
-									</h4>
-									<List items={creativePrompts} spacing="xs" textColor="muted" textSize="sm" />
-								</div>
-							)}
-
-							{gmNotes && gmNotes.length > 0 && (
-								<div className="mt-3">
-									<h4 className="font-medium text-sm mb-1 flex items-center">
-										<Icons.Eye className="h-3.5 w-3.5 mr-1.5 text-red-600" />
-										GM Notes
-									</h4>
-									<List items={gmNotes} spacing="xs" textColor="muted" textSize="sm" />
-								</div>
-							)}
-
-							{tags && tags.length > 0 && (
-								<div className="mt-3">
-									<h4 className="font-medium text-sm mb-1 flex items-center">
-										<Icons.Tag className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-										Tags
-									</h4>
-									<div className="flex flex-wrap gap-1">
-										{tags.map((tag) => (
-											<span
-												key={tag}
-												className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded"
-											>
-												{tag}
-											</span>
-										))}
-									</div>
-								</div>
-							)}
+							<List items={description} heading="Description" />
+							<List items={creativePrompts} heading="Creative Prompts" />
+							<List items={gmNotes} heading="GM Notes" />
+							<Tags tags={tags} />
 						</div>
 					),
 				)}

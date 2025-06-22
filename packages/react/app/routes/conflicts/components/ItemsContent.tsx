@@ -1,24 +1,9 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Tags } from "~/components/tags"
+import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
-
-// const itemRelations: ({
-//   id: number;
-//   creativePrompts: string[];
-//   description: string[];
-//   gmNotes: string[];
-//   tags: string[];
-//   relationshipType: string;
-//   relationshipDetails: string | null;
-//   item: {
-//     id: number;
-//     name: string;
-//     slug: string;
-//   };
-// })[]
 
 export function ItemsContent({ itemRelations }: Pick<Conflict, "itemRelations">) {
 	return (
@@ -29,16 +14,16 @@ export function ItemsContent({ itemRelations }: Pick<Conflict, "itemRelations">)
 		>
 			<div className="space-y-6">
 				{itemRelations.map(
-					({ id, creativePrompts, description, gmNotes, tags, relationshipType, relationshipDetails, item }) => (
+					({ id, creativePrompts, description, gmNotes, tags, relationshipType, relationshipDetails, sourceItem }) => (
 						<div key={id} className="border rounded-lg p-4 bg-background dark:bg-muted/30">
 							{/* Header with item name and relationship type */}
 							<div className="flex justify-between items-start mb-3">
 								<div>
 									<Link
-										href={`/items/${item?.slug || item?.id}`}
+										href={`/items/${sourceItem?.slug || sourceItem?.id}`}
 										className="text-lg font-semibold text-primary hover:underline"
 									>
-										{item?.name}
+										{sourceItem?.name}
 									</Link>
 									<p className="text-sm text-muted-foreground mt-1">
 										<strong>Relationship:</strong> {relationshipType.replace(/_/g, " ")}

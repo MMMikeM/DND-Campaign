@@ -12,7 +12,11 @@ import type { Route } from "./+types/index"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	return await getAllConflicts()
+	const conflicts = await getAllConflicts()
+	if (!conflicts) {
+		return new Response("No conflicts found", { status: 404 })
+	}
+	return conflicts
 }
 
 export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
@@ -61,9 +65,7 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 								className="h-full hover:shadow-md transition-shadow"
 							>
 								<div className="p-4">
-									<p className="text-sm text-muted-foreground mb-2">
-										<List items={conflict.description} spacing="sm" emptyText="No description." />
-									</p>
+									<List items={conflict.description} spacing="sm" emptyText="No description." />
 								</div>
 								<div className="border-t p-4">
 									<BadgeWithTooltip
