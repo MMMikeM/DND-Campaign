@@ -14,8 +14,10 @@ type Categories =
 	| "quests"
 	| "conflicts"
 	| "foreshadowing"
-	| "narrativeArcs"
-	| "worldChanges"
+	| "narrativeEvents"
+	| "narrativeDestinations"
+	| "lore"
+	| "maps"
 
 type ItemsData = Record<Categories, MenuItem[] | undefined>
 
@@ -23,34 +25,51 @@ interface SidebarNavProps {
 	menuData: ItemsData
 }
 
+const categoriesConfig: {
+	key: keyof ItemsData
+	title: string
+	icon: React.ComponentType<{ className?: string }>
+	path?: string
+}[] = [
+	{ key: "lore", title: "Lore", icon: Icons.Library },
+	{ key: "maps", title: "Maps", icon: Icons.Map },
+	{ key: "factions", title: "Factions", icon: Icons.Users },
+	{ key: "npcs", title: "NPCs", icon: Icons.User },
+	{ key: "regions", title: "Regions", icon: Icons.Globe },
+	{ key: "areas", title: "Areas", icon: Icons.MapPin },
+	{ key: "sites", title: "Sites", icon: Icons.LocateFixed },
+	{ key: "quests", title: "Quests", icon: Icons.Scroll },
+	{ key: "conflicts", title: "Conflicts", icon: Icons.Swords },
+	{ key: "foreshadowing", title: "Foreshadowing", icon: Icons.Eye },
+	{
+		key: "narrativeEvents",
+		title: "Narrative Events",
+		icon: Icons.Milestone,
+		path: "narrative-events",
+	},
+	{
+		key: "narrativeDestinations",
+		title: "Narrative Destinations",
+		icon: Icons.Book,
+		path: "narrative-destinations",
+	},
+]
+
 export function SidebarNav({ menuData }: SidebarNavProps) {
 	const location = useLocation()
-
 	const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
 	useEffect(() => {
 		const currentPath = location.pathname
-
-		const categories: Categories[] = [
-			"factions",
-			"npcs",
-			"regions",
-			"areas",
-			"sites",
-			"quests",
-			"conflicts",
-			"foreshadowing",
-			"narrativeArcs",
-			"worldChanges",
-		]
-
-		// Find if the current path matches any category and set that as the active menu
-		for (const category of categories) {
-			if (currentPath.startsWith(`/${category}`)) {
-				setActiveMenu(category)
-				break
+		for (const config of categoriesConfig) {
+			const basePath = config.path ?? config.key
+			const pathToCheck = `/${basePath}`
+			if (currentPath.startsWith(pathToCheck)) {
+				setActiveMenu(basePath)
+				return
 			}
 		}
+		setActiveMenu(null)
 	}, [location.pathname])
 
 	const toggleMenu = (menu: string) => {
@@ -79,116 +98,23 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 			<div className="mt-8 mb-3 px-4">
 				<h3 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">World Elements</h3>
 			</div>
+			{categoriesConfig.map((config) => {
+				const menuItems = menuData[config.key]
+				if (!menuItems) return null
+				const basePath = config.path ?? config.key
 
-			{menuData.factions && (
-				<CategoryMenu
-					title="Factions"
-					icon={Icons.Users}
-					isExpanded={activeMenu === "factions"}
-					onToggle={() => toggleMenu("factions")}
-					basePath="factions"
-					menuItems={menuData.factions}
-				/>
-			)}
-
-			{menuData.npcs && (
-				<CategoryMenu
-					title="NPCs"
-					icon={Icons.User}
-					isExpanded={activeMenu === "npcs"}
-					onToggle={() => toggleMenu("npcs")}
-					basePath="npcs"
-					menuItems={menuData.npcs}
-				/>
-			)}
-
-			{menuData.regions && (
-				<CategoryMenu
-					title="Regions"
-					icon={Icons.Map}
-					isExpanded={activeMenu === "regions"}
-					onToggle={() => toggleMenu("regions")}
-					basePath="regions"
-					menuItems={menuData.regions}
-				/>
-			)}
-
-			{menuData.areas && (
-				<CategoryMenu
-					title="Areas"
-					icon={Icons.MapPin}
-					isExpanded={activeMenu === "areas"}
-					onToggle={() => toggleMenu("areas")}
-					basePath="areas"
-					menuItems={menuData.areas}
-				/>
-			)}
-
-			{menuData.sites && (
-				<CategoryMenu
-					title="Sites"
-					icon={Icons.LocateFixed}
-					isExpanded={activeMenu === "sites"}
-					onToggle={() => toggleMenu("sites")}
-					basePath="sites"
-					menuItems={menuData.sites}
-				/>
-			)}
-
-			{menuData.quests && (
-				<CategoryMenu
-					title="Quests"
-					icon={Icons.Scroll}
-					isExpanded={activeMenu === "quests"}
-					onToggle={() => toggleMenu("quests")}
-					basePath="quests"
-					menuItems={menuData.quests}
-				/>
-			)}
-
-			{menuData.conflicts && (
-				<CategoryMenu
-					title="Conflicts"
-					icon={Icons.Swords}
-					isExpanded={activeMenu === "conflicts"}
-					onToggle={() => toggleMenu("conflicts")}
-					basePath="conflicts"
-					menuItems={menuData.conflicts}
-				/>
-			)}
-
-			{menuData.foreshadowing && (
-				<CategoryMenu
-					title="Foreshadowing"
-					icon={Icons.Eye}
-					isExpanded={activeMenu === "foreshadowing"}
-					onToggle={() => toggleMenu("foreshadowing")}
-					basePath="foreshadowing"
-					menuItems={menuData.foreshadowing}
-				/>
-			)}
-
-			{menuData.narrativeArcs && (
-				<CategoryMenu
-					title="Narrative Arcs"
-					icon={Icons.Milestone}
-					isExpanded={activeMenu === "narrativeArcs"}
-					onToggle={() => toggleMenu("narrativeArcs")}
-					basePath="narrative-arcs"
-					menuItems={menuData.narrativeArcs}
-				/>
-			)}
-
-			{menuData.worldChanges && (
-				<CategoryMenu
-					title="World Changes"
-					icon={Icons.Globe}
-					isExpanded={activeMenu === "worldChanges"}
-					onToggle={() => toggleMenu("worldChanges")}
-					basePath="world"
-					menuItems={menuData.worldChanges}
-				/>
-			)}
+				return (
+					<CategoryMenu
+						key={basePath}
+						title={config.title}
+						icon={config.icon}
+						isExpanded={activeMenu === basePath}
+						onToggle={() => toggleMenu(basePath)}
+						basePath={basePath}
+						menuItems={menuItems}
+					/>
+				)
+			})}
 		</SidebarMenu>
 	)
 }
