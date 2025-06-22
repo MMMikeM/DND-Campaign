@@ -96,15 +96,13 @@ export function registerToolHandlers(server: Server) {
 		...regions.handlers,
 	}
 
-	logger.info("MCP Tools", { tools })
-	logger.info("MCP Tool handlers", { handlers: allToolHandlers })
-
 	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
 
 	server.setRequestHandler(CallToolRequestSchema, async (request) => {
 		const { name, arguments: args } = request.params
 
 		const handler = allToolHandlers[name as keyof typeof allToolHandlers]
+		logger.info("MCP Tool handlers", { handler })
 		if (!handler) {
 			throw new Error(`Tool not found: ${name}`)
 		}
@@ -120,13 +118,30 @@ export function registerToolHandlers(server: Server) {
 				],
 			}
 		} catch (error) {
-			logger.error("Error calling tool", { err: error, tool: name, args })
+			logger.error("Error calling tool", {
+				tool: name,
+				args,
+				error:
+					error && error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+								cause: error.cause,
+							}
+						: {
+								errorType: typeof error,
+								errorValue: error,
+								errorString: String(error),
+								errorJSON: error ? JSON.stringify(error) : "null",
+							},
+			})
 			return {
 				isError: true,
 				content: [
 					{
 						type: "text",
-						text: `Error: ${error instanceof Error ? error.message : JSON.stringify(error, null, 2)}`,
+						text: `Error: ${error && error instanceof Error ? error.message : String(error || "Unknown error")}`,
 					},
 				],
 			}

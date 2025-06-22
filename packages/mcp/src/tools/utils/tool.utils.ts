@@ -268,7 +268,6 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			}
 
 			try {
-				logger.info(`Creating ${tableName.data} (via ${categoryToolName}) with data ${JSON.stringify(createData)}`)
 				const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
 
 				// Get the entity name from the created data if available
@@ -276,20 +275,11 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 				return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
 			} catch (error) {
 				logger.error(`Database error creating ${tableName.data}`, {
-					error:
-						error instanceof Error
-							? {
-									name: error.name,
-									message: error.message,
-									stack: error.stack,
-								}
-							: error,
 					tableName: tableName.data,
-					data: createData,
+					error: error instanceof Error ? error.message : error,
 				})
-				return createErrorResponse(
-					`Database error: Failed to create ${tableName.data}. ${error instanceof Error ? error.message : "Unknown error"}`,
-				)
+
+				return createErrorResponse(`Database error when creating ${tableName.data}.`)
 			}
 		}
 

@@ -19,6 +19,11 @@ const polymorphicConfig = polymorphicHelper.fromEnums("loreLinks", [
 	},
 ])
 
+const loreTableDefs = {
+	lore: tables.loreTables.lore,
+	loreLinks: tables.loreTables.loreLinks,
+}
+
 export const entityGetters = createEntityGetters({
 	all_lore: () => db.query.lore.findMany({}),
 	all_lore_links: () => db.query.loreLinks.findMany({}),
@@ -63,7 +68,7 @@ export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 		enums: tables.loreTables.enums,
 		description: "Manage lore-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_lore", tables.loreTables, tableEnum, schemas, polymorphicConfig),
+		handler: createManageEntityHandler("manage_lore", loreTableDefs, tableEnum, schemas, polymorphicConfig),
 		annotations: {
 			title: "Manage Lore",
 			readOnlyHint: false,
