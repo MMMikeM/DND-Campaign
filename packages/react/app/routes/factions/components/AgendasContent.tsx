@@ -4,7 +4,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Faction } from "~/lib/entities"
 
-export function AgendasContent({ agendas }: Faction) {
+export function AgendasContent({ agendas }: Pick<Faction, "agendas">) {
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 			{agendas.map((agenda) => (

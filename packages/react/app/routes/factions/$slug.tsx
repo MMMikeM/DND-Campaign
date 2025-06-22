@@ -21,6 +21,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 
 	const faction = await getFaction(params.slug)
+
 	if (!faction) {
 		throw new Response("Faction not found", { status: 404 })
 	}
@@ -37,7 +38,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		creativePrompts,
 		description,
 		gmNotes,
-		id,
 		incomingForeshadowing,
 		itemRelations,
 		loreLinks,
@@ -55,7 +55,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		wealth,
 		tags,
 		history,
-		hqSiteId,
 		jargon,
 		name,
 		publicAlignment,
@@ -121,31 +120,64 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 					</TabsList>
 
 					<TabsContent value="overview" className="space-y-6 animate-in fade-in-50 duration-300">
-						<OverviewContent {...faction} />
+						<OverviewContent
+							description={description}
+							gmNotes={gmNotes}
+							name={name}
+							publicGoal={publicGoal}
+							secretGoal={secretGoal}
+							primaryHqSite={primaryHqSite}
+							history={history}
+							publicPerception={publicPerception}
+						/>
 					</TabsContent>
 
 					<TabsContent value="details" className="animate-in fade-in-50 duration-300">
-						<DetailsContent {...faction} />
+						<DetailsContent
+							secretAlignment={secretAlignment}
+							transparencyLevel={transparencyLevel}
+							tags={tags}
+							incomingForeshadowing={incomingForeshadowing}
+							narrativeDestinationInvolvement={narrativeDestinationInvolvement}
+							conflicts={conflicts}
+							itemRelations={itemRelations}
+							loreLinks={loreLinks}
+							creativePrompts={creativePrompts}
+							affectingConsequences={affectingConsequences}
+							publicAlignment={publicAlignment}
+							size={size}
+							wealth={wealth}
+							reach={reach}
+							type={type}
+						/>
 					</TabsContent>
 
 					<TabsContent value="culture" className="animate-in fade-in-50 duration-300">
-						<CultureContent {...faction} />
+						<CultureContent
+							aesthetics={aesthetics}
+							jargon={jargon}
+							recognitionSigns={recognitionSigns}
+							taboos={taboos}
+							symbols={symbols}
+							rituals={rituals}
+							values={values}
+						/>
 					</TabsContent>
 
 					<TabsContent value="agendas" className="space-y-6 animate-in fade-in-50 duration-300">
-						<AgendasContent {...faction} />
+						<AgendasContent agendas={agendas} />
 					</TabsContent>
 
 					<TabsContent value="influence" className="space-y-6 animate-in fade-in-50 duration-300">
-						<InfluenceContent {...faction} />
+						<InfluenceContent relations={relations} influence={influence} />
 					</TabsContent>
 
 					<TabsContent value="quests" className="animate-in fade-in-50 duration-300">
-						<QuestsContent {...faction} />
+						<QuestsContent questHooks={questHooks} questParticipation={questParticipation} />
 					</TabsContent>
 
 					<TabsContent value="members" className="animate-in fade-in-50 duration-300">
-						<MembersContent {...faction} />
+						<MembersContent members={members} />
 					</TabsContent>
 				</Tabs>
 			</div>
@@ -169,8 +201,8 @@ export function Header({
 			</h1>
 
 			<div className="flex items-center gap-2">
-				<BadgeWithTooltip tooltipContent={"Type"} className={getSizeBadgeClasses(type)}>
-					{type}
+				<BadgeWithTooltip tooltipContent={"Type"} className={getSizeBadgeClasses(type[0])}>
+					{type[0]}
 				</BadgeWithTooltip>
 
 				<AlignmentBadge alignment={publicAlignment} />
