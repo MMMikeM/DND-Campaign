@@ -25,7 +25,7 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetFaction" }),
 	itemRelations: many(itemRelations),
-	loreLinks: many(loreLinks),
+	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetFaction" }),
 
 	primaryHqSite: one(sites, {
 		fields: [factions.hqSiteId],

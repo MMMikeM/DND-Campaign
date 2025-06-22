@@ -19,9 +19,9 @@ export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 	triggeredConsequences: many(consequences, { relationName: "ConsequenceTriggerConflict" }),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedConflict" }),
 	narrativeDestinations: many(narrativeDestinations),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForConflict" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetConflict" }),
 	itemRelations: many(itemRelations),
-	loreLinks: many(loreLinks),
+	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetConflict" }),
 }))
 
 export const conflictParticipantsRelations = relations(conflictParticipants, ({ one }) => ({

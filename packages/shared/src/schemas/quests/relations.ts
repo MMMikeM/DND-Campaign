@@ -31,10 +31,10 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 	triggeredConsequences: many(consequences, { relationName: "ConsequenceTriggerQuest" }),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedQuest" }),
 	triggeredEvents: many(narrativeEvents),
-	outgoingForeshadowing: many(foreshadowing, { relationName: "foreshadowingFromQuest" }),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForQuest" }),
+	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceQuest" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetQuest" }),
 	itemRelations: many(itemRelations),
-	loreLinks: many(loreLinks),
+	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetQuest" }),
 }))
 
 export const questRelationTargets = relations(questRelations, ({ one }) => ({

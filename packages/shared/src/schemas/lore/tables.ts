@@ -1,4 +1,4 @@
-import { integer, pgTable } from "drizzle-orm/pg-core"
+import { integer, pgTable, text } from "drizzle-orm/pg-core"
 import { cascadeFk, list, oneOf, pk, string } from "../../db/utils"
 import { enums } from "./enums"
 
@@ -9,14 +9,18 @@ const { loreTypes, linkStrengths, targetEntityTypes } = enums
 export const lore = pgTable("lore", {
 	id: pk(),
 	name: string("name").unique(),
-	summary: string("summary"),
-	loreType: oneOf("lore_type", loreTypes),
+	description: text("description").array(),
+	creativePrompts: list("creative_prompts"),
+	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
+	summary: string("summary"),
 	surfaceImpression: string("surface_impression"),
 	livedReality: string("lived_reality"),
 	hiddenTruths: string("hidden_truths"),
 	modernRelevance: string("modern_relevance"),
+
+	loreType: oneOf("lore_type", loreTypes),
 
 	aesthetics_and_symbols: list("aesthetics_and_symbols"),
 	interactions_and_rules: list("interactions_and_rules"),
@@ -24,8 +28,6 @@ export const lore = pgTable("lore", {
 	core_tenets_and_traditions: list("core_tenets_and_traditions"),
 	history_and_legacy: list("history_and_legacy"),
 	conflicting_narratives: list("conflicting_narratives"),
-	creativePrompts: list("creative_prompts"),
-	gmNotes: list("gm_notes"),
 })
 
 export const loreLinks = pgTable("lore_links", {

@@ -24,7 +24,7 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 		fields: [narrativeEvents.relatedQuestId],
 		references: [quests.id],
 	}),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForNarrativeEvent" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNarrativeEvent" }),
 }))
 
 export const consequencesRelations = relations(consequences, ({ one }) => ({

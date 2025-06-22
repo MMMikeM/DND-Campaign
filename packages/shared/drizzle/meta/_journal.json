@@ -15,6 +15,13 @@
       "when": 1750524705745,
       "tag": "0001_little_firedrake",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750581956923,
+      "tag": "0002_dear_captain_universe",
+      "breakpoints": true
     }
   ]
 }

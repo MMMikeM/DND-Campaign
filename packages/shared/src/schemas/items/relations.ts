@@ -14,7 +14,7 @@ export const itemsRelations = relations(items, ({ many, one }) => ({
 	relations: many(itemRelations),
 
 	notableHistory: many(itemNotableHistory),
-	incomingForeshadowing: many(foreshadowing, { relationName: "foreshadowingForItem" }),
+	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetItem" }),
 
 	questStage: one(questStages, {
 		fields: [items.questStageId],
