@@ -9,11 +9,15 @@ export function OverviewContent({
 	name,
 	publicGoal,
 	secretGoal,
-	hqSiteId,
 	primaryHqSite,
 	description,
 	gmNotes,
-}: Pick<Faction, "name" | "publicGoal" | "secretGoal" | "hqSiteId" | "primaryHqSite" | "description" | "gmNotes">) {
+	history,
+	publicPerception,
+}: Pick<
+	Faction,
+	"name" | "publicGoal" | "secretGoal" | "primaryHqSite" | "description" | "gmNotes" | "history" | "publicPerception"
+>) {
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
 			<InfoCard
@@ -74,6 +78,22 @@ export function OverviewContent({
 				className="lg:col-span-2"
 			>
 				<List items={gmNotes} />
+			</InfoCard>
+			<InfoCard
+				title="History"
+				icon={<Icons.Scroll className="h-5 w-5 mr-2 text-amber-500" />}
+				emptyMessage={`No history available for ${name}`}
+				className="lg:col-span-3"
+			>
+				<List items={history} />
+			</InfoCard>
+			<InfoCard
+				title="Public Perception"
+				icon={<Icons.Eye className="h-5 w-5 mr-2 text-blue-500" />}
+				emptyMessage={`No public perception available for ${name}`}
+				className="lg:col-span-3"
+			>
+				<p className="text-slate-700 dark:text-slate-300">{publicPerception}</p>
 			</InfoCard>
 		</div>
 	)

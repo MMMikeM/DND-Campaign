@@ -9,7 +9,7 @@ export function InfluenceContent({ relations, influence }: Pick<Faction, "relati
 	return (
 		<div className="space-y-6">
 			<FactionRelationsCard relations={relations} />
-			<FactionterritorialControlInfo territorialControl={influence} />
+			<FactionterritorialControlInfo influence={influence} />
 		</div>
 	)
 }
@@ -65,7 +65,7 @@ const TerritorialControlTitle = ({
 	)
 }
 
-function FactionterritorialControlInfo({ territorialControl }: { territorialControl: Faction["territorialControl"] }) {
+function FactionterritorialControlInfo({ influence }: { influence: Faction["influence"] }) {
 	return (
 		<InfoCard
 			title={`Sphere of territorialControl`}
@@ -73,8 +73,19 @@ function FactionterritorialControlInfo({ territorialControl }: { territorialCont
 			emptyMessage={`No territorialControl information available`}
 			contentClassName="space-y-4"
 		>
-			{territorialControl.map(
-				({ id, area, creativePrompts, description, influenceLevel, presence, priorities, region, site }) => (
+			{influence.map(
+				({
+					id,
+					area,
+					creativePrompts,
+					description,
+					influenceLevel,
+					presenceDetails,
+					presenceTypes,
+					priorities,
+					region,
+					site,
+				}) => (
 					<div key={id} className="overflow-hidden border-b">
 						<div className="flex items-center justify-between mb-3">
 							<TerritorialControlTitle site={site} area={area} region={region} />
@@ -84,7 +95,8 @@ function FactionterritorialControlInfo({ territorialControl }: { territorialCont
 						</div>
 
 						<div className="mb-4 space-y-4">
-							<List items={presence} className="text-sm" initialCollapsed heading="Presence" />
+							<List items={presenceDetails} className="text-sm" initialCollapsed heading="Presence" />
+							<List items={presenceTypes} className="text-sm" initialCollapsed heading="Presence Types" />
 							<List items={priorities} className="text-sm" initialCollapsed heading="Priorities" />
 							<List items={description} className="text-sm" initialCollapsed heading="Description" />
 							<List items={creativePrompts} className="text-sm" initialCollapsed heading="Creative Prompts" />
