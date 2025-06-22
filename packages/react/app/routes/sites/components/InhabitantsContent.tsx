@@ -1,9 +1,15 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
+import { List } from "~/components/List"
+import { Tags } from "~/components/Tags"
+import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
-// InhabitantsContent.tsx
-export const InhabitantsContent: React.FC<Site> = ({ npcs, territorialControl }) => {
+export const InhabitantsContent = ({
+	npcAssociations,
+	factionInfluence,
+	factionHqs,
+}: Pick<Site, "npcAssociations" | "factionInfluence" | "factionHqs">) => {
 	return (
 		<div className="space-y-6">
 			<InfoCard
@@ -11,8 +17,22 @@ export const InhabitantsContent: React.FC<Site> = ({ npcs, territorialControl })
 				icon={<Icons.Users className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No NPCs are present at this site."
 			>
-				{npcs.map((npc) => (
+				{npcAssociations.map((npc) => (
 					<div key={`npc-${npc.id}`} className="border rounded p-4"></div>
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Faction Headquarters"
+				icon={<Icons.Home className="h-4 w-4 mr-2 text-primary" />}
+				emptyMessage="No factions have their headquarters here."
+			>
+				{factionHqs.map((faction) => (
+					<div key={`faction-hq-${faction.id}`} className="border rounded p-3 mb-2">
+						<Link href={`/factions/${faction.slug}`}>
+							<h4 className="font-medium text-primary hover:underline">{faction.name}</h4>
+						</Link>
+					</div>
 				))}
 			</InfoCard>
 
@@ -21,16 +41,33 @@ export const InhabitantsContent: React.FC<Site> = ({ npcs, territorialControl })
 				icon={<Icons.Flag className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No factions control this site."
 			>
-				{territorialControl.map(({ creativePrompts, description, faction, influenceLevel, presence, priorities }) => (
-					<div key={`control-${faction.id}`} className="border rounded p-4">
-						<h3 className="text-lg font-semibold">{faction.name}</h3>
-						<p className="text-sm text-muted-foreground">{description}</p>
-						<p className="text-sm text-muted-foreground">{presence}</p>
-						<p className="text-sm text-muted-foreground">{priorities}</p>
-						<p className="text-sm text-muted-foreground">{influenceLevel}</p>
-						<p className="text-sm text-muted-foreground">{creativePrompts}</p>
-					</div>
-				))}
+				{factionInfluence.map(
+					({
+						creativePrompts,
+						description,
+						influenceLevel,
+						presenceTypes,
+						presenceDetails,
+						priorities,
+						gmNotes,
+						tags,
+						faction,
+					}) => (
+						<div key={`control-${faction.id}`} className="border rounded p-4">
+							<Link href={`/factions/${faction.slug}`}>
+								<h3 className="text-lg font-semibold">{faction.name}</h3>
+							</Link>
+							<Tags tags={tags} />
+							<p className="text-sm text-muted-foreground">{influenceLevel}</p>
+							<List items={description} heading="Description" />
+							<List items={presenceTypes} heading="Presence Types" />
+							<List items={presenceDetails} heading="Presence Details" />
+							<List items={priorities} heading="Priorities" />
+							<List items={creativePrompts} heading="Creative Prompts" />
+							<List items={gmNotes} heading="GM Notes" />
+						</div>
+					),
+				)}
 			</InfoCard>
 		</div>
 	)

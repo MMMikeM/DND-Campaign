@@ -1,5 +1,6 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
+import { Tags } from "~/components/Tags"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getSite } from "~/lib/entities"
@@ -7,10 +8,13 @@ import type { Route } from "./+types/$slug"
 import { DetailsContent } from "./components/DetailsContent"
 import { EncountersContent } from "./components/EncountersContent"
 import { InhabitantsContent } from "./components/InhabitantsContent"
-import LinksContent from "./components/LinksContent"
+import { ItemsContent } from "./components/ItemsContent"
+import { LinksContent } from "./components/LinksContent"
+import { MapContent } from "./components/MapContent"
+import { NarrativeContent } from "./components/NarrativeContent"
 import { OverviewContent } from "./components/OverviewContent"
-import SecretsContent from "./components/SecretsContent"
-import SiteHeader from "./components/SiteHeader"
+import { SecretsContent } from "./components/SecretsContent"
+import { SiteHeader } from "./components/SiteHeader"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -32,31 +36,40 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
-		id,
-		name,
-		siteType,
 		area,
-		slug,
+		areaId,
 		climate,
+		consequences,
 		creativePrompts,
 		creatures,
 		description,
 		descriptors,
 		encounters,
 		environment,
+		factionHqs,
+		factionInfluence,
 		features,
-		items,
-		mood,
-		npcs,
-		secrets,
-		terrain,
-		worldChanges,
+		gmNotes,
+		incomingForeshadowing,
+		intendedSiteFunction,
+		itemHistory,
+		itemRelations,
 		lightingDescription,
+		mapGroup,
+		mood,
+		name,
+		npcAssociations,
+		questHooks,
+		questStages,
 		relations,
+		secrets,
+		slug,
 		smells,
 		soundscape,
-		territorialControl,
+		tags,
+		terrain,
 		treasures,
+		type,
 		weather,
 	} = site
 
@@ -75,40 +88,84 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<SiteHeader {...site} />
+			<SiteHeader
+				name={name}
+				type={type}
+				area={area}
+				terrain={terrain}
+				climate={climate}
+				mood={mood}
+				environment={environment}
+			/>
+
+			{/* Tags */}
+			<Tags tags={tags} variant="secondary" maxDisplay={8} className="mb-6" />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-				<TabsList className="grid grid-cols-6 mb-6">
+				<TabsList className="grid grid-cols-9 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
 					<TabsTrigger value="details">Details</TabsTrigger>
+					<TabsTrigger value="map">Map</TabsTrigger>
 					<TabsTrigger value="encounters">Encounters</TabsTrigger>
 					<TabsTrigger value="inhabitants">Inhabitants</TabsTrigger>
 					<TabsTrigger value="secrets">Secrets</TabsTrigger>
 					<TabsTrigger value="links">Links</TabsTrigger>
+					<TabsTrigger value="narrative">Narrative</TabsTrigger>
+					<TabsTrigger value="items">Items</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent {...site} />
+					<OverviewContent creatures={creatures} description={description} features={features} treasures={treasures} />
 				</TabsContent>
 
 				<TabsContent value="details">
-					<DetailsContent {...site} />
+					<DetailsContent
+						weather={weather}
+						creativePrompts={creativePrompts}
+						descriptors={descriptors}
+						lightingDescription={lightingDescription}
+						soundscape={soundscape}
+						smells={smells}
+						intendedSiteFunction={intendedSiteFunction}
+						gmNotes={gmNotes}
+					/>
 				</TabsContent>
 
 				<TabsContent value="inhabitants">
-					<InhabitantsContent {...site} />
+					<InhabitantsContent
+						npcAssociations={npcAssociations}
+						factionInfluence={factionInfluence}
+						factionHqs={factionHqs}
+					/>
 				</TabsContent>
 
 				<TabsContent value="encounters">
-					<EncountersContent {...site} />
+					<EncountersContent encounters={encounters} />
 				</TabsContent>
 
 				<TabsContent value="secrets">
-					<SecretsContent {...site} />
+					<SecretsContent secrets={secrets} />
 				</TabsContent>
 
 				<TabsContent value="links">
-					<LinksContent {...site} />
+					<LinksContent relations={relations} />
+				</TabsContent>
+
+				<TabsContent value="map">
+					<MapContent mapGroup={mapGroup} />
+				</TabsContent>
+
+				<TabsContent value="narrative">
+					<NarrativeContent
+						questHooks={questHooks}
+						questStages={questStages}
+						incomingForeshadowing={incomingForeshadowing}
+						consequences={consequences}
+					/>
+				</TabsContent>
+
+				<TabsContent value="items">
+					<ItemsContent itemHistory={itemHistory} itemRelations={itemRelations} />
 				</TabsContent>
 			</Tabs>
 		</div>

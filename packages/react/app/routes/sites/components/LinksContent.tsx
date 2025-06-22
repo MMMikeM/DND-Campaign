@@ -1,12 +1,11 @@
 import * as Icons from "lucide-react"
-import type React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
-export const LinksContent: React.FC<Site> = ({ relations }) => {
+export const LinksContent = ({ relations }: Pick<Site, "relations">) => {
 	return (
 		<InfoCard
 			title="Linked Sites"

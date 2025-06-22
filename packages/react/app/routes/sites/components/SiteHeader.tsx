@@ -1,10 +1,17 @@
 import * as Icons from "lucide-react"
-import type React from "react"
 import { NavLink } from "react-router"
 // import { getSiteTypeIcon } from "../utils" // Import utils if needed
 import type { Site } from "~/lib/entities" // Import the Site type
 
-export const SiteHeader: React.FC<Site> = ({ name, siteType, area, terrain, climate, mood, environment }) => {
+export const SiteHeader = ({
+	name,
+	type,
+	area,
+	terrain,
+	climate,
+	mood,
+	environment,
+}: Pick<Site, "name" | "area" | "terrain" | "climate" | "mood" | "environment" | "type">) => {
 	return (
 		<div className="p-4 mb-6 border rounded bg-card text-card-foreground shadow-sm">
 			<div className="flex justify-between items-start mb-2">
@@ -13,7 +20,7 @@ export const SiteHeader: React.FC<Site> = ({ name, siteType, area, terrain, clim
 						<Icons.LocateFixed className="h-6 w-6 mr-2 text-indigo-500" />
 						{name}
 					</h1>
-					<p className="text-muted-foreground capitalize">{siteType}</p>
+					<p className="text-muted-foreground capitalize">{type}</p>
 				</div>
 				<div className="text-right text-sm">
 					<NavLink to={`/areas/${area.slug}`} className="text-primary hover:underline flex items-center justify-end">

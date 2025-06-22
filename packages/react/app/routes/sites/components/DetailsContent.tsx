@@ -1,17 +1,28 @@
 import * as Icons from "lucide-react"
-import type React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Site } from "~/lib/entities"
 
-export const DetailsContent: React.FC<Site> = ({
+export const DetailsContent = ({
 	lightingDescription,
 	soundscape,
 	smells,
 	weather,
 	descriptors,
 	creativePrompts,
-}) => (
+	intendedSiteFunction,
+	gmNotes,
+}: Pick<
+	Site,
+	| "lightingDescription"
+	| "soundscape"
+	| "smells"
+	| "weather"
+	| "descriptors"
+	| "creativePrompts"
+	| "intendedSiteFunction"
+	| "gmNotes"
+>) => (
 	<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 		<InfoCard title="Lighting" icon={<Icons.Sun className="h-4 w-4 text-primary" />}>
 			<List items={lightingDescription} spacing="sm" emptyText="No specific lighting details." />
@@ -35,6 +46,12 @@ export const DetailsContent: React.FC<Site> = ({
 
 		<InfoCard title="Creative Prompts" icon={<Icons.Lightbulb className="h-4 w-4 text-primary" />}>
 			<List items={creativePrompts} spacing="sm" emptyText="No creative prompts available." />
+		</InfoCard>
+		<InfoCard title="Intended Site Function" icon={<Icons.Puzzle className="h-4 w-4 text-primary" />}>
+			<p className="text-sm text-muted-foreground">{intendedSiteFunction}</p>
+		</InfoCard>
+		<InfoCard title="GM Notes" icon={<Icons.Scroll className="h-4 w-4 text-primary" />}>
+			<List items={gmNotes} spacing="sm" emptyText="No GM notes available." />
 		</InfoCard>
 	</div>
 )
