@@ -13,6 +13,7 @@ import { ItemsContent } from "./components/ItemsContent"
 import { LoreContent } from "./components/LoreContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { ParticipantsContent } from "./components/ParticipantsContent"
+import { ProgressionContent } from "./components/ProgressionContent"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -21,18 +22,12 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("Conflict not found", { status: 404 })
 	}
 
-	console.log(JSON.stringify(conflict, null, 2))
-
 	return conflict
 }
 
-interface ConflictHeaderProps extends Pick<Conflict, "name" | "scope" | "natures" | "status"> {
-	className?: string
-}
-
-export function Header({ name, scope, natures, status, className }: ConflictHeaderProps) {
+export function Header({ name, scope, natures, status }: Pick<Conflict, "name" | "scope" | "natures" | "status">) {
 	return (
-		<div className={className}>
+		<div>
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
 				<Icons.Swords className="h-6 w-6 mr-2 text-primary" />
 				{name}
@@ -77,7 +72,6 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 		description,
 		gmNotes,
 		hiddenTruths,
-		id,
 		incomingForeshadowing,
 		itemRelations,
 		loreLinks,
@@ -115,10 +109,10 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<Header {...{ name, scope, natures, status }} className="mb-6" />
+			<Header name={name} scope={scope} natures={natures} status={status} />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
-				<TabsList className="grid grid-cols-3 mb-8 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+				<TabsList>
 					{tabs.map((tab) => (
 						<TabsTrigger
 							key={tab}
@@ -137,13 +131,31 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 						status={status}
 						scope={scope}
 						natures={natures}
-						primaryRegion={region}
+						region={region}
 						narrativeDestinations={narrativeDestinations}
+						cause={cause}
+						clarityOfRightWrong={clarityOfRightWrong}
+						moralDilemma={moralDilemma}
+						tags={tags}
+						creativePrompts={creativePrompts}
+						gmNotes={gmNotes}
+						hiddenTruths={hiddenTruths}
+					/>
+				</TabsContent>
+
+				<TabsContent value="progression" className="animate-in fade-in-50 duration-300">
+					<ProgressionContent
+						currentTensionLevel={currentTensionLevel}
+						possibleOutcomes={possibleOutcomes}
+						questImpacts={questImpacts}
 					/>
 				</TabsContent>
 
 				<TabsContent value="consequences" className="animate-in fade-in-50 duration-300">
-					<ConsequencesContent consequences={affectingConsequences} affectedByConsequences={triggeredConsequences} />
+					<ConsequencesContent
+						affectingConsequences={affectingConsequences}
+						triggeredConsequences={triggeredConsequences}
+					/>
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">

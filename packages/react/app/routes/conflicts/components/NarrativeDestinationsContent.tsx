@@ -1,6 +1,5 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
-import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
 
@@ -22,51 +21,6 @@ export function NarrativeDestinationsContent({ narrativeDestinations }: Pick<Con
 								{destination.name}
 							</Link>
 						</div>
-
-						{destination.description && (
-							<div className="mb-3">
-								<h4 className="font-medium text-sm mb-1 flex items-center">
-									<Icons.FileText className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-									Description
-								</h4>
-								<List items={destination.description} spacing="xs" textColor="muted" textSize="sm" />
-							</div>
-						)}
-
-						{destination.region && (
-							<div className="mb-3">
-								<h4 className="font-medium text-sm mb-1 flex items-center">
-									<Icons.Globe className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-									Region
-								</h4>
-								<Link
-									href={`/regions/${destination.region.slug || destination.region.id}`}
-									className="text-sm text-primary hover:underline"
-								>
-									{destination.region.name}
-								</Link>
-							</div>
-						)}
-
-						{destination.creativePrompts && destination.creativePrompts.length > 0 && (
-							<div className="mb-3">
-								<h4 className="font-medium text-sm mb-1 flex items-center">
-									<Icons.Lightbulb className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-									Creative Prompts
-								</h4>
-								<List items={destination.creativePrompts} spacing="xs" textColor="muted" textSize="sm" />
-							</div>
-						)}
-
-						{destination.gmNotes && destination.gmNotes.length > 0 && (
-							<div>
-								<h4 className="font-medium text-sm mb-1 flex items-center">
-									<Icons.Eye className="h-3.5 w-3.5 mr-1.5 text-red-600" />
-									GM Notes
-								</h4>
-								<List items={destination.gmNotes} spacing="xs" textColor="muted" textSize="sm" />
-							</div>
-						)}
 					</div>
 				))}
 			</div>
