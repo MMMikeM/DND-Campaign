@@ -1,29 +1,33 @@
-import * as Icons from "lucide-react"
-import type React from "react"
-import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Area } from "~/lib/entities"
 
-export const DetailsContent: React.FC<Pick<Area, "hazards" | "defenses" | "rumors" | "creativePrompts">> = (
-	details,
-) => {
+export const DetailsContent = ({
+	hazards,
+	defenses,
+	rumors,
+	creativePrompts,
+	atmosphereType,
+	gmNotes,
+	revelationLayersSummary,
+}: Pick<
+	Area,
+	"hazards" | "defenses" | "rumors" | "creativePrompts" | "atmosphereType" | "gmNotes" | "revelationLayersSummary"
+>) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<InfoCard title="Hazards" icon={<Icons.AlertTriangle className="h-4 w-4 text-primary" />}>
-				<List items={details.hazards} spacing="sm" emptyText="No known hazards." />
-			</InfoCard>
+			<p className="capitalize">{atmosphereType?.replace(/_/g, " ")}</p>
 
-			<InfoCard title="Defenses" icon={<Icons.Shield className="h-4 w-4 text-primary" />}>
-				<List items={details.defenses} spacing="sm" emptyText="No notable defenses." />
-			</InfoCard>
+			<List items={hazards} spacing="sm" emptyText="No known hazards." />
 
-			<InfoCard title="Rumors" icon={<Icons.MessageSquare className="h-4 w-4 text-primary" />}>
-				<List items={details.rumors} spacing="sm" emptyText="No rumors circulating." />
-			</InfoCard>
+			<List items={defenses} spacing="sm" emptyText="No notable defenses." />
 
-			<InfoCard title="Creative Prompts" icon={<Icons.Lightbulb className="h-4 w-4 text-primary" />}>
-				<List items={details.creativePrompts} spacing="sm" emptyText="No creative prompts available." />
-			</InfoCard>
+			<List items={rumors} spacing="sm" emptyText="No rumors circulating." />
+
+			<List items={revelationLayersSummary} spacing="sm" emptyText="No revelation layers available." />
+
+			<List items={creativePrompts} spacing="sm" emptyText="No creative prompts available." />
+
+			<List items={gmNotes} heading="GM Notes" spacing="sm" emptyText="No GM notes." />
 		</div>
 	)
 }

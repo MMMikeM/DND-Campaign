@@ -7,7 +7,7 @@ import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllAreas } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader(_: Route.LoaderArgs) {
 	return await getAllAreas()
 }
 
@@ -40,29 +40,7 @@ export default function AreasIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredAreas.map((area) => {
-					const {
-						id,
-						name,
-						type,
-						dangerLevel,
-						slug,
-						description,
-						creativePrompts,
-						culturalNotes,
-						defenses,
-						hazards,
-						leadership,
-						pointsOfInterest,
-						population,
-						primaryActivity,
-						atmosphereType,
-						gmNotes,
-						revelationLayersSummary,
-						tags,
-						region,
-						regionId,
-						rumors,
-					} = area
+					const { id, name, type, slug, description, region } = area
 
 					return (
 						<NavLink key={id} to={`/areas/${slug}`}>
