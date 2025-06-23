@@ -8,11 +8,11 @@ import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
-import { getAllMapsMetadata } from "~/lib/entities"
+import { getAllMaps } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const maps = await getAllMapsMetadata()
+	const maps = await getAllMaps()
 	if (!maps) {
 		throw new Response("Maps not found", { status: 404 })
 	}

@@ -17,7 +17,13 @@ const siteConfig = {
 				itemHistory: true,
 				itemRelations: true,
 				questHooks: true,
-				mapGroup: true,
+				mapGroup: {
+					with: {
+						variants: {
+							with: { mapFile: { columns: { id: true, imageWidth: true, imageHeight: true } } },
+						},
+					},
+				},
 				npcAssociations: true,
 				questStages: true,
 				area: { columns: { id: true, name: true }, with: { region: { columns: { id: true, name: true } } } },

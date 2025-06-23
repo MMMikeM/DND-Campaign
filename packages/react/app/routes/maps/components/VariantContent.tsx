@@ -3,19 +3,28 @@ import { motion } from "motion/react"
 import { useState } from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { Tags } from "~/components/Tags"
 import { Badge } from "~/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import type { MapVariant } from "../utils"
+import type { MapVariant } from "~/lib/entities"
 
 const tabContentVariants = {
 	active: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut" } },
 	inactive: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" } },
 }
 
-const imageClasses: Record<MapVariant["orientation"], string> = {
+const imageClasses: Record<"landscape" | "portrait" | "square", string> = {
 	landscape: "w-full max-h-[40vh] md:max-h-[60vh]",
 	portrait: "w-auto max-w-full block mx-auto max-h-[60vh] md:max-h-[80vh]",
 	square: "w-full max-h-[50vh] md:max-h-[70vh]",
+}
+
+const getOrientation = (mapFile: MapVariant["mapFile"]) => {
+	if (!mapFile.imageWidth || !mapFile.imageHeight) {
+		return "square"
+	}
+	const aspectRatio = mapFile.imageWidth / mapFile.imageHeight
+	return aspectRatio > 1.2 ? "landscape" : aspectRatio < 0.8 ? "portrait" : "square"
 }
 
 export default function MapVariants({ variants }: { variants: MapVariant[] }) {
@@ -58,7 +67,6 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 						tacticalPositions,
 						interactiveElements,
 						environmentalHazards,
-						orientation,
 						tags,
 					}) => (
 						<TabsContent key={id} value={id.toString()} forceMount className="w-full mt-4 data-[state=inactive]:hidden">
@@ -70,6 +78,7 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 							>
 								<div className="flex items-center mb-4 h-6 gap-4">
 									<h3 className="text-xl font-semibold">{variantName || "Default Variant"}</h3>
+									<Tags tags={tags} />
 
 									{isDefault && (
 										<Badge variant="default">
@@ -83,7 +92,7 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 									<img
 										src={`/api/maps/images/${mapFile.id}`}
 										alt={variantName || "Default"}
-										className={`object-contain ${imageClasses[orientation]}`}
+										className={`object-contain ${imageClasses[getOrientation(mapFile)]}`}
 										loading="lazy"
 									/>
 								</div>
@@ -115,7 +124,7 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 									title="Tactical Information"
 									icon={<Icons.Eye className="h-4 w-4 mr-2 text-red-600" />}
 									contentClassName="grid grid-cols-1 lg:grid-cols-2 gap-6"
-									className={`${orientation === "landscape" ? "col-span-2" : "col-span-1"} w-full h-fit`}
+									className={`${getOrientation(mapFile) === "landscape" ? "col-span-2" : "col-span-1"} w-full h-fit`}
 								>
 									<List items={coverOptions} heading="Cover Options" spacing="xs" textSize="sm" />
 									<List items={elevationFeatures} heading="Elevation Features" spacing="xs" textSize="sm" />
