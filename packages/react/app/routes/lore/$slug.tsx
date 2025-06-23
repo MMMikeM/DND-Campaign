@@ -9,6 +9,7 @@ import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 import { DetailsContent } from "./components/DetailsContent"
 import { ImpactContent } from "./components/ImpactContent"
+import { LoreOverviewContent } from "./components/OverviewContent"
 import { getLoreTypeVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -24,33 +25,34 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return lore
 }
 
-const TABS = ["Details", "Impact", "Connections"]
+const TABS = ["Overview", "Details", "Impact", "Connections"]
 
 export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 	const { tab } = useParams()
 	const navigate = useNavigate()
 
 	const {
-		itemRelations,
-		name,
-		tags,
-		summary,
-		loreType,
-		surfaceImpression,
-		livedReality,
-		hiddenTruths,
-		modernRelevance,
 		aesthetics_and_symbols,
-		interactions_and_rules,
+		conflicting_narratives,
 		connections_to_world,
 		core_tenets_and_traditions,
-		history_and_legacy,
-		conflicting_narratives,
-		incomingForeshadowing,
-		slug,
 		creativePrompts,
+		description,
 		gmNotes,
+		hiddenTruths,
+		history_and_legacy,
+		incomingForeshadowing,
+		interactions_and_rules,
+		itemRelations,
 		links,
+		livedReality,
+		loreType,
+		modernRelevance,
+		name,
+		slug,
+		summary,
+		surfaceImpression,
+		tags,
 	} = loaderData
 
 	const activeTab = tab || "details"
@@ -71,7 +73,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 			<Header name={name} loreType={loreType} tags={tags} className="mb-6" />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
-				<TabsList className="mb-8 grid grid-cols-3 rounded-lg bg-slate-100 p-1 dark:bg-slate-800">
+				<TabsList>
 					{TABS.map((tab) => (
 						<TabsTrigger
 							key={tab}
@@ -83,9 +85,18 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 					))}
 				</TabsList>
 
+				<TabsContent value="overview" className="animate-in fade-in-50 duration-300">
+					<LoreOverviewContent
+						tags={tags}
+						description={description}
+						summary={summary}
+						gmNotes={gmNotes}
+						creativePrompts={creativePrompts}
+					/>
+				</TabsContent>
+
 				<TabsContent value="details" className="animate-in fade-in-50 duration-300">
 					<DetailsContent
-						summary={summary}
 						surfaceImpression={surfaceImpression}
 						livedReality={livedReality}
 						hiddenTruths={hiddenTruths}
@@ -105,6 +116,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="connections" className="animate-in fade-in-50 duration-300">
 					<ConnectionsContent
+						links={links}
 						itemRelations={itemRelations}
 						incomingForeshadowing={incomingForeshadowing}
 						connections_to_world={connections_to_world}

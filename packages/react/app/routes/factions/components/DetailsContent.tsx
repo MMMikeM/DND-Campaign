@@ -99,8 +99,9 @@ export function DetailsContent({
 				icon={<Icons.BookHeart className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No narrative links"
 			>
+				{JSON.stringify(conflicts)}
 				{JSON.stringify(incomingForeshadowing)}
-				{JSON.stringify(narrativeDestinationInvolvement)}oe
+				{JSON.stringify(narrativeDestinationInvolvement)}
 			</InfoCard>
 
 			<InfoCard
