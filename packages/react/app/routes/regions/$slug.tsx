@@ -31,26 +31,33 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
-		name,
-		type,
-		dangerLevel,
-		economy,
-		population,
-		slug,
 		areas,
-		quests,
-		description,
-		culturalNotes,
+		atmosphereType,
+		conflicts,
+		consequences,
 		creativePrompts,
+		culturalNotes,
+		dangerLevel,
+		description,
+		economy,
+		factionInfluence,
+		gmNotes,
 		hazards,
 		history,
+		loreLinks,
+		name,
+		narrativeDestinations,
 		pointsOfInterest,
+		population,
+		quests,
 		relations,
+		revelationLayersSummary,
 		rumors,
 		secrets,
 		security,
-		territorialControl,
-		worldChanges,
+		slug,
+		tags,
+		type,
 	} = region
 
 	const handleTabChange = (value: string) => {
@@ -111,7 +118,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<ConnectionsContent relations={relations} territorialControl={territorialControl} />
+					<ConnectionsContent relations={relations} territorialControl={factionInfluence} />
 				</TabsContent>
 			</Tabs>
 		</div>

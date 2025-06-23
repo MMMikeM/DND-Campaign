@@ -7,7 +7,13 @@ import { Link } from "~/components/ui/link"
 import type { NPC } from "~/lib/entities"
 import { getRelationshipStrengthVariant } from "../utils"
 
-export function ConnectionsContent({ name, relations, relatedFactions, relatedSites, relatedQuests }: NPC) {
+export function ConnectionsContent({
+	name,
+	relations,
+	factionMemberships,
+	siteAssociations,
+	questParticipants,
+}: Pick<NPC, "name" | "relations" | "factionMemberships" | "siteAssociations" | "questParticipants">) {
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -29,7 +35,7 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 							relationshipDynamics,
 							sharedGoals,
 							strength,
-							type,
+							relationshipType,
 						}) => (
 							<div key={`relationship-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 								<div className="flex justify-between">
@@ -42,7 +48,7 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 									className="capitalize"
 									tooltipContent={`Relationship type - Strength`}
 								>
-									{strength} - {type}
+									{strength} - {relationshipType}
 								</BadgeWithTooltip>
 
 								<List
@@ -107,7 +113,7 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 					emptyMessage="No known faction affiliations for this NPC"
 					contentClassName="space-y-4"
 				>
-					{relatedFactions.map(({ id, faction, justification, loyalty, rank, role, secrets }) => (
+					{factionMemberships.map(({ id, justification, loyalty, rank, role, secrets, faction }) => (
 						<div key={`faction-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 							<div className="flex justify-between">
 								<h4 className="font-medium">
@@ -160,20 +166,23 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 					emptyMessage="No associated locations for this NPC"
 				>
 					<Optional fallback={<p className="text-muted-foreground">No associated locations for this NPC</p>}>
-						{relatedSites.map(({ id, creativePrompts, description, site }) => (
-							<div key={`location-${id}`} className="border-b last:border-b-0 rounded p-3">
-								<div className="flex justify-between">
-									<h4 className="font-medium">
-										{site ? <Link href={`/sites/${site.slug}`}>{site.name}</Link> : <span>Unnamed Location</span>}
-									</h4>
-									<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
-										Location
-									</BadgeWithTooltip>
-								</div>
+						{siteAssociations.map(
+							({ id, creativePrompts, description, site, associationType, gmNotes, isCurrent, tags }) => (
+								<div key={`location-${id}`} className="border-b last:border-b-0 rounded p-3">
+									<div className="flex justify-between">
+										<h4 className="font-medium">
+											{site ? <Link href={`/sites/${site.slug}`}>{site.name}</Link> : <span>Unnamed Location</span>}
+										</h4>
+										<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
+											Location
+										</BadgeWithTooltip>
+									</div>
 
-								<List items={description} spacing="sm" textColor="muted" textSize="xs" />
-							</div>
-						))}
+									<List items={description} spacing="sm" textColor="muted" textSize="xs" />
+									<List items={creativePrompts} spacing="sm" textColor="muted" textSize="xs" />
+								</div>
+							),
+						)}
 					</Optional>
 				</InfoCard>
 
@@ -183,28 +192,38 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 					icon={<Icons.Scroll className="h-4 w-4 mr-2 text-amber-600" />}
 					emptyMessage="No quests involve this NPC"
 				>
-					{relatedQuests.map(
-						({ id, quest, importance, description, hiddenAspects, creativePrompts, dramaticMoments, role }) => (
+					{questParticipants.map(
+						({
+							id,
+							quest,
+							importanceInQuest,
+							description,
+							involvementDetails,
+							creativePrompts,
+							gmNotes,
+							tags,
+							roleInQuest,
+						}) => (
 							<div key={`quest-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 								<div className="flex justify-between">
 									<h4 className="font-medium">{quest && <Link href={`/quests/${quest.slug}`}>{quest.name}</Link>}</h4>
 									<BadgeWithTooltip
 										variant={
-											importance === "critical"
+											importanceInQuest === "critical"
 												? "destructive"
-												: importance === "major"
+												: importanceInQuest === "major"
 													? "default"
-													: importance === "supporting"
+													: importanceInQuest === "supporting"
 														? "secondary"
 														: "outline"
 										}
-										tooltipContent={`Importance: ${importance} - How important this NPC is to the quest`}
+										tooltipContent={`Importance: ${importanceInQuest} - How important this NPC is to the quest`}
 									>
-										{importance}
+										{importanceInQuest}
 									</BadgeWithTooltip>
 								</div>
 								<p className="text-sm mt-1">
-									<span className="font-medium">Role:</span> {role}
+									<span className="font-medium">Role:</span> {roleInQuest}
 								</p>
 
 								<List
@@ -216,24 +235,10 @@ export function ConnectionsContent({ name, relations, relatedFactions, relatedSi
 									textSize="xs"
 									collapsible={false}
 								/>
+								<List items={involvementDetails} spacing="sm" textColor="muted" textSize="xs" />
 
-								<List
-									heading="Dramatic Moments"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={dramaticMoments}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-
-								<List
-									icon={<Icons.Lock className="h-3 w-3 mr-1" />}
-									items={hiddenAspects}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-									heading="Hidden aspects"
-								/>
+								<List items={gmNotes} spacing="sm" textColor="muted" textSize="xs" />
+								<List items={tags} spacing="sm" textColor="muted" textSize="xs" />
 
 								<List
 									heading="Creative Prompts"

@@ -59,7 +59,6 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 		otherUnlockConditionsNotes,
 		relations,
 		region,
-		stages,
 		hooks,
 		participants,
 		narrativeDestinationContributions,

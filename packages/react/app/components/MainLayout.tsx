@@ -24,8 +24,10 @@ export function MainLayout({ loaderData }: Route.ComponentProps) {
 		quests: fetcher.data?.quests,
 		conflicts: fetcher.data?.conflicts,
 		foreshadowing: fetcher.data?.foreshadowing,
-		narrativeArcs: fetcher.data?.narrativeArcs,
-		worldChanges: fetcher.data?.worldChanges,
+		narrativeEvents: fetcher.data?.narrativeEvents,
+		narrativeDestinations: fetcher.data?.narrativeDestinations,
+		lore: fetcher.data?.lore,
+		maps: fetcher.data?.maps,
 	}
 
 	return (
