@@ -2,6 +2,12 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 
+const mapFileColumns = {
+	id: true,
+	imageWidth: true,
+	imageHeight: true,
+} as const
+
 const mapConfig = {
 	findById: (id: number) =>
 		db.query.mapGroups.findFirst({
@@ -10,7 +16,9 @@ const mapConfig = {
 				site: { columns: { id: true, name: true } },
 				variants: {
 					with: {
-						mapFile: true,
+						mapFile: {
+							columns: mapFileColumns,
+						},
 					},
 				},
 			},
@@ -21,14 +29,7 @@ const mapConfig = {
 				variants: {
 					with: {
 						mapFile: {
-							columns: {
-								fileName: true,
-								mapImage: true,
-								imageFormat: true,
-								imageSize: true,
-								imageWidth: true,
-								imageHeight: true,
-							},
+							columns: mapFileColumns,
 						},
 					},
 				},
@@ -40,14 +41,7 @@ const mapConfig = {
 				variants: {
 					with: {
 						mapFile: {
-							columns: {
-								id: true,
-								fileName: true,
-								imageFormat: true,
-								imageSize: true,
-								imageWidth: true,
-								imageHeight: true,
-							},
+							columns: mapFileColumns,
 						},
 					},
 				},
@@ -61,17 +55,21 @@ const mapConfig = {
 			},
 		}),
 }
-
-export const getAllMaps = async () => {
-	const arcs = await mapConfig.getAll()
-
-	return addSlugs(arcs)
+const sortByDefaultThenName = (a: MapVariant, b: MapVariant) => {
+	if (b.isDefault) return 1
+	if (a.isDefault) return -1
+	return a.variantName.localeCompare(b.variantName)
 }
 
-export const getAllMapsMetadata = async () => {
-	const arcs = await mapConfig.getAllMetadata()
+export const getAllMaps = async () => {
+	const maps = await mapConfig.getAllMetadata()
 
-	return addSlugs(arcs)
+	const sorted = maps.map((map) => ({
+		...map,
+		variants: map.variants.toSorted(sortByDefaultThenName),
+	}))
+
+	return addSlugs(sorted)
 }
 
 export type Map = Awaited<ReturnType<typeof getMap>>
@@ -94,3 +92,5 @@ export const getMap = async (slug: string) => {
 
 	throw new EntityNotFoundError("Map", selectedMap.id)
 }
+
+export type MapVariant = Awaited<ReturnType<typeof getMap>>["variants"][number]

@@ -7,7 +7,6 @@ import { Button } from "~/components/ui/button"
 import { getMap } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import MapVariants from "./components/VariantContent"
-import type { MapVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const map = await getMap(params.slug)
@@ -15,16 +14,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("Map not found", { status: 404 })
 	}
 
-	const variants = map.variants.map((variant) => {
-		if (!variant.mapFile?.imageWidth || !variant.mapFile?.imageHeight) {
-			return { ...variant, orientation: "square" }
-		}
-		const aspectRatio = variant.mapFile.imageWidth / variant.mapFile.imageHeight
-		const orientation = aspectRatio > 1.2 ? "landscape" : aspectRatio < 0.8 ? "portrait" : "square"
-		return { ...variant, orientation }
-	})
-
-	return { ...map, variants }
+	return map
 }
 
 export default function MapDetail({ loaderData }: Route.ComponentProps) {
@@ -68,14 +58,8 @@ export default function MapDetail({ loaderData }: Route.ComponentProps) {
 					<List items={description} heading="Description" spacing="sm" textColor="muted" />
 					<List items={creativePrompts} heading="Creative Prompts" spacing="sm" textColor="muted" />
 				</InfoCard>
-				<MapVariants variants={variants.toSorted(sortByDefaultThenName)} />
+				<MapVariants variants={variants} />
 			</div>
 		</>
 	)
-}
-
-const sortByDefaultThenName = (a: MapVariant, b: MapVariant) => {
-	if (b.isDefault) return 1
-	if (a.isDefault) return -1
-	return a.variantName.localeCompare(b.variantName)
 }
