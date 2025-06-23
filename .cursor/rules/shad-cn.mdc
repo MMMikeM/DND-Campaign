@@ -8,4 +8,8 @@ When working in react projects, prefer
 react-icons
 shad-cn
 
-Do not change any shad-cn components unless explicitly requested
+Do not change any shad-cn components unless explicitly requested - these exist in packages/react/app/components/ui
+
+Custom components are created in packages/react/app/components 
+
+When the warranted, if multiple files are needed per component, folders can be created in the components folder
