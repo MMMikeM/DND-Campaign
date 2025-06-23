@@ -25,7 +25,14 @@ const loreTableDefs = {
 }
 
 export const entityGetters = createEntityGetters({
-	all_lore: () => db.query.lore.findMany({}),
+	all_lore: () =>
+		db.query.lore.findMany({
+			columns: {
+				id: true,
+				name: true,
+				description: true,
+			},
+		}),
 	all_lore_links: () => db.query.loreLinks.findMany({}),
 
 	lore_by_id: (id: number) =>
