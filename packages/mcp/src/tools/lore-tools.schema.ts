@@ -65,15 +65,33 @@ export const schemas = {
 		targetEntityType: z
 			.enum(targetEntityTypes)
 			.describe("Type of target entity (region, faction, npc, conflict, quest, lore)"),
-		linkRoleOrTypeText: (s) => s.describe("Description of the relationship role or type"),
+		linkRoleOrTypeText: (s) =>
+			s.describe("Brief categorization of the relationship type (e.g., 'Primary antagonist', 'Spiritual foundation')"),
 		linkStrength: z.enum(linkStrengths).describe("Strength of the connection (tenuous, moderate, strong, defining)"),
-		linkDetailsText: (s) => s.describe("Detailed explanation of the relationship"),
-		creativePrompts: list.describe("GM ideas for using this connection"),
-		description: list.describe("Description of this relationship"),
-		gmNotes: list.describe("GM-only information about this connection"),
-		tags: list.describe("Tags categorizing this relationship"),
+		linkDetailsText: (s) =>
+			s.describe(
+				"Concise explanation of how the entities connect - focus on the relationship, not the entities themselves",
+			),
+		creativePrompts: list.describe(
+			"GM ideas for scenes/situations that arise specifically from this RELATIONSHIP - avoid duplicating prompts from either core entity",
+		),
+		description: list.describe(
+			"How this relationship manifests or functions - describe the CONNECTION dynamics, not the individual entities",
+		),
+		gmNotes: list.describe(
+			"GM guidance for managing this specific relationship - avoid repeating general advice from core entities",
+		),
+		tags: list.describe("Tags specific to this relationship dynamic - not general entity tags"),
 	})
 		.omit({ id: true })
 		.strict()
-		.describe("Connects lore to other entities like factions, NPCs, regions, etc."),
+		.describe(
+			"Connects lore to other entities. Focus on RELATIONSHIP dynamics - avoid duplicating content from core entities.",
+		)
+		.refine((data) => {
+			if (data.targetEntityType === "lore") {
+				return data.targetEntityId !== data.loreId
+			}
+			return true
+		}, "Lore cannot link to itself"),
 } as const satisfies Schema<TableNames[number]>
