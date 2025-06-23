@@ -1,0 +1,1 @@
+ALTER TABLE "lore_links" ADD CONSTRAINT "unique_lore_link" UNIQUE("lore_id","target_entity_id","target_entity_type");
