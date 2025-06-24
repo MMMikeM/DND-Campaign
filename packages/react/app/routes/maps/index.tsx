@@ -100,7 +100,6 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 										<span>
 											{map.variants?.length || 0} variant{map.variants?.length !== 1 ? "s" : ""}
 										</span>
-										{map.site && <span className="text-xs">Site: {map.site.name}</span>}
 									</div>
 								</div>
 							</InfoCard>

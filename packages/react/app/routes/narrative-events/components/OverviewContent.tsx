@@ -2,27 +2,20 @@ import * as Icons from "lucide-react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import type { NarrativeArc } from "~/lib/entities"
+import type { NarrativeEvent } from "~/lib/entities"
 import { getArcStatusVariant } from "../utils"
-
-interface OverviewContentProps {
-	arc: NarrativeArc
-}
 
 const getThemeVariant = (_theme: string): "default" | "destructive" | "outline" | "secondary" => {
 	return "outline"
 }
 
-export function OverviewContent({ arc }: OverviewContentProps) {
-	const {
-		description,
-		promise,
-		themes,
-		status,
-		type,
-		// goal, // This field does not exist on NarrativeArc type
-	} = arc
-
+export function OverviewContent({
+	name,
+	eventType,
+	description,
+	creativePrompts,
+	gmNotes,
+}: Pick<NarrativeEvent, "name" | "eventType" | "description" | "creativePrompts" | "gmNotes">) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div className="space-y-6">
@@ -31,7 +24,7 @@ export function OverviewContent({ arc }: OverviewContentProps) {
 					icon={<Icons.ScrollText className="h-4 w-4 mr-2 text-blue-600" />}
 					emptyMessage="No description provided."
 				>
-					{description && description.length > 0 && <List items={description} spacing="sm" textColor="muted" />}
+					<List items={description} spacing="sm" />
 				</InfoCard>
 
 				<InfoCard

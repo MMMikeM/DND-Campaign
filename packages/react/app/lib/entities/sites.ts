@@ -2,6 +2,7 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
+import { nameAndId } from "."
 
 const siteConfig = {
 	findById: (id: number) =>
@@ -11,12 +12,26 @@ const siteConfig = {
 				encounters: true,
 				secrets: true,
 				consequences: true,
-				factionHqs: true,
-				factionInfluence: true,
 				incomingForeshadowing: true,
-				itemHistory: true,
-				itemRelations: true,
-				questHooks: true,
+				factionHqs: nameAndId,
+				factionInfluence: nameAndId,
+				itemHistory: nameAndId,
+				itemRelations: nameAndId,
+				questHooks: {
+					with: {
+						quest: nameAndId,
+					},
+				},
+				npcAssociations: nameAndId,
+				area: { ...nameAndId, with: { region: nameAndId } },
+				incomingRelations: { with: { sourceSite: nameAndId } },
+				outgoingRelations: { with: { targetSite: nameAndId } },
+				questStages: {
+					...nameAndId,
+					with: {
+						quest: nameAndId,
+					},
+				},
 				mapGroup: {
 					with: {
 						variants: {
@@ -24,11 +39,6 @@ const siteConfig = {
 						},
 					},
 				},
-				npcAssociations: true,
-				questStages: true,
-				area: { columns: { id: true, name: true }, with: { region: { columns: { id: true, name: true } } } },
-				incomingRelations: { with: { sourceSite: { columns: { id: true, name: true } } } },
-				outgoingRelations: { with: { targetSite: { columns: { id: true, name: true } } } },
 			},
 		}),
 	getAll: () => db.query.sites.findMany({}),

@@ -51,7 +51,6 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 					const {
 						id,
 						name,
-						siteType,
 						slug,
 						description,
 						areaId,
@@ -59,7 +58,6 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 						creativePrompts,
 						creatures,
 						descriptors,
-						embedding,
 						environment,
 						features,
 						lightingDescription,
@@ -69,6 +67,11 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 						terrain,
 						treasures,
 						weather,
+						gmNotes,
+						intendedSiteFunction,
+						mapGroupId,
+						tags,
+						type,
 					} = site
 
 					const icon = <Icons.LocateFixed className="h-4 w-4 text-primary" />

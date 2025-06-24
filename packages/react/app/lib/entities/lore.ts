@@ -1,4 +1,5 @@
 import { db } from "../db"
+import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { nameAndId } from "."
 
@@ -7,11 +8,6 @@ const loreConfig = {
 		db.query.lore.findFirst({
 			where: (lore, { eq }) => eq(lore.id, id),
 			with: {
-				itemRelations: {
-					with: {
-						sourceItem: nameAndId,
-					},
-				},
 				incomingForeshadowing: true,
 				links: {
 					with: {
@@ -22,6 +18,7 @@ const loreConfig = {
 						quest: nameAndId,
 						foreshadowing: nameAndId,
 						relatedLore: nameAndId,
+						item: nameAndId,
 					},
 				},
 			},
@@ -32,6 +29,11 @@ const loreConfig = {
 
 export type Lore = NonNullable<Awaited<ReturnType<typeof loreConfig.findById>>>
 
+export const getAllLore = async () => {
+	const lore = await loreConfig.getAll()
+	return addSlugs(lore)
+}
+
 export async function getLoreById(id: number) {
 	const lore = await loreConfig.findById(id)
 	if (!lore) {
@@ -40,9 +42,23 @@ export async function getLoreById(id: number) {
 	return addSlugs(lore)
 }
 
-export async function getAllLore() {
-	const allLore = await loreConfig.getAll()
-	return addSlugs(allLore)
+export const getLore = async (slug: string) => {
+	const selectedLore = await loreConfig
+		.getNamesAndIds()
+		.then(addSlugs)
+		.then((lore) => lore.find((lore) => lore.slug === slug))
+
+	if (!selectedLore) {
+		throw new EntityNotFoundError("Lore", slug)
+	}
+
+	const byId = await loreConfig.findById(selectedLore.id)
+
+	if (byId) {
+		return addSlugs(byId)
+	}
+
+	throw new EntityNotFoundError("Lore", selectedLore.id)
 }
 
 export async function getLoreNames() {
