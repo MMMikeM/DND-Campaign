@@ -63,7 +63,6 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
           ${influence.site ? `Site: \`${influence.site?.name}\` (Id: \`${influence.site?.id}\`)` : ""}
           ${influence.area ? `Area: \`${influence.area?.name}\` (Id: \`${influence.area?.id}\`)` : ""}
           ${influence.region ? `Region: \`${influence.region?.name}\` (Id: \`${influence.region?.id}\`)` : ""}
-          ${influence.regionConnection ? `Region Connection: \`${influence.regionConnection?.name}\` (Id: \`${influence.regionConnection?.id}\`)` : ""}
         `,
 					)
 					.join(", ")}

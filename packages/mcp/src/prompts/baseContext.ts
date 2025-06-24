@@ -322,7 +322,6 @@ export const getFactionContext = async () => {
 					site: { columns: COMMON_COLUMNS.idAndName },
 					area: { columns: COMMON_COLUMNS.idAndName },
 					region: { columns: COMMON_COLUMNS.idAndName },
-					regionConnection: { columns: COMMON_COLUMNS.idAndName },
 				},
 			},
 			agendas: {

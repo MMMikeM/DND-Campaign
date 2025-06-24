@@ -10,14 +10,6 @@ const createEntityGetters = createEntityGettersFactory(tables.itemTables)
 // Configure polymorphic validation for itemRelations table
 const { targetEntityTypes } = tables.itemTables.enums
 const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
-const polymorphicConfig = polymorphicHelper.fromEnums("itemRelations", [
-	{
-		typeField: "targetEntityType",
-		idField: "targetEntityId",
-		enumValues: targetEntityTypes,
-		// No exclusions needed - all target entity types map to tables
-	},
-])
 
 export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
@@ -38,13 +30,14 @@ export const entityGetters = createEntityGetters({
 				relations: {
 					with: {
 						sourceItem: true,
-						targetConflict: true,
-						targetFaction: true,
-						targetLore: true,
-						targetNpc: true,
-						targetQuest: true,
-						targetSite: true,
-						targetItem: true,
+						conflict: true,
+						item: true,
+						narrativeDestination: true,
+						lore: true,
+						quest: true,
+						site: true,
+						npc: true,
+						faction: true,
 					},
 				},
 			},
@@ -61,13 +54,14 @@ export const entityGetters = createEntityGetters({
 			where: (itemRelations, { eq }) => eq(itemRelations.id, id),
 			with: {
 				sourceItem: true,
-				targetConflict: true,
-				targetFaction: true,
-				targetLore: true,
-				targetNpc: true,
-				targetQuest: true,
-				targetSite: true,
-				targetItem: true,
+				item: true,
+				npc: true,
+				conflict: true,
+				quest: true,
+				site: true,
+				faction: true,
+				lore: true,
+				narrativeDestination: true,
 			},
 		}),
 })

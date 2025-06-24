@@ -7,8 +7,7 @@ const {
 	foreshadowingTables: { foreshadowing, enums },
 } = tables
 
-const { foreshadowedTargetType, foreshadowingSourceType, discoverySubtlety, narrativeWeight, seedDeliveryMethods } =
-	enums
+const { discoverySubtlety, narrativeWeight, seedDeliveryMethods } = enums
 
 type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
 
@@ -23,16 +22,26 @@ export const schemas = {
 		description: list.describe(
 			"How this foreshadowing manifests - focus on the CLUE/HINT itself, not full explanations of what it foreshadows",
 		),
-		sourceEntityType: z
-			.optional(z.enum(foreshadowingSourceType))
-			.describe("Type of entity this foreshadowing seed originates from (where players encounter the clue)"),
-		sourceEntityId: optionalId.describe(
-			"ID of the entity where this foreshadowing appears (location, NPC, item, etc.)",
+
+		sourceQuestId: optionalId.describe("ID of the quest this foreshadowing is related to"),
+		sourceQuestStageId: optionalId.describe("ID of the quest stage this foreshadowing is related to"),
+		sourceSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
+		sourceNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
+		sourceItemDescriptionId: optionalId.describe("ID of the item description this foreshadowing is related to"),
+		sourceLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
+
+		targetQuestId: optionalId.describe("ID of the quest this foreshadowing is related to"),
+		targetNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
+		targetNarrativeEventId: optionalId.describe("ID of the narrative event this foreshadowing is related to"),
+		targetConflictId: optionalId.describe("ID of the conflict this foreshadowing is related to"),
+		targetItemId: optionalId.describe("ID of the item this foreshadowing is related to"),
+		targetNarrativeDestinationId: optionalId.describe(
+			"ID of the narrative destination this foreshadowing is related to",
 		),
-		targetEntityType: z
-			.optional(z.enum(foreshadowedTargetType))
-			.describe("Type of entity this foreshadowing hints toward (what the clue points to)"),
-		targetEntityId: optionalId.describe("ID of the entity this foreshadowing points toward (the future revelation)"),
+		targetLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
+		targetFactionId: optionalId.describe("ID of the faction this foreshadowing is related to"),
+		targetSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
+
 		subtlety: z
 			.enum(discoverySubtlety)
 			.describe("How obvious the clue is - balance against narrativeWeight for proper timing"),
