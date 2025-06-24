@@ -36,6 +36,13 @@
       "when": 1750743789019,
       "tag": "0004_modern_grandmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750744886187,
+      "tag": "0005_acoustic_sandman",
+      "breakpoints": true
     }
   ]
 }
