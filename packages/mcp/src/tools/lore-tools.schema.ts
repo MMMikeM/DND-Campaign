@@ -62,14 +62,15 @@ export const schemas = {
 	loreLinks: createInsertSchema(loreLinks, {
 		loreId: id.describe("ID of the source lore entry"),
 
-		conflictId: optionalId.describe("ID of the conflict this relationship belongs to"),
-		narrativeDestinationId: optionalId.describe("ID of the narrative destination this relationship belongs to"),
-		questId: optionalId.describe("ID of the quest this relationship belongs to"),
-		factionId: optionalId.describe("ID of the faction this relationship belongs to"),
-		npcId: optionalId.describe("ID of the NPC this relationship belongs to"),
-		regionId: optionalId.describe("ID of the region this relationship belongs to"),
-		foreshadowingId: optionalId.describe("ID of the foreshadowing this relationship belongs to"),
-		relatedLoreId: optionalId.describe("ID of the related lore this relationship belongs to"),
+		itemId: optionalId.describe("Related item ID"),
+		conflictId: optionalId.describe("Related conflict ID"),
+		narrativeDestinationId: optionalId.describe("Related narrative destination ID"),
+		questId: optionalId.describe("Related quest ID"),
+		factionId: optionalId.describe("Related faction ID"),
+		npcId: optionalId.describe("Related NPC ID"),
+		regionId: optionalId.describe("Related region ID"),
+		foreshadowingId: optionalId.describe("Related foreshadowing ID"),
+		relatedLoreId: optionalId.describe("Related lore ID"),
 		linkRoleOrTypeText: (s) =>
 			s.describe("Brief categorization of the relationship type (e.g., 'Primary antagonist', 'Spiritual foundation')"),
 		linkStrength: z.enum(linkStrengths).describe("Strength of the connection (tenuous, moderate, strong, defining)"),

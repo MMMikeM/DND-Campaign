@@ -64,7 +64,6 @@ export const schemas = {
 		conflictId: optionalId.describe("ID of conflict this relationship belongs to"),
 		itemId: optionalId.describe("ID of item this relationship belongs to"),
 		narrativeDestinationId: optionalId.describe("ID of narrative destination this relationship belongs to"),
-		loreId: optionalId.describe("ID of lore this relationship belongs to"),
 		questId: optionalId.describe("ID of quest this relationship belongs to"),
 		siteId: optionalId.describe("ID of site this relationship belongs to"),
 		factionId: optionalId.describe("ID of faction this relationship belongs to"),
