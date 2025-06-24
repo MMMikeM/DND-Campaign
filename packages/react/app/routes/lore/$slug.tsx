@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getLore, type Lore } from "~/lib/entities"
@@ -43,7 +44,6 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 		history_and_legacy,
 		incomingForeshadowing,
 		interactions_and_rules,
-		itemRelations,
 		links,
 		livedReality,
 		loreType,
@@ -117,7 +117,6 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 				<TabsContent value="connections" className="animate-in fade-in-50 duration-300">
 					<ConnectionsContent
 						links={links}
-						itemRelations={itemRelations}
 						incomingForeshadowing={incomingForeshadowing}
 						connections_to_world={connections_to_world}
 					/>
@@ -145,11 +144,7 @@ export function Header({ name, loreType, tags, className }: LoreHeaderProps) {
 						{loreType.replace(/_/g, " ")}
 					</BadgeWithTooltip>
 				)}
-				{tags?.slice(0, 4).map((tag) => (
-					<BadgeWithTooltip key={tag} variant="outline" tooltipContent="Tag">
-						{tag}
-					</BadgeWithTooltip>
-				))}
+				<Tags tags={tags} variant="secondary" maxDisplay={8} />
 			</div>
 		</div>
 	)
