@@ -14,9 +14,18 @@ export function OverviewContent({
 	gmNotes,
 	history,
 	publicPerception,
+	values,
 }: Pick<
 	Faction,
-	"name" | "publicGoal" | "secretGoal" | "primaryHqSite" | "description" | "gmNotes" | "history" | "publicPerception"
+	| "name"
+	| "publicGoal"
+	| "secretGoal"
+	| "primaryHqSite"
+	| "description"
+	| "gmNotes"
+	| "history"
+	| "publicPerception"
+	| "values"
 >) {
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
@@ -94,6 +103,14 @@ export function OverviewContent({
 				className="lg:col-span-3"
 			>
 				<p className="text-slate-700 dark:text-slate-300">{publicPerception}</p>
+			</InfoCard>
+			<InfoCard
+				title="Values"
+				icon={<Icons.Heart className="h-5 w-5 mr-2 text-amber-500" />}
+				emptyMessage={`No values available for ${name}`}
+				className="lg:col-span-3"
+			>
+				<List items={values} />
 			</InfoCard>
 		</div>
 	)

@@ -1,5 +1,4 @@
 import * as Icons from "lucide-react"
-import React from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Faction } from "~/lib/entities"
@@ -11,17 +10,9 @@ export function CultureContent({
 	taboos,
 	symbols,
 	rituals,
-	values,
-}: Pick<Faction, "aesthetics" | "jargon" | "recognitionSigns" | "taboos" | "symbols" | "rituals" | "values">) {
+}: Pick<Faction, "aesthetics" | "jargon" | "recognitionSigns" | "taboos" | "symbols" | "rituals">) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			<InfoCard
-				title="Values"
-				icon={<Icons.Heart className="h-4 w-4 mr-2 text-primary" />}
-				emptyMessage="No values information available"
-			>
-				<List items={values} />
-			</InfoCard>
 			<InfoCard
 				title="Symbols"
 				icon={<Icons.Fingerprint className="h-4 w-4 mr-2 text-primary" />}
