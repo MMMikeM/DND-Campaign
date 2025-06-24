@@ -15,7 +15,6 @@ const conflictConfig = {
 				narrativeDestinations: nameAndId,
 				loreLinks: {
 					columns: {
-						id: false,
 						loreId: false,
 						relatedLoreId: false,
 						conflictId: false,

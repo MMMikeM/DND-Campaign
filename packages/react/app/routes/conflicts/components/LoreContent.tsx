@@ -24,6 +24,14 @@ export function LoreContent({ loreLinks }: Pick<Conflict, "loreLinks">) {
 						linkStrength,
 						linkDetailsText,
 						lore,
+						conflict,
+						faction,
+						foreshadowingId,
+						narrativeDestinationId,
+						npc,
+						quest,
+						region,
+						relatedLore,
 					}) => (
 						<div key={id} className="border rounded p-4 bg-background dark:bg-muted/30">
 							<div className="flex justify-between items-start mb-3">

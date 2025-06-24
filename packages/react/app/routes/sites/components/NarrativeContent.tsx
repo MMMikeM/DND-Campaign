@@ -3,7 +3,10 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
-type keyss = keyof Site["questHooks"][number]
+type qhkeys = keyof Site["questHooks"][number]
+type qskeys = keyof Site["questStages"][number]
+type ifkeys = keyof Site["incomingForeshadowing"][number]
+type ckeys = keyof Site["consequences"][number]
 
 export const NarrativeContent = ({
 	questHooks,
@@ -40,11 +43,12 @@ export const NarrativeContent = ({
 						hookContent,
 						discoveryConditions,
 						slug,
+						quest,
 					}) => (
 						<div key={id} className="border rounded p-3 mb-2">
 							{questId && (
-								<Link href={`/quests/${slug}`}>
-									<h4 className="font-medium text-primary hover:underline">{name}</h4>
+								<Link href={`/quests/${quest.slug}`}>
+									<h4 className="font-medium text-primary hover:underline">{quest.name}</h4>
 								</Link>
 							)}
 							<p className="text-sm mt-1">{hookContent}</p>
@@ -76,12 +80,40 @@ export const NarrativeContent = ({
 				icon={<Icons.Eye className="h-4 w-4 text-primary" />}
 				emptyMessage="No foreshadowing is linked to this site."
 			>
-				{incomingForeshadowing.map((foreshadow) => (
-					<div key={foreshadow.id} className="border rounded p-3 mb-2">
-						<h4 className="font-medium">{foreshadow.name}</h4>
-						<p className="text-sm mt-1">{foreshadow.description}</p>
-					</div>
-				))}
+				{incomingForeshadowing.map(
+					({
+						id,
+						name,
+						creativePrompts,
+						description,
+						gmNotes,
+						tags,
+						targetQuestId,
+						targetNpcId,
+						targetNarrativeEventId,
+						targetConflictId,
+						targetItemId,
+						targetNarrativeDestinationId,
+						targetLoreId,
+						targetFactionId,
+						targetSiteId,
+						sourceQuestId,
+						sourceQuestStageId,
+						sourceSiteId,
+						sourceNpcId,
+						sourceItemDescriptionId,
+						sourceLoreId,
+						subtlety,
+						narrativeWeight,
+						suggestedDeliveryMethods,
+						slug,
+					}) => (
+						<div key={id} className="border rounded p-3 mb-2">
+							<h4 className="font-medium">{name}</h4>
+							<p className="text-sm mt-1">{description}</p>
+						</div>
+					),
+				)}
 			</InfoCard>
 
 			<InfoCard
