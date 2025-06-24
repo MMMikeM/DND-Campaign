@@ -1,9 +1,14 @@
 // narrative-events/tables.ts
 
 import { sql } from "drizzle-orm"
-import { check, integer, pgTable } from "drizzle-orm/pg-core"
-import { list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
+import { check, pgTable } from "drizzle-orm/pg-core"
+import { list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { conflicts } from "../conflicts/tables"
+import { factions } from "../factions/tables"
+import { narrativeDestinations } from "../narrative-destinations/tables"
+import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
+import { areas, regions, sites } from "../regions/tables"
 import { questStageDecisions, questStages } from "../stages/tables"
 import { enums } from "./enums"
 
@@ -19,8 +24,6 @@ const {
 	narrativePlacements,
 	playerImpactFeels,
 	rhythmEffects,
-	consequenceTriggerTypes,
-	consequenceAffectedEntityTypes,
 } = enums
 
 export const narrativeEvents = pgTable(
@@ -76,24 +79,50 @@ export const consequences = pgTable(
 		visibility: oneOf("visibility", consequenceVisibility),
 		timeframe: oneOf("timeframe", consequenceTimeframe),
 		playerImpactFeel: oneOf("player_impact_feel", playerImpactFeels),
-
 		sourceType: oneOf("source_type", consequenceSources),
-		triggerEntityType: nullableOneOf("trigger_entity_type", consequenceTriggerTypes),
-		triggerEntityId: integer("trigger_entity_id"),
 
-		affectedEntityType: oneOf("affected_entity_type", consequenceAffectedEntityTypes),
-		affectedEntityId: integer("affected_entity_id"),
+		// Trigger Entity Foreign Keys
+		triggerQuestId: nullableFk("trigger_quest_id", () => quests.id),
+		triggerConflictId: nullableFk("trigger_conflict_id", () => conflicts.id),
+		triggerQuestStageDecisionId: nullableFk("trigger_quest_stage_decision_id", () => questStageDecisions.id),
+
+		// Affected Entity Foreign Keys
+		affectedFactionId: nullableFk("affected_faction_id", () => factions.id),
+		affectedRegionId: nullableFk("affected_region_id", () => regions.id),
+		affectedAreaId: nullableFk("affected_area_id", () => areas.id),
+		affectedSiteId: nullableFk("affected_site_id", () => sites.id),
+		affectedNpcId: nullableFk("affected_npc_id", () => npcs.id),
+		affectedNarrativeDestinationId: nullableFk("affected_narrative_destination_id", () => narrativeDestinations.id),
+		affectedConflictId: nullableFk("affected_conflict_id", () => conflicts.id),
+		affectedQuestId: nullableFk("affected_quest_id", () => quests.id),
 
 		conflictImpactDescription: nullableString("conflict_impact_description"),
 	},
 	(t) => [
 		check(
-			"chk_trigger_duo_validity",
-			sql`(${t.triggerEntityType} IS NULL AND ${t.triggerEntityId} IS NULL) OR (${t.triggerEntityType} IS NOT NULL AND ${t.triggerEntityId} IS NOT NULL)`,
+			"chk_single_trigger",
+			sql`(
+        (CASE WHEN ${t.triggerQuestId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.triggerConflictId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.triggerQuestStageDecisionId} IS NOT NULL THEN 1 ELSE 0 END)
+      ) <= 1`,
+		),
+		check(
+			"chk_single_affected_entity",
+			sql`(
+        (CASE WHEN ${t.affectedFactionId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedRegionId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedAreaId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedSiteId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedNpcId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedNarrativeDestinationId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedConflictId} IS NOT NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN ${t.affectedQuestId} IS NOT NULL THEN 1 ELSE 0 END)
+      ) = 1`,
 		),
 		check(
 			"chk_conflict_impact_description_required",
-			sql`(${t.affectedEntityType} != 'conflict') OR (${t.conflictImpactDescription} IS NOT NULL)`,
+			sql`(${t.affectedConflictId} IS NULL) OR (${t.conflictImpactDescription} IS NOT NULL)`,
 		),
 	],
 )

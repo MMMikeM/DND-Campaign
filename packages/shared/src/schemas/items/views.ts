@@ -24,14 +24,14 @@ export const itemSearchDataView = pgView("item_search_data_view").as((qb) =>
 			quest: sql<string>`COALESCE(jsonb_build_object('id', rq.id, 'name', rq.name), '{}'::jsonb)`.as("quest"),
 			relations: sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'relationship', to_jsonb(${itemRelations}.*),
-    'targetItem', CASE WHEN ${itemRelations.targetEntityType} = 'item' THEN jsonb_build_object('id', ti.id, 'name', ti.name) END,
-    'targetNpc', CASE WHEN ${itemRelations.targetEntityType} = 'npc' THEN jsonb_build_object('id', tn.id, 'name', tn.name) END,
-    'targetFaction', CASE WHEN ${itemRelations.targetEntityType} = 'faction' THEN jsonb_build_object('id', tf.id, 'name', tf.name) END,
-    'targetSite', CASE WHEN ${itemRelations.targetEntityType} = 'site' THEN jsonb_build_object('id', ts.id, 'name', ts.name) END,
-    'targetQuest', CASE WHEN ${itemRelations.targetEntityType} = 'quest' THEN jsonb_build_object('id', tq.id, 'name', tq.name) END,
-    'targetConflict', CASE WHEN ${itemRelations.targetEntityType} = 'conflict' THEN jsonb_build_object('id', tc.id, 'name', tc.name) END,
-    'targetNarrativeDestination', CASE WHEN ${itemRelations.targetEntityType} = 'narrative_destination' THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) END,
-    'targetLore', CASE WHEN ${itemRelations.targetEntityType} = 'lore' THEN jsonb_build_object('id', tl.id, 'name', tl.name) END
+    'item', CASE WHEN ${itemRelations.itemId} IS NOT NULL THEN jsonb_build_object('id', ti.id, 'name', ti.name) END,
+    'npc', CASE WHEN ${itemRelations.npcId} IS NOT NULL THEN jsonb_build_object('id', tn.id, 'name', tn.name) END,
+    'faction', CASE WHEN ${itemRelations.factionId} IS NOT NULL THEN jsonb_build_object('id', tf.id, 'name', tf.name) END,
+    'site', CASE WHEN ${itemRelations.siteId} IS NOT NULL THEN jsonb_build_object('id', ts.id, 'name', ts.name) END,
+    'quest', CASE WHEN ${itemRelations.questId} IS NOT NULL THEN jsonb_build_object('id', tq.id, 'name', tq.name) END,
+    'conflict', CASE WHEN ${itemRelations.conflictId} IS NOT NULL THEN jsonb_build_object('id', tc.id, 'name', tc.name) END,
+    'narrativeDestination', CASE WHEN ${itemRelations.narrativeDestinationId} IS NOT NULL THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) END,
+    'lore', CASE WHEN ${itemRelations.loreId} IS NOT NULL THEN jsonb_build_object('id', tl.id, 'name', tl.name) END
   )) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as("relations"),
 			incomingRelations: sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'relationship', to_jsonb(ir_in.*),
@@ -52,49 +52,19 @@ export const itemSearchDataView = pgView("item_search_data_view").as((qb) =>
 		.leftJoin(sql`${quests} AS sq`, sql`${questStages.questId} = sq.id`)
 		.leftJoin(sql`${quests} AS rq`, sql`${items.questId} = rq.id`)
 		.leftJoin(itemRelations, sql`${itemRelations.sourceItemId} = ${items.id}`)
-		.leftJoin(
-			sql`${items} AS ti`,
-			sql`${itemRelations.targetEntityType} = 'item' AND ${itemRelations.targetEntityId} = ti.id`,
-		)
-		.leftJoin(
-			sql`${npcs} AS tn`,
-			sql`${itemRelations.targetEntityType} = 'npc' AND ${itemRelations.targetEntityId} = tn.id`,
-		)
-		.leftJoin(
-			sql`${factions} AS tf`,
-			sql`${itemRelations.targetEntityType} = 'faction' AND ${itemRelations.targetEntityId} = tf.id`,
-		)
-		.leftJoin(
-			sql`${sites} AS ts`,
-			sql`${itemRelations.targetEntityType} = 'site' AND ${itemRelations.targetEntityId} = ts.id`,
-		)
-		.leftJoin(
-			sql`${quests} AS tq`,
-			sql`${itemRelations.targetEntityType} = 'quest' AND ${itemRelations.targetEntityId} = tq.id`,
-		)
-		.leftJoin(
-			sql`${conflicts} AS tc`,
-			sql`${itemRelations.targetEntityType} = 'conflict' AND ${itemRelations.targetEntityId} = tc.id`,
-		)
-		.leftJoin(
-			sql`${narrativeDestinations} AS tnd`,
-			sql`${itemRelations.targetEntityType} = 'narrative_destination' AND ${itemRelations.targetEntityId} = tnd.id`,
-		)
-		.leftJoin(
-			sql`${lore} AS tl`,
-			sql`${itemRelations.targetEntityType} = 'lore' AND ${itemRelations.targetEntityId} = tl.id`,
-		)
-		.leftJoin(
-			sql`${itemRelations} AS ir_in`,
-			sql`ir_in.target_entity_type = 'item' AND ir_in.target_entity_id = ${items.id}`,
-		)
+		.leftJoin(sql`${items} AS ti`, sql`${itemRelations.itemId} = ti.id`)
+		.leftJoin(sql`${npcs} AS tn`, sql`${itemRelations.npcId} = tn.id`)
+		.leftJoin(sql`${factions} AS tf`, sql`${itemRelations.factionId} = tf.id`)
+		.leftJoin(sql`${sites} AS ts`, sql`${itemRelations.siteId} = ts.id`)
+		.leftJoin(sql`${quests} AS tq`, sql`${itemRelations.questId} = tq.id`)
+		.leftJoin(sql`${conflicts} AS tc`, sql`${itemRelations.conflictId} = tc.id`)
+		.leftJoin(sql`${narrativeDestinations} AS tnd`, sql`${itemRelations.narrativeDestinationId} = tnd.id`)
+		.leftJoin(sql`${lore} AS tl`, sql`${itemRelations.loreId} = tl.id`)
+		.leftJoin(sql`${itemRelations} AS ir_in`, sql`ir_in.item_id = ${items.id}`)
 		.leftJoin(sql`${items} AS si`, sql`ir_in.source_item_id = si.id`)
 		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.itemId} = ${items.id}`)
 		.leftJoin(sql`${npcs} AS hn`, sql`${itemNotableHistory.keyNpcId} = hn.id`)
 		.leftJoin(sql`${sites} AS hs`, sql`${itemNotableHistory.locationSiteId} = hs.id`)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.targetEntityType} = 'item' AND ${foreshadowing.targetEntityId} = ${items.id}`,
-		)
+		.leftJoin(foreshadowing, sql`${foreshadowing.targetItemId} = ${items.id}`)
 		.groupBy(items.id, questStages.id, sql`sq.id`, sql`rq.id`),
 )

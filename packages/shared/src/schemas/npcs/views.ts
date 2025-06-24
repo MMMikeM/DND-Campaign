@@ -88,23 +88,11 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.leftJoin(regions, sql`${areas.regionId} = ${regions.id}`)
 		.leftJoin(conflictParticipants, sql`${conflictParticipants.npcId} = ${npcs.id}`)
 		.leftJoin(conflicts, sql`${conflictParticipants.conflictId} = ${conflicts.id}`)
-		.leftJoin(
-			consequences,
-			sql`${consequences.affectedEntityType} = 'npc' AND ${consequences.affectedEntityId} = ${npcs.id}`,
-		)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_out`,
-			sql`fs_out.source_entity_type = 'npc' AND fs_out.source_entity_id = ${npcs.id}`,
-		)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_in`,
-			sql`fs_in.target_entity_type = 'npc' AND fs_in.target_entity_id = ${npcs.id}`,
-		)
+		.leftJoin(consequences, sql`${consequences.affectedNpcId} = ${npcs.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_npc_id = ${npcs.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_npc_id = ${npcs.id}`)
 		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.keyNpcId} = ${npcs.id}`)
-		.leftJoin(
-			itemRelations,
-			sql`${itemRelations.targetEntityType} = 'npc' AND ${itemRelations.targetEntityId} = ${npcs.id}`,
-		)
+		.leftJoin(itemRelations, sql`${itemRelations.npcId} = ${npcs.id}`)
 		.leftJoin(narrativeDestinationParticipants, sql`${narrativeDestinationParticipants.npcId} = ${npcs.id}`)
 		.leftJoin(
 			narrativeDestinations,
@@ -117,64 +105,10 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.leftJoin(npcStageInvolvement, sql`${npcStageInvolvement.npcId} = ${npcs.id}`)
 		.leftJoin(sql`${questStages} AS si`, sql`${npcStageInvolvement.questStageId} = si.id`)
 		.leftJoin(sql`${quests} AS q_involvement`, sql`si.quest_id = q_involvement.id`)
-		.leftJoin(loreLinks, sql`${loreLinks.targetEntityType} = 'npc' AND ${loreLinks.targetEntityId} = ${npcs.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.npcId} = ${npcs.id}`)
 		.leftJoin(sql`${npcRelations} AS nr_out`, sql`nr_out.source_npc_id = ${npcs.id}`)
 		.leftJoin(sql`${npcs} AS rn_out`, sql`nr_out.target_npc_id = rn_out.id`)
 		.leftJoin(sql`${npcRelations} AS nr_in`, sql`nr_in.target_npc_id = ${npcs.id}`)
 		.leftJoin(sql`${npcs} AS sn_in`, sql`nr_in.source_npc_id = sn_in.id`)
 		.groupBy(npcs.id),
 )
-
-// -- View for aggregating NPC data for the search index
-// CREATE OR REPLACE VIEW npc_search_data_view AS
-// SELECT
-//   n.id,
-//   'npcs' AS source_table,
-//   to_jsonb(n.*) AS entity_main,
-//   -- Select specific columns based on entities/npcs.ts
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('membership', to_jsonb(nf.*), 'faction', jsonb_build_object('id', f.id, 'name', f.name))) FILTER (WHERE nf.id IS NOT NULL), '[]'::jsonb) AS related_factions,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('association', to_jsonb(ns.*), 'site', jsonb_build_object('id', s.id, 'name', s.name, 'area', jsonb_build_object('id', a.id, 'name', a.name, 'region', jsonb_build_object('id', r.id, 'name', r.name))))) FILTER (WHERE ns.id IS NOT NULL), '[]'::jsonb) AS related_site_associations,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participant', to_jsonb(cp.*), 'conflict', jsonb_build_object('id', mc.id, 'name', mc.name))) FILTER (WHERE cp.id IS NOT NULL), '[]'::jsonb) AS related_conflict_participation,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c.id, 'description', c.description)) FILTER (WHERE c.id IS NOT NULL), '[]'::jsonb) AS related_consequences,
-//   COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_target.*)) FILTER (WHERE fs_target.id IS NOT NULL), '[]'::jsonb) AS related_target_foreshadowing,
-//   COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_source.*)) FILTER (WHERE fs_source.id IS NOT NULL), '[]'::jsonb) AS related_source_foreshadowing,
-//   COALESCE(jsonb_agg(DISTINCT to_jsonb(ih.*)) FILTER (WHERE ih.id IS NOT NULL), '[]'::jsonb) AS related_item_history,
-//   COALESCE(jsonb_agg(DISTINCT to_jsonb(ir.*)) FILTER (WHERE ir.id IS NOT NULL), '[]'::jsonb) AS related_item_relationships,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(dpi.*), 'destination', jsonb_build_object('id', nd.id, 'name', nd.name))) FILTER (WHERE dpi.id IS NOT NULL), '[]'::jsonb) AS related_destination_involvement,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qh.id, 'source', qh.source, 'hook_content', qh.hook_content)) FILTER (WHERE qh.id IS NOT NULL), '[]'::jsonb) AS related_quest_hooks,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs.id, 'name', qs.name, 'quest', jsonb_build_object('id', q_stage_delivery.id, 'name', q_stage_delivery.name))) FILTER (WHERE qs.id IS NOT NULL), '[]'::jsonb) AS related_quest_stage_deliveries,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(nsi.*), 'stage', jsonb_build_object('id', si.id, 'name', si.name), 'quest', jsonb_build_object('id', q_involvement.id, 'name', q_involvement.name))) FILTER (WHERE nsi.id IS NOT NULL), '[]'::jsonb) AS related_stage_involvement,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', wcl.id, 'concept_id', wcl.world_concept_id)) FILTER (WHERE wcl.id IS NOT NULL), '[]'::jsonb) AS related_world_concept_links,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_out.*), 'relatedNpc', jsonb_build_object('id', rn_out.id, 'name', rn_out.name))) FILTER (WHERE nr_out.id IS NOT NULL), '[]'::jsonb) AS related_outgoing_relationships,
-//   COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb) AS related_incoming_relationships
-// FROM
-//   npcs n
-// LEFT JOIN npc_faction_memberships nf ON nf.npc_id = n.id
-// LEFT JOIN factions f ON nf.faction_id = f.id
-// LEFT JOIN npc_site_associations ns ON ns.npc_id = n.id
-// LEFT JOIN sites s ON ns.site_id = s.id
-// LEFT JOIN areas a ON s.area_id = a.id
-// LEFT JOIN regions r ON a.region_id = r.id
-// LEFT JOIN conflict_participants cp ON cp.npc_id = n.id
-// LEFT JOIN conflicts mc ON cp.conflict_id = mc.id
-// LEFT JOIN consequences c ON c.affected_npc_id = n.id
-// LEFT JOIN foreshadowing fs_target ON fs_target.target_npc_id = n.id
-// LEFT JOIN foreshadowing fs_source ON fs_source.source_npc_id = n.id
-// LEFT JOIN item_notable_history ih ON ih.key_npc_id = n.id
-// LEFT JOIN item_relationships ir ON ir.target_npc_id = n.id
-// LEFT JOIN narrative_destination_participants dpi ON dpi.npc_id = n.id
-// LEFT JOIN narrative_destinations nd ON dpi.narrative_destination_id = nd.id
-// LEFT JOIN quest_hooks qh ON qh.delivery_npc_id = n.id
-// LEFT JOIN quests q_delivery ON qh.quest_id = q_delivery.id
-// LEFT JOIN quest_stages qs ON qs.delivery_npc_id = n.id
-// LEFT JOIN quests q_stage_delivery ON qs.quest_id = q_stage_delivery.id
-// LEFT JOIN npc_stage_involvement nsi ON nsi.npc_id = n.id
-// LEFT JOIN quest_stages si ON nsi.quest_stage_id = si.id
-// LEFT JOIN quests q_involvement ON si.quest_id = q_involvement.id
-// LEFT JOIN world_concept_links wcl ON wcl.npc_id = n.id
-// LEFT JOIN npc_relationships nr_out ON nr_out.source_npc_id = n.id
-// LEFT JOIN npcs rn_out ON nr_out.target_npc_id = rn_out.id
-// LEFT JOIN npc_relationships nr_in ON nr_in.target_npc_id = n.id
-// LEFT JOIN npcs sn_in ON nr_in.source_npc_id = sn_in.id
-// GROUP BY
-//   n.id;

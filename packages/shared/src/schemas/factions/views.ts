@@ -39,9 +39,9 @@ export const factionSearchDataView = pgView("faction_search_data_view").as((qb) 
 				),
 			influence: sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
       'influence', to_jsonb(${factionInfluence}.*),
-      'region', CASE WHEN ${factionInfluence.relatedEntityType} = 'region' THEN jsonb_build_object('id', r.id, 'name', r.name) END,
-      'area', CASE WHEN ${factionInfluence.relatedEntityType} = 'area' THEN jsonb_build_object('id', a.id, 'name', a.name) END,
-      'site', CASE WHEN ${factionInfluence.relatedEntityType} = 'site' THEN jsonb_build_object('id', s.id, 'name', s.name) END
+      'region', CASE WHEN ${factionInfluence.regionId} IS NOT NULL THEN jsonb_build_object('id', r.id, 'name', r.name) END,
+      'area', CASE WHEN ${factionInfluence.areaId} IS NOT NULL THEN jsonb_build_object('id', a.id, 'name', a.name) END,
+      'site', CASE WHEN ${factionInfluence.siteId} IS NOT NULL THEN jsonb_build_object('id', s.id, 'name', s.name) END
     )) FILTER (WHERE ${factionInfluence.id} IS NOT NULL), '[]'::jsonb)`.as("influence"),
 			conflicts:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participant', to_jsonb(${conflictParticipants}.*), 'conflict', jsonb_build_object('id', ${conflicts.id}, 'name', ${conflicts.name}))) FILTER (WHERE ${conflictParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -85,41 +85,20 @@ export const factionSearchDataView = pgView("faction_search_data_view").as((qb) 
 		.leftJoin(sql`${questParticipants} AS qp`, sql`qp.faction_id = ${factions.id}`)
 		.leftJoin(sql`${quests} AS q`, sql`qp.quest_id = q.id`)
 		.leftJoin(factionInfluence, sql`${factionInfluence.factionId} = ${factions.id}`)
-		.leftJoin(
-			sql`${regions} AS r`,
-			sql`${factionInfluence.relatedEntityType} = 'region' AND ${factionInfluence.relatedEntityId} = r.id`,
-		)
-		.leftJoin(
-			sql`${areas} AS a`,
-			sql`${factionInfluence.relatedEntityType} = 'area' AND ${factionInfluence.relatedEntityId} = a.id`,
-		)
-		.leftJoin(
-			sql`${sites} AS s`,
-			sql`${factionInfluence.relatedEntityType} = 'site' AND ${factionInfluence.relatedEntityId} = s.id`,
-		)
+		.leftJoin(sql`${regions} AS r`, sql`${factionInfluence.regionId} = r.id`)
+		.leftJoin(sql`${areas} AS a`, sql`${factionInfluence.areaId} = a.id`)
+		.leftJoin(sql`${sites} AS s`, sql`${factionInfluence.siteId} = s.id`)
 		.leftJoin(conflictParticipants, sql`${conflictParticipants.factionId} = ${factions.id}`)
 		.leftJoin(conflicts, sql`${conflictParticipants.conflictId} = ${conflicts.id}`)
-		.leftJoin(
-			consequences,
-			sql`${consequences.affectedEntityType} = 'faction' AND ${consequences.affectedEntityId} = ${factions.id}`,
-		)
+		.leftJoin(consequences, sql`${consequences.affectedFactionId} = ${factions.id}`)
 		.leftJoin(narrativeDestinationParticipants, sql`${narrativeDestinationParticipants.factionId} = ${factions.id}`)
 		.leftJoin(
 			narrativeDestinations,
 			sql`${narrativeDestinationParticipants.narrativeDestinationId} = ${narrativeDestinations.id}`,
 		)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.targetEntityType} = 'faction' AND ${foreshadowing.targetEntityId} = ${factions.id}`,
-		)
-		.leftJoin(
-			itemRelations,
-			sql`${itemRelations.targetEntityType} = 'faction' AND ${itemRelations.targetEntityId} = ${factions.id}`,
-		)
-		.leftJoin(
-			loreLinks,
-			sql`${loreLinks.targetEntityType} = 'faction' AND ${loreLinks.targetEntityId} = ${factions.id}`,
-		)
+		.leftJoin(foreshadowing, sql`${foreshadowing.targetFactionId} = ${factions.id}`)
+		.leftJoin(itemRelations, sql`${itemRelations.factionId} = ${factions.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.factionId} = ${factions.id}`)
 		.leftJoin(sql`${factionDiplomacy} AS fd_in`, sql`fd_in.target_faction_id = ${factions.id}`)
 		.leftJoin(sql`${factions} AS sf`, sql`fd_in.source_faction_id = sf.id`)
 		.leftJoin(sql`${factionDiplomacy} AS fd_out`, sql`fd_out.source_faction_id = ${factions.id}`)

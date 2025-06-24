@@ -27,89 +27,52 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNarrativeEvent" }),
 }))
 
-export const consequencesRelations = relations(consequences, ({ one }) => ({
-	// Trigger entity soft relations (what triggered the consequence)
+export const consequenceRelations = relations(consequences, ({ one }) => ({
+	// Trigger relations
 	triggerQuest: one(quests, {
-		relationName: "ConsequenceTriggerQuest",
-		fields: [consequences.triggerEntityId],
+		fields: [consequences.triggerQuestId],
 		references: [quests.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.triggerEntityType} = 'quest'`,
 	}),
-
 	triggerConflict: one(conflicts, {
-		relationName: "ConsequenceTriggerConflict",
-		fields: [consequences.triggerEntityId],
+		fields: [consequences.triggerConflictId],
 		references: [conflicts.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.triggerEntityType} = 'conflict'`,
+	}),
+	triggerQuestStageDecision: one(questStageDecisions, {
+		fields: [consequences.triggerQuestStageDecisionId],
+		references: [questStageDecisions.id],
 	}),
 
-	// Note: 'decision' type doesn't map to a specific table as it represents quest stage decisions
-	// which are handled differently in the application layer
-
-	// Affected entity soft relations (what the consequence affects)
+	// Affected entity relations
 	affectedFaction: one(factions, {
-		relationName: "ConsequenceAffectedFaction",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedFactionId],
 		references: [factions.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'faction'`,
 	}),
-
 	affectedRegion: one(regions, {
-		relationName: "ConsequenceAffectedRegion",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedRegionId],
 		references: [regions.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'region'`,
 	}),
-
 	affectedArea: one(areas, {
-		relationName: "ConsequenceAffectedArea",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedAreaId],
 		references: [areas.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'area'`,
 	}),
-
 	affectedSite: one(sites, {
-		relationName: "ConsequenceAffectedSite",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedSiteId],
 		references: [sites.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'site'`,
 	}),
-
 	affectedNpc: one(npcs, {
-		relationName: "ConsequenceAffectedNpc",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedNpcId],
 		references: [npcs.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'npc'`,
 	}),
-
 	affectedNarrativeDestination: one(narrativeDestinations, {
-		relationName: "ConsequenceAffectedNarrativeDestination",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedNarrativeDestinationId],
 		references: [narrativeDestinations.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'narrative_destination'`,
 	}),
-
 	affectedConflict: one(conflicts, {
-		relationName: "ConsequenceAffectedConflict",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedConflictId],
 		references: [conflicts.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'conflict'`,
 	}),
-
 	affectedQuest: one(quests, {
-		relationName: "ConsequenceAffectedQuest",
-		fields: [consequences.affectedEntityId],
+		fields: [consequences.affectedQuestId],
 		references: [quests.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${consequences.affectedEntityType} = 'quest'`,
 	}),
 }))
