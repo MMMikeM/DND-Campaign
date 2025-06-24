@@ -6,7 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getNpc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
+import { GmContent } from "./components/GmContent"
 import { KnowledgeContent } from "./components/KnowledgeContent"
+import { NarrativeContent } from "./components/NarrativeContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { PersonalityContent } from "./components/PersonalityContent"
 import { SocialContent } from "./components/SocialContent"
@@ -82,6 +84,8 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 		itemHistory,
 		narrativeDestinationInvolvement,
 		questStageDeliveries,
+		outgoingForeshadowing,
+		questParticipants,
 		stageInvolvement,
 		slug,
 	} = npc
@@ -170,32 +174,88 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 			</div>
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-				<TabsList className="grid grid-cols-5 mb-6">
+				<TabsList className="grid grid-cols-7 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
 					<TabsTrigger value="personality">Personality</TabsTrigger>
 					<TabsTrigger value="social">Social</TabsTrigger>
 					<TabsTrigger value="knowledge">Knowledge</TabsTrigger>
 					<TabsTrigger value="connections">Connections</TabsTrigger>
+					<TabsTrigger value="narrative">Narrative</TabsTrigger>
+					<TabsTrigger value="gm">GM</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent {...npc} />
+					<OverviewContent
+						appearance={appearance}
+						background={background}
+						alignment={alignment}
+						attitude={attitude}
+						occupation={occupation}
+						currentGoals={currentGoals}
+						tags={tags}
+						quirk={quirk}
+						name={name}
+						description={description}
+						socialStatus={socialStatus}
+					/>
 				</TabsContent>
 
 				<TabsContent value="personality">
-					<PersonalityContent {...npc} />
+					<PersonalityContent
+						personalityTraits={personalityTraits}
+						biases={biases}
+						drives={drives}
+						fears={fears}
+						mannerisms={mannerisms}
+						availability={availability}
+						capability={capability}
+						proactivity={proactivity}
+						relatability={relatability}
+						complexityProfile={complexityProfile}
+						playerPerceptionGoal={playerPerceptionGoal}
+						voiceNotes={voiceNotes}
+					/>
 				</TabsContent>
 
 				<TabsContent value="social">
-					<SocialContent {...npc} />
+					<SocialContent
+						avoidTopics={avoidTopics}
+						dialogue={dialogue}
+						rumours={rumours}
+						preferredTopics={preferredTopics}
+					/>
 				</TabsContent>
 
 				<TabsContent value="knowledge">
-					<KnowledgeContent {...npc} />
+					<KnowledgeContent knowledge={knowledge} secrets={secrets} />
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<ConnectionsContent {...npc} />
+					<ConnectionsContent
+						name={name}
+						relations={relations}
+						factionMemberships={factionMemberships}
+						siteAssociations={siteAssociations}
+						itemHistory={itemHistory}
+						loreLinks={loreLinks}
+						itemRelations={itemRelations}
+						questHooks={questHooks}
+						questStageDeliveries={questStageDeliveries}
+						stageInvolvement={stageInvolvement}
+						questParticipants={questParticipants}
+					/>
+				</TabsContent>
+				<TabsContent value="narrative">
+					<NarrativeContent
+						name={name}
+						affectingConsequences={affectingConsequences}
+						incomingForeshadowing={incomingForeshadowing}
+						conflictParticipation={conflictParticipation}
+						narrativeDestinationInvolvement={narrativeDestinationInvolvement}
+					/>
+				</TabsContent>
+				<TabsContent value="gm">
+					<GmContent name={name} gmNotes={gmNotes} creativePrompts={creativePrompts} />
 				</TabsContent>
 			</Tabs>
 		</div>

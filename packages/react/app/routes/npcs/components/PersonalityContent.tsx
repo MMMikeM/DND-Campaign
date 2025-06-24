@@ -3,7 +3,34 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function PersonalityContent({ personalityTraits, biases, drives, fears, mannerisms, voiceNotes }: NPC) {
+export function PersonalityContent({
+	personalityTraits,
+	biases,
+	drives,
+	fears,
+	mannerisms,
+	voiceNotes,
+	complexityProfile,
+	playerPerceptionGoal,
+	availability,
+	capability,
+	proactivity,
+	relatability,
+}: Pick<
+	NPC,
+	| "personalityTraits"
+	| "biases"
+	| "drives"
+	| "fears"
+	| "mannerisms"
+	| "voiceNotes"
+	| "complexityProfile"
+	| "playerPerceptionGoal"
+	| "availability"
+	| "capability"
+	| "proactivity"
+	| "relatability"
+>) {
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -23,6 +50,38 @@ export function PersonalityContent({ personalityTraits, biases, drives, fears, m
 					<List items={biases} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
+
+			<InfoCard
+				title="Character Profile"
+				icon={<Icons.UserSquare className="h-4 w-4 mr-2 text-cyan-600" />}
+				contentClassName="grid grid-cols-2 md:grid-cols-3 gap-4"
+				className="mb-6"
+			>
+				<div>
+					<h4 className="font-medium mb-1">Complexity</h4>
+					<p className="text-muted-foreground capitalize">{complexityProfile}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Perception Goal</h4>
+					<p className="text-muted-foreground capitalize">{playerPerceptionGoal}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Availability</h4>
+					<p className="text-muted-foreground capitalize">{availability}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Capability</h4>
+					<p className="text-muted-foreground capitalize">{capability}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Proactivity</h4>
+					<p className="text-muted-foreground capitalize">{proactivity}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Relatability</h4>
+					<p className="text-muted-foreground capitalize">{relatability}</p>
+				</div>
+			</InfoCard>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<InfoCard

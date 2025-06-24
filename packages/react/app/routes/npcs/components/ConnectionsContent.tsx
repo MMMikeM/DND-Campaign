@@ -13,7 +13,26 @@ export function ConnectionsContent({
 	factionMemberships,
 	siteAssociations,
 	questParticipants,
-}: Pick<NPC, "name" | "relations" | "factionMemberships" | "siteAssociations" | "questParticipants">) {
+	itemRelations,
+	itemHistory,
+	loreLinks,
+	questHooks,
+	stageInvolvement,
+	questStageDeliveries,
+}: Pick<
+	NPC,
+	| "name"
+	| "relations"
+	| "factionMemberships"
+	| "siteAssociations"
+	| "questParticipants"
+	| "itemRelations"
+	| "itemHistory"
+	| "loreLinks"
+	| "questHooks"
+	| "stageInvolvement"
+	| "questStageDeliveries"
+>) {
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -158,6 +177,59 @@ export function ConnectionsContent({
 				</InfoCard>
 			</div>
 
+			<InfoCard
+				title="Lore Connections"
+				description={`Lore related to ${name}`}
+				icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-rose-600" />}
+				emptyMessage="No lore is related to this NPC"
+				className="mb-6"
+			>
+				{loreLinks.map(({ id, lore, linkDetailsText }) => (
+					<div key={`lore-link-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
+						<div className="flex justify-between">
+							<Link href={`/lore/${lore?.slug}`}>
+								<h4 className="font-medium">{lore?.name}</h4>
+							</Link>
+						</div>
+						<p className="text-sm text-muted-foreground">{linkDetailsText}</p>
+					</div>
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Item Connections"
+				description={`Items related to ${name}`}
+				icon={<Icons.Sword className="h-4 w-4 mr-2 text-cyan-600" />}
+				emptyMessage="No items are related to this NPC"
+				className="mb-6"
+			>
+				{itemRelations.map(({ id, sourceItem, relationshipType }) => (
+					<div key={`item-relation-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
+						<div className="flex justify-between">
+							<Link href={`/items/${sourceItem?.slug}`}>
+								<h4 className="font-medium">{sourceItem?.name}</h4>
+							</Link>
+							<BadgeWithTooltip variant="secondary" tooltipContent="Relationship Type">
+								{relationshipType}
+							</BadgeWithTooltip>
+						</div>
+					</div>
+				))}
+				{itemHistory.map(({ id, item, eventDescription }) => (
+					<div key={`item-history-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
+						<div className="flex justify-between">
+							<Link href={`/items/${item?.slug}`}>
+								<h4 className="font-medium">{item?.name}</h4>
+							</Link>
+							<BadgeWithTooltip variant="outline" tooltipContent="Historical Event">
+								History
+							</BadgeWithTooltip>
+						</div>
+						<p className="text-sm text-muted-foreground">{eventDescription}</p>
+					</div>
+				))}
+			</InfoCard>
+
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<InfoCard
 					title="Associated Locations"
@@ -251,6 +323,34 @@ export function ConnectionsContent({
 							</div>
 						),
 					)}
+					<div className="p-3 space-y-3">
+						<h4 className="font-medium">Quest Hooks</h4>
+						{questHooks.map(({ id, quest, name }) => (
+							<div key={`quest-hook-${id}`} className="text-sm">
+								<Link href={`/quests/${quest?.slug}`}>
+									{name} ({quest?.name})
+								</Link>
+							</div>
+						))}
+					</div>
+					<div className="p-3 space-y-3">
+						<h4 className="font-medium">Quest Stage Deliveries</h4>
+						{questStageDeliveries.map(({ id, quest, questStage }) => (
+							<div key={`quest-stage-delivery-${id}`} className="text-sm">
+								<Link href={`/quests/${quest?.slug}`}>
+									Delivers: {quest?.name} - {questStage?.name}
+								</Link>
+							</div>
+						))}
+					</div>
+					<div className="p-3 space-y-3">
+						<h4 className="font-medium">Quest Stage Involvement</h4>
+						{stageInvolvement.map(({ id, questStage }) => (
+							<div key={`stage-involvement-${id}`} className="text-sm">
+								Involved in: {questStage?.name}
+							</div>
+						))}
+					</div>
 				</InfoCard>
 			</div>
 		</>

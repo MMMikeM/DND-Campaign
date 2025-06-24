@@ -3,8 +3,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function KnowledgeContent({ knowledge, secrets }: NPC) {
-	console.log
+export function KnowledgeContent({ knowledge, secrets }: Pick<NPC, "knowledge" | "secrets">) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<InfoCard
