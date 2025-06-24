@@ -1,15 +1,11 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./items-tools.schema"
-import { createEnhancedPolymorphicConfig, createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.itemTables)
-
-// Configure polymorphic validation for itemRelations table
-const { targetEntityTypes } = tables.itemTables.enums
-const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
 
 export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
@@ -27,13 +23,13 @@ export const entityGetters = createEntityGetters({
 				},
 				incomingForeshadowing: true,
 				questStage: true,
+				loreLinks: true,
 				relations: {
 					with: {
 						sourceItem: true,
 						conflict: true,
 						item: true,
 						narrativeDestination: true,
-						lore: true,
 						quest: true,
 						site: true,
 						npc: true,
@@ -60,7 +56,6 @@ export const entityGetters = createEntityGetters({
 				quest: true,
 				site: true,
 				faction: true,
-				lore: true,
 				narrativeDestination: true,
 			},
 		}),

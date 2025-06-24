@@ -28,7 +28,6 @@ export const entityGetters = createEntityGetters({
 			where: (lore, { eq }) => eq(lore.id, id),
 			with: {
 				incomingForeshadowing: true,
-				itemRelations: true,
 				links: {
 					with: {
 						conflict: true,
@@ -38,6 +37,7 @@ export const entityGetters = createEntityGetters({
 						npc: true,
 						foreshadowing: true,
 						region: true,
+						item: true,
 						relatedLore: { columns: { name: true, id: true } },
 					},
 				},
