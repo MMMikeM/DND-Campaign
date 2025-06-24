@@ -6,6 +6,7 @@ import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
+import { items } from "../items/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
@@ -60,7 +61,7 @@ export const loreLinks = pgTable(
 		foreshadowingId: nullableFk("foreshadowing_id", foreshadowing.id),
 		relatedLoreId: nullableFk("related_lore_id", lore.id),
 		narrativeDestinationId: nullableFk("narrative_destination_id", narrativeDestinations.id),
-
+		itemId: nullableFk("item_id", items.id),
 		linkRoleOrTypeText: string("link_role_or_type_text"),
 		linkDetailsText: string("link_details_text"),
 	},
