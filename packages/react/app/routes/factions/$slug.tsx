@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import { useNavigate, useParams } from "react-router"
+import { redirect, replace, useNavigate, useParams } from "react-router"
 import { AlignmentBadge } from "~/components/alignment-badge"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Link } from "~/components/ui/link"
@@ -21,6 +21,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 
 	const faction = await getFaction(params.slug)
+
+	if (Number.isInteger(Number(params.slug))) {
+		return replace(`/factions/${faction.slug}`)
+	}
 
 	if (!faction) {
 		throw new Response("Faction not found", { status: 404 })
@@ -121,6 +125,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 
 					<TabsContent value="overview" className="space-y-6 animate-in fade-in-50 duration-300">
 						<OverviewContent
+							values={values}
 							description={description}
 							gmNotes={gmNotes}
 							name={name}
@@ -160,7 +165,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 							taboos={taboos}
 							symbols={symbols}
 							rituals={rituals}
-							values={values}
 						/>
 					</TabsContent>
 
