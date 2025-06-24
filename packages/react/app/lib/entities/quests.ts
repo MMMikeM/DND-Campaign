@@ -2,6 +2,7 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
+import { nameAndId } from "."
 import { getQuestStages } from "./questStages"
 
 const questConfig = {
@@ -10,17 +11,17 @@ const questConfig = {
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
 				affectingConsequences: true,
-				incomingForeshadowing: true,
 				hooks: true,
+				incomingForeshadowing: true,
 				itemRelations: true,
+				loreLinks: true,
 				narrativeDestinationContributions: true,
 				participants: true,
-				region: { columns: { name: true, id: true } },
-				stages: { columns: { id: true, name: true } },
-				outgoingRelations: { with: { targetQuest: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceQuest: { columns: { name: true, id: true } } } },
+				region: nameAndId,
+				stages: nameAndId,
 				triggeredEvents: true,
-				loreLinks: true,
+				outgoingRelations: { with: { targetQuest: nameAndId } },
+				incomingRelations: { with: { sourceQuest: nameAndId } },
 			},
 		}),
 	getAll: () =>
@@ -35,16 +36,10 @@ const questConfig = {
 				regionId: true,
 			},
 			with: {
-				region: { columns: { name: true } },
+				region: nameAndId,
 			},
 		}),
-	getNamesAndIds: () =>
-		db.query.quests.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.quests.findMany(nameAndId),
 }
 
 export const getAllQuests = async () => {

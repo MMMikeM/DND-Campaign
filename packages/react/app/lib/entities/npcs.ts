@@ -2,25 +2,26 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
+import { nameAndId } from "."
 
 const npcConfig = {
 	findById: (id: number) =>
 		db.query.npcs.findFirst({
 			where: (npcs, { eq }) => eq(npcs.id, id),
 			with: {
-				incomingRelations: { with: { sourceNpc: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetNpc: { columns: { name: true, id: true } } } },
+				incomingRelations: { with: { sourceNpc: nameAndId } },
+				outgoingRelations: { with: { targetNpc: nameAndId } },
 				affectingConsequences: true,
 				conflictParticipation: true,
 				narrativeDestinationInvolvement: true,
-				factionMemberships: { with: { faction: { columns: { name: true, id: true } } } },
+				factionMemberships: { with: { faction: nameAndId } },
 				incomingForeshadowing: true,
 				itemHistory: true,
 				itemRelations: true,
-				questHooks: { with: { quest: { columns: { name: true, id: true } } } },
-				questStageDeliveries: { with: { quest: { columns: { name: true, id: true } } } },
-				questParticipants: { with: { quest: { columns: { name: true, id: true } } } },
-				siteAssociations: { with: { site: { columns: { name: true, id: true } } } },
+				questHooks: { with: { quest: nameAndId } },
+				questStageDeliveries: { with: { quest: nameAndId } },
+				questParticipants: { with: { quest: nameAndId } },
+				siteAssociations: { with: { site: nameAndId } },
 				stageInvolvement: true,
 				loreLinks: true,
 				outgoingForeshadowing: true,
@@ -28,13 +29,7 @@ const npcConfig = {
 		}),
 
 	getAll: () => db.query.npcs.findMany({}),
-	getNamesAndIds: () =>
-		db.query.npcs.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.npcs.findMany(nameAndId),
 }
 
 export const getAllNpcs = async () => {

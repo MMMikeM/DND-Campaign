@@ -1,54 +1,70 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const conflictConfig = {
 	findById: (id: number) =>
 		db.query.conflicts.findFirst({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
-				region: { columns: { name: true, id: true } },
+				region: nameAndId,
 				itemRelations: {
-					with: { sourceItem: { columns: { id: true, name: true } } },
+					with: { sourceItem: nameAndId },
 				},
-				narrativeDestinations: { columns: { id: true, name: true } },
+				narrativeDestinations: nameAndId,
 				loreLinks: {
 					columns: {
-						targetEntityType: false,
+						id: false,
+						loreId: false,
+						relatedLoreId: false,
+						conflictId: false,
+						factionId: false,
+						npcId: false,
+						questId: false,
+						regionId: false,
 					},
-					with: { lore: { columns: { id: true, name: true } } },
+					with: {
+						conflict: nameAndId,
+						lore: nameAndId,
+						relatedLore: nameAndId,
+						faction: nameAndId,
+						npc: nameAndId,
+						quest: nameAndId,
+						region: nameAndId,
+					},
 				},
 				affectingConsequences: {
 					with: {
-						triggerConflict: { columns: { id: true, name: true } },
-						triggerQuest: { columns: { id: true, name: true } },
+						triggerConflict: nameAndId,
+						triggerQuest: nameAndId,
 					},
 				},
 				triggeredConsequences: {
 					with: {
-						affectedNarrativeDestination: { columns: { id: true, name: true } },
-						affectedArea: { columns: { id: true, name: true } },
-						affectedFaction: { columns: { id: true, name: true } },
-						affectedSite: { columns: { id: true, name: true } },
-						affectedQuest: { columns: { id: true, name: true } },
-						affectedNpc: { columns: { id: true, name: true } },
-						affectedRegion: { columns: { id: true, name: true } },
-						affectedConflict: { columns: { id: true, name: true } },
+						affectedNarrativeDestination: nameAndId,
+						affectedArea: nameAndId,
+						affectedFaction: nameAndId,
+						affectedSite: nameAndId,
+						affectedQuest: nameAndId,
+						affectedNpc: nameAndId,
+						affectedRegion: nameAndId,
+						affectedConflict: nameAndId,
 					},
 				},
 				incomingForeshadowing: {
 					with: {
-						sourceLore: { columns: { id: true, name: true } },
-						sourceNpc: { columns: { id: true, name: true } },
-						sourceQuest: { columns: { id: true, name: true } },
-						sourceSite: { columns: { id: true, name: true } },
-						sourceQuestStage: { columns: { id: true, name: true } },
+						sourceLore: nameAndId,
+						sourceNpc: nameAndId,
+						sourceQuest: nameAndId,
+						sourceSite: nameAndId,
+						sourceQuestStage: nameAndId,
 					},
 				},
 				participants: {
 					with: {
-						faction: { columns: { name: true, id: true } },
-						npc: { columns: { name: true, id: true } },
+						faction: nameAndId,
+						npc: nameAndId,
 					},
 				},
 			},
@@ -56,16 +72,10 @@ const conflictConfig = {
 	getAll: () =>
 		db.query.conflicts.findMany({
 			with: {
-				region: { columns: { name: true } },
+				region: nameAndId,
 			},
 		}),
-	getNamesAndIds: () =>
-		db.query.conflicts.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.conflicts.findMany(nameAndId),
 }
 
 export const getAllConflicts = async () => {

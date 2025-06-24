@@ -2,6 +2,7 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
+import { nameAndId } from "."
 
 const factionConfig = {
 	findById: (id: number) =>
@@ -10,69 +11,69 @@ const factionConfig = {
 			with: {
 				agendas: true,
 				conflicts: true,
-				members: { with: { npc: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceFaction: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetFaction: { columns: { name: true, id: true } } } },
+				primaryHqSite: true,
+				members: { with: { npc: nameAndId } },
+				incomingRelations: { with: { sourceFaction: nameAndId } },
+				outgoingRelations: { with: { targetFaction: nameAndId } },
 				affectingConsequences: {
 					with: {
-						affectedFaction: { columns: { id: true, name: true } },
-						affectedNpc: { columns: { id: true, name: true } },
-						affectedRegion: { columns: { id: true, name: true } },
-						affectedSite: { columns: { id: true, name: true } },
-						affectedQuest: { columns: { id: true, name: true } },
-						affectedArea: { columns: { id: true, name: true } },
-						affectedConflict: { columns: { id: true, name: true } },
-						affectedNarrativeDestination: { columns: { id: true, name: true } },
+						affectedFaction: nameAndId,
+						affectedNpc: nameAndId,
+						affectedRegion: nameAndId,
+						affectedSite: nameAndId,
+						affectedQuest: nameAndId,
+						affectedArea: nameAndId,
+						affectedConflict: nameAndId,
+						affectedNarrativeDestination: nameAndId,
 					},
 				},
 				narrativeDestinationInvolvement: {
 					with: {
-						narrativeDestination: { columns: { id: true, name: true } },
-						faction: { columns: { id: true, name: true } },
-						npc: { columns: { id: true, name: true } },
+						narrativeDestination: nameAndId,
+						faction: nameAndId,
+						npc: nameAndId,
 					},
 				},
 				incomingForeshadowing: {
 					with: {
-						sourceNpc: { columns: { id: true, name: true } },
-						sourceQuest: { columns: { id: true, name: true } },
-						sourceSite: { columns: { id: true, name: true } },
-						sourceQuestStage: { columns: { id: true, name: true } },
-						sourceLore: { columns: { id: true, name: true } },
+						sourceNpc: nameAndId,
+						sourceQuest: nameAndId,
+						sourceSite: nameAndId,
+						sourceQuestStage: nameAndId,
+						sourceLore: nameAndId,
 					},
 				},
 				influence: {
 					with: {
-						area: { columns: { id: true, name: true } },
-						faction: { columns: { id: true, name: true } },
-						region: { columns: { id: true, name: true } },
-						site: { columns: { id: true, name: true } },
+						area: nameAndId,
+						faction: nameAndId,
+						region: nameAndId,
+						site: nameAndId,
 					},
 				},
 				itemRelations: {
 					with: {
-						sourceItem: { columns: { id: true, name: true } },
+						sourceItem: nameAndId,
 					},
 				},
 				loreLinks: {
 					with: {
-						lore: { columns: { id: true, name: true } },
+						lore: nameAndId,
 					},
 				},
-				primaryHqSite: true,
 				questHooks: {
 					with: {
-						deliveryNpc: { columns: { id: true, name: true } },
-						faction: { columns: { id: true, name: true } },
-						site: { columns: { id: true, name: true } },
-						quest: { columns: { id: true, name: true } },
+						deliveryNpc: nameAndId,
+						faction: nameAndId,
+						site: nameAndId,
+						quest: nameAndId,
 					},
 				},
 				questParticipation: {
 					with: {
-						faction: { columns: { id: true, name: true } },
-						npc: { columns: { id: true, name: true } },
-						quest: { columns: { id: true, name: true } },
+						faction: nameAndId,
+						npc: nameAndId,
+						quest: nameAndId,
 					},
 				},
 			},

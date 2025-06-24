@@ -2,6 +2,7 @@ import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
+import { nameAndId } from "."
 
 const regionConfig = {
 	findById: (id: number) =>
@@ -10,52 +11,43 @@ const regionConfig = {
 			with: {
 				factionInfluence: {
 					with: {
-						faction: { columns: { name: true, id: true } },
+						faction: nameAndId,
 					},
 				},
 				incomingRelations: {
 					with: {
-						sourceRegion: { columns: { name: true, id: true } },
+						sourceRegion: nameAndId,
 					},
 				},
 				outgoingRelations: {
 					with: {
-						targetRegion: { columns: { name: true, id: true } },
+						targetRegion: nameAndId,
 					},
 				},
 				areas: {
-					columns: { id: true, name: true, type: true },
 					with: {
-						sites: {
-							columns: { id: true, name: true, type: true },
-						},
+						sites: nameAndId,
 					},
 				},
-				quests: { columns: { id: true, name: true } },
-				conflicts: { columns: { id: true, name: true } },
-				consequences: { columns: { id: true, name: true } },
+				quests: nameAndId,
+				conflicts: nameAndId,
+				consequences: nameAndId,
 
 				narrativeDestinations: {
 					with: {
-						conflict: { columns: { id: true, name: true } },
-						loreLinks: { with: { lore: { columns: { id: true, name: true } } } },
+						conflict: nameAndId,
+						loreLinks: { with: { lore: nameAndId } },
 					},
 				},
 				loreLinks: {
 					with: {
-						lore: { columns: { id: true, name: true } },
+						lore: nameAndId,
 					},
 				},
 			},
 		}),
 	getAll: () => db.query.regions.findMany({}),
-	getNamesAndIds: () =>
-		db.query.regions.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.regions.findMany(nameAndId),
 }
 
 export const getAllRegions = async () => {
