@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelations, items } from "../items/tables"
+import { items } from "../items/tables"
 import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
@@ -25,22 +25,27 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 	region: one(regions, {
 		fields: [loreLinks.regionId],
 		references: [regions.id],
+		relationName: "LoreLinkTargetRegion",
 	}),
 	faction: one(factions, {
 		fields: [loreLinks.factionId],
 		references: [factions.id],
+		relationName: "LoreLinkTargetFaction",
 	}),
 	npc: one(npcs, {
 		fields: [loreLinks.npcId],
 		references: [npcs.id],
+		relationName: "LoreLinkTargetNpc",
 	}),
 	conflict: one(conflicts, {
 		fields: [loreLinks.conflictId],
 		references: [conflicts.id],
+		relationName: "LoreLinkTargetConflict",
 	}),
 	quest: one(quests, {
 		fields: [loreLinks.questId],
 		references: [quests.id],
+		relationName: "LoreLinkTargetQuest",
 	}),
 	foreshadowing: one(foreshadowing, {
 		fields: [loreLinks.foreshadowingId],
@@ -50,10 +55,12 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 	item: one(items, {
 		fields: [loreLinks.itemId],
 		references: [items.id],
+		relationName: "LoreLinkTargetItem",
 	}),
 	narrativeDestination: one(narrativeDestinations, {
 		fields: [loreLinks.narrativeDestinationId],
 		references: [narrativeDestinations.id],
+		relationName: "LoreLinkTargetNarrativeDestination",
 	}),
 	relatedLore: one(lore, {
 		fields: [loreLinks.relatedLoreId],

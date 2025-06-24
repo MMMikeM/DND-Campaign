@@ -44,35 +44,43 @@ export const consequenceRelations = relations(consequences, ({ one }) => ({
 
 	// Affected entity relations
 	affectedFaction: one(factions, {
+		relationName: "ConsequenceAffectedFaction",
 		fields: [consequences.affectedFactionId],
 		references: [factions.id],
 	}),
 	affectedRegion: one(regions, {
 		fields: [consequences.affectedRegionId],
 		references: [regions.id],
+		relationName: "ConsequenceAffectedRegion",
 	}),
 	affectedArea: one(areas, {
 		fields: [consequences.affectedAreaId],
 		references: [areas.id],
+		relationName: "ConsequenceAffectedArea",
 	}),
 	affectedSite: one(sites, {
 		fields: [consequences.affectedSiteId],
 		references: [sites.id],
+		relationName: "ConsequenceAffectedSite",
 	}),
 	affectedNpc: one(npcs, {
 		fields: [consequences.affectedNpcId],
 		references: [npcs.id],
+		relationName: "ConsequenceAffectedNpc",
 	}),
 	affectedNarrativeDestination: one(narrativeDestinations, {
 		fields: [consequences.affectedNarrativeDestinationId],
 		references: [narrativeDestinations.id],
+		relationName: "ConsequenceAffectedNarrativeDestination",
 	}),
 	affectedConflict: one(conflicts, {
 		fields: [consequences.affectedConflictId],
 		references: [conflicts.id],
+		relationName: "ConsequenceAffectedConflict",
 	}),
 	affectedQuest: one(quests, {
 		fields: [consequences.affectedQuestId],
 		references: [quests.id],
+		relationName: "ConsequenceAffectedQuest",
 	}),
 }))

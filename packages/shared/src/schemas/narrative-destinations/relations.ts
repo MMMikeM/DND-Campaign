@@ -4,6 +4,7 @@ import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
+import { consequences } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -29,6 +30,7 @@ export const narrativeDestinationsRelations = relations(narrativeDestinations, (
 
 	questRoles: many(narrativeDestinationQuestRoles),
 	participantInvolvement: many(narrativeDestinationParticipants),
+	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedNarrativeDestination" }),
 	itemRelations: many(itemRelations),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetNarrativeDestination" }),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNarrativeDestination" }),
