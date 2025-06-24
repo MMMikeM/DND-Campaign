@@ -73,7 +73,7 @@ export const getMap = async (slug: string) => {
 	const selectedMap = await mapConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((maps) => maps.find((map) => map.slug === slug))
+		.then((maps) => maps.find((map) => map.slug === slug || map.id === Number(slug)))
 
 	if (!selectedMap) {
 		throw new EntityNotFoundError("Map", slug)

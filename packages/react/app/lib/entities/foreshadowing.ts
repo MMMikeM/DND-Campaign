@@ -43,7 +43,7 @@ export const getForeshadowing = async (slug: string) => {
 	const selectedForeshadowing = await foreshadowingConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((items) => items.find((item) => item.slug === slug))
+		.then((items) => items.find((item) => item.slug === slug || item.id === Number(slug)))
 
 	if (!selectedForeshadowing) {
 		throw new EntityNotFoundError("Foreshadowing", slug)

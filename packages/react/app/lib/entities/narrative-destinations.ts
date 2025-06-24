@@ -35,7 +35,9 @@ export const getNarrativeDestination = async (slug: string) => {
 	const selectedDestination = await narrativeDestinationConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((destinations) => destinations.find((destination) => destination.slug === slug))
+		.then((destinations) =>
+			destinations.find((destination) => destination.slug === slug || destination.id === Number(slug)),
+		)
 
 	if (!selectedDestination) {
 		throw new EntityNotFoundError("Narrative Destination", slug)

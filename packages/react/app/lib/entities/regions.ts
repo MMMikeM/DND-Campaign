@@ -61,7 +61,7 @@ export const getRegion = async (slug: string) => {
 	const selectedRegion = await regionConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((regions) => regions.find((region) => region.slug === slug))
+		.then((regions) => regions.find((region) => region.slug === slug || region.id === Number(slug)))
 
 	if (!selectedRegion) {
 		throw new EntityNotFoundError("Region", slug)

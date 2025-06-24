@@ -67,7 +67,7 @@ export const getArea = async (slug: string) => {
 	const selectedArea = await areaConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((areas) => areas.find((area) => area.slug === slug))
+		.then((areas) => areas.find((area) => area.slug === slug || area.id === Number(slug)))
 
 	if (!selectedArea) {
 		throw new EntityNotFoundError("Area", slug)

@@ -54,7 +54,7 @@ export const getQuest = async (slug: string) => {
 	const selectedQuest = await questConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((quests) => quests.find((quest) => quest.slug === slug))
+		.then((quests) => quests.find((quest) => quest.slug === slug || quest.id === Number(slug)))
 
 	if (!selectedQuest) {
 		throw new EntityNotFoundError("Quest", slug)

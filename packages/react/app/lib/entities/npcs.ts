@@ -43,7 +43,7 @@ export const getNpc = async (slug: string) => {
 	const selectedNpc = await npcConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((npcs) => npcs.find((npc) => npc.slug === slug))
+		.then((npcs) => npcs.find((npc) => npc.slug === slug || npc.id === Number(slug)))
 
 	if (!selectedNpc) {
 		throw new EntityNotFoundError("NPC", slug)

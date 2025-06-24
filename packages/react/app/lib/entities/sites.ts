@@ -62,7 +62,7 @@ export const getSite = async (slug: string) => {
 	const selectedSite = await siteConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((sites) => sites.find((site) => site.slug === slug))
+		.then((sites) => sites.find((site) => site.slug === slug || site.id === Number(slug)))
 
 	if (!selectedSite) {
 		throw new EntityNotFoundError("Site", slug)
