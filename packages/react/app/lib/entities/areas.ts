@@ -1,6 +1,7 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors" // Import custom error
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const areaConfig = {
 	findById: (id: number) =>
@@ -10,32 +11,41 @@ const areaConfig = {
 				regionId: false,
 			},
 			with: {
-				region: { columns: { id: true, name: true } },
+				region: nameAndId,
 				sites: {
 					columns: { id: true, name: true, type: true },
 				},
 				consequences: {
+					columns: {
+						id: true,
+						name: true,
+						description: true,
+						consequenceType: true,
+						severity: true,
+						visibility: true,
+						sourceType: true,
+						conflictImpactDescription: true,
+						creativePrompts: true,
+						gmNotes: true,
+						playerImpactFeel: true,
+						tags: true,
+						timeframe: true,
+					},
+					where: (consequences, { eq }) => eq(consequences.affectedAreaId, id),
 					with: {
-						affectedArea: { columns: { id: true, name: true } },
-						affectedConflict: { columns: { id: true, name: true } },
-						affectedNarrativeDestination: { columns: { id: true, name: true } },
-						affectedNpc: { columns: { id: true, name: true } },
-						affectedRegion: { columns: { id: true, name: true } },
-						affectedFaction: { columns: { id: true, name: true } },
-						affectedSite: { columns: { id: true, name: true } },
-						affectedQuest: { columns: { id: true, name: true } },
-						triggerConflict: { columns: { id: true, name: true } },
-						triggerQuest: { columns: { id: true, name: true } },
+						triggerConflict: nameAndId,
+						triggerQuest: nameAndId,
+						triggerQuestStageDecision: nameAndId,
 					},
 				},
 				factionInfluence: {
 					with: {
-						faction: { columns: { id: true, name: true } },
+						faction: nameAndId,
 					},
 				},
 			},
 		}),
-	getAll: () => db.query.areas.findMany({ with: { region: { columns: { id: true, name: true } } } }),
+	getAll: () => db.query.areas.findMany({ with: { region: nameAndId } }),
 	getNamesAndIds: () =>
 		db.query.areas.findMany({
 			columns: {

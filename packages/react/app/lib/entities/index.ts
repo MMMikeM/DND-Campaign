@@ -35,3 +35,5 @@ export const searchBySimilarity = async (
       ${phoneticStrength}
     )
   `)
+
+export const nameAndId = { columns: { id: true, name: true } } as const

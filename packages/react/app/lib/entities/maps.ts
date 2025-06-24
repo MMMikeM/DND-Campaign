@@ -1,6 +1,7 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const mapFileColumns = {
 	id: true,
@@ -13,7 +14,7 @@ const mapConfig = {
 		db.query.mapGroups.findFirst({
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
-				site: { columns: { id: true, name: true } },
+				site: nameAndId,
 				variants: {
 					with: {
 						mapFile: {
@@ -47,13 +48,7 @@ const mapConfig = {
 				},
 			},
 		}),
-	getNamesAndIds: () =>
-		db.query.mapGroups.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.mapGroups.findMany(nameAndId),
 }
 const sortByDefaultThenName = (a: MapVariant, b: MapVariant) => {
 	if (b.isDefault) return 1

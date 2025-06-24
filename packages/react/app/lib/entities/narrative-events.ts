@@ -1,26 +1,21 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const narrativeEventConfig = {
 	findById: (id: number) =>
 		db.query.narrativeEvents.findFirst({
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
-				questStage: { columns: { id: true, name: true } },
-				relatedQuest: { columns: { id: true, name: true } },
-				triggeringStageDecision: { columns: { id: true, name: true } },
+				questStage: nameAndId,
+				relatedQuest: nameAndId,
+				triggeringStageDecision: nameAndId,
 				incomingForeshadowing: true,
 			},
 		}),
 	getAll: () => db.query.narrativeEvents.findMany({}),
-	getNamesAndIds: () =>
-		db.query.narrativeEvents.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.narrativeEvents.findMany(nameAndId),
 }
 
 export const getAllNarrativeEvents = async () => {

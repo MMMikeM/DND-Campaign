@@ -1,6 +1,7 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const narrativeDestinationConfig = {
 	findById: (id: number) =>
@@ -8,24 +9,18 @@ const narrativeDestinationConfig = {
 			where: (arcs, { eq }) => eq(arcs.id, id),
 			with: {
 				incomingForeshadowing: true,
-				conflict: { columns: { id: true, name: true } },
-				incomingRelations: { with: { sourceNarrativeDestination: { columns: { id: true, name: true } } } },
-				outgoingRelations: { with: { targetNarrativeDestination: { columns: { id: true, name: true } } } },
-				participantInvolvement: { with: { faction: { columns: { id: true, name: true } } } },
-				questRoles: { with: { quest: { columns: { id: true, name: true } } } },
-				region: { columns: { id: true, name: true } },
-				loreLinks: { with: { lore: { columns: { id: true, name: true } } } },
-				itemRelations: { with: { sourceItem: { columns: { id: true, name: true } } } },
+				conflict: nameAndId,
+				incomingRelations: { with: { sourceNarrativeDestination: nameAndId } },
+				outgoingRelations: { with: { targetNarrativeDestination: nameAndId } },
+				participantInvolvement: { with: { faction: nameAndId } },
+				questRoles: { with: { quest: nameAndId } },
+				region: nameAndId,
+				loreLinks: { with: { lore: nameAndId } },
+				itemRelations: { with: { sourceItem: nameAndId } },
 			},
 		}),
 	getAll: () => db.query.narrativeDestinations.findMany({}),
-	getNamesAndIds: () =>
-		db.query.narrativeDestinations.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.narrativeDestinations.findMany(nameAndId),
 }
 
 export const getAllNarrativeDestinations = async () => {
