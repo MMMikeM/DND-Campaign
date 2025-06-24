@@ -172,8 +172,8 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 		.leftJoin(areas, sql`${sites.areaId} = ${areas.id}`)
 		.leftJoin(regions, sql`${areas.regionId} = ${regions.id}`)
 		.leftJoin(sql`${siteLinks} AS sl_out`, sql`sl_out.source_site_id = ${sites.id}`)
-		.leftJoin(sql`${sites} AS ts`, sql`sl_out.target_site_id = ts.id`)
 		.leftJoin(sql`${siteLinks} AS sl_in`, sql`sl_in.target_site_id = ${sites.id}`)
+		.leftJoin(sql`${sites} AS ts`, sql`sl_out.target_site_id = ts.id`)
 		.leftJoin(sql`${sites} AS ss`, sql`sl_in.source_site_id = ss.id`)
 		.leftJoin(siteEncounters, sql`${siteEncounters.siteId} = ${sites.id}`)
 		.leftJoin(siteSecrets, sql`${siteSecrets.siteId} = ${sites.id}`)
@@ -183,28 +183,13 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 		.leftJoin(sql`${quests} AS qs_quest`, sql`${questStages.questId} = qs_quest.id`)
 		.leftJoin(questHooks, sql`${questHooks.siteId} = ${sites.id}`)
 		.leftJoin(sql`${quests} AS qh_quest`, sql`${questHooks.questId} = qh_quest.id`)
-		.leftJoin(
-			sql`${consequences} AS site_consequences`,
-			sql`site_consequences.affected_entity_type = 'site' AND site_consequences.affected_entity_id = ${sites.id}`,
-		)
+		.leftJoin(sql`${consequences} AS site_consequences`, sql`site_consequences.affected_site_id = ${sites.id}`)
 		.leftJoin(factions, sql`${factions.hqSiteId} = ${sites.id}`)
-		.leftJoin(
-			sql`${factionInfluence} AS site_faction_influence`,
-			sql`site_faction_influence.related_entity_type = 'site' AND site_faction_influence.related_entity_id = ${sites.id}`,
-		)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_out`,
-			sql`fs_out.source_entity_type = 'site' AND fs_out.source_entity_id = ${sites.id}`,
-		)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_in`,
-			sql`fs_in.target_entity_type = 'site' AND fs_in.target_entity_id = ${sites.id}`,
-		)
+		.leftJoin(sql`${factionInfluence} AS site_faction_influence`, sql`site_faction_influence.site_id = ${sites.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_site_id = ${sites.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_site_id = ${sites.id}`)
 		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.locationSiteId} = ${sites.id}`)
-		.leftJoin(
-			sql`${itemRelations} AS site_item_relations`,
-			sql`site_item_relations.target_entity_type = 'site' AND site_item_relations.target_entity_id = ${sites.id}`,
-		)
+		.leftJoin(sql`${itemRelations} AS site_item_relations`, sql`site_item_relations.site_id = ${sites.id}`)
 		.leftJoin(mapGroups, sql`${sites.mapGroupId} = ${mapGroups.id}`)
 		.groupBy(sites.id, areas.id, regions.id, mapGroups.id),
 )
