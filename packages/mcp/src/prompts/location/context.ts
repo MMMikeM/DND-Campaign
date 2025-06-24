@@ -143,20 +143,14 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		})
 
 		// Get foreshadowing seeds related to sites
-		const foreshadowingSeeds = await db.query.foreshadowing.findMany({
-			where: (fs, { or, eq, and, isNotNull }) =>
-				or(
-					and(eq(fs.sourceEntityType, "site"), isNotNull(fs.sourceEntityId)),
-					and(eq(fs.targetEntityType, "site"), isNotNull(fs.targetEntityId)),
-				),
+		const foreshadowing = await db.query.foreshadowing.findMany({
+			where: (fs, { or, isNotNull }) => or(isNotNull(fs.sourceSiteId), isNotNull(fs.targetSiteId)),
 			with: {
 				sourceSite: { columns: { id: true, name: true } },
 				targetSite: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
-				targetEntityType: true,
-				sourceEntityType: true,
 				subtlety: true,
 				narrativeWeight: true,
 				description: true,
@@ -209,15 +203,12 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 				// Get faction influence in the regions
 				const nearbyFactionInfluence = await db.query.factionInfluence.findMany({
-					where: (fi, { inArray, or, eq, and }) =>
+					where: (fi, { inArray, or }) =>
 						or(
-							and(eq(fi.relatedEntityType, "region"), inArray(fi.relatedEntityId, regionIds)),
-							and(
-								eq(fi.relatedEntityType, "area"),
-								inArray(
-									fi.relatedEntityId,
-									nearbyAreas.map((a) => a.id),
-								),
+							inArray(fi.regionId, regionIds),
+							inArray(
+								fi.areaId,
+								nearbyAreas.map((a) => a.id),
 							),
 						),
 					with: {
@@ -294,7 +285,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		const campaignThemes: CampaignThemes = {
 			relevantQuests,
 			activeConflicts,
-			foreshadowingElements: foreshadowingSeeds,
+			foreshadowing,
 		}
 
 		// Generate analysis and suggestions
@@ -333,7 +324,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			npcSiteAssociations,
 			factionInfluence,
 			questStages,
-			foreshadowingSeeds,
+			foreshadowingSeeds: foreshadowing,
 			itemHistory,
 			nearbyEntities,
 			campaignThemes,

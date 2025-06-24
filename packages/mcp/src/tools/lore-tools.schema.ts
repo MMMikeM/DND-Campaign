@@ -1,13 +1,13 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, list, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const { lore, loreLinks, enums } = tables.loreTables
 
 type TableNames = CreateTableNames<typeof tables.loreTables>
 
-const { loreTypes, linkStrengths, targetEntityTypes } = enums
+const { loreTypes, linkStrengths } = enums
 
 export const tableEnum = ["lore", "loreLinks"] as const satisfies TableNames
 
@@ -61,10 +61,15 @@ export const schemas = {
 
 	loreLinks: createInsertSchema(loreLinks, {
 		loreId: id.describe("ID of the source lore entry"),
-		targetEntityId: id.describe("ID of the target entity being linked to"),
-		targetEntityType: z
-			.enum(targetEntityTypes)
-			.describe("Type of target entity (region, faction, npc, conflict, quest, lore)"),
+
+		conflictId: optionalId.describe("ID of the conflict this relationship belongs to"),
+		narrativeDestinationId: optionalId.describe("ID of the narrative destination this relationship belongs to"),
+		questId: optionalId.describe("ID of the quest this relationship belongs to"),
+		factionId: optionalId.describe("ID of the faction this relationship belongs to"),
+		npcId: optionalId.describe("ID of the NPC this relationship belongs to"),
+		regionId: optionalId.describe("ID of the region this relationship belongs to"),
+		foreshadowingId: optionalId.describe("ID of the foreshadowing this relationship belongs to"),
+		relatedLoreId: optionalId.describe("ID of the related lore this relationship belongs to"),
 		linkRoleOrTypeText: (s) =>
 			s.describe("Brief categorization of the relationship type (e.g., 'Primary antagonist', 'Spiritual foundation')"),
 		linkStrength: z.enum(linkStrengths).describe("Strength of the connection (tenuous, moderate, strong, defining)"),
@@ -89,8 +94,8 @@ export const schemas = {
 			"Connects lore to other entities. Focus on RELATIONSHIP dynamics - avoid duplicating content from core entities.",
 		)
 		.refine((data) => {
-			if (data.targetEntityType === "lore") {
-				return data.targetEntityId !== data.loreId
+			if (data.relatedLoreId) {
+				return data.relatedLoreId !== data.loreId
 			}
 			return true
 		}, "Lore cannot link to itself"),

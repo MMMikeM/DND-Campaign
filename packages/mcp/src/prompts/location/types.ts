@@ -106,7 +106,6 @@ export interface ConflictForLocationAnalysis {
 
 export interface ForeshadowingSeedForAnalysis {
 	id: number
-	targetEntityType: string
 	subtlety: string
 	narrativeWeight: string
 	description: string[]
@@ -166,5 +165,5 @@ export interface CampaignThemes {
 		themes: string[]
 	}>
 	activeConflicts: ConflictForLocationAnalysis[]
-	foreshadowingElements: ForeshadowingSeedForAnalysis[]
+	foreshadowing: ForeshadowingSeedForAnalysis[]
 }

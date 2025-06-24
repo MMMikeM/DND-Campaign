@@ -1,20 +1,18 @@
 import { tables } from "@tome-master/shared"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod/v4"
-import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
+import { type CreateTableNames, list, optionalId, type Schema } from "./utils/tool.utils"
 
 const {
 	narrativeEventTables: { narrativeEvents, consequences, enums },
 } = tables
 
 const {
-	consequenceAffectedEntityTypes,
 	consequenceSources,
 	consequenceTimeframe,
 	consequenceVisibility,
 	impactSeverity,
 	rhythmEffects,
-	consequenceTriggerTypes,
 	consequenceTypes,
 	eventTypes,
 	narrativePlacements,
@@ -143,16 +141,21 @@ export const schemas = {
 			.describe(
 				"The intended emotional reaction for the players. Is this an 'Empowering Reward', a 'Challenging Setback', or a 'Just Consequence' for their actions?",
 			),
-
-		triggerEntityType: z
-			.enum(consequenceTriggerTypes)
-			.describe("The specific type of in-game element that caused this consequence."),
-
-		affectedEntityType: z
-			.enum(consequenceAffectedEntityTypes)
-			.describe("The specific type of in-game element that this consequence impacts."),
-		affectedEntityId: id.describe("The ID of the entity that this consequence impacts."),
-		triggerEntityId: id.describe("The ID of the entity that caused this consequence."),
+		affectedAreaId: optionalId.describe("The ID of the area that this consequence impacts."),
+		affectedRegionId: optionalId.describe("The ID of the region that this consequence impacts."),
+		affectedSiteId: optionalId.describe("The ID of the site that this consequence impacts."),
+		affectedFactionId: optionalId.describe("The ID of the faction that this consequence impacts."),
+		affectedNpcId: optionalId.describe("The ID of the NPC that this consequence impacts."),
+		affectedQuestId: optionalId.describe("The ID of the quest that this consequence impacts."),
+		affectedConflictId: optionalId.describe("The ID of the conflict that this consequence impacts."),
+		affectedNarrativeDestinationId: optionalId.describe(
+			"The ID of the narrative destination that this consequence impacts.",
+		),
+		triggerConflictId: optionalId.describe("The ID of the conflict that caused this consequence."),
+		triggerQuestId: optionalId.describe("The ID of the quest that caused this consequence."),
+		triggerQuestStageDecisionId: optionalId.describe(
+			"The ID of the quest stage decision that caused this consequence.",
+		),
 		conflictImpactDescription: (s) =>
 			s
 				.optional()
@@ -168,15 +171,5 @@ export const schemas = {
 		.strict()
 		.describe(
 			"The ripple effects of player actions and world events. Consequences are how the world responds to the story, making player choices feel meaningful and the world feel alive.",
-		)
-		.refine(
-			(data) => {
-				if (data.triggerEntityType === "conflict") return data.conflictImpactDescription !== undefined
-				return true
-			},
-			{
-				message: "Conflict impact description is required when trigger entity type is conflict",
-				path: ["triggerEntityType"],
-			},
 		),
 } as const satisfies Schema<TableNames[number]>

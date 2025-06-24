@@ -26,7 +26,11 @@ export const entityGetters = createEntityGetters({
 		}),
 	all_map_groups: () =>
 		db.query.mapGroups.findMany({
-			with: { variants: true },
+			with: {
+				variants: {
+					columns: { id: true, description: true, variantName: true },
+				},
+			},
 		}),
 	all_map_variants: () =>
 		db.query.mapVariants.findMany({

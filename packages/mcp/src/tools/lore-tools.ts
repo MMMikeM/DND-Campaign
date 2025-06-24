@@ -7,18 +7,6 @@ import { createEntityGettersFactory } from "./utils/types"
 
 const createEntityGetters = createEntityGettersFactory(tables.loreTables)
 
-// Configure polymorphic validation for loreLinks table
-const { targetEntityTypes } = tables.loreTables.enums
-const polymorphicHelper = createEnhancedPolymorphicConfig(tables)
-const polymorphicConfig = polymorphicHelper.fromEnums("loreLinks", [
-	{
-		typeField: "targetEntityType",
-		idField: "targetEntityId",
-		enumValues: targetEntityTypes,
-		// No exclusions needed - all target entity types map to tables
-	},
-])
-
 const loreTableDefs = {
 	lore: tables.loreTables.lore,
 	loreLinks: tables.loreTables.loreLinks,
@@ -43,13 +31,14 @@ export const entityGetters = createEntityGetters({
 				itemRelations: true,
 				links: {
 					with: {
-						targetConflict: { columns: { name: true, id: true } },
-						targetFaction: { columns: { name: true, id: true } },
-						targetNpc: { columns: { name: true, id: true } },
-						targetQuest: { columns: { name: true, id: true } },
-						targetRegion: { columns: { name: true, id: true } },
-						targetLore: { columns: { name: true, id: true } },
-						lore: { columns: { name: true, id: true } },
+						conflict: true,
+						narrativeDestination: true,
+						quest: true,
+						faction: true,
+						npc: true,
+						foreshadowing: true,
+						region: true,
+						relatedLore: { columns: { name: true, id: true } },
 					},
 				},
 			},
@@ -59,13 +48,14 @@ export const entityGetters = createEntityGetters({
 		db.query.loreLinks.findFirst({
 			where: (loreLinks, { eq }) => eq(loreLinks.id, id),
 			with: {
-				targetConflict: { columns: { name: true, id: true } },
-				targetFaction: { columns: { name: true, id: true } },
-				targetNpc: { columns: { name: true, id: true } },
-				targetQuest: { columns: { name: true, id: true } },
-				targetRegion: { columns: { name: true, id: true } },
-				targetLore: { columns: { name: true, id: true } },
-				lore: { columns: { name: true, id: true } },
+				conflict: true,
+				narrativeDestination: true,
+				quest: true,
+				faction: true,
+				npc: true,
+				foreshadowing: true,
+				region: true,
+				relatedLore: { columns: { name: true, id: true } },
 			},
 		}),
 })
@@ -75,7 +65,7 @@ export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 		enums: tables.loreTables.enums,
 		description: "Manage lore-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_lore", loreTableDefs, tableEnum, schemas, polymorphicConfig),
+		handler: createManageEntityHandler("manage_lore", loreTableDefs, tableEnum, schemas),
 		annotations: {
 			title: "Manage Lore",
 			readOnlyHint: false,
