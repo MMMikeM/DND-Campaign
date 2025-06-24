@@ -1,6 +1,12 @@
 // items/tables.ts
-import { integer, pgTable, unique } from "drizzle-orm/pg-core"
+
+import { sql } from "drizzle-orm"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { conflicts } from "../conflicts/tables"
+import { factions } from "../factions/tables"
+import { lore } from "../lore/tables"
+import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -49,13 +55,33 @@ export const itemRelations = pgTable(
 		sourceItemId: cascadeFk("source_item_id", items.id),
 
 		relationshipType: oneOf("relationship_type", itemRelationshipTypes),
-		targetEntityType: oneOf("target_entity_type", targetEntityTypes),
-
-		targetEntityId: integer("target_entity_id"),
+		itemId: nullableFk("item_id", items.id),
+		npcId: nullableFk("npc_id", npcs.id),
+		factionId: nullableFk("faction_id", factions.id),
+		siteId: nullableFk("site_id", sites.id),
+		questId: nullableFk("quest_id", quests.id),
+		conflictId: nullableFk("conflict_id", conflicts.id),
+		narrativeDestinationId: nullableFk("narrative_destination_id", narrativeDestinations.id),
+		loreId: nullableFk("lore_id", lore.id),
 
 		relationshipDetails: nullableString("relationship_details"),
 	},
-	(t) => [unique().on(t.sourceItemId, t.targetEntityType, t.targetEntityId, t.relationshipType)],
+	(t) => [
+		unique().on(t.sourceItemId, t.relationshipType),
+		check(
+			"chk_single_fk_check",
+			sql`(
+			(case when ${t.itemId} is not null then 1 else 0 end) +
+			(case when ${t.npcId} is not null then 1 else 0 end) +
+			(case when ${t.factionId} is not null then 1 else 0 end) +
+			(case when ${t.siteId} is not null then 1 else 0 end) +
+			(case when ${t.questId} is not null then 1 else 0 end) +
+			(case when ${t.conflictId} is not null then 1 else 0 end) +
+			(case when ${t.narrativeDestinationId} is not null then 1 else 0 end) +
+			(case when ${t.loreId} is not null then 1 else 0 end)
+		) = 1`,
+		),
+	],
 )
 
 export const itemNotableHistory = pgTable("item_notable_history", {

@@ -29,6 +29,13 @@
       "when": 1750660020185,
       "tag": "0003_misty_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1750743789019,
+      "tag": "0004_modern_grandmaster",
+      "breakpoints": true
     }
   ]
 }

@@ -56,10 +56,7 @@ export const questStageSearchDataView = pgView("quest_stage_search_data_view").a
 		.leftJoin(narrativeEvents, sql`${narrativeEvents.questStageId} = ${questStages.id}`)
 		.leftJoin(npcStageInvolvement, sql`${npcStageInvolvement.questStageId} = ${questStages.id}`)
 		.leftJoin(sql`${npcs} AS inv_npc`, sql`${npcStageInvolvement.npcId} = inv_npc.id`)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.sourceEntityType} = 'quest_stage' AND ${foreshadowing.sourceEntityId} = ${questStages.id}`,
-		)
+		.leftJoin(foreshadowing, sql`${foreshadowing.sourceQuestStageId} = ${questStages.id}`)
 		.groupBy(questStages.id, quests.id, sites.id, npcs.id),
 )
 
@@ -86,9 +83,6 @@ export const questStageDecisionSearchDataView = pgView("quest_stage_decision_sea
 		.leftJoin(sql`${questStages} AS fs`, sql`${questStageDecisions.fromQuestStageId} = fs.id`)
 		.leftJoin(sql`${questStages} AS ts`, sql`${questStageDecisions.toQuestStageId} = ts.id`)
 		.leftJoin(narrativeEvents, sql`${narrativeEvents.triggeringStageDecisionId} = ${questStageDecisions.id}`)
-		.leftJoin(
-			consequences,
-			sql`${consequences.triggerEntityType} = 'quest_stage_decision' AND ${consequences.triggerEntityId} = ${questStageDecisions.id}`,
-		)
+		.leftJoin(consequences, sql`${consequences.triggerQuestStageDecisionId} = ${questStageDecisions.id}`)
 		.groupBy(questStageDecisions.id, quests.id, sql`fs.id`, sql`ts.id`),
 )

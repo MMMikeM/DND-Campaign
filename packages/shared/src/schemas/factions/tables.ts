@@ -1,8 +1,8 @@
 // factions/tables.ts
 import { sql } from "drizzle-orm"
-import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
-import { sites } from "../regions/tables"
+import { areas, regions, sites } from "../regions/tables"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
@@ -20,7 +20,6 @@ const {
 	relationshipStrengths,
 	transparencyLevels,
 	wealthLevels,
-	relatedEntityTypes,
 } = enums
 
 export const factions = pgTable(
@@ -107,20 +106,31 @@ export const factionDiplomacy = pgTable(
 	(t) => [unique().on(t.sourceFactionId, t.targetFactionId)],
 )
 
-export const factionInfluence = pgTable("faction_influence", {
-	id: pk(),
-	creativePrompts: list("creative_prompts"),
-	description: list("description"),
-	gmNotes: list("gm_notes"),
-	tags: list("tags"),
+export const factionInfluence = pgTable(
+	"faction_influence",
+	{
+		id: pk(),
+		creativePrompts: list("creative_prompts"),
+		description: list("description"),
+		gmNotes: list("gm_notes"),
+		tags: list("tags"),
 
-	factionId: cascadeFk("faction_id", factions.id),
-	relatedEntityType: oneOf("related_entity_type", relatedEntityTypes),
-	relatedEntityId: integer("related_entity_id"),
+		factionId: cascadeFk("faction_id", factions.id),
 
-	influenceLevel: oneOf("influence_level", influenceLevels),
+		regionId: nullableFk("region_id", () => regions.id),
+		areaId: nullableFk("area_id", () => areas.id),
+		siteId: nullableFk("site_id", () => sites.id),
 
-	presenceTypes: list("presence_types"),
-	presenceDetails: list("presence_details"),
-	priorities: list("priorities"),
-})
+		influenceLevel: oneOf("influence_level", influenceLevels),
+
+		presenceTypes: list("presence_types"),
+		presenceDetails: list("presence_details"),
+		priorities: list("priorities"),
+	},
+	(t) => [
+		check(
+			"single_fk_check",
+			sql`((CASE WHEN ${t.regionId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.areaId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.siteId} IS NOT NULL THEN 1 ELSE 0 END)) = 1`,
+		),
+	],
+)

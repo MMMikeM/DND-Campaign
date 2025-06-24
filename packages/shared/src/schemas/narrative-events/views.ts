@@ -37,10 +37,7 @@ export const narrativeEventSearchDataView = pgView("narrative_event_search_data_
 		.leftJoin(sql`${quests} AS sq`, sql`${questStages.questId} = sq.id`)
 		.leftJoin(questStageDecisions, sql`${narrativeEvents.triggeringStageDecisionId} = ${questStageDecisions.id}`)
 		.leftJoin(sql`${quests} AS rq`, sql`${narrativeEvents.relatedQuestId} = rq.id`)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.targetEntityType} = 'narrative_event' AND ${foreshadowing.targetEntityId} = ${narrativeEvents.id}`,
-		)
+		.leftJoin(foreshadowing, sql`${foreshadowing.targetNarrativeEventId} = ${narrativeEvents.id}`)
 		.groupBy(narrativeEvents.id, questStages.id, sql`sq.id`, questStageDecisions.id, sql`rq.id`),
 )
 
@@ -75,47 +72,17 @@ export const consequenceSearchDataView = pgView("consequence_search_data_view").
 		})
 		.from(consequences)
 		// Trigger entity joins
-		.leftJoin(
-			sql`${quests} AS tq`,
-			sql`${consequences.triggerEntityType} = 'quest' AND ${consequences.triggerEntityId} = tq.id`,
-		)
-		.leftJoin(
-			sql`${conflicts} AS tc`,
-			sql`${consequences.triggerEntityType} = 'conflict' AND ${consequences.triggerEntityId} = tc.id`,
-		)
+		.leftJoin(sql`${quests} AS tq`, sql`${consequences.triggerQuestId} = tq.id`)
+		.leftJoin(sql`${conflicts} AS tc`, sql`${consequences.triggerConflictId} = tc.id`)
 		// Affected entity joins
-		.leftJoin(
-			sql`${factions} AS af`,
-			sql`${consequences.affectedEntityType} = 'faction' AND ${consequences.affectedEntityId} = af.id`,
-		)
-		.leftJoin(
-			sql`${regions} AS ar`,
-			sql`${consequences.affectedEntityType} = 'region' AND ${consequences.affectedEntityId} = ar.id`,
-		)
-		.leftJoin(
-			sql`${areas} AS aa`,
-			sql`${consequences.affectedEntityType} = 'area' AND ${consequences.affectedEntityId} = aa.id`,
-		)
-		.leftJoin(
-			sql`${sites} AS as_`,
-			sql`${consequences.affectedEntityType} = 'site' AND ${consequences.affectedEntityId} = as_.id`,
-		)
-		.leftJoin(
-			sql`${npcs} AS an`,
-			sql`${consequences.affectedEntityType} = 'npc' AND ${consequences.affectedEntityId} = an.id`,
-		)
-		.leftJoin(
-			sql`${narrativeDestinations} AS and_`,
-			sql`${consequences.affectedEntityType} = 'narrative_destination' AND ${consequences.affectedEntityId} = and_.id`,
-		)
-		.leftJoin(
-			sql`${conflicts} AS ac`,
-			sql`${consequences.affectedEntityType} = 'conflict' AND ${consequences.affectedEntityId} = ac.id`,
-		)
-		.leftJoin(
-			sql`${quests} AS aq`,
-			sql`${consequences.affectedEntityType} = 'quest' AND ${consequences.affectedEntityId} = aq.id`,
-		)
+		.leftJoin(sql`${factions} AS af`, sql`${consequences.affectedFactionId} = af.id`)
+		.leftJoin(sql`${regions} AS ar`, sql`${consequences.affectedRegionId} = ar.id`)
+		.leftJoin(sql`${areas} AS aa`, sql`${consequences.affectedAreaId} = aa.id`)
+		.leftJoin(sql`${sites} AS as_`, sql`${consequences.affectedSiteId} = as_.id`)
+		.leftJoin(sql`${npcs} AS an`, sql`${consequences.affectedNpcId} = an.id`)
+		.leftJoin(sql`${narrativeDestinations} AS and_`, sql`${consequences.affectedNarrativeDestinationId} = and_.id`)
+		.leftJoin(sql`${conflicts} AS ac`, sql`${consequences.affectedConflictId} = ac.id`)
+		.leftJoin(sql`${quests} AS aq`, sql`${consequences.affectedQuestId} = aq.id`)
 		.groupBy(
 			consequences.id,
 			sql`tq.id`,

@@ -55,26 +55,11 @@ export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb
 		.leftJoin(conflictParticipants, sql`${conflictParticipants.conflictId} = ${conflicts.id}`)
 		.leftJoin(factions, sql`${conflictParticipants.factionId} = ${factions.id}`)
 		.leftJoin(npcs, sql`${conflictParticipants.npcId} = ${npcs.id}`)
-		.leftJoin(
-			sql`${consequences} AS c_caused`,
-			sql`c_caused.trigger_entity_type = 'conflict' AND c_caused.trigger_entity_id = ${conflicts.id}`,
-		)
-		.leftJoin(
-			sql`${consequences} AS c_affecting`,
-			sql`c_affecting.affected_entity_type = 'conflict' AND c_affecting.affected_entity_id = ${conflicts.id}`,
-		)
+		.leftJoin(sql`${consequences} AS c_caused`, sql`c_caused.trigger_conflict_id = ${conflicts.id}`)
+		.leftJoin(sql`${consequences} AS c_affecting`, sql`c_affecting.affected_conflict_id = ${conflicts.id}`)
 		.leftJoin(narrativeDestinations, sql`${narrativeDestinations.conflictId} = ${conflicts.id}`)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.targetEntityType} = 'conflict' AND ${foreshadowing.targetEntityId} = ${conflicts.id}`,
-		)
-		.leftJoin(
-			itemRelations,
-			sql`${itemRelations.targetEntityType} = 'conflict' AND ${itemRelations.targetEntityId} = ${conflicts.id}`,
-		)
-		.leftJoin(
-			loreLinks,
-			sql`${loreLinks.targetEntityType} = 'conflict' AND ${loreLinks.targetEntityId} = ${conflicts.id}`,
-		)
+		.leftJoin(foreshadowing, sql`${foreshadowing.targetConflictId} = ${conflicts.id}`)
+		.leftJoin(itemRelations, sql`${itemRelations.conflictId} = ${conflicts.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.conflictId} = ${conflicts.id}`)
 		.groupBy(conflicts.id, regions.id),
 )

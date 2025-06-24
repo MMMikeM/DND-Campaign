@@ -94,21 +94,12 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 			narrativeDestinations,
 			sql`${narrativeDestinationQuestRoles.narrativeDestinationId} = ${narrativeDestinations.id}`,
 		)
-		.leftJoin(c_trig, sql`${c_trig.triggerEntityType} = 'quest' AND ${c_trig.triggerEntityId} = ${quests.id}`)
-		.leftJoin(c_aff, sql`${c_aff.affectedEntityType} = 'quest' AND ${c_aff.affectedEntityId} = ${quests.id}`)
+		.leftJoin(c_trig, sql`${c_trig.triggerQuestId} = ${quests.id}`)
+		.leftJoin(c_aff, sql`${c_aff.affectedQuestId} = ${quests.id}`)
 		.leftJoin(narrativeEvents, sql`${narrativeEvents.relatedQuestId} = ${quests.id}`)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_out`,
-			sql`fs_out.source_entity_type = 'quest' AND fs_out.source_entity_id = ${quests.id}`,
-		)
-		.leftJoin(
-			sql`${foreshadowing} AS fs_in`,
-			sql`fs_in.target_entity_type = 'quest' AND fs_in.target_entity_id = ${quests.id}`,
-		)
-		.leftJoin(
-			itemRelations,
-			sql`${itemRelations.targetEntityType} = 'quest' AND ${itemRelations.targetEntityId} = ${quests.id}`,
-		)
-		.leftJoin(loreLinks, sql`${loreLinks.targetEntityType} = 'quest' AND ${loreLinks.targetEntityId} = ${quests.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_quest_id = ${quests.id}`)
+		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_quest_id = ${quests.id}`)
+		.leftJoin(itemRelations, sql`${itemRelations.questId} = ${quests.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.questId} = ${quests.id}`)
 		.groupBy(quests.id, regions.id),
 )

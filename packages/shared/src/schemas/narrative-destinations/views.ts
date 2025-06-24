@@ -69,18 +69,9 @@ export const narrativeDestinationSearchDataView = pgView("narrative_destination_
 		)
 		.leftJoin(sql`${npcs} AS n`, sql`${narrativeDestinationParticipants.npcId} = n.id`)
 		.leftJoin(sql`${factions} AS f`, sql`${narrativeDestinationParticipants.factionId} = f.id`)
-		.leftJoin(
-			itemRelations,
-			sql`${itemRelations.targetEntityType} = 'narrative_destination' AND ${itemRelations.targetEntityId} = ${narrativeDestinations.id}`,
-		)
-		.leftJoin(
-			loreLinks,
-			sql`${loreLinks.targetEntityType} = 'narrative_destination' AND ${loreLinks.targetEntityId} = ${narrativeDestinations.id}`,
-		)
-		.leftJoin(
-			foreshadowing,
-			sql`${foreshadowing.targetEntityType} = 'narrative_destination' AND ${foreshadowing.targetEntityId} = ${narrativeDestinations.id}`,
-		)
+		.leftJoin(itemRelations, sql`${itemRelations.narrativeDestinationId} = ${narrativeDestinations.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.narrativeDestinationId} = ${narrativeDestinations.id}`)
+		.leftJoin(foreshadowing, sql`${foreshadowing.targetNarrativeDestinationId} = ${narrativeDestinations.id}`)
 		.leftJoin(
 			sql`${narrativeDestinationRelations} AS dr_out`,
 			sql`dr_out.source_destination_id = ${narrativeDestinations.id}`,

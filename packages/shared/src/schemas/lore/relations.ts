@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -10,81 +10,50 @@ import { regions } from "../regions/tables"
 import { lore, loreLinks } from "./tables"
 
 export const loreRelations = relations(lore, ({ many }) => ({
-	links: many(loreLinks, { relationName: "LoreLinkParent" }),
 	itemRelations: many(itemRelations),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetLore" }),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "sourceLoreForForeshadowing" }),
+	links: many(loreLinks, { relationName: "loreLinks" }),
+	relatedLinks: many(loreLinks, { relationName: "relatedLoreLinks" }),
 }))
 
 export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 	lore: one(lore, {
-		relationName: "LoreLinkParent",
 		fields: [loreLinks.loreId],
 		references: [lore.id],
+		relationName: "loreLinks",
 	}),
-
-	// Soft relations for polymorphic targetEntityType/targetEntityId
-	targetRegion: one(regions, {
-		relationName: "LoreLinkTargetRegion",
-		fields: [loreLinks.targetEntityId],
+	region: one(regions, {
+		fields: [loreLinks.regionId],
 		references: [regions.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'region'`,
 	}),
-
-	targetFaction: one(factions, {
-		relationName: "LoreLinkTargetFaction",
-		fields: [loreLinks.targetEntityId],
+	faction: one(factions, {
+		fields: [loreLinks.factionId],
 		references: [factions.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'faction'`,
 	}),
-
-	targetNpc: one(npcs, {
-		relationName: "LoreLinkTargetNpc",
-		fields: [loreLinks.targetEntityId],
+	npc: one(npcs, {
+		fields: [loreLinks.npcId],
 		references: [npcs.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'npc'`,
 	}),
-
-	targetConflict: one(conflicts, {
-		relationName: "LoreLinkTargetConflict",
-		fields: [loreLinks.targetEntityId],
+	conflict: one(conflicts, {
+		fields: [loreLinks.conflictId],
 		references: [conflicts.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'conflict'`,
 	}),
-
-	targetQuest: one(quests, {
-		relationName: "LoreLinkTargetQuest",
-		fields: [loreLinks.targetEntityId],
+	quest: one(quests, {
+		fields: [loreLinks.questId],
 		references: [quests.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'quest'`,
 	}),
-
-	targetLore: one(lore, {
-		relationName: "LoreLinkTargetLore",
-		fields: [loreLinks.targetEntityId],
-		references: [lore.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'lore'`,
-	}),
-
-	targetNarrativeDestination: one(narrativeDestinations, {
-		relationName: "LoreLinkTargetNarrativeDestination",
-		fields: [loreLinks.targetEntityId],
-		references: [narrativeDestinations.id],
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'narrative_destination'`,
-	}),
-
-	targetForeshadowing: one(foreshadowing, {
-		fields: [loreLinks.targetEntityId],
+	foreshadowing: one(foreshadowing, {
+		fields: [loreLinks.foreshadowingId],
 		references: [foreshadowing.id],
-		relationName: "targetForeshadowingForLoreLink",
-		// @ts-expect-error - Drizzle doesn't have proper types for where conditions in relations yet
-		where: sql`${loreLinks.targetEntityType} = 'foreshadowing'`,
+	}),
+	narrativeDestination: one(narrativeDestinations, {
+		fields: [loreLinks.narrativeDestinationId],
+		references: [narrativeDestinations.id],
+	}),
+	relatedLore: one(lore, {
+		fields: [loreLinks.relatedLoreId],
+		references: [lore.id],
+		relationName: "relatedLoreLinks",
 	}),
 }))

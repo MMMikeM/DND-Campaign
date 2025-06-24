@@ -64,16 +64,10 @@ export const regionSearchDataView = pgView("region_search_data_view").as((qb) =>
 		.leftJoin(areas, sql`${areas.regionId} = ${regions.id}`)
 		.leftJoin(quests, sql`${quests.regionId} = ${regions.id}`)
 		.leftJoin(conflicts, sql`${conflicts.regionId} = ${regions.id}`)
-		.leftJoin(
-			consequences,
-			sql`${consequences.affectedEntityType} = 'region' AND ${consequences.affectedEntityId} = ${regions.id}`,
-		)
+		.leftJoin(consequences, sql`${consequences.affectedRegionId} = ${regions.id}`)
 		.leftJoin(narrativeDestinations, sql`${narrativeDestinations.regionId} = ${regions.id}`)
-		.leftJoin(
-			factionInfluence,
-			sql`${factionInfluence.relatedEntityType} = 'region' AND ${factionInfluence.relatedEntityId} = ${regions.id}`,
-		)
-		.leftJoin(loreLinks, sql`${loreLinks.targetEntityType} = 'region' AND ${loreLinks.targetEntityId} = ${regions.id}`)
+		.leftJoin(factionInfluence, sql`${factionInfluence.regionId} = ${regions.id}`)
+		.leftJoin(loreLinks, sql`${loreLinks.regionId} = ${regions.id}`)
 		.groupBy(regions.id),
 )
 
@@ -100,14 +94,8 @@ export const areaSearchDataView = pgView("area_search_data_view").as((qb) =>
 		.from(areas)
 		.leftJoin(regions, sql`${areas.regionId} = ${regions.id}`)
 		.leftJoin(sites, sql`${sites.areaId} = ${areas.id}`)
-		.leftJoin(
-			consequences,
-			sql`${consequences.affectedEntityType} = 'area' AND ${consequences.affectedEntityId} = ${areas.id}`,
-		)
-		.leftJoin(
-			factionInfluence,
-			sql`${factionInfluence.relatedEntityType} = 'area' AND ${factionInfluence.relatedEntityId} = ${areas.id}`,
-		)
+		.leftJoin(consequences, sql`${consequences.affectedAreaId} = ${areas.id}`)
+		.leftJoin(factionInfluence, sql`${factionInfluence.areaId} = ${areas.id}`)
 		.groupBy(areas.id, regions.id),
 )
 

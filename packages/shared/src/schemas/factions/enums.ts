@@ -22,8 +22,6 @@ const factionTypes = [
 
 const transparencyLevels = ["transparent", "secretive", "deceptive"] as const
 
-const relatedEntityTypes = ["region", "region_connection", "area", "site"] as const
-
 export const enums = {
 	agendaImportance,
 	agendaStages,
@@ -37,5 +35,4 @@ export const enums = {
 	relationshipStrengths,
 	transparencyLevels,
 	wealthLevels,
-	relatedEntityTypes,
 }

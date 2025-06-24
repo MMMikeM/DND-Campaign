@@ -2,13 +2,12 @@
 
 import { sql } from "drizzle-orm"
 import { check, integer, pgTable } from "drizzle-orm/pg-core"
-import { list, manyOf, nullableOneOf, oneOf, pk, string } from "../../db/utils"
+import { list, manyOf, oneOf, pk, string } from "../../db/utils"
 import { enums } from "./enums"
 
 export { enums } from "./enums"
 
-const { discoverySubtlety, narrativeWeight, seedDeliveryMethods, foreshadowedTargetType, foreshadowingSourceType } =
-	enums
+const { discoverySubtlety, narrativeWeight, seedDeliveryMethods } = enums
 
 export const foreshadowing = pgTable(
 	"foreshadowing",
@@ -20,11 +19,22 @@ export const foreshadowing = pgTable(
 		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
-		targetEntityType: oneOf("target_entity_type", foreshadowedTargetType),
-		targetEntityId: integer("target_entity_id"),
+		targetQuestId: integer("target_quest_id"),
+		targetNpcId: integer("target_npc_id"),
+		targetNarrativeEventId: integer("target_narrative_event_id"),
+		targetConflictId: integer("target_conflict_id"),
+		targetItemId: integer("target_item_id"),
+		targetNarrativeDestinationId: integer("target_narrative_destination_id"),
+		targetLoreId: integer("target_lore_id"),
+		targetFactionId: integer("target_faction_id"),
+		targetSiteId: integer("target_site_id"),
 
-		sourceEntityType: nullableOneOf("source_entity_type", foreshadowingSourceType),
-		sourceEntityId: integer("source_entity_id"),
+		sourceQuestId: integer("source_quest_id"),
+		sourceQuestStageId: integer("source_quest_stage_id"),
+		sourceSiteId: integer("source_site_id"),
+		sourceNpcId: integer("source_npc_id"),
+		sourceItemDescriptionId: integer("source_item_description_id"),
+		sourceLoreId: integer("source_lore_id"),
 
 		subtlety: oneOf("subtlety", discoverySubtlety),
 		narrativeWeight: oneOf("narrative_weight", narrativeWeight),
@@ -32,18 +42,29 @@ export const foreshadowing = pgTable(
 	},
 	(t) => [
 		check(
-			"chk_abstract_target_has_text",
-			sql`
-                CASE 
-                    WHEN ${t.targetEntityType} IN ('abstract_theme', 'specific_reveal') 
-                    THEN (${t.targetEntityId} IS NOT NULL) -- For abstract, the text IS the ID.
-                    ELSE TRUE
-                END
-            `,
+			"single_target_fk_check",
+			sql`(
+        (case when ${t.targetQuestId} is not null then 1 else 0 end) +
+        (case when ${t.targetNpcId} is not null then 1 else 0 end) +
+        (case when ${t.targetNarrativeEventId} is not null then 1 else 0 end) +
+        (case when ${t.targetConflictId} is not null then 1 else 0 end) +
+        (case when ${t.targetItemId} is not null then 1 else 0 end) +
+        (case when ${t.targetNarrativeDestinationId} is not null then 1 else 0 end) +
+        (case when ${t.targetLoreId} is not null then 1 else 0 end) +
+        (case when ${t.targetFactionId} is not null then 1 else 0 end) +
+        (case when ${t.targetSiteId} is not null then 1 else 0 end)
+      ) = 1`,
 		),
 		check(
-			"chk_source_duo_validity",
-			sql`(${t.sourceEntityType} IS NULL AND ${t.sourceEntityId} IS NULL) OR (${t.sourceEntityType} IS NOT NULL AND ${t.sourceEntityId} IS NOT NULL)`,
+			"single_source_fk_check",
+			sql`(
+        (case when ${t.sourceQuestId} is not null then 1 else 0 end) +
+        (case when ${t.sourceQuestStageId} is not null then 1 else 0 end) +
+        (case when ${t.sourceSiteId} is not null then 1 else 0 end) +
+        (case when ${t.sourceNpcId} is not null then 1 else 0 end) +
+        (case when ${t.sourceItemDescriptionId} is not null then 1 else 0 end) +
+        (case when ${t.sourceLoreId} is not null then 1 else 0 end)
+      ) = 1`,
 		),
 	],
 )

@@ -50,63 +50,21 @@ export const foreshadowingSearchDataView = pgView("foreshadowing_search_data_vie
 			targetSite: sql<string>`COALESCE(jsonb_build_object('id', ts.id, 'name', ts.name), '{}'::jsonb)`.as("targetSite"),
 		})
 		.from(foreshadowing)
-		.leftJoin(
-			sql`${quests} AS sq`,
-			sql`${foreshadowing.sourceEntityType} = 'quest' AND ${foreshadowing.sourceEntityId} = sq.id`,
-		)
-		.leftJoin(
-			sql`${questStages} AS sqs`,
-			sql`${foreshadowing.sourceEntityType} = 'quest_stage' AND ${foreshadowing.sourceEntityId} = sqs.id`,
-		)
+		.leftJoin(sql`${quests} AS sq`, sql`${foreshadowing.sourceQuestId} = sq.id`)
+		.leftJoin(sql`${questStages} AS sqs`, sql`${foreshadowing.sourceQuestStageId} = sqs.id`)
 		.leftJoin(sql`${quests} AS sq_stage`, sql`sqs.quest_id = sq_stage.id`)
-		.leftJoin(
-			sql`${sites} AS ss`,
-			sql`${foreshadowing.sourceEntityType} = 'site' AND ${foreshadowing.sourceEntityId} = ss.id`,
-		)
-		.leftJoin(
-			sql`${npcs} AS sn`,
-			sql`${foreshadowing.sourceEntityType} = 'npc' AND ${foreshadowing.sourceEntityId} = sn.id`,
-		)
-		.leftJoin(
-			sql`${lore} AS sl`,
-			sql`${foreshadowing.sourceEntityType} = 'lore' AND ${foreshadowing.sourceEntityId} = sl.id`,
-		)
-		.leftJoin(
-			sql`${quests} AS tq`,
-			sql`${foreshadowing.targetEntityType} = 'quest' AND ${foreshadowing.targetEntityId} = tq.id`,
-		)
-		.leftJoin(
-			sql`${npcs} AS tn`,
-			sql`${foreshadowing.targetEntityType} = 'npc' AND ${foreshadowing.targetEntityId} = tn.id`,
-		)
-		.leftJoin(
-			sql`${narrativeEvents} AS tne`,
-			sql`${foreshadowing.targetEntityType} = 'narrative_event' AND ${foreshadowing.targetEntityId} = tne.id`,
-		)
-		.leftJoin(
-			sql`${conflicts} AS tmc`,
-			sql`${foreshadowing.targetEntityType} = 'conflict' AND ${foreshadowing.targetEntityId} = tmc.id`,
-		)
-		.leftJoin(
-			sql`${items} AS ti`,
-			sql`${foreshadowing.targetEntityType} = 'item' AND ${foreshadowing.targetEntityId} = ti.id`,
-		)
-		.leftJoin(
-			sql`${narrativeDestinations} AS tnd`,
-			sql`${foreshadowing.targetEntityType} = 'narrative_destination' AND ${foreshadowing.targetEntityId} = tnd.id`,
-		)
-		.leftJoin(
-			sql`${lore} AS tl`,
-			sql`${foreshadowing.targetEntityType} = 'lore' AND ${foreshadowing.targetEntityId} = tl.id`,
-		)
-		.leftJoin(
-			sql`${factions} AS tf`,
-			sql`${foreshadowing.targetEntityType} = 'faction' AND ${foreshadowing.targetEntityId} = tf.id`,
-		)
-		.leftJoin(
-			sql`${sites} AS ts`,
-			sql`${foreshadowing.targetEntityType} = 'site' AND ${foreshadowing.targetEntityId} = ts.id`,
-		)
+		.leftJoin(sql`${sites} AS ss`, sql`${foreshadowing.sourceSiteId} = ss.id`)
+		.leftJoin(sql`${npcs} AS sn`, sql`${foreshadowing.sourceNpcId} = sn.id`)
+		.leftJoin(sql`${lore} AS sl`, sql`${foreshadowing.sourceLoreId} = sl.id`)
+		.leftJoin(sql`${quests} AS tq`, sql`${foreshadowing.targetQuestId} = tq.id`)
+		.leftJoin(sql`${npcs} AS tn`, sql`${foreshadowing.targetNpcId} = tn.id`)
+		.leftJoin(sql`${narrativeEvents} AS tne`, sql`${foreshadowing.targetNarrativeEventId} = tne.id`)
+		.leftJoin(sql`${conflicts} AS tmc`, sql`${foreshadowing.targetConflictId} = tmc.id`)
+		.leftJoin(sql`${items} AS ti`, sql`${foreshadowing.targetItemId} = ti.id`)
+		.leftJoin(sql`${narrativeDestinations} AS tnd`, sql`${foreshadowing.targetNarrativeDestinationId} = tnd.id`)
+		.leftJoin(sql`${lore} AS tl`, sql`${foreshadowing.targetLoreId} = tl.id`)
+		.leftJoin(sql`${factions} AS tf`, sql`${foreshadowing.targetFactionId} = tf.id`)
+		.leftJoin(sql`${sites} AS ts`, sql`${foreshadowing.targetSiteId} = ts.id`)
 		.groupBy(
 			foreshadowing.id,
 			sql`sq.id`,
