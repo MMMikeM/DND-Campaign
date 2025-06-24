@@ -1,5 +1,5 @@
 // factions/relations.ts
-import { relations, sql } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
@@ -8,7 +8,7 @@ import { narrativeDestinationParticipants } from "../narrative-destinations/tabl
 import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships } from "../npcs/tables"
 import { questHooks, questParticipants } from "../quests/tables"
-import { areas, regionConnections, regions, sites } from "../regions/tables"
+import { areas, regions, sites } from "../regions/tables"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionsRelations = relations(factions, ({ many, one }) => ({

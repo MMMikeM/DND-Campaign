@@ -20,7 +20,7 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	areas: many(areas),
 	quests: many(quests),
 	conflicts: many(conflicts),
-	consequences: many(consequences),
+	consequences: many(consequences, { relationName: "ConsequenceAffectedRegion" }),
 	narrativeDestinations: many(narrativeDestinations),
 	factionInfluence: many(factionInfluence),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetRegion" }),
@@ -33,7 +33,7 @@ export const areasRelations = relations(areas, ({ one, many }) => ({
 	}),
 
 	sites: many(sites),
-	consequences: many(consequences),
+	consequences: many(consequences, { relationName: "ConsequenceAffectedArea" }),
 	factionInfluence: many(factionInfluence),
 }))
 
@@ -64,7 +64,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	npcAssociations: many(npcSiteAssociations),
 	questStages: many(questStages),
 	questHooks: many(questHooks),
-	consequences: many(consequences),
+	consequences: many(consequences, { relationName: "ConsequenceAffectedSite" }),
 	factionHqs: many(factions, { relationName: "factionHq" }),
 	factionInfluence: many(factionInfluence),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceSite" }),

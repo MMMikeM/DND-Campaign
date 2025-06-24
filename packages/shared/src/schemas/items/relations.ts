@@ -13,7 +13,7 @@ import { itemNotableHistory, itemRelations, items } from "./tables"
 export const itemsRelations = relations(items, ({ many, one }) => ({
 	relations: many(itemRelations),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceItem" }),
-	loreLinks: many(loreLinks),
+	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetItem" }),
 	notableHistory: many(itemNotableHistory),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetItem" }),
 
