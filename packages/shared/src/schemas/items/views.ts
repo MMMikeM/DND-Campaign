@@ -30,8 +30,7 @@ export const itemSearchDataView = pgView("item_search_data_view").as((qb) =>
     'site', CASE WHEN ${itemRelations.siteId} IS NOT NULL THEN jsonb_build_object('id', ts.id, 'name', ts.name) END,
     'quest', CASE WHEN ${itemRelations.questId} IS NOT NULL THEN jsonb_build_object('id', tq.id, 'name', tq.name) END,
     'conflict', CASE WHEN ${itemRelations.conflictId} IS NOT NULL THEN jsonb_build_object('id', tc.id, 'name', tc.name) END,
-    'narrativeDestination', CASE WHEN ${itemRelations.narrativeDestinationId} IS NOT NULL THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) END,
-    'lore', CASE WHEN ${itemRelations.loreId} IS NOT NULL THEN jsonb_build_object('id', tl.id, 'name', tl.name) END
+    'narrativeDestination', CASE WHEN ${itemRelations.narrativeDestinationId} IS NOT NULL THEN jsonb_build_object('id', tnd.id, 'name', tnd.name) END
   )) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as("relations"),
 			incomingRelations: sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
     'relationship', to_jsonb(ir_in.*),
@@ -59,7 +58,6 @@ export const itemSearchDataView = pgView("item_search_data_view").as((qb) =>
 		.leftJoin(sql`${quests} AS tq`, sql`${itemRelations.questId} = tq.id`)
 		.leftJoin(sql`${conflicts} AS tc`, sql`${itemRelations.conflictId} = tc.id`)
 		.leftJoin(sql`${narrativeDestinations} AS tnd`, sql`${itemRelations.narrativeDestinationId} = tnd.id`)
-		.leftJoin(sql`${lore} AS tl`, sql`${itemRelations.loreId} = tl.id`)
 		.leftJoin(sql`${itemRelations} AS ir_in`, sql`ir_in.item_id = ${items.id}`)
 		.leftJoin(sql`${items} AS si`, sql`ir_in.source_item_id = si.id`)
 		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.itemId} = ${items.id}`)

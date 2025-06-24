@@ -306,11 +306,12 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 			rawData: sql`jsonb_build_object(
         'lore', ${loreSearchDataView.entityMain},
         'links', ${loreSearchDataView.links},
-        'itemRelations', ${loreSearchDataView.itemRelations},
-        'incomingForeshadowing', ${loreSearchDataView.incomingForeshadowing}
+        'foreshadowing', jsonb_build_object(
+          'incoming', ${loreSearchDataView.incomingForeshadowing},
+          'outgoing', ${loreSearchDataView.outgoingForeshadowing}
+        )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${loreSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${loreSearchDataView.links})`.as("content"),
+			content: sql<string>`jsonb_deep_text_values(${loreSearchDataView.entityMain})`.as("content"),
 			contentTsv: sql`weighted_search_vector(
         ${loreSearchDataView.entityMain},
         ${loreSearchDataView.links}
