@@ -3,6 +3,14 @@ import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { nameAndId } from "."
 
+const nameIdAndDescription = {
+	columns: {
+		id: true,
+		name: true,
+		description: true,
+	},
+} as const
+
 const loreConfig = {
 	findById: (id: number) =>
 		db.query.lore.findFirst({
@@ -11,14 +19,14 @@ const loreConfig = {
 				incomingForeshadowing: true,
 				links: {
 					with: {
-						region: nameAndId,
-						faction: nameAndId,
-						npc: nameAndId,
-						conflict: nameAndId,
-						quest: nameAndId,
-						foreshadowing: nameAndId,
-						relatedLore: nameAndId,
-						item: nameAndId,
+						region: nameIdAndDescription,
+						faction: nameIdAndDescription,
+						npc: nameIdAndDescription,
+						conflict: nameIdAndDescription,
+						quest: nameIdAndDescription,
+						foreshadowing: nameIdAndDescription,
+						relatedLore: nameIdAndDescription,
+						item: nameIdAndDescription,
 					},
 				},
 			},
@@ -46,7 +54,7 @@ export const getLore = async (slug: string) => {
 	const selectedLore = await loreConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((lore) => lore.find((lore) => lore.slug === slug))
+		.then((lore) => lore.find((lore) => lore.slug === slug || lore.id === Number(slug)))
 
 	if (!selectedLore) {
 		throw new EntityNotFoundError("Lore", slug)

@@ -30,7 +30,7 @@ export const getNarrativeEvent = async (slug: string) => {
 	const selectedEvent = await narrativeEventConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((events) => events.find((event) => event.slug === slug))
+		.then((events) => events.find((event) => event.slug === slug || event.id === Number(slug)))
 
 	if (!selectedEvent) {
 		throw new EntityNotFoundError("Narrative Event", slug)

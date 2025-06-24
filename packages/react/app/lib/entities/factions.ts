@@ -99,7 +99,7 @@ export const getFaction = async (slug: string) => {
 	const selectedFaction = await factionConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((factions) => factions.find((faction) => faction.slug === slug))
+		.then((factions) => factions.find((faction) => faction.slug === slug || faction.id === Number(slug)))
 
 	if (!selectedFaction) {
 		throw new EntityNotFoundError("Faction", slug)

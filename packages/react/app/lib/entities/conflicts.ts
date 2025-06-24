@@ -89,7 +89,7 @@ export const getConflict = async (slug: string) => {
 	const selectedConflict = await conflictConfig
 		.getNamesAndIds()
 		.then(addSlugs)
-		.then((conflicts) => conflicts.find((conflict) => conflict.slug === slug))
+		.then((conflicts) => conflicts.find((conflict) => conflict.slug === slug || conflict.id === Number(slug)))
 
 	if (!selectedConflict) {
 		throw new EntityNotFoundError("Conflict", slug)
