@@ -10,123 +10,13 @@ export const id = z.coerce.number()
 export const optionalId = z.coerce.number().optional()
 export const list = z.array(z.string()).min(1).max(5)
 
-// Re-export from schema.ts to avoid circular dependencies
 export { createManageSchema } from "./schema"
 
-// --- Polymorphic Entity Validation Types ---
-
-export interface PolymorphicField {
-	typeField: string
-	idField: string
-	allowedTypes: Record<string, baseTableWithId>
-}
-
-export interface PolymorphicValidationConfig {
-	[key: string]: PolymorphicField[]
-}
-
-// --- Polymorphic Configuration Helper ---
-
-export function createPolymorphicConfig(tableMapping: Record<string, baseTableWithId>) {
-	return {
-		createField: (typeField: string, idField: string, allowedEntityTypes: string[]): PolymorphicField => ({
-			typeField,
-			idField,
-			allowedTypes: Object.fromEntries(
-				allowedEntityTypes
-					.map((entityType) => {
-						const table = tableMapping[entityType]
-						return table ? [entityType, table] : null
-					})
-					.filter(Boolean) as [string, baseTableWithId][],
-			),
-		}),
-
-		forTable: (tableName: string, fields: PolymorphicField[]): PolymorphicValidationConfig => ({
-			[tableName]: fields,
-		}),
-	}
-}
-
-// Enhanced polymorphic helper with automatic enum-to-table mapping
-export function createEnhancedPolymorphicConfig(tablesCollection: Record<string, Record<string, unknown>>) {
-	// Extract all table objects, excluding enums
-	const allTables: Record<string, baseTableWithId> = {}
-
-	Object.values(tablesCollection).forEach((tableGroup) => {
-		if (tableGroup && typeof tableGroup === "object" && tableGroup !== null) {
-			Object.entries(tableGroup).forEach(([key, value]) => {
-				// More specific check for Drizzle tables: they should have getSQL method and Symbol.toStringTag
-				if (
-					key !== "enums" &&
-					value &&
-					typeof value === "object" &&
-					value !== null &&
-					!Array.isArray(value) &&
-					"getSQL" in value &&
-					typeof value.getSQL === "function"
-				) {
-					allTables[key] = value as baseTableWithId
-				}
-			})
-		}
-	})
-
-	// Common enum-to-table name mappings
-	const enumToTableMap: Record<string, string> = {
-		quest: "quests",
-		npc: "npcs",
-		narrative_event: "narrativeEvents",
-		conflict: "conflicts",
-		item: "items",
-		narrative_destination: "narrativeDestinations",
-		lore: "lore",
-		faction: "factions",
-		site: "sites",
-		quest_stage: "questStages",
-		region: "regions",
-		area: "areas",
-		// For faction influence table
-		region_connection: "regionConnections", // This is the exclusion case
-	}
-
-	return {
-		fromEnums: (
-			tableName: string,
-			relations: Array<{
-				typeField: string
-				idField: string
-				enumValues: readonly string[]
-				exclude?: string[]
-			}>,
-		): PolymorphicValidationConfig => {
-			const polymorphicFields = relations.map(({ typeField, idField, enumValues, exclude = [] }) => {
-				const allowedTypes: Record<string, baseTableWithId> = {}
-
-				enumValues
-					.filter((value) => !exclude.includes(value))
-					.forEach((enumValue) => {
-						const tableName = enumToTableMap[enumValue] || enumValue
-						const table = allTables[tableName]
-						if (table) {
-							// Store the mapping from enum value to table
-							allowedTypes[enumValue] = table
-						}
-					})
-
-				return {
-					typeField,
-					idField,
-					allowedTypes,
-				}
-			})
-
-			return { [tableName]: polymorphicFields }
-		},
-	}
-}
-
 // --- Response Helpers ---
+
+export const createResponse = (message: string): ToolHandlerReturn => ({
+	content: [{ type: "text", text: message }],
+})
 
 export const createErrorResponse = (message: string): ToolHandlerReturn => {
 	logger.error(message)
@@ -136,64 +26,142 @@ export const createErrorResponse = (message: string): ToolHandlerReturn => {
 	}
 }
 
-export const createResponse = (message: string): ToolHandlerReturn => ({
-	content: [{ type: "text", text: message }],
-})
+const safelyParseJSON = (data: unknown) => {
+	if (typeof data !== "string") {
+		return { success: true as const, data }
+	}
+	try {
+		return { success: true as const, data: JSON.parse(data) }
+	} catch (error) {
+		logger.error(`Error parsing JSON data: ${error}`)
+		return { success: false as const, error: "Invalid JSON data provided." }
+	}
+}
 
-// --- Polymorphic Entity Validation ---
-
-async function validatePolymorphicRelations(
-	data: object,
+async function handleDelete(
+	args: Record<string, unknown>,
+	table: baseTableWithId,
 	tableName: string,
-	polymorphicConfig?: PolymorphicValidationConfig,
-): Promise<string | null> {
-	if (!polymorphicConfig || !polymorphicConfig[tableName]) {
-		return null
+	categoryToolName: string,
+): Promise<ToolHandlerReturn> {
+	const deleteId = z.coerce.number().safeParse(args?.id)
+
+	if (!deleteId.success) {
+		return createErrorResponse(`Invalid id '${args?.id}' provided to ${categoryToolName} handler.`)
+	}
+	logger.info(`Deleting ${tableName} (via ${categoryToolName})`, { id: deleteId.data })
+	const result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
+	return createResponse(
+		result.length > 0
+			? `Successfully deleted ${tableName} with ID: ${deleteId.data}`
+			: `No ${tableName} found with ID: ${deleteId.data}`,
+	)
+}
+
+async function handleCreate<TS extends Schema<string>>(
+	args: Record<string, unknown>,
+	table: baseTableWithId,
+	tableName: string,
+	schemas: TS,
+	categoryToolName: string,
+): Promise<ToolHandlerReturn> {
+	const parseResult = safelyParseJSON(args?.data)
+	if (!parseResult.success) {
+		return createErrorResponse(`Invalid JSON data provided to ${categoryToolName} handler.`)
 	}
 
-	// Cast to Record for safe access to properties
-	const dataRecord = data as Record<string, unknown>
-	const polymorphicFields = polymorphicConfig[tableName]
-
-	for (const field of polymorphicFields) {
-		const entityType = dataRecord[field.typeField] as string | undefined
-		const entityId = dataRecord[field.idField] as number | undefined
-
-		// Skip validation if both are null/undefined (optional polymorphic relation)
-		if (!entityType && !entityId) {
-			continue
-		}
-
-		// Both must be provided if one is provided
-		if (!entityType || !entityId) {
-			return `Both ${field.typeField} and ${field.idField} must be provided together`
-		}
-
-		// Check if entity type is allowed
-		const targetTable = field.allowedTypes[entityType]
-		if (!targetTable) {
-			const allowedTypes = Object.keys(field.allowedTypes).join(", ")
-			return `Invalid ${field.typeField} '${entityType}'. Allowed types: ${allowedTypes}`
-		}
-
-		// Validate that the entity exists
-		try {
-			const existingEntity = await db
-				.select({ id: targetTable.id })
-				.from(targetTable)
-				.where(eq(targetTable.id, entityId))
-				.limit(1)
-
-			if (existingEntity.length === 0) {
-				return `${entityType} with ID ${entityId} does not exist`
-			}
-		} catch (error) {
-			logger.error(`Error validating polymorphic relation: ${error}`)
-			return `Failed to validate ${entityType} with ID ${entityId}`
-		}
+	if (!schemas[tableName]) {
+		return createErrorResponse(`Schema for ${tableName} not found.`)
 	}
 
-	return null
+	const parsedData = schemas[tableName].safeParse(parseResult.data)
+
+	if (!parsedData.success) {
+		const prettyError = z.prettifyError(parsedData.error)
+		return createErrorResponse(`Validation failed for ${tableName}:\n${prettyError}`)
+	}
+
+	const createData = parsedData.data
+
+	try {
+		const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
+
+		const entityName = "name" in createData && typeof createData.name === "string" ? createData.name : tableName
+		return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
+	} catch (error) {
+		logger.error(`Database error creating ${tableName}`, {
+			tableName: tableName,
+			error: error instanceof Error ? error.message : error,
+		})
+
+		return createErrorResponse(`Database error when creating ${tableName}.`)
+	}
+}
+
+async function handleUpdate<TS extends Schema<string>>(
+	args: Record<string, unknown>,
+	table: baseTableWithId,
+	tableName: string,
+	schemas: TS,
+	categoryToolName: string,
+): Promise<ToolHandlerReturn> {
+	if (args.id === undefined || args.id === null) {
+		return createErrorResponse(`An ID must be provided for the 'update' operation in ${categoryToolName}.`)
+	}
+	const updateId = Number(args.id)
+
+	const parseResult = safelyParseJSON(args?.data)
+	if (!parseResult.success) {
+		return createErrorResponse(`Invalid JSON data provided to ${categoryToolName} handler.`)
+	}
+
+	if (!schemas[tableName]) {
+		return createErrorResponse(`Schema for ${tableName} not found.`)
+	}
+
+	const parsedData = schemas[tableName].partial().safeParse(parseResult.data)
+
+	if (!parsedData.success) {
+		const prettyError = z.prettifyError(parsedData.error)
+		return createErrorResponse(`Validation failed for ${tableName}:\n${prettyError}`)
+	}
+
+	const dataToUpdate = parsedData.data
+
+	try {
+		logger.info(
+			`Updating ${tableName} (via ${categoryToolName}) with ID ${updateId} and data ${JSON.stringify(dataToUpdate)}`,
+		)
+		const result = await db
+			.update(table)
+			.set(dataToUpdate)
+			.where(eq(table.id, updateId))
+			.returning({ successfullyUpdated: table.id })
+
+		if (result.length !== 1 || result[0] === undefined) {
+			logger.error(`No ${tableName} found with ID: ${updateId}`)
+			return createErrorResponse(`No ${tableName} found with ID: ${updateId}`)
+		}
+
+		return createResponse(`Successfully updated ${tableName} with ID: ${updateId}`)
+	} catch (error) {
+		logger.error(`Database error updating ${tableName}`, {
+			error:
+				error instanceof Error
+					? {
+							name: error.name,
+							message: error.message,
+							stack: error.stack,
+						}
+					: error,
+			tableName: tableName,
+			data: dataToUpdate,
+		})
+
+		return createErrorResponse(
+			`Database error: Failed to update ${tableName}. ${error instanceof Error ? error.message : "Unknown error"}`,
+		)
+	}
 }
 
 export function createManageEntityHandler<TS extends Schema<TK[number]>, TK extends readonly [string, ...string[]]>(
@@ -201,10 +169,9 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 	tables: Record<TK[number], baseTableWithId>,
 	tableEnum: TK,
 	schemas: TS,
-	polymorphicConfig?: PolymorphicValidationConfig,
 ): ToolHandler {
 	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		logger.info(`Creating manage entity handler for ${categoryToolName} with args ${JSON.stringify(args)}`)
+		logger.info(`Creating manage entity handler for ${categoryToolName}`, { args })
 		if (!args) {
 			logger.error(`No arguments provided to ${categoryToolName} handler.`)
 			return createErrorResponse(`Arguments provided to ${categoryToolName} are malformed`)
@@ -224,132 +191,15 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			return createErrorResponse(`Invalid operation '${args?.operation}' provided to ${categoryToolName} handler.`)
 		}
 
-		if (operation.data === "delete") {
-			const deleteId = z.coerce.number().safeParse(args?.id)
-
-			if (!deleteId.success) {
-				return createErrorResponse(`Invalid id '${args?.id}' provided to ${categoryToolName} handler.`)
-			}
-			logger.info(`Deleting ${tableName.data} (via ${categoryToolName}) with id ${deleteId.data}`)
-			const result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
-			return createResponse(
-				result.length > 0
-					? `Successfully deleted ${tableName.data} with ID: ${deleteId.data}`
-					: `No ${tableName.data} found with ID: ${deleteId.data}`,
-			)
+		switch (operation.data) {
+			case "delete":
+				return handleDelete(args, table, tableName.data, categoryToolName)
+			case "create":
+				return handleCreate(args, table, tableName.data, schemas, categoryToolName)
+			case "update":
+				return handleUpdate(args, table, tableName.data, schemas, categoryToolName)
+			default:
+				return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)
 		}
-
-		if (operation.data === "create") {
-			// Handle string data by attempting to parse as JSON first
-			let dataToValidate = args?.data
-			if (typeof args?.data === "string") {
-				try {
-					dataToValidate = JSON.parse(args.data)
-				} catch (error: unknown) {
-					logger.error(`Error parsing JSON data: ${error}`)
-					return createErrorResponse(`Invalid JSON data provided to ${categoryToolName} handler.`)
-				}
-			}
-
-			const parsedData = schemas[tableName.data].safeParse(dataToValidate)
-
-			if (!parsedData.success) {
-				// Use Zod's built-in error formatting for better error messages
-				const prettyError = z.prettifyError(parsedData.error)
-				return createErrorResponse(`Validation failed for ${tableName.data}:\n${prettyError}`)
-			}
-
-			const createData = parsedData.data
-
-			// Validate polymorphic relations
-			const polymorphicError = await validatePolymorphicRelations(createData, tableName.data, polymorphicConfig)
-			if (polymorphicError) {
-				return createErrorResponse(`Relation validation failed: ${polymorphicError}`)
-			}
-
-			try {
-				const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
-
-				// Get the entity name from the created data if available
-				const entityName = createData?.name || tableName.data
-				return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
-			} catch (error) {
-				logger.error(`Database error creating ${tableName.data}`, {
-					tableName: tableName.data,
-					error: error instanceof Error ? error.message : error,
-				})
-
-				return createErrorResponse(`Database error when creating ${tableName.data}.`)
-			}
-		}
-
-		if (operation.data === "update") {
-			// Handle string data by attempting to parse as JSON first
-			let dataToValidate = args?.data
-			if (typeof args?.data === "string") {
-				try {
-					dataToValidate = JSON.parse(args.data)
-				} catch (error: unknown) {
-					logger.error(`Error parsing JSON data: ${error}`)
-					return createErrorResponse(`Invalid JSON data provided to ${categoryToolName} handler.`)
-				}
-			}
-
-			const parsedData = schemas[tableName.data].partial().safeParse(dataToValidate)
-
-			if (!parsedData.success) {
-				// Use Zod's built-in error formatting for better error messages
-				const prettyError = z.prettifyError(parsedData.error)
-				return createErrorResponse(`Validation failed for ${tableName.data}:\n${prettyError}`)
-			}
-
-			if (args.id === undefined || args.id === null) {
-				return createErrorResponse(`An ID must be provided for the 'update' operation in ${categoryToolName}.`)
-			}
-
-			const dataToUpdate = parsedData.data
-
-			// Validate polymorphic relations for update
-			const polymorphicError = await validatePolymorphicRelations(dataToUpdate, tableName.data, polymorphicConfig)
-			if (polymorphicError) {
-				return createErrorResponse(`Relation validation failed: ${polymorphicError}`)
-			}
-
-			try {
-				logger.info(
-					`Updating ${tableName.data} (via ${categoryToolName}) with ID ${args.id} and data ${JSON.stringify(dataToUpdate)}`,
-				)
-				const result = await db
-					.update(table)
-					.set(dataToUpdate)
-					.where(eq(table.id, args.id))
-					.returning({ successfullyUpdated: table.id })
-
-				if (result.length !== 1 || result[0] === undefined) {
-					logger.error(`No ${tableName.data} found with ID: ${args.id}`)
-					return createErrorResponse(`No ${tableName.data} found with ID: ${args.id}`)
-				}
-
-				return createResponse(`Successfully updated ${tableName.data} with ID: ${args.id}`)
-			} catch (error) {
-				logger.error(`Database error updating ${tableName.data}`, {
-					error:
-						error instanceof Error
-							? {
-									name: error.name,
-									message: error.message,
-									stack: error.stack,
-								}
-							: error,
-					tableName: tableName.data,
-					data: dataToUpdate,
-				})
-
-				return createErrorResponse(
-					`Database error: Failed to update ${tableName.data}. ${error instanceof Error ? error.message : "Unknown error"}`,
-				)
-			}
-		}
-		return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)
 	}
 }
