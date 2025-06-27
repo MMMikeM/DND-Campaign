@@ -4,8 +4,8 @@ const getRawQuestStages = async (id: number) =>
 	await db.query.questStages.findMany({
 		where: (questStages, { eq }) => eq(questStages.questId, id),
 		with: {
-			outgoingDecisions: { with: { toStage: true } },
-			incomingDecisions: { with: { fromStage: true } },
+			outgoingDecisions: { with: { targetStage: true } },
+			incomingDecisions: { with: { sourceStage: true } },
 			items: true,
 			quest: { columns: { name: true, id: true } },
 			site: { columns: { name: true, id: true } },
@@ -47,10 +47,10 @@ export function buildStageTree(
 	visited.add(stageId)
 
 	const branches = stage.outgoingDecisions
-		.filter((decision) => decision.toStage)
+		.filter((decision) => decision.targetStage)
 		.map((decision) => {
-			const nextStage = decision.toStage?.id
-				? buildStageTree(decision.toStage.id, stageMap, new Set([...visited]))
+			const nextStage = decision.targetStage?.id
+				? buildStageTree(decision.targetStage.id, stageMap, new Set([...visited]))
 				: null
 
 			return { decision, nextStage }

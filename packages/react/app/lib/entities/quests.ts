@@ -3,7 +3,6 @@ import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 import { nameAndId } from "."
-import { getQuestStages } from "./questStages"
 
 const questConfig = {
 	findById: (id: number) =>
@@ -60,10 +59,7 @@ export const getQuest = async (slug: string) => {
 		throw new EntityNotFoundError("Quest", slug)
 	}
 
-	const [byId, stageData] = await Promise.all([
-		questConfig.findById(selectedQuest.id),
-		getQuestStages(selectedQuest.id),
-	])
+	const byId = await questConfig.findById(selectedQuest.id)
 
 	if (!byId) {
 		throw new EntityNotFoundError("Quest", selectedQuest.id)
@@ -75,8 +71,7 @@ export const getQuest = async (slug: string) => {
 		.to({ property: "relations", key: "quest" })
 
 	if (unified) {
-		const combinedData = { ...unified, ...stageData }
-		return addSlugs(combinedData)
+		return addSlugs(unified)
 	}
 
 	throw new EntityNotFoundError("Quest", selectedQuest.id)
