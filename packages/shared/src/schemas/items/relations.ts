@@ -20,6 +20,7 @@ export const itemsRelations = relations(items, ({ many, one }) => ({
 	questStage: one(questStages, {
 		fields: [items.questStageId],
 		references: [questStages.id],
+		relationName: "stageItems",
 	}),
 }))
 
@@ -48,6 +49,7 @@ export const itemRelationsRelations = relations(itemRelations, ({ one }) => ({
 	quest: one(quests, {
 		fields: [itemRelations.questId],
 		references: [quests.id],
+		relationName: "questItemRelations",
 	}),
 	conflict: one(conflicts, {
 		fields: [itemRelations.conflictId],

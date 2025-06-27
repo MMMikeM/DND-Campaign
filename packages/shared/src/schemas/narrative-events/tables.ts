@@ -41,9 +41,9 @@ export const narrativeEvents = pgTable(
 		narrativePlacement: oneOf("narrative_placement", narrativePlacements),
 		impactSeverity: oneOf("impact_severity", impactSeverity),
 
-		questStageId: nullableFk("quest_stage_id", questStages.id),
-		triggeringStageDecisionId: nullableFk("triggering_stage_decision_id", questStageDecisions.id),
-		relatedQuestId: nullableFk("related_quest_id", quests.id),
+		questStageId: nullableFk("quest_stage_id", () => questStages.id),
+		triggeringStageDecisionId: nullableFk("triggering_stage_decision_id", () => questStageDecisions.id),
+		relatedQuestId: nullableFk("related_quest_id", () => quests.id),
 
 		complication_details: nullableString("complication_details"),
 		escalation_details: nullableString("escalation_details"),
