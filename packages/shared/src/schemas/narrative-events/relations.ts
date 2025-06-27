@@ -19,10 +19,12 @@ export const narrativeEventsRelations = relations(narrativeEvents, ({ one, many 
 	triggeringStageDecision: one(questStageDecisions, {
 		fields: [narrativeEvents.triggeringStageDecisionId],
 		references: [questStageDecisions.id],
+		relationName: "DecisionTriggeredEvents",
 	}),
 	relatedQuest: one(quests, {
 		fields: [narrativeEvents.relatedQuestId],
 		references: [quests.id],
+		relationName: "QuestTriggeredEvents",
 	}),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetNarrativeEvent" }),
 }))
@@ -32,14 +34,17 @@ export const consequenceRelations = relations(consequences, ({ one }) => ({
 	triggerQuest: one(quests, {
 		fields: [consequences.triggerQuestId],
 		references: [quests.id],
+		relationName: "ConsequenceTriggerQuest",
 	}),
 	triggerConflict: one(conflicts, {
 		fields: [consequences.triggerConflictId],
 		references: [conflicts.id],
+		relationName: "ConsequenceTriggerConflict",
 	}),
 	triggerQuestStageDecision: one(questStageDecisions, {
 		fields: [consequences.triggerQuestStageDecisionId],
 		references: [questStageDecisions.id],
+		relationName: "ConsequenceTriggerQuestStageDecision",
 	}),
 
 	// Affected entity relations
