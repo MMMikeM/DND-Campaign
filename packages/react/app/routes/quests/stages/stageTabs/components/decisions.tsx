@@ -7,7 +7,6 @@ import { cn } from "~/lib/utils"
 import { getConditionTypeBadgeProps, getDecisionTypeBadgeProps } from "../../utils"
 
 export default function StageDecisionsTab(selectedStage: Quest["stages"][0]) {
-	console.log({ selectedStage })
 	return selectedStage?.outgoingDecisions.length > 0 ? (
 		selectedStage.outgoingDecisions.map((decision) => (
 			<InfoCard
