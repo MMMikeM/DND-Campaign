@@ -1,14 +1,12 @@
 // regions/relations.ts
 import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemNotableHistory, itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { mapGroups, mapVariants } from "../maps/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
-import { npcSiteAssociations } from "../npcs/tables"
 import { questHooks, quests } from "../quests/tables"
 import { questStages } from "../stages/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -21,7 +19,6 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	quests: many(quests),
 	conflicts: many(conflicts),
 	consequences: many(consequences, { relationName: "ConsequenceAffectedRegion" }),
-	narrativeDestinations: many(narrativeDestinations),
 	factionInfluence: many(factionInfluence),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetRegion" }),
 }))
@@ -61,7 +58,6 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 
 	encounters: many(siteEncounters),
 	secrets: many(siteSecrets),
-	npcAssociations: many(npcSiteAssociations),
 	questStages: many(questStages),
 	questHooks: many(questHooks),
 	consequences: many(consequences, { relationName: "ConsequenceAffectedSite" }),
@@ -69,8 +65,7 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	factionInfluence: many(factionInfluence),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceSite" }),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetSite" }),
-	itemHistory: many(itemNotableHistory),
-	itemRelations: many(itemRelations),
+	itemConnections: many(itemConnections),
 
 	mapGroup: one(mapGroups, {
 		fields: [sites.mapGroupId],

@@ -1,14 +1,12 @@
 import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
 import { conflicts } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { factionInfluence, factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemNotableHistory, itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { mapGroups } from "../maps/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
-import { npcSiteAssociations, npcs } from "../npcs/tables"
 import { questHooks, quests } from "../quests/tables"
 import { questStages } from "../stages/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -43,10 +41,6 @@ export const regionSearchDataView = pgView("region_search_data_view").as((qb) =>
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${consequences.id}, 'description', ${consequences.description})) FILTER (WHERE ${consequences.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"consequences",
 				),
-			narrativeDestinations:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${narrativeDestinations.id}, 'name', ${narrativeDestinations.name})) FILTER (WHERE ${narrativeDestinations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrative_destinations",
-				),
 			factionInfluence:
 				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${factionInfluence}.*)) FILTER (WHERE ${factionInfluence.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"faction_influence",
@@ -62,10 +56,7 @@ export const regionSearchDataView = pgView("region_search_data_view").as((qb) =>
 		.leftJoin(sql`${regionConnections} AS rc_in`, sql`rc_in.target_region_id = ${regions.id}`)
 		.leftJoin(sql`${regions} AS sr`, sql`rc_in.source_region_id = sr.id`)
 		.leftJoin(areas, sql`${areas.regionId} = ${regions.id}`)
-		.leftJoin(quests, sql`${quests.regionId} = ${regions.id}`)
-		.leftJoin(conflicts, sql`${conflicts.regionId} = ${regions.id}`)
 		.leftJoin(consequences, sql`${consequences.affectedRegionId} = ${regions.id}`)
-		.leftJoin(narrativeDestinations, sql`${narrativeDestinations.regionId} = ${regions.id}`)
 		.leftJoin(factionInfluence, sql`${factionInfluence.regionId} = ${regions.id}`)
 		.leftJoin(loreLinks, sql`${loreLinks.regionId} = ${regions.id}`)
 		.groupBy(regions.id),
@@ -121,12 +112,8 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 					"encounters",
 				),
 			secrets:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${siteSecrets}.*)) FILTER (WHERE ${siteSecrets.id} IS NOT NULL), '[]'::jsonb)`.as(
+				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${siteSecrets}.*)) FILTER (WHERE ${siteSecrets.siteId} IS NOT NULL), '[]'::jsonb)`.as(
 					"secrets",
-				),
-			npcAssociations:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('association', to_jsonb(${npcSiteAssociations}.*), 'npc', jsonb_build_object('id', ${npcs.id}, 'name', ${npcs.name}))) FILTER (WHERE ${npcSiteAssociations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"npc_associations",
 				),
 			questStages:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${questStages.id}, 'name', ${questStages.name}, 'quest', jsonb_build_object('id', qs_quest.id, 'name', qs_quest.name))) FILTER (WHERE ${questStages.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -157,7 +144,7 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 					"incoming_foreshadowing",
 				),
 			itemHistory:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemNotableHistory}.*)) FILTER (WHERE ${itemNotableHistory.id} IS NOT NULL), '[]'::jsonb)`.as(
+				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"item_history",
 				),
 			itemRelations:
@@ -177,8 +164,6 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 		.leftJoin(sql`${sites} AS ss`, sql`sl_in.source_site_id = ss.id`)
 		.leftJoin(siteEncounters, sql`${siteEncounters.siteId} = ${sites.id}`)
 		.leftJoin(siteSecrets, sql`${siteSecrets.siteId} = ${sites.id}`)
-		.leftJoin(npcSiteAssociations, sql`${npcSiteAssociations.siteId} = ${sites.id}`)
-		.leftJoin(npcs, sql`${npcSiteAssociations.npcId} = ${npcs.id}`)
 		.leftJoin(questStages, sql`${questStages.siteId} = ${sites.id}`)
 		.leftJoin(sql`${quests} AS qs_quest`, sql`${questStages.questId} = qs_quest.id`)
 		.leftJoin(questHooks, sql`${questHooks.siteId} = ${sites.id}`)
@@ -188,8 +173,7 @@ export const siteSearchDataView = pgView("site_search_data_view").as((qb) =>
 		.leftJoin(sql`${factionInfluence} AS site_faction_influence`, sql`site_faction_influence.site_id = ${sites.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_site_id = ${sites.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_site_id = ${sites.id}`)
-		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.locationSiteId} = ${sites.id}`)
-		.leftJoin(sql`${itemRelations} AS site_item_relations`, sql`site_item_relations.site_id = ${sites.id}`)
+		.leftJoin(sql`${itemConnections} AS site_item_relations`, sql`site_item_relations.site_id = ${sites.id}`)
 		.leftJoin(mapGroups, sql`${sites.mapGroupId} = ${mapGroups.id}`)
 		.groupBy(sites.id, areas.id, regions.id, mapGroups.id),
 )
