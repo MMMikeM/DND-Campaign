@@ -65,6 +65,10 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb)`.as(
 					"incoming_relations",
 				),
+			siteAssociations:
+				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(s.*)) FILTER (WHERE s.id IS NOT NULL), '[]'::jsonb)`.as(
+					"site_associations",
+				),
 		})
 		.from(npcs)
 		.leftJoin(npcFactionMemberships, sql`${npcFactionMemberships.npcId} = ${npcs.id}`)
@@ -87,5 +91,6 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.leftJoin(loreLinks, sql`${loreLinks.npcId} = ${npcs.id}`)
 		.leftJoin(sql`${npcs} AS rn_out`, sql`${loreLinks.relatedLoreId} = rn_out.id`)
 		.leftJoin(sql`${npcs} AS sn_in`, sql`${loreLinks.npcId} = sn_in.id`)
+		.leftJoin(sql`${sites} AS s`, sql`${npcs.siteId} = s.id`)
 		.groupBy(npcs.id),
 )

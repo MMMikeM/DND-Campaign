@@ -16,11 +16,7 @@ const {
 	cprScores,
 	genders,
 	npcFactionRoles,
-	playerPerceptionGoals,
 	races,
-	relationshipStrengths,
-	relationshipTypes,
-	siteAssociationTypes,
 	trustLevels,
 	wealthLevels,
 } = enums
@@ -58,8 +54,8 @@ export const npcDetails = pgTable("npc_details", {
 	adaptability: oneOf("adaptability", adaptabilityLevels),
 	complexity: oneOf("complexity", characterComplexityProfiles),
 
-	goals_and_fears: list("goals_and_fears"),
-	secrets_and_history: list("secrets_and_history"),
+	goalsAndFears: list("goals_and_fears"),
+	secretsAndHistory: list("secrets_and_history"),
 
 	capability: oneOf("capability", cprScores),
 	proactivity: oneOf("proactivity", cprScores),
@@ -92,7 +88,7 @@ export const npcFactionMemberships = pgTable(
 
 		secrets: list("secrets"),
 	},
-	(t) => [unique("unique_npc_faction_membership").on(t.npcId, t.factionId)],
+	(t) => [unique().on(t.npcId)],
 )
 
 export const npcRelations = pgTable(
@@ -107,7 +103,7 @@ export const npcRelations = pgTable(
 		tags: list("tags"),
 
 		relationship: string("relationship"),
-		dynamics_and_history: list("dynamics_and_history"),
+		dynamicsAndHistory: list("dynamics_and_history"),
 	},
 	(t) => [
 		unique("unique_npc_relationship").on(t.sourceNpcId, t.targetNpcId),

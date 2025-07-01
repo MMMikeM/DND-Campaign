@@ -71,6 +71,7 @@ export const loreLinks = pgTable(
 			table.questId,
 			table.foreshadowingId,
 			table.relatedLoreId,
+			table.itemId,
 		),
 		check(
 			"single_fk_check",
@@ -81,7 +82,8 @@ export const loreLinks = pgTable(
         (case when ${table.conflictId} is not null then 1 else 0 end) +
         (case when ${table.questId} is not null then 1 else 0 end) +
         (case when ${table.foreshadowingId} is not null then 1 else 0 end) +
-        (case when ${table.relatedLoreId} is not null then 1 else 0 end)
+        (case when ${table.relatedLoreId} is not null then 1 else 0 end) +
+        (case when ${table.itemId} is not null then 1 else 0 end)
       ) = 1`,
 		),
 	],

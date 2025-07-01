@@ -57,7 +57,10 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 	}),
 
 	encounters: many(siteEncounters),
-	secrets: many(siteSecrets),
+	secret: one(siteSecrets, {
+		fields: [sites.id],
+		references: [siteSecrets.siteId],
+	}),
 	questStages: many(questStages),
 	questHooks: many(questHooks),
 	consequences: many(consequences, { relationName: "ConsequenceAffectedSite" }),

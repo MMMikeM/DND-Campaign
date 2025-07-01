@@ -9,7 +9,10 @@ export const mapFilesRelations = relations(mapFiles, ({ one }) => ({
 
 export const mapGroupsRelations = relations(mapGroups, ({ one, many }) => ({
 	variants: many(mapVariants),
-	site: one(sites),
+	site: one(sites, {
+		fields: [mapGroups.id],
+		references: [sites.mapGroupId],
+	}),
 }))
 
 export const mapVariantsRelations = relations(mapVariants, ({ one, many }) => ({

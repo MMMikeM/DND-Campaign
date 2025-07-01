@@ -5,14 +5,31 @@ import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
+import { questStageDecisions } from "../stages/tables"
 import { consequences } from "./tables"
 
-export const consequenceRelations = relations(consequences, ({ one }) => ({
+export const consequenceRelations = relations(consequences, ({ one, many }) => ({
+	// Self-referencing relations
+	affectedConsequence: one(consequences, {
+		fields: [consequences.affectedConsequenceId],
+		references: [consequences.id],
+		relationName: "affectingConsequences",
+	}),
+	affectingConsequences: many(consequences, {
+		relationName: "affectingConsequences",
+	}),
+
 	// Trigger relations
 	triggerQuest: one(quests, {
 		fields: [consequences.triggerQuestId],
 		references: [quests.id],
 		relationName: "ConsequenceTriggerQuest",
+	}),
+
+	triggerQuestStageDecision: one(questStageDecisions, {
+		fields: [consequences.triggerQuestStageDecisionId],
+		references: [questStageDecisions.id],
+		relationName: "ConsequenceTriggerQuestStageDecision",
 	}),
 
 	// Affected entity relations

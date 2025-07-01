@@ -15,7 +15,6 @@ export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 		references: [regions.id],
 	}),
 	participants: many(conflictParticipants),
-	triggeredConsequences: many(consequences, { relationName: "ConsequenceTriggerConflict" }),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedConflict" }),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetConflict" }),
 	itemConnections: many(itemConnections),

@@ -7,10 +7,18 @@ import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { sites } from "../regions/tables"
-import { questStages } from "../stages/tables"
+import { questStageDecisions, questStages } from "../stages/tables"
 import { questHooks, questParticipants, questRelations, quests } from "./tables"
 
 export const questsRelations = relations(quests, ({ many, one }) => ({
+	prerequisiteQuest: one(quests, {
+		fields: [quests.prerequisiteQuestId],
+		references: [quests.id],
+		relationName: "PrerequisiteQuest",
+	}),
+	dependentQuests: many(quests, {
+		relationName: "PrerequisiteQuest",
+	}),
 	outgoingRelations: many(questRelations, {
 		relationName: "questoutgoingRelations",
 	}),
@@ -18,6 +26,7 @@ export const questsRelations = relations(quests, ({ many, one }) => ({
 		relationName: "questincomingRelations",
 	}),
 	stages: many(questStages),
+	stageDecisions: many(questStageDecisions, { relationName: "questForStageDecision" }),
 
 	hooks: many(questHooks),
 	participants: many(questParticipants),
