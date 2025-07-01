@@ -1,16 +1,15 @@
 import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
 import { conflictParticipants, conflicts } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemNotableHistory, itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { narrativeDestinationParticipants, narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
 import { questHooks, quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { npcStageInvolvement, questStages } from "../stages/tables"
-import { npcFactionMemberships, npcRelations, npcSiteAssociations, npcs } from "./tables"
+import { npcFactionMemberships, npcs } from "./tables"
 
 export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 	qb
@@ -21,10 +20,6 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 			factionMemberships:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('membership', to_jsonb(${npcFactionMemberships}.*), 'faction', jsonb_build_object('id', ${factions.id}, 'name', ${factions.name}))) FILTER (WHERE ${npcFactionMemberships.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"faction_memberships",
-				),
-			siteAssociations:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('association', to_jsonb(${npcSiteAssociations}.*), 'site', jsonb_build_object('id', ${sites.id}, 'name', ${sites.name}, 'area', jsonb_build_object('id', ${areas.id}, 'name', ${areas.name}, 'region', jsonb_build_object('id', ${regions.id}, 'name', ${regions.name}))))) FILTER (WHERE ${npcSiteAssociations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"site_associations",
 				),
 			conflictParticipation:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participant', to_jsonb(${conflictParticipants}.*), 'conflict', jsonb_build_object('id', ${conflicts.id}, 'name', ${conflicts.name}))) FILTER (WHERE ${conflictParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -42,17 +37,9 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_in.*)) FILTER (WHERE fs_in.id IS NOT NULL), '[]'::jsonb)`.as(
 					"incoming_foreshadowing",
 				),
-			itemHistory:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemNotableHistory}.*)) FILTER (WHERE ${itemNotableHistory.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"item_history",
-				),
-			itemRelations:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemRelations}.*)) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"item_relations",
-				),
-			narrativeDestinationInvolvement:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${narrativeDestinationParticipants}.*), 'destination', jsonb_build_object('id', ${narrativeDestinations.id}, 'name', ${narrativeDestinations.name}))) FILTER (WHERE ${narrativeDestinationParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrative_destination_involvement",
+			itemConnections:
+				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
+					"item_connections",
 				),
 			questHooks:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${questHooks.id}, 'source', ${questHooks.source}, 'hook_content', ${questHooks.hookContent}, 'quest', jsonb_build_object('id', qh_quest.id, 'name', qh_quest.name))) FILTER (WHERE ${questHooks.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -82,8 +69,6 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.from(npcs)
 		.leftJoin(npcFactionMemberships, sql`${npcFactionMemberships.npcId} = ${npcs.id}`)
 		.leftJoin(factions, sql`${npcFactionMemberships.factionId} = ${factions.id}`)
-		.leftJoin(npcSiteAssociations, sql`${npcSiteAssociations.npcId} = ${npcs.id}`)
-		.leftJoin(sites, sql`${npcSiteAssociations.siteId} = ${sites.id}`)
 		.leftJoin(areas, sql`${sites.areaId} = ${areas.id}`)
 		.leftJoin(regions, sql`${areas.regionId} = ${regions.id}`)
 		.leftJoin(conflictParticipants, sql`${conflictParticipants.npcId} = ${npcs.id}`)
@@ -91,13 +76,7 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.leftJoin(consequences, sql`${consequences.affectedNpcId} = ${npcs.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_npc_id = ${npcs.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_npc_id = ${npcs.id}`)
-		.leftJoin(itemNotableHistory, sql`${itemNotableHistory.keyNpcId} = ${npcs.id}`)
-		.leftJoin(itemRelations, sql`${itemRelations.npcId} = ${npcs.id}`)
-		.leftJoin(narrativeDestinationParticipants, sql`${narrativeDestinationParticipants.npcId} = ${npcs.id}`)
-		.leftJoin(
-			narrativeDestinations,
-			sql`${narrativeDestinationParticipants.narrativeDestinationId} = ${narrativeDestinations.id}`,
-		)
+		.leftJoin(itemConnections, sql`${itemConnections.connectedNpcId} = ${npcs.id}`)
 		.leftJoin(questHooks, sql`${questHooks.deliveryNpcId} = ${npcs.id}`)
 		.leftJoin(sql`${quests} AS qh_quest`, sql`${questHooks.questId} = qh_quest.id`)
 		.leftJoin(sql`${questStages} AS qs_delivery`, sql`qs_delivery.delivery_npc_id = ${npcs.id}`)
@@ -106,9 +85,7 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 		.leftJoin(sql`${questStages} AS si`, sql`${npcStageInvolvement.questStageId} = si.id`)
 		.leftJoin(sql`${quests} AS q_involvement`, sql`si.quest_id = q_involvement.id`)
 		.leftJoin(loreLinks, sql`${loreLinks.npcId} = ${npcs.id}`)
-		.leftJoin(sql`${npcRelations} AS nr_out`, sql`nr_out.source_npc_id = ${npcs.id}`)
-		.leftJoin(sql`${npcs} AS rn_out`, sql`nr_out.target_npc_id = rn_out.id`)
-		.leftJoin(sql`${npcRelations} AS nr_in`, sql`nr_in.target_npc_id = ${npcs.id}`)
-		.leftJoin(sql`${npcs} AS sn_in`, sql`nr_in.source_npc_id = sn_in.id`)
+		.leftJoin(sql`${npcs} AS rn_out`, sql`${loreLinks.relatedLoreId} = rn_out.id`)
+		.leftJoin(sql`${npcs} AS sn_in`, sql`${loreLinks.npcId} = sn_in.id`)
 		.groupBy(npcs.id),
 )
