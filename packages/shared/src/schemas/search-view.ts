@@ -1,12 +1,11 @@
 import { sql } from "drizzle-orm"
 import { pgMaterializedView } from "drizzle-orm/pg-core"
 import { conflictSearchDataView } from "./conflicts/views"
+import { consequenceSearchDataView } from "./consequences/views"
 import { factionSearchDataView } from "./factions/views"
 import { foreshadowingSearchDataView } from "./foreshadowing/views"
 import { itemSearchDataView } from "./items/views"
 import { loreSearchDataView } from "./lore/views"
-import { narrativeDestinationSearchDataView } from "./narrative-destinations/views"
-import { consequenceSearchDataView, narrativeEventSearchDataView } from "./narrative-events/views"
 import { npcSearchDataView } from "./npcs/views"
 import { questSearchDataView } from "./quests/views"
 import { areaSearchDataView, regionSearchDataView, siteSearchDataView } from "./regions/views"
@@ -24,7 +23,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'quests', ${regionSearchDataView.quests},
         'conflicts', ${regionSearchDataView.conflicts},
         'consequences', ${regionSearchDataView.consequences},
-        'narrativeDestinations', ${regionSearchDataView.narrativeDestinations},
         'factionInfluence', ${regionSearchDataView.factionInfluence},
         'loreLinks', ${regionSearchDataView.loreLinks},
         'connections', jsonb_build_object(
@@ -58,7 +56,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'area', ${siteSearchDataView.area},
         'encounters', ${siteSearchDataView.encounters},
         'secrets', ${siteSearchDataView.secrets},
-        'npcAssociations', ${siteSearchDataView.npcAssociations},
         'questStages', ${siteSearchDataView.questStages},
         'questHooks', ${siteSearchDataView.questHooks},
         'consequences', ${siteSearchDataView.consequences},
@@ -104,9 +101,7 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'outgoing', ${npcSearchDataView.outgoingForeshadowing}, 
           'incoming', ${npcSearchDataView.incomingForeshadowing}
         ),
-        'itemHistory', ${npcSearchDataView.itemHistory},
-        'itemRelations', ${npcSearchDataView.itemRelations},
-        'narrativeDestinationInvolvement', ${npcSearchDataView.narrativeDestinationInvolvement},
+        'itemConnections', ${npcSearchDataView.itemConnections},
         'questHooks', ${npcSearchDataView.questHooks},
         'questStageDeliveries', ${npcSearchDataView.questStageDeliveries},
         'stageInvolvement', ${npcSearchDataView.stageInvolvement},
@@ -140,10 +135,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'stages', ${questSearchDataView.stages},
         'hooks', ${questSearchDataView.hooks},
         'participants', ${questSearchDataView.participants},
-        'narrativeDestinationContributions', ${questSearchDataView.narrativeDestinationContributions},
         'affectingConsequences', ${questSearchDataView.affectingConsequences},
         'triggeredConsequences', ${questSearchDataView.triggeredConsequences},
-        'triggeredEvents', ${questSearchDataView.triggeredEvents},
         'foreshadowing', jsonb_build_object(
           'outgoing', ${questSearchDataView.outgoingForeshadowing}, 
           'incoming', ${questSearchDataView.incomingForeshadowing}
@@ -183,9 +176,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'influence', ${factionSearchDataView.influence},
         'conflicts', ${factionSearchDataView.conflicts},
         'consequences', ${factionSearchDataView.consequences},
-        'narrativeDestinationInvolvement', ${factionSearchDataView.narrativeDestinationInvolvement},
         'foreshadowing', ${factionSearchDataView.incomingForeshadowing},
-        'itemRelations', ${factionSearchDataView.itemRelations},
+        'itemConnections', ${factionSearchDataView.itemConnections},
         'loreLinks', ${factionSearchDataView.loreLinks},
         'relations', jsonb_build_object(
           'incoming', ${factionSearchDataView.incomingRelations}, 
@@ -216,9 +208,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'participants', ${conflictSearchDataView.participants},
         'consequences', ${conflictSearchDataView.consequences},
         'affectedByConsequences', ${conflictSearchDataView.affectedByConsequences},
-        'narrativeDestinations', ${conflictSearchDataView.narrativeDestinations},
         'incomingForeshadowing', ${conflictSearchDataView.incomingForeshadowing},
-        'itemRelations', ${conflictSearchDataView.itemRelations},
+        'itemConnections', ${conflictSearchDataView.itemConnections},
         'loreLinks', ${conflictSearchDataView.loreLinks}
       )`.as("raw_data"),
 			content: sql<string>`jsonb_deep_text_values(${conflictSearchDataView.entityMain}) || ' ' ||
@@ -277,10 +268,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'sourceLore', ${foreshadowingSearchDataView.sourceLore},
         'targetQuest', ${foreshadowingSearchDataView.targetQuest},
         'targetNpc', ${foreshadowingSearchDataView.targetNpc},
-        'targetNarrativeEvent', ${foreshadowingSearchDataView.targetNarrativeEvent},
         'targetConflict', ${foreshadowingSearchDataView.targetConflict},
         'targetItem', ${foreshadowingSearchDataView.targetItem},
-        'targetNarrativeDestination', ${foreshadowingSearchDataView.targetNarrativeDestination},
         'targetLore', ${foreshadowingSearchDataView.targetLore},
         'targetFaction', ${foreshadowingSearchDataView.targetFaction},
         'targetSite', ${foreshadowingSearchDataView.targetSite}
@@ -319,63 +308,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		})
 		.from(loreSearchDataView)
 
-	// Union with narrative destinations
-	const narrativeDestinationsQuery = qb
-		.select({
-			id: sql<string>`${narrativeDestinationSearchDataView.id}::text`.as("id"),
-			sourceTable: narrativeDestinationSearchDataView.sourceTable,
-			rawData: sql`jsonb_build_object(
-        'narrativeDestination', ${narrativeDestinationSearchDataView.entityMain},
-        'region', ${narrativeDestinationSearchDataView.region},
-        'conflict', ${narrativeDestinationSearchDataView.conflict},
-        'questRoles', ${narrativeDestinationSearchDataView.questRoles},
-        'participantInvolvement', ${narrativeDestinationSearchDataView.participantInvolvement},
-        'itemRelations', ${narrativeDestinationSearchDataView.itemRelations},
-        'relations', jsonb_build_object(
-          'outgoing', ${narrativeDestinationSearchDataView.outgoingRelations}, 
-          'incoming', ${narrativeDestinationSearchDataView.incomingRelations}
-        ),
-        'loreLinks', ${narrativeDestinationSearchDataView.loreLinks},
-        'incomingForeshadowing', ${narrativeDestinationSearchDataView.incomingForeshadowing}
-      )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${narrativeDestinationSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${narrativeDestinationSearchDataView.region}) || ' ' ||
-      jsonb_deep_text_values(${narrativeDestinationSearchDataView.conflict})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${narrativeDestinationSearchDataView.entityMain},
-        jsonb_build_object(
-          'region', ${narrativeDestinationSearchDataView.region},
-          'conflict', ${narrativeDestinationSearchDataView.conflict}
-        )
-      )`.as("content_tsv"),
-		})
-		.from(narrativeDestinationSearchDataView)
-
-	// Union with narrative events
-	const narrativeEventsQuery = qb
-		.select({
-			id: sql<string>`${narrativeEventSearchDataView.id}::text`.as("id"),
-			sourceTable: narrativeEventSearchDataView.sourceTable,
-			rawData: sql`jsonb_build_object(
-        'narrativeEvent', ${narrativeEventSearchDataView.entityMain},
-        'questStage', ${narrativeEventSearchDataView.questStage},
-        'triggeringStageDecision', ${narrativeEventSearchDataView.triggeringStageDecision},
-        'relatedQuest', ${narrativeEventSearchDataView.relatedQuest},
-        'incomingForeshadowing', ${narrativeEventSearchDataView.incomingForeshadowing}
-      )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${narrativeEventSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${narrativeEventSearchDataView.questStage}) || ' ' ||
-      jsonb_deep_text_values(${narrativeEventSearchDataView.relatedQuest})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${narrativeEventSearchDataView.entityMain},
-        jsonb_build_object(
-          'questStage', ${narrativeEventSearchDataView.questStage},
-          'relatedQuest', ${narrativeEventSearchDataView.relatedQuest}
-        )
-      )`.as("content_tsv"),
-		})
-		.from(narrativeEventSearchDataView)
-
 	// Union with quest stages
 	const questStagesQuery = qb
 		.select({
@@ -389,7 +321,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'outgoingDecisions', ${questStageSearchDataView.outgoingDecisions},
         'incomingDecisions', ${questStageSearchDataView.incomingDecisions},
         'items', ${questStageSearchDataView.items},
-        'narrativeEvents', ${questStageSearchDataView.narrativeEvents},
         'npcInvolvement', ${questStageSearchDataView.npcInvolvement},
         'outgoingForeshadowing', ${questStageSearchDataView.outgoingForeshadowing}
       )`.as("raw_data"),
@@ -416,7 +347,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'quest', ${questStageDecisionSearchDataView.quest},
         'fromStage', ${questStageDecisionSearchDataView.fromStage},
         'toStage', ${questStageDecisionSearchDataView.toStage},
-        'triggeredEvents', ${questStageDecisionSearchDataView.triggeredEvents},
         'consequences', ${questStageDecisionSearchDataView.consequences}
       )`.as("raw_data"),
 			content: sql<string>`jsonb_deep_text_values(${questStageDecisionSearchDataView.entityMain}) || ' ' ||
@@ -471,7 +401,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'affectedArea', ${consequenceSearchDataView.affectedArea},
         'affectedSite', ${consequenceSearchDataView.affectedSite},
         'affectedNpc', ${consequenceSearchDataView.affectedNpc},
-        'affectedNarrativeDestination', ${consequenceSearchDataView.affectedNarrativeDestination},
         'affectedConflict', ${consequenceSearchDataView.affectedConflict},
         'affectedQuest', ${consequenceSearchDataView.affectedQuest}
       )`.as("raw_data"),
@@ -483,7 +412,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
       jsonb_deep_text_values(${consequenceSearchDataView.affectedArea}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedSite}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedNpc}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedNarrativeDestination}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedConflict}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedQuest})`.as("content"),
 			contentTsv: sql`weighted_search_vector(
@@ -496,7 +424,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'affectedArea', ${consequenceSearchDataView.affectedArea},
           'affectedSite', ${consequenceSearchDataView.affectedSite},
           'affectedNpc', ${consequenceSearchDataView.affectedNpc},
-          'affectedNarrativeDestination', ${consequenceSearchDataView.affectedNarrativeDestination},
           'affectedConflict', ${consequenceSearchDataView.affectedConflict},
           'affectedQuest', ${consequenceSearchDataView.affectedQuest}
         )
@@ -514,8 +441,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.unionAll(itemsQuery)
 		.unionAll(foreshadowingQuery)
 		.unionAll(loreQuery)
-		.unionAll(narrativeDestinationsQuery)
-		.unionAll(narrativeEventsQuery)
 		.unionAll(consequencesQuery)
 		.unionAll(questStagesQuery)
 		.unionAll(questStageDecisionsQuery)

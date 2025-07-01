@@ -1,6 +1,6 @@
 // quests/tables.ts
 
-import { sql } from "drizzle-orm"
+import { isNull, sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
@@ -133,6 +133,8 @@ export const questParticipants = pgTable(
 		involvementDetails: list("involvement_details"),
 	},
 	(t) => [
+		unique().on(t.questId, t.npcId),
+		unique().on(t.questId, t.factionId),
 		check(
 			"chk_quest_participant_exclusive",
 			sql`

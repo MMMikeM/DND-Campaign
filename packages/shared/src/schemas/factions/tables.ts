@@ -124,6 +124,7 @@ export const factionInfluence = pgTable(
 		priorities: list("priorities"),
 	},
 	(t) => [
+		unique().on(t.factionId, t.regionId, t.areaId, t.siteId),
 		check(
 			"single_fk_check",
 			sql`((CASE WHEN ${t.regionId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.areaId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.siteId} IS NOT NULL THEN 1 ELSE 0 END)) = 1`,

@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm"
 import { conflicts } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
 import { lore, loreLinks } from "../lore/tables"
@@ -48,6 +49,11 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one, many }) =
 		references: [sites.id],
 		relationName: "ForeshadowingTargetSite",
 	}),
+	targetConsequence: one(consequences, {
+		fields: [foreshadowing.targetConsequenceId],
+		references: [consequences.id],
+		relationName: "ForeshadowingTargetConsequence",
+	}),
 
 	// Source entity relations
 	sourceQuest: one(quests, {
@@ -75,8 +81,8 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one, many }) =
 		references: [lore.id],
 		relationName: "sourceLoreForForeshadowing",
 	}),
-	sourceItemDescription: one(items, {
-		fields: [foreshadowing.sourceItemDescriptionId],
+	sourceItem: one(items, {
+		fields: [foreshadowing.sourceItemId],
 		references: [items.id],
 		relationName: "ForeshadowingSourceItem",
 	}),

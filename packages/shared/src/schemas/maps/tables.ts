@@ -32,7 +32,7 @@ export const mapVariants = pgTable(
 		mapFileId: cascadeFk("map_file_id", mapFiles.id).unique(),
 		isDefault: boolean("is_default").default(false).notNull(),
 
-		variantName: string("name").unique(),
+		variantName: string("name"),
 
 		description: list("description"),
 		tags: list("tags"),

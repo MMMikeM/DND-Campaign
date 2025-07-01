@@ -139,6 +139,7 @@ export const siteEncounters = pgTable(
 )
 
 export const siteSecrets = pgTable("site_secrets", {
+	id: pk(),
 	siteId: integer("site_id")
 		.primaryKey()
 		.references(() => sites.id, { onDelete: "cascade" }),

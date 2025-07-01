@@ -1,7 +1,7 @@
 // conflicts/tables.ts
 import { sql } from "drizzle-orm"
-import { check, pgTable } from "drizzle-orm/pg-core"
-import { cascadeFk, list, manyOf, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
@@ -62,6 +62,8 @@ export const conflictParticipants = pgTable(
 		secretStance: nullableString("secret_stance"),
 	},
 	(t) => [
+		unique().on(t.conflictId, t.npcId),
+		unique().on(t.conflictId, t.factionId),
 		check(
 			"npc_or_faction_participant_exclusive",
 			sql`(${t.npcId} IS NOT NULL AND ${t.factionId} IS NULL) OR (${t.npcId} IS NULL AND ${t.factionId} IS NOT NULL)`,
