@@ -3,43 +3,11 @@ import { pgView } from "drizzle-orm/pg-core"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { questStageDecisions, questStages } from "../stages/tables"
-import { consequences, narrativeEvents } from "./tables"
-
-export const narrativeEventSearchDataView = pgView("narrative_event_search_data_view").as((qb) =>
-	qb
-		.select({
-			id: narrativeEvents.id,
-			sourceTable: sql<string>`'narrative_events'`.as("source_table"),
-			entityMain: sql`to_jsonb(${narrativeEvents}.*)`.as("entity_main"),
-			questStage:
-				sql`COALESCE(jsonb_build_object('stage', jsonb_build_object('id', ${questStages.id}, 'name', ${questStages.name}), 'quest', jsonb_build_object('id', sq.id, 'name', sq.name)), '{}'::jsonb)`.as(
-					"quest_stage",
-				),
-			triggeringStageDecision:
-				sql`COALESCE(jsonb_build_object('id', ${questStageDecisions.id}, 'name', ${questStageDecisions.name}), '{}'::jsonb)`.as(
-					"triggering_stage_decision",
-				),
-			relatedQuest: sql`COALESCE(jsonb_build_object('id', ${sql`rq`}.id, 'name', ${sql`rq`}.name), '{}'::jsonb)`.as(
-				"related_quest",
-			),
-			incomingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${foreshadowing}.*)) FILTER (WHERE ${foreshadowing.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"incoming_foreshadowing",
-				),
-		})
-		.from(narrativeEvents)
-		.leftJoin(questStages, sql`${narrativeEvents.questStageId} = ${questStages.id}`)
-		.leftJoin(sql`${quests} AS sq`, sql`${questStages.questId} = sq.id`)
-		.leftJoin(questStageDecisions, sql`${narrativeEvents.triggeringStageDecisionId} = ${questStageDecisions.id}`)
-		.leftJoin(sql`${quests} AS rq`, sql`${narrativeEvents.relatedQuestId} = rq.id`)
-		.leftJoin(foreshadowing, sql`${foreshadowing.targetNarrativeEventId} = ${narrativeEvents.id}`)
-		.groupBy(narrativeEvents.id, questStages.id, sql`sq.id`, questStageDecisions.id, sql`rq.id`),
-)
+import { consequences } from "./tables"
 
 export const consequenceSearchDataView = pgView("consequence_search_data_view").as((qb) =>
 	qb
@@ -73,14 +41,12 @@ export const consequenceSearchDataView = pgView("consequence_search_data_view").
 		.from(consequences)
 		// Trigger entity joins
 		.leftJoin(sql`${quests} AS tq`, sql`${consequences.triggerQuestId} = tq.id`)
-		.leftJoin(sql`${conflicts} AS tc`, sql`${consequences.triggerConflictId} = tc.id`)
 		// Affected entity joins
 		.leftJoin(sql`${factions} AS af`, sql`${consequences.affectedFactionId} = af.id`)
 		.leftJoin(sql`${regions} AS ar`, sql`${consequences.affectedRegionId} = ar.id`)
 		.leftJoin(sql`${areas} AS aa`, sql`${consequences.affectedAreaId} = aa.id`)
 		.leftJoin(sql`${sites} AS as_`, sql`${consequences.affectedSiteId} = as_.id`)
 		.leftJoin(sql`${npcs} AS an`, sql`${consequences.affectedNpcId} = an.id`)
-		.leftJoin(sql`${narrativeDestinations} AS and_`, sql`${consequences.affectedNarrativeDestinationId} = and_.id`)
 		.leftJoin(sql`${conflicts} AS ac`, sql`${consequences.affectedConflictId} = ac.id`)
 		.leftJoin(sql`${quests} AS aq`, sql`${consequences.affectedQuestId} = aq.id`)
 		.groupBy(

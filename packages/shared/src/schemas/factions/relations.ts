@@ -1,11 +1,10 @@
 // factions/relations.ts
 import { relations } from "drizzle-orm"
 import { conflictParticipants } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { itemRelations } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { narrativeDestinationParticipants } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships } from "../npcs/tables"
 import { questHooks, questParticipants } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
@@ -22,7 +21,6 @@ export const factionsRelations = relations(factions, ({ many, one }) => ({
 	influence: many(factionInfluence),
 	conflicts: many(conflictParticipants),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedFaction" }),
-	narrativeDestinationInvolvement: many(narrativeDestinationParticipants),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetFaction" }),
 	itemRelations: many(itemRelations),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetFaction" }),
