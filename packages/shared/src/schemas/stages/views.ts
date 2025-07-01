@@ -1,8 +1,8 @@
 import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
+import { consequences } from "../consequences/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { items } from "../items/tables"
-import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -31,10 +31,6 @@ export const questStageSearchDataView = pgView("quest_stage_search_data_view").a
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${items.id}, 'name', ${items.name})) FILTER (WHERE ${items.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"items",
 				),
-			narrativeEvents:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${narrativeEvents.id}, 'description', ${narrativeEvents.description})) FILTER (WHERE ${narrativeEvents.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrative_events",
-				),
 			npcInvolvement:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${npcStageInvolvement}.*), 'npc', jsonb_build_object('id', inv_npc.id, 'name', inv_npc.name))) FILTER (WHERE ${npcStageInvolvement.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"npc_involvement",
@@ -52,8 +48,6 @@ export const questStageSearchDataView = pgView("quest_stage_search_data_view").a
 		.leftJoin(sql`${questStages} AS ts_out`, sql`qsd_out.to_quest_stage_id = ts_out.id`)
 		.leftJoin(sql`${questStageDecisions} AS qsd_in`, sql`qsd_in.to_quest_stage_id = ${questStages.id}`)
 		.leftJoin(sql`${questStages} AS ts_in`, sql`qsd_in.from_quest_stage_id = ts_in.id`)
-		.leftJoin(items, sql`${items.questStageId} = ${questStages.id}`)
-		.leftJoin(narrativeEvents, sql`${narrativeEvents.questStageId} = ${questStages.id}`)
 		.leftJoin(npcStageInvolvement, sql`${npcStageInvolvement.questStageId} = ${questStages.id}`)
 		.leftJoin(sql`${npcs} AS inv_npc`, sql`${npcStageInvolvement.npcId} = inv_npc.id`)
 		.leftJoin(foreshadowing, sql`${foreshadowing.sourceQuestStageId} = ${questStages.id}`)
@@ -69,10 +63,6 @@ export const questStageDecisionSearchDataView = pgView("quest_stage_decision_sea
 			quest: sql`COALESCE(jsonb_build_object('id', ${quests.id}, 'name', ${quests.name}), '{}'::jsonb)`.as("quest"),
 			fromStage: sql`COALESCE(jsonb_build_object('id', fs.id, 'name', fs.name), '{}'::jsonb)`.as("from_stage"),
 			toStage: sql`COALESCE(jsonb_build_object('id', ts.id, 'name', ts.name), '{}'::jsonb)`.as("to_stage"),
-			triggeredEvents:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${narrativeEvents.id}, 'description', ${narrativeEvents.description})) FILTER (WHERE ${narrativeEvents.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"triggered_events",
-				),
 			consequences:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${consequences.id}, 'description', ${consequences.description})) FILTER (WHERE ${consequences.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"consequences",
@@ -82,7 +72,6 @@ export const questStageDecisionSearchDataView = pgView("quest_stage_decision_sea
 		.leftJoin(quests, sql`${questStageDecisions.questId} = ${quests.id}`)
 		.leftJoin(sql`${questStages} AS fs`, sql`${questStageDecisions.fromQuestStageId} = fs.id`)
 		.leftJoin(sql`${questStages} AS ts`, sql`${questStageDecisions.toQuestStageId} = ts.id`)
-		.leftJoin(narrativeEvents, sql`${narrativeEvents.triggeringStageDecisionId} = ${questStageDecisions.id}`)
 		.leftJoin(consequences, sql`${consequences.triggerQuestStageDecisionId} = ${questStageDecisions.id}`)
 		.groupBy(questStageDecisions.id, quests.id, sql`fs.id`, sql`ts.id`),
 )

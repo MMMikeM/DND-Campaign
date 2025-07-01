@@ -1,11 +1,10 @@
 import { sql } from "drizzle-orm"
 import { alias, pgView } from "drizzle-orm/pg-core"
+import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { narrativeDestinationQuestRoles, narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions, sites } from "../regions/tables"
 import { questStages } from "../stages/tables"
@@ -41,10 +40,6 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${questParticipants}.*), 'npc', CASE WHEN ${questParticipants.npcId} IS NOT NULL THEN jsonb_build_object('id', p_n.id, 'name', p_n.name) END, 'faction', CASE WHEN ${questParticipants.factionId} IS NOT NULL THEN jsonb_build_object('id', p_f.id, 'name', p_f.name) END)) FILTER (WHERE ${questParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"participants",
 				),
-			narrativeDestinationContributions:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('role', to_jsonb(${narrativeDestinationQuestRoles}.*), 'destination', jsonb_build_object('id', ${narrativeDestinations.id}, 'name', ${narrativeDestinations.name}))) FILTER (WHERE ${narrativeDestinationQuestRoles.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrative_destination_contributions",
-				),
 			triggeredConsequences:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${c_trig.id}, 'description', ${c_trig.description})) FILTER (WHERE ${c_trig.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"triggered_consequences",
@@ -52,10 +47,6 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 			affectingConsequences:
 				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${c_aff.id}, 'description', ${c_aff.description})) FILTER (WHERE ${c_aff.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"affecting_consequences",
-				),
-			triggeredEvents:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${narrativeEvents.id}, 'description', ${narrativeEvents.description})) FILTER (WHERE ${narrativeEvents.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"triggered_events",
 				),
 			outgoingForeshadowing:
 				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_out.*)) FILTER (WHERE fs_out.id IS NOT NULL), '[]'::jsonb)`.as(
@@ -66,7 +57,7 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 					"incoming_foreshadowing",
 				),
 			itemRelations:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemRelations}.*)) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as(
+				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"item_relations",
 				),
 			loreLinks:
@@ -75,7 +66,6 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 				),
 		})
 		.from(quests)
-		.leftJoin(regions, sql`${quests.regionId} = ${regions.id}`)
 		.leftJoin(sql`${questRelations} AS qr_out`, sql`qr_out.source_quest_id = ${quests.id}`)
 		.leftJoin(sql`${quests} AS tq`, sql`qr_out.target_quest_id = tq.id`)
 		.leftJoin(sql`${questRelations} AS qr_in`, sql`qr_in.target_quest_id = ${quests.id}`)
@@ -89,17 +79,10 @@ export const questSearchDataView = pgView("quest_search_data_view").as((qb) =>
 		.leftJoin(questParticipants, sql`${questParticipants.questId} = ${quests.id}`)
 		.leftJoin(sql`${npcs} AS p_n`, sql`${questParticipants.npcId} = p_n.id`)
 		.leftJoin(sql`${factions} AS p_f`, sql`${questParticipants.factionId} = p_f.id`)
-		.leftJoin(narrativeDestinationQuestRoles, sql`${narrativeDestinationQuestRoles.questId} = ${quests.id}`)
-		.leftJoin(
-			narrativeDestinations,
-			sql`${narrativeDestinationQuestRoles.narrativeDestinationId} = ${narrativeDestinations.id}`,
-		)
 		.leftJoin(c_trig, sql`${c_trig.triggerQuestId} = ${quests.id}`)
 		.leftJoin(c_aff, sql`${c_aff.affectedQuestId} = ${quests.id}`)
-		.leftJoin(narrativeEvents, sql`${narrativeEvents.relatedQuestId} = ${quests.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_quest_id = ${quests.id}`)
 		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_quest_id = ${quests.id}`)
-		.leftJoin(itemRelations, sql`${itemRelations.questId} = ${quests.id}`)
 		.leftJoin(loreLinks, sql`${loreLinks.questId} = ${quests.id}`)
 		.groupBy(quests.id, regions.id),
 )
