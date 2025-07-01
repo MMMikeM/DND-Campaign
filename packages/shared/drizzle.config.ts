@@ -10,8 +10,8 @@ export default defineConfig({
 	},
 	schema: [
 		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/tables.ts",
-		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/views.ts",
-		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/search-view.ts",
+		// "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/views.ts",
+		// "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/search-view.ts",
 	],
 	out: "./drizzle",
 })

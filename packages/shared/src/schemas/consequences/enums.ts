@@ -1,6 +1,4 @@
 const impactSeverity = ["minor", "moderate", "major"] as const
-const eventTypes = ["complication", "escalation", "twist"] as const
-const narrativePlacements = ["early", "middle", "climax", "denouement"] as const
 const rhythmEffects = [
 	"spike_immediate_tension",
 	"introduce_new_mystery",
@@ -53,9 +51,7 @@ export const enums = {
 	consequenceTimeframe,
 	consequenceTypes,
 	consequenceVisibility,
-	eventTypes,
 	impactSeverity,
-	narrativePlacements,
 	playerImpactFeels,
 	rhythmEffects,
 }

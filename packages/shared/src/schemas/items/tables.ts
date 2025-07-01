@@ -5,7 +5,6 @@ import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -60,7 +59,6 @@ export const itemRelations = pgTable(
 		siteId: nullableFk("site_id", sites.id),
 		questId: nullableFk("quest_id", quests.id),
 		conflictId: nullableFk("conflict_id", conflicts.id),
-		narrativeDestinationId: nullableFk("narrative_destination_id", narrativeDestinations.id),
 
 		relationshipDetails: nullableString("relationship_details"),
 	},
@@ -74,8 +72,7 @@ export const itemRelations = pgTable(
 			(case when ${t.factionId} is not null then 1 else 0 end) +
 			(case when ${t.siteId} is not null then 1 else 0 end) +
 			(case when ${t.questId} is not null then 1 else 0 end) +
-			(case when ${t.conflictId} is not null then 1 else 0 end) +
-			(case when ${t.narrativeDestinationId} is not null then 1 else 0 end)
+			(case when ${t.conflictId} is not null then 1 else 0 end)
 		) = 1`,
 		),
 	],
