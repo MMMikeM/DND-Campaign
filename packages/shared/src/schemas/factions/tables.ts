@@ -29,7 +29,6 @@ export const factions = pgTable(
 		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		hqSiteId: nullableFk("hq_site_id", () => sites.id),
@@ -70,7 +69,6 @@ export const factionAgendas = pgTable(
 		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		factionId: cascadeFk("faction_id", factions.id),
@@ -94,7 +92,6 @@ export const factionDiplomacy = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		sourceFactionId: cascadeFk("source_faction_id", factions.id),
@@ -112,7 +109,6 @@ export const factionInfluence = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		factionId: cascadeFk("faction_id", factions.id),

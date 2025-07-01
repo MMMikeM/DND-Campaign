@@ -21,7 +21,6 @@ export const lore = pgTable("lore", {
 	name: string("name").unique(),
 	description: text("description").array(),
 	creativePrompts: list("creative_prompts"),
-	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	summary: string("summary"),
@@ -32,12 +31,12 @@ export const lore = pgTable("lore", {
 
 	loreType: oneOf("lore_type", loreTypes),
 
-	aesthetics_and_symbols: list("aesthetics_and_symbols"),
-	interactions_and_rules: list("interactions_and_rules"),
-	connections_to_world: list("connections_to_world"),
-	core_tenets_and_traditions: list("core_tenets_and_traditions"),
-	history_and_legacy: list("history_and_legacy"),
-	conflicting_narratives: list("conflicting_narratives"),
+	aestheticsAndSymbols: list("aesthetics_and_symbols"),
+	interactionsAndRules: list("interactions_and_rules"),
+	connectionsToWorld: list("connections_to_world"),
+	coreTenetsAndTraditions: list("core_tenets_and_traditions"),
+	historyAndLegacy: list("history_and_legacy"),
+	conflictingNarratives: list("conflicting_narratives"),
 })
 
 export const loreLinks = pgTable(
@@ -46,7 +45,6 @@ export const loreLinks = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		loreId: cascadeFk("lore_id", lore.id),
@@ -57,9 +55,9 @@ export const loreLinks = pgTable(
 		npcId: nullableFk("npc_id", npcs.id),
 		conflictId: nullableFk("conflict_id", conflicts.id),
 		questId: nullableFk("quest_id", quests.id),
-		foreshadowingId: nullableFk("foreshadowing_id", foreshadowing.id),
+		foreshadowingId: nullableFk("foreshadowing_id", () => foreshadowing.id),
 		relatedLoreId: nullableFk("related_lore_id", lore.id),
-		itemId: nullableFk("item_id", items.id),
+		itemId: nullableFk("item_id", () => items.id),
 		linkRoleOrTypeText: string("link_role_or_type_text"),
 		linkDetailsText: string("link_details_text"),
 	},

@@ -6,67 +6,43 @@ import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { questStages } from "../stages/tables"
-import { itemNotableHistory, itemRelations, items } from "./tables"
+import { itemConnections, items } from "./tables"
 
-export const itemsRelations = relations(items, ({ many, one }) => ({
-	relations: many(itemRelations),
+export const itemsRelations = relations(items, ({ many }) => ({
+	relations: many(itemConnections),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceItem" }),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetItem" }),
-	notableHistory: many(itemNotableHistory),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetItem" }),
-
-	questStage: one(questStages, {
-		fields: [items.questStageId],
-		references: [questStages.id],
-		relationName: "stageItems",
-	}),
 }))
 
-export const itemRelationsRelations = relations(itemRelations, ({ one }) => ({
+export const itemRelationsRelations = relations(itemConnections, ({ one }) => ({
 	sourceItem: one(items, {
-		fields: [itemRelations.sourceItemId],
+		fields: [itemConnections.itemId],
 		references: [items.id],
 	}),
 
 	item: one(items, {
-		fields: [itemRelations.itemId],
+		fields: [itemConnections.connectedItemId],
 		references: [items.id],
 	}),
 	npc: one(npcs, {
-		fields: [itemRelations.npcId],
+		fields: [itemConnections.connectedNpcId],
 		references: [npcs.id],
 	}),
 	faction: one(factions, {
-		fields: [itemRelations.factionId],
+		fields: [itemConnections.connectedFactionId],
 		references: [factions.id],
 	}),
 	site: one(sites, {
-		fields: [itemRelations.siteId],
+		fields: [itemConnections.connectedSiteId],
 		references: [sites.id],
 	}),
 	quest: one(quests, {
-		fields: [itemRelations.questId],
+		fields: [itemConnections.connectedQuestId],
 		references: [quests.id],
-		relationName: "questItemRelations",
 	}),
 	conflict: one(conflicts, {
-		fields: [itemRelations.conflictId],
+		fields: [itemConnections.connectedConflictId],
 		references: [conflicts.id],
-	}),
-}))
-
-export const itemNotableHistoryRelations = relations(itemNotableHistory, ({ one }) => ({
-	item: one(items, {
-		fields: [itemNotableHistory.itemId],
-		references: [items.id],
-	}),
-	keyNpc: one(npcs, {
-		fields: [itemNotableHistory.keyNpcId],
-		references: [npcs.id],
-	}),
-	locationSite: one(sites, {
-		fields: [itemNotableHistory.locationSiteId],
-		references: [sites.id],
 	}),
 }))

@@ -3,7 +3,6 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { items } from "../items/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
@@ -57,11 +56,7 @@ export const loreLinksRelations = relations(loreLinks, ({ one }) => ({
 		references: [items.id],
 		relationName: "LoreLinkTargetItem",
 	}),
-	narrativeDestination: one(narrativeDestinations, {
-		fields: [loreLinks.narrativeDestinationId],
-		references: [narrativeDestinations.id],
-		relationName: "LoreLinkTargetNarrativeDestination",
-	}),
+
 	relatedLore: one(lore, {
 		fields: [loreLinks.relatedLoreId],
 		references: [lore.id],

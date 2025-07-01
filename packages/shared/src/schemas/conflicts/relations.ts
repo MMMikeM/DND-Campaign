@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm"
 import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
@@ -18,7 +18,7 @@ export const conflictsRelations = relations(conflicts, ({ one, many }) => ({
 	triggeredConsequences: many(consequences, { relationName: "ConsequenceTriggerConflict" }),
 	affectingConsequences: many(consequences, { relationName: "ConsequenceAffectedConflict" }),
 	incomingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingTargetConflict" }),
-	itemRelations: many(itemRelations),
+	itemConnections: many(itemConnections),
 	loreLinks: many(loreLinks, { relationName: "LoreLinkTargetConflict" }),
 }))
 

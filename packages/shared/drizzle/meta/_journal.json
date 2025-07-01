@@ -71,6 +71,13 @@
       "when": 1751352066438,
       "tag": "0009_easy_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1751352297548,
+      "tag": "0010_thin_sage",
+      "breakpoints": true
     }
   ]
 }

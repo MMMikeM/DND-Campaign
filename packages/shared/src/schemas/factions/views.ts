@@ -1,11 +1,10 @@
 import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
 import { conflictParticipants, conflicts } from "../conflicts/tables"
+import { consequences } from "../consequences/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { narrativeDestinationParticipants, narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
 import { npcFactionMemberships, npcs } from "../npcs/tables"
 import { questHooks, questParticipants, quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
@@ -51,17 +50,13 @@ export const factionSearchDataView = pgView("faction_search_data_view").as((qb) 
 				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${consequences.id}, 'description', ${consequences.description})) FILTER (WHERE ${consequences.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"consequences",
 				),
-			narrativeDestinationInvolvement:
-				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${narrativeDestinationParticipants}.*), 'destination', jsonb_build_object('id', ${narrativeDestinations.id}, 'name', ${narrativeDestinations.name}))) FILTER (WHERE ${narrativeDestinationParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrativeDestinationInvolvement",
-				),
 			incomingForeshadowing:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${foreshadowing}.*)) FILTER (WHERE ${foreshadowing.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"incomingForeshadowing",
 				),
-			itemRelations:
-				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemRelations}.*)) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"itemRelations",
+			itemConnections:
+				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
+					"itemConnections",
 				),
 			loreLinks:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${loreLinks.id}, 'lore_id', ${loreLinks.loreId})) FILTER (WHERE ${loreLinks.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -91,13 +86,8 @@ export const factionSearchDataView = pgView("faction_search_data_view").as((qb) 
 		.leftJoin(conflictParticipants, sql`${conflictParticipants.factionId} = ${factions.id}`)
 		.leftJoin(conflicts, sql`${conflictParticipants.conflictId} = ${conflicts.id}`)
 		.leftJoin(consequences, sql`${consequences.affectedFactionId} = ${factions.id}`)
-		.leftJoin(narrativeDestinationParticipants, sql`${narrativeDestinationParticipants.factionId} = ${factions.id}`)
-		.leftJoin(
-			narrativeDestinations,
-			sql`${narrativeDestinationParticipants.narrativeDestinationId} = ${narrativeDestinations.id}`,
-		)
 		.leftJoin(foreshadowing, sql`${foreshadowing.targetFactionId} = ${factions.id}`)
-		.leftJoin(itemRelations, sql`${itemRelations.factionId} = ${factions.id}`)
+		.leftJoin(itemConnections, sql`${itemConnections.connectedFactionId} = ${factions.id}`)
 		.leftJoin(loreLinks, sql`${loreLinks.factionId} = ${factions.id}`)
 		.leftJoin(sql`${factionDiplomacy} AS fd_in`, sql`fd_in.target_faction_id = ${factions.id}`)
 		.leftJoin(sql`${factions} AS sf`, sql`fd_in.source_faction_id = sf.id`)
