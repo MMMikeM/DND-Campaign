@@ -12,16 +12,16 @@ import * as npcRelations from "./npcs/relations"
 
 export const relations = {
 	conflictRelations,
-	factionRelations,
 	consequenceRelations,
+	factionRelations,
 	foreshadowingRelations,
 	itemRelations,
+	loreRelations,
+	mapRelations,
 	npcRelations,
 	questRelations,
 	questStageRelations,
 	regionRelations,
-	loreRelations,
-	mapRelations,
 }
 
 import * as factionTables from "../schemas/factions/tables"
@@ -38,16 +38,16 @@ import * as npcTables from "./npcs/tables"
 
 export const tables = {
 	conflictTables,
-	factionTables,
 	consequenceTables,
+	factionTables,
 	foreshadowingTables,
 	itemTables,
-	npcTables,
-	questTables,
-	questStageTables,
-	regionTables,
 	loreTables,
 	mapTables,
+	npcTables,
+	questStageTables,
+	questTables,
+	regionTables,
 }
 
 import * as conflictViews from "./conflicts/views"
@@ -64,14 +64,14 @@ import * as stageViews from "./stages/views"
 
 export const views = {
 	conflictViews,
-	factionViews,
 	consequenceViews,
+	factionViews,
 	foreshadowingViews,
 	itemViews,
 	loreViews,
 	npcViews,
 	questViews,
 	regionViews,
-	stageViews,
 	searchIndex,
+	stageViews,
 }
