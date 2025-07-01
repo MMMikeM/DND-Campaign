@@ -2,51 +2,52 @@
 
 import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
-import { regions, sites } from "../regions/tables"
+import { sites } from "../regions/tables"
 import { enums } from "./enums"
 
 const {
 	hookTypes,
-	moralSpectrumFocus,
-	pacingRoles,
 	participantImportanceLevels,
-	playerExperienceGoals,
 	presentationStyles,
 	questTypes,
 	relationshipTypes,
 	trustLevels,
 	urgencyLevels,
-	visibilityLevels,
 	questHookSourceTypes,
+	impactSeverity,
+	eventTypes,
+	narrativePlacements,
+	rhythmEffects,
+	emotionalShapes,
 } = enums
 
 export const quests = pgTable("quests", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
-	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	name: string("name").unique(),
-	regionId: nullableFk("region_id", regions.id),
 	type: oneOf("type", questTypes),
 	urgency: oneOf("urgency", urgencyLevels),
-	visibility: oneOf("visibility", visibilityLevels),
 	mood: string("mood"),
+	primaryPlayerExperienceGoal: string("primary_player_experience_goal"),
 
-	moralSpectrumFocus: oneOf("moral_spectrum_focus", moralSpectrumFocus),
-	intendedPacingRole: oneOf("intended_pacing_role", pacingRoles),
-	primaryPlayerExperienceGoal: oneOf("primary_player_experience_goal", playerExperienceGoals),
+	promise: nullableString("promise"),
+	payoff: nullableString("payoff"),
+	stakes: list("stakes"),
+	emotionalShape: nullableOneOf("emotional_shape", emotionalShapes),
 
-	failureOutcomes: list("failure_outcomes"),
-	successOutcomes: list("success_outcomes"),
+	eventType: oneOf("event_type", eventTypes),
+	intendedRhythmEffect: oneOf("intended_rhythm_effect", rhythmEffects),
+	narrativePlacement: oneOf("narrative_placement", narrativePlacements),
+	impactSeverity: oneOf("impact_severity", impactSeverity),
+
 	objectives: list("objectives"),
 	rewards: list("rewards"),
-	themes: list("themes"),
-	inspirations: list("inspirations"),
 
 	prerequisiteQuestId: integer("prerequisite_quest_id").references((): AnyPgColumn => quests.id),
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
@@ -58,7 +59,6 @@ export const questRelations = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		sourceQuestId: cascadeFk("source_quest_id", quests.id),
@@ -78,7 +78,6 @@ export const questHooks = pgTable(
 		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", quests.id),
@@ -121,7 +120,6 @@ export const questParticipants = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", quests.id),

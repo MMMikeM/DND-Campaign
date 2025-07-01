@@ -1,8 +1,8 @@
 // quests/stages/relations.ts
 import { relations } from "drizzle-orm"
+import { consequences } from "../consequences/tables"
 import { foreshadowing } from "../foreshadowing/tables"
 import { items } from "../items/tables"
-import { consequences, narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -26,7 +26,6 @@ export const questStagesRelations = relations(questStages, ({ one, many }) => ({
 	incomingDecisions: many(questStageDecisions, { relationName: "targetStageForDecisions" }),
 
 	items: many(items, { relationName: "stageItems" }),
-	narrativeEvents: many(narrativeEvents),
 	npcInvolvement: many(npcStageInvolvement),
 	outgoingForeshadowing: many(foreshadowing, { relationName: "ForeshadowingSourceQuestStage" }),
 }))
@@ -48,7 +47,6 @@ export const questStageDecisionsRelations = relations(questStageDecisions, ({ on
 		relationName: "targetStageForDecisions",
 	}),
 
-	triggeredEvents: many(narrativeEvents, { relationName: "DecisionTriggeredEvents" }),
 	consequences: many(consequences, { relationName: "ConsequenceTriggerQuestStageDecision" }),
 }))
 

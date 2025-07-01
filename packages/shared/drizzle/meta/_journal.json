@@ -64,6 +64,13 @@
       "when": 1751351735807,
       "tag": "0008_real_vision",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1751352066438,
+      "tag": "0009_easy_sprite",
+      "breakpoints": true
     }
   ]
 }

@@ -17,7 +17,6 @@ export const questStages = pgTable("quest_stages", {
 	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
-	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	siteId: nullableFk("site_id", sites.id),
@@ -47,7 +46,6 @@ export const questStageDecisions = pgTable(
 		name: string("name").unique(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", () => quests.id),
@@ -85,7 +83,6 @@ export const npcStageInvolvement = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
 
 		npcId: cascadeFk("npc_id", npcs.id),
