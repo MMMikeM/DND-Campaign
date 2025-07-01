@@ -4,8 +4,6 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
 import { lore } from "../lore/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -39,10 +37,6 @@ export const foreshadowingSearchDataView = pgView("foreshadowing_search_data_vie
 				"targetConflict",
 			),
 			targetItem: sql<string>`COALESCE(jsonb_build_object('id', ti.id, 'name', ti.name), '{}'::jsonb)`.as("targetItem"),
-			targetNarrativeDestination:
-				sql<string>`COALESCE(jsonb_build_object('id', tnd.id, 'name', tnd.name), '{}'::jsonb)`.as(
-					"targetNarrativeDestination",
-				),
 			targetLore: sql<string>`COALESCE(jsonb_build_object('id', tl.id, 'name', tl.name), '{}'::jsonb)`.as("targetLore"),
 			targetFaction: sql<string>`COALESCE(jsonb_build_object('id', tf.id, 'name', tf.name), '{}'::jsonb)`.as(
 				"targetFaction",
@@ -58,10 +52,8 @@ export const foreshadowingSearchDataView = pgView("foreshadowing_search_data_vie
 		.leftJoin(sql`${lore} AS sl`, sql`${foreshadowing.sourceLoreId} = sl.id`)
 		.leftJoin(sql`${quests} AS tq`, sql`${foreshadowing.targetQuestId} = tq.id`)
 		.leftJoin(sql`${npcs} AS tn`, sql`${foreshadowing.targetNpcId} = tn.id`)
-		.leftJoin(sql`${narrativeEvents} AS tne`, sql`${foreshadowing.targetNarrativeEventId} = tne.id`)
 		.leftJoin(sql`${conflicts} AS tmc`, sql`${foreshadowing.targetConflictId} = tmc.id`)
 		.leftJoin(sql`${items} AS ti`, sql`${foreshadowing.targetItemId} = ti.id`)
-		.leftJoin(sql`${narrativeDestinations} AS tnd`, sql`${foreshadowing.targetNarrativeDestinationId} = tnd.id`)
 		.leftJoin(sql`${lore} AS tl`, sql`${foreshadowing.targetLoreId} = tl.id`)
 		.leftJoin(sql`${factions} AS tf`, sql`${foreshadowing.targetFactionId} = tf.id`)
 		.leftJoin(sql`${sites} AS ts`, sql`${foreshadowing.targetSiteId} = ts.id`)

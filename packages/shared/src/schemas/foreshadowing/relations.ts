@@ -3,8 +3,6 @@ import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
 import { lore, loreLinks } from "../lore/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { narrativeEvents } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -25,11 +23,6 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one, many }) =
 		references: [npcs.id],
 		relationName: "ForeshadowingTargetNpc",
 	}),
-	targetNarrativeEvent: one(narrativeEvents, {
-		fields: [foreshadowing.targetNarrativeEventId],
-		references: [narrativeEvents.id],
-		relationName: "ForeshadowingTargetNarrativeEvent",
-	}),
 	targetConflict: one(conflicts, {
 		fields: [foreshadowing.targetConflictId],
 		references: [conflicts.id],
@@ -39,11 +32,6 @@ export const foreshadowingRelations = relations(foreshadowing, ({ one, many }) =
 		fields: [foreshadowing.targetItemId],
 		references: [items.id],
 		relationName: "ForeshadowingTargetItem",
-	}),
-	targetNarrativeDestination: one(narrativeDestinations, {
-		fields: [foreshadowing.targetNarrativeDestinationId],
-		references: [narrativeDestinations.id],
-		relationName: "ForeshadowingTargetNarrativeDestination",
 	}),
 	targetLore: one(lore, {
 		fields: [foreshadowing.targetLoreId],

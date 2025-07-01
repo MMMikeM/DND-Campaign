@@ -16,7 +16,6 @@ const {
 	conflictStatuses,
 	participantRolesInConflict,
 	tensionLevels,
-	questImpacts,
 } = enums
 
 export const conflicts = pgTable("conflicts", {
@@ -24,7 +23,6 @@ export const conflicts = pgTable("conflicts", {
 	name: string("name").unique(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
-	gmNotes: list("gm_notes"),
 	tags: list("tags"),
 
 	regionId: nullableFk("region_id", regions.id),
@@ -40,9 +38,7 @@ export const conflicts = pgTable("conflicts", {
 	status: oneOf("status", conflictStatuses),
 	clarityOfRightWrong: oneOf("clarity_of_right_wrong", conflictClarity),
 	currentTensionLevel: oneOf("tension_level", tensionLevels),
-
-	natures: manyOf("natures", conflictNatures),
-	questImpacts: manyOf("quest_impacts", questImpacts),
+	nature: oneOf("nature", conflictNatures),
 })
 
 export const conflictParticipants = pgTable(
@@ -51,12 +47,12 @@ export const conflictParticipants = pgTable(
 		id: pk(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
-		gmNotes: list("gm_notes"),
 		tags: list("tags"),
+
+		conflictId: cascadeFk("conflict_id", conflicts.id),
 
 		npcId: nullableFk("npc_id", npcs.id),
 		factionId: nullableFk("faction_id", factions.id),
-		conflictId: cascadeFk("conflict_id", conflicts.id),
 
 		role: oneOf("role", participantRolesInConflict),
 

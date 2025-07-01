@@ -1,11 +1,10 @@
 import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
+import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { itemRelations } from "../items/tables"
+import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
-import { narrativeDestinations } from "../narrative-destinations/tables"
-import { consequences } from "../narrative-events/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
 
@@ -33,17 +32,13 @@ export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb
 				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', c_affecting.id, 'description', c_affecting.description)) FILTER (WHERE c_affecting.id IS NOT NULL), '[]'::jsonb)`.as(
 					"affectedByConsequences",
 				),
-			narrativeDestinations:
-				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${narrativeDestinations.id}, 'name', ${narrativeDestinations.name})) FILTER (WHERE ${narrativeDestinations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"narrativeDestinations",
-				),
 			incomingForeshadowing:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${foreshadowing}.*)) FILTER (WHERE ${foreshadowing.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"incomingForeshadowing",
 				),
-			itemRelations:
-				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemRelations}.*)) FILTER (WHERE ${itemRelations.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"itemRelations",
+			itemConnections:
+				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
+					"itemConnections",
 				),
 			loreLinks:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${loreLinks.id}, 'lore_id', ${loreLinks.loreId})) FILTER (WHERE ${loreLinks.id} IS NOT NULL), '[]'::jsonb)`.as(
@@ -57,9 +52,7 @@ export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb
 		.leftJoin(npcs, sql`${conflictParticipants.npcId} = ${npcs.id}`)
 		.leftJoin(sql`${consequences} AS c_caused`, sql`c_caused.trigger_conflict_id = ${conflicts.id}`)
 		.leftJoin(sql`${consequences} AS c_affecting`, sql`c_affecting.affected_conflict_id = ${conflicts.id}`)
-		.leftJoin(narrativeDestinations, sql`${narrativeDestinations.conflictId} = ${conflicts.id}`)
 		.leftJoin(foreshadowing, sql`${foreshadowing.targetConflictId} = ${conflicts.id}`)
-		.leftJoin(itemRelations, sql`${itemRelations.conflictId} = ${conflicts.id}`)
 		.leftJoin(loreLinks, sql`${loreLinks.conflictId} = ${conflicts.id}`)
 		.groupBy(conflicts.id, regions.id),
 )
