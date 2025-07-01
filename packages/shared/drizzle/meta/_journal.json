@@ -57,6 +57,13 @@
       "when": 1751349461246,
       "tag": "0007_deep_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1751351735807,
+      "tag": "0008_real_vision",
+      "breakpoints": true
     }
   ]
 }

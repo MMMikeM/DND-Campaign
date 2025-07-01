@@ -1,0 +1,5076 @@
+{
+  "id": "d0addae0-5833-45cc-a2e6-a7095b0b27cd",
+  "prevId": "48f08e69-5aad-45c1-8fad-07e3b4c8491b",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.conflict_participants": {
+      "name": "conflict_participants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "conflict_id": {
+          "name": "conflict_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivation": {
+          "name": "motivation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_stance": {
+          "name": "public_stance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secret_stance": {
+          "name": "secret_stance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "conflict_participants_npc_id_npcs_id_fk": {
+          "name": "conflict_participants_npc_id_npcs_id_fk",
+          "tableFrom": "conflict_participants",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "conflict_participants_faction_id_factions_id_fk": {
+          "name": "conflict_participants_faction_id_factions_id_fk",
+          "tableFrom": "conflict_participants",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "conflict_participants_conflict_id_conflicts_id_fk": {
+          "name": "conflict_participants_conflict_id_conflicts_id_fk",
+          "tableFrom": "conflict_participants",
+          "tableTo": "conflicts",
+          "columnsFrom": [
+            "conflict_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "npc_or_faction_participant_exclusive": {
+          "name": "npc_or_faction_participant_exclusive",
+          "value": "(\"conflict_participants\".\"npc_id\" IS NOT NULL AND \"conflict_participants\".\"faction_id\" IS NULL) OR (\"conflict_participants\".\"npc_id\" IS NULL AND \"conflict_participants\".\"faction_id\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.conflicts": {
+      "name": "conflicts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cause": {
+          "name": "cause",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moral_dilemma": {
+          "name": "moral_dilemma",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stakes": {
+          "name": "stakes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "possible_outcomes": {
+          "name": "possible_outcomes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden_truths": {
+          "name": "hidden_truths",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "clarity_of_right_wrong": {
+          "name": "clarity_of_right_wrong",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tension_level": {
+          "name": "tension_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "natures": {
+          "name": "natures",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_impacts": {
+          "name": "quest_impacts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "conflicts_region_id_regions_id_fk": {
+          "name": "conflicts_region_id_regions_id_fk",
+          "tableFrom": "conflicts",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "conflicts_name_unique": {
+          "name": "conflicts_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.consequences": {
+      "name": "consequences",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "consequence_type": {
+          "name": "consequence_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "severity": {
+          "name": "severity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timeframe": {
+          "name": "timeframe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_impact_feel": {
+          "name": "player_impact_feel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_type": {
+          "name": "source_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "complication_details": {
+          "name": "complication_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "escalation_details": {
+          "name": "escalation_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "twist_reveal_details": {
+          "name": "twist_reveal_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trigger_quest_id": {
+          "name": "trigger_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "trigger_quest_stage_decision_id": {
+          "name": "trigger_quest_stage_decision_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_faction_id": {
+          "name": "affected_faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_region_id": {
+          "name": "affected_region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_area_id": {
+          "name": "affected_area_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_site_id": {
+          "name": "affected_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_npc_id": {
+          "name": "affected_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_consequence_id": {
+          "name": "affected_consequence_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_conflict_id": {
+          "name": "affected_conflict_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "affected_quest_id": {
+          "name": "affected_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "conflict_impact_description": {
+          "name": "conflict_impact_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "consequences_trigger_quest_id_quests_id_fk": {
+          "name": "consequences_trigger_quest_id_quests_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "trigger_quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_trigger_quest_stage_decision_id_quest_stage_decisions_id_fk": {
+          "name": "consequences_trigger_quest_stage_decision_id_quest_stage_decisions_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "quest_stage_decisions",
+          "columnsFrom": [
+            "trigger_quest_stage_decision_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_faction_id_factions_id_fk": {
+          "name": "consequences_affected_faction_id_factions_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "affected_faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_region_id_regions_id_fk": {
+          "name": "consequences_affected_region_id_regions_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "affected_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_area_id_areas_id_fk": {
+          "name": "consequences_affected_area_id_areas_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "areas",
+          "columnsFrom": [
+            "affected_area_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_site_id_sites_id_fk": {
+          "name": "consequences_affected_site_id_sites_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "affected_site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_npc_id_npcs_id_fk": {
+          "name": "consequences_affected_npc_id_npcs_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "affected_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_consequence_id_consequences_id_fk": {
+          "name": "consequences_affected_consequence_id_consequences_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "consequences",
+          "columnsFrom": [
+            "affected_consequence_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_conflict_id_conflicts_id_fk": {
+          "name": "consequences_affected_conflict_id_conflicts_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "conflicts",
+          "columnsFrom": [
+            "affected_conflict_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "consequences_affected_quest_id_quests_id_fk": {
+          "name": "consequences_affected_quest_id_quests_id_fk",
+          "tableFrom": "consequences",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "affected_quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "consequences_name_unique": {
+          "name": "consequences_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_single_trigger": {
+          "name": "chk_single_trigger",
+          "value": "(\n        (CASE WHEN \"consequences\".\"trigger_quest_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"trigger_quest_stage_decision_id\" IS NOT NULL THEN 1 ELSE 0 END)\n      ) <= 1"
+        },
+        "chk_single_affected_entity": {
+          "name": "chk_single_affected_entity",
+          "value": "(\n        (CASE WHEN \"consequences\".\"affected_faction_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_region_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_area_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_site_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_npc_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_consequence_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_conflict_id\" IS NOT NULL THEN 1 ELSE 0 END) +\n        (CASE WHEN \"consequences\".\"affected_quest_id\" IS NOT NULL THEN 1 ELSE 0 END)\n      ) = 1"
+        },
+        "chk_conflict_impact_description_required": {
+          "name": "chk_conflict_impact_description_required",
+          "value": "(\"consequences\".\"affected_conflict_id\" IS NULL) OR (\"consequences\".\"conflict_impact_description\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.faction_agendas": {
+      "name": "faction_agendas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agenda_type": {
+          "name": "agenda_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "current_stage": {
+          "name": "current_stage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "importance": {
+          "name": "importance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ultimate_aim": {
+          "name": "ultimate_aim",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moral_ambiguity": {
+          "name": "moral_ambiguity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "approach": {
+          "name": "approach",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "story_hooks": {
+          "name": "story_hooks",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faction_agendas_faction_id_factions_id_fk": {
+          "name": "faction_agendas_faction_id_factions_id_fk",
+          "tableFrom": "faction_agendas",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faction_agendas_name_unique": {
+          "name": "faction_agendas_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "faction_agendas_faction_id_name_unique": {
+          "name": "faction_agendas_faction_id_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "faction_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.faction_diplomacy": {
+      "name": "faction_diplomacy",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_faction_id": {
+          "name": "source_faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_faction_id": {
+          "name": "target_faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "strength": {
+          "name": "strength",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "diplomatic_status": {
+          "name": "diplomatic_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faction_diplomacy_source_faction_id_factions_id_fk": {
+          "name": "faction_diplomacy_source_faction_id_factions_id_fk",
+          "tableFrom": "faction_diplomacy",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "source_faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "faction_diplomacy_target_faction_id_factions_id_fk": {
+          "name": "faction_diplomacy_target_faction_id_factions_id_fk",
+          "tableFrom": "faction_diplomacy",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "target_faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faction_diplomacy_source_faction_id_target_faction_id_unique": {
+          "name": "faction_diplomacy_source_faction_id_target_faction_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_faction_id",
+            "target_faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.faction_influence": {
+      "name": "faction_influence",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area_id": {
+          "name": "area_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "influence_level": {
+          "name": "influence_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "presence_types": {
+          "name": "presence_types",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "presence_details": {
+          "name": "presence_details",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "priorities": {
+          "name": "priorities",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faction_influence_faction_id_factions_id_fk": {
+          "name": "faction_influence_faction_id_factions_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "faction_influence_region_id_regions_id_fk": {
+          "name": "faction_influence_region_id_regions_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_area_id_areas_id_fk": {
+          "name": "faction_influence_area_id_areas_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "areas",
+          "columnsFrom": [
+            "area_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "faction_influence_site_id_sites_id_fk": {
+          "name": "faction_influence_site_id_sites_id_fk",
+          "tableFrom": "faction_influence",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "single_fk_check": {
+          "name": "single_fk_check",
+          "value": "((CASE WHEN \"faction_influence\".\"region_id\" IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN \"faction_influence\".\"area_id\" IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN \"faction_influence\".\"site_id\" IS NOT NULL THEN 1 ELSE 0 END)) = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.factions": {
+      "name": "factions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hq_site_id": {
+          "name": "hq_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size": {
+          "name": "size",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wealth": {
+          "name": "wealth",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reach": {
+          "name": "reach",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transparency_level": {
+          "name": "transparency_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_alignment": {
+          "name": "public_alignment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secret_alignment": {
+          "name": "secret_alignment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "public_perception": {
+          "name": "public_perception",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_goal": {
+          "name": "public_goal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secret_goal": {
+          "name": "secret_goal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "values": {
+          "name": "values",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "history": {
+          "name": "history",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "symbols": {
+          "name": "symbols",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rituals": {
+          "name": "rituals",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "taboos": {
+          "name": "taboos",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aesthetics": {
+          "name": "aesthetics",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "jargon": {
+          "name": "jargon",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recognition_signs": {
+          "name": "recognition_signs",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "factions_hq_site_id_sites_id_fk": {
+          "name": "factions_hq_site_id_sites_id_fk",
+          "tableFrom": "factions",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "hq_site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "factions_name_unique": {
+          "name": "factions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_faction_transparency_rules": {
+          "name": "chk_faction_transparency_rules",
+          "value": "NOT ((\"factions\".\"transparency_level\" = 'transparent') AND (\"factions\".\"secret_alignment\" IS NOT NULL OR \"factions\".\"secret_goal\" IS NOT NULL))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.foreshadowing": {
+      "name": "foreshadowing",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_quest_id": {
+          "name": "target_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_npc_id": {
+          "name": "target_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_narrative_event_id": {
+          "name": "target_narrative_event_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_conflict_id": {
+          "name": "target_conflict_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_item_id": {
+          "name": "target_item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_narrative_destination_id": {
+          "name": "target_narrative_destination_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_lore_id": {
+          "name": "target_lore_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_faction_id": {
+          "name": "target_faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_site_id": {
+          "name": "target_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_quest_id": {
+          "name": "source_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_quest_stage_id": {
+          "name": "source_quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_site_id": {
+          "name": "source_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_npc_id": {
+          "name": "source_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_item_description_id": {
+          "name": "source_item_description_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_lore_id": {
+          "name": "source_lore_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subtlety": {
+          "name": "subtlety",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_weight": {
+          "name": "narrative_weight",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "suggested_delivery_methods": {
+          "name": "suggested_delivery_methods",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "foreshadowing_name_unique": {
+          "name": "foreshadowing_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "single_target_fk_check": {
+          "name": "single_target_fk_check",
+          "value": "(\n        (case when \"foreshadowing\".\"target_quest_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_npc_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_narrative_event_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_conflict_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_item_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_narrative_destination_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_lore_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_faction_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"target_site_id\" is not null then 1 else 0 end)\n      ) = 1"
+        },
+        "single_source_fk_check": {
+          "name": "single_source_fk_check",
+          "value": "(\n        (case when \"foreshadowing\".\"source_quest_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"source_quest_stage_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"source_site_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"source_npc_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"source_item_description_id\" is not null then 1 else 0 end) +\n        (case when \"foreshadowing\".\"source_lore_id\" is not null then 1 else 0 end)\n      ) = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.item_notable_history": {
+      "name": "item_notable_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key_npc_id": {
+          "name": "key_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location_site_id": {
+          "name": "location_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "event_description": {
+          "name": "event_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timeframe": {
+          "name": "timeframe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_role_in_event": {
+          "name": "npc_role_in_event",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_notable_history_item_id_items_id_fk": {
+          "name": "item_notable_history_item_id_items_id_fk",
+          "tableFrom": "item_notable_history",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "item_notable_history_key_npc_id_npcs_id_fk": {
+          "name": "item_notable_history_key_npc_id_npcs_id_fk",
+          "tableFrom": "item_notable_history",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "key_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_notable_history_location_site_id_sites_id_fk": {
+          "name": "item_notable_history_location_site_id_sites_id_fk",
+          "tableFrom": "item_notable_history",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "location_site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.item_relations": {
+      "name": "item_relations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_item_id": {
+          "name": "source_item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relationship_type": {
+          "name": "relationship_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "conflict_id": {
+          "name": "conflict_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "relationship_details": {
+          "name": "relationship_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_relations_source_item_id_items_id_fk": {
+          "name": "item_relations_source_item_id_items_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "items",
+          "columnsFrom": [
+            "source_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "item_relations_item_id_items_id_fk": {
+          "name": "item_relations_item_id_items_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_relations_npc_id_npcs_id_fk": {
+          "name": "item_relations_npc_id_npcs_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_relations_faction_id_factions_id_fk": {
+          "name": "item_relations_faction_id_factions_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_relations_site_id_sites_id_fk": {
+          "name": "item_relations_site_id_sites_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_relations_quest_id_quests_id_fk": {
+          "name": "item_relations_quest_id_quests_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_relations_conflict_id_conflicts_id_fk": {
+          "name": "item_relations_conflict_id_conflicts_id_fk",
+          "tableFrom": "item_relations",
+          "tableTo": "conflicts",
+          "columnsFrom": [
+            "conflict_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "item_relations_source_item_id_relationship_type_unique": {
+          "name": "item_relations_source_item_id_relationship_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_item_id",
+            "relationship_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_single_fk_check": {
+          "name": "chk_single_fk_check",
+          "value": "(\n\t\t\t(case when \"item_relations\".\"item_id\" is not null then 1 else 0 end) +\n\t\t\t(case when \"item_relations\".\"npc_id\" is not null then 1 else 0 end) +\n\t\t\t(case when \"item_relations\".\"faction_id\" is not null then 1 else 0 end) +\n\t\t\t(case when \"item_relations\".\"site_id\" is not null then 1 else 0 end) +\n\t\t\t(case when \"item_relations\".\"quest_id\" is not null then 1 else 0 end) +\n\t\t\t(case when \"item_relations\".\"conflict_id\" is not null then 1 else 0 end)\n\t\t) = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.items": {
+      "name": "items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quest_stage_id": {
+          "name": "quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "item_type": {
+          "name": "item_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_role": {
+          "name": "narrative_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "perceived_simplicity": {
+          "name": "perceived_simplicity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "significance": {
+          "name": "significance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore_significance": {
+          "name": "lore_significance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creation_period": {
+          "name": "creation_period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "place_of_origin": {
+          "name": "place_of_origin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mechanical_effects": {
+          "name": "mechanical_effects",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "items_quest_id_quests_id_fk": {
+          "name": "items_quest_id_quests_id_fk",
+          "tableFrom": "items",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "items_quest_stage_id_quest_stages_id_fk": {
+          "name": "items_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "items",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "items_name_unique": {
+          "name": "items_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lore": {
+      "name": "lore",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "surface_impression": {
+          "name": "surface_impression",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lived_reality": {
+          "name": "lived_reality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden_truths": {
+          "name": "hidden_truths",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modern_relevance": {
+          "name": "modern_relevance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore_type": {
+          "name": "lore_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aesthetics_and_symbols": {
+          "name": "aesthetics_and_symbols",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interactions_and_rules": {
+          "name": "interactions_and_rules",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "connections_to_world": {
+          "name": "connections_to_world",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "core_tenets_and_traditions": {
+          "name": "core_tenets_and_traditions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "history_and_legacy": {
+          "name": "history_and_legacy",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conflicting_narratives": {
+          "name": "conflicting_narratives",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "lore_name_unique": {
+          "name": "lore_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lore_links": {
+      "name": "lore_links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore_id": {
+          "name": "lore_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_strength": {
+          "name": "link_strength",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "conflict_id": {
+          "name": "conflict_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "foreshadowing_id": {
+          "name": "foreshadowing_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_lore_id": {
+          "name": "related_lore_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "link_role_or_type_text": {
+          "name": "link_role_or_type_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_details_text": {
+          "name": "link_details_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lore_links_lore_id_lore_id_fk": {
+          "name": "lore_links_lore_id_lore_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "lore",
+          "columnsFrom": [
+            "lore_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "lore_links_region_id_regions_id_fk": {
+          "name": "lore_links_region_id_regions_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_faction_id_factions_id_fk": {
+          "name": "lore_links_faction_id_factions_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_npc_id_npcs_id_fk": {
+          "name": "lore_links_npc_id_npcs_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_conflict_id_conflicts_id_fk": {
+          "name": "lore_links_conflict_id_conflicts_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "conflicts",
+          "columnsFrom": [
+            "conflict_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_quest_id_quests_id_fk": {
+          "name": "lore_links_quest_id_quests_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_foreshadowing_id_foreshadowing_id_fk": {
+          "name": "lore_links_foreshadowing_id_foreshadowing_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "foreshadowing",
+          "columnsFrom": [
+            "foreshadowing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_related_lore_id_lore_id_fk": {
+          "name": "lore_links_related_lore_id_lore_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "lore",
+          "columnsFrom": [
+            "related_lore_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "lore_links_item_id_items_id_fk": {
+          "name": "lore_links_item_id_items_id_fk",
+          "tableFrom": "lore_links",
+          "tableTo": "items",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_lore_link": {
+          "name": "unique_lore_link",
+          "nullsNotDistinct": false,
+          "columns": [
+            "lore_id",
+            "region_id",
+            "faction_id",
+            "npc_id",
+            "conflict_id",
+            "quest_id",
+            "foreshadowing_id",
+            "related_lore_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "single_fk_check": {
+          "name": "single_fk_check",
+          "value": "(\n        (case when \"lore_links\".\"region_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"faction_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"npc_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"conflict_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"quest_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"foreshadowing_id\" is not null then 1 else 0 end) +\n        (case when \"lore_links\".\"related_lore_id\" is not null then 1 else 0 end)\n      ) = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.map_files": {
+      "name": "map_files",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "file_name": {
+          "name": "file_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "map_image": {
+          "name": "map_image",
+          "type": "bytea",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_format": {
+          "name": "image_format",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_size": {
+          "name": "image_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_width": {
+          "name": "image_width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_height": {
+          "name": "image_height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "map_files_file_name_unique": {
+          "name": "map_files_file_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "file_name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.map_groups": {
+      "name": "map_groups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "map_groups_name_unique": {
+          "name": "map_groups_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.map_variants": {
+      "name": "map_variants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "map_group_id": {
+          "name": "map_group_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "map_file_id": {
+          "name": "map_file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_default": {
+          "name": "is_default",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cover_options": {
+          "name": "cover_options",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "elevation_features": {
+          "name": "elevation_features",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "movement_routes": {
+          "name": "movement_routes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficult_terrain": {
+          "name": "difficult_terrain",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "choke_points": {
+          "name": "choke_points",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sight_lines": {
+          "name": "sight_lines",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tactical_positions": {
+          "name": "tactical_positions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interactive_elements": {
+          "name": "interactive_elements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "environmental_hazards": {
+          "name": "environmental_hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "one_default_per_group_idx": {
+          "name": "one_default_per_group_idx",
+          "columns": [
+            {
+              "expression": "map_group_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"map_variants\".\"is_default\" = true",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "map_variants_map_group_id_map_groups_id_fk": {
+          "name": "map_variants_map_group_id_map_groups_id_fk",
+          "tableFrom": "map_variants",
+          "tableTo": "map_groups",
+          "columnsFrom": [
+            "map_group_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "map_variants_map_file_id_map_files_id_fk": {
+          "name": "map_variants_map_file_id_map_files_id_fk",
+          "tableFrom": "map_variants",
+          "tableTo": "map_files",
+          "columnsFrom": [
+            "map_file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "map_variants_map_file_id_unique": {
+          "name": "map_variants_map_file_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "map_file_id"
+          ]
+        },
+        "map_id_variant_name_unique": {
+          "name": "map_id_variant_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "map_group_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.npc_details": {
+      "name": "npc_details",
+      "schema": "",
+      "columns": {
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "alignment": {
+          "name": "alignment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wealth": {
+          "name": "wealth",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "availability": {
+          "name": "availability",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adaptability": {
+          "name": "adaptability",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "complexity": {
+          "name": "complexity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "goals_and_fears": {
+          "name": "goals_and_fears",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secrets_and_history": {
+          "name": "secrets_and_history",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "capability": {
+          "name": "capability",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proactivity": {
+          "name": "proactivity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relatability": {
+          "name": "relatability",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "biases": {
+          "name": "biases",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "preferred_topics": {
+          "name": "preferred_topics",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avoid_topics": {
+          "name": "avoid_topics",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "knowledge": {
+          "name": "knowledge",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rumours": {
+          "name": "rumours",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_details_npc_id_npcs_id_fk": {
+          "name": "npc_details_npc_id_npcs_id_fk",
+          "tableFrom": "npc_details",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.npc_faction_memberships": {
+      "name": "npc_faction_memberships",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "loyalty": {
+          "name": "loyalty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "justification": {
+          "name": "justification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rank": {
+          "name": "rank",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secrets": {
+          "name": "secrets",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_faction_memberships_npc_id_npcs_id_fk": {
+          "name": "npc_faction_memberships_npc_id_npcs_id_fk",
+          "tableFrom": "npc_faction_memberships",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_faction_memberships_faction_id_factions_id_fk": {
+          "name": "npc_faction_memberships_faction_id_factions_id_fk",
+          "tableFrom": "npc_faction_memberships",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_npc_faction_membership": {
+          "name": "unique_npc_faction_membership",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "faction_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.npc_relations": {
+      "name": "npc_relations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "source_npc_id": {
+          "name": "source_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_npc_id": {
+          "name": "target_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relationship": {
+          "name": "relationship",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dynamics_and_history": {
+          "name": "dynamics_and_history",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_relations_source_npc_id_npcs_id_fk": {
+          "name": "npc_relations_source_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relations",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "source_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_relations_target_npc_id_npcs_id_fk": {
+          "name": "npc_relations_target_npc_id_npcs_id_fk",
+          "tableFrom": "npc_relations",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "target_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_npc_relationship": {
+          "name": "unique_npc_relationship",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_npc_id",
+            "target_npc_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "no_self_relationship": {
+          "name": "no_self_relationship",
+          "value": "\"npc_relations\".\"source_npc_id\" != \"npc_relations\".\"target_npc_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.npcs": {
+      "name": "npcs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "race": {
+          "name": "race",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "age": {
+          "name": "age",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attitude": {
+          "name": "attitude",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occupation": {
+          "name": "occupation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "social_status_and_reputation": {
+          "name": "social_status_and_reputation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "roleplaying_guide": {
+          "name": "roleplaying_guide",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appearance": {
+          "name": "appearance",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quirk": {
+          "name": "quirk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_hooks": {
+          "name": "conversation_hooks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "voice_notes": {
+          "name": "voice_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npcs_site_id_sites_id_fk": {
+          "name": "npcs_site_id_sites_id_fk",
+          "tableFrom": "npcs",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "npcs_name_unique": {
+          "name": "npcs_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quest_hooks": {
+      "name": "quest_hooks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hook_source_type": {
+          "name": "hook_source_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivery_npc_id": {
+          "name": "delivery_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hook_type": {
+          "name": "hook_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "presentation_style": {
+          "name": "presentation_style",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trust_required": {
+          "name": "trust_required",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_relationship_to_party": {
+          "name": "npc_relationship_to_party",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dialogue_hint": {
+          "name": "dialogue_hint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hook_content": {
+          "name": "hook_content",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "discovery_conditions": {
+          "name": "discovery_conditions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_hooks_quest_id_quests_id_fk": {
+          "name": "quest_hooks_quest_id_quests_id_fk",
+          "tableFrom": "quest_hooks",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_hooks_site_id_sites_id_fk": {
+          "name": "quest_hooks_site_id_sites_id_fk",
+          "tableFrom": "quest_hooks",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_hooks_faction_id_factions_id_fk": {
+          "name": "quest_hooks_faction_id_factions_id_fk",
+          "tableFrom": "quest_hooks",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_hooks_delivery_npc_id_npcs_id_fk": {
+          "name": "quest_hooks_delivery_npc_id_npcs_id_fk",
+          "tableFrom": "quest_hooks",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "delivery_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quest_hooks_name_unique": {
+          "name": "quest_hooks_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "quest_hooks_quest_id_source_hook_type_unique": {
+          "name": "quest_hooks_quest_id_source_hook_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "source",
+            "hook_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_quest_hook_source_exclusive": {
+          "name": "chk_quest_hook_source_exclusive",
+          "value": "\n\t\t\tCASE \"quest_hooks\".\"hook_source_type\"\n\t\t\t\tWHEN 'site' THEN (\"quest_hooks\".\"site_id\" IS NOT NULL AND \"quest_hooks\".\"faction_id\" IS NULL AND \"quest_hooks\".\"delivery_npc_id\" IS NULL)\n\t\t\t\tWHEN 'faction' THEN (\"quest_hooks\".\"site_id\" IS NULL AND \"quest_hooks\".\"faction_id\" IS NOT NULL AND \"quest_hooks\".\"delivery_npc_id\" IS NULL)\n\t\t\t\tWHEN 'npc' THEN (\"quest_hooks\".\"site_id\" IS NULL AND \"quest_hooks\".\"faction_id\" IS NULL AND \"quest_hooks\".\"delivery_npc_id\" IS NOT NULL)\n\t\t\t\tELSE FALSE\n\t\t\tEND\n\t\t\t"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.quest_participants": {
+      "name": "quest_participants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faction_id": {
+          "name": "faction_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_in_quest": {
+          "name": "role_in_quest",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "importance_in_quest": {
+          "name": "importance_in_quest",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "involvement_details": {
+          "name": "involvement_details",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_participants_quest_id_quests_id_fk": {
+          "name": "quest_participants_quest_id_quests_id_fk",
+          "tableFrom": "quest_participants",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_participants_npc_id_npcs_id_fk": {
+          "name": "quest_participants_npc_id_npcs_id_fk",
+          "tableFrom": "quest_participants",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_participants_faction_id_factions_id_fk": {
+          "name": "quest_participants_faction_id_factions_id_fk",
+          "tableFrom": "quest_participants",
+          "tableTo": "factions",
+          "columnsFrom": [
+            "faction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chk_quest_participant_exclusive": {
+          "name": "chk_quest_participant_exclusive",
+          "value": "\n\t\t(\"quest_participants\".\"npc_id\" IS NOT NULL AND \"quest_participants\".\"faction_id\" IS NULL) OR\n\t\t(\"quest_participants\".\"npc_id\" IS NULL AND \"quest_participants\".\"faction_id\" IS NOT NULL)\n\t\t"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.quest_relations": {
+      "name": "quest_relations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_quest_id": {
+          "name": "source_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_quest_id": {
+          "name": "target_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relationship_type": {
+          "name": "relationship_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_relations_source_quest_id_quests_id_fk": {
+          "name": "quest_relations_source_quest_id_quests_id_fk",
+          "tableFrom": "quest_relations",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "source_quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_relations_target_quest_id_quests_id_fk": {
+          "name": "quest_relations_target_quest_id_quests_id_fk",
+          "tableFrom": "quest_relations",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "target_quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quest_relations_source_quest_id_target_quest_id_unique": {
+          "name": "quest_relations_source_quest_id_target_quest_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_quest_id",
+            "target_quest_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "no_self_relationship": {
+          "name": "no_self_relationship",
+          "value": "\"quest_relations\".\"source_quest_id\" != \"quest_relations\".\"target_quest_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.quests": {
+      "name": "quests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "urgency": {
+          "name": "urgency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mood": {
+          "name": "mood",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moral_spectrum_focus": {
+          "name": "moral_spectrum_focus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intended_pacing_role": {
+          "name": "intended_pacing_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_player_experience_goal": {
+          "name": "primary_player_experience_goal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "failure_outcomes": {
+          "name": "failure_outcomes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success_outcomes": {
+          "name": "success_outcomes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objectives": {
+          "name": "objectives",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rewards": {
+          "name": "rewards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "themes": {
+          "name": "themes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inspirations": {
+          "name": "inspirations",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prerequisite_quest_id": {
+          "name": "prerequisite_quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "other_unlock_conditions_notes": {
+          "name": "other_unlock_conditions_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quests_region_id_regions_id_fk": {
+          "name": "quests_region_id_regions_id_fk",
+          "tableFrom": "quests",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quests_prerequisite_quest_id_quests_id_fk": {
+          "name": "quests_prerequisite_quest_id_quests_id_fk",
+          "tableFrom": "quests",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "prerequisite_quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quests_name_unique": {
+          "name": "quests_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.areas": {
+      "name": "areas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region_id": {
+          "name": "region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "danger_level": {
+          "name": "danger_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "atmosphere_type": {
+          "name": "atmosphere_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revelation_layers_summary": {
+          "name": "revelation_layers_summary",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "leadership": {
+          "name": "leadership",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "population": {
+          "name": "population",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_activity": {
+          "name": "primary_activity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cultural_notes": {
+          "name": "cultural_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hazards": {
+          "name": "hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rumors": {
+          "name": "rumors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defenses": {
+          "name": "defenses",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "areas_region_id_regions_id_fk": {
+          "name": "areas_region_id_regions_id_fk",
+          "tableFrom": "areas",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "areas_name_unique": {
+          "name": "areas_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.region_connections": {
+      "name": "region_connections",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_region_id": {
+          "name": "source_region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_region_id": {
+          "name": "target_region_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "connection_type": {
+          "name": "connection_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "route_type": {
+          "name": "route_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "travel_difficulty": {
+          "name": "travel_difficulty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "travel_time": {
+          "name": "travel_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "travel_hazards": {
+          "name": "travel_hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "region_connections_source_region_id_regions_id_fk": {
+          "name": "region_connections_source_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "source_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "region_connections_target_region_id_regions_id_fk": {
+          "name": "region_connections_target_region_id_regions_id_fk",
+          "tableFrom": "region_connections",
+          "tableTo": "regions",
+          "columnsFrom": [
+            "target_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "region_connections_name_unique": {
+          "name": "region_connections_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "region_connections_source_region_id_target_region_id_connection_type_unique": {
+          "name": "region_connections_source_region_id_target_region_id_connection_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_region_id",
+            "target_region_id",
+            "connection_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_no_self_region_connection": {
+          "name": "chk_no_self_region_connection",
+          "value": "\"region_connections\".\"source_region_id\" != \"region_connections\".\"target_region_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.regions": {
+      "name": "regions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "danger_level": {
+          "name": "danger_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "atmosphere_type": {
+          "name": "atmosphere_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revelation_layers_summary": {
+          "name": "revelation_layers_summary",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "economy": {
+          "name": "economy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "history": {
+          "name": "history",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "population": {
+          "name": "population",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cultural_notes": {
+          "name": "cultural_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hazards": {
+          "name": "hazards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_of_interest": {
+          "name": "points_of_interest",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rumors": {
+          "name": "rumors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secrets": {
+          "name": "secrets",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defenses": {
+          "name": "defenses",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "regions_name_unique": {
+          "name": "regions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.site_encounters": {
+      "name": "site_encounters",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "map_variant_id": {
+          "name": "map_variant_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounter_vibe": {
+          "name": "encounter_vibe",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objective_type": {
+          "name": "objective_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objective_details": {
+          "name": "objective_details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "has_timer": {
+          "name": "has_timer",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "timer_value": {
+          "name": "timer_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timer_unit": {
+          "name": "timer_unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timer_consequence": {
+          "name": "timer_consequence",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "core_enemy_groups": {
+          "name": "core_enemy_groups",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "synergy_description": {
+          "name": "synergy_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "encounter_category": {
+          "name": "encounter_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recommended_proficiency_bonus": {
+          "name": "recommended_proficiency_bonus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "special_variations": {
+          "name": "special_variations",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "non_combat_options": {
+          "name": "non_combat_options",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounter_specific_environment_notes": {
+          "name": "encounter_specific_environment_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interactive_elements": {
+          "name": "interactive_elements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "treasure_or_rewards": {
+          "name": "treasure_or_rewards",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "site_encounters_site_id_sites_id_fk": {
+          "name": "site_encounters_site_id_sites_id_fk",
+          "tableFrom": "site_encounters",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "site_encounters_map_variant_id_map_variants_id_fk": {
+          "name": "site_encounters_map_variant_id_map_variants_id_fk",
+          "tableFrom": "site_encounters",
+          "tableTo": "map_variants",
+          "columnsFrom": [
+            "map_variant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "site_encounters_name_unique": {
+          "name": "site_encounters_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "site_encounters_site_id_name_unique": {
+          "name": "site_encounters_site_id_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "site_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_timer_details_if_has_timer": {
+          "name": "chk_timer_details_if_has_timer",
+          "value": "NOT \"site_encounters\".\"has_timer\" OR (\"site_encounters\".\"timer_value\" IS NOT NULL AND \"site_encounters\".\"timer_unit\" IS NOT NULL)"
+        },
+        "chk_no_timer_details_if_no_timer": {
+          "name": "chk_no_timer_details_if_no_timer",
+          "value": "\"site_encounters\".\"has_timer\" OR (\"site_encounters\".\"timer_value\" IS NULL AND \"site_encounters\".\"timer_unit\" IS NULL AND \"site_encounters\".\"timer_consequence\" IS NULL)"
+        },
+        "chk_objective_details_for_non_deathmatch": {
+          "name": "chk_objective_details_for_non_deathmatch",
+          "value": "\"site_encounters\".\"objective_type\" = 'DEATHMATCH' OR \"site_encounters\".\"objective_details\" IS NOT NULL"
+        },
+        "chk_proficiency_bonus_range": {
+          "name": "chk_proficiency_bonus_range",
+          "value": "\"site_encounters\".\"recommended_proficiency_bonus\" IS NULL OR (\"site_encounters\".\"recommended_proficiency_bonus\" >= 2 AND \"site_encounters\".\"recommended_proficiency_bonus\" <= 6)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.site_links": {
+      "name": "site_links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_site_id": {
+          "name": "source_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_site_id": {
+          "name": "target_site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_type": {
+          "name": "link_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "site_links_source_site_id_sites_id_fk": {
+          "name": "site_links_source_site_id_sites_id_fk",
+          "tableFrom": "site_links",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "source_site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "site_links_target_site_id_sites_id_fk": {
+          "name": "site_links_target_site_id_sites_id_fk",
+          "tableFrom": "site_links",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "target_site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "site_links_source_site_id_target_site_id_link_type_unique": {
+          "name": "site_links_source_site_id_target_site_id_link_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "source_site_id",
+            "target_site_id",
+            "link_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_no_self_site_link": {
+          "name": "chk_no_self_site_link",
+          "value": "\"site_links\".\"source_site_id\" != \"site_links\".\"target_site_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.site_secrets": {
+      "name": "site_secrets",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secret_type": {
+          "name": "secret_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "discovery_method": {
+          "name": "discovery_method",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "consequences": {
+          "name": "consequences",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "site_secrets_site_id_sites_id_fk": {
+          "name": "site_secrets_site_id_sites_id_fk",
+          "tableFrom": "site_secrets",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sites": {
+      "name": "sites",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "area_id": {
+          "name": "area_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_type": {
+          "name": "site_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intended_site_function": {
+          "name": "intended_site_function",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "terrain": {
+          "name": "terrain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "climate": {
+          "name": "climate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mood": {
+          "name": "mood",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "environment": {
+          "name": "environment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creatures": {
+          "name": "creatures",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "features": {
+          "name": "features",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "treasures": {
+          "name": "treasures",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lighting_description": {
+          "name": "lighting_description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "soundscape": {
+          "name": "soundscape",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "smells": {
+          "name": "smells",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weather": {
+          "name": "weather",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descriptors": {
+          "name": "descriptors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "map_group_id": {
+          "name": "map_group_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sites_area_id_areas_id_fk": {
+          "name": "sites_area_id_areas_id_fk",
+          "tableFrom": "sites",
+          "tableTo": "areas",
+          "columnsFrom": [
+            "area_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "sites_map_group_id_map_groups_id_fk": {
+          "name": "sites_map_group_id_map_groups_id_fk",
+          "tableFrom": "sites",
+          "tableTo": "map_groups",
+          "columnsFrom": [
+            "map_group_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sites_name_unique": {
+          "name": "sites_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "sites_map_group_id_unique": {
+          "name": "sites_map_group_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "map_group_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.npc_quest_stage_involvement": {
+      "name": "npc_quest_stage_involvement",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "npc_id": {
+          "name": "npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_stage_id": {
+          "name": "quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_in_stage": {
+          "name": "role_in_stage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "involvement_details": {
+          "name": "involvement_details",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "npc_quest_stage_involvement_npc_id_npcs_id_fk": {
+          "name": "npc_quest_stage_involvement_npc_id_npcs_id_fk",
+          "tableFrom": "npc_quest_stage_involvement",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk": {
+          "name": "npc_quest_stage_involvement_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "npc_quest_stage_involvement",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "npc_quest_stage_involvement_npc_id_quest_stage_id_unique": {
+          "name": "npc_quest_stage_involvement_npc_id_quest_stage_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "npc_id",
+            "quest_stage_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quest_stage_decisions": {
+      "name": "quest_stage_decisions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_quest_stage_id": {
+          "name": "from_quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_quest_stage_id": {
+          "name": "to_quest_stage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "condition_type": {
+          "name": "condition_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "decision_type": {
+          "name": "decision_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ambiguity_level": {
+          "name": "ambiguity_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "options": {
+          "name": "options",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success_description": {
+          "name": "success_description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "failure_description": {
+          "name": "failure_description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_transition": {
+          "name": "narrative_transition",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "potential_player_reactions": {
+          "name": "potential_player_reactions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "condition_value": {
+          "name": "condition_value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "failure_leads_to_retry": {
+          "name": "failure_leads_to_retry",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "failure_lesson_learned": {
+          "name": "failure_lesson_learned",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_stage_decisions_quest_id_quests_id_fk": {
+          "name": "quest_stage_decisions_quest_id_quests_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk": {
+          "name": "quest_stage_decisions_from_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "from_quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk": {
+          "name": "quest_stage_decisions_to_quest_stage_id_quest_stages_id_fk",
+          "tableFrom": "quest_stage_decisions",
+          "tableTo": "quest_stages",
+          "columnsFrom": [
+            "to_quest_stage_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quest_stage_decisions_name_unique": {
+          "name": "quest_stage_decisions_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique": {
+          "name": "quest_stage_decisions_quest_id_from_quest_stage_id_to_quest_stage_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quest_id",
+            "from_quest_stage_id",
+            "to_quest_stage_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chk_stage_decision_no_self_loop": {
+          "name": "chk_stage_decision_no_self_loop",
+          "value": "COALESCE(\"quest_stage_decisions\".\"from_quest_stage_id\" != \"quest_stage_decisions\".\"to_quest_stage_id\", TRUE)"
+        },
+        "chk_failure_retry_lesson": {
+          "name": "chk_failure_retry_lesson",
+          "value": "(\"quest_stage_decisions\".\"failure_leads_to_retry\" = FALSE) OR (\"quest_stage_decisions\".\"failure_lesson_learned\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.quest_stages": {
+      "name": "quest_stages",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creative_prompts": {
+          "name": "creative_prompts",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gm_notes": {
+          "name": "gm_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivery_npc_id": {
+          "name": "delivery_npc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quest_id": {
+          "name": "quest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stage_order": {
+          "name": "stage_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dramatic_question": {
+          "name": "dramatic_question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stage_type": {
+          "name": "stage_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intended_complexity_level": {
+          "name": "intended_complexity_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stage_importance": {
+          "name": "stage_importance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objectives": {
+          "name": "objectives",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "completion_paths": {
+          "name": "completion_paths",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounters": {
+          "name": "encounters",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dramatic_moments": {
+          "name": "dramatic_moments",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sensory_elements": {
+          "name": "sensory_elements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quest_stages_site_id_sites_id_fk": {
+          "name": "quest_stages_site_id_sites_id_fk",
+          "tableFrom": "quest_stages",
+          "tableTo": "sites",
+          "columnsFrom": [
+            "site_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_stages_delivery_npc_id_npcs_id_fk": {
+          "name": "quest_stages_delivery_npc_id_npcs_id_fk",
+          "tableFrom": "quest_stages",
+          "tableTo": "npcs",
+          "columnsFrom": [
+            "delivery_npc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "quest_stages_quest_id_quests_id_fk": {
+          "name": "quest_stages_quest_id_quests_id_fk",
+          "tableFrom": "quest_stages",
+          "tableTo": "quests",
+          "columnsFrom": [
+            "quest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quest_stages_name_unique": {
+          "name": "quest_stages_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
