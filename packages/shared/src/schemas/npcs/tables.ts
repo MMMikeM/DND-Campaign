@@ -45,7 +45,8 @@ export const npcs = pgTable("npcs", {
 })
 
 export const npcDetails = pgTable("npc_details", {
-	npcId: cascadeFk("npc_id", npcs.id).primaryKey(),
+	id: pk(),
+	npcId: cascadeFk("npc_id", npcs.id),
 
 	alignment: oneOf("alignment", alignments),
 	wealth: oneOf("wealth", wealthLevels),
