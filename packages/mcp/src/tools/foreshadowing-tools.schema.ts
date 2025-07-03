@@ -27,17 +27,11 @@ export const schemas = {
 		sourceQuestStageId: optionalId.describe("ID of the quest stage this foreshadowing is related to"),
 		sourceSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
 		sourceNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
-		sourceItemDescriptionId: optionalId.describe("ID of the item description this foreshadowing is related to"),
 		sourceLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
 
 		targetQuestId: optionalId.describe("ID of the quest this foreshadowing is related to"),
 		targetNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
-		targetNarrativeEventId: optionalId.describe("ID of the narrative event this foreshadowing is related to"),
 		targetConflictId: optionalId.describe("ID of the conflict this foreshadowing is related to"),
-		targetItemId: optionalId.describe("ID of the item this foreshadowing is related to"),
-		targetNarrativeDestinationId: optionalId.describe(
-			"ID of the narrative destination this foreshadowing is related to",
-		),
 		targetLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
 		targetFactionId: optionalId.describe("ID of the faction this foreshadowing is related to"),
 		targetSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
@@ -55,9 +49,6 @@ export const schemas = {
 			),
 		creativePrompts: list.describe(
 			"Specific ideas for presenting this foreshadowing element - focus on discovery scenarios, not exposition",
-		),
-		gmNotes: list.describe(
-			"Timing guidance, player reaction tips, and connection management - avoid spoiling the actual revelation",
 		),
 		tags: list.describe("Tags for organizing and tracking foreshadowing elements across the campaign"),
 	})

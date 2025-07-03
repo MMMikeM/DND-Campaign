@@ -1,5 +1,5 @@
 import { z } from "zod/v4"
-import { foreshadowing, lore, narrativeDestinations, narrativeEvents } from "../tools/tools"
+import { foreshadowing, lore } from "../tools/tools"
 
 const loreSeedSchema = z.object({
 	name: z.string(),
@@ -40,16 +40,6 @@ export async function handleCampaignSeed(seed: CampaignSeed) {
 	if (seed.lore) {
 		for (const loreItem of seed.lore) {
 			await lore.handlers.manage_lore({ create: { lore: loreItem } })
-		}
-	}
-	if (seed.narrativeEvents) {
-		for (const event of seed.narrativeEvents) {
-			await narrativeEvents.handlers.manage_narrative_event({ create: { narrative_event: event } })
-		}
-	}
-	if (seed.narrativeDestinations) {
-		for (const dest of seed.narrativeDestinations) {
-			await narrativeDestinations.handlers.manage_narrative_destination({ create: { narrative_destination: dest } })
 		}
 	}
 	if (seed.foreshadowing) {

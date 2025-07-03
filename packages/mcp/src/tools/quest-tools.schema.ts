@@ -9,17 +9,18 @@ const {
 
 const {
 	hookTypes,
-	moralSpectrumFocus,
-	pacingRoles,
-	playerExperienceGoals,
-	relationshipTypes,
-	visibilityLevels,
-	urgencyLevels,
 	participantImportanceLevels,
 	presentationStyles,
-	questHookSourceTypes,
 	questTypes,
+	relationshipTypes,
 	trustLevels,
+	urgencyLevels,
+	questHookSourceTypes,
+	impactSeverity,
+	eventTypes,
+	narrativePlacements,
+	rhythmEffects,
+	emotionalShapes,
 } = enums
 
 type TableNames = CreateTableNames<typeof tables.questTables>
@@ -29,26 +30,26 @@ export const tableEnum = ["quests", "questRelations", "questHooks", "questPartic
 export const schemas = {
 	quests: createInsertSchema(quests, {
 		creativePrompts: list.describe("Ideas for plot developments and player involvement"),
+		emotionalShape: z.enum(emotionalShapes).describe("Emotional shape of the quest"),
+		eventType: z.enum(eventTypes).describe("Type of event (main, side, faction, character, generic)"),
+		impactSeverity: z.enum(impactSeverity).describe("Severity of the impact of the quest"),
+		intendedRhythmEffect: z.enum(rhythmEffects).describe("Rhythm effect of the quest"),
+
+		narrativePlacement: z.enum(narrativePlacements).describe("Narrative placement of the quest"),
+		payoff: (s) => s.describe("Payoff of the quest"),
+		promise: (s) => s.describe("Promise of the quest"),
+		stakes: list.describe("Stakes of the quest"),
 		description: list.describe("Core narrative elements and storyline in point form"),
-		failureOutcomes: list.describe("Consequences if players fail to complete the quest"),
-		successOutcomes: list.describe("Results and world changes upon successful completion"),
-		inspirations: list.describe("Reference materials that influenced this quest design"),
 		objectives: list.describe("Specific tasks players must accomplish to progress"),
 		rewards: list.describe("Items, reputation, and benefits for completion"),
-		themes: list.describe("Underlying motifs and emotional elements explored"),
 		name: (s) => s.describe("Title or identifier revealed to players"),
-		regionId: optionalId.describe("ID of region where quest primarily takes place"),
 		mood: (s) => s.describe("Emotional tone and atmosphere (tense, mysterious, celebratory, etc.)"),
 		urgency: z.enum(urgencyLevels).describe("Time pressure (background, developing, urgent, critical)"),
-		visibility: z.enum(visibilityLevels).describe("How known this quest is (hidden, rumored, known, featured)"),
 		type: z.enum(questTypes).describe("Campaign significance (main, side, faction, character, generic)"),
-		moralSpectrumFocus: z.enum(moralSpectrumFocus).describe("Moral complexity of the quest"),
-		intendedPacingRole: z.enum(pacingRoles).describe("Role in campaign pacing"),
-		primaryPlayerExperienceGoal: z.enum(playerExperienceGoals).describe("Primary experience goal for players"),
+		primaryPlayerExperienceGoal: (s) => s.describe("Primary experience goal for players"),
 		prerequisiteQuestId: optionalId.describe("ID of quest that must be completed first"),
 		otherUnlockConditionsNotes: (s) =>
 			s.optional().describe("Additional unlock conditions not covered by prerequisite quest"),
-		gmNotes: list.describe("GM-only information about this quest"),
 		tags: list.describe("Tags for this quest"),
 	})
 		.omit({ id: true })
@@ -63,7 +64,6 @@ export const schemas = {
 			.describe("Connection type (prerequisite, sequel, parallel, alternative, hidden_connection)"),
 		description: list.describe("How these quests interconnect narratively in point form"),
 		creativePrompts: list.describe("Ideas for emphasizing connections between quests"),
-		gmNotes: list.describe("GM-only notes about this relationship"),
 		tags: list.describe("Tags for this relationship"),
 	})
 		.omit({ id: true })
@@ -87,7 +87,6 @@ export const schemas = {
 		dialogueHint: (s) => s.describe("Dialogue hint for this hook"),
 		description: list.describe("Description of this hook"),
 		creativePrompts: list.describe("Ideas for presenting this hook"),
-		gmNotes: list.describe("GM-only notes about this hook"),
 		tags: list.describe("Tags for this hook"),
 	})
 		.omit({ id: true })
@@ -103,7 +102,6 @@ export const schemas = {
 		involvementDetails: list.describe("Details about how this participant is involved"),
 		creativePrompts: list.describe("Ideas for using this participant"),
 		description: list.describe("Description of the participant's involvement"),
-		gmNotes: list.describe("GM-only notes about this participant"),
 		tags: list.describe("Tags for this participant involvement"),
 	})
 		.omit({ id: true })

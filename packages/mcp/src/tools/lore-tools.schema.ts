@@ -19,7 +19,6 @@ export const schemas = {
 		summary: (s) => s.describe("One-sentence description of this broad concept that multiple entities reference"),
 		description: longList.describe("Detailed description of this concept"),
 		creativePrompts: list.describe("GM ideas for incorporating this foundational concept into scenes and storylines"),
-		gmNotes: list.describe("GM-only information about the deeper implications and campaign uses of this concept"),
 
 		loreType: z
 			.enum(loreTypes)
@@ -33,21 +32,19 @@ export const schemas = {
 		hiddenTruths: (s) => s.describe("The deeper reality or secret aspects known only to a few"),
 		modernRelevance: (s) => s.describe("Why this foundational concept is crucial to current campaign events"),
 
-		aesthetics_and_symbols: list.describe("Visual, auditory, and sensory elements associated with this concept"),
-		interactions_and_rules: longList.describe(
+		aestheticsAndSymbols: list.describe("Visual, auditory, and sensory elements associated with this concept"),
+		interactionsAndRules: longList.describe(
 			"How characters can interact with this concept - rituals, laws, vulnerabilities, mechanics",
 		),
-		connections_to_world: list.describe(
+		connectionsToWorld: list.describe(
 			"How this concept connects to and influences factions, NPCs, places, and other lore",
 		),
 
-		core_tenets_and_traditions: longList.describe(
+		coreTenetsAndTraditions: longList.describe(
 			"Fundamental beliefs, values, and established practices of this concept",
 		),
-		history_and_legacy: longList.describe("Origin story, major historical developments, and lasting cultural impact"),
-		conflicting_narratives: longList.describe(
-			"Competing interpretations, propaganda, or viewpoints about this concept",
-		),
+		historyAndLegacy: longList.describe("Origin story, major historical developments, and lasting cultural impact"),
+		conflictingNarratives: longList.describe("Competing interpretations, propaganda, or viewpoints about this concept"),
 	})
 		.omit({ id: true })
 		.strict()
@@ -64,7 +61,6 @@ export const schemas = {
 
 		itemId: optionalId.describe("Related item ID"),
 		conflictId: optionalId.describe("Related conflict ID"),
-		narrativeDestinationId: optionalId.describe("Related narrative destination ID"),
 		questId: optionalId.describe("Related quest ID"),
 		factionId: optionalId.describe("Related faction ID"),
 		npcId: optionalId.describe("Related NPC ID"),
@@ -84,9 +80,7 @@ export const schemas = {
 		description: list.describe(
 			"How this relationship manifests or functions - describe the CONNECTION dynamics, not the individual entities",
 		),
-		gmNotes: list.describe(
-			"GM guidance for managing this specific relationship - avoid repeating general advice from core entities",
-		),
+
 		tags: list.describe("Tags specific to this relationship dynamic - not general entity tags"),
 	})
 		.omit({ id: true })

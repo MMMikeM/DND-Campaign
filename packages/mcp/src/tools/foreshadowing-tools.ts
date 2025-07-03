@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./foreshadowing-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -14,20 +14,21 @@ export const entityGetters = createEntityGetters({
 		db.query.foreshadowing.findFirst({
 			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
 			with: {
-				sourceLore: { columns: { name: true, id: true } },
-				sourceNpc: { columns: { name: true, id: true } },
-				sourceSite: { columns: { name: true, id: true } },
-				sourceQuest: { columns: { name: true, id: true } },
-				sourceQuestStage: { columns: { name: true, id: true } },
-				targetFaction: { columns: { name: true, id: true } },
-				targetItem: { columns: { name: true, id: true } },
-				targetConflict: { columns: { name: true, id: true } },
-				targetNarrativeDestination: { columns: { name: true, id: true } },
-				targetNpc: { columns: { name: true, id: true } },
-				targetQuest: { columns: { name: true, id: true } },
-				targetLore: { columns: { name: true, id: true } },
-				targetNarrativeEvent: { columns: { name: true, id: true } },
-				targetSite: { columns: { name: true, id: true } },
+				incomingLoreLinks: nameAndId,
+				sourceItem: nameAndId,
+				sourceLore: nameAndId,
+				sourceNpc: nameAndId,
+				sourceQuest: nameAndId,
+				sourceQuestStage: nameAndId,
+				sourceSite: nameAndId,
+				targetConflict: nameAndId,
+				targetConsequence: nameAndId,
+				targetFaction: nameAndId,
+				targetItem: nameAndId,
+				targetLore: nameAndId,
+				targetNpc: nameAndId,
+				targetQuest: nameAndId,
+				targetSite: nameAndId,
 			},
 		}),
 })

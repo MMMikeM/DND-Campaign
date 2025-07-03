@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./lore-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -19,7 +19,7 @@ export const entityGetters = createEntityGetters({
 				id: true,
 				name: true,
 				description: true,
-				interactions_and_rules: true,
+				interactionsAndRules: true,
 				loreType: true,
 				summary: true,
 				surfaceImpression: true,
@@ -32,18 +32,20 @@ export const entityGetters = createEntityGetters({
 		db.query.lore.findFirst({
 			where: (lore, { eq }) => eq(lore.id, id),
 			with: {
-				incomingForeshadowing: true,
+				incomingForeshadowing: { with: { targetLore: nameAndId } },
+				outgoingForeshadowing: { with: { sourceLore: nameAndId } },
+				relatedLinks: true,
 				links: {
 					with: {
 						conflict: true,
-						narrativeDestination: true,
 						quest: true,
 						faction: true,
 						npc: true,
 						foreshadowing: true,
 						region: true,
 						item: true,
-						relatedLore: { columns: { name: true, id: true } },
+						lore: true,
+						relatedLore: nameAndId,
 					},
 				},
 			},
@@ -53,14 +55,15 @@ export const entityGetters = createEntityGetters({
 		db.query.loreLinks.findFirst({
 			where: (loreLinks, { eq }) => eq(loreLinks.id, id),
 			with: {
+				item: true,
+				lore: true,
 				conflict: true,
-				narrativeDestination: true,
 				quest: true,
 				faction: true,
 				npc: true,
 				foreshadowing: true,
 				region: true,
-				relatedLore: { columns: { name: true, id: true } },
+				relatedLore: nameAndId,
 			},
 		}),
 })

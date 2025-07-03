@@ -3,143 +3,55 @@ import { search } from "fast-fuzzy"
 import { logger } from ".."
 import zodToMCP from "../zodToMcp"
 import { schemas } from "./help-tools.schema"
-import {
-	conflicts,
-	factions,
-	fuzzySearch,
-	getEntity,
-	items,
-	lore,
-	narrativeDestinations,
-	narrativeEvents,
-	npcs,
-	quests,
-	regions,
-} from "./tools"
+import { conflicts, consequences, factions, fuzzySearch, getEntity, items, lore, npcs, quests, regions } from "./tools"
 import type { ToolDefinition } from "./utils/types"
+
+// There should be 2 cases for help:
+// 1. No args: general help - lists the different available tools
+// 2. Tool: tool help -
+// - lists the tables available for the tool
+// - lists the enums for the tool
+// - lists the parameters for a specific tool
+
+// The general help should be a list of the different categories, and the number of tools in each category.
+// The tool help should be a list of the parameters for a specific tool.
 
 // Type for tools as they come from extractToolsAndHandlers
 type ExtractedTool = Tool & { name: string }
 
-function isStringArray(value: unknown): value is string[] {
-	return Array.isArray(value)
+const isStringArray = (value: unknown): value is string[] => Array.isArray(value)
+
+const formatEnumsForTool = (originalTool?: ToolDefinition): string => {
+	if (!originalTool?.enums || Object.keys(originalTool.enums).length === 0) {
+		return ""
+	}
+	const enumsText = Object.entries(originalTool.enums)
+		.map(([name, values]) => `- **${name}**: \`${values.join("`, `")}\``)
+		.join("\n")
+
+	return `\n\n## Available Enums\n\n${enumsText}`
 }
 
-function getToolInfo(tool: ExtractedTool, originalDefinitions: Record<string, ToolDefinition>) {
-	let paramsInfo = "No parameters available."
-	let requiredParams = ""
-	let examples = ""
-	let enumsText = ""
+const formatManageToolParameters = (tool: ExtractedTool): string => {
+	const schema = tool.inputSchema as { properties?: { table?: { enum?: string[] } } }
+	const tableEnumValues = schema.properties?.table?.enum ?? []
+	const tableListItems = tableEnumValues.map((value) => `  - \`${value}\``).join("\n")
+	const tableList = tableEnumValues.length > 0 ? `\n\n  Possible values:\n${tableListItems}\n` : ""
 
-	// Get the original tool definition to access enums
-	const originalTool = originalDefinitions[tool.name]
-	logger.info("Getting tool info", { toolName: tool.name, hasOriginal: !!originalTool })
-
-	// Handle enums first (for all tools)
-	if (originalTool?.enums && Object.keys(originalTool.enums).length > 0) {
-		enumsText = `\n\n## Available Enums\n\n${Object.entries(originalTool.enums)
-			.map(([name, values]) => `- **${name}**: [${values.join(", ")}]`)
-			.join("\n")}`
-		logger.info("Found enums for tool", { toolName: tool.name, enumCount: Object.keys(originalTool.enums).length })
-	}
-
-	// Handle the new structure for 'manage_*' tools
-	if (tool.name.startsWith("manage_")) {
-		logger.info("Processing manage tool", { toolName: tool.name })
-		const manageToolInfo = getManageToolInfo(tool)
-		paramsInfo = manageToolInfo.paramsInfo
-		requiredParams = manageToolInfo.requiredParams
-		examples = manageToolInfo.examples
-	} else {
-		logger.info("Processing regular tool", { toolName: tool.name })
-		const regularToolInfo = getRegularToolInfo(tool)
-		paramsInfo = regularToolInfo.paramsInfo
-		requiredParams = regularToolInfo.requiredParams
-	}
-
-	return { paramsInfo, requiredParams, examples, enumsText }
-}
-
-function getManageToolInfo(tool: ExtractedTool) {
-	// Define interfaces for expected JSON schema structure
-	interface JsonSchemaProperty {
-		const?: string
-		enum?: string[]
-	}
-	interface JsonSchemaObject {
-		properties?: {
-			table?: JsonSchemaProperty
-		}
-	}
-	interface JsonSchemaWithOneOf {
-		oneOf?: JsonSchemaObject[]
-	}
-
-	// Type-safe extraction of possible table names
-	let tableEnumValues: string[] = []
-	const schemaWithOneOf = tool.inputSchema as JsonSchemaWithOneOf
-	if (Array.isArray(schemaWithOneOf.oneOf)) {
-		tableEnumValues = schemaWithOneOf.oneOf
-			.map((subSchema) => {
-				const tableProp = subSchema?.properties?.table
-				return tableProp?.const ?? tableProp?.enum?.[0]
-			})
-			.filter((value): value is string => typeof value === "string")
-	}
-	const tableList = tableEnumValues.length > 0 ? ` (e.g., ${tableEnumValues.join(", ")})` : ""
-
-	logger.info("Extracted table enum values for manage tool", { toolName: tool.name, tableEnumValues })
-
-	const paramsInfo = `
-- **table** (Required) (string): The specific type of entity to manage within this category${tableList}.
-- **operation** (Required) (string): The operation to perform: "create", "update", or "delete".
-- **id** (Optional/Required) (number): The ID of the entity. Required for "update" and "delete" operations. Omit for "create".
-- **data** (Optional/Required) (object): The data for the entity. Required for "create" and "update" operations. Structure depends on the 'table' and 'operation'. Omit for "delete".
-      `.trim()
+	const paramsInfo = [
+		`- **table** (Required) (string): The specific type of entity to manage within this category.${tableList}`,
+		'- **operation** (Required) (string): The operation to perform: "create", "update", or "delete".',
+		'- **id** (Optional/Required) (number): The ID of the entity. Required for "update" and "delete" operations. Omit for "create".',
+		"- **data** (Optional/Required) (object): The data for the entity. Required for \"create\" and \"update\" operations. Structure depends on the 'table' and 'operation'. Omit for 'delete'.",
+	].join("\n")
 
 	const requiredParams =
-		"\n\n**Required Parameters:** table, operation (plus 'id' for update/delete, 'data' for create/update)"
+		"**Required Parameters:** `table`, `operation` (plus `id` for update/delete, `data` for create/update)"
 
-	const examples = `
-\n\n**Examples:**
-
-Create a new entity (replace 'specific_table_name' and fields):
-\`\`\`
-${tool.name}({
-  table: "specific_table_name",
-  operation: "create",
-  data: {
-   
-  }
-})
-\`\`\`
-
-Update an existing entity (replace 'specific_table_name' and fields):
-\`\`\`
-${tool.name}({
-  table: "specific_table_name",
-  operation: "update",
-  id: 123,
-  data: {
-   
-  }
-})
-\`\`\`
-
-Delete an entity (replace 'specific_table_name'):
-\`\`\`
-${tool.name}({
-  table: "specific_table_name",
-  operation: "delete",
-  id: 123
-})
-\`\`\`
-`
-
-	return { paramsInfo, requiredParams, examples }
+	return `${requiredParams}\n\n## Parameters\n${paramsInfo}`
 }
 
-function getRegularToolInfo(tool: ExtractedTool) {
+const formatRegularToolParameters = (tool: ExtractedTool): string => {
 	const paramsInfo = tool.inputSchema.properties
 		? Object.entries(tool.inputSchema.properties)
 				.map(([param, schema]) => {
@@ -157,24 +69,53 @@ function getRegularToolInfo(tool: ExtractedTool) {
 
 	const requiredParams =
 		isStringArray(tool.inputSchema.required) && tool.inputSchema.required.length > 0
-			? `\n\n**Required Parameters:** ${tool.inputSchema.required.join(", ")}`
+			? `**Required Parameters:** \`${tool.inputSchema.required.join("`, `")}\``
 			: ""
 
-	return { paramsInfo, requiredParams, examples: "" }
+	return `${requiredParams}\n\n## Parameters\n${paramsInfo}`
 }
 
-function handleToolSpecificHelp(
+const formatToolExamples = (toolName: string): string => `
+\n\n**Examples:**
+
+Create a new entity (replace 'specific_table_name' and fields):
+\`\`\`
+${toolName}({
+  table: "specific_table_name",
+  operation: "create",
+  data: {}
+})
+\`\`\`
+
+Update an existing entity with a partial payload (acts like a PATCH, not a PUT). Only provide the fields you want to change:
+\`\`\`
+${toolName}({
+  table: "specific_table_name",
+  operation: "update",
+  id: 123,
+  data: {}
+})
+\`\`\`
+
+Delete an entity (replace 'specific_table_name'):
+\`\`\`
+${toolName}({
+  table: "specific_table_name",
+  operation: "delete",
+  id: 123
+})
+\`\`\`
+`
+
+const createToolHelpResponse = (
 	toolName: string,
 	allToolsList: ExtractedTool[],
 	allDefinitions: Record<string, ToolDefinition>,
-) {
-	logger.info("Handling tool-specific help", { toolName })
-
+) => {
 	const results = search(toolName, allToolsList, { keySelector: (t) => t.name })
 	const tool = results.length > 0 ? results[0] : undefined
 
 	if (!tool) {
-		logger.info("Tool not found", { toolName })
 		return {
 			content: [
 				{
@@ -185,101 +126,53 @@ function handleToolSpecificHelp(
 		}
 	}
 
-	logger.info("Found tool, getting info", { toolName: tool.name })
-	const { paramsInfo, requiredParams, examples, enumsText } = getToolInfo(tool, allDefinitions)
-
 	const description = tool.description || "No description available"
+	const originalTool = allDefinitions[tool.name]
+	const enumsText = formatEnumsForTool(originalTool)
+
+	let paramsText = ""
+	let examplesText = ""
+
+	if (tool.name.startsWith("manage_")) {
+		paramsText = formatManageToolParameters(tool)
+		examplesText = formatToolExamples(tool.name)
+	} else {
+		paramsText = formatRegularToolParameters(tool)
+	}
+
+	const helpText = `# Tool: ${tool.name}\n\n${description}\n\n${paramsText}${examplesText}${enumsText}`
 
 	return {
-		content: [
-			{
-				type: "text",
-				text: `# Tool: ${tool.name}\n\n${description}${requiredParams}\n\n## Parameters\n${paramsInfo}${examples}${enumsText}`,
-			},
-		],
+		content: [{ type: "text", text: helpText }],
 	}
 }
 
-function handleCategorySpecificHelp(category: string, categories: Record<string, ExtractedTool[]>) {
-	logger.info("Handling category-specific help", { category })
+const createGeneralHelpResponse = (categories: Record<string, ExtractedTool[]>) => {
+	const categoriesText = Object.entries(categories)
+		.map(
+			([cat, tools]) => `## ${cat.toUpperCase()} (${tools.length})\n${tools.map((t) => `- **${t.name}**`).join("\n")}`,
+		)
+		.join("\n\n")
 
-	const categoryTools = categories[category]
-	if (!categoryTools) {
-		logger.error("Category not found", { category, availableCategories: Object.keys(categories) })
-		return {
-			content: [
-				{
-					type: "text",
-					text: `Category "${category}" not found. Available categories: ${Object.keys(categories).join(", ")}`,
-				},
-			],
-		}
-	}
+	const generalToolsText = `- **get_entity**: ${getEntity.tools[0]?.description ?? "Get any entity by type and optional ID"}\n- **fuzzy_search**: ${fuzzySearch.tools[0]?.description ?? "Search for entities by similarity."}`
+
+	const helpText = `# Available Tool Categories\n\n${categoriesText}\n\n## General Tools\n${generalToolsText}\n\nFor tool details: \`help({tool: 'tool_name'})\``
 
 	return {
-		content: [
-			{
-				type: "text",
-				text: `# ${category.toUpperCase()} Tools\n\n${categoryTools
-					.map((t) => {
-						// Add required parameters to the description - safely
-						const requiredParams =
-							isStringArray(t.inputSchema.required) && t.inputSchema.required.length > 0
-								? ` (Required params: ${t.inputSchema.required.join(", ")})`
-								: ""
-						const description = t.description || "No description available"
-						return `- **${t.name}**: ${description}${requiredParams}`
-					})
-					.join("\n")}\n\nFor detailed parameter info on a specific tool, use \`help({tool: 'tool_name'})\``,
-			},
-		],
-	}
-}
-
-function handleGeneralHelp(categories: Record<string, ExtractedTool[]>) {
-	logger.info("Handling general help")
-
-	return {
-		content: [
-			{
-				type: "text",
-				text: `# Available Tool Categories\n\n${Object.entries(categories)
-					.map(
-						([cat, tools]) =>
-							`## ${cat.toUpperCase()} (${tools.length})\n${tools
-								.map((t) => {
-									// Add required parameter info to the description - safely
-									const requiredParams =
-										isStringArray(t.inputSchema.required) && t.inputSchema.required.length > 0
-											? ` (Required: ${t.inputSchema.required.join(", ")})`
-											: ""
-									const description = t.description || "No description available"
-									return `- **${t.name}**: ${description}${requiredParams}`
-								})
-								.join("\n")}`,
-					)
-					.join(
-						"\n\n",
-					)}\n\n## General Tools\n- **get_entity**: ${getEntity.tools[0]?.description ?? "Get any entity by type and optional ID"} (Required: entity_type)\n\nFor category details: \`help({category: 'category_name'})\`\nFor tool details: \`help({tool: 'tool_name'})\``,
-			},
-		],
+		content: [{ type: "text", text: helpText }],
 	}
 }
 
 const handler = async (args?: Record<string, unknown>) => {
-	const category = args?.category as string | undefined
 	const toolName = args?.tool as string | undefined
 
-	logger.info("Help handler called", { category, toolName, args })
+	logger.info("Help handler called", { toolName, args })
 
 	const categories = {
 		conflicts: conflicts.tools,
-		narrativeEvents: narrativeEvents.tools,
+		consequences: consequences.tools,
 		factions: factions.tools,
-		fuzzySearch: fuzzySearch.tools,
-		getEntity: getEntity.tools,
 		items: items.tools,
-		narrativeDestinations: narrativeDestinations.tools,
 		npcs: npcs.tools,
 		quests: quests.tools,
 		regions: regions.tools,
@@ -294,12 +187,11 @@ const handler = async (args?: Record<string, unknown>) => {
 	const { loreToolDefinitions } = await import("./lore-tools")
 	const { questToolDefinitions } = await import("./quest-tools")
 	const { regionToolDefinitions } = await import("./region-tools")
-	const { narrativeDestinationToolDefinitions } = await import("./narrative-destination-tools")
-	const { narrativeEventToolDefinitions } = await import("./narrative-events-tools")
+	const { consequenceToolDefinitions } = await import("./consequence-tools")
 	const { fuzzySearchToolDefinitions } = await import("./utils/fuzzy-search")
 	const { getEntityToolDefinition } = await import("./get-entity")
 
-	const allDefinitions = {
+	const allDefinitions: Record<string, ToolDefinition> = {
 		...npcToolDefinitions,
 		...conflictToolDefinitions,
 		...factionToolDefinitions,
@@ -307,30 +199,19 @@ const handler = async (args?: Record<string, unknown>) => {
 		...loreToolDefinitions,
 		...questToolDefinitions,
 		...regionToolDefinitions,
-		...narrativeDestinationToolDefinitions,
-		...narrativeEventToolDefinitions,
+		...consequenceToolDefinitions,
 		...fuzzySearchToolDefinitions,
 		...getEntityToolDefinition,
 		...helpToolDefinitions,
 	}
 
-	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools]
-
-	logger.info("Help categories and tools", {
-		categoriesLength: Object.keys(categories).length,
-		allToolsLength: allToolsList.length,
-		definitionsLength: Object.keys(allDefinitions).length,
-	})
+	const allToolsList = [...Object.values(categories).flat(), ...getEntity.tools, ...fuzzySearch.tools]
 
 	if (toolName) {
-		return handleToolSpecificHelp(toolName, allToolsList, allDefinitions)
+		return createToolHelpResponse(toolName, allToolsList, allDefinitions)
 	}
 
-	if (category && category in categories) {
-		return handleCategorySpecificHelp(category, categories)
-	}
-
-	return handleGeneralHelp(categories)
+	return createGeneralHelpResponse(categories)
 }
 
 export const helpToolDefinitions: Record<string, ToolDefinition> = {

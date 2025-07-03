@@ -55,7 +55,6 @@ export const schemas = {
 		hqSiteId: optionalId.describe("ID of the faction's main headquarters site"),
 		creativePrompts: list.describe("GM ideas for using this faction in campaigns"),
 		description: list.describe("Overview of the faction's role and characteristics"),
-		gmNotes: list.describe("GM-only information about this faction"),
 		tags: list.describe("Tags for this faction"),
 	})
 		.omit({ id: true })
@@ -74,7 +73,6 @@ export const schemas = {
 		storyHooks: list.describe("Ways this agenda can involve player characters"),
 		creativePrompts: list.describe("GM ideas for developing this agenda"),
 		description: list.describe("Details about this agenda"),
-		gmNotes: list.describe("GM-only information about this agenda"),
 		tags: list.describe("Tags for this agenda"),
 	})
 		.omit({ id: true })
@@ -88,7 +86,6 @@ export const schemas = {
 		diplomaticStatus: z.enum(diplomaticStatuses).describe("Type of diplomatic relationship"),
 		creativePrompts: list.describe("GM ideas for using this relationship"),
 		description: list.describe("Details about this diplomatic relationship"),
-		gmNotes: list.describe("GM-only information about this relationship"),
 		tags: list.describe("Tags for this relationship"),
 	})
 		.omit({ id: true })
@@ -110,7 +107,6 @@ export const schemas = {
 		priorities: list.describe("What the faction prioritizes in this location"),
 		creativePrompts: list.describe("GM ideas for using this influence"),
 		description: list.describe("Details about this influence"),
-		gmNotes: list.describe("GM-only information about this influence"),
 		tags: list.describe("Tags for this influence"),
 	})
 		.omit({ id: true })

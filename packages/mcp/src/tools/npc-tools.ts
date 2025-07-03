@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./npc-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -10,8 +10,8 @@ const createEntityGetters = createEntityGettersFactory(tables.npcTables)
 export const entityGetters = createEntityGetters({
 	all_npcs: () => db.query.npcs.findMany({}),
 	all_npc_faction_memberships: () => db.query.npcFactionMemberships.findMany({}),
-	all_npc_site_associations: () => db.query.npcSiteAssociations.findMany({}),
 	all_npc_relations: () => db.query.npcRelations.findMany({}),
+	all_npc_details: () => db.query.npcDetails.findMany({}),
 
 	npc_by_id: (id: number) =>
 		db.query.npcs.findFirst({
@@ -20,18 +20,17 @@ export const entityGetters = createEntityGetters({
 				affectingConsequences: true,
 				incomingForeshadowing: true,
 				outgoingForeshadowing: true,
-				questHooks: { with: { quest: { columns: { name: true, id: true } } } },
-				itemHistory: { with: { item: { columns: { name: true, id: true } } } },
-				itemRelations: { with: { sourceItem: { columns: { name: true, id: true } } } },
-				siteAssociations: { with: { site: { columns: { name: true, id: true } } } },
-				stageInvolvement: { with: { questStage: { columns: { name: true, id: true } } } },
-				loreLinks: { with: { lore: { columns: { name: true, id: true } } } },
-				incomingRelations: { with: { sourceNpc: { columns: { name: true, id: true } } } },
-				outgoingRelations: { with: { targetNpc: { columns: { name: true, id: true } } } },
-				factionMemberships: { with: { faction: { columns: { name: true, id: true } } } },
-				questStageDeliveries: { with: { quest: { columns: { name: true, id: true } } } },
-				conflictParticipation: { with: { conflict: { columns: { name: true, id: true } } } },
-				narrativeDestinationInvolvement: { with: { narrativeDestination: { columns: { name: true, id: true } } } },
+				details: true,
+				questHooks: { with: { quest: nameAndId } },
+				itemRelations: { with: { sourceItem: nameAndId } },
+				stageInvolvement: { with: { questStage: nameAndId } },
+				loreLinks: { with: { lore: nameAndId } },
+				incomingRelations: { with: { sourceNpc: nameAndId } },
+				outgoingRelations: { with: { targetNpc: nameAndId } },
+				factionMemberships: { with: { faction: nameAndId } },
+				questStageDeliveries: { with: { quest: nameAndId } },
+				conflictParticipation: { with: { conflict: nameAndId } },
+				questParticipants: { with: { quest: nameAndId } },
 			},
 		}),
 	npc_faction_membership_by_id: (id: number) =>
@@ -42,14 +41,7 @@ export const entityGetters = createEntityGetters({
 				faction: true,
 			},
 		}),
-	npc_site_association_by_id: (id: number) =>
-		db.query.npcSiteAssociations.findFirst({
-			where: (npcSiteAssociations, { eq }) => eq(npcSiteAssociations.id, id),
-			with: {
-				npc: true,
-				site: true,
-			},
-		}),
+
 	npc_relation_by_id: (id: number) =>
 		db.query.npcRelations.findFirst({
 			where: (npcRelations, { eq }) => eq(npcRelations.id, id),
@@ -57,6 +49,10 @@ export const entityGetters = createEntityGetters({
 				sourceNpc: true,
 				targetNpc: true,
 			},
+		}),
+	npc_detail_by_id: (id: number) =>
+		db.query.npcDetails.findFirst({
+			where: (npcDetails, { eq }) => eq(npcDetails.npcId, id),
 		}),
 })
 
