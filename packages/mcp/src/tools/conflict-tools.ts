@@ -15,10 +15,8 @@ export const entityGetters = createEntityGetters({
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
 				affectingConsequences: true,
-				triggeredConsequences: true,
 				incomingForeshadowing: true,
-				itemRelations: true,
-				narrativeDestinations: true,
+				itemConnections: true,
 				loreLinks: true,
 				region: true,
 				participants: { with: { faction: true, npc: true } },

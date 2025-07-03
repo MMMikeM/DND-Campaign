@@ -29,7 +29,6 @@ export const schemas = {
 		stageType: z.enum(stageTypes).describe("Type of stage (revelation_point, decision_point, etc.)"),
 		creativePrompts: list.describe("Ideas for running this stage or adapting to player approaches"),
 		description: list.describe("Key events and plot developments in this segment in point form"),
-		gmNotes: list.describe("GM-only information about this stage"),
 		tags: list.describe("Tags for this stage"),
 	})
 		.omit({ id: true })
@@ -57,7 +56,6 @@ export const schemas = {
 			s.optional().describe("Lesson learned from failure (required if failure_leads_to_retry is true)"),
 		description: list.describe("The choice or dilemma presented to players in point form"),
 		creativePrompts: list.describe("Ideas for presenting this dramatically or adapting to choices"),
-		gmNotes: list.describe("GM-only notes about this decision"),
 		tags: list.describe("Tags for this decision"),
 	})
 		.omit({ id: true })
@@ -79,7 +77,6 @@ export const schemas = {
 		involvementDetails: list.describe("Details about how this NPC is involved"),
 		creativePrompts: list.describe("Ideas for using this NPC in the stage"),
 		description: list.describe("Description of the NPC's involvement"),
-		gmNotes: list.describe("GM-only notes about this NPC involvement"),
 		tags: list.describe("Tags for this NPC involvement"),
 	})
 		.omit({ id: true })

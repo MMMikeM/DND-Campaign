@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./faction-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -21,32 +21,18 @@ export const entityGetters = createEntityGetters({
 			with: {
 				agendas: true,
 				members: true,
-
-				incomingRelations: {
-					with: {
-						sourceFaction: { columns: { name: true, id: true } },
-					},
-				},
-
-				outgoingRelations: {
-					with: {
-						targetFaction: { columns: { name: true, id: true } },
-					},
-				},
-				questParticipation: {
-					with: {
-						quest: { columns: { name: true, id: true } },
-					},
-				},
-
+				incomingForeshadowing: true,
+				primaryHqSite: nameAndId,
+				incomingRelations: { with: { sourceFaction: nameAndId } },
+				outgoingRelations: { with: { targetFaction: nameAndId } },
+				questParticipation: { with: { quest: nameAndId } },
 				influence: {
 					with: {
-						region: { columns: { name: true, id: true } },
-						area: { columns: { name: true, id: true } },
-						site: { columns: { name: true, id: true } },
+						region: nameAndId,
+						area: nameAndId,
+						site: nameAndId,
 					},
 				},
-				incomingForeshadowing: true,
 			},
 		}),
 

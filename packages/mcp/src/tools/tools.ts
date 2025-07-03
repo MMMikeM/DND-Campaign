@@ -3,6 +3,7 @@ import type { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
 import { logger } from ".."
 import { conflictToolDefinitions } from "./conflict-tools"
+import { consequenceToolDefinitions } from "./consequence-tools"
 import { factionToolDefinitions } from "./faction-tools"
 import { foreshadowingToolDefinitions } from "./foreshadowing-tools"
 import { getEntityToolDefinition } from "./get-entity"
@@ -10,8 +11,6 @@ import { helpToolDefinitions } from "./help-tools"
 import { itemToolDefinitions } from "./items-tools"
 import { loreToolDefinitions } from "./lore-tools"
 import { mapToolDefinitions } from "./map-tools"
-import { narrativeDestinationToolDefinitions } from "./narrative-destination-tools"
-import { narrativeEventToolDefinitions } from "./narrative-events-tools"
 import { npcToolDefinitions } from "./npc-tools"
 import { questStageToolDefinitions } from "./quest-stage-tools"
 import { questToolDefinitions } from "./quest-tools"
@@ -38,6 +37,7 @@ function extractToolsAndHandlers<T extends Record<string, ToolDefinition>>(defin
 }
 
 export const conflicts = extractToolsAndHandlers(conflictToolDefinitions)
+export const consequences = extractToolsAndHandlers(consequenceToolDefinitions)
 export const factions = extractToolsAndHandlers(factionToolDefinitions)
 export const foreshadowing = extractToolsAndHandlers(foreshadowingToolDefinitions)
 export const fuzzySearch = extractToolsAndHandlers(fuzzySearchToolDefinitions)
@@ -46,8 +46,6 @@ export const help = extractToolsAndHandlers(helpToolDefinitions)
 export const items = extractToolsAndHandlers(itemToolDefinitions)
 export const lore = extractToolsAndHandlers(loreToolDefinitions)
 export const maps = extractToolsAndHandlers(mapToolDefinitions)
-export const narrativeDestinations = extractToolsAndHandlers(narrativeDestinationToolDefinitions)
-export const narrativeEvents = extractToolsAndHandlers(narrativeEventToolDefinitions)
 export const npcs = extractToolsAndHandlers(npcToolDefinitions)
 export const quests = extractToolsAndHandlers(questToolDefinitions)
 export const questStages = extractToolsAndHandlers(questStageToolDefinitions)
@@ -63,12 +61,11 @@ export function registerToolHandlers(server: Server) {
 
 		// Manage tools
 		...conflicts.tools,
+		...consequences.tools,
 		...factions.tools,
 		...foreshadowing.tools,
 		...items.tools,
 		...lore.tools,
-		...narrativeDestinations.tools,
-		...narrativeEvents.tools,
 		...npcs.tools,
 		...quests.tools,
 		...questStages.tools,
@@ -84,12 +81,11 @@ export function registerToolHandlers(server: Server) {
 
 		// Manage tools
 		...conflicts.handlers,
+		...consequences.handlers,
 		...factions.handlers,
 		...foreshadowing.handlers,
 		...items.handlers,
 		...lore.handlers,
-		...narrativeDestinations.handlers,
-		...narrativeEvents.handlers,
 		...npcs.handlers,
 		...quests.handlers,
 		...questStages.handlers,

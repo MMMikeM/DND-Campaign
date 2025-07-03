@@ -5,7 +5,7 @@ import { imageSize } from "image-size"
 import { db, logger } from "../index"
 import zodToMCP from "../zodToMcp"
 import { schemas, syncMapsSchema, tableEnum } from "./map-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -45,7 +45,7 @@ export const entityGetters = createEntityGetters({
 	map_variant_by_id: (id: number) =>
 		db.query.mapVariants.findFirst({
 			where: (mapVariants, { eq }) => eq(mapVariants.id, id),
-			with: { mapGroup: true, mapFile: true },
+			with: { mapGroup: nameAndId },
 		}),
 	map_file_by_id: (id: number) =>
 		db.query.mapFiles.findFirst({

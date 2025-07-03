@@ -13,7 +13,6 @@ const {
 	conflictScopes,
 	conflictStatuses,
 	participantRolesInConflict,
-	questImpacts,
 	tensionLevels,
 } = enums
 
@@ -33,11 +32,7 @@ export const schemas = {
 		creativePrompts: list.describe(
 			"Ideas for Narrative Destinations or specific quests that stem directly from this conflict.",
 		),
-		gmNotes: list.describe(
-			"Behind-the-scenes notes, potential future escalations, or mechanical considerations for running this conflict.",
-		),
 		tags: list.describe("Keywords for filtering and organization (e.g., 'War for the Throne,' 'Magical Plague')."),
-
 		cause: (s) =>
 			s.describe(
 				"The inciting incident or long-brewing situation that ignited this struggle. The 'first domino' to fall.",
@@ -76,15 +71,10 @@ export const schemas = {
 			.describe(
 				"The 'emotional temperature' of the conflict. Does it create an atmosphere of background anxiety, immediate danger, or open panic?",
 			),
-		natures: z
-			.array(z.enum(conflictNatures))
+		nature: z
+			.enum(conflictNatures)
 			.describe(
 				"The dominant arenas where the conflict plays out. Determines the types of challenges players will face (e.g., battles for Military, diplomacy for Political, investigation for Mystical).",
-			),
-		questImpacts: z
-			.array(z.enum(questImpacts))
-			.describe(
-				"The way this overarching conflict actively shapes or disrupts quests, providing context, urgency, or obstacles.",
 			),
 
 		regionId: optionalId.describe("ID of the primary region where the conflict's effects are most deeply felt."),
@@ -102,9 +92,7 @@ export const schemas = {
 		creativePrompts: list.describe(
 			"Ideas for how players might interact with, be hired by, or come into opposition with this specific participant.",
 		),
-		gmNotes: list.describe(
-			"GM notes about this participant's secret weaknesses, hidden resources, or likely future moves.",
-		),
+
 		tags: list.describe("Keywords for this participant's role (e.g., 'Traitor,' 'Financier,' 'Propagandist')."),
 
 		conflictId: id.describe("ID of the major conflict this participant is involved in."),

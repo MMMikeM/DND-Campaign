@@ -24,17 +24,11 @@ export const schemas = {
 		mapGroupId: id.describe("Required ID of the map these details belong to"),
 		creativePrompts: list.describe("Adventure hooks and creative ideas inspired by the map"),
 		description: list.describe("Overall description of the map's features and atmosphere"),
-		gmNotes: list.describe("Private notes for the GM about this map"),
 		tags: list.describe("Descriptive tags for categorization and search"),
-		coverOptions: list.describe("Areas offering cover (full, half, three-quarters)"),
-		elevationFeatures: list.describe("Significant changes in elevation and high/low ground"),
-		movementRoutes: list.describe("Primary and secondary paths for movement across the map"),
-		difficultTerrain: list.describe("Areas that impede movement"),
-		chokePoints: list.describe("Narrow passages or areas that restrict movement"),
-		sightLines: list.describe("Clear lines of sight for ranged attacks and observation"),
-		tacticalPositions: list.describe("Advantageous positions for combatants"),
 		interactiveElements: list.describe("Objects or features characters can interact with"),
 		environmentalHazards: list.describe("Dangers posed by the environment itself"),
+		atmosphereAndSensoryDetails: list.describe("Atmosphere and sensory details of the map"),
+		tacticalFeatures: list.describe("Tactical features of the map"),
 	})
 		.omit({ id: true })
 		.strict()

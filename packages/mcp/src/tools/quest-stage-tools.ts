@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./quest-stage-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -16,31 +16,28 @@ export const entityGetters = createEntityGetters({
 		db.query.questStages.findFirst({
 			where: (questStages, { eq }) => eq(questStages.id, id),
 			with: {
-				deliveryNpc: { columns: { name: true, id: true } },
-				outgoingForeshadowing: true,
 				npcInvolvement: true,
-				quest: { columns: { name: true, id: true } },
+				itemConnections: true,
+				outgoingForeshadowing: true,
+				deliveryNpc: nameAndId,
+				quest: nameAndId,
 				site: {
 					with: {
-						secrets: true,
-						area: { columns: { name: true, id: true } },
-						encounters: { columns: { name: true, id: true } },
+						area: nameAndId,
+						encounters: nameAndId,
 					},
 				},
 				outgoingDecisions: { with: { targetStage: true } },
 				incomingDecisions: { with: { sourceStage: true } },
-				items: true,
-				narrativeEvents: true,
 			},
 		}),
 	quest_stage_decision_by_id: (id: number) =>
 		db.query.questStageDecisions.findFirst({
 			where: (stageDecisions, { eq }) => eq(stageDecisions.id, id),
 			with: {
-				quest: { columns: { name: true, id: true } },
-				sourceStage: { columns: { name: true, id: true } },
-				targetStage: { columns: { name: true, id: true } },
-				triggeredEvents: true,
+				quest: nameAndId,
+				sourceStage: nameAndId,
+				targetStage: nameAndId,
 				consequences: true,
 			},
 		}),
@@ -48,8 +45,8 @@ export const entityGetters = createEntityGetters({
 		db.query.npcStageInvolvement.findFirst({
 			where: (npcStageInvolvement, { eq }) => eq(npcStageInvolvement.id, id),
 			with: {
-				questStage: { columns: { name: true, id: true } },
-				npc: { columns: { name: true, id: true } },
+				questStage: nameAndId,
+				npc: nameAndId,
 			},
 		}),
 })

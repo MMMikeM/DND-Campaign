@@ -6,6 +6,8 @@ import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./types"
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
 export type Schema<T extends string> = Record<T, z.ZodObject>
 
+export const nameAndId = { columns: { name: true, id: true } } as const
+
 export const id = z.coerce.number()
 export const optionalId = z.coerce.number().optional()
 export const list = z.array(z.string()).min(1).max(5)

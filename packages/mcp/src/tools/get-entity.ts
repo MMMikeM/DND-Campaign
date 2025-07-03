@@ -1,14 +1,13 @@
 import { logger } from ".."
 import zodToMCP from "../zodToMcp"
 import { entityGetters as conflictGetters } from "./conflict-tools"
+import { entityGetters as consequenceGetters } from "./consequence-tools"
 import { entityGetters as factionGetters } from "./faction-tools"
 import { entityGetters as foreshadowingGetters } from "./foreshadowing-tools"
 import { getEntitySchema } from "./get-entity.schema"
 import { entityGetters as itemsGetters } from "./items-tools"
 import { entityGetters as loreGetters } from "./lore-tools"
 import { entityGetters as mapGetters } from "./map-tools"
-import { entityGetters as narrativeGetters } from "./narrative-destination-tools"
-import { entityGetters as eventsGetters } from "./narrative-events-tools"
 import { entityGetters as npcGetters } from "./npc-tools"
 import { entityGetters as questGetters } from "./quest-tools"
 import { entityGetters as regionGetters } from "./region-tools"
@@ -17,12 +16,11 @@ import type { ToolDefinition, ToolHandler, ToolHandlerReturn } from "./utils/typ
 // Note: embedding-tools do not follow the standard getter pattern
 
 const combinedGetters = {
+	...consequenceGetters,
 	...conflictGetters,
-	...eventsGetters,
 	...factionGetters,
 	...foreshadowingGetters,
 	...itemsGetters,
-	...narrativeGetters,
 	...npcGetters,
 	...questGetters,
 	...regionGetters,

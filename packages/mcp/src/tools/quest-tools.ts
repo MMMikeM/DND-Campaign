@@ -1,7 +1,7 @@
 import { tables } from "@tome-master/shared"
 import { db } from "../index"
 import { schemas, tableEnum } from "./quest-tools.schema"
-import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
+import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -17,6 +17,9 @@ export const entityGetters = createEntityGetters({
 		db.query.quests.findFirst({
 			where: (quests, { eq }) => eq(quests.id, id),
 			with: {
+				dependentQuests: true,
+				prerequisiteQuest: true,
+				stageDecisions: true,
 				affectingConsequences: true,
 				triggeredConsequences: true,
 				incomingForeshadowing: true,
@@ -24,13 +27,10 @@ export const entityGetters = createEntityGetters({
 				hooks: true,
 				incomingRelations: true,
 				itemRelations: true,
-				narrativeDestinationContributions: true,
 				outgoingRelations: true,
 				participants: true,
 				loreLinks: true,
-				triggeredEvents: true,
 				stages: true,
-				region: { columns: { name: true, id: true } },
 			},
 		}),
 
@@ -38,27 +38,27 @@ export const entityGetters = createEntityGetters({
 		db.query.questHooks.findFirst({
 			where: (questHooks, { eq }) => eq(questHooks.id, id),
 			with: {
-				deliveryNpc: { columns: { name: true, id: true } },
-				faction: { columns: { name: true, id: true } },
-				site: { columns: { name: true, id: true } },
-				quest: { columns: { name: true, id: true } },
+				deliveryNpc: nameAndId,
+				faction: nameAndId,
+				site: nameAndId,
+				quest: nameAndId,
 			},
 		}),
 	quest_participant_by_id: (id: number) =>
 		db.query.questParticipants.findFirst({
 			where: (questParticipants, { eq }) => eq(questParticipants.id, id),
 			with: {
-				quest: { columns: { name: true, id: true } },
-				faction: { columns: { name: true, id: true } },
-				npc: { columns: { name: true, id: true } },
+				quest: nameAndId,
+				faction: nameAndId,
+				npc: nameAndId,
 			},
 		}),
 	quest_relation_by_id: (id: number) =>
 		db.query.questRelations.findFirst({
 			where: (questRelations, { eq }) => eq(questRelations.id, id),
 			with: {
-				sourceQuest: { columns: { name: true, id: true } },
-				targetQuest: { columns: { name: true, id: true } },
+				sourceQuest: nameAndId,
+				targetQuest: nameAndId,
 			},
 		}),
 })
