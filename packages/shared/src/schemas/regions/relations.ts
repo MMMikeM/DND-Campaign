@@ -7,7 +7,7 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { mapGroups, mapVariants } from "../maps/tables"
-import { questHooks, quests } from "../quests/tables"
+import { questHooks } from "../quests/tables"
 import { questStages } from "../stages/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
 
@@ -16,7 +16,6 @@ export const regionsRelations = relations(regions, ({ many }) => ({
 	incomingRelations: many(regionConnections, { relationName: "targetRegion" }),
 
 	areas: many(areas),
-	quests: many(quests),
 	conflicts: many(conflicts),
 	consequences: many(consequences, { relationName: "ConsequenceAffectedRegion" }),
 	factionInfluence: many(factionInfluence),
