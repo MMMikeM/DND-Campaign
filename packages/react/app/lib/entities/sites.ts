@@ -10,19 +10,16 @@ const siteConfig = {
 			where: (sites, { eq }) => eq(sites.id, id),
 			with: {
 				encounters: true,
-				secrets: true,
 				consequences: true,
 				incomingForeshadowing: true,
 				factionHqs: nameAndId,
 				factionInfluence: nameAndId,
-				itemHistory: nameAndId,
-				itemRelations: nameAndId,
+				itemConnections: nameAndId,
 				questHooks: {
 					with: {
 						quest: nameAndId,
 					},
 				},
-				npcAssociations: nameAndId,
 				area: { ...nameAndId, with: { region: nameAndId } },
 				incomingRelations: { with: { sourceSite: nameAndId } },
 				outgoingRelations: { with: { targetSite: nameAndId } },

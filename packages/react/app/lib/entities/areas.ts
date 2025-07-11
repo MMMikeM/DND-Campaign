@@ -12,9 +12,7 @@ const areaConfig = {
 			},
 			with: {
 				region: nameAndId,
-				sites: {
-					columns: { id: true, name: true, type: true },
-				},
+				sites: nameAndId,
 				consequences: {
 					columns: {
 						id: true,
@@ -26,14 +24,12 @@ const areaConfig = {
 						sourceType: true,
 						conflictImpactDescription: true,
 						creativePrompts: true,
-						gmNotes: true,
 						playerImpactFeel: true,
 						tags: true,
 						timeframe: true,
 					},
 					where: (consequences, { eq }) => eq(consequences.affectedAreaId, id),
 					with: {
-						triggerConflict: nameAndId,
 						triggerQuest: nameAndId,
 						triggerQuestStageDecision: nameAndId,
 					},

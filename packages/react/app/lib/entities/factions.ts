@@ -24,16 +24,10 @@ const factionConfig = {
 						affectedQuest: nameAndId,
 						affectedArea: nameAndId,
 						affectedConflict: nameAndId,
-						affectedNarrativeDestination: nameAndId,
+						affectedConsequence: nameAndId,
 					},
 				},
-				narrativeDestinationInvolvement: {
-					with: {
-						narrativeDestination: nameAndId,
-						faction: nameAndId,
-						npc: nameAndId,
-					},
-				},
+
 				incomingForeshadowing: {
 					with: {
 						sourceNpc: nameAndId,
@@ -51,7 +45,7 @@ const factionConfig = {
 						site: nameAndId,
 					},
 				},
-				itemRelations: {
+				itemConnections: {
 					with: {
 						sourceItem: nameAndId,
 					},

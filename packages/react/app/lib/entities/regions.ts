@@ -29,16 +29,8 @@ const regionConfig = {
 						sites: nameAndId,
 					},
 				},
-				quests: nameAndId,
 				conflicts: nameAndId,
 				consequences: nameAndId,
-
-				narrativeDestinations: {
-					with: {
-						conflict: nameAndId,
-						loreLinks: { with: { lore: nameAndId } },
-					},
-				},
 				loreLinks: {
 					with: {
 						lore: nameAndId,
