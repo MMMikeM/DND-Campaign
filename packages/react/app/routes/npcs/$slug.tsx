@@ -6,11 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getNpc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
-import { GmContent } from "./components/GmContent"
 import { KnowledgeContent } from "./components/KnowledgeContent"
 import { NarrativeContent } from "./components/NarrativeContent"
 import { OverviewContent } from "./components/OverviewContent"
-import { PersonalityContent } from "./components/PersonalityContent"
+import { DetailsContent } from "./components/PersonalityContent"
 import { SocialContent } from "./components/SocialContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -33,61 +32,35 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
-		loreLinks,
-		itemRelations,
-		questHooks,
-		id,
-		name,
-		creativePrompts,
-		description,
-		gmNotes,
-		tags,
-		secrets,
-		alignment,
-		gender,
-		race,
-		trustLevel,
-		wealth,
-		adaptability,
-		complexityProfile,
-		playerPerceptionGoal,
-		availability,
-		capability,
-		proactivity,
-		relatability,
-		disposition,
-		age,
-		attitude,
-		occupation,
-		quirk,
-		socialStatus,
-		currentGoals,
-		appearance,
-		avoidTopics,
-		background,
-		biases,
-		dialogue,
-		drives,
-		fears,
-		knowledge,
-		mannerisms,
-		personalityTraits,
-		preferredTopics,
-		rumours,
-		voiceNotes,
-		relations,
-		factionMemberships,
-		siteAssociations,
-		conflictParticipation,
 		affectingConsequences,
+		age,
+		appearance,
+		attitude,
+		conflictParticipation,
+		conversationHook,
+		details,
+		factionMemberships,
+		gender,
 		incomingForeshadowing,
-		itemHistory,
-		narrativeDestinationInvolvement,
-		questStageDeliveries,
+		itemRelations,
+		loreLinks,
+		name,
+		occupation,
 		outgoingForeshadowing,
+		questHooks,
 		questParticipants,
-		stageInvolvement,
+		questStageDeliveries,
+		quirk,
+		race,
+		relations,
+		roleplayingGuide,
+		site,
 		slug,
+		socialStatusAndReputation,
+		stageInvolvement,
+		summary,
+		tags,
+		voiceNotes,
 	} = npc
 
 	const handleTabChange = (value: string) => {
@@ -140,7 +113,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						tooltipContent="General attitude toward others"
 					>
 						<Icons.Smile className="h-3.5 w-3.5 mr-1" />
-						{disposition}
+						{attitude}
 					</BadgeWithTooltip>
 					<BadgeWithTooltip
 						variant="outline"
@@ -148,86 +121,70 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						tooltipContent="Economic standing and available resources"
 					>
 						<Icons.Building className="h-3.5 w-3.5 mr-1" />
-						{wealth}
+						{details?.wealth}
 					</BadgeWithTooltip>
 					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character identity">
 						<Icons.Users className="h-3.5 w-3.5 mr-1" />
 						{gender}
 					</BadgeWithTooltip>
 					<BadgeWithTooltip
-						variant={getTrustVariant(trustLevel)}
+						variant={getTrustVariant(details?.adaptability || "")}
 						className="flex items-center"
 						tooltipContent="How readily this character trusts others"
 					>
 						<Icons.UserCheck className="h-3.5 w-3.5 mr-1" />
-						{trustLevel} trust
+						{details?.adaptability} trust
 					</BadgeWithTooltip>
 					<BadgeWithTooltip
-						variant={getAdaptabilityVariant(adaptability)}
+						variant={getAdaptabilityVariant(details?.adaptability || "")}
 						className="flex items-center"
 						tooltipContent="Flexibility in response to changing situations"
 					>
 						<Icons.Sparkles className="h-3.5 w-3.5 mr-1" />
-						{adaptability}
+						{details?.adaptability}
 					</BadgeWithTooltip>
 				</div>
 			</div>
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-				<TabsList className="grid grid-cols-7 mb-6">
+				<TabsList className="grid grid-cols-6 mb-6">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
-					<TabsTrigger value="personality">Personality</TabsTrigger>
+					<TabsTrigger value="details">Details</TabsTrigger>
 					<TabsTrigger value="social">Social</TabsTrigger>
 					<TabsTrigger value="knowledge">Knowledge</TabsTrigger>
 					<TabsTrigger value="connections">Connections</TabsTrigger>
 					<TabsTrigger value="narrative">Narrative</TabsTrigger>
-					<TabsTrigger value="gm">GM</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="overview">
 					<OverviewContent
 						appearance={appearance}
-						background={background}
-						alignment={alignment}
 						attitude={attitude}
 						occupation={occupation}
-						currentGoals={currentGoals}
 						tags={tags}
 						quirk={quirk}
 						name={name}
-						description={description}
-						socialStatus={socialStatus}
+						summary={summary}
+						socialStatusAndReputation={socialStatusAndReputation}
+						alignment={details?.alignment}
+						goalsAndFears={details?.goalsAndFears}
 					/>
 				</TabsContent>
 
-				<TabsContent value="personality">
-					<PersonalityContent
-						personalityTraits={personalityTraits}
-						biases={biases}
-						drives={drives}
-						fears={fears}
-						mannerisms={mannerisms}
-						availability={availability}
-						capability={capability}
-						proactivity={proactivity}
-						relatability={relatability}
-						complexityProfile={complexityProfile}
-						playerPerceptionGoal={playerPerceptionGoal}
-						voiceNotes={voiceNotes}
-					/>
+				<TabsContent value="details">
+					<DetailsContent details={details} />
 				</TabsContent>
 
 				<TabsContent value="social">
 					<SocialContent
-						avoidTopics={avoidTopics}
-						dialogue={dialogue}
-						rumours={rumours}
-						preferredTopics={preferredTopics}
+						conversationHook={conversationHook}
+						rumours={details?.rumours}
+						preferredTopics={details?.preferredTopics}
 					/>
 				</TabsContent>
 
 				<TabsContent value="knowledge">
-					<KnowledgeContent knowledge={knowledge} secrets={secrets} />
+					<KnowledgeContent knowledge={details?.knowledge} secrets={details?.secretsAndHistory} />
 				</TabsContent>
 
 				<TabsContent value="connections">
@@ -235,8 +192,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						name={name}
 						relations={relations}
 						factionMemberships={factionMemberships}
-						siteAssociations={siteAssociations}
-						itemHistory={itemHistory}
 						loreLinks={loreLinks}
 						itemRelations={itemRelations}
 						questHooks={questHooks}
@@ -251,11 +206,8 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						affectingConsequences={affectingConsequences}
 						incomingForeshadowing={incomingForeshadowing}
 						conflictParticipation={conflictParticipation}
-						narrativeDestinationInvolvement={narrativeDestinationInvolvement}
+						outgoingForeshadowing={outgoingForeshadowing}
 					/>
-				</TabsContent>
-				<TabsContent value="gm">
-					<GmContent name={name} gmNotes={gmNotes} creativePrompts={creativePrompts} />
 				</TabsContent>
 			</Tabs>
 		</div>

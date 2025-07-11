@@ -3,27 +3,20 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function SocialContent({
-	dialogue,
-	rumours,
-	preferredTopics,
-	avoidTopics,
-}: Pick<NPC, "dialogue" | "rumours" | "preferredTopics" | "avoidTopics">) {
+export function SocialContent({}: Pick<NPC, "">) {
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 				<InfoCard
-					title="Dialogue"
+					title="Conversation Hook"
 					icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-blue-600" />}
-					emptyMessage="No dialogue specified."
+					emptyMessage="No conversation hook specified."
 					className="col-span-2"
 				>
-					{dialogue && dialogue.length > 0 && (
-						<>
-							<p className="text-sm text-muted-foreground mb-4">Characteristic phrases and speech patterns</p>
-							<List items={dialogue} spacing="sm" textColor="muted" />
-						</>
-					)}
+					<p className="text-sm text-muted-foreground mb-4">How to start a conversation with this NPC</p>
+					<div className="p-4 bg-muted rounded-md">
+						<p className="text-lg italic">{conversationHook}</p>
+					</div>
 				</InfoCard>
 
 				<InfoCard

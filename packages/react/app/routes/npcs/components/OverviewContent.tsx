@@ -1,35 +1,27 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Badge } from "~/components/ui/badge"
+import { Tags } from "~/components/Tags"
 import type { NPC } from "~/lib/entities"
 
 export function OverviewContent({
-	description,
+	summary,
 	appearance,
-	background,
-	alignment,
 	attitude,
 	occupation,
-	socialStatus,
+	socialStatusAndReputation,
 	quirk,
-	currentGoals,
 	tags,
 	name,
+	alignment,
+	goalsAndFears,
 }: Pick<
 	NPC,
-	| "description"
-	| "appearance"
-	| "background"
-	| "alignment"
-	| "attitude"
-	| "occupation"
-	| "socialStatus"
-	| "quirk"
-	| "currentGoals"
-	| "tags"
-	| "name"
->) {
+	"summary" | "appearance" | "attitude" | "occupation" | "socialStatusAndReputation" | "quirk" | "tags" | "name"
+> & {
+	alignment: NPC["details"]["alignment"]
+	goalsAndFears: NPC["details"]["goalsAndFears"]
+}) {
 	return (
 		<div className="space-y-6">
 			<InfoCard
@@ -39,13 +31,6 @@ export function OverviewContent({
 				emptyMessage="No overview information available."
 				contentClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
 			>
-				<div>
-					<h3 className="font-medium mb-2 flex items-center">
-						<Icons.Heart className="h-4 w-4 mr-2 text-red-500" />
-						Alignment
-					</h3>
-					<p className="text-muted-foreground capitalize">{alignment}</p>
-				</div>
 				<div>
 					<h3 className="font-medium mb-2 flex items-center">
 						<Icons.Smile className="h-4 w-4 mr-2 text-amber-500" />
@@ -65,7 +50,7 @@ export function OverviewContent({
 						<Icons.Users className="h-4 w-4 mr-2 text-purple-600" />
 						Social Status
 					</h3>
-					<p className="text-muted-foreground capitalize">{socialStatus}</p>
+					<p className="text-muted-foreground capitalize">{socialStatusAndReputation}</p>
 				</div>
 				<div className="col-span-1 md:col-span-2 lg:col-span-3">
 					<p className="text-sm text-muted-foreground mb-4">What makes this NPC unique</p>
@@ -75,23 +60,10 @@ export function OverviewContent({
 				</div>
 			</InfoCard>
 
-			<List heading="Description" items={description} spacing="sm" textColor="muted" collapsible={false} />
-			<List heading="Current Goals" items={currentGoals} spacing="sm" textColor="muted" collapsible />
-			<List heading="Background" items={background} spacing="sm" textColor="muted" collapsible />
+			<List heading="Summary" items={summary} spacing="sm" textColor="muted" collapsible={false} />
 			<List heading="Appearance" items={appearance} spacing="sm" textColor="muted" collapsible />
 
-			{tags && tags.length > 0 && (
-				<div className="pt-4">
-					<h3 className="font-medium mb-3">Tags</h3>
-					<div className="flex flex-wrap gap-2">
-						{tags.map((tag) => (
-							<Badge key={tag} variant="secondary">
-								{tag}
-							</Badge>
-						))}
-					</div>
-				</div>
-			)}
+			<Tags tags={tags} />
 		</div>
 	)
 }

@@ -6,12 +6,18 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { questHooks, questParticipants } from "../quests/tables"
+import { sites } from "../regions/tables"
 import { npcStageInvolvement, questStages } from "../stages/tables"
 import { npcDetails, npcFactionMemberships, npcRelations, npcs } from "./tables"
 
 export const npcsRelations = relations(npcs, ({ one, many }) => ({
 	outgoingRelations: many(npcRelations, { relationName: "sourceNpc" }),
 	incomingRelations: many(npcRelations, { relationName: "targetNpc" }),
+
+	site: one(sites, {
+		fields: [npcs.siteId],
+		references: [sites.id],
+	}),
 
 	factionMemberships: one(npcFactionMemberships, {
 		fields: [npcs.id],

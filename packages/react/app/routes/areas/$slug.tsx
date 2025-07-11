@@ -37,24 +37,15 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 		name,
 		type,
 		region,
-		dangerLevel,
 		tags,
 		description,
-		culturalNotes,
-		pointsOfInterest,
-		leadership,
-		population,
-		primaryActivity,
-		creativePrompts,
-		hazards,
-		defenses,
-		rumors,
-		atmosphereType,
-		gmNotes,
-		revelationLayersSummary,
 		sites,
 		factionInfluence,
 		consequences,
+		cultureAndLeadership,
+		featuresAndHazards,
+		id,
+		loreAndSecrets,
 	} = loaderData
 
 	const handleTabChange = (value: string) => {
@@ -72,7 +63,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<AreaHeader name={name} type={type} region={region} dangerLevel={dangerLevel} />
+			<AreaHeader name={name} type={type} region={region} dangerLevel={region?.dangerLevel} />
 
 			<Tags tags={tags} className="mb-6" />
 
@@ -86,26 +77,11 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent
-						description={description}
-						culturalNotes={culturalNotes}
-						pointsOfInterest={pointsOfInterest}
-						leadership={leadership}
-						population={population}
-						primaryActivity={primaryActivity}
-					/>
+					<OverviewContent description={description} cultureAndLeadership={cultureAndLeadership} />
 				</TabsContent>
 
 				<TabsContent value="details">
-					<DetailsContent
-						creativePrompts={creativePrompts}
-						hazards={hazards}
-						defenses={defenses}
-						rumors={rumors}
-						atmosphereType={atmosphereType}
-						gmNotes={gmNotes}
-						revelationLayersSummary={revelationLayersSummary}
-					/>
+					<DetailsContent featuresAndHazards={featuresAndHazards} loreAndSecrets={loreAndSecrets} />
 				</TabsContent>
 
 				<TabsContent value="sites">
