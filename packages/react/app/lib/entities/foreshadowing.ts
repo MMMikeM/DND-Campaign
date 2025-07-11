@@ -1,25 +1,28 @@
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
+import { nameAndId } from "."
 
 const foreshadowingConfig = {
 	findById: (id: number) =>
 		db.query.foreshadowing.findFirst({
 			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
 			with: {
-				sourceNpc: { columns: { id: true, name: true } },
-				sourceQuest: { columns: { id: true, name: true } },
-				sourceSite: { columns: { id: true, name: true } },
-				sourceQuestStage: { columns: { id: true, name: true } },
-				targetFaction: { columns: { id: true, name: true } },
-				targetNpc: { columns: { id: true, name: true } },
-				targetQuest: { columns: { id: true, name: true } },
-				targetSite: { columns: { id: true, name: true } },
-				targetLore: { columns: { id: true, name: true } },
-				targetItem: { columns: { id: true, name: true } },
-				targetConflict: { columns: { id: true, name: true } },
-				targetNarrativeDestination: { columns: { id: true, name: true } },
-				targetNarrativeEvent: { columns: { id: true, name: true } },
+				sourceNpc: nameAndId,
+				sourceQuest: nameAndId,
+				sourceSite: nameAndId,
+				sourceQuestStage: nameAndId,
+				targetFaction: nameAndId,
+				targetNpc: nameAndId,
+				targetQuest: nameAndId,
+				targetSite: nameAndId,
+				targetLore: nameAndId,
+				targetItem: nameAndId,
+				targetConflict: nameAndId,
+				sourceItem: nameAndId,
+				sourceLore: nameAndId,
+				incomingLoreLinks: nameAndId,
+				targetConsequence: nameAndId,
 			},
 		}),
 	getAll: () => db.query.foreshadowing.findMany({}),

@@ -9,10 +9,7 @@ const conflictConfig = {
 			where: (conflicts, { eq }) => eq(conflicts.id, id),
 			with: {
 				region: nameAndId,
-				itemRelations: {
-					with: { sourceItem: nameAndId },
-				},
-				narrativeDestinations: nameAndId,
+				itemConnections: nameAndId,
 				loreLinks: {
 					columns: {
 						loreId: false,
@@ -35,20 +32,8 @@ const conflictConfig = {
 				},
 				affectingConsequences: {
 					with: {
-						triggerConflict: nameAndId,
 						triggerQuest: nameAndId,
-					},
-				},
-				triggeredConsequences: {
-					with: {
-						affectedNarrativeDestination: nameAndId,
-						affectedArea: nameAndId,
-						affectedFaction: nameAndId,
-						affectedSite: nameAndId,
-						affectedQuest: nameAndId,
-						affectedNpc: nameAndId,
-						affectedRegion: nameAndId,
-						affectedConflict: nameAndId,
+						triggerQuestStageDecision: nameAndId,
 					},
 				},
 				incomingForeshadowing: {
