@@ -8,14 +8,10 @@ export function NarrativeContent({
 	conflictParticipation,
 	affectingConsequences,
 	incomingForeshadowing,
-	narrativeDestinationInvolvement,
+	outgoingForeshadowing,
 }: Pick<
 	NPC,
-	| "name"
-	| "conflictParticipation"
-	| "affectingConsequences"
-	| "incomingForeshadowing"
-	| "narrativeDestinationInvolvement"
+	"name" | "conflictParticipation" | "affectingConsequences" | "incomingForeshadowing" | "outgoingForeshadowing"
 >) {
 	return (
 		<div className="space-y-6">
@@ -36,29 +32,27 @@ export function NarrativeContent({
 			</InfoCard>
 
 			<InfoCard
-				title="Narrative Arcs"
-				description={`Story arcs featuring ${name}`}
+				title="Outgoing Foreshadowing"
+				description={`Foreshadowing elements that ${name} creates or hints at`}
 				icon={<Icons.GitMerge className="h-4 w-4 mr-2 text-purple-600" />}
-				emptyMessage="Not involved in any narrative arcs."
+				emptyMessage="No outgoing foreshadowing elements."
 			>
-				{narrativeDestinationInvolvement.map(({ id, narrativeDestination, narrativeRole }) => (
-					<div key={`narrative-arc-${id}`} className="border-b last:border-b-0 p-3">
-						<Link href={`/narrative-destinations/${narrativeDestination.slug}`}>
-							<h4 className="font-medium">{narrativeDestination.name}</h4>
-						</Link>
-						<p className="text-sm text-muted-foreground">Role: {narrativeRole}</p>
+				{outgoingForeshadowing.map(({ id, name: foreshadowingName, description }) => (
+					<div key={`outgoing-foreshadowing-${id}`} className="border-b last:border-b-0 p-3">
+						<h4 className="font-medium">{foreshadowingName}</h4>
+						<p className="text-sm text-muted-foreground">{description.join(" ")}</p>
 					</div>
 				))}
 			</InfoCard>
 
 			<InfoCard
-				title="Foreshadowing"
+				title="Incoming Foreshadowing"
 				description={`Foreshadowing that hints at ${name}'s role`}
 				icon={<Icons.Eye className="h-4 w-4 mr-2 text-blue-600" />}
-				emptyMessage="No foreshadowing for this NPC."
+				emptyMessage="No incoming foreshadowing for this NPC."
 			>
 				{incomingForeshadowing.map(({ id, name: foreshadowingName, description }) => (
-					<div key={`foreshadowing-${id}`} className="border-b last:border-b-0 p-3">
+					<div key={`incoming-foreshadowing-${id}`} className="border-b last:border-b-0 p-3">
 						<h4 className="font-medium">{foreshadowingName}</h4>
 						<p className="text-sm text-muted-foreground">{description.join(" ")}</p>
 					</div>

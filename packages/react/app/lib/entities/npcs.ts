@@ -11,6 +11,7 @@ const npcConfig = {
 			with: {
 				incomingRelations: { with: { sourceNpc: nameAndId } },
 				outgoingRelations: { with: { targetNpc: nameAndId } },
+				site: nameAndId,
 				affectingConsequences: true,
 				conflictParticipation: true,
 				factionMemberships: { with: { faction: nameAndId } },

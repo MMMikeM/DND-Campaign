@@ -11,10 +11,8 @@ export function ConnectionsContent({
 	name,
 	relations,
 	factionMemberships,
-	siteAssociations,
 	questParticipants,
 	itemRelations,
-	itemHistory,
 	loreLinks,
 	questHooks,
 	stageInvolvement,
@@ -24,10 +22,8 @@ export function ConnectionsContent({
 	| "name"
 	| "relations"
 	| "factionMemberships"
-	| "siteAssociations"
 	| "questParticipants"
 	| "itemRelations"
-	| "itemHistory"
 	| "loreLinks"
 	| "questHooks"
 	| "stageInvolvement"
@@ -215,49 +211,9 @@ export function ConnectionsContent({
 						</div>
 					</div>
 				))}
-				{itemHistory.map(({ id, item, eventDescription }) => (
-					<div key={`item-history-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
-						<div className="flex justify-between">
-							<Link href={`/items/${item?.slug}`}>
-								<h4 className="font-medium">{item?.name}</h4>
-							</Link>
-							<BadgeWithTooltip variant="outline" tooltipContent="Historical Event">
-								History
-							</BadgeWithTooltip>
-						</div>
-						<p className="text-sm text-muted-foreground">{eventDescription}</p>
-					</div>
-				))}
 			</InfoCard>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<InfoCard
-					title="Associated Locations"
-					description={`Places where ${name} can be found`}
-					icon={<Icons.MapPin className="h-4 w-4 mr-2 text-emerald-600" />}
-					emptyMessage="No associated locations for this NPC"
-				>
-					<Optional fallback={<p className="text-muted-foreground">No associated locations for this NPC</p>}>
-						{siteAssociations.map(
-							({ id, creativePrompts, description, site, associationType, gmNotes, isCurrent, tags }) => (
-								<div key={`location-${id}`} className="border-b last:border-b-0 rounded p-3">
-									<div className="flex justify-between">
-										<h4 className="font-medium">
-											{site ? <Link href={`/sites/${site.slug}`}>{site.name}</Link> : <span>Unnamed Location</span>}
-										</h4>
-										<BadgeWithTooltip variant="outline" tooltipContent="Location associated with this NPC">
-											Location
-										</BadgeWithTooltip>
-									</div>
-
-									<List items={description} spacing="sm" textColor="muted" textSize="xs" />
-									<List items={creativePrompts} spacing="sm" textColor="muted" textSize="xs" />
-								</div>
-							),
-						)}
-					</Optional>
-				</InfoCard>
-
 				<InfoCard
 					title="Involved Quests"
 					description={`Quests where ${name} plays a role`}

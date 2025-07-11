@@ -3,43 +3,38 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function PersonalityContent({
-	personalityTraits,
-	biases,
-	drives,
-	fears,
-	mannerisms,
-	voiceNotes,
-	complexityProfile,
-	playerPerceptionGoal,
-	availability,
-	capability,
-	proactivity,
-	relatability,
-}: Pick<
-	NPC,
-	| "personalityTraits"
-	| "biases"
-	| "drives"
-	| "fears"
-	| "mannerisms"
-	| "voiceNotes"
-	| "complexityProfile"
-	| "playerPerceptionGoal"
-	| "availability"
-	| "capability"
-	| "proactivity"
-	| "relatability"
->) {
+export function DetailsContent({ details }: Pick<NPC, "details">) {
+	if (!details) {
+		return <div className="text-center py-8 text-muted-foreground">No details available for this NPC.</div>
+	}
+
+	const {
+		adaptability,
+		availability,
+		biases,
+		capability,
+		complexity,
+		goalsAndFears,
+		knowledge,
+		proactivity,
+		relatability,
+		rumours,
+		alignment,
+		avoidTopics,
+		preferredTopics,
+		secretsAndHistory,
+		wealth,
+	} = details
+
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<InfoCard
-					title="Personality Traits"
-					icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-indigo-600" />}
-					emptyMessage="No personality traits specified."
+					title="Goals & Fears"
+					icon={<Icons.Target className="h-4 w-4 mr-2 text-indigo-600" />}
+					emptyMessage="No goals and fears specified."
 				>
-					<List items={personalityTraits} spacing="sm" textColor="muted" />
+					<List items={goalsAndFears} spacing="sm" textColor="muted" />
 				</InfoCard>
 
 				<InfoCard
@@ -58,12 +53,12 @@ export function PersonalityContent({
 				className="mb-6"
 			>
 				<div>
-					<h4 className="font-medium mb-1">Complexity</h4>
-					<p className="text-muted-foreground capitalize">{complexityProfile}</p>
+					<h4 className="font-medium mb-1">Alignment</h4>
+					<p className="text-muted-foreground capitalize">{alignment}</p>
 				</div>
 				<div>
-					<h4 className="font-medium mb-1">Perception Goal</h4>
-					<p className="text-muted-foreground capitalize">{playerPerceptionGoal}</p>
+					<h4 className="font-medium mb-1">Wealth</h4>
+					<p className="text-muted-foreground capitalize">{wealth}</p>
 				</div>
 				<div>
 					<h4 className="font-medium mb-1">Availability</h4>
@@ -81,41 +76,49 @@ export function PersonalityContent({
 					<h4 className="font-medium mb-1">Relatability</h4>
 					<p className="text-muted-foreground capitalize">{relatability}</p>
 				</div>
+				<div>
+					<h4 className="font-medium mb-1">Adaptability</h4>
+					<p className="text-muted-foreground capitalize">{adaptability}</p>
+				</div>
+				<div>
+					<h4 className="font-medium mb-1">Complexity</h4>
+					<p className="text-muted-foreground capitalize">{complexity}</p>
+				</div>
 			</InfoCard>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 				<InfoCard
-					title="Drives"
-					icon={<Icons.Brain className="h-4 w-4 mr-2 text-purple-600" />}
-					emptyMessage="No drives specified."
+					title="Preferred Topics"
+					icon={<Icons.Heart className="h-4 w-4 mr-2 text-green-600" />}
+					emptyMessage="No preferred topics specified."
 				>
-					<List items={drives} spacing="sm" textColor="muted" />
+					<List items={preferredTopics} spacing="sm" textColor="muted" />
 				</InfoCard>
 
 				<InfoCard
-					title="Fears"
-					icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-red-500" />}
-					emptyMessage="No fears specified."
+					title="Topics to Avoid"
+					icon={<Icons.X className="h-4 w-4 mr-2 text-red-500" />}
+					emptyMessage="No topics to avoid specified."
 				>
-					<List items={fears} spacing="sm" textColor="muted" />
+					<List items={avoidTopics} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<InfoCard
-					title="Mannerisms"
-					icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-blue-600" />}
-					emptyMessage="No mannerisms specified."
+					title="Knowledge"
+					icon={<Icons.Brain className="h-4 w-4 mr-2 text-blue-600" />}
+					emptyMessage="No knowledge specified."
 				>
-					<List items={mannerisms} spacing="sm" textColor="muted" />
+					<List items={knowledge} spacing="sm" textColor="muted" />
 				</InfoCard>
 
 				<InfoCard
-					title="Voice Notes"
-					icon={<Icons.MessageCircle className="h-4 w-4 mr-2 text-emerald-600" />}
-					emptyMessage="No voice notes specified."
+					title="Secrets & History"
+					icon={<Icons.Lock className="h-4 w-4 mr-2 text-purple-600" />}
+					emptyMessage="No secrets or history specified."
 				>
-					<List items={voiceNotes} spacing="sm" textColor="muted" />
+					<List items={secretsAndHistory} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
 		</>
