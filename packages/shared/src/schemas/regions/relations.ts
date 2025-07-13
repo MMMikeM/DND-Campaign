@@ -7,6 +7,7 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { mapGroups, mapVariants } from "../maps/tables"
+import { npcs } from "../npcs/tables"
 import { questHooks } from "../quests/tables"
 import { questStages } from "../stages/tables"
 import { areas, regionConnections, regions, siteEncounters, siteLinks, siteSecrets, sites } from "./tables"
@@ -73,6 +74,8 @@ export const sitesRelations = relations(sites, ({ one, many }) => ({
 		fields: [sites.mapGroupId],
 		references: [mapGroups.id],
 	}),
+
+	npcs: many(npcs, { relationName: "siteNpcs" }),
 }))
 
 export const siteLinksRelations = relations(siteLinks, ({ one }) => ({

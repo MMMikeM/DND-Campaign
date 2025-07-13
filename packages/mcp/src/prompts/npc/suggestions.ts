@@ -5,7 +5,7 @@ import type { EnhancedNpcCreationArgs } from "./types"
 export function generateNPCCreationSuggestions({ args, context }: { args: EnhancedNpcCreationArgs; context: Context }) {
 	const gaps = getNpcContentGaps(context)
 
-	const { npcs, sites, areas, regions, conflicts, factions, narrativeDestinations, quests } = context
+	const { npcs, sites, areas, regions, conflicts, factions, quests } = context
 
 	const suggestions: Record<
 		"targetNPCs" | "factionOpportunities" | "narrativeHooks" | "characterComplexity",
@@ -19,12 +19,12 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 
 	// 1. Location-based suggestions (NPCs, Factions, Hooks)
 	sites.forEach((site) => {
-		site.npcAssociations.forEach((assoc) => {
+		site.npcs.forEach((npc) => {
 			suggestions.targetNPCs.push({
 				npc: {
-					id: assoc.npc.id,
-					name: assoc.npc.name,
-					occupation: assoc.npc.occupation,
+					id: npc.id,
+					name: npc.name,
+					occupation: npc.occupation,
 				},
 				suggestedRelationshipTypes: ["ally", "rival", "contact"],
 				reasoning: `Regional connection - both associated with the site "${site.name}".`,
@@ -63,7 +63,7 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 				`Connect to the ongoing conflict: "${conflict.name}" in the ${region.name} region. The NPC could be a participant, victim, or profiteer.`,
 			)
 		})
-		region.quests.forEach((quest) => {
+		region.consequences.forEach((quest) => {
 			suggestions.narrativeHooks.push(
 				`Tie into the existing quest: "${quest.name}" in the ${region.name} region. The NPC could offer a new lead, be a surprise obstacle, or hold a key piece of information.`,
 			)
@@ -83,7 +83,7 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 				reasoning: `Matches faction hint: "${args.faction_hint}".`,
 			})
 
-			const factionMembers = npcs.filter((npc) => npc.factionMemberships.some((m) => m.faction.id === faction.id))
+			const factionMembers = npcs.filter((npc) => npc.factionMemberships)
 
 			factionMembers.forEach((member) => {
 				suggestions.targetNPCs.push({
@@ -136,9 +136,9 @@ export function generateNPCCreationSuggestions({ args, context }: { args: Enhanc
 		}
 	})
 
-	if (gaps.complexityProfile.length > 0) {
-		suggestions.characterComplexity = gaps.complexityProfile.map((gap) => `Consider creating: ${gap}`)
-	}
+	// if (gaps.complexityProfile.length > 0) {
+	// 	suggestions.characterComplexity = gaps.complexityProfile.map((gap) => `Consider creating: ${gap}`)
+	// }
 
 	if (gaps.locationGaps.length > 0) {
 		gaps.locationGaps.forEach((gap) => {

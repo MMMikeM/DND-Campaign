@@ -1,6 +1,5 @@
 // quests/tables.ts
-
-import { isNull, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
 import { factions } from "../factions/tables"

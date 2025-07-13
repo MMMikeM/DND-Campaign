@@ -3,20 +3,8 @@ import { logger } from "../.."
 import type { Context } from "../baseContext"
 import { countBy, getUnderrepresentedKeys } from "../utils"
 
-const { enums } = tables.npcTables
-
-export function getNpcContentGaps({
-	conflicts,
-	factions,
-	npcs,
-	quests,
-	narrativeDestinations,
-	regions,
-	areas,
-	sites,
-}: Context) {
+export function getNpcContentGaps({ conflicts, factions, npcs, quests, regions, areas, sites }: Context) {
 	const gaps: Record<
-		| "complexityProfile"
 		| "playerPerceptionGoal"
 		| "factionMembership"
 		| "narrativeIntegrationOpportunities"
@@ -25,7 +13,6 @@ export function getNpcContentGaps({
 		| "conflictGaps",
 		string[]
 	> = {
-		complexityProfile: [],
 		playerPerceptionGoal: [],
 		factionMembership: [],
 		narrativeIntegrationOpportunities: [],
@@ -35,28 +22,6 @@ export function getNpcContentGaps({
 	}
 
 	// Analyze NPC complexity distribution
-	const complexityDistribution = countBy(npcs, (npc) => npc.complexityProfile, enums.characterComplexityProfiles)
-
-	gaps.complexityProfile = getUnderrepresentedKeys(complexityDistribution).map(
-		(key) => `${key} is an underrepresented NPC complexity`,
-	)
-
-	const playerPerceptionGoalDistribution = countBy(
-		npcs,
-		(npc) => npc.playerPerceptionGoal,
-		tables.npcTables.enums.playerPerceptionGoals,
-	)
-
-	gaps.playerPerceptionGoal = getUnderrepresentedKeys(playerPerceptionGoalDistribution).map(
-		(key) => `${key} is an underrepresented NPC player perception goal`,
-	)
-
-	if ((playerPerceptionGoalDistribution.comic_relief_levity.percentage ?? 0) < 20) {
-		gaps.playerPerceptionGoal.push("Campaign needs more comic relief characters")
-	}
-	if ((playerPerceptionGoalDistribution.tragic_figure_empathy.percentage ?? 0) < 10) {
-		gaps.playerPerceptionGoal.push("Campaign lacks tragic figures for emotional depth")
-	}
 
 	const factionMembershipDistribution = countBy(
 		factions.map((f) => ({ name: f.name, members: f.members.length ?? 0 })),
@@ -84,11 +49,7 @@ export function getNpcContentGaps({
 			return participants?.flatMap((p) => (p.npc?.id != null ? [p.npc.id] : [])) ?? []
 		})
 
-	const narrativeActiveNPCs = new Set([
-		...extractNPCIds(quests),
-		...extractNPCIds(narrativeDestinations.map((arc) => ({ participants: arc.participantInvolvement }))),
-		...extractNPCIds(conflicts),
-	])
+	const narrativeActiveNPCs = new Set([...extractNPCIds(quests), ...extractNPCIds(conflicts)])
 
 	const inactiveNPCs = npcs.filter((npc) => !narrativeActiveNPCs.has(npc.id))
 

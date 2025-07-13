@@ -33,11 +33,9 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 		const npc = await db.query.npcs.findFirst({
 			where: eq(tables.npcTables.npcs.id, npcId),
 			with: {
+				details: true,
 				factionMemberships: {
 					with: { faction: { columns: { name: true, type: true } } },
-				},
-				siteAssociations: {
-					with: { site: { columns: { name: true, type: true } } },
 				},
 				outgoingRelations: {
 					with: { targetNpc: { columns: { name: true, occupation: true } } },
@@ -49,42 +47,57 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 			throw new Error(`NPC not found with ID: ${npcId}`)
 		}
 
+		const site = npc.siteId
+			? await db.query.sites.findFirst({
+					where: eq(tables.regionTables.sites.id, npc.siteId),
+					columns: { name: true, intendedSiteFunction: true },
+				})
+			: null
+
 		const contextData = {
 			npc_profile: {
 				name: npc.name,
 				occupation: npc.occupation,
-				alignment: npc.alignment,
-				personality_traits: npc.personalityTraits,
-				dialogue_style: npc.dialogue,
+				alignment: npc.details?.alignment || "true neutral",
+				summary: npc.summary || [],
+				attitude: npc.attitude,
 				voice_notes: npc.voiceNotes,
-				mannerisms: npc.mannerisms,
-				preferred_topics: npc.preferredTopics,
-				avoid_topics: npc.avoidTopics,
-				secrets: npc.secrets,
-				knowledge: npc.knowledge,
-				trust_level: npc.trustLevel,
-				disposition: npc.disposition,
+				conversation_hook: npc.conversationHook,
+				quirk: npc.quirk,
+				appearance: npc.appearance || [],
+				roleplaying_guide: npc.roleplayingGuide || [],
+				preferred_topics: npc.details?.preferredTopics || [],
+				avoid_topics: npc.details?.avoidTopics || [],
+				knowledge: npc.details?.knowledge || [],
+				biases: npc.details?.biases || [],
+				secrets_and_history: npc.details?.secretsAndHistory || [],
+				goals_and_fears: npc.details?.goalsAndFears || [],
 			},
-			faction_affiliations: npc.factionMemberships.map((rel) => ({
-				faction_name: rel.faction?.name || "Unknown",
-				faction_type: rel.faction?.type || "Unknown",
-				role: rel.role,
-				loyalty: rel.loyalty,
-			})),
-			location_context: npc.siteAssociations.map((rel) => ({
-				site_name: rel.site?.name || "Unknown",
-				site_type: rel.site?.type || "Unknown",
-				description: rel.description,
-			})),
+			faction_affiliations: npc.factionMemberships
+				? [
+						{
+							faction_name: npc.factionMemberships.faction?.name || "Unknown",
+							faction_type: npc.factionMemberships.faction?.type || "Unknown",
+							role: npc.factionMemberships.role,
+							loyalty: npc.factionMemberships.loyalty,
+						},
+					]
+				: [],
+			location_context: site
+				? {
+						site_name: site.name,
+						site_type: site.intendedSiteFunction || "location",
+					}
+				: null,
 			relationships: npc.outgoingRelations.map((rel) => ({
 				related_npc: rel.targetNpc?.name || "Unknown",
 				occupation: rel.targetNpc?.occupation || "Unknown",
-				relationship_type: rel.relationshipType,
-				strength: rel.strength,
+				relationship_type: rel.relationship,
+				dynamics: rel.dynamicsAndHistory || [],
 			})),
 			dialogue_guidelines: {
-				speech_patterns: "Use the NPC's established dialogue style and voice notes",
-				topic_sensitivity: "Respect preferred and avoided topics based on trust level",
+				speech_patterns: "Use the NPC's established voice notes and conversation hooks",
+				topic_sensitivity: "Respect preferred and avoided topics based on established trust",
 				faction_loyalty: "Consider faction affiliations when discussing politics or conflicts",
 				secret_knowledge: "Reveal secrets only when appropriate trust is established",
 			},

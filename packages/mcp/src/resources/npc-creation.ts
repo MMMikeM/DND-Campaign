@@ -15,7 +15,7 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 		// Gather related campaign entities for context
 		const [existingNpcs, factions, regions, sites] = await Promise.all([
 			db.query.npcs.findMany({
-				columns: { id: true, name: true, occupation: true, alignment: true },
+				columns: { id: true, name: true, occupation: true },
 			}),
 			db.query.factions.findMany({
 				columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true },
@@ -24,7 +24,7 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 				columns: { id: true, name: true, type: true },
 			}),
 			db.query.sites.findMany({
-				columns: { id: true, name: true, type: true },
+				columns: { id: true, name: true },
 			}),
 		])
 
@@ -36,7 +36,6 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 				existing_npcs: existingNpcs.map((npc) => ({
 					name: npc.name,
 					occupation: npc.occupation,
-					alignment: npc.alignment,
 				})),
 				active_factions: factions.map((faction) => ({
 					name: faction.name,
@@ -50,7 +49,6 @@ const handleNpcCreationContext: ResourceHandler = async (uri: string) => {
 				})),
 				notable_sites: sites.map((site) => ({
 					name: site.name,
-					type: site.type,
 				})),
 			},
 			creation_guidelines: {

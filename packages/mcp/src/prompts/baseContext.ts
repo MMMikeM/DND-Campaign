@@ -217,17 +217,14 @@ export const getSiteContext = async () =>
 	await db.query.sites.findMany({
 		columns: COMMON_COLUMNS.site.detailed,
 		with: {
-			npcAssociations: {
-				with: {
-					npc: { columns: COMMON_COLUMNS.npc.basic },
-				},
-				columns: { associationType: true, isCurrent: true, id: true },
+			npcs: {
+				columns: COMMON_COLUMNS.npc.basic,
 			},
-			secrets: {
-				columns: { secretType: true, difficultyToDiscover: true, description: true, id: true },
+			factionHqs: {
+				columns: COMMON_COLUMNS.faction.basic,
 			},
 			encounters: {
-				columns: { name: true, encounterCategory: true, id: true },
+				columns: COMMON_COLUMNS.idAndName,
 			},
 			area: {
 				columns: COMMON_COLUMNS.idAndName,
@@ -274,12 +271,7 @@ export const getRegionContext = async () =>
 					},
 				},
 			},
-			quests: {
-				columns: COMMON_COLUMNS.quest.basic,
-			},
-			narrativeDestinations: {
-				columns: { id: true, name: true, description: true, type: true },
-			},
+
 			areas: {
 				columns: COMMON_COLUMNS.area.basic,
 			},
@@ -362,7 +354,12 @@ export const getNpcContext = async () => {
 				columns: COMMON_COLUMNS.factionMembership,
 				with: { faction: { columns: COMMON_COLUMNS.idAndName } },
 			},
-			siteAssociations: { columns: { id: true, associationType: true, isCurrent: true, description: true } },
+			site: {
+				columns: COMMON_COLUMNS.site.basic,
+				with: {
+					area: { columns: COMMON_COLUMNS.area.basic },
+				},
+			},
 		},
 	})
 }
@@ -390,24 +387,8 @@ export const getQuestContext = async () => {
 	})
 }
 
-export const getNarrativeDestsinationContext = async () => {
-	return await db.query.narrativeDestinations.findMany({
-		with: {
-			participantInvolvement: {
-				with: {
-					faction: { columns: COMMON_COLUMNS.idAndName },
-					narrativeDestination: { columns: COMMON_COLUMNS.idAndName },
-					npc: { columns: { id: true } },
-				},
-				columns: { narrativeRole: true, involvementDetails: true, importance: true },
-			},
-		},
-		columns: COMMON_COLUMNS.narrativeDestination.detailed,
-	})
-}
-
-export const getNarrativeEventContext = async () => {
-	return await db.query.narrativeEvents.findMany({
+export const getConsequences = async () => {
+	return await db.query.consequences.findMany({
 		columns: { id: true, name: true, description: true },
 	})
 }
@@ -428,37 +409,24 @@ export const getConflictContext = async () => {
 	})
 }
 
+const contextFunctions = {
+	sites: getSiteContext,
+	areas: getAreaContext,
+	regions: getRegionContext,
+	npcs: getNpcContext,
+	factions: getFactionContext,
+	conflicts: getConflictContext,
+	quests: getQuestContext,
+	consequences: getConsequences,
+} as const
+
 export type Context = {
-	sites: Awaited<ReturnType<typeof getSiteContext>>
-	areas: Awaited<ReturnType<typeof getAreaContext>>
-	regions: Awaited<ReturnType<typeof getRegionContext>>
-	npcs: Awaited<ReturnType<typeof getNpcContext>>
-	factions: Awaited<ReturnType<typeof getFactionContext>>
-	conflicts: Awaited<ReturnType<typeof getConflictContext>>
-	quests: Awaited<ReturnType<typeof getQuestContext>>
-	narrativeDestinations: Awaited<ReturnType<typeof getNarrativeDestsinationContext>>
+	[K in keyof typeof contextFunctions]: Awaited<ReturnType<(typeof contextFunctions)[K]>>
 }
 
 export const getFullContext = async (): Promise<Context> => {
-	const [sites, areas, regions, npcs, factions, conflicts, quests, narrativeDestinations] = await Promise.all([
-		getSiteContext(),
-		getAreaContext(),
-		getRegionContext(),
-		getNpcContext(),
-		getFactionContext(),
-		getConflictContext(),
-		getQuestContext(),
-		getNarrativeDestsinationContext(),
-	])
+	const entries = Object.entries(contextFunctions)
+	const results = await Promise.all(entries.map(([_, fn]) => fn()))
 
-	return {
-		sites,
-		areas,
-		regions,
-		npcs,
-		factions,
-		conflicts,
-		quests,
-		narrativeDestinations,
-	}
+	return Object.fromEntries(entries.map(([key], index) => [key, results[index]])) as Context
 }

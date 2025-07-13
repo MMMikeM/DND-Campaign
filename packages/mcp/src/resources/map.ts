@@ -21,47 +21,59 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 		try {
 			const maps = await db.query.mapFiles.findMany({
 				columns: { id: true, fileName: true },
-				with: {
-					variant: {
-						columns: {
-							id: true,
-							variantName: true,
-							creativePrompts: true,
-							description: true,
-							gmNotes: true,
-							tags: true,
-						},
-						with: {
-							mapGroup: {
-								columns: { name: true },
-							},
-						},
-					},
-				},
-				where: (maps, { isNotNull }) => isNotNull(maps.mapImage),
 				orderBy: (maps, { asc }) => [asc(maps.fileName)],
 			})
 
+			// Get all map variants to join with map files
+			const mapVariants = await db.query.mapVariants.findMany({
+				columns: {
+					id: true,
+					mapFileId: true,
+					variantName: true,
+					creativePrompts: true,
+					description: true,
+					tags: true,
+				},
+				with: {
+					mapGroup: {
+						columns: { name: true },
+					},
+				},
+			})
+
+			// Create a map of mapFileId to variants
+			const variantsByMapFile = new Map<number, (typeof mapVariants)[0][]>()
+			for (const variant of mapVariants) {
+				if (!variantsByMapFile.has(variant.mapFileId)) {
+					variantsByMapFile.set(variant.mapFileId, [])
+				}
+				variantsByMapFile.get(variant.mapFileId)!.push(variant)
+			}
+
 			const mapData = {
 				total_maps: maps.length,
-				maps_with_variants: maps.filter((map) => map.variant).length,
-				maps_lacking_variants: maps.filter((map) => !map.variant).length,
-				map_list: maps.map((map) => ({
-					id: map.id,
-					fileName: map.fileName,
-					hasVariant: !!map.variant,
-					variant: map.variant
-						? {
-								id: map.variant.id,
-								name: map.variant.variantName,
-								mapGroupName: map.variant.mapGroup?.name || null,
-								creativePrompts: map.variant.creativePrompts || [],
-								description: map.variant.description || [],
-								gmNotes: map.variant.gmNotes || [],
-								tags: map.variant.tags || [],
-							}
-						: null,
-				})),
+				maps_with_variants: maps.filter((map) => variantsByMapFile.has(map.id)).length,
+				maps_lacking_variants: maps.filter((map) => !variantsByMapFile.has(map.id)).length,
+				map_list: maps.map((map) => {
+					const variants = variantsByMapFile.get(map.id) || []
+					const primaryVariant = variants[0] || null
+
+					return {
+						id: map.id,
+						fileName: map.fileName,
+						hasVariant: variants.length > 0,
+						variant: primaryVariant
+							? {
+									id: primaryVariant.id,
+									name: primaryVariant.variantName,
+									mapGroupName: primaryVariant.mapGroup?.name || null,
+									creativePrompts: primaryVariant.creativePrompts || [],
+									description: primaryVariant.description || [],
+									tags: primaryVariant.tags || [],
+								}
+							: null,
+					}
+				}),
 			}
 
 			return createJsonResource(uri, mapData)

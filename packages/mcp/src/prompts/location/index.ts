@@ -49,7 +49,7 @@ ${
 	context.nameConflicts.length > 0
 		? `
 **⚠️ Name Conflicts Found:**
-${context.nameConflicts.map((c) => `- ${c.name} (${c.type})`).join("\n")}
+${context.nameConflicts.map((c) => `- ${c.name}`).join("\n")}
 `
 		: ""
 }
