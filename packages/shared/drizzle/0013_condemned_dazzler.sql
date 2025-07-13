@@ -1,0 +1,1 @@
+ALTER TABLE "site_secrets" ADD COLUMN "description" text[] NOT NULL;
