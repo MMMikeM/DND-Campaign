@@ -21,7 +21,7 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 				columns: { id: true, name: true, type: true, publicGoal: true },
 			}),
 			db.query.conflicts.findMany({
-				columns: { id: true, name: true, natures: true, status: true },
+				columns: { id: true, name: true, nature: true, status: true },
 			}),
 			db.query.npcs.findMany({
 				columns: { id: true, name: true, occupation: true },
@@ -45,7 +45,7 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 				})),
 				ongoing_conflicts: conflicts.map((conflict) => ({
 					name: conflict.name,
-					nature: conflict.natures,
+					nature: conflict.nature,
 					status: conflict.status,
 				})),
 				available_npcs: npcs.map((npc) => ({

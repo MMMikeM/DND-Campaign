@@ -40,16 +40,14 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 							where: eq(tables.npcTables.npcs.id, row.id),
 							columns: { id: true, name: true, occupation: true },
 							with: {
-								siteAssociations: {
-									with: { site: { columns: { name: true } } },
-								},
+								site: { columns: { name: true } },
 							},
 						})
 						return npc
 							? {
 									...npc,
 									source_table: "npcs",
-									location: npc.siteAssociations[0]?.site?.name || "Unknown location",
+									location: npc.site?.name || "Unknown location",
 								}
 							: null
 					}
@@ -134,21 +132,7 @@ const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | 
 // Build comprehensive NPC context for dialogue
 const buildNPCDialogueContext = async (npcId: number, playerQuery: string) => {
 	// Simple basic query first to avoid schema issues
-	const npcContext = await db.query.npcs.findFirst({
-		where: eq(tables.npcTables.npcs.id, npcId),
-		columns: {
-			id: true,
-			name: true,
-			occupation: true,
-			alignment: true,
-			secrets: true,
-			// Add basic properties available in NPC schema
-			gender: true,
-			race: true,
-			trustLevel: true,
-			disposition: true,
-		},
-	})
+	const npcContext = await db.query.npcs.findFirst({ where: eq(tables.npcTables.npcs.id, npcId) })
 
 	if (!npcContext) {
 		throw new Error(`NPC with ID ${npcId} not found`)
@@ -158,12 +142,8 @@ const buildNPCDialogueContext = async (npcId: number, playerQuery: string) => {
 		npc_basic: {
 			name: npcContext.name,
 			occupation: npcContext.occupation,
-			alignment: npcContext.alignment,
 			gender: npcContext.gender,
 			race: npcContext.race,
-			trustLevel: npcContext.trustLevel,
-			disposition: npcContext.disposition,
-			secrets: Array.isArray(npcContext.secrets) ? npcContext.secrets.join(", ") : npcContext.secrets,
 		},
 		campaign_context: {
 			player_query: playerQuery,

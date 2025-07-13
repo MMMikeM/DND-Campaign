@@ -1,7 +1,6 @@
 // regions/tables.ts
-
 import { sql } from "drizzle-orm"
-import { check, integer, pgTable, unique } from "drizzle-orm/pg-core"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableString, oneOf, pk, string } from "../../db/utils"
 import { mapGroups, mapVariants } from "../maps/tables"
 import { enums } from "./enums"
@@ -141,6 +140,7 @@ export const siteEncounters = pgTable(
 export const siteSecrets = pgTable("site_secrets", {
 	id: pk(),
 	siteId: cascadeFk("site_id", sites.id),
+	description: list("description"),
 	secretType: oneOf("secret_type", secretTypes),
 	difficultyToDiscover: oneOf("difficulty", difficultyLevels),
 	discoveryMethod: list("discovery_method"),

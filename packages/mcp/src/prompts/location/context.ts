@@ -10,7 +10,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		// Check for name conflicts
 		const nameConflicts = await db.query.sites.findMany({
 			where: (sites, { like }) => like(sites.name, `%${args.name}%`),
-			columns: { id: true, name: true, type: true },
+			columns: { id: true, name: true },
 		})
 
 		// Get existing sites for reference and to avoid name conflicts
@@ -19,24 +19,14 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				area: {
 					with: { region: { columns: { id: true, name: true } } },
 				},
-				encounters: { columns: { id: true, name: true, objectiveType: true, encounterCategory: true } },
-				secrets: { columns: { id: true, secretType: true, difficultyToDiscover: true } },
-				npcAssociations: {
-					with: {
-						npc: { columns: { id: true, name: true, occupation: true } },
-					},
-					columns: { associationType: true },
-				},
+				encounters: { columns: { id: true, name: true, objectiveType: true } },
+				secret: true,
+				npcs: { columns: { id: true, name: true, occupation: true } },
 			},
 			columns: {
 				id: true,
 				name: true,
-				type: true,
 				intendedSiteFunction: true,
-				description: true,
-				features: true,
-				mood: true,
-				environment: true,
 			},
 			limit: 20,
 		})
@@ -50,22 +40,20 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				id: true,
 				name: true,
 				type: true,
-				description: true,
 				dangerLevel: true,
-				atmosphereType: true,
+				atmosphereAndCulture: true,
 			},
 		})
 
 		// Get site encounters for understanding location types and challenges
 		const existingEncounters = await db.query.siteEncounters.findMany({
 			with: {
-				site: { columns: { id: true, name: true, type: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
 				name: true,
 				objectiveType: true,
-				encounterCategory: true,
 				encounterVibe: true,
 			},
 		})
@@ -73,21 +61,20 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		// Get site secrets for understanding hidden elements
 		const existingSecrets = await db.query.siteSecrets.findMany({
 			with: {
-				site: { columns: { id: true, name: true, type: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
 				secretType: true,
 				difficultyToDiscover: true,
-				description: true,
 			},
 		})
 
 		// Get site links for understanding connections
 		const existingLinks = await db.query.siteLinks.findMany({
 			with: {
-				sourceSite: { columns: { id: true, name: true, type: true } },
-				targetSite: { columns: { id: true, name: true, type: true } },
+				sourceSite: { columns: { id: true, name: true } },
+				targetSite: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
@@ -96,16 +83,16 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			},
 		})
 
-		// Get NPC site associations
-		const npcSiteAssociations = await db.query.npcSiteAssociations.findMany({
+		// Get NPC site associations - NPCs have siteId field
+		const npcSiteAssociations = await db.query.npcs.findMany({
+			where: (npc, { isNotNull }) => isNotNull(npc.siteId),
 			with: {
-				npc: { columns: { id: true, name: true, occupation: true, alignment: true } },
-				site: { columns: { id: true, name: true, type: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
-				associationType: true,
-				description: true,
+				name: true,
+				occupation: true,
 			},
 		})
 
@@ -130,8 +117,8 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		const questStages = await db.query.questStages.findMany({
 			where: (qs, { isNotNull }) => isNotNull(qs.siteId),
 			with: {
-				quest: { columns: { id: true, name: true, type: true } },
-				site: { columns: { id: true, name: true, type: true } },
+				quest: { columns: { id: true, name: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
@@ -157,18 +144,17 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			},
 		})
 
-		// Get item history at locations
-		const itemHistory = await db.query.itemNotableHistory.findMany({
-			where: (inh, { isNotNull }) => isNotNull(inh.locationSiteId),
+		// Get item connections to locations
+		const itemConnections = await db.query.itemConnections.findMany({
+			where: (ic, { isNotNull }) => isNotNull(ic.connectedSiteId),
 			with: {
-				item: { columns: { id: true, name: true, itemType: true } },
-				locationSite: { columns: { id: true, name: true, type: true } },
+				sourceItem: { columns: { id: true, name: true, itemType: true } },
+				site: { columns: { id: true, name: true } },
 			},
 			columns: {
 				id: true,
-				eventDescription: true,
-				timeframe: true,
-				npcRoleInEvent: true,
+				relationship: true,
+				details: true,
 			},
 		})
 
@@ -198,7 +184,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 							sites.areaId,
 							nearbyAreas.map((a) => a.id),
 						),
-					columns: { id: true, name: true, type: true, intendedSiteFunction: true },
+					columns: { id: true, name: true, intendedSiteFunction: true },
 				})
 
 				// Get faction influence in the regions
@@ -220,20 +206,22 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				})
 
 				// Get NPCs in nearby sites
-				const nearbyNPCs = await db.query.npcSiteAssociations.findMany({
-					where: (npcSiteAssociations, { inArray }) =>
+				const nearbyNPCs = await db.query.npcs.findMany({
+					where: (npcs, { inArray }) =>
 						inArray(
-							npcSiteAssociations.siteId,
+							npcs.siteId,
 							nearbySites.map((s) => s.id),
 						),
-					with: { npc: { columns: { id: true, name: true, occupation: true } } },
-					columns: { id: true },
+					columns: { id: true, name: true, occupation: true, siteId: true },
 				})
 
 				nearbyEntities = {
 					regions: matchingRegions,
 					areas: nearbyAreas,
-					sites: nearbySites,
+					sites: nearbySites.map((s) => ({
+						...s,
+						type: "site", // Add required type field
+					})),
 					factions: nearbyFactionInfluence.map((fi) => ({
 						id: fi.faction.id,
 						name: fi.faction.name,
@@ -241,10 +229,10 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 						influence: [{ level: fi.influenceLevel, id: fi.id }],
 					})),
 					npcs: nearbyNPCs.map((npc) => ({
-						id: npc.npc.id,
-						name: npc.npc.name,
-						occupation: npc.npc.occupation,
-						sites: [{ id: npc.id }],
+						id: npc.id,
+						name: npc.name,
+						occupation: npc.occupation,
+						sites: [{ id: npc.siteId }],
 					})),
 				}
 			}
@@ -258,7 +246,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				type: true,
 				description: true,
 				mood: true,
-				themes: true,
+				tags: true, // Use tags instead of themes
 			},
 			limit: 10,
 		})
@@ -283,16 +271,34 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		})
 
 		const campaignThemes: CampaignThemes = {
-			relevantQuests,
+			relevantQuests: relevantQuests.map((quest) => ({
+				...quest,
+				themes: quest.tags, // Map tags to themes
+			})),
 			activeConflicts,
 			foreshadowing,
 		}
 
 		// Generate analysis and suggestions
 		const locationAnalysis = analyzeLocationLandscape({
-			existingSites,
-			existingEncounters,
-			existingSecrets,
+			existingSites: existingSites.map((s) => ({
+				id: s.id,
+				name: s.name,
+				type: "site", // Add required type field
+				intendedSiteFunction: s.intendedSiteFunction,
+				encounters: s.encounters.map((e) => ({
+					objectiveType: e.objectiveType,
+					encounterCategory: "combat", // Default category
+				})),
+				secrets: [], // Will be populated separately
+			})),
+			existingEncounters: existingEncounters.map((e) => ({
+				objectiveType: e.objectiveType,
+				encounterCategory: "combat", // Default category
+			})),
+			existingSecrets: existingSecrets.map((s) => ({
+				secretType: s.secretType,
+			})),
 			factionInfluence: factionInfluence.map((fi) => ({
 				influenceLevel: fi.influenceLevel,
 				faction: { id: fi.faction.id, name: fi.faction.name },
@@ -300,18 +306,58 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 				area: fi.area,
 				region: fi.region,
 			})),
-			questStages,
+			questStages: questStages.map((qs) => ({
+				stageType: qs.stageType,
+				stageImportance: qs.stageImportance,
+				site: qs.site ? { ...qs.site, type: "site" } : null,
+			})),
 			activeConflicts,
 		})
 
 		const connectionSuggestions = generateLocationConnectionSuggestions(
 			args,
 			existingSites.map((s) => ({
-				...s,
-				npcs: s.npcAssociations,
+				id: s.id,
+				name: s.name,
+				type: "site", // Add required type field
+				intendedSiteFunction: s.intendedSiteFunction,
+				description: [], // Add required field
+				features: [], // Add required field
+				mood: "", // Add required field
+				environment: "", // Add required field
+				area: s.area,
+				encounters: s.encounters.map((e) => ({
+					id: e.id,
+					name: e.name,
+					objectiveType: e.objectiveType,
+					encounterCategory: "combat", // Add required field with default value
+				})),
+				secrets: [], // Add required field
+				npcs: [], // Add required field
 			})),
-			availableRegions,
-			existingLinks,
+
+			availableRegions.map((r) => ({
+				id: r.id,
+				name: r.name,
+				type: r.type,
+				description: [], // Add required field
+				dangerLevel: r.dangerLevel,
+				atmosphereType: r.atmosphereAndCulture.join(", "), // Transform atmosphereAndCulture to atmosphereType
+				areas: r.areas,
+			})),
+			existingLinks.map((link) => ({
+				id: link.id,
+				linkType: link.linkType,
+				description: link.description,
+				sourceSite: {
+					...link.sourceSite,
+					type: "site", // Add required type field
+				},
+				targetSite: {
+					...link.targetSite,
+					type: "site", // Add required type field
+				},
+			})),
 		)
 
 		return {
@@ -325,7 +371,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			factionInfluence,
 			questStages,
 			foreshadowingSeeds: foreshadowing,
-			itemHistory,
+			itemConnections,
 			nearbyEntities,
 			campaignThemes,
 			locationAnalysis,

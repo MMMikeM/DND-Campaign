@@ -1,5 +1,5 @@
 import { tables } from "@tome-master/shared"
-import { db, logger } from "../.."
+import { logger } from "../.."
 import { unifyRelations } from "../../unify"
 import type { Context } from "../baseContext"
 import { countBy, getUnderrepresentedKeys } from "../utils"
@@ -28,7 +28,7 @@ export function analyzePoliticalLandscape(context: Context) {
 		narrativeIntegrationPotential: [],
 	}
 
-	const { factions, conflicts, narrativeDestinations } = context
+	const { factions, conflicts } = context
 
 	const agendas = factions.flatMap((f) => f.agendas)
 
@@ -108,17 +108,7 @@ export function analyzePoliticalLandscape(context: Context) {
 	if (nonConflictFactions.length > factions.length / 2) {
 		gaps.narrativeIntegrationPotential.push("Many factions not involved in current conflicts")
 	}
-
-	// Analyze narrative arc participation
-	const narrativeParticipants = new Set(
-		narrativeDestinations.flatMap((dest) => dest.participantInvolvement.map((p) => p.faction?.id)).filter(Boolean),
-	)
-
-	const nonNarrativeFactions = factions.filter((f) => !narrativeParticipants.has(f.id))
-
-	if (nonNarrativeFactions.length > 0) {
-		gaps.narrativeIntegrationPotential.push(`${nonNarrativeFactions.length} factions not involved in narrative arcs`)
-	}
+	// Analyze narrative arc participation - TODO
 
 	// Territory analysis - look for geographic clustering opportunities
 	const factionsWithHeadquarters = factions.filter((f) => f.primaryHqSite?.area)
@@ -178,26 +168,7 @@ export async function analyzeFactionGaps({ factions }: Context) {
 		gaps.diplomaticStance.push('A lack of open enemies might indicate a "cold war" or hidden tensions brewing.')
 	}
 
-	// 4. Analyze Narrative Integration
-	const factionsInNarratives = await db.query.factions.findMany({
-		with: {
-			narrativeDestinationInvolvement: {
-				where: (nd, { exists }) => exists(nd.narrativeDestinationId),
-			},
-		},
-	})
-
-	const factionNarrativeCount = countBy(factionsInNarratives, (f) =>
-		f.narrativeDestinationInvolvement.length.toString(),
-	)
-
-	const underrepresentedFactions = getUnderrepresentedKeys(factionNarrativeCount)
-
-	if (underrepresentedFactions.length > 0) {
-		gaps.narrativeIntegration.push(
-			`${underrepresentedFactions.length} factions have low narrative connections. Consider integrating them.`,
-		)
-	}
+	// 4. Analyze Narrative Integration - TODO
 
 	// 5. Analyze Territorial Presence
 	const factionWithoutAreaInfluence = factions.filter((f) => !f.influence.some((i) => !i.area))

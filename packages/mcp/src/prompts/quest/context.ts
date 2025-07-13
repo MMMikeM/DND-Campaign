@@ -131,14 +131,15 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 						columns: {
 							id: true,
 							name: true,
-							type: true,
 							description: true,
+							intendedSiteFunction: true,
 						},
 					})
 					.then((res) =>
 						res.map((s) => ({
 							...s,
 							id: String(s.id),
+							type: s.intendedSiteFunction || "location",
 							description: Array.isArray(s.description) ? s.description.join("\\n") : (s.description as string),
 						})),
 					),
@@ -172,10 +173,22 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 							id: true,
 							name: true,
 							occupation: true,
-							alignment: true,
+						},
+						with: {
+							details: {
+								columns: {
+									alignment: true,
+								},
+							},
 						},
 					})
-					.then((res) => res.map((n) => ({ ...n, id: String(n.id) }))),
+					.then((res) =>
+						res.map((n) => ({
+							...n,
+							id: String(n.id),
+							alignment: n.details?.alignment || "true neutral",
+						})),
+					),
 
 				// Get active conflicts for quest integration
 				db.query.conflicts
@@ -184,7 +197,7 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 						columns: {
 							id: true,
 							name: true,
-							natures: true,
+							nature: true,
 							description: true,
 						},
 						limit: 8,
@@ -193,6 +206,7 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 						res.map((c) => ({
 							...c,
 							id: String(c.id),
+							natures: [c.nature],
 							description: Array.isArray(c.description) ? c.description.join("\\n") : (c.description as string),
 						})),
 					),
@@ -289,13 +303,24 @@ async function gatherFactionContext(factionHint?: string) {
 			where: inArray(npcFactionMemberships.factionId, factionIds),
 			with: {
 				npc: {
-					columns: { id: true, name: true, occupation: true, alignment: true },
+					columns: { id: true, name: true, occupation: true },
+					with: {
+						details: {
+							columns: {
+								alignment: true,
+							},
+						},
+					},
 				},
 			},
 			limit: 8,
 		})
 
-		const factionNPCs = factionNPCRelations.map((rel) => ({ ...rel.npc, id: String(rel.npc.id) }))
+		const factionNPCs = factionNPCRelations.map((rel) => ({
+			...rel.npc,
+			id: String(rel.npc.id),
+			alignment: rel.npc.details?.alignment || "true neutral",
+		}))
 
 		return {
 			factions: relatedFactions,

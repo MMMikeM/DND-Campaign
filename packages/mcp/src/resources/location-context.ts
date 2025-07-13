@@ -55,10 +55,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 						with: { region: { columns: { name: true, type: true } } },
 					},
 					encounters: true,
-					secrets: true,
-					npcAssociations: {
-						with: { npc: { columns: { name: true, occupation: true } } },
-					},
+					secret: true,
 				},
 			}),
 			db.query.regions.findFirst({
@@ -66,7 +63,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				with: {
 					areas: {
 						with: {
-							sites: { columns: { name: true, type: true } },
+							sites: { columns: { name: true, intendedSiteFunction: true } },
 						},
 					},
 				},
@@ -80,25 +77,21 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				location_type: "site",
 				site_details: {
 					name: site.name,
-					type: site.type,
+					type: site.intendedSiteFunction || "location",
 					description: site.description,
-					features: site.features,
-					mood: site.mood,
-					environment: site.environment,
 				},
 				encounters: site.encounters.map((enc) => ({
 					name: enc.name,
 					type: enc.objectiveType,
 				})),
-				secrets: site.secrets.map((secret) => ({
-					type: secret.secretType,
-					difficulty: secret.difficultyToDiscover,
-				})),
-				npcs_present: site.npcAssociations.map((rel) => ({
-					name: rel.npc.name,
-					occupation: rel.npc.occupation,
-					description: rel.description,
-				})),
+				secrets: site.secret
+					? [
+							{
+								type: site.secret.secretType,
+								difficulty: site.secret.difficultyToDiscover,
+							},
+						]
+					: [],
 			}
 		} else if (region) {
 			contextData = {
@@ -108,13 +101,11 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 					type: region.type,
 					description: region.description,
 					danger_level: region.dangerLevel,
-					economy: region.economy,
-					population: region.population,
 				},
 				notable_sites: region.areas.flatMap((area) =>
 					area.sites.map((site) => ({
 						name: site.name,
-						type: site.type,
+						type: site.intendedSiteFunction || "location",
 					})),
 				),
 			}
