@@ -127,6 +127,8 @@ As you gain levels (Level 2+), your mastery of spells deepens. Each level, you g
 
 These opportunities can be used on the same spell or different spells, in any combination.
 
+Enhancements are listed under the Mode they attach to, and you must already know that Mode before you can learn them. Enhancements under **General Enhancements** work with any Mode of that spell, so knowing one Mode is enough. Where an Enhancement is indented under another, it lists its prerequisite in brackets and you must learn them in order.
+
 > **Example:** At 3rd level, Lyra could learn the "Forceful Bolt" Enhancement and "Area Bolt" Mode for her Bolt spell, OR learn "Chain Bolt" Enhancement for Bolt and "Sensory Illusion" Mode for her Illusion spell.
 
 #### Combining Enhancements

@@ -161,8 +161,8 @@ This book is structured to get you playing quickly:
 
 1.  **Section 2: Forging Your Hero:** Start here. It walks you from a
     concept to a finished sheet, in order, with a checklist at the end.
-2.  **Sections 3-7:** Classes, Essences, Spells, Spell Points,
-    Enhancements. You look these up while building the character or
+2.  **Sections 3-6:** Classes, Essences, Spells, and the Spell
+    Reference. You look these up while building the character or
     levelling up, your character sheet should prevent from needing to
     look up specifics in game.
 
@@ -1465,6 +1465,12 @@ opportunity, choose one spell you know and select either:
 These opportunities can be used on the same spell or different spells,
 in any combination.
 
+Enhancements are listed under the Mode they attach to, and you must
+already know that Mode before you can learn them. Enhancements under
+**General Enhancements** work with any Mode of that spell, so knowing
+one Mode is enough. Where an Enhancement is indented under another, it
+lists its prerequisite in brackets and you must learn them in order.
+
 > **Example:** At 3rd level, Lyra could learn the “Forceful Bolt”
 > Enhancement and “Area Bolt” Mode for her Bolt spell, OR learn “Chain
 > Bolt” Enhancement for Bolt and “Sensory Illusion” Mode for her
@@ -1809,6 +1815,30 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 | **Duration** | Instantaneous |
 | **Effect** | Creatures in cone make Dex save vs Spell DC. Fail: 1d8 Essence damage. Success: Half damage. |
 
+#### What you can buy
+
+```mermaid
+graph LR
+  B["Basic Effect<br/>0 SP"]
+  B --> C["Cone Blast<br/>2 SP"]
+  B --> O["Orb Blast<br/>2 SP"]
+  B --> L["Lancing Blast<br/>2 SP"]
+  C --> MC["Mega Cone<br/>+2 SP"]
+  C --> SB["Selective Blast<br/>+3 SP"]
+  O --> LO["Large Orb<br/>+1 SP"]
+  LO --> MO["Mega Orb<br/>+1 SP"]
+  L --> PL["Piercing Lance<br/>+1 SP"]
+  L --> TL["Twin Lance<br/>+2 SP"]
+
+  G(["any Mode"]) --> AM["Amplify Blast<br/>+1 SP"]
+  AM --> PB["Penetrating Blast<br/>+2 SP"]
+  G --> FB["Forceful Blast<br/>+1 SP"]
+  FB --> EI["Environmental Impact<br/>+1 SP"]
+  G --> DB["Debilitating Blast<br/>+2 SP"]
+  G --> CSP["Change Save: Physical<br/>+1 SP"]
+  G --> CSM["Change Save: Mental<br/>+1 SP"]
+```
+
 #### Mode: Cone Blast ✦ 2 SP
 
 | Property | Value |
@@ -1820,9 +1850,10 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 
 ##### Cone Blast Enhancements
 
-| Enhancement | SP Cost | Effect                           |
-|:------------|:--------|:---------------------------------|
-| Mega Cone   | +2 SP   | Increase cone length to 30 feet. |
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| Mega Cone | +2 SP | Increase cone length to 30 feet. |
+| Selective Blast | +3 SP | Choose creatures in the cone; they are unaffected by the blast. |
 
 #### Mode: Orb Blast ✦ 2 SP
 
@@ -1835,10 +1866,10 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 
 ##### Orb Blast Enhancements
 
-| Enhancement | SP Cost | Effect                      |
-|:------------|:--------|:----------------------------|
-| Large Orb   | +1 SP   | Increase radius to 10 feet. |
-| Mega Orb    | +3 SP   | Increase radius to 15 feet. |
+| Enhancement | SP Cost | Effect                                            |
+|:------------|:--------|:--------------------------------------------------|
+| Large Orb   | +1 SP   | Increase radius to 10 feet.                       |
+| ↳ Mega Orb  | +1 SP   | (Requires: Large Orb) Increase radius to 15 feet. |
 
 #### Mode: Lancing Blast ✦ 2 SP
 
@@ -1858,16 +1889,18 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 
 #### General Enhancements (Blast)
 
+Available with any Mode. The indented rows require the enhancement above
+them.
+
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Amplify Blast | +1 SP | Increase initial damage dice by +1d8. (*Stackable*). |
+| ↳ Penetrating Blast | +2 SP | (Requires: Amplify Blast) The blast’s damage ignores resistance to its damage type. |
 | Forceful Blast | +1 SP | Creatures failing the initial save are pushed 10 ft away from the origin/center. |
-| Penetrating Blast | +2 SP | The blast’s damage ignores resistance to its damage type. |
+| ↳ Environmental Impact | +1 SP | (Requires: Forceful Blast) The area affected by the initial blast becomes difficult terrain until the start of your next turn. |
 | Debilitating Blast | +2 SP | Creatures failing initial save suffer the status effect until end of **your** next turn. |
-| Environmental Impact | +1 SP | The area affected by the initial blast becomes difficult terrain until the start of your next turn. |
 | Change Save (Physical) | +1 SP | Changes the required saving throw from Dexterity to Strength or Constitution (choose when learning). |
-| Change Save (Mental) | +2 SP | Changes the required saving throw from Dexterity to Wisdom or Intelligence (choose when learning). |
-| Selective Blast | +3 SP | Choose creatures in initial area; they are unaffected by the initial blast. (*Does not affect Lancing Blast linger*). |
+| Change Save (Mental) | +1 SP | Changes the required saving throw from Dexterity to Wisdom or Intelligence (choose when learning). |
 
 <!-- markdownlint-disable MD041 -->
 
@@ -1882,6 +1915,36 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 | **Duration** | Instantaneous |
 | **Effect** | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
 
+#### What you can buy
+
+```mermaid
+graph LR
+  B["Basic Effect<br/>0 SP"]
+  B --> S["Standard Bolt<br/>2 SP<br/><i>attack roll</i>"]
+  B --> SK["Seeking Bolt<br/>3 SP<br/><i>saving throw</i>"]
+  B --> A["Area Bolt<br/>3 SP"]
+  B --> CH["Channeled Bolt<br/>3 SP"]
+
+  S --> AC["Accurate Bolt<br/>+1 SP"]
+  S --> CB["Chain Bolt<br/>+2 SP"]
+
+  A --> EA["Expand Area Bolt<br/>+1 SP each"]
+
+  CH --> ICD["Increase Channel Damage<br/>+2 SP"]
+  CH --> TC["Tenacious Channel<br/>+2 SP"]
+
+  G(["any Mode"]) --> MD["More Damage<br/>+1 SP"]
+  MD --> PB["Penetrating Bolt<br/>+2 SP"]
+  G --> FB["Forceful Bolt<br/>+1 SP"]
+  FB --> DB["Debilitating Bolt<br/>+2 SP"]
+  G --> IR["Increase Range<br/>+1 SP"]
+  G --> CSP["Change Save: Physical<br/>+1 SP"]
+  G --> CSM["Change Save: Mental<br/>+1 SP"]
+```
+
+`Standard Bolt` rolls to hit, so `Accurate Bolt` and `Chain Bolt` hang
+off it. Every other Mode makes the target save instead.
+
 #### Mode: Standard Bolt ✦ 2 SP
 
 | Property | Value |
@@ -1895,11 +1958,17 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Accurate Bolt | +1 SP | Gain Advantage on the ranged spell attack roll. (*Cannot combine with Seeking Bolt*). |
-| Chain Bolt | +2 SP | On hit, bolt leaps to a second target within 15 ft (new attack roll). Hit: half original damage (round down). (*Stackable*: +2 SP/target, half previous damage). (*Cannot combine with Seeking Bolt*). |
-| Seeking Bolt Enhancement | +1 SP | Change spell to a Dexterity saving throw vs damage (half on success). No attack roll. (Total 3 SP). (*Cannot combine with Accurate/Chain Bolt*). |
-| ↳ Change Save (Physical) | +1 SP | (Requires: Seeking Bolt Enhancement) Changes the required save to Strength or Constitution. |
-| ↳ Change Save (Mental) | +1 SP | (Requires: Seeking Bolt Enhancement) Changes the required save to Wisdom, Intelligence, or Charisma. |
+| Accurate Bolt | +1 SP | Gain Advantage on the ranged spell attack roll. |
+| Chain Bolt | +2 SP | On hit, bolt leaps to a second target within 15 ft (new attack roll). Hit: half original damage (round down). (*Stackable*: +2 SP/target, half previous damage). |
+
+#### Mode: Seeking Bolt ✦ 3 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | Instantaneous |
+| **Effect** | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll. |
 
 #### Mode: Area Bolt ✦ 3 SP
 
@@ -1929,19 +1998,23 @@ at no extra cost. Everything else adds its SP to the Mode cost.
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Increase Initial Damage | +1 SP | Increase initial damage by +1d8. (*Stackable*). |
 | Increase Channel Damage | +2 SP | Increase subsequent Action damage by +1d8. (*Stackable*). |
 | Tenacious Channel | +2 SP | Concentration is not broken if you use your Action to cast a non-attack spell or take a non-Attack action. |
 
 #### General Enhancements (Bolt)
 
+Available with any Mode. The indented rows require the enhancement above
+them.
+
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | More Damage | +1 SP | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Area, Channeled initial hit). |
-| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Area/Seeking/Channeled), primary target pushed 10 ft away from caster or center of area. |
-| Penetrating Bolt | +2 SP | The spell’s damage ignores resistance to its damage type. |
-| Debilitating Bolt | +2 SP | On hit (Standard) or failed initial save (Area/Seeking/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
+| ↳ Penetrating Bolt | +2 SP | (Requires: More Damage) The spell’s damage ignores resistance to its damage type. |
+| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target pushed 10 ft away from caster or center of area. |
+| ↳ Debilitating Bolt | +2 SP | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
 | Increase Range | +1 SP | Doubles the spell’s range. (*Stackable*). |
+| Change Save (Physical) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution. |
+| Change Save (Mental) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma. |
 
 <!-- markdownlint-disable MD041 -->
 
