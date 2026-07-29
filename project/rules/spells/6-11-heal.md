@@ -12,12 +12,12 @@
 
 #### Mode: Standard Heal ✦ 2 SP
 
-| Property     | Value                                                                       |
-|:-------------|:----------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                    |
-| **Range**    | Touch                                                                       |
-| **Duration** | Instantaneous                                                               |
-| **Effect**   | Target creature regains **2d8 + Spellcasting Ability Modifier** hit points. |
+| Property     | Value                                                                |
+|:-------------|:---------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                             |
+| **Range**    | Touch                                                                |
+| **Duration** | Instantaneous                                                        |
+| **Effect**   | Target creature regains **2d8 + Spellcasting Attribute** hit points. |
 
 ##### Standard Heal Enhancements
 
@@ -28,12 +28,12 @@
 
 #### Mode: Area Heal ✦ 5 SP
 
-| Property     | Value                                                                                                                       |
-|:-------------|:----------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                    |
-| **Range**    | 60 ft (10-foot radius sphere centered on point)                                                                             |
-| **Duration** | Instantaneous                                                                                                               |
-| **Effect**   | Choose up to 6 willing creatures within the sphere. Each target regains **2d8 + Spellcasting Ability Modifier** hit points. |
+| Property     | Value                                                                                                                |
+|:-------------|:---------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                             |
+| **Range**    | 60 ft (10-foot radius sphere centred on point)                                                                       |
+| **Duration** | Instantaneous                                                                                                        |
+| **Effect**   | Choose up to 6 willing creatures within the sphere. Each target regains **2d8 + Spellcasting Attribute** hit points. |
 
 ##### Area Heal Enhancements
 
@@ -44,18 +44,18 @@
 
 #### Mode: Restorative Heal ✦ 3 SP
 
-| Property     | Value                                                                                                                                                                              |
-|:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                           |
-| **Range**    | Touch                                                                                                                                                                              |
-| **Duration** | Instantaneous                                                                                                                                                                      |
-| **Effect**   | Target creature regains **1d8 + Spellcasting Ability Modifier** hit points AND you end **one** disease OR **one** condition affecting it (Blinded, Deafened, Paralyzed, Poisoned). |
+| Property     | Value                                                                                                                                                                       |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                    |
+| **Range**    | Touch                                                                                                                                                                       |
+| **Duration** | Instantaneous                                                                                                                                                               |
+| **Effect**   | Target creature regains **1d8 + Spellcasting Attribute** hit points AND you end **one** disease OR **one** condition affecting it (Blinded, Deafened, Paralysed, Poisoned). |
 
 ##### Restorative Heal Enhancements
 
-| Enhancement         | SP Cost | Effect                                                                                                                                                                        |
-|:--------------------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Greater Restoration | +2 SP   | Instead end **one** effect: Curse, Petrification, Charmed, Frightened, OR reduce exhaustion by one level, OR remove one reduction to ability score/HP max. (Total cost 5 SP). |
+| Enhancement         | SP Cost | Effect                                                                                                                                                                    |
+|:--------------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Greater Restoration | +2 SP   | Instead end **one** effect: Curse, Petrification, Charmed, Frightened, OR reduce exhaustion by one level, OR remove one reduction to attribute/HP max. (Total cost 5 SP). |
 
 #### General Enhancements (Heal)
 

@@ -22,7 +22,7 @@ Four decisions shaped everything else in this book.
 
 * **Focus on character's decisions, not mechanics**: This sysetm aims to skew rules light. They should serve the story, not stifle ideas.
 
-* **Streamline the core loop** Roll a d20, add an ability modifier (never higher than +3), against a DC. The depth lives in Enhancements, which are added incrementally from a tree, so are never overwhelming.
+* **Streamline the core loop** Roll a d20, add an Attribute (never higher than +3), against a DC. The depth lives in Enhancements, which are added incrementally from a tree, so are never overwhelming.
 * **Describe first, price it after.** You choose the Essence, so you choose what your magic looks like. A `Bolt` is a golden sunbeam or a spear of frozen air depending on who cast it, and the rules don't care which as long as you say it out loud.
 * **The rule loses.** If a mechanic gets between a player and a good idea, we'd rather patch the mechanic. Anything in here can be overruled at your table without the rest of the system falling over.
 * **No trap options.** Every class, every Spell, every Enhancement should be worth its cost. If one is clearly the right answer every time, that's a bug and we want to hear about it.

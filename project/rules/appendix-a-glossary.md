@@ -31,7 +31,7 @@
 
 * Hit Points (HP): A measure of a character's health and resilience to damage. (See Section 2.7)
 
-* Key Ability: The primary Ability Score associated with a character's Class, determining their Spellcasting Ability Modifier and often influencing class features. (See Section 2.2, Section 3.2)
+* Key Attribute: The primary Attribute associated with a character's Class, determining their Spellcasting Attribute and often influencing class features. (See Section 2.2, Section 3.2)
 
 * Long Rest: An extended period of rest (typically 8 hours) during which characters regain all lost Hit Points and expended Spell Points (SP).
 

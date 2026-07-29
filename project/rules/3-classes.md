@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 ## 3. Classes: The Heart of Your Hero
 
-Your class represents not merely what your character does, but *how* they channel magical power and approach challenges. Each class is a flexible framework aligned with one of the six core ability scores, celebrating your natural strengths while leaving ample room for your unique interpretive flair.
+Your class represents not merely what your character does, but *how* they channel magical power and approach challenges. Each class is built around one of the six Attributes, and that Attribute is where your +3 goes, but the framework leaves plenty of room for your own interpretation of it.
 
 ### **3.1 Starting Spells**
 
@@ -19,7 +19,7 @@ At 1st level, you begin with **four foundational spells** that form the bedrock 
 
 > *Force of will made manifest*
 
-Key Ability: **Strength**
+Key Attribute: **Strength**
 
 Champions transform raw physical power into tangible magical effects. Their might isn't just muscle—it's an extension of an unbreakable will that both protects allies and devastates enemies. Whether manifesting as shimmering barriers, earthen walls that rise at a stomp, or strikes that channel supernatural force, a Champion's magic is physical prowess incarnate.
 
@@ -151,7 +151,7 @@ Scholars bend reality through careful study, pattern recognition, and the precis
 
 > *Perceiving what others cannot*
 
-Key Ability: **Wisdom**
+Key Attribute: **Wisdom**
 
 Sages draw power from perception, intuition, and a deep connection to the world around them. They see truths hidden from others, whether through communion with spirits, reading auras, or an uncanny understanding of patterns and motivations. Whether healing wounds through insight into life's flow, communing with entities beyond mortal ken, or anticipating an opponent's next move before they make it, the Sage's awareness transcends ordinary limitations.
 
@@ -186,7 +186,7 @@ Sages draw power from perception, intuition, and a deep connection to the world 
 
 > *Reality shaped through force of personality*
 
-Key Ability: **Charisma**
+Key Attribute: **Charisma**
 
 Orators command attention and shape reality through sheer force of personality. Their presence allows them to influence minds, emotions, and even the flow of magic itself. Whether through spectacular displays of power, subtle manipulations, compelling commands, or pact-bound abilities, the Orator's words and presence carry weight that extends beyond the merely social—they have the power to reshape the world itself.
 
@@ -221,7 +221,7 @@ When choosing your class, consider both mechanical fit and narrative satisfactio
 
 **Mechanical Considerations:**
 
-* Does the class's Key Ability align with where you placed your highest modifier?
+* Does the class's Key Attribute align with where you placed your highest modifier?
 * Does the play style (front-line fighter, mobile striker, support caster) match your preferences?
 * Are you drawn to the unique spell and available spell options?
 

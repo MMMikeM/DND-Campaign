@@ -324,16 +324,17 @@ Starting HP = Maximum value of your Class Hit Die + your Constitution modifier
 
 #### Spell Points (SP)
 
-At 1st level, you have **10 SP**. You can spend a maximum of **3 SP** on a single spell activation. You regain all SP after a Long Rest.
+At 1st level you have **10 SP** and can spend at most **3 SP** on any single spell activation. You regain all SP after a Long Rest. Both numbers grow with level, see Table 5-1.
 
-> **SP in Action:** *Thorne knows the Bolt spell. At 1st level, he can only use its Basic Effect (0 SP). At 2nd level, he might learn the Standard Bolt Mode (2 SP), allowing him to cast a bolt that deals 3d8 damage.*
+> **SP in Action:** _Thorne knows `Bolt`. At 1st level he only has its Basic Effect, 0 SP for 1d10. At 2nd level he can learn the `Standard Bolt` Mode and spend 2 SP for 3d8 instead._
 
 #### Looking Ahead
 
-As you gain levels, you'll learn **Enhancements** (2 per level from level 2 onwards) that let you spend SP to customize your spells in creative ways.
+From 2nd level you get two picks per level. Each pick is a new Mode or a new Enhancement for a spell you already know, so your four spells get deeper rather than more numerous.
 
-> **Example:** *At 3rd level, Thorne could enhance his Bolt spell with both the "Chain Bolt" (+2 SP) to create a powerful fire bolt that jumps from one enemy to another.*
-> **Remember:** Characters evolve through play. You don't need perfect details to start having fun—the most memorable development often emerges organically from shared adventures!
+> **Example:** _At 3rd level Thorne casts `Standard Bolt` for 2 SP and adds `Chain Bolt` for 2 more, a total of 4 SP, which is exactly his cap at that level. The bolt of earth hits the front goblin for 3d8, then leaps to a second goblin within 15 feet for half that._
+>
+> **Remember:** You don't need every detail settled to start. Name, class, Attributes and spells are enough to play the first session, and the Anchor and Question usually get better once the table has met your character.
 
 ### 2.8 Character Creation Checklist
 
@@ -341,8 +342,8 @@ Use this quick reference to ensure you've completed all steps:
 
 1. ☐ **Develop your character concept**
 2. ☐ **Choose your class**
-3. ☐ **Assign ability modifiers** (+3, +2, +1, +0, +0, -1)
-4. ☐ **Note your saving throw proficiencies** (from class)
+3. ☐ **Assign Attributes** (+3, +2, +1, +0, +0, -1)
+4. ☐ **Note your saving throw proficiency** (from class)
 5. ☐ **Select two skill proficiencies**
 6. ☐ **Choose two essence descriptors**
 7. ☐ **Record your four spells** (Core Attack, Unique, and two Choice spells)
