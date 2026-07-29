@@ -3,7 +3,7 @@ from: markdown+yaml_metadata_block+footnotes+table_captions
 to: gfm
 toc: true
 standalone: true
-toc-depth: 2
+toc-depth: 3
 shift-heading-level-by: 0
 output-file: book.md
 

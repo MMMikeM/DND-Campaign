@@ -1,0 +1,64 @@
+<!-- markdownlint-disable MD041 -->
+### 6.9 Defend
+
+#### Basic Effect (0 SP)
+
+| Property      | Value                                                             |
+|:--------------|:------------------------------------------------------------------|
+| **Cast Time** | 1 Action                                                          |
+| **Range**     | Self                                                              |
+| **Duration**  | 1 round                                                           |
+| **Effect**    | Gain resistance to physical damage until start of your next turn. |
+
+#### Mode: Essence Ward ✦ 2 SP
+
+| Property     | Value                                                                 |
+|:-------------|:----------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                              |
+| **Range**    | Self                                                                  |
+| **Duration** | Concentration, up to 1 min                                            |
+| **Effect**   | Gain resistance to the damage type determined by the applied Essence. |
+
+##### Essence Ward Enhancements
+
+| Enhancement        | SP Cost      | Effect                                                                                                       |
+|:-------------------|:-------------|:-------------------------------------------------------------------------------------------------------------|
+| Bolstering Defense | +1 SP        | Gain Temporary HP = 5 + Spell Mod when cast.                                                                 |
+| Share Defense      | +2 SP        | Range becomes Touch, affects one willing creature instead.                                                   |
+| Aura of Defense    | +3 SP        | Range Self (10-ft aura). You and allies starting turn in aura gain the resistance.                           |
+| Invulnerability    | +3 SP        | Resistance becomes Immunity. (Total cost 5 SP+).                                                             |
+| Reactive Retort    | +2 SP        | When target takes resisted damage from attacker within 30ft, attacker takes Spell Mod damage [Essence type]. |
+| Sustain Ward       | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour).                                                   |
+| Persistent Ward    | +3 SP        | (Requires: Sustain Ward ≥ 1 hour) Duration becomes 8 hours, no Concentration.                                |
+
+#### Mode: Reactive Shield ✦ 3 SP
+
+| Property     | Value                                                                                    |
+|:-------------|:-----------------------------------------------------------------------------------------|
+| **Cast**     | Reaction (when hit by attack)                                                            |
+| **Range**    | Self                                                                                     |
+| **Duration** | 1 round                                                                                  |
+| **Effect**   | Gain +5 bonus to AC against the triggering attack and until the start of your next turn. |
+
+##### Reactive Shield Enhancements
+
+| Enhancement       | SP Cost | Effect                                                                                                       |
+|:------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
+| Shield Other      | +2 SP   | Range becomes Touch. Use reaction when ally within 5 ft is hit; grant them the AC bonus. (Total 5 SP).       |
+| Deflecting Shield | +1 SP   | If the triggering attack misses due to the AC bonus, attacker takes 1d8 Force/Essence damage. (Total 4 SP+). |
+
+#### Mode: Enduring Armor ✦ 0 SP
+
+| Property     | Value                                                     |
+|:-------------|:----------------------------------------------------------|
+| **Cast**     | 10 Minutes (Ritual)                                       |
+| **Range**    | Self                                                      |
+| **Duration** | 8 hours                                                   |
+| **Effect**   | Your base AC becomes 13 + Dex modifier. No Concentration. |
+
+##### Enduring Armor Enhancements
+
+| Enhancement   | SP Cost | Effect                                                                               |
+|:--------------|:--------|:-------------------------------------------------------------------------------------|
+| Armour Other  | +2 SP   | Target becomes one willing creature touched instead of Self.                         |
+| Greater Armor | +2 SP   | The AC formula becomes 14 + Dex Mod. (Total cost 2 SP+). Requires separate learning. |

@@ -4,84 +4,140 @@ title: Mike's Rules
 ---
 
 - [1. Introduction](#introduction)
+  - [**1.1 Welcome: Doing Cool Shit**](#welcome-doing-cool-shit)
+  - [**1.2 Our Design Philosophy**](#our-design-philosophy)
+  - [**1.3 What You Need to Play**](#what-you-need-to-play)
+  - [**1.4 How to Use These Rules**](#how-to-use-these-rules)
 - [2 Character Creation Guide: Forging Your
   Hero](#character-creation-guide-forging-your-hero)
+  - [2.1 The Spark: Your Character
+    Concept](#the-spark-your-character-concept)
+  - [2.2 Choosing Your Class](#choosing-your-class)
+  - [2.3 Defining Your Abilities](#defining-your-abilities)
+  - [2.4 Core Mechanics](#core-mechanics)
+  - [2.5 Shaping Your Magic](#shaping-your-magic)
+  - [2.6 Adding Character Depth](#adding-character-depth)
+  - [2.7 Game Mechanics](#game-mechanics)
+  - [2.8 Character Creation Checklist](#character-creation-checklist)
 - [3. Classes: The Heart of Your Hero](#classes-the-heart-of-your-hero)
+  - [**3.1 Starting Spells**](#starting-spells)
+  - [**3.2 The Six Classes**](#the-six-classes)
+  - [**3.3 Class Selection Strategy**](#class-selection-strategy)
 - [4. Essences: The Flavors of Magic](#essences-the-flavors-of-magic)
+  - [4.1 What Are Essences?](#what-are-essences)
+  - [4.2 Learning Essences](#learning-essences)
+  - [4.3 Using Essences](#using-essences)
+  - [4.4 Mechanical Effects of
+    Essences](#mechanical-effects-of-essences)
+  - [4.5 Essence Descriptors](#essence-descriptors)
+  - [4.6 Evolving Your Essence
+    Expressions](#evolving-your-essence-expressions)
 - [5. Spells: The Frameworks of Magic](#spells-the-frameworks-of-magic)
-- [6. Spell Points (SP)](#spell-points-sp-1)
-- [7: Enhancements](#enhancements)
-- [8. Feat Catalog](#feat-catalog)
+  - [5.1 The Nature of Spells](#the-nature-of-spells)
+  - [5.2 Learning Spells](#learning-spells)
+  - [5.3 How to Read a Spell Entry](#how-to-read-a-spell-entry)
+  - [5.4 Spell Points (SP)](#spell-points-sp-1)
+  - [5.5 The Eighteen Spells](#the-eighteen-spells)
+  - [5.6 Creativity in Action](#creativity-in-action)
+- [6. Spell Reference](#spell-reference)
+  - [6.1 Adapt Self](#adapt-self)
+  - [6.2 Arcane Sight](#arcane-sight)
+  - [6.3 Barrier](#barrier)
+  - [6.4 Blast](#blast)
+  - [6.5 Bolt](#bolt)
+  - [6.6 Communicate](#communicate)
+  - [6.7 Conduit](#conduit)
+  - [6.8 Debilitate](#debilitate)
+  - [6.9 Defend](#defend)
+  - [6.10 Empower/Enfeeble](#empowerenfeeble)
+  - [6.11 Heal](#heal)
+  - [6.12 Illusion](#illusion)
+  - [6.13 Influence](#influence)
+  - [6.14 Manipulate](#manipulate)
+  - [Enhancements](#enhancements)
+  - [6.15 Move](#move)
+  - [6.16 Strike](#strike)
+  - [6.17 Summon](#summon)
+  - [6.18 Zone](#zone)
+- [7. Feat Catalog](#feat-catalog)
+  - [Class-Specific Feats](#class-specific-feats)
+  - [Base Feats](#base-feats)
+  - [Level 8+ Feats](#level-8-feats)
+  - [Level 12+ Feats](#level-12-feats)
+  - [GM Reference: Feat Awards via Nat 20
+    Accomplishments](#gm-reference-feat-awards-via-nat-20-accomplishments)
+- [Appendix A: Glossary](#appendix-a-glossary)
 
 ## 1. Introduction
 
 ### **1.1 Welcome: Doing Cool Shit**
 
-Welcome to a tabletop roleplaying game built from the ground up with one
-goal: **Empower you to do cool shit with as little friction as
-possible.** Forget dense rulebooks filled with exceptions and edge
-cases. This system is designed for dynamic, imaginative play where your
-character’s unique abilities and your clever ideas take center stage.
+This TTRPG has one job: **let you do cool shit with as little friction
+as possible.**
 
-This is a game about heroes wielding incredible power, shaped not just
-by rigid rules, but by their personality, history, and the fundamental
-magical **Essences** they command. You won’t find sprawling spell lists
-here. Instead, you’ll master core **Spells** – versatile templates
-representing fundamental magical concepts – and customize them on the
-fly with **Essences** and tactical **Enhancements**.
+Your hero knows four **Spells**. One of which is unique to your class,
+as well as either strike or bolt as standard attacks. The other two you
+are able to pick from the remaining pool of ten. Levelling up equips you
+with ways to modify those four spells, givin you more freedom to decide
+what your magic does at the moment you cast it.
 
-Want your energy blast to be a searing flame that pushes enemies back? A
-crackling bolt of lightning that chains between targets? A wave of
-chilling frost that slows them to a crawl? You can build that,
-expressing *your* character’s specific brand of magic.
+Say you took `Blast`. It’s free to cast as a 10-foot cone for 1d8. Spend
+two `spell points` and you could enchance it into a 15-foot cone, a
+sphere you drop 60 feet downrange, or a lance that skewers a whole line.
+One more point on **Forceful Blast** and everything that fails the save
+gets thrown 10 feet back. That’s one spell, with a dozen
+**Enhancements** you could learn along the way. Two characters with the
+same four spells can have entirely different play styles.
 
-> **Magic in Action:** Lyra faces three charging goblins. “I slam my
-> staff down and channel earth energy into a Blast!” She spends 2 SP for
-> a standard Blast, adds Fire essence, and the Forceful enhancement (+1
-> SP). The goblins fail their saves and are pushed back by the wave of
-> molten stone erupting from the ground – exactly the breathing room
-> Lyra needed.
+Everything you cast is shaped by an **Essence**. You pick two of the
+twelve at 1st level and choose one of them each time you cast. Fire,
+Cold, Shadow, Lightning, Psychic, Sound, and six more. It sets your
+damage type, it helps you tell the table what your magic looks like when
+it lands, and with the right **Enhancement** it leaves the target
+Ignited or Frozen or Conductive until the start of your next turn.
 
-Get ready to weave compelling stories, face daunting challenges, and
-unleash your creativity.
+The class **Champion** uniquely gets the spell `Barrier`, but based on
+their choices, they could end up being very different tools. One walls
+off a doorway with earth. Another pays more to conjure a shield of light
+that protects his allies as they cross a battlefielod.
+
+> **Magic in Action:** Three goblins charge Lyra. “I slam my staff down
+> and channel earth energy into a Blast!” She spends 2 SP for a Cone
+> Blast and 1 SP for Forceful Blast, casting through her Earth Essence.
+> All three fail the Dex save, take 2d8 damage as a slab of stone heaves
+> up under them, and get thrown 10 feet back down the corridor, out of
+> reach for a round.
+
+Six classes, twelve Essences, eighteen Spells, hundreds of Enhancements
+to be picked.
 
 ### **1.2 Our Design Philosophy**
 
-These rules are guided by a core set of principles aimed at creating the
-best possible play experience:
+Four decisions shaped everything else in this book.
 
-- **Narrative First:** The story you and your friends create together is
-  paramount. Rules serve the story, providing structure for action and
-  resolution, but should never stifle a great idea. Player inspiration
-  drives the game.
-- **Clarity:** Rules are written to be obvious and jargon-light. We aim
-  for intuitive mechanics you can understand quickly and use
-  confidently. No hidden traps or obscure interactions buried in
-  footnotes.
-- **Simplicity:** The core mechanics are designed to be lightweight and
-  easy to grasp. While your magical effects can become complex and
-  layered through Enhancements, the underlying system remains
-  streamlined.
-- **Versatility:** The magic system (Spells + Essences + Enhancements)
-  is modular. Mix and match components to create the precise effects you
-  envision, when you need them.
-- **Fun:** Every choice should feel meaningful and exciting. Your
-  character’s abilities are tools designed to spark clever tactics and
-  rewarding moments, not bog down the game.
-- **Creativity:** Mechanics should be a launchpad for imagination, not a
-  straitjacket. This system encourages you to describe *how* your
-  character’s magic looks, feels, and manifests, celebrating unique
-  flair over rote recitation.
-- **Balance:** We aim for earned power and fair challenges. Choices
-  should be meaningful, without obvious “best” options or game-breaking
-  combos. Every character path should feel viable and rewarding.
-- **Clean Design:** We’ve avoided legacy bloat and unnecessary
-  complexity. This is a refined, streamlined system focused on doing its
-  job elegantly.
+- **Focus on character’s decisions, not mechanics**: This sysetm aims to
+  skew rules light. They should serve the story, not stifle ideas.
+
+- **Streamline the core loop** Roll a d20, add an ability modifier
+  (never higher than +3), against a DC. The depth lives in Enhancements,
+  which are added incrementally from a tree, so are never overwhelming.
+
+- **Describe first, price it after.** You choose the Essence, so you
+  choose what your magic looks like. A `Bolt` is a golden sunbeam or a
+  spear of frozen air depending on who cast it, and the rules don’t care
+  which as long as you say it out loud.
+
+- **The rule loses.** If a mechanic gets between a player and a good
+  idea, we’d rather patch the mechanic. Anything in here can be
+  overruled at your table without the rest of the system falling over.
+
+- **No trap options.** Every class, every Spell, every Enhancement
+  should be worth its cost. If one is clearly the right answer every
+  time, that’s a bug and we want to hear about it.
 
 > ✨ **Our Golden Rule:**  
 > If a rule ever blocks a great idea or feels too complicated for the
-> fun it provides, we tweak the rule—not the idea.  
+> fun it provides, we tweak the rule, not the idea.  
 > **If it isn’t fun, it isn’t right.**
 
 ### **1.3 What You Need to Play**
@@ -96,146 +152,32 @@ To play, you’ll need a few things:
   may be provided separately).
 - **Pencils & Paper:** For notes, mapping, and tracking temporary
   effects.
-- **Imagination:** The most crucial component!
+- **Status tokens:** All classes get access to status effects, they’re
+  short-lived so having a temporary marker is helpful.
 
 ### **1.4 How to Use These Rules**
 
 This book is structured to get you playing quickly:
 
-1.  **Section 2: Forging Your Character:** This is your starting point.
-    It guides you step-by-step through creating your unique hero, from
-    initial concept to final details.
-2.  **Sections 3-7:** These sections detail the core mechanics
-    underpinning your character’s abilities – Classes, Essences, Spells,
-    Spell Points, and Enhancements. You’ll reference these during
-    character creation and throughout play.
+1.  **Section 2: Forging Your Hero:** Start here. It walks you from a
+    concept to a finished sheet, in order, with a checklist at the end.
+2.  **Sections 3-7:** Classes, Essences, Spells, Spell Points,
+    Enhancements. You look these up while building the character or
+    levelling up, your character sheet should prevent from needing to
+    look up specifics in game.
 
-Don’t feel you need to memorize everything upfront. To start, you only
-need the following:
+To start, you only need the following:
 
 - Your character (Section 2)
 - The basics of their Class (Section 3)
 - Your two selected Essences (Section 4)
 - Your four selected Spells (Section 5)
 
-Spell Points (Section 6) and Enhancements (Section 7) will become
-relevant as you progress through the game.
+Spell Points (Section 5.4) and the Enhancements in Section 6 open up as
+you level. At 1st level you have 10 SP and a 3 SP ceiling on any single
+cast, which rules out most of Section 6 anyway.
 
-Now, gather your dice, spark your imagination, and let’s forge a hero!
-Turn to **Section 2: Forging Your Character** to begin.
-
-### 1.5 Glossary
-
-- Ability Modifier: A numerical bonus or penalty (ranging from -1 to +3
-  in this system) derived from an Ability Score, used in dice rolls for
-  checks, saves, and attacks. (See Section 2.3)
-
-- Anchor: A defining element (memento, promise, principle) that grounds
-  a character emotionally or narratively. (See Section 2.6)
-
-- Base Spells: The four foundational spells a character knows at 1st
-  level, consisting of their Core Attack Spell, Unique Spell, and two
-  Choice Spells. (See Section 2.5, Section 3.1, Section 5.2)
-
-- Basic Effect: The simplest version of a Spell, usable at will for 0
-  Spell Points (SP). Represents the core concept of the spell. (See
-  Section 2.5, Section 5.4, Section 5.5)
-
-- Choice Spells: Two spells selected by the player from their chosen
-  Class’s available options during character creation. (See Section 2.5,
-  Section 3.1, Section 5.2)
-
-- Class: The character’s primary archetype, defining their Key Ability,
-  Unique Spell, Hit Die, proficiencies, and general approach to
-  challenges and magic. (See Section 2.2, Section 3)
-
-- Core Attack Spell: A character’s primary offensive magical option
-  (Strike or Bolt), granted by their Class. (See Section 2.5, Section
-  3.1, Section 5.2)
-
-- Enhancement: A modification applied to a Spell by spending Spell
-  Points (SP) to augment its effects (power, scope, duration, function).
-  Learned as characters level up. (See Section 2.7, Section 7)
-
-- Essence (Descriptor): A fundamental magical energy (e.g., Fire, Cold,
-  Shadow) chosen by the character, defining the damage type and sensory
-  details of their spells. (See Section 2.5, Section 4)
-
-- Fate Undo Token: A resource awarded by the GM when a character’s
-  Hindrance causes a Meaningful Complication. Can be spent to reroll
-  dice or revise narrative actions. (See Section 2.6)
-
-- Feat: A special ability gained (typically through leveling) that
-  provides unique capabilities or enhances existing ones. (See Section
-  8)
-
-- GM (Game Master): The person who runs the game, describes the world,
-  adjudicates rules, and portrays non-player characters. (See Section
-  1.3)
-
-- Hindrance: A character flaw, weakness, or complication chosen during
-  creation that adds depth and can lead to Meaningful Complications (and
-  Fate Undo Tokens). (See Section 2.6)
-
-- Hit Die (HD): The type of die rolled to determine hit points gained
-  per level, specific to each Class. (See Section 2.2, Section 2.7)
-
-- Hit Points (HP): A measure of a character’s health and resilience to
-  damage. (See Section 2.7)
-
-- Key Ability: The primary Ability Score associated with a character’s
-  Class, determining their Spellcasting Ability Modifier and often
-  influencing class features. (See Section 2.2, Section 3.2)
-
-- Long Rest: An extended period of rest (typically 8 hours) during which
-  characters regain all lost Hit Points and expended Spell Points (SP).
-
-- Max SP per Activation: The maximum number of Spell Points (SP) that
-  can be spent on a single use of a Spell (Mode cost + Enhancement
-  costs), determined by character level. (See Section 2.7, Section 6.3)
-
-- Meaningful Complication: An instance where a character’s Hindrance
-  significantly impacts a scene, creates obstacles, or forces difficult
-  choices, potentially earning a Fate Undo Token. (See Section 2.6)
-
-- Mode: Predefined ways to use a Spell, often requiring Spell Points
-  (SP) to activate effects more powerful than the Basic Effect (0 SP).
-  (See Section 5.4, Section 7)
-
-- Proficiency Bonus: A fixed bonus (+3 in this system) added to rolls
-  where a character is proficient (skills, saves, certain attacks). (See
-  Section 2.4)
-
-- Question: A driving mystery or unresolved element in a character’s
-  backstory or goals. (See Section 2.6)
-
-- Spell: A foundational magical concept (like Bolt, Heal, Barrier) that
-  serves as a template, customized via Essences and Enhancements. (See
-  Section 2.5, Section 5)
-
-- Spell Attack Bonus: The bonus added to attack rolls made with spells,
-  equal to the character’s Spellcasting Ability Modifier. (See Section
-  2.4)
-
-- Spell Points (SP): The magical energy resource spent to activate Spell
-  Modes and apply Enhancements. Regained after a Long Rest. (See Section
-  2.7, Section 6)
-
-- Spell Save DC: The Difficulty Class an opponent must meet or exceed on
-  a saving throw to resist a character’s spell effect. Calculated as
-  10 + Spellcasting Ability Modifier. (See Section 2.4)
-
-- Spellcasting Ability Modifier (Spell Mod): The Ability Modifier
-  derived from a character’s Key Ability, used for spell attacks and
-  calculating Spell Save DC. (See Section 2.4)
-
-- Status Effect: A specific condition (e.g., Ignited, Frozen, Dazzled)
-  associated with an Essence, typically applied via Enhancements. (See
-  Section 4.4, Section 4.5)
-
-- Unique Spell: A distinctive spell accessible only to a specific Class,
-  representing its core magical approach. (See Section 2.2, Section 3.1,
-  Section 5.2, Section 5.7)
+Turn to **Section 2: Forging Your Hero**.
 
 <!-- markdownlint-disable MD041 -->
 
@@ -1329,11 +1271,11 @@ your magic come alive at the table!
 
 ### 5.1 The Nature of Spells
 
-In this system, **Spells** are foundational magical concepts—versatile
+In this system, **Spells** are foundational magical concepts, versatile
 templates that represent core magical effects like projecting energy,
-healing wounds, or creating barriers. Unlike traditional systems with
-sprawling spell lists, we focus on a curated set of core spells that
-you’ll personalize through **Essences** and **Enhancements**.
+healing wounds, or creating barriers. We focus on a curated set of core
+spells that you’ll personalize through **Essences** and
+**Enhancements**.
 
 Think of Spells as the underlying structure of your magic:
 
@@ -1345,8 +1287,8 @@ Think of Spells as the underlying structure of your magic:
 This modular approach shifts the focus from memorizing numerous specific
 rules to mastering a core framework that you can creatively adapt to any
 situation. Your character isn’t limited by a static list of
-predetermined effects—they’re empowered to shape their magic according
-to their needs and style.
+predetermined effects, they decide what their magic does as they cast
+it.
 
 > **Magic in Action: Narrative Drives Mechanics**
 >
@@ -1374,20 +1316,20 @@ to their needs and style.
 > *A translucent barrier of radiant energy materializes, arrows thudding
 > harmlessly against its surface.*
 >
-> **Behind the Magic:** Same spell (`Barrier`), different execution—this
-> time with **Light Essence** and the simpler “Standard Barrier” mode (2
-> SP) for a quick defensive reaction.
+> **Behind the Magic:** Same spell (`Barrier`), different execution.
+> This time with **Light Essence** and the simpler “Standard Barrier”
+> mode (3 SP) for a quick defensive reaction.
 
 ### 5.2 Learning Spells
 
 Characters **know** a set number of Spells, representing the magical
-effects they have mastered. Unlike some systems, you don’t prepare
-spells daily—your known spells are always available to you.
+effects they have mastered. You don’t prepare spells daily, your known
+spells are always available to you.
 
 Your four starting spells form the core of your magical repertoire,
 representing the foundational concepts your character has mastered.
 Character progression primarily focuses on enhancing these core spells
-through Spell Points and Enhancements (see Section 7). While your
+through Spell Points and Enhancements (see Section 6). While your
 character may rarely learn entirely new spells through specific feats or
 unique narrative opportunities, the emphasis of this system is on
 deepening mastery over breadth of effects.
@@ -1417,7 +1359,12 @@ gain a Feat, you can replace one spell you know with a different spell
 from your class spell list, representing your character’s evolving
 magical approach.
 
-### 5.3 Spell Descriptions
+### 5.3 How to Read a Spell Entry
+
+Every spell in Section 6 opens with its **Basic Effect**, then lists its
+**Modes**, then the **Enhancements** that attach to them. The Basic
+Effect costs 0 SP and is always available, like a cantrip. Modes and
+Enhancements cost Spell Points.
 
 Each spell follows a standard format detailing its core function before
 any Enhancements are applied:
@@ -1450,16 +1397,11 @@ any Enhancements are applied:
 - **Ritual** - Can be cast taking 10 minutes longer without spending SP
   (only for spells with this tag)
 
-### 5.4 Understanding Spell Effects
+#### Modes and Enhancements
 
-Each spell has a **Basic Effect** (0 SP) that you can use at will,
-similar to a cantrip. This represents the most fundamental application
-of the magical concept.
-
-By spending **Spell Points (SP)**, you can activate more powerful
-**Modes** of the spell or add **Enhancements** (see Section 7) that
-modify its effects. **Modes** are specific predefined ways to use a
-spell, while **Enhancements** are customized modifications.
+**Modes** are specific predefined ways to use a spell. **Enhancements**
+are modifications you add on top. You learn both as you level, and you
+can only use the ones you have learned.
 
 > **Example: Building on Basics**
 >
@@ -1481,207 +1423,117 @@ spell, while **Enhancements** are customized modifications.
 > *Adding the “Chain Bolt” **Enhancement** (+2 SP, total 4 SP) creates a
 > bolt that jumps to a second target after hitting the first.*
 
-### 5.5 Core Spells - Basic Effects
+### 5.4 Spell Points (SP)
 
-The following section details the baseline **Basic Effect** for each
-core spell. Remember that these 0 SP effects are always available to
-you, forming your baseline magical abilities that never run out.
+Magic is fueled by **Spell Points (SP)**, representing a caster’s pool
+of magical energy. Activating Spell **Modes** and adding
+**Enhancements** costs SP.
 
-#### Adapt Self - Basic Effect (0 SP)
+#### Gaining and Spending SP
 
-| Property | Value |
+- **SP Pool:** You have a maximum number of SP based on your character
+  level, (your level + 1) \* 5. You regain all expended SP after
+  completing a **Long Rest**.
+- **Spending SP:** When you activate a Spell using one of its **Modes**
+  (other than the 0 SP Basic Effect) or add **Enhancements**, you spend
+  SP equal to the total cost. You cannot spend more SP than you
+  currently have.
+
+#### Basic Effects (0 SP)
+
+Each core Spell has a **Basic Effect**, listed at the top of its entry
+in Section 6, that costs 0 SP to use. These represent minor
+manifestations of the Spell’s concept and can be used at will.
+
+#### Maximum SP per Activation
+
+There is a limit to the total SP you can spend on a single activation of
+a Spell (Mode cost + Enhancement costs). This limit prevents characters
+from expending their entire energy pool on one overwhelmingly powerful
+effect early on. The limit is 2 + (level / 2) rounded up, as shown on
+Table 5-1.
+
+#### Learning Modes and Enhancements
+
+As you gain levels (Level 2+), your mastery of spells deepens. Each
+level, you gain two opportunities to improve your magic. For each
+opportunity, choose one spell you know and select either:
+
+- One new **Mode** listed for that spell
+- One new **Enhancement** listed for that spell
+
+These opportunities can be used on the same spell or different spells,
+in any combination.
+
+> **Example:** At 3rd level, Lyra could learn the “Forceful Bolt”
+> Enhancement and “Area Bolt” Mode for her Bolt spell, OR learn “Chain
+> Bolt” Enhancement for Bolt and “Sensory Illusion” Mode for her
+> Illusion spell.
+
+#### Combining Enhancements
+
+Multiple *different* learned Enhancements can be applied to a single
+Spell activation, provided their effects are not contradictory. You
+cannot, for example, apply two Enhancements that change the saving throw
+to different stats. The SP costs are cumulative, and the total still
+cannot exceed your Maximum SP per Activation.
+
+#### Table 5-1: Spell Points and Maximum SP per Activation by Level
+
+| Level | Spell Points | Max SP Per Activation |
+|:------|:-------------|:----------------------|
+| 1     | 10           | 3                     |
+| 2     | 15           | 3                     |
+| 3     | 20           | 4                     |
+| 4     | 25           | 4                     |
+| 5     | 30           | 5                     |
+| 6     | 35           | 5                     |
+| 7     | 40           | 6                     |
+| 8     | 45           | 6                     |
+| 9     | 50           | 7                     |
+| 10    | 55           | 7                     |
+| 11    | 60           | 8                     |
+| 12    | 65           | 8                     |
+| 13    | 70           | 9                     |
+| 14    | 75           | 9                     |
+| 15    | 80           | 10                    |
+| 16    | 85           | 10                    |
+| 17    | 90           | 11                    |
+| 18    | 95           | 11                    |
+| 19    | 100          | 12                    |
+| 20    | 105          | 12                    |
+
+### 5.5 The Eighteen Spells
+
+Two of your four Spells come from your Class. This is the pool you pick
+the other two from. Every one of them does something for free, and every
+one of them has Modes and Enhancements you buy into later, so read this
+for the concept and turn to Section 6 when you want the numbers.
+
+| Spell | What it does |
 |:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | Self |
-| **Duration** | 1 minute |
-| **Effect** | Gain one: +5 ft speed; OR Adv on Athletics (climb/swim); OR unarmed strikes deal 1d4 + Str mod damage. |
+| `Adapt Self` | Your body is the spell. A climber’s grip or a runner’s speed at will, and later a beast’s shape or a body made of your Essence. |
+| `Arcane Sight` | See magic and interfere with it. Spoil an incoming attack as a reaction, read what’s enchanted, strip an effect off a target, or shut a spell down as it’s being cast. |
+| `Barrier` | Put something solid between you and the problem. A slab of cover at will, growing into walls, domes, bridges, and barriers that travel with you. |
+| `Blast` | Hit everything in an area. A cone off your hands at will, later a sphere dropped downrange or a lance that skewers a line and stays burning. |
+| `Bolt` | One ranged attack, one target, no save. Later it splashes onto everything nearby, or becomes a beam you hold on someone across several turns. |
+| `Communicate` | Talk without speaking. Silent messages across a battlefield, a private two-way link, borrowing another creature’s senses, or understanding any language you meet. |
+| `Conduit` | Make everyone else’s attacks land. Hand an ally advantage as a reaction, open a target up, set up a joint strike, or hold a field that keeps paying out. |
+| `Debilitate` | Take something away from a creature. Its speed for free, then whatever your Essence does to it, on one target or everything in a cube. |
+| `Defend` | Shrug off what’s coming. Resistance to weapons at will, wards against a chosen Essence, a shield you throw up as a reaction, and armour you never have to recast. |
+| `Empower/Enfeeble` | Nudge a roll. Add to an ally’s next attack or save, subtract from an enemy’s, or sit on it and spend it as a reaction on the roll that actually matters. |
+| `Heal` | Put hit points back and get people up. One touch at will, later the whole party at once, or lifting the condition that was the real problem. |
+| `Illusion` | Show people something that isn’t there. Small sights and sounds at will, then full sensory fakes, a false face worn on your own body, or no body at all. |
+| `Influence` | Change a mind. Force an enemy to come at you, make a stranger friendly, plant an idea, read what someone’s thinking, or take the wheel entirely. |
+| `Manipulate` | Move what you aren’t touching. Doors, levers, and anything you can lift, then finer and heavier work at a distance as you invest in it. |
+| `Move` | Go where you want. Nothing gets a swing at you as you leave, then blink across a gap, outrun what’s chasing you, or phase aside as a reaction. |
+| `Strike` | A weapon swing carrying your Essence. Later it hits harder, cleaves into a second enemy, skewers whoever is standing behind your target, or bursts on impact. |
+| `Summon` | Call something to fight or fetch for you. A servant that helps you land a hit at will, then a familiar for errands, or a spirit that fights on its own turn. |
+| `Zone` | Claim a patch of ground. Difficult terrain at will, then areas that hinder, hurt, or shelter whoever is standing in them. |
 
-------------------------------------------------------------------------
-
-#### Arcane Sight - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Reaction |
-| **Range** | Self (30 ft radius) |
-| **Duration** | 1 minute |
-| **Effect** | When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll. |
-
-------------------------------------------------------------------------
-
-#### Barrier - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 round |
-| **Effect** | Create a 5x5 ft energy plane: Provides half cover (+2 AC/Dex saves), has 5 HP, collapses if destroyed or at start of your next turn. |
-
-------------------------------------------------------------------------
-
-#### Blast - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | Self (10-ft cone) |
-| **Duration** | Instantaneous |
-| **Effect** | Creatures in cone make Dex save vs Spell DC. Fail: 1d8 Essence damage. Success: Half damage. |
-
-------------------------------------------------------------------------
-
-#### Bolt - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 60 ft |
-| **Duration** | Instantaneous |
-| **Effect** | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
-
-------------------------------------------------------------------------
-
-#### Communicate - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 120 ft |
-| **Duration** | Instantaneous |
-| **Effect** | EITHER send a one-way telepathic message (max 10 words) to up to three creatures you can see, OR establish two-way communication with one creature you can see (allowing a brief reply of up to 5 words). Message is understood regardless of language. |
-
-------------------------------------------------------------------------
-
-#### Conduit - Basic Effect (0 SP)
-
-| Property      | Value                                           |
-|:--------------|:------------------------------------------------|
-| **Cast Time** | Reaction (when ally seen attacks creature seen) |
-| **Range**     | 30 ft                                           |
-| **Duration**  | Instantaneous                                   |
-| **Effect**    | The triggering attack roll has advantage.       |
-
-------------------------------------------------------------------------
-
-#### Debilitate - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 round |
-| **Effect** | Target makes Con save vs Spell DC. Fail: Speed halved until start of your next turn. |
-
-------------------------------------------------------------------------
-
-#### Defend - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | Self |
-| **Duration** | 1 round |
-| **Effect** | Gain resistance to physical damage until start of your next turn. |
-
-------------------------------------------------------------------------
-
-#### Empower/Enfeeble - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 round |
-| **Effect** | Choose one target & effect: **Empower:** Target gets +1d4 to next Attack Roll OR Save before start of your next turn. **Enfeeble:** Target makes Wis save vs Spell DC. Fail: -1d4 to next Attack Roll OR Save before start of your next turn. |
-
-------------------------------------------------------------------------
-
-#### Heal - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | Touch |
-| **Duration** | Instantaneous |
-| **Effect** | Target regains 1d4 + Spell Mod HP, OR becomes stable with 1 HP if downed. |
-
-------------------------------------------------------------------------
-
-#### Illusion - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 minute |
-| **Effect** | Create minor visual illusion (object/creature ≤ 5-ft cube) OR simple sound effect. Interaction/Investigation reveals illusion. |
-
-------------------------------------------------------------------------
-
-#### Influence - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 round |
-| **Effect** | Target creature you can see makes Wis save vs Spell DC. Fail: Is only able to target you with any spells or attacks until your next turn. |
-
-------------------------------------------------------------------------
-
-#### Manipulate - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 minute |
-| **Effect** | Use Action (on cast or later turns) to target point in range. Cause one: Interact with object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked door/container; Pour contents from container. Lacks finesse/strength for complex tasks/attacks. |
-
-------------------------------------------------------------------------
-
-#### Move - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | Special (Part of Move Action) |
-| **Range** | Self |
-| **Duration** | Instantaneous |
-| **Effect** | When moving this turn, your movement doesn’t provoke opportunity attacks. |
-
-------------------------------------------------------------------------
-
-#### Strike - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | Self |
-| **Duration** | Instantaneous |
-| **Effect** | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
-
-------------------------------------------------------------------------
-
-#### Summon - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 30 ft |
-| **Duration** | 1 minute |
-| **Effect** | Summons Tiny servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken directly before or after yours, to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end. |
-
-------------------------------------------------------------------------
-
-#### Zone - Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 60 ft |
-| **Duration** | 1 round |
-| **Effect** | Choose point on surface seen. Creates 10-ft square area centered there. Area is Difficult Terrain until start of your next turn. |
+Six of these are Class Unique Spells and can only be taken by that
+Class: `Barrier` (Champion), `Move` (Trickster), `Adapt Self` (Adapter),
+`Manipulate` (Scholar), `Arcane Sight` (Sage), and `Influence` (Orator).
 
 ### 5.6 Creativity in Action
 
@@ -1708,210 +1560,77 @@ perfectly suit the situation at hand.
 >
 > - *“I brace against the wall and push with both hands. The stone
 >   responds, thickening and spreading to completely seal the corridor
->   behind us.” (Standard Barrier + Fortify, 4 SP)*
+>   behind us.” (Standard Barrier + Fortify Barrier, 4 SP)*
 >
 > - *“I focus intensely, drawing up small platforms of magically
 >   reinforced stone that hover just above the lava’s surface.” (Shaped
 >   Barrier + Resilient Barrier, 5 SP)*
 >
-> *Same spell, different stories—limited only by creativity and SP.*
+> *Same spell, five different answers, limited by what he has learned
+> and what he can pay.*
 
-Remember that Modes and Enhancements for each spell are detailed in
-Section 7: Enhancements. As you gain levels, you’ll learn more ways to
-customize your spells, making your magical repertoire increasingly
-versatile and powerful.
-
-### 5.7 Class Unique Spells
-
-Each class gains access to a special spell that embodies its approach to
-magic. These unique spells are unavailable to other classes without
-special feats or circumstances. Below is a summary of the Basic (0 SP)
-effect and the first key Mode for each unique spell, drawing from the
-full details found in Section 5.5 and Section 7: Enhancements.
-
-#### Champion: Barrier
-
-The Champion’s ability to manifest protective force through sheer
-strength of will.
-
-**Basic (0 SP):** A 5×5 ft plane of energy that provides half cover and
-has 5 HP.  
-**Standard (3 SP):** A 10×10 ft plane with total cover, 17 HP, lasting
-up to 10 minutes with concentration.
-
-#### Trickster: Move
-
-The Trickster’s unmatched mobility and spatial awareness.
-
-**Basic (0 SP):** Your movement doesn’t provoke opportunity attacks.  
-**Blink Step (2 SP):** Teleport up to 30 feet to a visible location.
-
-#### Adapter: Adapt Self
-
-The Adapter’s remarkable ability to transform their body to meet any
-challenge.
-
-**Basic (0 SP):** Gain one physical enhancement for 1 minute.  
-**Focused Adaptation (2 SP):** Gain two enhancements for up to 10
-minutes with concentration.
-
-#### Scholar: Manipulate
-
-The Scholar’s precise control over objects and energy through applied
-knowledge.
-
-**Basic (0 SP):** Telekinetically interact with objects up to 10 kg for
-1 minute.  
-**Focused Control (2 SP):** Enhanced telekinetic control with greater
-range, capacity, and precision.
-
-#### Sage: Arcane Sight
-
-The Sage’s extraordinary perception and insight into magical forces.
-
-**Basic (0 SP):** When you or an ally within 30 ft is hit by an attack
-OR targeted by a harmful spell or effect, you can use your Reaction to
-impose disadvantage on that triggering roll. **Detect Magic (2 SP):**
-Detailed magical detection for up to 10 minutes with concentration.
-
-#### Orator: Influence
-
-The Orator’s ability to affect others through sheer force of
-personality.
-
-**Basic (0 SP):** Force a creature to target you with any spells or
-attacks until your next turn.  
-**Charm Person (2 SP):** Make a humanoid regard you as a friendly
-acquaintance for 1 hour.
+Every Mode and Enhancement for each spell is listed with that spell in
+Section 6.
 
 <!-- markdownlint-disable MD041 -->
 
-## 6. Spell Points (SP)
+## 6. Spell Reference
 
-Magic is fueled by **Spell Points (SP)**, representing a caster’s pool
-of magical energy. Activating Spell **Modes** and adding
-**Enhancements** costs SP.
+One entry per Spell, alphabetical. Each entry opens with the **Basic
+Effect** you can use at will for 0 SP, then its **Modes**, then the
+**Enhancements** available to it. Enhancements listed under a Mode apply
+only to that Mode. Enhancements under **General Enhancements** apply to
+any Mode of that spell.
 
-### **6.1 Gaining and Spending SP**
-
-- **SP Pool:** You have a maximum number of SP based on your character
-  level, (your level + 1) \* 5. You regain all expended SP after
-  completing a **Long Rest**.
-- **Spending SP:** When you activate a Spell using one of its **Modes**
-  (other than the 0 SP Basic Effect) or add **Enhancements**, you spend
-  SP equal to the total cost. You cannot spend more SP than you
-  currently have.
-
-### **6.2 Basic Effects (0 SP)**
-
-Each core Spell has a **Basic Effect** listed in Section 3.4 that costs
-0 SP to use. These represent minor manifestations of the Spell’s concept
-and can be used at will.
-
-### **6.3 Maximum SP per Activation**
-
-There is a limit to the total SP you can spend on a single activation of
-a Spell (Base Mode Cost + Enhancement Costs). This limit prevents
-characters from expending their entire energy pool on one overwhelmingly
-powerful effect early on. This limit is based on your character level
-your 2 + (level / 2) rounded up, as shown on Table 2-1.
-
-### **6.4 Spell Point Progression**
-
-#### Table 6-1: Spell Points and Maximum SP per Activation by Level\*\*
-
-| Level | Spell Points | Max SP Per Activation |
-|:------|:-------------|:----------------------|
-| 1     | 10           | 3                     |
-| 2     | 15           | 3                     |
-| 3     | 20           | 4                     |
-| 4     | 25           | 4                     |
-| 5     | 30           | 5                     |
-| 6     | 35           | 5                     |
-| 7     | 40           | 6                     |
-| 8     | 45           | 6                     |
-| 9     | 50           | 7                     |
-| 10    | 55           | 7                     |
-| 11    | 60           | 8                     |
-| 12    | 65           | 8                     |
-| 13    | 70           | 9                     |
-| 14    | 75           | 9                     |
-| 15    | 80           | 10                    |
-| 16    | 85           | 10                    |
-| 17    | 90           | 11                    |
-| 18    | 95           | 11                    |
-| 19    | 100          | 12                    |
-| 20    | 105          | 12                    |
+You can only use Modes and Enhancements you have learned. See Section
+5.4 for how you learn them, what a single cast can cost, and how costs
+combine.
 
 <!-- markdownlint-disable MD041 -->
 
-## 7: Enhancements
+### 6.1 Adapt Self
 
-### **7.1 Purpose of Enhancements**
+#### Basic Effect (0 SP)
 
-**Enhancements** allow casters to spend **Spell Points (SP)** to augment
-the **Basic Effect (0 SP)** of their known Spells. The most fundamental
-Enhancement is the **Standard Activation Enhancement**, which unlocks
-the Spell’s original core function at a specific SP cost. Further
-Enhancements allow casters to scale a Spell’s effects (increasing
-potency, scope, or duration), add new functions, or even alter how the
-Spell is cast or resolved, typically building upon the Standard
-Activation.
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | Self |
+| **Duration** | 1 minute |
+| **Effect** | Gain one: +5 ft speed; OR Adv on Athletics (climb/swim); OR unarmed strikes deal 1d4 + Str mod damage. |
 
-### **7.2 Learning and Using Enhancements**
+#### What you can buy
 
-#### Learning Enhancements & Modes
+```mermaid
+graph LR
+  B["Basic Effect<br/>0 SP"]
+  B --> FA["Focused Adaptation<br/>2 SP"]
+  B --> BS["Beast Shape<br/>5 SP"]
+  B --> EB["Elemental Body<br/>5 SP"]
 
-As you gain levels (Level 2+), your mastery of spells deepens. Each
-level, you gain two opportunities to improve your magic. For each
-opportunity, choose one spell you know and select either:
+  FA -->|"two starred, free"| G
+  BS --> G
+  EB --> G
 
-- One new **Mode** listed for that spell (such as Standard Mode or other
-  available Modes)
-- One new **Enhancement** listed for that spell
+  subgraph G["General Enhancements"]
+    direction TB
+    S1["Battle Mutation *<br/>+1 SP"]
+    S2["Hard Skin *<br/>+1 SP"]
+    S3["Enhanced Mobility *<br/>+1 SP"]
+    S4["Heightened Senses *<br/>+1 SP"]
+    G1["Share Adaptation<br/>+2 SP"]
+    G2["Sustained Form<br/>+1 SP per step"]
+    G3["Illusory Guise<br/>+2 SP"]
+    G4["Growth<br/>+2 SP"]
+    G5["Shrink<br/>+2 SP"]
+    G6["Inherent Form<br/>+2 SP"]
+  end
+```
 
-These opportunities can be used on the same spell or different spells,
-in any combination.
+Starred Enhancements are the ones **Focused Adaptation** can take two of
+at no extra cost. Everything else adds its SP to the Mode cost.
 
-> **Example:** At 3rd level, Lyra could learn the “Forceful Bolt”
-> Enhancement and “Area Bolt” Mode for her Bolt spell, OR learn “Chain
-> Bolt” Enhancement for Bolt and “Sensory Illusion” Mode for her
-> Illusion spell.
-
-#### Applying Enhancements
-
-When activating a Spell, you can declare any learned Enhancements you
-wish to apply. Add the SP cost of all applied Enhancements to the
-Spell’s Base SP Cost. The total SP spent cannot exceed your Maximum SP
-per Activation limit (see Table 6-1 in Section 6.4).
-
-#### Combining Enhancements
-
-Multiple *different* learned Enhancements can be applied to a single
-Spell activation, provided their effects are not contradictory (e.g.,
-you cannot apply two Enhancements that change the saving throw type to
-different stats). The SP costs are cumulative.
-
-### **7.3 Maximum SP per Activation**
-
-To maintain balance across levels, there is a limit to the total number
-of **Spell Points (SP)** (Base SP Cost + Enhancement SP Costs) that can
-be spent on a single activation of any Spell. This limit typically
-increases as a character gains levels. The specific progression will be
-detailed on \[Table X-Y: Maximum SP per Activation\] (to be created
-later, likely tied to class progression or caster level).
-
-### **7.4 Enhancement Categories by Spell**
-
-### 7.4.1 Adapt Self
-
-> **Basic Effect** (0 SP, 1 Action, Self, 1 min): Minor physical
-> adaptation: +5ft speed OR Adv Athletics climb/swim OR 1d4+Str unarmed
-> strikes.
-
-------------------------------------------------------------------------
-
-### Mode: Focused Adaptation ✦ 2 SP
+#### Mode: Focused Adaptation ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -1920,7 +1639,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration at no additional SP cost. |
 
-### Mode: Beast Shape ✦ 5 SP
+#### Mode: Beast Shape ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
@@ -1930,7 +1649,7 @@ later, likely tied to class progression or caster level).
 | **Effect** | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), +2 AC, Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
 | **Limits** | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion). |
 
-### Mode: Elemental Body ✦ 5 SP
+#### Mode: Elemental Body ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
@@ -1940,7 +1659,7 @@ later, likely tied to class progression or caster level).
 | **Effect** | Body partially transforms into Essence type. Gain: Resistance to Essence damage type, Unarmed strikes deal 1d10 magical Essence damage, Move through 1-inch spaces without squeezing, Ignore non-magical difficult terrain, Retaliation damage (Spell Mod Essence) on melee hit within 5 ft. |
 | **Limits** | Minor environmental interactions (ignite, freeze, dim light) based on Essence (GM discretion). May appear obviously magical. |
 
-### General Enhancements (Adapt Self)
+#### General Enhancements (Adapt Self)
 
 *(Add SP cost to Mode cost, unless used via Focused Adaptation\*)*
 
@@ -1957,16 +1676,20 @@ later, likely tied to class progression or caster level).
 | Shrink | +2 SP | Size becomes Small (if M/L). Gain Adv Dex checks/saves & Stealth, +1 AC & attack rolls. |
 | Inherent Form | +2 SP | Removes the need for Concentration. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.2 Arcane Sight
+### 6.2 Arcane Sight
 
-> **Basic Effect** (0 SP, 1 Action, Self (30ft), Instantaneous): When
-> you or an ally within 30 ft is hit by an attack OR targeted by a
-> harmful spell or effect, you can use your Reaction to impose
-> disadvantage on that triggering roll.
+#### Basic Effect (0 SP)
 
-### Mode: Detect Magic ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Reaction |
+| **Range** | Self (30 ft radius) |
+| **Duration** | 1 minute |
+| **Effect** | When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll. |
+
+#### Mode: Detect Magic ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -1975,7 +1698,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | Sense presence/location of magic effects, items, residue within range. Action: Focus on visible target for aura/school. Penetrates thin barriers. |
 
-#### Detect Magic Enhancements
+##### Detect Magic Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -1985,7 +1708,7 @@ later, likely tied to class progression or caster level).
 | Sustain Detection | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours). |
 | Persistent Detection | +3 SP | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-### Mode: Dispel Magic ✦ 4 SP
+#### Mode: Dispel Magic ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -1994,7 +1717,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to end. |
 
-#### Dispel Magic Enhancements
+##### Dispel Magic Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2002,7 +1725,7 @@ later, likely tied to class progression or caster level).
 | Area Dispel | +3 SP | Affects 10-ft radius sphere. Attempt dispel on *one* effect (lowest SP or targeted) on each target. Rolls separate. (Total 7 SP+). |
 | Lingering Suppression | +1 SP | If check fails, target effect suppressed (inactive) until end of **your** next turn. (Total 5 SP+). |
 
-### Mode: Counterspell ✦ 4 SP
+#### Mode: Counterspell ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2011,7 +1734,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to cause spell to fail. |
 
-### General Enhancements
+#### General Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2020,14 +1743,20 @@ later, likely tied to class progression or caster level).
 | Adept Negation | +2 SP | (Applies To: Dispel/Counter Modes) Gain advantage on spellcasting check to dispel/counter spells above threshold. |
 | Dispel Feedback | +2 SP | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 essence damage per 2 full SP of negated spell’s cost. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.3 Barrier
+### 6.3 Barrier
 
-> **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): 5x5 plane,
-> half cover (+2 AC/+2 Dex), 5 HP.
+#### Basic Effect (0 SP)
 
-### Mode: Standard Barrier ✦ 3 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 round |
+| **Effect** | Create a 5x5 ft energy plane: Provides half cover (+2 AC/Dex saves), has 5 HP, collapses if destroyed or at start of your next turn. |
+
+#### Mode: Standard Barrier ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2036,7 +1765,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | Creates flat, vertical, opaque barrier (up to 10x10 ft plane OR 5-ft radius sphere/hemisphere). Provides total cover. AC 10, HP 17. Collapses at 0 HP. Anchored. |
 
-### Mode: Shaped Barrier ✦ 4 SP (Simple) / 5 SP (Complex)
+#### Mode: Shaped Barrier ✦ 4 SP (Simple) / 5 SP (Complex)
 
 | Property | Value |
 |:---|:---|
@@ -2045,7 +1774,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | As Standard Barrier, but allows creating specific forms (e.g., 10x10x10 ft cube, 30 ft long bridge) within overall size limits. Anchored. |
 
-### Mode: Mobile Barrier ✦ 5 SP
+#### Mode: Mobile Barrier ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
@@ -2054,7 +1783,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | As Standard Barrier, but use Action while concentrating to move barrier up to 20 ft within range. |
 
-### General Enhancements (Barrier)
+#### General Enhancements (Barrier)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2065,16 +1794,22 @@ later, likely tied to class progression or caster level).
 | Damaging Barrier | +2 SP | Creatures ending turn adjacent or moving through its space (if possible) take 1d8 Essence damage. |
 | Obscuring Barrier | +1 SP | Barrier heavily obscures vision through it (if not already opaque). |
 | One-Way Visibility | +2 SP | Choose one side when casting; creatures on that side can see and target through as if transparent, others cannot. |
-| Persistent Barrier | +2 SP | (Requires: Sustain Barrier ≥ 1 hour - Removes the need for Concentration. |
+| Persistent Barrier | +2 SP | (Requires: Sustain Barrier ≥ 1 hour) Removes the need for Concentration. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.4 Blast
+### 6.4 Blast
 
-> **Basic Effect** (0 SP, 1 Action, Self (10-ft cone)): Dex save vs 1d8
-> Essence damage, half on success.
+#### Basic Effect (0 SP)
 
-### Mode: Cone Blast ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | Self (10-ft cone) |
+| **Duration** | Instantaneous |
+| **Effect** | Creatures in cone make Dex save vs Spell DC. Fail: 1d8 Essence damage. Success: Half damage. |
+
+#### Mode: Cone Blast ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2083,13 +1818,13 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Creatures in cone make Dex save. Fail: 2d8 Essence damage. Success: Half damage. |
 
-#### Cone Blast Enhancements
+##### Cone Blast Enhancements
 
 | Enhancement | SP Cost | Effect                           |
 |:------------|:--------|:---------------------------------|
 | Mega Cone   | +2 SP   | Increase cone length to 30 feet. |
 
-### Mode: Orb Blast ✦ 2 SP
+#### Mode: Orb Blast ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2098,14 +1833,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Creatures in sphere make Dex save. Fail: 2d8 Essence damage. Success: Half damage. |
 
-#### Orb Blast Enhancements
+##### Orb Blast Enhancements
 
 | Enhancement | SP Cost | Effect                      |
 |:------------|:--------|:----------------------------|
 | Large Orb   | +1 SP   | Increase radius to 10 feet. |
 | Mega Orb    | +3 SP   | Increase radius to 15 feet. |
 
-### Mode: Lancing Blast ✦ 2 SP
+#### Mode: Lancing Blast ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2114,14 +1849,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous (Lingers until start of your next turn) |
 | **Effect** | Creatures in line make Dex save. Fail: 2d8 Essence damage. Success: Half damage. Line persists; creatures entering/ending turn repeat save vs 1d8 Essence damage (half on success). |
 
-#### Lancing Blast Enhancements
+##### Lancing Blast Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Piercing Lance | +1 SP | Increase line length to 30 feet. |
 | Twin Lance | +2 SP | Create two separate Lancing Blasts with this casting. |
 
-### General Enhancements (Blast)
+#### General Enhancements (Blast)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2134,14 +1869,20 @@ later, likely tied to class progression or caster level).
 | Change Save (Mental) | +2 SP | Changes the required saving throw from Dexterity to Wisdom or Intelligence (choose when learning). |
 | Selective Blast | +3 SP | Choose creatures in initial area; they are unaffected by the initial blast. (*Does not affect Lancing Blast linger*). |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.5 Bolt
+### 6.5 Bolt
 
-> **Basic Effect** (0 SP, 1 Action, 60 ft range): Ranged spell attack,
-> 1d10 damage.
+#### Basic Effect (0 SP)
 
-### Mode: Standard Bolt ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | Instantaneous |
+| **Effect** | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
+
+#### Mode: Standard Bolt ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2150,7 +1891,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Make a ranged spell attack vs one target. Hit: 3d8 Essence damage. |
 
-#### Standard Bolt Enhancements
+##### Standard Bolt Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2160,7 +1901,7 @@ later, likely tied to class progression or caster level).
 | ↳ Change Save (Physical) | +1 SP | (Requires: Seeking Bolt Enhancement) Changes the required save to Strength or Constitution. |
 | ↳ Change Save (Mental) | +1 SP | (Requires: Seeking Bolt Enhancement) Changes the required save to Wisdom, Intelligence, or Charisma. |
 
-### Mode: Area Bolt ✦ 3 SP
+#### Mode: Area Bolt ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2169,13 +1910,13 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Creatures within the sphere make a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. |
 
-#### Area Bolt Enhancements
+##### Area Bolt Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Expand Area Bolt | +1 SP | Increase the radius of the sphere by +5 feet. (*Stackable*). |
 
-### Mode: Channeled Bolt ✦ 3 SP
+#### Mode: Channeled Bolt ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2184,7 +1925,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Choose delivery: **Attack Channel** (Make a spell attack. On hit: target takes 2d8 Essence damage and you establish a channel to them.) OR **Save Channel** (Target makes a Dexterity saving throw. On fail: takes 2d8 Essence damage and you establish a channel to them. On success: takes half damage and no channel is established). While concentrating, you can use your Action on subsequent turns to deal 2d8 Essence damage to the channeled target (if visible and within range). The channel ends if you lose concentration or use a different spell/effect that requires your Action on a subsequent turn. |
 
-#### Channeled Bolt Enhancements
+##### Channeled Bolt Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2192,7 +1933,7 @@ later, likely tied to class progression or caster level).
 | Increase Channel Damage | +2 SP | Increase subsequent Action damage by +1d8. (*Stackable*). |
 | Tenacious Channel | +2 SP | Concentration is not broken if you use your Action to cast a non-attack spell or take a non-Attack action. |
 
-### General Enhancements (Bolt)
+#### General Enhancements (Bolt)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2202,14 +1943,20 @@ later, likely tied to class progression or caster level).
 | Debilitating Bolt | +2 SP | On hit (Standard) or failed initial save (Area/Seeking/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
 | Increase Range | +1 SP | Doubles the spell’s range. (*Stackable*). |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.6 Communicate
+### 6.6 Communicate
 
-> **Basic Effect** (0 SP, 1 Action, 60ft range): Send one-way, 10-word
-> telepathic message, bypasses language, no reply.
+#### Basic Effect (0 SP)
 
-### Mode: Direct Link ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 120 ft |
+| **Duration** | Instantaneous |
+| **Effect** | EITHER send a one-way telepathic message (max 10 words) to up to three creatures you can see, OR establish two-way communication with one creature you can see (allowing a brief reply of up to 5 words). Message is understood regardless of language. |
+
+#### Mode: Direct Link ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2218,7 +1965,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Initiate a **two-way telepathic conversation** with one creature (willing, or Int save if unwilling). Bypasses language. Exchange thoughts freely. |
 
-#### Direct Link Enhancements
+##### Direct Link Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2228,7 +1975,7 @@ later, likely tied to class progression or caster level).
 | Encrypt Link | +1 SP | Link resists interception (Int check vs Spell Save DC). |
 | Emotional Hue | +1 SP | Imbue communication with simple, strong emotion (calm, fear, joy, etc.). |
 
-### Mode: Sensory Scry ✦ 3 SP
+#### Mode: Sensory Scry ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2237,7 +1984,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | Choose one: **Link Senses:** Target willing creature. Action to perceive via their visual/auditory senses (gain special senses); blind/deaf to own senses while doing so. OR **Read Object Imprint:** Target non-magical object. Gain vague psychic impressions of last user/events (needs Int \[Invest\] check vs GM DC 10-20). |
 
-#### Sensory Scry Enhancements
+##### Sensory Scry Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2246,7 +1993,7 @@ later, likely tied to class progression or caster level).
 | Two-Way Senses | +2 SP | (Applies To: Link Senses) Target(s) can use their Action to perceive through your senses. |
 | Deepen Imprint Reading | +1 SP | (Applies To: Read Imprint) Gain clearer images/sounds. Advantage on Investigation check. |
 
-### Mode: Universal Channel ✦ 1 SP
+#### Mode: Universal Channel ✦ 1 SP
 
 | Property     | Value                                                    |
 |:-------------|:---------------------------------------------------------|
@@ -2255,7 +2002,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | 1 hour (no Concentration)                                |
 | **Effect**   | Understand literal meaning of any spoken language heard. |
 
-#### Universal Channel Enhancements
+##### Universal Channel Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2264,9 +2011,9 @@ later, likely tied to class progression or caster level).
 | Gift of Tongues | +2 SP | Range becomes Touch. Target (can be self) can also be understood by any creature with a language. |
 | Swap Effect: Broadcast | +2 SP | Change effect: Range Self (30ft radius) OR Point within 60ft (30ft radius). Send one-way, 25-word telepathic message to chosen creatures in radius, bypasses language. Instantaneous. |
 | Swap Effect: Relay Net | +2 SP | Change effect: Range 120 ft. Link up to 3 willing creatures (inc. self) for 10 mins (no Conc.). Linked members send 10-word telepathic messages to each other 1/round (no action). |
-| Extended Understanding | +1 SP / step | (Requires: Base Effect, Written Word, or Speak to Beasts) Increase non-Concentration duration step (1 hour → 8 hours). |
+| Extended Understanding | +1 SP / step | (Requires: Basic Effect, Written Word, or Speak to Beasts) Increase non-Concentration duration step (1 hour → 8 hours). |
 
-### General Enhancements (Communicate)
+#### General Enhancements (Communicate)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2277,15 +2024,20 @@ later, likely tied to class progression or caster level).
 | Sustain Link/Scry | +1 SP / step | (Applies To: Direct Link, Sensory Scry) Increase Concentration duration step (1 min/10 min → 10 min/1 hour → 1 hour/8 hours). |
 | Persistent Link/Scry | +2 SP | (Applies To: Direct Link, Sensory Scry) (Requires: Sustain Link/Scry ≥ 1 hour) Requires no Concentration. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.7 Conduit
+### 6.7 Conduit
 
-> **Basic Effect** (0 SP, reaction, 30ft, 1 round): When an ally
-> declares an attack against a creature you can see, the triggering
-> attack roll has advantage.
+#### Basic Effect (0 SP)
 
-### Mode: Target Vulnerability ✦ 2 SP
+| Property      | Value                                           |
+|:--------------|:------------------------------------------------|
+| **Cast Time** | Reaction (when ally seen attacks creature seen) |
+| **Range**     | 30 ft                                           |
+| **Duration**  | Instantaneous                                   |
+| **Effect**    | The triggering attack roll has advantage.       |
+
+#### Mode: Target Vulnerability ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2294,14 +2046,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature. Choose one of your Essences. Target becomes vulnerable to that Essence’s damage type. Con save at end of its turns ends effect. |
 
-#### Target Vulnerability Enhancements
+##### Target Vulnerability Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Lingering Vulnerability | +1 SP | If target succeeds save, vulnerability persists until the *end* of its next turn. |
 | Deepen Vulnerability | +2 SP | Target has disadvantage on its saving throws to end this effect. |
 
-### Mode: Collaborative Strike ✦ 3 SP
+#### Mode: Collaborative Strike ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2310,14 +2062,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature. First time each turn an **ally** hits the target with an attack, that attack deals +1d8 Essence damage. |
 
-#### Collaborative Strike Enhancements
+##### Collaborative Strike Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Amplify Collaboration | +1 SP | Increase the bonus damage dealt by allies by +1d8. (*Stackable*). |
 | Personal Strike | +1 SP | Your own attacks can also trigger the bonus damage (once per turn total). |
 
-### Mode: Resonance Field ✦ 4 SP
+#### Mode: Resonance Field ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2326,14 +2078,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Choose up to three creatures within range. When any marked target takes damage from an attack or spell, all other marked targets within 30 feet of it take damage = your Spell Mod (min 1) of the same damage type. |
 
-#### Resonance Field Enhancements
+##### Resonance Field Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Harmonic Resonance | +2 SP | Increase the resonance damage from Spell Mod to 1d8. |
 | Expanded Field | +1 SP / target | Increase the number of initial targets. |
 
-### General Enhancements (Conduit)
+#### General Enhancements (Conduit)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2344,14 +2096,20 @@ later, likely tied to class progression or caster level).
 | Sustain Conduit | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour). |
 | Persistent Conduit | +3 SP | (Requires: Sustain Conduit ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.8 Debilitate
+### 6.8 Debilitate
 
-> **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target makes
-> Con save vs speed halved.
+#### Basic Effect (0 SP)
 
-### Mode: Single Target Affliction ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 round |
+| **Effect** | Target makes Con save vs Spell DC. Fail: Speed halved until start of your next turn. |
+
+#### Mode: Single Target Affliction ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2360,7 +2118,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature makes a saving throw (Wisdom by default). On fail, target suffers an effect based on applied Essence (Ignited, etc.). Repeats save end of turns. |
 
-#### Single Target Affliction Enhancements
+##### Single Target Affliction Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2369,7 +2127,7 @@ later, likely tied to class progression or caster level).
 | Shared Affliction | +2 SP | Target an additional creature within 30 ft of primary; also makes save vs same effect. |
 | Extreme Affliction | +3 SP | Target becomes Stunned instead of having the status effect applied. |
 
-### Mode: Area Affliction ✦ 3 SP
+#### Mode: Area Affliction ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2378,28 +2136,34 @@ later, likely tied to class progression or caster level).
 | **Duration** | 1 round |
 | **Effect** | Creatures within cube make save (Wisdom default). On fail, targets suffer Essence-based status effect until end of **your** next turn. |
 
-#### Area Affliction Enhancements
+##### Area Affliction Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Expand Area | +1 SP / +5ft | Increase the cube’s side length by +5 feet. (*Stackable*). |
 | Increased Duration | +2 SP | Effect lasts Concentration, up to 1 min. Affected creatures repeat save at end of turns, ending effect on self on success. |
 
-### General Enhancements (Debilitate)
+#### General Enhancements (Debilitate)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Change Save | +1 SP | Change the saving throw to Strength, Constitution, Intelligence, or Charisma (choose when learned). |
 | Greater Affliction | +2 SP | The target becomes Incapacitated, instead of having the status effect applied. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.9 Defend
+### 6.9 Defend
 
-> **Basic Effect** (0 SP, 1 Action, Self, 1 round): Resistance to
-> Bludgeoning, Piercing, OR Slashing.
+#### Basic Effect (0 SP)
 
-### Mode: Essence Ward ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | Self |
+| **Duration** | 1 round |
+| **Effect** | Gain resistance to physical damage until start of your next turn. |
+
+#### Mode: Essence Ward ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2408,7 +2172,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Gain resistance to the damage type determined by the applied Essence. |
 
-#### Essence Ward Enhancements
+##### Essence Ward Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2420,7 +2184,7 @@ later, likely tied to class progression or caster level).
 | Sustain Ward | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour). |
 | Persistent Ward | +3 SP | (Requires: Sustain Ward ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-### Mode: Reactive Shield ✦ 3 SP
+#### Mode: Reactive Shield ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2429,14 +2193,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | 1 round |
 | **Effect** | Gain +5 bonus to AC against the triggering attack and until the start of your next turn. |
 
-#### Reactive Shield Enhancements
+##### Reactive Shield Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Shield Other | +2 SP | Range becomes Touch. Use reaction when ally within 5 ft is hit; grant them the AC bonus. (Total 5 SP). |
 | Deflecting Shield | +1 SP | If the triggering attack misses due to the AC bonus, attacker takes 1d8 Force/Essence damage. (Total 4 SP+). |
 
-### Mode: Enduring Armor ✦ 0 SP
+#### Mode: Enduring Armor ✦ 0 SP
 
 | Property     | Value                                                     |
 |:-------------|:----------------------------------------------------------|
@@ -2445,21 +2209,27 @@ later, likely tied to class progression or caster level).
 | **Duration** | 8 hours                                                   |
 | **Effect**   | Your base AC becomes 13 + Dex modifier. No Concentration. |
 
-#### Enduring Armor Enhancements
+##### Enduring Armor Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Armour Other | +2 SP | Target becomes one willing creature touched instead of Self. |
 | Greater Armor | +2 SP | The AC formula becomes 14 + Dex Mod. (Total cost 2 SP+). Requires separate learning. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.10 Empower/Enfeeble
+### 6.10 Empower/Enfeeble
 
-> **Basic Effect** (0 SP, 1 Action, 30 ft range, 1 round): Target gets
-> +1d4 OR makes Wis save vs -1d4 to ONE attack roll OR saving throw.
+#### Basic Effect (0 SP)
 
-### Mode: Greater Empowerment ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 round |
+| **Effect** | Choose one target & effect: **Empower:** Target gets +1d4 to next Attack Roll OR Save before start of your next turn. **Enfeeble:** Target makes Wis save vs Spell DC. Fail: -1d4 to next Attack Roll OR Save before start of your next turn. |
+
+#### Mode: Greater Empowerment ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2468,13 +2238,13 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature. Gains +1d4 bonus to all attack rolls, saving throws, and ability checks. |
 
-#### Greater Empowerment Enhancements
+##### Greater Empowerment Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Shared Empowerment | +1 SP / target | Target additional creatures within 30 ft of primary. |
 
-### Mode: Greater Enfeeblement ✦ 2 SP
+#### Mode: Greater Enfeeblement ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2483,7 +2253,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature. Target makes Wisdom save. Fail: -1d4 penalty to all attack rolls, saves, ability checks. Repeats save at end of turns. |
 
-#### Greater Enfeeblement Enhancements
+##### Greater Enfeeblement Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2492,7 +2262,7 @@ later, likely tied to class progression or caster level).
 | Change Save (Physical) | +1 SP | Change save to Strength or Constitution. |
 | Change Save (Mental) | +1 SP | Change save to Intelligence or Charisma. |
 
-### Mode: Reactive Interference ✦ 3 SP
+#### Mode: Reactive Interference ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2501,7 +2271,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Target rerolls the triggering d20, must use the lower result. |
 
-### Mode: Reactive Fortune ✦ 3 SP
+#### Mode: Reactive Fortune ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2510,7 +2280,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Target rerolls the triggering d20, potentially changing the outcome (use higher for fail, lower for hit vs AC). |
 
-### General Enhancements (Empower/Enfeeble)
+#### General Enhancements (Empower/Enfeeble)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2518,15 +2288,20 @@ later, likely tied to class progression or caster level).
 | Sustain Effect | +1 SP / step | (Applies To: Greater Empowerment, Greater Enfeeblement) Increase Concentration duration (1 min → 10 min → 1 hour). |
 | Persistent Effect | +3 SP | (Applies To: Greater Empowerment, Greater Enfeeblement) (Requires: Sustain Effect ≥ 1 hour) Duration 1 hour, no Conc. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.11 Heal
+### 6.11 Heal
 
-> **Basic Effect** (0 SP, 1 Action, Touch): Target regains **1d4** +
-> spellcasting ability modifier hit points OR becomes stabilized if
-> dying.
+#### Basic Effect (0 SP)
 
-### Mode: Standard Heal ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | Touch |
+| **Duration** | Instantaneous |
+| **Effect** | Target regains 1d4 + Spell Mod HP, OR becomes stable with 1 HP if downed. |
+
+#### Mode: Standard Heal ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2535,14 +2310,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Target creature regains **2d8 + Spellcasting Ability Modifier** hit points. |
 
-#### Standard Heal Enhancements
+##### Standard Heal Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Distant Heal | +1 SP | Range becomes 60 feet. |
 | Shared Heal | +2 SP / target | Target additional willing creatures within 30 ft of original. Healing amount rolled once, applies to each. |
 
-### Mode: Area Heal ✦ 5 SP
+#### Mode: Area Heal ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
@@ -2551,14 +2326,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Choose up to 6 willing creatures within the sphere. Each target regains **2d8 + Spellcasting Ability Modifier** hit points. |
 
-#### Area Heal Enhancements
+##### Area Heal Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Expand Area | +1 SP / +5ft | Increase the sphere’s radius by +5 feet. (*Stackable*). |
 | Increase Targets | +1 SP / +2 targets | Increase the number of creatures you can choose. |
 
-### Mode: Restorative Heal ✦ 3 SP
+#### Mode: Restorative Heal ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2567,27 +2342,33 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Target creature regains **1d8 + Spellcasting Ability Modifier** hit points AND you end **one** disease OR **one** condition affecting it (Blinded, Deafened, Paralyzed, Poisoned). |
 
-#### Restorative Heal Enhancements
+##### Restorative Heal Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Greater Restoration | +2 SP | Instead end **one** effect: Curse, Petrification, Charmed, Frightened, OR reduce exhaustion by one level, OR remove one reduction to ability score/HP max. (Total cost 5 SP). |
 
-### General Enhancements (Heal)
+#### General Enhancements (Heal)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | More Healing | +1 SP | Increase healing dice by **+1d8**. (Applies to Standard, Area, or Restorative healing amount). (*Stackable*). |
 | Revivify | +5 SP | (Applies To: Standard Heal, Restorative Heal) Target creature died within last minute. Returns to life with 1 HP. Doesn’t restore missing parts or prevent death from old age. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.12 Illusion
+### 6.12 Illusion
 
-> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Basic visual OR
-> sound illusion, like Minor Illusion.
+#### Basic Effect (0 SP)
 
-### Mode: Sensory Illusion ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 minute |
+| **Effect** | Create minor visual illusion (object/creature ≤ 5-ft cube) OR simple sound effect. Interaction/Investigation reveals illusion. |
+
+#### Mode: Sensory Illusion ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2596,7 +2377,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Create EITHER image (object/creature/phenomenon ≤ 15-ft cube) OR sound effect (whisper to scream). Physical interaction reveals visual illusions; Action + Int (Investigation) check vs Spell Save DC discerns illusion. |
 
-#### Sensory Illusion Enhancements
+##### Sensory Illusion Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2608,7 +2389,7 @@ later, likely tied to class progression or caster level).
 | Sustain Sensory | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour). |
 | Persistent Sensory | +3 SP | (Requires: Sustain Sensory ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-### Mode: Personal Illusion ✦ 3 SP
+#### Mode: Personal Illusion ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2617,7 +2398,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | See Effect |
 | **Effect** | Choose **one**: **Disguise Self:** Change appearance (visual only). Duration 1 hour, no Conc. Int (Investigation) check vs Spell DC on interaction/inspection reveals. **Blurring Form:** Attackers have disadvantage unless they don’t use sight. Duration Conc, up to 1 min. **Illusory Duplicates:** Create 3 duplicates (like *Mirror Image*). Duration 1 min, no Conc. |
 
-#### Personal Illusion Enhancements
+##### Personal Illusion Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2625,7 +2406,7 @@ later, likely tied to class progression or caster level).
 | Sustain Blur | +1 SP / step | (Applies To: Blurring Form) Increase Concentration duration (1 min → 10 min → 1 hour). |
 | Persistent Blur | +3 SP | (Applies To: Blurring Form) (Requires: Sustain Blur ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-### Mode: Invisibility ✦ 4 SP
+#### Mode: Invisibility ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2634,29 +2415,34 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 hour |
 | **Effect** | A creature you touch becomes Invisible. Ends if target attacks or casts a spell. |
 
-#### Invisibility Enhancements
+##### Invisibility Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Improved Invisibility | +3 SP | Effect does not end if the target attacks or casts a spell. (Total cost 7 SP+). |
 | Share Invisibility | +2 SP / target | Target additional creatures touched. (Total cost 6 SP+ for 2 targets, 8 SP+ for 3, etc.). |
 
-### General Enhancements (Illusion)
+#### General Enhancements (Illusion)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Increase Range | +1 SP | Doubles the range of the chosen Mode (if applicable and not Self/Touch). (*Stackable*). |
 | Subtle Casting | +1 SP | Cast without Verbal or Somatic components. (Most useful for Sensory Illusion or bestowed Personal Illusions) |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.13 Influence
+### 6.13 Influence
 
-> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 round): Target makes
-> Wis save or is forced to target **you** with any spells or attacks
-> until your next turn.
+#### Basic Effect (0 SP)
 
-### Mode: Charm Person ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 round |
+| **Effect** | Target creature you can see makes Wis save vs Spell DC. Fail: Is only able to target you with any spells or attacks until your next turn. |
+
+#### Mode: Charm Person ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2665,14 +2451,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | 1 hour (no Concentration) |
 | **Effect** | Target one humanoid you can see. Wis save vs **Charmed**. Regards you as friendly acquaintance. Knows it was charmed after effect ends (unless *Lasting Impression* used). Ends early if harmed by you/companions. |
 
-#### Charm Person Enhancements
+##### Charm Person Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Share Charm | +2 SP / target | Target additional humanoids within range. |
 | Sustain Charm | +2 SP / step | Increase non-Concentration duration step (1 hour → 8 hours → 24 hours). |
 
-### Mode: Suggest Course ✦ 3 SP
+#### Mode: Suggest Course ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2681,14 +2467,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 8 hours |
 | **Effect** | Target one creature that can hear/understand you. Wis save vs following a suggested reasonable course of activity (1-2 sentences). Ends if suggestion completed or target harmed by you/companions. |
 
-#### Suggest Course Enhancements
+##### Suggest Course Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Sustain Suggestion | +2 SP / step | Increase Concentration duration step (8 hours → 24 hours). (*Can be made Persistent*) |
 | Persistent Suggestion | +3 SP | (Requires: Sustain Suggestion at 24 hours) Duration becomes 24 hours, no Conc. |
 
-### Mode: Read Thoughts ✦ 3 SP
+#### Mode: Read Thoughts ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2697,13 +2483,13 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Use Action to target creature within 30 ft. Wis save vs reading its surface thoughts while within 30 ft. Can switch targets with Action. Target unaware on success (unless *Probe Deeper* used). |
 
-#### Read Thoughts Enhancements
+##### Read Thoughts Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Probe Deeper | +1 SP | As Action, force linked target Int save. Fail: access deeper thoughts for 1 round. Target knows mind is probed on failed save. Success: spell ends for that target. |
 
-### Mode: Dominate Creature ✦ 6 SP
+#### Mode: Dominate Creature ✦ 6 SP
 
 | Property | Value |
 |:---|:---|
@@ -2712,14 +2498,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Target one creature. Wis save vs **Charmed**. Establish telepathic link (same plane). Issue commands (no action). Use Action for precise control until end of next turn (use target’s reaction with yours). Target repeats save each time it takes damage, ending effect on success. |
 
-#### Dominate Creature Enhancements
+##### Dominate Creature Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Extended Domination | +2 SP / step | Increase Concentration duration step (1 min → 10 min → 1 hour). |
 | Overwhelming Will | +2 SP | Target has disadvantage on the initial saving throw. |
 
-### General Enhancements (Influence)
+#### General Enhancements (Influence)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2730,17 +2516,20 @@ later, likely tied to class progression or caster level).
 | Lasting Impression | +1 SP | (Applies To: Charm Person, Suggest Course) Target doesn’t realize it was magically influenced after the effect ends. |
 | Broaden Target | +2 SP | (Applies To: Charm Person, Suggest Course, Dominate Creature) Can target any creature type (GM discretion on understanding for Suggestion). |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.14 Manipulate
+### 6.14 Manipulate
 
-> **Basic Effect (0 SP)** – 1 Action, 30 ft, 1 min. Use Action (on cast
-> or later turns) to target point in range. Cause one: Interact with
-> object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked
-> door/container; Pour contents from container. Lacks finesse/strength
-> for complex tasks/attacks.
+#### Basic Effect (0 SP)
 
-### Mode: Focused Control ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 minute |
+| **Effect** | Use Action (on cast or later turns) to target point in range. Cause one: Interact with object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked door/container; Pour contents from container. Lacks finesse/strength for complex tasks/attacks. |
+
+#### Mode: Focused Control ✦ 2 SP
 
 *This replaces the Basic Effect when cast.*
 
@@ -2759,7 +2548,7 @@ later, likely tied to class progression or caster level).
 | Enhancement | SP | Effect / notes |
 |:---|:---|:---|
 | Increase Range/Speed | +1 SP | Doubles both range & movement of the focus. *Stackable.* |
-| Sustain Control | +1 SP/step | Extend concentration → 1 h → 8 h. |
+| Sustain Control | +1 SP/step | Increase Concentration duration (10 min → 1 hour → 8 hours). |
 | Invisible Hand | +1 SP | The telekinetic effect leaves no visible trace. |
 | Boost Force | +1 SP/step | Each step: ×2 carry cap (25→50→100 lb …) **and** raises eligible size for shove / grapple by 1 (S→M→L…). |
 | Forceful Push | +1 SP | (Requires: ≥ 1 step Boost Force) Action: contested check (Spell ability vs Athletics/Acrobatics). On success, push creature ≤ size limit 10 ft. |
@@ -2769,17 +2558,22 @@ later, likely tied to class progression or caster level).
 | Coordinated Action | +1 SP | (Requires: Dual Hands) Both hands may attempt complex checks / attacks simultaneously; if aimed at the same target, gain Advantage. |
 | Elemental Touch | +1 SP | (Requires: an Essence) Hand is immune to that element and can carry / slosh / ignite it for minor narrative effects. |
 | Shape Element | +2 SP | (Requires: Elemental Touch and apt Essence) Action: sculpt / move a **5‑ft cube** of loose, non‑living matching material (sand, water, shadow, etc.). Lasts while spell lasts. |
-| Persistent Control | +3 SP | (Requires: Sustain Control ≥ 1 h) Duration 8 h, no concentration. |
+| Persistent Control | +3 SP | (Requires: Sustain Control ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.15 Move
+### 6.15 Move
 
-> **Basic Effect** (0 SP, Special (Part of Move), Self, Instantaneous):
-> When moving this turn, your movement doesn’t provoke opportunity
-> attacks.
+#### Basic Effect (0 SP)
 
-### Mode: Blink Step ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | Special (Part of Move Action) |
+| **Range** | Self |
+| **Duration** | Instantaneous |
+| **Effect** | When moving this turn, your movement doesn’t provoke opportunity attacks. |
+
+#### Mode: Blink Step ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2788,7 +2582,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | When moving, instead **teleport up to 30 feet** to an unoccupied space you can see. This uses an equivalent amount of movement speed. Can pass through obstacles you couldn’t normally move through. |
 
-#### Blink Step Enhancements
+##### Blink Step Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2798,7 +2592,7 @@ later, likely tied to class progression or caster level).
 | Phase Step | +2 SP | Teleport allows passing through solid objects/barriers up to 5 feet thick. Must end in unoccupied space. |
 | Elemental Arrival | +1 SP | Creatures within 5 feet of arrival space take damage = Spell Mod (min 1) of your Essence type. |
 
-### Mode: Velocity Surge ✦ 2 SP
+#### Mode: Velocity Surge ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2807,7 +2601,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Gain the benefits of both the **Dash** and **Disengage** actions for your movement this turn. |
 
-### Mode: Reactive Phase ✦ 3 SP
+#### Mode: Reactive Phase ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2816,14 +2610,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Immediately **teleport up to 15 feet** to an unoccupied space you can see *after* the trigger resolves. |
 
-#### Reactive Phase Enhancements
+##### Reactive Phase Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Increase Teleport Dist. | +1 SP / +15 ft | Increase the distance teleported. (*Stackable*). |
 | Elemental Arrival | +1 SP | Creatures within 5 feet of arrival space take damage = Spell Mod (min 1) of your Essence type. |
 
-### General Enhancements (Move)
+#### General Enhancements (Move)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2831,14 +2625,20 @@ later, likely tied to class progression or caster level).
 | Feather Fall | +1 SP | (Cast Independently) Reaction (when you or creature within 60 ft falls). Target’s fall rate slows to 60 ft/round, no fall damage. Duration 1 min or until landing. |
 | Subtle Movement | +1 SP | Cast without Verbal or Somatic components (mainly for Bestow/Feather Fall). |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.16 Strike
+### 6.16 Strike
 
-> **Basic Effect** (0 SP, 1 Action, Self, Instantaneous): Make weapon
-> attack, if hit deals +Spell Mod Essence damage.
+#### Basic Effect (0 SP)
 
-### Mode: Empowered Strike ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | Self |
+| **Duration** | Instantaneous |
+| **Effect** | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
+
+#### Mode: Empowered Strike ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2847,7 +2647,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
 
-### Mode: Cleaving Strike ✦ 4 SP
+#### Mode: Cleaving Strike ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2856,7 +2656,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
 
-### Mode: Piercing Strike ✦ 4 SP
+#### Mode: Piercing Strike ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2865,7 +2665,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | (Ranged/Thrown Only) Make ranged weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 15ft line behind target make Dex save vs **2d8** Essence damage (half on success). |
 
-### Mode: Bursting Strike ✦ 5 SP
+#### Mode: Bursting Strike ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
@@ -2874,7 +2674,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Instantaneous |
 | **Effect** | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centered on target make Dex save vs **2d8** Essence damage (half on success). |
 
-### General Enhancements (Strike)
+#### General Enhancements (Strike)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2887,16 +2687,20 @@ later, likely tied to class progression or caster level).
 | Feinting Strike | +2 SP | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn. |
 | Critical Surge | +2 SP | (Use as Reaction) On critical hit with the spell’s attack, spend 2 SP to maximize the spell’s **bonus** damage dice. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.17 Summon
+### 6.17 Summon
 
-> **Basic Effect** (0 SP, 1 Action, 30ft range, 1 min): Summons Tiny
-> servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken
-> directly before or after yours, to Help ally attacking creature within
-> 5 ft. Disappears at 0 HP or duration end.
+#### Basic Effect (0 SP)
 
-### Mode: Utility Familiar ✦ 2 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 30 ft |
+| **Duration** | 1 minute |
+| **Effect** | Summons Tiny servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken directly before or after yours, to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end. |
+
+#### Mode: Utility Familiar ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
@@ -2905,7 +2709,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 10 min |
 | **Effect** | Summon Tiny/Small spirit (AC 12, HP 5+SpellMod, Speed 30ft). Can Help, Search, Use Object, Dash actions. Obeys commands. Can deliver your touch spells. |
 
-#### Utility Familiar Enhancements
+##### Utility Familiar Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2917,7 +2721,7 @@ later, likely tied to class progression or caster level).
 | Sustain Familiar | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours). |
 | Persistent Familiar | +3 SP | (Requires: Sustain Familiar ≥ 1 hour) Duration 8 hours, no Concentration. |
 
-### Mode: Combat Spirit ✦ 4 SP
+#### Mode: Combat Spirit ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2926,7 +2730,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 hour |
 | **Effect** | Summon Medium spirit (AC 14, HP 15 + \[5 \* SP spent above 4 SP\], Speed 30ft). Acts on its own turn after yours. Can take most actions (no spells). Attack: Uses your Spell Attack vs AC, deals **1d8 + Spell Mod** Essence damage on hit. |
 
-#### Combat Spirit Enhancements
+##### Combat Spirit Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2940,7 +2744,7 @@ later, likely tied to class progression or caster level).
 | Movement Mode | +1 SP | Gains a fly, burrow, or swim speed equal to its walking speed (choose one). |
 | Special Maneuver | +2 SP | Choose one option: **Charge:** (Replaces attack) Move ≥10ft straight, attack deals +1d8 dmg, target makes Str save vs Spell DC or knocked prone. **Grapple:** (Replaces attack) Make grapple check using Spell Atk bonus. **Area Burst:** (1/summon, replaces attack) 5-ft radius burst centered on self, 2d6 Essence dmg, Dex save vs Spell DC for half. |
 
-### General Enhancements (Summon)
+#### General Enhancements (Summon)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2948,14 +2752,20 @@ later, likely tied to class progression or caster level).
 | Essence Burst | +2 SP | When spirit drops to 0 HP, it explodes (10ft radius). Dex save vs Spell DC, 2d6 Essence damage on fail, half on success. |
 | Twin Summon | +4 SP | Summon two identical spirits instead of one. Concentration applies to both. Base cost + 4 SP applies. |
 
-------------------------------------------------------------------------
+<!-- markdownlint-disable MD041 -->
 
-### 7.4.18 Zone
+### 6.18 Zone
 
-> **Basic Effect** (0 SP, 1 Action, 60ft range, 1 round): 10-ft square
-> area becomes Difficult Terrain.
+#### Basic Effect (0 SP)
 
-### Mode: Hindering Zone ✦ 3 SP
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | 1 round |
+| **Effect** | Choose point on surface seen. Creates 10-ft square area centered there. Area is Difficult Terrain until start of your next turn. |
+
+#### Mode: Hindering Zone ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -2964,7 +2774,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Create zone. Choose **one** effect upon casting: **Difficult Terrain:** Area is difficult terrain. **Obscuring Mist:** Area heavily obscured. **Restraining Field:** Creatures entering/starting turn make Str save vs **Restrained** until start of their next turn. **Silence:** No sound within/passes through. Deafens inside. Prevents V components. |
 
-#### Hindering Zone Enhancements
+##### Hindering Zone Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2973,7 +2783,7 @@ later, likely tied to class progression or caster level).
 | Mobile Silence | +2 SP | (Applies To: Silence) Zone centered on a willing creature/object you choose within range, moves with it. |
 | Tenacious Restraint | +1 SP | (Applies To: Restraining Field) Creatures have disadvantage on the Strength saving throw. |
 
-### Mode: Harmful Zone ✦ 4 SP
+#### Mode: Harmful Zone ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2982,7 +2792,7 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Create zone. Choose **one** effect upon casting: **Damaging:** Creatures entering/starting turn make Dex save. Take **2d6** Essence damage on fail, half on success. **Debilitating:** Creatures entering/starting turn make Con save vs essence status until start of *your* next turn. |
 
-#### Harmful Zone Enhancements
+##### Harmful Zone Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -2990,7 +2800,7 @@ later, likely tied to class progression or caster level).
 | Lingering Hazard | +1 SP | The zone’s area also becomes difficult terrain. |
 | Weakening Field | +1 SP | (Applies To: Debilitating) Creatures have disadvantage on the initial save vs the status effect. |
 
-### Mode: Sanctuary Zone ✦ 4 SP
+#### Mode: Sanctuary Zone ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
@@ -2999,14 +2809,14 @@ later, likely tied to class progression or caster level).
 | **Duration** | Concentration, up to 1 min |
 | **Effect** | Choose creatures when casting. Chosen creatures inside gain **+1 bonus to AC and all saving throws**. |
 
-#### Sanctuary Zone Enhancements
+##### Sanctuary Zone Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
 | Greater Sanctuary | +2 SP | Bonus increases to +2. |
 | Purifying Aura | +2 SP | Chosen creatures also have advantage on saving throws against being charmed, frightened, or poisoned. |
 
-### General Enhancements (Zone)
+#### General Enhancements (Zone)
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
@@ -3017,11 +2827,9 @@ later, likely tied to class progression or caster level).
 | Selective Zone | +2 SP | Choose creatures when casting; they are unaffected by the zone’s detrimental effects (does not grant benefits of Sanctuary Zone). |
 | Shape Zone | +1 SP | Can form the zone into a Cube, Cylinder, Line, or Wall of equivalent area/volume (GM discretion for specific dimensions based on radius/side). |
 
-------------------------------------------------------------------------
-
 <!-- markdownlint-disable MD041 -->
 
-## 8. Feat Catalog
+## 7. Feat Catalog
 
 *(**Reminder:** Ability modifiers are capped at +5)* *(Feats grant a +1
 modifier increase, replacing traditional ASIs)* *(Action Economy:
@@ -4143,3 +3951,119 @@ feat.
 | **Consistent / Narrative Growth** |  |  |
 | **Consistent Outstanding Play:** Demonstrates consistent skill/roleplay/contribution over time (GM judgment). | `Ability Boost` (Focus on stats tied to their consistent strengths), `Resilient Survivor` (if their journey involved resilience). | Good default if no specific moment stands out. |
 | **Character Arc Climax:** Character reaches major goal, defining moment aligns with concept/class/essence focus. | Class-specific Feat, Essence Feat, Spell Feat, or any other feat that strongly represents their growth or newfound mastery. | High narrative importance; GM discretion key here. Match the feat to the *nature* of the accomplishment. |
+
+<!-- markdownlint-disable MD041 -->
+
+## Appendix A: Glossary
+
+- Ability Modifier: A numerical bonus or penalty (ranging from -1 to +3
+  in this system) derived from an Ability Score, used in dice rolls for
+  checks, saves, and attacks. (See Section 2.3)
+
+- Anchor: A defining element (memento, promise, principle) that grounds
+  a character emotionally or narratively. (See Section 2.6)
+
+- Base Spells: The four foundational spells a character knows at 1st
+  level, consisting of their Core Attack Spell, Unique Spell, and two
+  Choice Spells. (See Section 2.5, Section 3.1, Section 5.2)
+
+- Basic Effect: The simplest version of a Spell, usable at will for 0
+  Spell Points (SP). Represents the core concept of the spell. (See
+  Section 2.5, Section 5.3, Section 6)
+
+- Choice Spells: Two spells selected by the player from their chosen
+  Class’s available options during character creation. (See Section 2.5,
+  Section 3.1, Section 5.2)
+
+- Class: The character’s primary archetype, defining their Key Ability,
+  Unique Spell, Hit Die, proficiencies, and general approach to
+  challenges and magic. (See Section 2.2, Section 3)
+
+- Core Attack Spell: A character’s primary offensive magical option
+  (Strike or Bolt), granted by their Class. (See Section 2.5, Section
+  3.1, Section 5.2)
+
+- Enhancement: A modification applied to a Spell by spending Spell
+  Points (SP) to augment its effects (power, scope, duration, function).
+  Learned as characters level up. (See Section 2.7, Section 5.4, Section
+  6)
+
+- Essence (Descriptor): A fundamental magical energy (e.g., Fire, Cold,
+  Shadow) chosen by the character, defining the damage type and sensory
+  details of their spells. (See Section 2.5, Section 4)
+
+- Fate Undo Token: A resource awarded by the GM when a character’s
+  Hindrance causes a Meaningful Complication. Can be spent to reroll
+  dice or revise narrative actions. (See Section 2.6)
+
+- Feat: A special ability gained (typically through leveling) that
+  provides unique capabilities or enhances existing ones. (See Section
+  7)
+
+- GM (Game Master): The person who runs the game, describes the world,
+  adjudicates rules, and portrays non-player characters. (See Section
+  1.3)
+
+- Hindrance: A character flaw, weakness, or complication chosen during
+  creation that adds depth and can lead to Meaningful Complications (and
+  Fate Undo Tokens). (See Section 2.6)
+
+- Hit Die (HD): The type of die rolled to determine hit points gained
+  per level, specific to each Class. (See Section 2.2, Section 2.7)
+
+- Hit Points (HP): A measure of a character’s health and resilience to
+  damage. (See Section 2.7)
+
+- Key Ability: The primary Ability Score associated with a character’s
+  Class, determining their Spellcasting Ability Modifier and often
+  influencing class features. (See Section 2.2, Section 3.2)
+
+- Long Rest: An extended period of rest (typically 8 hours) during which
+  characters regain all lost Hit Points and expended Spell Points (SP).
+
+- Max SP per Activation: The maximum number of Spell Points (SP) that
+  can be spent on a single use of a Spell (Mode cost + Enhancement
+  costs), determined by character level. (See Section 2.7, Section 5.4)
+
+- Meaningful Complication: An instance where a character’s Hindrance
+  significantly impacts a scene, creates obstacles, or forces difficult
+  choices, potentially earning a Fate Undo Token. (See Section 2.6)
+
+- Mode: A predefined way to use a Spell, more powerful than its Basic
+  Effect. Modes cost 1 to 6 SP, with one exception at 0 SP. (See Section
+  5.3, Section 6)
+
+- Proficiency Bonus: A fixed bonus (+3 in this system) added to rolls
+  where a character is proficient (skills, saves, certain attacks). (See
+  Section 2.4)
+
+- Question: A driving mystery or unresolved element in a character’s
+  backstory or goals. (See Section 2.6)
+
+- Spell: A foundational magical concept (like Bolt, Heal, Barrier) that
+  serves as a template, customized via Essences and Enhancements. (See
+  Section 2.5, Section 5, Section 6)
+
+- Spell Attack Bonus: The bonus added to attack rolls made with spells,
+  equal to the character’s Spellcasting Ability Modifier. (See Section
+  2.4)
+
+- Spell Points (SP): The magical energy resource spent to activate Spell
+  Modes and apply Enhancements. Regained after a Long Rest. (See Section
+  2.7, Section 5.4)
+
+- Spell Save DC: The Difficulty Class an opponent must meet or exceed on
+  a saving throw to resist a character’s spell effect. Calculated as
+  10 + Spellcasting Ability Modifier. (See Section 2.4)
+
+- Spellcasting Ability Modifier (Spell Mod): The Ability Modifier
+  derived from a character’s Key Ability, used for spell attacks and
+  calculating Spell Save DC. (See Section 2.4)
+
+- Status Effect: A specific condition (e.g., Ignited, Frozen, Dazzled)
+  associated with an Essence, typically applied via Enhancements. (See
+  Section 4.4, Section 4.5)
+
+- Unique Spell: A distinctive spell accessible only to a specific Class,
+  representing its core magical approach. (See Section 2.2, Section 3.1,
+  Section 5.2, Section 5.5)

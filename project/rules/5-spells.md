@@ -4,7 +4,7 @@
 
 ### 5.1 The Nature of Spells
 
-In this system, **Spells** are foundational magical concepts—versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. Unlike traditional systems with sprawling spell lists, we focus on a curated set of core spells that you'll personalize through **Essences** and **Enhancements**.
+In this system, **Spells** are foundational magical concepts, versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. We focus on a curated set of core spells that you'll personalize through **Essences** and **Enhancements**.
 
 Think of Spells as the underlying structure of your magic:
 
@@ -12,7 +12,7 @@ Think of Spells as the underlying structure of your magic:
 * **Essences** determine *how* your magic manifests (fire, lightning, shadow)
 * **Enhancements** control *how powerful* your effects become
 
-This modular approach shifts the focus from memorizing numerous specific rules to mastering a core framework that you can creatively adapt to any situation. Your character isn't limited by a static list of predetermined effects—they're empowered to shape their magic according to their needs and style.
+This modular approach shifts the focus from memorizing numerous specific rules to mastering a core framework that you can creatively adapt to any situation. Your character isn't limited by a static list of predetermined effects, they decide what their magic does as they cast it.
 
 > **Magic in Action: Narrative Drives Mechanics**
 >
@@ -30,14 +30,14 @@ This modular approach shifts the focus from memorizing numerous specific rules t
 >
 > *A translucent barrier of radiant energy materializes, arrows thudding harmlessly against its surface.*
 >
-> **Behind the Magic:** Same spell (`Barrier`), different execution—this time with **Light Essence** and the simpler "Standard Barrier" mode (2 SP) for a quick defensive reaction.
+> **Behind the Magic:** Same spell (`Barrier`), different execution. This time with **Light Essence** and the simpler "Standard Barrier" mode (3 SP) for a quick defensive reaction.
 
 ### 5.2 Learning Spells
 
-Characters **know** a set number of Spells, representing the magical effects they have mastered. Unlike some systems, you don't prepare spells daily—your known spells are always available to you.
+Characters **know** a set number of Spells, representing the magical effects they have mastered. You don't prepare spells daily, your known spells are always available to you.
 
 Your four starting spells form the core of your magical repertoire, representing the foundational concepts your character has mastered.
-Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 7).
+Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 6).
 While your character may rarely learn entirely new spells through specific feats or unique narrative opportunities, the emphasis of this system is on deepening mastery over breadth of effects.
 
 #### Starting Spells
@@ -56,7 +56,9 @@ At 1st level, you know **four Spells** determined as follows:
 
 Every 4th level (4th, 8th, 12th, 16th, 20th), when you would normally gain a Feat, you can replace one spell you know with a different spell from your class spell list, representing your character's evolving magical approach.
 
-### 5.3 Spell Descriptions
+### 5.3 How to Read a Spell Entry
+
+Every spell in Section 6 opens with its **Basic Effect**, then lists its **Modes**, then the **Enhancements** that attach to them. The Basic Effect costs 0 SP and is always available, like a cantrip. Modes and Enhancements cost Spell Points.
 
 Each spell follows a standard format detailing its core function before any Enhancements are applied:
 
@@ -81,11 +83,9 @@ Each spell follows a standard format detailing its core function before any Enha
 * **Concentration** - Requires maintaining focus; you can only concentrate on one spell at a time
 * **Ritual** - Can be cast taking 10 minutes longer without spending SP (only for spells with this tag)
 
-### 5.4 Understanding Spell Effects
+#### Modes and Enhancements
 
-Each spell has a **Basic Effect** (0 SP) that you can use at will, similar to a cantrip. This represents the most fundamental application of the magical concept.
-
-By spending **Spell Points (SP)**, you can activate more powerful **Modes** of the spell or add **Enhancements** (see Section 7) that modify its effects. **Modes** are specific predefined ways to use a spell, while **Enhancements** are customized modifications.
+**Modes** are specific predefined ways to use a spell. **Enhancements** are modifications you add on top. You learn both as you level, and you can only use the ones you have learned.
 
 > **Example: Building on Basics**
 >
@@ -101,205 +101,89 @@ By spending **Spell Points (SP)**, you can activate more powerful **Modes** of t
 >
 > *Adding the "Chain Bolt" **Enhancement** (+2 SP, total 4 SP) creates a bolt that jumps to a second target after hitting the first.*
 
-### 5.5 Core Spells - Basic Effects
+### 5.4 Spell Points (SP)
 
-The following section details the baseline **Basic Effect** for each core spell. Remember that these 0 SP effects are always available to you, forming your baseline magical abilities that never run out.
+Magic is fueled by **Spell Points (SP)**, representing a caster's pool of magical energy. Activating Spell **Modes** and adding **Enhancements** costs SP.
 
-#### Adapt Self - Basic Effect (0 SP)
+#### Gaining and Spending SP
 
-| Property      | Value                                                                                                  |
-|:--------------|:-------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                               |
-| **Range**     | Self                                                                                                   |
-| **Duration**  | 1 minute                                                                                               |
-| **Effect**    | Gain one: +5 ft speed; OR Adv on Athletics (climb/swim); OR unarmed strikes deal 1d4 + Str mod damage. |
+* **SP Pool:** You have a maximum number of SP based on your character level, (your level + 1) * 5. You regain all expended SP after completing a **Long Rest**.
+* **Spending SP:** When you activate a Spell using one of its **Modes** (other than the 0 SP Basic Effect) or add **Enhancements**, you spend SP equal to the total cost. You cannot spend more SP than you currently have.
 
----
+#### Basic Effects (0 SP)
 
-#### Arcane Sight - Basic Effect (0 SP)
+Each core Spell has a **Basic Effect**, listed at the top of its entry in Section 6, that costs 0 SP to use. These represent minor manifestations of the Spell's concept and can be used at will.
 
-| Property      | Value                                                                                                                                                                    |
-|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Reaction                                                                                                                                                               |
-| **Range**     | Self (30 ft radius)                                                                                                                                                      |
-| **Duration**  | 1 minute                                                                                                                                                                 |
-| **Effect**    | When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll. |
+#### Maximum SP per Activation
 
----
+There is a limit to the total SP you can spend on a single activation of a Spell (Mode cost + Enhancement costs). This limit prevents characters from expending their entire energy pool on one overwhelmingly powerful effect early on. The limit is 2 + (level / 2) rounded up, as shown on Table 5-1.
 
-#### Barrier - Basic Effect (0 SP)
+#### Learning Modes and Enhancements
 
-| Property      | Value                                                                                                                                |
-|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                             |
-| **Range**     | 30 ft                                                                                                                                |
-| **Duration**  | 1 round                                                                                                                              |
-| **Effect**    | Create a 5x5 ft energy plane: Provides half cover (+2 AC/Dex saves), has 5 HP, collapses if destroyed or at start of your next turn. |
+As you gain levels (Level 2+), your mastery of spells deepens. Each level, you gain two opportunities to improve your magic. For each opportunity, choose one spell you know and select either:
 
----
+* One new **Mode** listed for that spell
+* One new **Enhancement** listed for that spell
 
-#### Blast - Basic Effect (0 SP)
+These opportunities can be used on the same spell or different spells, in any combination.
 
-| Property      | Value                                                                                        |
-|:--------------|:---------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                     |
-| **Range**     | Self (10-ft cone)                                                                            |
-| **Duration**  | Instantaneous                                                                                |
-| **Effect**    | Creatures in cone make Dex save vs Spell DC. Fail: 1d8 Essence damage. Success: Half damage. |
+> **Example:** At 3rd level, Lyra could learn the "Forceful Bolt" Enhancement and "Area Bolt" Mode for her Bolt spell, OR learn "Chain Bolt" Enhancement for Bolt and "Sensory Illusion" Mode for her Illusion spell.
 
----
+#### Combining Enhancements
 
-#### Bolt - Basic Effect (0 SP)
+Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory. You cannot, for example, apply two Enhancements that change the saving throw to different stats. The SP costs are cumulative, and the total still cannot exceed your Maximum SP per Activation.
 
-| Property      | Value                                                              |
-|:--------------|:-------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                           |
-| **Range**     | 60 ft                                                              |
-| **Duration**  | Instantaneous                                                      |
-| **Effect**    | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
+#### Table 5-1: Spell Points and Maximum SP per Activation by Level
 
----
+| Level | Spell Points | Max SP Per Activation |
+|:------|:-------------|:----------------------|
+| 1     | 10           | 3                     |
+| 2     | 15           | 3                     |
+| 3     | 20           | 4                     |
+| 4     | 25           | 4                     |
+| 5     | 30           | 5                     |
+| 6     | 35           | 5                     |
+| 7     | 40           | 6                     |
+| 8     | 45           | 6                     |
+| 9     | 50           | 7                     |
+| 10    | 55           | 7                     |
+| 11    | 60           | 8                     |
+| 12    | 65           | 8                     |
+| 13    | 70           | 9                     |
+| 14    | 75           | 9                     |
+| 15    | 80           | 10                    |
+| 16    | 85           | 10                    |
+| 17    | 90           | 11                    |
+| 18    | 95           | 11                    |
+| 19    | 100          | 12                    |
+| 20    | 105          | 12                    |
 
-#### Communicate - Basic Effect (0 SP)
+### 5.5 The Eighteen Spells
 
-| Property      | Value                                                                                                                                                                                                                                                   |
-|:--------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                                                                                                                                |
-| **Range**     | 120 ft                                                                                                                                                                                                                                                  |
-| **Duration**  | Instantaneous                                                                                                                                                                                                                                           |
-| **Effect**    | EITHER send a one-way telepathic message (max 10 words) to up to three creatures you can see, OR establish two-way communication with one creature you can see (allowing a brief reply of up to 5 words). Message is understood regardless of language. |
+Two of your four Spells come from your Class. This is the pool you pick the other two from. Every one of them does something for free, and every one of them has Modes and Enhancements you buy into later, so read this for the concept and turn to Section 6 when you want the numbers.
 
----
+| Spell | What it does |
+|:---|:---|
+| `Adapt Self` | Your body is the spell. A climber's grip or a runner's speed at will, and later a beast's shape or a body made of your Essence. |
+| `Arcane Sight` | See magic and interfere with it. Spoil an incoming attack as a reaction, read what's enchanted, strip an effect off a target, or shut a spell down as it's being cast. |
+| `Barrier` | Put something solid between you and the problem. A slab of cover at will, growing into walls, domes, bridges, and barriers that travel with you. |
+| `Blast` | Hit everything in an area. A cone off your hands at will, later a sphere dropped downrange or a lance that skewers a line and stays burning. |
+| `Bolt` | One ranged attack, one target, no save. Later it splashes onto everything nearby, or becomes a beam you hold on someone across several turns. |
+| `Communicate` | Talk without speaking. Silent messages across a battlefield, a private two-way link, borrowing another creature's senses, or understanding any language you meet. |
+| `Conduit` | Make everyone else's attacks land. Hand an ally advantage as a reaction, open a target up, set up a joint strike, or hold a field that keeps paying out. |
+| `Debilitate` | Take something away from a creature. Its speed for free, then whatever your Essence does to it, on one target or everything in a cube. |
+| `Defend` | Shrug off what's coming. Resistance to weapons at will, wards against a chosen Essence, a shield you throw up as a reaction, and armour you never have to recast. |
+| `Empower/Enfeeble` | Nudge a roll. Add to an ally's next attack or save, subtract from an enemy's, or sit on it and spend it as a reaction on the roll that actually matters. |
+| `Heal` | Put hit points back and get people up. One touch at will, later the whole party at once, or lifting the condition that was the real problem. |
+| `Illusion` | Show people something that isn't there. Small sights and sounds at will, then full sensory fakes, a false face worn on your own body, or no body at all. |
+| `Influence` | Change a mind. Force an enemy to come at you, make a stranger friendly, plant an idea, read what someone's thinking, or take the wheel entirely. |
+| `Manipulate` | Move what you aren't touching. Doors, levers, and anything you can lift, then finer and heavier work at a distance as you invest in it. |
+| `Move` | Go where you want. Nothing gets a swing at you as you leave, then blink across a gap, outrun what's chasing you, or phase aside as a reaction. |
+| `Strike` | A weapon swing carrying your Essence. Later it hits harder, cleaves into a second enemy, skewers whoever is standing behind your target, or bursts on impact. |
+| `Summon` | Call something to fight or fetch for you. A servant that helps you land a hit at will, then a familiar for errands, or a spirit that fights on its own turn. |
+| `Zone` | Claim a patch of ground. Difficult terrain at will, then areas that hinder, hurt, or shelter whoever is standing in them. |
 
-#### Conduit - Basic Effect (0 SP)
-
-| Property      | Value                                           |
-|:--------------|:------------------------------------------------|
-| **Cast Time** | Reaction (when ally seen attacks creature seen) |
-| **Range**     | 30 ft                                           |
-| **Duration**  | Instantaneous                                   |
-| **Effect**    | The triggering attack roll has advantage.       |
-
----
-
-#### Debilitate - Basic Effect (0 SP)
-
-| Property      | Value                                                                                |
-|:--------------|:-------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                             |
-| **Range**     | 30 ft                                                                                |
-| **Duration**  | 1 round                                                                              |
-| **Effect**    | Target makes Con save vs Spell DC. Fail: Speed halved until start of your next turn. |
-
----
-
-#### Defend - Basic Effect (0 SP)
-
-| Property      | Value                                                             |
-|:--------------|:------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                          |
-| **Range**     | Self                                                              |
-| **Duration**  | 1 round                                                           |
-| **Effect**    | Gain resistance to physical damage until start of your next turn. |
-
----
-
-#### Empower/Enfeeble - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                                                                                                                                         |
-|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                                                                                                                      |
-| **Range**     | 30 ft                                                                                                                                                                                                                                         |
-| **Duration**  | 1 round                                                                                                                                                                                                                                       |
-| **Effect**    | Choose one target & effect: **Empower:** Target gets +1d4 to next Attack Roll OR Save before start of your next turn. **Enfeeble:** Target makes Wis save vs Spell DC. Fail: -1d4 to next Attack Roll OR Save before start of your next turn. |
-
----
-
-#### Heal - Basic Effect (0 SP)
-
-| Property      | Value                                                                     |
-|:--------------|:--------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                  |
-| **Range**     | Touch                                                                     |
-| **Duration**  | Instantaneous                                                             |
-| **Effect**    | Target regains 1d4 + Spell Mod HP, OR becomes stable with 1 HP if downed. |
-
----
-
-#### Illusion - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                          |
-|:--------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                       |
-| **Range**     | 30 ft                                                                                                                          |
-| **Duration**  | 1 minute                                                                                                                       |
-| **Effect**    | Create minor visual illusion (object/creature ≤ 5-ft cube) OR simple sound effect. Interaction/Investigation reveals illusion. |
-
----
-
-#### Influence - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                                     |
-|:--------------|:------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                  |
-| **Range**     | 30 ft                                                                                                                                     |
-| **Duration**  | 1 round                                                                                                                                   |
-| **Effect**    | Target creature you can see makes Wis save vs Spell DC. Fail: Is only able to target you with any spells or attacks until your next turn. |
-
----
-
-#### Manipulate - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                                                                                                                                               |
-|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                                                                                                                            |
-| **Range**     | 30 ft                                                                                                                                                                                                                                               |
-| **Duration**  | 1 minute                                                                                                                                                                                                                                            |
-| **Effect**    | Use Action (on cast or later turns) to target point in range. Cause one: Interact with object ≤ 10 kg (push, pull, lift, etc.); Open/close unlocked door/container; Pour contents from container. Lacks finesse/strength for complex tasks/attacks. |
-
----
-
-#### Move - Basic Effect (0 SP)
-
-| Property      | Value                                                                     |
-|:--------------|:--------------------------------------------------------------------------|
-| **Cast Time** | Special (Part of Move Action)                                             |
-| **Range**     | Self                                                                      |
-| **Duration**  | Instantaneous                                                             |
-| **Effect**    | When moving this turn, your movement doesn't provoke opportunity attacks. |
-
----
-
-#### Strike - Basic Effect (0 SP)
-
-| Property      | Value                                                                                     |
-|:--------------|:------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                  |
-| **Range**     | Self                                                                                      |
-| **Duration**  | Instantaneous                                                                             |
-| **Effect**    | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
-
----
-
-#### Summon - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                                                                                            |
-|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                                                                                         |
-| **Range**     | 30 ft                                                                                                                                                                                            |
-| **Duration**  | 1 minute                                                                                                                                                                                         |
-| **Effect**    | Summons Tiny servant (AC 10, 1 HP, Speed 15ft) with an action that can be taken directly before or after yours, to Help ally attacking creature within 5 ft. Disappears at 0 HP or duration end. |
-
----
-
-#### Zone - Basic Effect (0 SP)
-
-| Property      | Value                                                                                                                            |
-|:--------------|:---------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                         |
-| **Range**     | 60 ft                                                                                                                            |
-| **Duration**  | 1 round                                                                                                                          |
-| **Effect**    | Choose point on surface seen. Creates 10-ft square area centered there. Area is Difficult Terrain until start of your next turn. |
+Six of these are Class Unique Spells and can only be taken by that Class: `Barrier` (Champion), `Move` (Trickster), `Adapt Self` (Adapter), `Manipulate` (Scholar), `Arcane Sight` (Sage), and `Influence` (Orator).
 
 ### 5.6 Creativity in Action
 
@@ -315,56 +199,10 @@ The true power of this spell system emerges when you combine Spells, Essences, a
 >
 > * *"You won't escape! I slam my palm to the ground, and walls of earth rise up around the thief, boxing him in as they follow my mental command." (Mobile Barrier + Expand Barrier, 6 SP)*
 >
-> * *"I brace against the wall and push with both hands. The stone responds, thickening and spreading to completely seal the corridor behind us." (Standard Barrier + Fortify, 4 SP)*
+> * *"I brace against the wall and push with both hands. The stone responds, thickening and spreading to completely seal the corridor behind us." (Standard Barrier + Fortify Barrier, 4 SP)*
 >
 > * *"I focus intensely, drawing up small platforms of magically reinforced stone that hover just above the lava's surface." (Shaped Barrier + Resilient Barrier, 5 SP)*
 >
-> *Same spell, different stories—limited only by creativity and SP.*
+> *Same spell, five different answers, limited by what he has learned and what he can pay.*
 
-Remember that Modes and Enhancements for each spell are detailed in Section 7: Enhancements. As you gain levels, you'll learn more ways to customize your spells, making your magical repertoire increasingly versatile and powerful.
-
-### 5.7 Class Unique Spells
-
-Each class gains access to a special spell that embodies its approach to magic. These unique spells are unavailable to other classes without special feats or circumstances. Below is a summary of the Basic (0 SP) effect and the first key Mode for each unique spell, drawing from the full details found in Section 5.5 and Section 7: Enhancements.
-
-#### Champion: Barrier
-
-The Champion's ability to manifest protective force through sheer strength of will.
-
-**Basic (0 SP):** A 5×5 ft plane of energy that provides half cover and has 5 HP.  
-**Standard (3 SP):** A 10×10 ft plane with total cover, 17 HP, lasting up to 10 minutes with concentration.
-
-#### Trickster: Move
-
-The Trickster's unmatched mobility and spatial awareness.
-
-**Basic (0 SP):** Your movement doesn't provoke opportunity attacks.  
-**Blink Step (2 SP):** Teleport up to 30 feet to a visible location.
-
-#### Adapter: Adapt Self
-
-The Adapter's remarkable ability to transform their body to meet any challenge.
-
-**Basic (0 SP):** Gain one physical enhancement for 1 minute.  
-**Focused Adaptation (2 SP):** Gain two enhancements for up to 10 minutes with concentration.
-
-#### Scholar: Manipulate
-
-The Scholar's precise control over objects and energy through applied knowledge.
-
-**Basic (0 SP):** Telekinetically interact with objects up to 10 kg for 1 minute.  
-**Focused Control (2 SP):** Enhanced telekinetic control with greater range, capacity, and precision.
-
-#### Sage: Arcane Sight
-
-The Sage's extraordinary perception and insight into magical forces.
-
-**Basic (0 SP):** When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll.
-**Detect Magic (2 SP):** Detailed magical detection for up to 10 minutes with concentration.
-
-#### Orator: Influence
-
-The Orator's ability to affect others through sheer force of personality.
-
-**Basic (0 SP):** Force a creature to target you with any spells or attacks until your next turn.  
-**Charm Person (2 SP):** Make a humanoid regard you as a friendly acquaintance for 1 hour.
+Every Mode and Enhancement for each spell is listed with that spell in Section 6.
