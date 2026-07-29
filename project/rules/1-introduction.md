@@ -40,6 +40,7 @@ To play, you'll need a few things:
 * **Character Sheets:** To record your character's details (a template may be provided separately).
 * **Pencils & Paper:** For notes, mapping, and tracking temporary effects.
 * **Status tokens:** All classes get access to status effects, they're short-lived so having a temporary marker is helpful.
+* **A hex map:** Areas in this book are measured in feet on a **hex grid**, one hex to 5 feet. Square grids distort small bursts badly, a 5-foot radius covers 7 hexes but only 4 squares.
 
 ### **1.4 How to Use These Rules**
 
