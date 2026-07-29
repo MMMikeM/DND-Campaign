@@ -1674,13 +1674,10 @@ graph LR
   B["Basic Effect<br/>0 SP"]
   B --> S["Standard Bolt<br/>2 SP<br/><i>attack roll</i>"]
   B --> SK["Seeking Bolt<br/>3 SP<br/><i>saving throw</i>"]
-  B --> A["Area Bolt<br/>3 SP"]
   B --> CH["Channeled Bolt<br/>3 SP"]
 
   S --> AC["Accurate Bolt<br/>+1 SP"]
   S --> CB["Chain Bolt<br/>+2 SP"]
-
-  A --> EA["Expand Area Bolt<br/>+1 SP each"]
 
   CH --> ICD["Increase Channel Damage<br/>+2 SP"]
   CH --> TC["Tenacious Channel<br/>+2 SP"]
@@ -1722,21 +1719,6 @@ off it. Every other Mode makes the target save instead.
 | **Duration** | Instantaneous |
 | **Effect** | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll. |
 
-#### Mode: Area Bolt ✦ 3 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | 60 ft (5-foot radius sphere centered on point) |
-| **Duration** | Instantaneous |
-| **Effect** | Creatures within the sphere make a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. |
-
-##### Area Bolt Enhancements
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| Expand Area Bolt | +1 SP | Increase the radius of the sphere by +5 feet. (*Stackable*). |
-
 #### Mode: Channeled Bolt ✦ 3 SP
 
 | Property | Value |
@@ -1760,10 +1742,10 @@ them.
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| More Damage | +1 SP | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Area, Channeled initial hit). |
+| More Damage | +1 SP | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Seeking, Channeled initial hit). |
 | ↳ Penetrating Bolt | +2 SP | (Requires: More Damage) The spell’s damage ignores resistance to its damage type. |
-| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target pushed 10 ft away from caster or center of area. |
-| ↳ Debilitating Bolt | +2 SP | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
+| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Seeking/Channeled), primary target pushed 10 ft away from the caster. |
+| ↳ Debilitating Bolt | +2 SP | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
 | Increase Range | +1 SP | Doubles the spell’s range. (*Stackable*). |
 | Change Save (Physical) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution. |
 | Change Save (Mental) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma. |
