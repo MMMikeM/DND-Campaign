@@ -19,7 +19,7 @@
 | **Duration** | Instantaneous                                                                           |
 | **Effect**   | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
 
-#### Mode: Cleaving Strike ✦ 4 SP
+#### Mode: Cleaving Strike ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                                            |
 |:-------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -28,7 +28,7 @@
 | **Duration** | Instantaneous                                                                                                                                                                                                    |
 | **Effect**   | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
 
-#### Mode: Piercing Strike ✦ 4 SP
+#### Mode: Piercing Strike ✦ 3 SP
 
 | Property     | Value                                                                                                                                                                                                        |
 |:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

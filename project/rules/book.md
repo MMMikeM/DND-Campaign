@@ -154,6 +154,9 @@ To play, you’ll need a few things:
   effects.
 - **Status tokens:** All classes get access to status effects, they’re
   short-lived so having a temporary marker is helpful.
+- **A hex map:** Areas in this book are measured in feet on a **hex
+  grid**, one hex to 5 feet. Square grids distort small bursts badly, a
+  5-foot radius covers 7 hexes but only 4 squares.
 
 ### **1.4 How to Use These Rules**
 
@@ -1614,7 +1617,7 @@ combine.
 | **Duration** | Instantaneous |
 | **Effect** | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
 
-#### Mode: Cleaving Strike ✦ 4 SP
+#### Mode: Cleaving Strike ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
@@ -1623,7 +1626,7 @@ combine.
 | **Duration** | Instantaneous |
 | **Effect** | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
 
-#### Mode: Piercing Strike ✦ 4 SP
+#### Mode: Piercing Strike ✦ 3 SP
 
 | Property | Value |
 |:---|:---|
