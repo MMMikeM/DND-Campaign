@@ -41,6 +41,7 @@ export const itemRelationsRelations = relations(itemConnections, ({ one }) => ({
 	quest: one(quests, {
 		fields: [itemConnections.connectedQuestId],
 		references: [quests.id],
+		relationName: "questItemRelations",
 	}),
 	conflict: one(conflicts, {
 		fields: [itemConnections.connectedConflictId],
