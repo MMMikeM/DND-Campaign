@@ -91,7 +91,28 @@ export const schemas = {
 	})
 		.omit({ id: true })
 		.strict()
-		.describe("Ways for players to discover and begin quests"),
+		.describe("Ways for players to discover and begin quests")
+		.refine(
+			(data) => {
+				const { hookSourceType, siteId, factionId, deliveryNpcId } = data
+
+				switch (hookSourceType) {
+					case "site":
+						return siteId !== undefined && factionId === undefined && deliveryNpcId === undefined
+					case "faction":
+						return siteId === undefined && factionId !== undefined && deliveryNpcId === undefined
+					case "npc":
+						return siteId === undefined && factionId === undefined && deliveryNpcId !== undefined
+					default:
+						return false
+				}
+			},
+			{
+				message:
+					"Quest hook source validation failed: each hookSourceType requires exactly one corresponding field - 'site' needs siteId, 'faction' needs factionId, 'npc' needs deliveryNpcId",
+				path: ["hookSourceType"],
+			},
+		),
 
 	questParticipants: createInsertSchema(questParticipants, {
 		questId: id.describe("ID of quest this involvement belongs to"),

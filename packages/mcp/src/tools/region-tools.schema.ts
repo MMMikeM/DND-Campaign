@@ -113,7 +113,7 @@ export const schemas = {
 	siteEncounters: createInsertSchema(siteEncounters, {
 		name: (s) => s.describe("Distinctive title for this encounter"),
 		siteId: id.describe("Required ID of site where this encounter occurs"),
-		mapVariantId: optionalId.describe("Optional ID of map variant where this encounter occurs"),
+		mapVariantId: id.describe("Required ID of map variant where this encounter occurs"),
 
 		encounterVibe: list.describe("Vibe of this encounter"),
 		creativePrompts: list.describe("Variations and alternative approaches"),
