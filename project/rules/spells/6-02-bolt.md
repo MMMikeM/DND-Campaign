@@ -47,19 +47,19 @@ graph LR
 
 ##### Standard Bolt Enhancements
 
-| Enhancement              | SP Cost | Effect                                                                                                                                                                                                 |
-|:-------------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Accurate Bolt | +1 SP   | Gain Advantage on the ranged spell attack roll.                                                                                     |
+| Enhancement   | SP Cost | Effect                                                                                                                                                           |
+|:--------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Accurate Bolt | +1 SP   | Gain Advantage on the ranged spell attack roll.                                                                                                                  |
 | Chain Bolt    | +2 SP   | On hit, bolt leaps to a second target within 15 ft (new attack roll). Hit: half original damage (round down). (*Stackable*: +2 SP/target, half previous damage). |
 
 #### Mode: Seeking Bolt ✦ 3 SP
 
-| Property     | Value                                                                                                     |
-|:-------------|:-----------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                  |
-| **Range**    | 60 ft                                                                                                     |
-| **Duration** | Instantaneous                                                                                             |
-| **Effect**   | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll.   |
+| Property     | Value                                                                                                  |
+|:-------------|:-------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                               |
+| **Range**    | 60 ft                                                                                                  |
+| **Duration** | Instantaneous                                                                                          |
+| **Effect**   | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll. |
 
 #### Mode: Channeled Bolt ✦ 3 SP
 
@@ -81,12 +81,12 @@ graph LR
 
 Available with any Mode. The indented rows require the enhancement above them.
 
-| Enhancement         | SP Cost | Effect                                                                                                                                                                    |
-|:--------------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| More Damage         | +1 SP   | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Seeking, Channeled initial hit).                                                               |
-| ↳ Penetrating Bolt  | +2 SP   | (Requires: More Damage) The spell's damage ignores resistance to its damage type.                                                                                        |
-| Forceful Bolt       | +1 SP   | On hit (Standard) or failed initial save (Seeking/Channeled), primary target pushed 10 ft away from the caster.                                        |
-| ↳ Debilitating Bolt | +2 SP   | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
-| Increase Range      | +1 SP   | Doubles the spell's range. (*Stackable*).                                                                                                                                 |
-| Change Save (Physical) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution.                                                                    |
-| Change Save (Mental)   | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma.                                                           |
+| Enhancement            | SP Cost | Effect                                                                                                                                                                                         |
+|:-----------------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| More Damage            | +1 SP   | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Seeking, Channeled initial hit).                                                                                 |
+| ↳ Penetrating Bolt     | +2 SP   | (Requires: More Damage) The spell's damage ignores resistance to its damage type.                                                                                                              |
+| Forceful Bolt          | +1 SP   | On hit (Standard) or failed initial save (Seeking/Channeled), primary target pushed 10 ft away from the caster.                                                                                |
+| ↳ Debilitating Bolt    | +2 SP   | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
+| Increase Range         | +1 SP   | Doubles the spell's range. (*Stackable*).                                                                                                                                                      |
+| Change Save (Physical) | +1 SP   | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution.                                                                                         |
+| Change Save (Mental)   | +1 SP   | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma.                                                                                |

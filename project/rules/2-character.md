@@ -2,17 +2,17 @@
 
 ## 2 Character Creation Guide: Forging Your Hero
 
-Welcome to a world where your magical identity is shaped not by rigid spell lists, but by your character's unique story and style. This guide walks you through creating someone you're excited to play—focusing on narrative first, with mechanics that support your vision.
+We recommend starting by deciding _who_ your character is, their core identity. Everything below exists to help you bring that person to table.
 
 ### 2.1 The Spark: Your Character Concept
 
-Before touching dice or numbers, envision who your character is at their core:
+We can start this by answering these three questions:
 
-- **What's their story?** A village healer who whispers to spirits? A former soldier with nothing left to lose? A street criminal who discovered magic by accident?
-- **What's their approach to problems?** Bold confrontation? Clever misdirection? Careful analysis? Inspiring leadership?
-- **What sets them apart?** Unusual talents? A distinctive appearance? A unique magical style?
+1. **What's their story?** A village healer who whispers to spirits? A former soldier with nothing left to lose? A street criminal who discovered magic by accident?
+2. **What's their approach to problems?** Bold confrontation? Clever misdirection? Careful analysis? Inspiring leadership?
+3. **What sets them apart?** Unusual talents? A distinctive appearance? A unique magical style?
 
-> **Example Concept:** Thorne was once a respected temple guardian before his reckless pursuit of power led to the shrine's destruction. Now he channels earth essence through disciplined martial forms, seeking redemption by protecting others—even as the ghosts of his past haunt his dreams.
+> **Example Concept:** Thorne was once a respected temple guardian before his reckless pursuit of power led to the shrine's destruction. Now he channels Earth Essence through disciplined martial forms, seeking redemption by protecting others, while the ghosts of his past haunt his dreams.
 
 **Need Inspiration?** Roll a d6 on each table or pick one option from each to generate a foundation for your character:
 
@@ -209,25 +209,23 @@ Your Class grants you four **Base Spells**:
 2. **Unique Spell:** A distinctive spell that only your class can access
 3. **Choice Spells:** Select **two** additional spells from your class's available options
 
-Record your spells and their **Basic Effects** (0 SP cost)—these 0 SP effects are always available to you.
+Record your spells and their **Basic Effects**. Basic Effects cost 0 SP, so they are always available, no matter how empty your SP pool is.
 
 **Spell Examples:**
 
-- **Strike (Basic, 0 SP):** *Making a weapon attack that deals extra essence damage equal to your Spell Mod. "My axe glows with earth energy as I swing it at the orc!"*
+- **Strike (Basic, 0 SP):** _One weapon attack. On a hit it deals extra Essence damage equal to your Spell Mod, minimum 1. "My axe glows with earth energy as I swing it at the orc!"_
 
-- **Bolt (Basic, 0 SP):** *Firing a ranged magical attack that deals 1d10 essence damage. "I launch a streak of shadow energy at the distant archer!"*
+- **Bolt (Basic, 0 SP):** _A ranged spell attack out to 60 feet. On a hit it deals 1d10 Essence damage. "I launch a streak of shadow energy at the distant archer!"_
 
-- **Barrier (Basic, 0 SP):** *Creating a 5x5 ft plane of energy that provides half cover. "I quickly raise a small wall of stone to shield myself from the arrows!"*
+- **Barrier (Basic, 0 SP):** _A 5x5 ft plane of energy within 30 feet. It gives half cover, has 5 HP, and collapses at the start of your next turn. "I raise a slab of stone between me and the archers!"_
 
-- **Heal (Basic, 0 SP):** *Restoring 1d4 + Spell Mod hit points to a touched creature. "I place my hands on your wound, channeling life essence to knit the flesh."*
+- **Heal (Basic, 0 SP):** _Touch a creature. It regains 1d4 + Spell Mod HP, or becomes stable with 1 HP if it was downed. "I place my hands on your wound, channeling life essence to knit the flesh."_
 
 ### 2.6 Adding Character Depth
 
 #### Your Hindrance
 
-Every hero has a weakness or complication that adds depth and creates dramatic opportunities. This is your **Hindrance**.
-
-Your Hindrance occasionally creates trouble for your character. When it causes a **Meaningful Complication** during play, the GM may award you a **Fate Undo Token**.
+Your **Hindrance** is the thing about your character that costs them something. When it causes a **Meaningful Complication** during play, the GM may award you a **Fate Undo Token**. That is the trade: you take the bad outcome now, you get to rewrite one roll later.
 
 ##### Meaningful Complication
 
@@ -240,7 +238,7 @@ It should:
 - Change the course of action your character would have taken otherwise
 - Have consequences beyond a single failed roll
 
-While your hindrance can enrich the description of your character's struggle without concrete impact on the situation is generally *not* a Meaningful Complication.
+A Hindrance that only colours the description, with no concrete impact on the situation, is _not_ a Meaningful Complication. Flavour is free. Tokens are not.
 
 ##### Fate Undo Token
 
@@ -254,9 +252,9 @@ When awarded a Fate Undo Token, you can spend it at any point of your choosing t
 
 Here are examples of how different Hindrances could create a Meaningful Complication that earns a Fate Undo Token:
 
-- **Code-Bound**: You refuse to take the most efficient or safe path because it violates your code (e.g., refusing to steal a necessary item, choosing not to attack a defenseless enemy even when tactically vital).
+- **Code-Bound**: You refuse to take the most efficient or safe path because it violates your code (e.g., refusing to steal a necessary item, choosing not to attack a defenceless enemy even when tactically vital).
 - **Old Injury**: Your injury causes you to fail a crucial physical task you would normally succeed at, directly hindering an important action (e.g., failing a jump necessary to escape, dropping a heavy but essential item mid-climb).
-- **Notorious Reputation**: Being recognized by someone in power or a hostile faction directly prevents access, initiates unwanted conflict, or causes a crucial NPC to refuse aid.
+- **Notorious Reputation**: Being recognised by someone in power or a hostile faction directly prevents access, initiates unwanted conflict, or causes a crucial NPC to refuse aid.
 - **Magical Resonance**: Your uncontrolled magical side effect directly disrupts a key action, reveals the party's presence when stealth was critical, or causes unintended harm/difficulty.
 
 ##### Hindrance Categories
@@ -270,7 +268,7 @@ Here are examples of how different Hindrances could create a Meaningful Complica
 **Physical Hindrances:**
 
 - **Old Injury**: A permanent wound sometimes flares up at the worst moments
-- **Recognizable Mark**: A distinctive appearance makes you easy to identify and remember
+- **Recognisable Mark**: A distinctive appearance makes you easy to identify and remember
 - **Chronic Condition**: An illness or condition that requires management and occasionally worsens
 
 **Social Hindrances:**
@@ -285,16 +283,15 @@ Here are examples of how different Hindrances could create a Meaningful Complica
 - **Marked by Power**: Your connection to magic is visible and potentially alarming to others
 - **Cosmic Attention**: Something beyond mortal understanding has noticed you
 
-##### Paying Hindrances Effectively
+##### Playing Hindrances Effectively
 
-The best hindrances:
+A Hindrance you can play works better than one you can only describe:
 
-- **Connect to your character's backstory:** "My fear of fire stems from watching my village burn."
-- **Create dramatic moments:** "I insist we help these refugees, even though it will delay our critical mission."
-- **Evolve over time:** "I'm learning to control my anger, but certain triggers still send me over the edge."
-- **Balance limitation with agency:** "I cannot lie due to my oath, but I can find creative ways to misdirect."
+- **It ties to the backstory:** "My fear of fire stems from watching my village burn."
+- **It costs you something in front of the party:** "I insist we help these refugees, even though it delays the mission."
+- **It leaves you a move:** "I cannot lie due to my oath, but I can misdirect."
 
-> **Player Tip:** Don't wait for the GM to invoke your hindrance! Proactively look for opportunities to demonstrate how it affects your character. Say "This is where my hindrance would come into play" if you think a situation warrants it.
+> **Player Tip:** Don't wait for the GM to invoke it. Say "this is where my Hindrance comes into play" and describe what your character does instead. The token is easier to award when you name the moment.
 
 ##### Hindrance in Action
 
@@ -304,13 +301,13 @@ The best hindrances:
 
 **GM:** "The noble hesitates, then admits the item belongs to a rival and this is essentially a theft. He offers more gold for your discretion."
 
-**Player:** "I refuse the job outright and suggest we leave. This goes against my code of honor."
+**Player:** "I refuse the job outright and suggest we leave. This goes against my code of honour."
 
-**GM:** "That's a meaningful complication from your hindrance—you're giving up a lucrative opportunity that would have advanced the plot. Here's a Fate Undo Token."
+**GM:** "That's a Meaningful Complication. You're turning down the job and the lead that came with it. Here's a Fate Undo Token."
 
-#### The Final Flourishes
+#### The Last Five Lines
 
-Complete your character with these important finishing touches:
+Five short answers finish the sheet:
 
 ##### Name
 
@@ -318,13 +315,13 @@ What are you called? Does your name have meaning or history?
 
 > Examples: Thorne, named for the thornbushes where he was found as an infant
 
-##### Apearance
+##### Appearance
 
 What immediately stands out about you? Any distinctive features?
 
 > Examples: Runes tattooed on the back of his hands that glow when he uses his magic
 
-##### Prsonality
+##### Personality
 
 Note key traits, ideals, and bonds.
 
@@ -391,4 +388,4 @@ Use this quick reference to ensure you've completed all steps:
 9. ☐ **Select a hindrance**
 10. ☐ **Add final details** (name, appearance, personality, anchor, question)
 
-You're now ready to embark on your heroic journey!
+Ten boxes ticked, and you can play.

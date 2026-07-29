@@ -4,7 +4,7 @@
 
 ### 5.1 The Nature of Spells
 
-In this system, **Spells** are foundational magical concepts, versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. We focus on a curated set of core spells that you'll personalize through **Essences** and **Enhancements**.
+In this system, **Spells** are foundational magical concepts, versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. We focus on a curated set of core spells that you'll personalise through **Essences** and **Enhancements**.
 
 Think of Spells as the underlying structure of your magic:
 
@@ -12,7 +12,7 @@ Think of Spells as the underlying structure of your magic:
 * **Essences** determine *how* your magic manifests (fire, lightning, shadow)
 * **Enhancements** control *how powerful* your effects become
 
-This modular approach shifts the focus from memorizing numerous specific rules to mastering a core framework that you can creatively adapt to any situation. Your character isn't limited by a static list of predetermined effects, they decide what their magic does as they cast it.
+This modular approach shifts the focus from memorising numerous specific rules to mastering a core framework that you can creatively adapt to any situation. Your character isn't limited by a static list of predetermined effects, they decide what their magic does as they cast it.
 
 > **Magic in Action: Narrative Drives Mechanics**
 >
@@ -28,7 +28,7 @@ This modular approach shifts the focus from memorizing numerous specific rules t
 >
 > *"I slam my staff down!" Lyra shouts as enemy archers take aim. "A wall of shimmering golden light springs up between us and the archers!"*
 >
-> *A translucent barrier of radiant energy materializes, arrows thudding harmlessly against its surface.*
+> *A translucent barrier of radiant energy materialises, arrows thudding harmlessly against its surface.*
 >
 > **Behind the Magic:** Same spell (`Barrier`), different execution. This time with **Light Essence** and the simpler "Standard Barrier" mode (3 SP) for a quick defensive reaction.
 
@@ -50,7 +50,7 @@ At 1st level, you know **four Spells** determined as follows:
 
 > **✨ Tip: Complementary Choices**
 >
-> When choosing your two additional spells, consider how they'll complement your core and unique spells. Look for options that cover different situations (combat, exploration, social) or fill different roles (offense, defense, utility).
+> When choosing your two additional spells, consider how they'll complement your core and unique spells. Look for options that cover different situations (combat, exploration, social) or fill different roles (offence, defence, utility).
 
 #### Changing Known Spells
 
@@ -103,7 +103,7 @@ Each spell follows a standard format detailing its core function before any Enha
 
 ### 5.4 Spell Points (SP)
 
-Magic is fueled by **Spell Points (SP)**, representing a caster's pool of magical energy. Activating Spell **Modes** and adding **Enhancements** costs SP.
+Magic is fuelled by **Spell Points (SP)**, representing a caster's pool of magical energy. Activating Spell **Modes** and adding **Enhancements** costs SP.
 
 #### Gaining and Spending SP
 
@@ -164,26 +164,26 @@ Multiple *different* learned Enhancements can be applied to a single Spell activ
 
 Two of your four Spells come from your Class. This is the pool you pick the other two from. Every one of them does something for free, and every one of them has Modes and Enhancements you buy into later, so read this for the concept and turn to Section 6 when you want the numbers.
 
-| Spell | What it does |
-|:---|:---|
-| `Adapt Self` | Your body is the spell. A climber's grip or a runner's speed at will, and later a beast's shape or a body made of your Essence. |
-| `Arcane Sight` | See magic and interfere with it. Spoil an incoming attack as a reaction, read what's enchanted, strip an effect off a target, or shut a spell down as it's being cast. |
-| `Barrier` | Put something solid between you and the problem. A slab of cover at will, growing into walls, domes, bridges, and barriers that travel with you. |
-| `Blast` | Hit everything in an area. A cone off your hands at will, later a sphere dropped downrange or a lance that skewers a line and stays burning. |
-| `Bolt` | One ranged attack, one target, no save. Later it splashes onto everything nearby, or becomes a beam you hold on someone across several turns. |
-| `Communicate` | Talk without speaking. Silent messages across a battlefield, a private two-way link, borrowing another creature's senses, or understanding any language you meet. |
-| `Conduit` | Make everyone else's attacks land. Hand an ally advantage as a reaction, open a target up, set up a joint strike, or hold a field that keeps paying out. |
-| `Debilitate` | Take something away from a creature. Its speed for free, then whatever your Essence does to it, on one target or everything in a cube. |
-| `Defend` | Shrug off what's coming. Resistance to weapons at will, wards against a chosen Essence, a shield you throw up as a reaction, and armour you never have to recast. |
-| `Empower/Enfeeble` | Nudge a roll. Add to an ally's next attack or save, subtract from an enemy's, or sit on it and spend it as a reaction on the roll that actually matters. |
-| `Heal` | Put hit points back and get people up. One touch at will, later the whole party at once, or lifting the condition that was the real problem. |
-| `Illusion` | Show people something that isn't there. Small sights and sounds at will, then full sensory fakes, a false face worn on your own body, or no body at all. |
-| `Influence` | Change a mind. Force an enemy to come at you, make a stranger friendly, plant an idea, read what someone's thinking, or take the wheel entirely. |
-| `Manipulate` | Move what you aren't touching. Doors, levers, and anything you can lift, then finer and heavier work at a distance as you invest in it. |
-| `Move` | Go where you want. Nothing gets a swing at you as you leave, then blink across a gap, outrun what's chasing you, or phase aside as a reaction. |
-| `Strike` | A weapon swing carrying your Essence. Later it hits harder, cleaves into a second enemy, skewers whoever is standing behind your target, or bursts on impact. |
-| `Summon` | Call something to fight or fetch for you. A servant that helps you land a hit at will, then a familiar for errands, or a spirit that fights on its own turn. |
-| `Zone` | Claim a patch of ground. Difficult terrain at will, then areas that hinder, hurt, or shelter whoever is standing in them. |
+| Spell              | What it does                                                                                                                                                           |
+|:-------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Adapt Self`       | Your body is the spell. A climber's grip or a runner's speed at will, and later a beast's shape or a body made of your Essence.                                        |
+| `Arcane Sight`     | See magic and interfere with it. Spoil an incoming attack as a reaction, read what's enchanted, strip an effect off a target, or shut a spell down as it's being cast. |
+| `Barrier`          | Put something solid between you and the problem. A slab of cover at will, growing into walls, domes, bridges, and barriers that travel with you.                       |
+| `Blast`            | Hit everything in an area. A cone off your hands at will, later a sphere dropped downrange or a lance that skewers a line and stays burning.                           |
+| `Bolt`             | One ranged attack, one target, no save. Later it splashes onto everything nearby, or becomes a beam you hold on someone across several turns.                          |
+| `Communicate`      | Talk without speaking. Silent messages across a battlefield, a private two-way link, borrowing another creature's senses, or understanding any language you meet.      |
+| `Conduit`          | Make everyone else's attacks land. Hand an ally advantage as a reaction, open a target up, set up a joint strike, or hold a field that keeps paying out.               |
+| `Debilitate`       | Take something away from a creature. Its speed for free, then whatever your Essence does to it, on one target or everything in a cube.                                 |
+| `Defend`           | Shrug off what's coming. Resistance to weapons at will, wards against a chosen Essence, a shield you throw up as a reaction, and armour you never have to recast.      |
+| `Empower/Enfeeble` | Nudge a roll. Add to an ally's next attack or save, subtract from an enemy's, or sit on it and spend it as a reaction on the roll that actually matters.               |
+| `Heal`             | Put hit points back and get people up. One touch at will, later the whole party at once, or lifting the condition that was the real problem.                           |
+| `Illusion`         | Show people something that isn't there. Small sights and sounds at will, then full sensory fakes, a false face worn on your own body, or no body at all.               |
+| `Influence`        | Change a mind. Force an enemy to come at you, make a stranger friendly, plant an idea, read what someone's thinking, or take the wheel entirely.                       |
+| `Manipulate`       | Move what you aren't touching. Doors, levers, and anything you can lift, then finer and heavier work at a distance as you invest in it.                                |
+| `Move`             | Go where you want. Nothing gets a swing at you as you leave, then blink across a gap, outrun what's chasing you, or phase aside as a reaction.                         |
+| `Strike`           | A weapon swing carrying your Essence. Later it hits harder, cleaves into a second enemy, skewers whoever is standing behind your target, or bursts on impact.          |
+| `Summon`           | Call something to fight or fetch for you. A servant that helps you land a hit at will, then a familiar for errands, or a spirit that fights on its own turn.           |
+| `Zone`             | Claim a patch of ground. Difficult terrain at will, then areas that hinder, hurt, or shelter whoever is standing in them.                                              |
 
 Six of these are Class Unique Spells and can only be taken by that Class: `Barrier` (Champion), `Move` (Trickster), `Adapt Self` (Adapter), `Manipulate` (Scholar), `Arcane Sight` (Sage), and `Influence` (Orator).
 

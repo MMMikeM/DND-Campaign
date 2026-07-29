@@ -12,12 +12,12 @@
 
 #### Mode: Greater Empowerment ✦ 2 SP
 
-| Property     | Value                                                                                         |
-|:-------------|:----------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                      |
-| **Range**    | 30 ft                                                                                         |
-| **Duration** | Concentration, up to 1 min                                                                    |
-| **Effect**   | Target one creature. Gains +1d4 bonus to all attack rolls, saving throws, and ability checks. |
+| Property     | Value                                                                                           |
+|:-------------|:------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                        |
+| **Range**    | 30 ft                                                                                           |
+| **Duration** | Concentration, up to 1 min                                                                      |
+| **Effect**   | Target one creature. Gains +1d4 bonus to all attack rolls, saving throws, and attribute checks. |
 
 ##### Greater Empowerment Enhancements
 
@@ -27,12 +27,12 @@
 
 #### Mode: Greater Enfeeblement ✦ 2 SP
 
-| Property     | Value                                                                                                                                       |
-|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                    |
-| **Range**    | 30 ft                                                                                                                                       |
-| **Duration** | Concentration, up to 1 min                                                                                                                  |
-| **Effect**   | Target one creature. Target makes Wisdom save. Fail: -1d4 penalty to all attack rolls, saves, ability checks. Repeats save at end of turns. |
+| Property     | Value                                                                                                                                         |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                      |
+| **Range**    | 30 ft                                                                                                                                         |
+| **Duration** | Concentration, up to 1 min                                                                                                                    |
+| **Effect**   | Target one creature. Target makes Wisdom save. Fail: -1d4 penalty to all attack rolls, saves, attribute checks. Repeats save at end of turns. |
 
 ##### Greater Enfeeblement Enhancements
 

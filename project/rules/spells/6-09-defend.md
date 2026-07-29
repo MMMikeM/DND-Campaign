@@ -23,9 +23,9 @@
 
 | Enhancement        | SP Cost      | Effect                                                                                                       |
 |:-------------------|:-------------|:-------------------------------------------------------------------------------------------------------------|
-| Bolstering Defense | +1 SP        | Gain Temporary HP = 5 + Spell Mod when cast.                                                                 |
-| Share Defense      | +2 SP        | Range becomes Touch, affects one willing creature instead.                                                   |
-| Aura of Defense    | +3 SP        | Range Self (10-ft aura). You and allies starting turn in aura gain the resistance.                           |
+| Bolstering Defence | +1 SP        | Gain Temporary HP = 5 + Spell Mod when cast.                                                                 |
+| Share Defence      | +2 SP        | Range becomes Touch, affects one willing creature instead.                                                   |
+| Aura of Defence    | +3 SP        | Range Self (10-ft aura). You and allies starting turn in aura gain the resistance.                           |
 | Invulnerability    | +3 SP        | Resistance becomes Immunity. (Total cost 5 SP+).                                                             |
 | Reactive Retort    | +2 SP        | When target takes resisted damage from attacker within 30ft, attacker takes Spell Mod damage [Essence type]. |
 | Sustain Ward       | +1 SP / step | Increase Concentration duration (1 min → 10 min → 1 hour).                                                   |

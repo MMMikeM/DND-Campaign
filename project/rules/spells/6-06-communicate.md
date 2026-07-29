@@ -65,7 +65,7 @@
 | Gift of Tongues        | +2 SP        | Range becomes Touch. Target (can be self) can also be understood by any creature with a language.                                                                                     |
 | Swap Effect: Broadcast | +2 SP        | Change effect: Range Self (30ft radius) OR Point within 60ft (30ft radius). Send one-way, 25-word telepathic message to chosen creatures in radius, bypasses language. Instantaneous. |
 | Swap Effect: Relay Net | +2 SP        | Change effect: Range 120 ft. Link up to 3 willing creatures (inc. self) for 10 mins (no Conc.). Linked members send 10-word telepathic messages to each other 1/round (no action).    |
-| Extended Understanding | +1 SP / step | (Requires: Basic Effect, Written Word, or Speak to Beasts) Increase non-Concentration duration step (1 hour → 8 hours).                                                                |
+| Extended Understanding | +1 SP / step | (Requires: Basic Effect, Written Word, or Speak to Beasts) Increase non-Concentration duration step (1 hour → 8 hours).                                                               |
 
 #### General Enhancements (Communicate)
 

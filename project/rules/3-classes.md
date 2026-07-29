@@ -9,9 +9,9 @@ At 1st level, you begin with **four foundational spells** that form the bedrock 
 
 1. **Core Attack Spell:** Your primary magical offensive option—either `Strike` (melee), `Bolt` (ranged), or a choice between them, depending on your class
 2. **Unique Spell:** A distinctive magical ability that only your class can access, representing its fundamental approach to magic
-3. **Choice Spells:** Two additional spells you select from your class's available options, allowing you to customize your initial capabilities
+3. **Choice Spells:** Two additional spells you select from your class's available options, allowing you to customise your initial capabilities
 
-> **Magical Foundation Tip:** When selecting your choice spells, consider balancing offense, defense, and utility. Even combat-focused characters benefit from having at least one non-combat option in their initial spell selection.
+> **Magical Foundation Tip:** When selecting your choice spells, consider balancing offence, defence, and utility. Even combat-focused characters benefit from having at least one non-combat option in their initial spell selection.
 
 ### **3.2 The Six Classes**
 
@@ -214,7 +214,7 @@ Orators command attention and shape reality through sheer force of personality. 
 
 * An innately magical individual whose emotions manifest as tangible effects
 * A pact-bound intermediary channeling otherworldly power through bargains
-* An inspiring leader whose words literally empower allies and demoralize foes
+* An inspiring leader whose words literally empower allies and demoralise foes
 * A silver-tongued negotiator whose pronouncements hold magical weight
 
 **Finding Your Orator's Voice:** How does your personality affect the world? Through captivating performances? Resolute commands? Subtle manipulation? Pure emotional expression? Your Orator's presence is yours to articulate.
@@ -237,4 +237,4 @@ When choosing your class, consider both mechanical fit and narrative satisfactio
 * Can you envision exciting stories emerging from your class's approach to challenges?
 * Does the class provide a framework that feels both inspiring and flexible?
 
-Remember that your class is a starting point, not a rigid limitation. As you gain Enhancements and develop your character, you'll customize your abilities far beyond the baseline class framework. The most compelling heroes often develop in surprising ways that transcend simple class definitions.
+Remember that your class is a starting point, not a rigid limitation. As you gain Enhancements and develop your character, you'll customise your abilities far beyond the baseline class framework. The most compelling heroes often develop in surprising ways that transcend simple class definitions.

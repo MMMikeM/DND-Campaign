@@ -3,12 +3,12 @@
 
 #### Basic Effect (0 SP)
 
-| Property      | Value                                                                                                                            |
-|:--------------|:---------------------------------------------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                                                         |
-| **Range**     | 60 ft                                                                                                                            |
-| **Duration**  | 1 round                                                                                                                          |
-| **Effect**    | Choose point on surface seen. Creates 10-ft square area centered there. Area is Difficult Terrain until start of your next turn. |
+| Property      | Value                                                                                                                           |
+|:--------------|:--------------------------------------------------------------------------------------------------------------------------------|
+| **Cast Time** | 1 Action                                                                                                                        |
+| **Range**     | 60 ft                                                                                                                           |
+| **Duration**  | 1 round                                                                                                                         |
+| **Effect**    | Choose point on surface seen. Creates 10-ft square area centred there. Area is Difficult Terrain until start of your next turn. |
 
 #### Mode: Hindering Zone ✦ 3 SP
 
@@ -25,7 +25,7 @@
 |:--------------------|:--------|:----------------------------------------------------------------------------------------------------------|
 | Hazardous Terrain   | +2 SP   | (Applies To: Difficult Terrain) Creatures take 1d4 Essence damage for every 5 feet moved within the zone. |
 | Selective Obscurity | +2 SP   | (Applies To: Obscuring Mist) Chosen creatures treat the area as only lightly obscured.                    |
-| Mobile Silence      | +2 SP   | (Applies To: Silence) Zone centered on a willing creature/object you choose within range, moves with it.  |
+| Mobile Silence      | +2 SP   | (Applies To: Silence) Zone centred on a willing creature/object you choose within range, moves with it.   |
 | Tenacious Restraint | +1 SP   | (Applies To: Restraining Field) Creatures have disadvantage on the Strength saving throw.                 |
 
 #### Mode: Harmful Zone ✦ 4 SP

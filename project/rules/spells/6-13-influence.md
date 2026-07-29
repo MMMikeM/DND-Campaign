@@ -81,5 +81,5 @@
 | Subtle Casting     | +1 SP   | Cast without Verbal or Somatic components.                                                                                                   |
 | Forceful Influence | +1 SP   | (Applies To: Charm Person, Suggest Course) Target has disadvantage on the initial saving throw (unless *Overwhelming Will* already applied). |
 | Stronger Hold      | +1 SP   | (Applies To: Charm Person, Suggest Course, Dominate Creature) Advantage on Charisma checks made against the target while affected.           |
-| Lasting Impression | +1 SP   | (Applies To: Charm Person, Suggest Course) Target doesn't realize it was magically influenced after the effect ends.                         |
+| Lasting Impression | +1 SP   | (Applies To: Charm Person, Suggest Course) Target doesn't realise it was magically influenced after the effect ends.                         |
 | Broaden Target     | +2 SP   | (Applies To: Charm Person, Suggest Course, Dominate Creature) Can target any creature type (GM discretion on understanding for Suggestion).  |

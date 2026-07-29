@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## 4. Essences: The Flavors of Magic
+## 4. Essences: The Flavours of Magic
 
 > *A frostbite-inducing cold that creaks with each movement, a wildfire's devastating hunger, the silent embrace of shadow, the raw kinetic force of a thunderclap—Essences are the fundamental energies that give your magic its distinctive character.*
 
@@ -36,7 +36,7 @@ Additional Essences might be learned through special feats or specific GM-grante
 
 When you cast a Spell, you choose **one** of your known Essence Descriptors to apply. This choice shapes how your magic manifests and determines its damage type (if applicable).
 
-* **Flavor First** — An Essence primarily determines *how* your spell manifests. When applying your Fire Essence to a `Heal` spell, you're not burning the target—you might manifest soothing embers that knit wounds closed or a phoenix-like warmth that revitalizes.
+* **Flavour First** — An Essence primarily determines *how* your spell manifests. When applying your Fire Essence to a `Heal` spell, you're not burning the target—you might manifest soothing embers that knit wounds closed or a phoenix-like warmth that revitalises.
 
 * **Narrative Freedom** — While your character knows only certain Essences, you have freedom in describing the specific way they manifest. Your Fire might be roaring flames, concentrated heat, or dancing embers—the choice is yours!
 
@@ -44,7 +44,7 @@ When you cast a Spell, you choose **one** of your known Essence Descriptors to a
 
 * **No Additional Cost** — Applying a basic Essence doesn't increase the SP cost of your spell.
 
-> **Example: Personalizing Your Magic**
+> **Example: Personalising Your Magic**
 >
 > *Aria the Sage casts `Bolt` with **Light Essence**, describing it as "a concentrated beam of golden sunlight that leaves sparkling motes in its wake."*
 >
@@ -52,7 +52,7 @@ When you cast a Spell, you choose **one** of your known Essence Descriptors to a
 >
 > *Vex the Trickster uses **Shadow Essence** with their `Move` spell: "I dissolve into wisps of darkness, flowing between the guards before reforming behind them."*
 >
-> *Orrin the Adapter channels **Life Essence** into his `Adapt Self` spell: "Bark-like patterns emerge across my skin as leafy vines coil around my arms, hardening into natural armor."*
+> *Orrin the Adapter channels **Life Essence** into his `Adapt Self` spell: "Bark-like patterns emerge across my skin as leafy vines coil around my arms, hardening into natural armour."*
 
 ### 4.4 Mechanical Effects of Essences
 
@@ -68,7 +68,7 @@ Each Essence is linked to a specific **status effect** (see table in 4.5). These
 
 #### Minor Inherent Effects
 
-Essences provide small, flavorful effects outside of combat—Fire might ignite torches, Cold might chill drinks, Light might illuminate dark corners. These are primarily for narrative color rather than mechanical advantage.
+Essences provide small, flavourful effects outside of combat—Fire might ignite torches, Cold might chill drinks, Light might illuminate dark corners. These are primarily for narrative colour rather than mechanical advantage.
 
 #### Occasional Skill Interactions
 
@@ -81,7 +81,7 @@ Each Essence represents a fundamental magical energy with unique properties. Cho
 | Essence       | Status Name    | Primary Effect               | Secondary Effect                                      | Minor Effect                                       | Feel                                                 |
 |:--------------|:---------------|:-----------------------------|:------------------------------------------------------|:---------------------------------------------------|:-----------------------------------------------------|
 | **Fire**      | **Ignited**    | Attack rolls at disadvantage | Vulnerable to Cold damage                             | Sheds dim light                                    | Burning, searing heat that consumes                  |
-| **Cold**      | **Frozen**     | Speed becomes 5 ft           | Vulnerable to Fire damage                             | Disadvantage on Athletics checks                   | Numbing, paralyzing chill                            |
+| **Cold**      | **Frozen**     | Speed becomes 5 ft           | Vulnerable to Fire damage                             | Disadvantage on Athletics checks                   | Numbing, paralysing chill                            |
 | **Life**      | **Overgrown**  | Speed becomes 5 ft           | Attacks gain advantage vs target                      | Disadvantage on grapple/disarm checks              | Entangling vines and natural growth                  |
 | **Necrotic**  | **Withered**   | Attack rolls at disadvantage | Constitution saves at disadvantage                    | Disadvantage on Strength checks                    | Decay that saps vitality and strength                |
 | **Light**     | **Dazzled**    | Attack rolls at disadvantage | Wisdom saves at disadvantage                          | Target gains no cover bonus vs caster              | Blinding brilliance that disorients                  |
@@ -118,7 +118,7 @@ The "Primary Effect," "Secondary Effect," and "Minor Effect" listed for each Ess
 As you advance in experience, consider how your relationship with your Essences might develop:
 
 * **Growing Mastery**: Your Fire might evolve from wild, untamed flames to precisely controlled geometric patterns
-* **Personalized Aesthetics**: Your Lightning could develop a signature color or distinctive sound that marks it as uniquely yours
+* **Personalised Aesthetics**: Your Lightning could develop a signature colour or distinctive sound that marks it as uniquely yours
 * **Deepening Understanding**: Your application of Shadow might progress from simple darkness to intricate manipulations of light and perception
 
 While the mechanical effects remain consistent, your descriptions can evolve to reflect your character's growing mastery and changing relationship with their magical energies.

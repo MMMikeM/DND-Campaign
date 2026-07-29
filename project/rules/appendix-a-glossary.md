@@ -23,7 +23,7 @@
 
 * Fate Undo Token: A resource awarded by the GM when a character's Hindrance causes a Meaningful Complication. Can be spent to reroll dice or revise narrative actions. (See Section 2.6)
 
-* Feat: A special ability gained (typically through leveling) that provides unique capabilities or enhances existing ones. (See Section 7)
+* Feat: A special ability gained (typically through levelling) that provides unique capabilities or enhances existing ones. (See Section 7)
 
 * GM (Game Master): The person who runs the game, describes the world, adjudicates rules, and portrays non-player characters. (See Section 1.3)
 

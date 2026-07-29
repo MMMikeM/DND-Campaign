@@ -39,12 +39,12 @@
 
 #### Mode: Bursting Strike ✦ 5 SP
 
-| Property     | Value                                                                                                                                                                                             |
-|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                                          |
-| **Range**    | Self (Affects primary target + 10ft radius burst)                                                                                                                                                 |
-| **Duration** | Instantaneous                                                                                                                                                                                     |
-| **Effect**   | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centered on target make Dex save vs **2d8** Essence damage (half on success). |
+| Property     | Value                                                                                                                                                                                            |
+|:-------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                                         |
+| **Range**    | Self (Affects primary target + 10ft radius burst)                                                                                                                                                |
+| **Duration** | Instantaneous                                                                                                                                                                                    |
+| **Effect**   | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centred on target make Dex save vs **2d8** Essence damage (half on success). |
 
 #### General Enhancements (Strike)
 
@@ -57,4 +57,4 @@
 | Tripping Strike    | +2 SP   | (Applies to *initial* target) Hit: target makes Str save vs knocked prone.                                                        |
 | Disarming Strike   | +2 SP   | (Applies to *initial* target) Hit: target makes Str/Dex save vs dropping one held item of your choice.                            |
 | Feinting Strike    | +2 SP   | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn.                |
-| Critical Surge     | +2 SP   | (Use as Reaction) On critical hit with the spell's attack, spend 2 SP to maximize the spell's **bonus** damage dice.              |
+| Critical Surge     | +2 SP   | (Use as Reaction) On critical hit with the spell's attack, spend 2 SP to maximise the spell's **bonus** damage dice.              |
