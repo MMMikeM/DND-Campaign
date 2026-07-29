@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## 8. Feat Catalog
+## 7. Feat Catalog
 
 *(**Reminder:** Ability modifiers are capped at +5)*
 *(Feats grant a +1 modifier increase, replacing traditional ASIs)*
