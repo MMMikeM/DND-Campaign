@@ -2,31 +2,33 @@
 
 ### **1.1 Welcome: Doing Cool Shit**
 
-Welcome to a tabletop roleplaying game built from the ground up with one goal: **Empower you to do cool shit with as little friction as possible.** Forget dense rulebooks filled with exceptions and edge cases. This system is designed for dynamic, imaginative play where your character's unique abilities and your clever ideas take center stage.
+This TTRPG has one job: **let you do cool shit with as little friction as possible.**
 
-This is a game about heroes wielding incredible power, shaped not just by rigid rules, but by their personality, history, and the fundamental magical **Essences** they command. You won't find sprawling spell lists here. Instead, you'll master core **Spells** – versatile templates representing fundamental magical concepts – and customize them on the fly with **Essences** and tactical **Enhancements**.
+Your hero knows four **Spells**. One of which is unique to your class, as well as either strike or bolt as standard attacks. The other two you are able to pick from the remaining pool of ten. Levelling up equips you with ways to modify those four spells, givin you more freedom to decide what your magic does at the moment you cast it.
 
-Want your energy blast to be a searing flame that pushes enemies back? A crackling bolt of lightning that chains between targets? A wave of chilling frost that slows them to a crawl? You can build that, expressing *your* character's specific brand of magic.
+Say you took `Blast`. It's free to cast as a 10-foot cone for 1d8. Spend two `spell points` and you could enchance it into a 15-foot cone, a sphere you drop 60 feet downrange, or a lance that skewers a whole line. One more point on **Forceful Blast** and everything that fails the save gets thrown 10 feet back. That's one spell, with a dozen **Enhancements** you could learn along the way. Two characters with the same four spells can have entirely different play styles.
 
-> **Magic in Action:** Lyra faces three charging goblins. "I slam my staff down and channel earth energy into a Blast!" She spends 2 SP for a standard Blast, adds Fire essence, and the Forceful enhancement (+1 SP). The goblins fail their saves and are pushed back by the wave of molten stone erupting from the ground – exactly the breathing room Lyra needed.
+Everything you cast is shaped by an **Essence**. You pick two of the twelve at 1st level and choose one of them each time you cast. Fire, Cold, Shadow, Lightning, Psychic, Sound, and six more. It sets your damage type, it helps you tell the table what your magic looks like when it lands, and with the right **Enhancement** it leaves the target Ignited or Frozen or Conductive until the start of your next turn.
 
-Get ready to weave compelling stories, face daunting challenges, and unleash your creativity.
+The class **Champion** uniquely gets the spell `Barrier`, but based on their choices, they could end up being very different tools. One walls off a doorway with earth. Another pays more to conjure a shield of light that protects his allies as they cross a battlefielod.
+
+> **Magic in Action:** Three goblins charge Lyra. "I slam my staff down and channel earth energy into a Blast!" She spends 2 SP for a Cone Blast and 1 SP for Forceful Blast, casting through her Earth Essence. All three fail the Dex save, take 2d8 damage as a slab of stone heaves up under them, and get thrown 10 feet back down the corridor, out of reach for a round.
+
+Six classes, twelve Essences, eighteen Spells, hundreds of Enhancements to be picked.
 
 ### **1.2 Our Design Philosophy**
 
-These rules are guided by a core set of principles aimed at creating the best possible play experience:
+Four decisions shaped everything else in this book.
 
-* **Narrative First:** The story you and your friends create together is paramount. Rules serve the story, providing structure for action and resolution, but should never stifle a great idea. Player inspiration drives the game.
-* **Clarity:** Rules are written to be obvious and jargon-light. We aim for intuitive mechanics you can understand quickly and use confidently. No hidden traps or obscure interactions buried in footnotes.
-* **Simplicity:** The core mechanics are designed to be lightweight and easy to grasp. While your magical effects can become complex and layered through Enhancements, the underlying system remains streamlined.
-* **Versatility:** The magic system (Spells + Essences + Enhancements) is modular. Mix and match components to create the precise effects you envision, when you need them.
-* **Fun:** Every choice should feel meaningful and exciting. Your character's abilities are tools designed to spark clever tactics and rewarding moments, not bog down the game.
-* **Creativity:** Mechanics should be a launchpad for imagination, not a straitjacket. This system encourages you to describe *how* your character's magic looks, feels, and manifests, celebrating unique flair over rote recitation.
-* **Balance:** We aim for earned power and fair challenges. Choices should be meaningful, without obvious "best" options or game-breaking combos. Every character path should feel viable and rewarding.
-* **Clean Design:** We've avoided legacy bloat and unnecessary complexity. This is a refined, streamlined system focused on doing its job elegantly.
+* **Focus on character's decisions, not mechanics**: This sysetm aims to skew rules light. They should serve the story, not stifle ideas.
+
+* **Streamline the core loop** Roll a d20, add an ability modifier (never higher than +3), against a DC. The depth lives in Enhancements, which are added incrementally from a tree, so are never overwhelming.
+* **Describe first, price it after.** You choose the Essence, so you choose what your magic looks like. A `Bolt` is a golden sunbeam or a spear of frozen air depending on who cast it, and the rules don't care which as long as you say it out loud.
+* **The rule loses.** If a mechanic gets between a player and a good idea, we'd rather patch the mechanic. Anything in here can be overruled at your table without the rest of the system falling over.
+* **No trap options.** Every class, every Spell, every Enhancement should be worth its cost. If one is clearly the right answer every time, that's a bug and we want to hear about it.
 
 > ✨ **Our Golden Rule:**  
-> If a rule ever blocks a great idea or feels too complicated for the fun it provides, we tweak the rule—not the idea.  
+> If a rule ever blocks a great idea or feels too complicated for the fun it provides, we tweak the rule, not the idea.  
 > **If it isn't fun, it isn't right.**
 
 ### **1.3 What You Need to Play**
@@ -37,82 +39,22 @@ To play, you'll need a few things:
 * **Dice:** A standard set of polyhedral dice (d4, d6, d8, d10, d12, d20) is recommended for each player.
 * **Character Sheets:** To record your character's details (a template may be provided separately).
 * **Pencils & Paper:** For notes, mapping, and tracking temporary effects.
-* **Imagination:** The most crucial component!
+* **Status tokens:** All classes get access to status effects, they're short-lived so having a temporary marker is helpful.
 
 ### **1.4 How to Use These Rules**
 
 This book is structured to get you playing quickly:
 
-1. **Section 2: Forging Your Character:** This is your starting point. It guides you step-by-step through creating your unique hero, from initial concept to final details.
-2. **Sections 3-7:** These sections detail the core mechanics underpinning your character's abilities – Classes, Essences, Spells, Spell Points, and Enhancements. You'll reference these during character creation and throughout play.
+1. **Section 2: Forging Your Hero:** Start here. It walks you from a concept to a finished sheet, in order, with a checklist at the end.
+2. **Sections 3-7:** Classes, Essences, Spells, Spell Points, Enhancements. You look these up while building the character or levelling up, your character sheet should prevent from needing to look up specifics in game.
 
-Don't feel you need to memorize everything upfront. To start, you only need the following:
+To start, you only need the following:
 
 * Your character (Section 2)
 * The basics of their Class (Section 3)
 * Your two selected Essences (Section 4)
 * Your four selected Spells (Section 5)
 
-Spell Points (Section 6) and Enhancements (Section 7) will become relevant as you progress through the game.
+Spell Points (Section 5.4) and the Enhancements in Section 6 open up as you level. At 1st level you have 10 SP and a 3 SP ceiling on any single cast, which rules out most of Section 6 anyway.
 
-Now, gather your dice, spark your imagination, and let's forge a hero! Turn to **Section 2: Forging Your Character** to begin.
-
-### 1.5 Glossary
-
-* Ability Modifier: A numerical bonus or penalty (ranging from -1 to +3 in this system) derived from an Ability Score, used in dice rolls for checks, saves, and attacks. (See Section 2.3)
-
-* Anchor: A defining element (memento, promise, principle) that grounds a character emotionally or narratively. (See Section 2.6)
-
-* Base Spells: The four foundational spells a character knows at 1st level, consisting of their Core Attack Spell, Unique Spell, and two Choice Spells. (See Section 2.5, Section 3.1, Section 5.2)
-
-* Basic Effect: The simplest version of a Spell, usable at will for 0 Spell Points (SP). Represents the core concept of the spell. (See Section 2.5, Section 5.4, Section 5.5)
-
-* Choice Spells: Two spells selected by the player from their chosen Class's available options during character creation. (See Section 2.5, Section 3.1, Section 5.2)
-
-* Class: The character's primary archetype, defining their Key Ability, Unique Spell, Hit Die, proficiencies, and general approach to challenges and magic. (See Section 2.2, Section 3)
-
-* Core Attack Spell: A character's primary offensive magical option (Strike or Bolt), granted by their Class. (See Section 2.5, Section 3.1, Section 5.2)
-
-* Enhancement: A modification applied to a Spell by spending Spell Points (SP) to augment its effects (power, scope, duration, function). Learned as characters level up. (See Section 2.7, Section 7)
-
-* Essence (Descriptor): A fundamental magical energy (e.g., Fire, Cold, Shadow) chosen by the character, defining the damage type and sensory details of their spells. (See Section 2.5, Section 4)
-
-* Fate Undo Token: A resource awarded by the GM when a character's Hindrance causes a Meaningful Complication. Can be spent to reroll dice or revise narrative actions. (See Section 2.6)
-
-* Feat: A special ability gained (typically through leveling) that provides unique capabilities or enhances existing ones. (See Section 8)
-
-* GM (Game Master): The person who runs the game, describes the world, adjudicates rules, and portrays non-player characters. (See Section 1.3)
-
-* Hindrance: A character flaw, weakness, or complication chosen during creation that adds depth and can lead to Meaningful Complications (and Fate Undo Tokens). (See Section 2.6)
-
-* Hit Die (HD): The type of die rolled to determine hit points gained per level, specific to each Class. (See Section 2.2, Section 2.7)
-
-* Hit Points (HP): A measure of a character's health and resilience to damage. (See Section 2.7)
-
-* Key Ability: The primary Ability Score associated with a character's Class, determining their Spellcasting Ability Modifier and often influencing class features. (See Section 2.2, Section 3.2)
-
-* Long Rest: An extended period of rest (typically 8 hours) during which characters regain all lost Hit Points and expended Spell Points (SP).
-
-* Max SP per Activation: The maximum number of Spell Points (SP) that can be spent on a single use of a Spell (Mode cost + Enhancement costs), determined by character level. (See Section 2.7, Section 6.3)
-
-* Meaningful Complication: An instance where a character's Hindrance significantly impacts a scene, creates obstacles, or forces difficult choices, potentially earning a Fate Undo Token. (See Section 2.6)
-
-* Mode: Predefined ways to use a Spell, often requiring Spell Points (SP) to activate effects more powerful than the Basic Effect (0 SP). (See Section 5.4, Section 7)
-
-* Proficiency Bonus: A fixed bonus (+3 in this system) added to rolls where a character is proficient (skills, saves, certain attacks). (See Section 2.4)
-
-* Question: A driving mystery or unresolved element in a character's backstory or goals. (See Section 2.6)
-
-* Spell: A foundational magical concept (like Bolt, Heal, Barrier) that serves as a template, customized via Essences and Enhancements. (See Section 2.5, Section 5)
-
-* Spell Attack Bonus: The bonus added to attack rolls made with spells, equal to the character's Spellcasting Ability Modifier. (See Section 2.4)
-
-* Spell Points (SP): The magical energy resource spent to activate Spell Modes and apply Enhancements. Regained after a Long Rest. (See Section 2.7, Section 6)
-
-* Spell Save DC: The Difficulty Class an opponent must meet or exceed on a saving throw to resist a character's spell effect. Calculated as 10 + Spellcasting Ability Modifier. (See Section 2.4)
-
-* Spellcasting Ability Modifier (Spell Mod): The Ability Modifier derived from a character's Key Ability, used for spell attacks and calculating Spell Save DC. (See Section 2.4)
-
-* Status Effect: A specific condition (e.g., Ignited, Frozen, Dazzled) associated with an Essence, typically applied via Enhancements. (See Section 4.4, Section 4.5)
-
-* Unique Spell: A distinctive spell accessible only to a specific Class, representing its core magical approach. (See Section 2.2, Section 3.1, Section 5.2, Section 5.7)
+Turn to **Section 2: Forging Your Hero**.
