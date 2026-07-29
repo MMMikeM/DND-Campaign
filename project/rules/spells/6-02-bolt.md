@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.5 Bolt
+### 6.2 Bolt
 
 #### Basic Effect (0 SP)
 

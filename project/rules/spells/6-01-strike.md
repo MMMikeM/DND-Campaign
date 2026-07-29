@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.16 Strike
+### 6.1 Strike
 
 #### Basic Effect (0 SP)
 

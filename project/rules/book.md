@@ -40,11 +40,11 @@ title: Mike's Rules
   - [5.5 The Eighteen Spells](#the-eighteen-spells)
   - [5.6 Creativity in Action](#creativity-in-action)
 - [6. Spell Reference](#spell-reference)
-  - [6.1 Adapt Self](#adapt-self)
-  - [6.2 Arcane Sight](#arcane-sight)
+  - [6.1 Strike](#strike)
+  - [6.2 Bolt](#bolt)
   - [6.3 Barrier](#barrier)
   - [6.4 Blast](#blast)
-  - [6.5 Bolt](#bolt)
+  - [6.5 Arcane Sight](#arcane-sight)
   - [6.6 Communicate](#communicate)
   - [6.7 Conduit](#conduit)
   - [6.8 Debilitate](#debilitate)
@@ -56,7 +56,7 @@ title: Mike's Rules
   - [6.14 Manipulate](#manipulate)
   - [Enhancements](#enhancements)
   - [6.15 Move](#move)
-  - [6.16 Strike](#strike)
+  - [6.16 Adapt Self](#adapt-self)
   - [6.17 Summon](#summon)
   - [6.18 Zone](#zone)
 - [7. Feat Catalog](#feat-catalog)
@@ -1594,7 +1594,7 @@ combine.
 
 <!-- markdownlint-disable MD041 -->
 
-### 6.1 Adapt Self
+### 6.1 Strike
 
 #### Basic Effect (0 SP)
 
@@ -1602,152 +1602,171 @@ combine.
 |:---|:---|
 | **Cast Time** | 1 Action |
 | **Range** | Self |
-| **Duration** | 1 minute |
-| **Effect** | Gain one: +5 ft speed; OR Adv on Athletics (climb/swim); OR unarmed strikes deal 1d4 + Str mod damage. |
+| **Duration** | Instantaneous |
+| **Effect** | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
+
+#### Mode: Empowered Strike ✦ 2 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | Self |
+| **Duration** | Instantaneous |
+| **Effect** | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
+
+#### Mode: Cleaving Strike ✦ 4 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | Self (Affects primary target + others within 5 ft) |
+| **Duration** | Instantaneous |
+| **Effect** | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
+
+#### Mode: Piercing Strike ✦ 4 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | Self (Affects primary target + 15ft line behind) |
+| **Duration** | Instantaneous |
+| **Effect** | (Ranged/Thrown Only) Make ranged weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 15ft line behind target make Dex save vs **2d8** Essence damage (half on success). |
+
+#### Mode: Bursting Strike ✦ 5 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | Self (Affects primary target + 10ft radius burst) |
+| **Duration** | Instantaneous |
+| **Effect** | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centered on target make Dex save vs **2d8** Essence damage (half on success). |
+
+#### General Enhancements (Strike)
+
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| Increase Bonus Dmg | +1 SP | Increases **bonus** damage dice by **+1d8**. (Applies to initial hit and secondary AoE where applicable). (*Stackable*). |
+| Inflicted Strike | +2 SP | (Applies to *initial* target) Hit: target makes Con save vs Spell DC or suffers essence status until start of **your** next turn. |
+| Flashing Step | +1 SP | After the attack (hit or miss), teleport up to 10 feet. |
+| Resounding Impact | +1 SP | (Applies to *initial* target) Hit: target makes Str save vs pushed 10 ft away. |
+| Tripping Strike | +2 SP | (Applies to *initial* target) Hit: target makes Str save vs knocked prone. |
+| Disarming Strike | +2 SP | (Applies to *initial* target) Hit: target makes Str/Dex save vs dropping one held item of your choice. |
+| Feinting Strike | +2 SP | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn. |
+| Critical Surge | +2 SP | (Use as Reaction) On critical hit with the spell’s attack, spend 2 SP to maximize the spell’s **bonus** damage dice. |
+
+<!-- markdownlint-disable MD041 -->
+
+### 6.2 Bolt
+
+#### Basic Effect (0 SP)
+
+| Property | Value |
+|:---|:---|
+| **Cast Time** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | Instantaneous |
+| **Effect** | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
 
 #### What you can buy
 
 ```mermaid
 graph LR
   B["Basic Effect<br/>0 SP"]
-  B --> FA["Focused Adaptation<br/>2 SP"]
-  B --> BS["Beast Shape<br/>5 SP"]
-  B --> EB["Elemental Body<br/>5 SP"]
+  B --> S["Standard Bolt<br/>2 SP<br/><i>attack roll</i>"]
+  B --> SK["Seeking Bolt<br/>3 SP<br/><i>saving throw</i>"]
+  B --> A["Area Bolt<br/>3 SP"]
+  B --> CH["Channeled Bolt<br/>3 SP"]
 
-  FA -->|"two starred, free"| G
-  BS --> G
-  EB --> G
+  S --> AC["Accurate Bolt<br/>+1 SP"]
+  S --> CB["Chain Bolt<br/>+2 SP"]
 
-  subgraph G["General Enhancements"]
-    direction TB
-    S1["Battle Mutation *<br/>+1 SP"]
-    S2["Hard Skin *<br/>+1 SP"]
-    S3["Enhanced Mobility *<br/>+1 SP"]
-    S4["Heightened Senses *<br/>+1 SP"]
-    G1["Share Adaptation<br/>+2 SP"]
-    G2["Sustained Form<br/>+1 SP per step"]
-    G3["Illusory Guise<br/>+2 SP"]
-    G4["Growth<br/>+2 SP"]
-    G5["Shrink<br/>+2 SP"]
-    G6["Inherent Form<br/>+2 SP"]
-  end
+  A --> EA["Expand Area Bolt<br/>+1 SP each"]
+
+  CH --> ICD["Increase Channel Damage<br/>+2 SP"]
+  CH --> TC["Tenacious Channel<br/>+2 SP"]
+
+  G(["any Mode"]) --> MD["More Damage<br/>+1 SP"]
+  MD --> PB["Penetrating Bolt<br/>+2 SP"]
+  G --> FB["Forceful Bolt<br/>+1 SP"]
+  FB --> DB["Debilitating Bolt<br/>+2 SP"]
+  G --> IR["Increase Range<br/>+1 SP"]
+  G --> CSP["Change Save: Physical<br/>+1 SP"]
+  G --> CSM["Change Save: Mental<br/>+1 SP"]
 ```
 
-Starred Enhancements are the ones **Focused Adaptation** can take two of
-at no extra cost. Everything else adds its SP to the Mode cost.
+`Standard Bolt` rolls to hit, so `Accurate Bolt` and `Chain Bolt` hang
+off it. Every other Mode makes the target save instead.
 
-#### Mode: Focused Adaptation ✦ 2 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | Self |
-| **Duration** | Concentration, up to 10 min |
-| **Effect** | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration at no additional SP cost. |
-
-#### Mode: Beast Shape ✦ 5 SP
+#### Mode: Standard Bolt ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
 | **Cast** | 1 Action |
-| **Range** | Self |
-| **Duration** | Concentration, up to 10 min |
-| **Effect** | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), +2 AC, Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
-| **Limits** | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion). |
-
-#### Mode: Elemental Body ✦ 5 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | Self |
-| **Duration** | Concentration, up to 10 min |
-| **Effect** | Body partially transforms into Essence type. Gain: Resistance to Essence damage type, Unarmed strikes deal 1d10 magical Essence damage, Move through 1-inch spaces without squeezing, Ignore non-magical difficult terrain, Retaliation damage (Spell Mod Essence) on melee hit within 5 ft. |
-| **Limits** | Minor environmental interactions (ignite, freeze, dim light) based on Essence (GM discretion). May appear obviously magical. |
-
-#### General Enhancements (Adapt Self)
-
-*(Add SP cost to Mode cost, unless used via Focused Adaptation\*)*
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| Battle Mutation\* | +1 SP | Natural weapons (or unarmed strikes if none granted) deal 1d8 magical Essence damage. |
-| Hard Skin\* | +1 SP | Gain +1 bonus to AC. (*Stackable, max +2 total bonus*). |
-| Share Adaptation | +2 SP | Range becomes Touch. One willing creature gains the chosen Mode’s effects instead. (*Cannot target self*). |
-| Enhanced Mobility\* | +1 SP | Gain both climb and swim speed = walking speed; can breathe air and water. |
-| Heightened Senses\* | +1 SP | Gain darkvision 60 ft; gain advantage on Wisdom (Perception) checks. |
-| Sustained Form | +1 SP / step | Increase Concentration duration step (10 min → 1 hour → 8 hours). |
-| Illusory Guise | +2 SP | Change appearance (visual only). Adv on Deception checks for disguise. Duration 1 hour, no Conc. (*Can add or cast alone*). |
-| Growth | +2 SP | Size becomes Large (if M/S). Gain Adv Str checks/saves, +5 ft reach, weapon/unarmed +1d4 damage. |
-| Shrink | +2 SP | Size becomes Small (if M/L). Gain Adv Dex checks/saves & Stealth, +1 AC & attack rolls. |
-| Inherent Form | +2 SP | Removes the need for Concentration. |
-
-<!-- markdownlint-disable MD041 -->
-
-### 6.2 Arcane Sight
-
-#### Basic Effect (0 SP)
-
-| Property | Value |
-|:---|:---|
-| **Cast Time** | 1 Reaction |
-| **Range** | Self (30 ft radius) |
-| **Duration** | 1 minute |
-| **Effect** | When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll. |
-
-#### Mode: Detect Magic ✦ 2 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action (Ritual Tag) |
-| **Range** | Self (30-ft radius) |
-| **Duration** | Concentration, up to 10 min |
-| **Effect** | Sense presence/location of magic effects, items, residue within range. Action: Focus on visible target for aura/school. Penetrates thin barriers. |
-
-##### Detect Magic Enhancements
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| Reveal Hidden Dangers | +1 SP | While concentrating, you also gain awareness of the presence and general location of non-magical traps, hidden mechanisms, or secret doors within range. Pinpointing details may require checks. |
-| Identify Properties | +1 SP | Change Cast Time to 1 min (touching item), Duration Instant. Learn item properties, function, activation, charges. (Total 3 SP). |
-| Penetrating Vision | +1 SP | Detection ignores additional 1 ft stone / 1 inch metal / 3 ft wood/dirt. (*Stackable*). |
-| Sustain Detection | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours). |
-| Persistent Detection | +3 SP | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
-
-#### Mode: Dispel Magic ✦ 4 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | 120 ft |
-| **Duration** | Instantaneous |
-| **Effect** | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to end. |
-
-##### Dispel Magic Enhancements
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| Targeted Dispel | +1 SP | Choose specific spell effect to target first if multiple exist. (Total 5 SP+). |
-| Area Dispel | +3 SP | Affects 10-ft radius sphere. Attempt dispel on *one* effect (lowest SP or targeted) on each target. Rolls separate. (Total 7 SP+). |
-| Lingering Suppression | +1 SP | If check fails, target effect suppressed (inactive) until end of **your** next turn. (Total 5 SP+). |
-
-#### Mode: Counterspell ✦ 4 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | Reaction (when you see creature within 60 ft casting) |
 | **Range** | 60 ft |
 | **Duration** | Instantaneous |
-| **Effect** | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to cause spell to fail. |
+| **Effect** | Make a ranged spell attack vs one target. Hit: 3d8 Essence damage. |
 
-#### General Enhancements
+##### Standard Bolt Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Increase Range/Radius | +1 SP | Doubles range or radius (Detect radius, Dispel/Counter initial range). |
-| Greater Negation | +2 SP | (Applies To: Dispel/Counter Modes) Increases automatic dispel/counter threshold by +2 SP (e.g., base 3 -\> 5). (*Stackable*). |
-| Adept Negation | +2 SP | (Applies To: Dispel/Counter Modes) Gain advantage on spellcasting check to dispel/counter spells above threshold. |
-| Dispel Feedback | +2 SP | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 essence damage per 2 full SP of negated spell’s cost. |
+| Accurate Bolt | +1 SP | Gain Advantage on the ranged spell attack roll. |
+| Chain Bolt | +2 SP | On hit, bolt leaps to a second target within 15 ft (new attack roll). Hit: half original damage (round down). (*Stackable*: +2 SP/target, half previous damage). |
+
+#### Mode: Seeking Bolt ✦ 3 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | Instantaneous |
+| **Effect** | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll. |
+
+#### Mode: Area Bolt ✦ 3 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | 60 ft (5-foot radius sphere centered on point) |
+| **Duration** | Instantaneous |
+| **Effect** | Creatures within the sphere make a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. |
+
+##### Area Bolt Enhancements
+
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| Expand Area Bolt | +1 SP | Increase the radius of the sphere by +5 feet. (*Stackable*). |
+
+#### Mode: Channeled Bolt ✦ 3 SP
+
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action |
+| **Range** | 60 ft |
+| **Duration** | Concentration, up to 1 min |
+| **Effect** | Choose delivery: **Attack Channel** (Make a spell attack. On hit: target takes 2d8 Essence damage and you establish a channel to them.) OR **Save Channel** (Target makes a Dexterity saving throw. On fail: takes 2d8 Essence damage and you establish a channel to them. On success: takes half damage and no channel is established). While concentrating, you can use your Action on subsequent turns to deal 2d8 Essence damage to the channeled target (if visible and within range). The channel ends if you lose concentration or use a different spell/effect that requires your Action on a subsequent turn. |
+
+##### Channeled Bolt Enhancements
+
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| Increase Channel Damage | +2 SP | Increase subsequent Action damage by +1d8. (*Stackable*). |
+| Tenacious Channel | +2 SP | Concentration is not broken if you use your Action to cast a non-attack spell or take a non-Attack action. |
+
+#### General Enhancements (Bolt)
+
+Available with any Mode. The indented rows require the enhancement above
+them.
+
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| More Damage | +1 SP | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Area, Channeled initial hit). |
+| ↳ Penetrating Bolt | +2 SP | (Requires: More Damage) The spell’s damage ignores resistance to its damage type. |
+| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target pushed 10 ft away from caster or center of area. |
+| ↳ Debilitating Bolt | +2 SP | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
+| Increase Range | +1 SP | Doubles the spell’s range. (*Stackable*). |
+| Change Save (Physical) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution. |
+| Change Save (Mental) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma. |
 
 <!-- markdownlint-disable MD041 -->
 
@@ -1904,117 +1923,70 @@ them.
 
 <!-- markdownlint-disable MD041 -->
 
-### 6.5 Bolt
+### 6.5 Arcane Sight
 
 #### Basic Effect (0 SP)
 
 | Property | Value |
 |:---|:---|
-| **Cast Time** | 1 Action |
-| **Range** | 60 ft |
-| **Duration** | Instantaneous |
-| **Effect** | Make a ranged spell attack. Hit: Target takes 1d10 Essence damage. |
+| **Cast Time** | 1 Reaction |
+| **Range** | Self (30 ft radius) |
+| **Duration** | 1 minute |
+| **Effect** | When you or an ally within 30 ft is hit by an attack OR targeted by a harmful spell or effect, you can use your Reaction to impose disadvantage on that triggering roll. |
 
-#### What you can buy
+#### Mode: Detect Magic ✦ 2 SP
 
-```mermaid
-graph LR
-  B["Basic Effect<br/>0 SP"]
-  B --> S["Standard Bolt<br/>2 SP<br/><i>attack roll</i>"]
-  B --> SK["Seeking Bolt<br/>3 SP<br/><i>saving throw</i>"]
-  B --> A["Area Bolt<br/>3 SP"]
-  B --> CH["Channeled Bolt<br/>3 SP"]
+| Property | Value |
+|:---|:---|
+| **Cast** | 1 Action (Ritual Tag) |
+| **Range** | Self (30-ft radius) |
+| **Duration** | Concentration, up to 10 min |
+| **Effect** | Sense presence/location of magic effects, items, residue within range. Action: Focus on visible target for aura/school. Penetrates thin barriers. |
 
-  S --> AC["Accurate Bolt<br/>+1 SP"]
-  S --> CB["Chain Bolt<br/>+2 SP"]
+##### Detect Magic Enhancements
 
-  A --> EA["Expand Area Bolt<br/>+1 SP each"]
+| Enhancement | SP Cost | Effect |
+|:---|:---|:---|
+| Reveal Hidden Dangers | +1 SP | While concentrating, you also gain awareness of the presence and general location of non-magical traps, hidden mechanisms, or secret doors within range. Pinpointing details may require checks. |
+| Identify Properties | +1 SP | Change Cast Time to 1 min (touching item), Duration Instant. Learn item properties, function, activation, charges. (Total 3 SP). |
+| Penetrating Vision | +1 SP | Detection ignores additional 1 ft stone / 1 inch metal / 3 ft wood/dirt. (*Stackable*). |
+| Sustain Detection | +1 SP / step | Increase Concentration duration (10 min → 1 hour → 8 hours). |
+| Persistent Detection | +3 SP | (Requires: Sustain Detection ≥ 1 hour) Duration becomes 8 hours, no Concentration. |
 
-  CH --> ICD["Increase Channel Damage<br/>+2 SP"]
-  CH --> TC["Tenacious Channel<br/>+2 SP"]
-
-  G(["any Mode"]) --> MD["More Damage<br/>+1 SP"]
-  MD --> PB["Penetrating Bolt<br/>+2 SP"]
-  G --> FB["Forceful Bolt<br/>+1 SP"]
-  FB --> DB["Debilitating Bolt<br/>+2 SP"]
-  G --> IR["Increase Range<br/>+1 SP"]
-  G --> CSP["Change Save: Physical<br/>+1 SP"]
-  G --> CSM["Change Save: Mental<br/>+1 SP"]
-```
-
-`Standard Bolt` rolls to hit, so `Accurate Bolt` and `Chain Bolt` hang
-off it. Every other Mode makes the target save instead.
-
-#### Mode: Standard Bolt ✦ 2 SP
+#### Mode: Dispel Magic ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
 | **Cast** | 1 Action |
-| **Range** | 60 ft |
+| **Range** | 120 ft |
 | **Duration** | Instantaneous |
-| **Effect** | Make a ranged spell attack vs one target. Hit: 3d8 Essence damage. |
+| **Effect** | Choose target creature/object/effect. Ends spell effects of ≤ 3 SP cost. For ≥ 4 SP effects, spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to end. |
 
-##### Standard Bolt Enhancements
+##### Dispel Magic Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Accurate Bolt | +1 SP | Gain Advantage on the ranged spell attack roll. |
-| Chain Bolt | +2 SP | On hit, bolt leaps to a second target within 15 ft (new attack roll). Hit: half original damage (round down). (*Stackable*: +2 SP/target, half previous damage). |
+| Targeted Dispel | +1 SP | Choose specific spell effect to target first if multiple exist. (Total 5 SP+). |
+| Area Dispel | +3 SP | Affects 10-ft radius sphere. Attempt dispel on *one* effect (lowest SP or targeted) on each target. Rolls separate. (Total 7 SP+). |
+| Lingering Suppression | +1 SP | If check fails, target effect suppressed (inactive) until end of **your** next turn. (Total 5 SP+). |
 
-#### Mode: Seeking Bolt ✦ 3 SP
+#### Mode: Counterspell ✦ 4 SP
 
 | Property | Value |
 |:---|:---|
-| **Cast** | 1 Action |
+| **Cast** | Reaction (when you see creature within 60 ft casting) |
 | **Range** | 60 ft |
 | **Duration** | Instantaneous |
-| **Effect** | Target makes a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. No attack roll. |
+| **Effect** | Interrupt spell if its total SP cost is ≤ 3 SP. If ≥ 4 SP, make spellcasting check (DC 10 + \[SP cost of the target spell / 2\]) to cause spell to fail. |
 
-#### Mode: Area Bolt ✦ 3 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | 60 ft (5-foot radius sphere centered on point) |
-| **Duration** | Instantaneous |
-| **Effect** | Creatures within the sphere make a Dexterity saving throw. Fail: 3d8 Essence damage. Success: Half damage. |
-
-##### Area Bolt Enhancements
+#### General Enhancements
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Expand Area Bolt | +1 SP | Increase the radius of the sphere by +5 feet. (*Stackable*). |
-
-#### Mode: Channeled Bolt ✦ 3 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | 60 ft |
-| **Duration** | Concentration, up to 1 min |
-| **Effect** | Choose delivery: **Attack Channel** (Make a spell attack. On hit: target takes 2d8 Essence damage and you establish a channel to them.) OR **Save Channel** (Target makes a Dexterity saving throw. On fail: takes 2d8 Essence damage and you establish a channel to them. On success: takes half damage and no channel is established). While concentrating, you can use your Action on subsequent turns to deal 2d8 Essence damage to the channeled target (if visible and within range). The channel ends if you lose concentration or use a different spell/effect that requires your Action on a subsequent turn. |
-
-##### Channeled Bolt Enhancements
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| Increase Channel Damage | +2 SP | Increase subsequent Action damage by +1d8. (*Stackable*). |
-| Tenacious Channel | +2 SP | Concentration is not broken if you use your Action to cast a non-attack spell or take a non-Attack action. |
-
-#### General Enhancements (Bolt)
-
-Available with any Mode. The indented rows require the enhancement above
-them.
-
-| Enhancement | SP Cost | Effect |
-|:---|:---|:---|
-| More Damage | +1 SP | Increase the initial damage dice by +1d8. (*Stackable*) (Applies to Standard, Area, Channeled initial hit). |
-| ↳ Penetrating Bolt | +2 SP | (Requires: More Damage) The spell’s damage ignores resistance to its damage type. |
-| Forceful Bolt | +1 SP | On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target pushed 10 ft away from caster or center of area. |
-| ↳ Debilitating Bolt | +2 SP | (Requires: Forceful Bolt) On hit (Standard) or failed initial save (Seeking/Area/Channeled), primary target makes Con save vs Spell DC or suffers Essence status until start of **your** next turn. |
-| Increase Range | +1 SP | Doubles the spell’s range. (*Stackable*). |
-| Change Save (Physical) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Strength or Constitution. |
-| Change Save (Mental) | +1 SP | (Applies To: any cast that uses a saving throw) Changes the required save to Wisdom, Intelligence, or Charisma. |
+| Increase Range/Radius | +1 SP | Doubles range or radius (Detect radius, Dispel/Counter initial range). |
+| Greater Negation | +2 SP | (Applies To: Dispel/Counter Modes) Increases automatic dispel/counter threshold by +2 SP (e.g., base 3 -\> 5). (*Stackable*). |
+| Adept Negation | +2 SP | (Applies To: Dispel/Counter Modes) Gain advantage on spellcasting check to dispel/counter spells above threshold. |
+| Dispel Feedback | +2 SP | (Applies To: Dispel/Counter Modes) On successful dispel/counter, caster takes 1d6 essence damage per 2 full SP of negated spell’s cost. |
 
 <!-- markdownlint-disable MD041 -->
 
@@ -2700,7 +2672,7 @@ them.
 
 <!-- markdownlint-disable MD041 -->
 
-### 6.16 Strike
+### 6.16 Adapt Self
 
 #### Basic Effect (0 SP)
 
@@ -2708,57 +2680,85 @@ them.
 |:---|:---|
 | **Cast Time** | 1 Action |
 | **Range** | Self |
-| **Duration** | Instantaneous |
-| **Effect** | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
+| **Duration** | 1 minute |
+| **Effect** | Gain one: +5 ft speed; OR Adv on Athletics (climb/swim); OR unarmed strikes deal 1d4 + Str mod damage. |
 
-#### Mode: Empowered Strike ✦ 2 SP
+#### What you can buy
+
+```mermaid
+graph LR
+  B["Basic Effect<br/>0 SP"]
+  B --> FA["Focused Adaptation<br/>2 SP"]
+  B --> BS["Beast Shape<br/>5 SP"]
+  B --> EB["Elemental Body<br/>5 SP"]
+
+  FA -->|"two starred, free"| G
+  BS --> G
+  EB --> G
+
+  subgraph G["General Enhancements"]
+    direction TB
+    S1["Battle Mutation *<br/>+1 SP"]
+    S2["Hard Skin *<br/>+1 SP"]
+    S3["Enhanced Mobility *<br/>+1 SP"]
+    S4["Heightened Senses *<br/>+1 SP"]
+    G1["Share Adaptation<br/>+2 SP"]
+    G2["Sustained Form<br/>+1 SP per step"]
+    G3["Illusory Guise<br/>+2 SP"]
+    G4["Growth<br/>+2 SP"]
+    G5["Shrink<br/>+2 SP"]
+    G6["Inherent Form<br/>+2 SP"]
+  end
+```
+
+Starred Enhancements are the ones **Focused Adaptation** can take two of
+at no extra cost. Everything else adds its SP to the Mode cost.
+
+#### Mode: Focused Adaptation ✦ 2 SP
 
 | Property | Value |
 |:---|:---|
 | **Cast** | 1 Action |
 | **Range** | Self |
-| **Duration** | Instantaneous |
-| **Effect** | Make one weapon attack. Hit: deals normal weapon damage + **2d8** bonus Essence damage. |
+| **Duration** | Concentration, up to 10 min |
+| **Effect** | Choose **two** enhancements from General Enhancements (marked with \*). Apply their effects for the duration at no additional SP cost. |
 
-#### Mode: Cleaving Strike ✦ 4 SP
-
-| Property | Value |
-|:---|:---|
-| **Cast** | 1 Action |
-| **Range** | Self (Affects primary target + others within 5 ft) |
-| **Duration** | Instantaneous |
-| **Effect** | (Melee Only) Make melee weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Choose others within 5 ft (up to Spell Mod); they make Dex save vs **2d8** Essence damage (half on success). |
-
-#### Mode: Piercing Strike ✦ 4 SP
+#### Mode: Beast Shape ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
 | **Cast** | 1 Action |
-| **Range** | Self (Affects primary target + 15ft line behind) |
-| **Duration** | Instantaneous |
-| **Effect** | (Ranged/Thrown Only) Make ranged weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 15ft line behind target make Dex save vs **2d8** Essence damage (half on success). |
+| **Range** | Self |
+| **Duration** | Concentration, up to 10 min |
+| **Effect** | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), +2 AC, Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
+| **Limits** | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion). |
 
-#### Mode: Bursting Strike ✦ 5 SP
+#### Mode: Elemental Body ✦ 5 SP
 
 | Property | Value |
 |:---|:---|
 | **Cast** | 1 Action |
-| **Range** | Self (Affects primary target + 10ft radius burst) |
-| **Duration** | Instantaneous |
-| **Effect** | Make weapon attack. Hit: target takes weapon dmg + **2d8** bonus Essence damage. Creatures in 10ft radius explosion centered on target make Dex save vs **2d8** Essence damage (half on success). |
+| **Range** | Self |
+| **Duration** | Concentration, up to 10 min |
+| **Effect** | Body partially transforms into Essence type. Gain: Resistance to Essence damage type, Unarmed strikes deal 1d10 magical Essence damage, Move through 1-inch spaces without squeezing, Ignore non-magical difficult terrain, Retaliation damage (Spell Mod Essence) on melee hit within 5 ft. |
+| **Limits** | Minor environmental interactions (ignite, freeze, dim light) based on Essence (GM discretion). May appear obviously magical. |
 
-#### General Enhancements (Strike)
+#### General Enhancements (Adapt Self)
+
+*(Add SP cost to Mode cost, unless used via Focused Adaptation\*)*
 
 | Enhancement | SP Cost | Effect |
 |:---|:---|:---|
-| Increase Bonus Dmg | +1 SP | Increases **bonus** damage dice by **+1d8**. (Applies to initial hit and secondary AoE where applicable). (*Stackable*). |
-| Inflicted Strike | +2 SP | (Applies to *initial* target) Hit: target makes Con save vs Spell DC or suffers essence status until start of **your** next turn. |
-| Flashing Step | +1 SP | After the attack (hit or miss), teleport up to 10 feet. |
-| Resounding Impact | +1 SP | (Applies to *initial* target) Hit: target makes Str save vs pushed 10 ft away. |
-| Tripping Strike | +2 SP | (Applies to *initial* target) Hit: target makes Str save vs knocked prone. |
-| Disarming Strike | +2 SP | (Applies to *initial* target) Hit: target makes Str/Dex save vs dropping one held item of your choice. |
-| Feinting Strike | +2 SP | (Applies to *initial* target) Hit: Gain advantage on your next attack roll vs target before end of your next turn. |
-| Critical Surge | +2 SP | (Use as Reaction) On critical hit with the spell’s attack, spend 2 SP to maximize the spell’s **bonus** damage dice. |
+| Battle Mutation\* | +1 SP | Natural weapons (or unarmed strikes if none granted) deal 1d8 magical Essence damage. |
+| Hard Skin\* | +1 SP | Gain +1 bonus to AC. (*Stackable, max +2 total bonus*). |
+| Share Adaptation | +2 SP | Range becomes Touch. One willing creature gains the chosen Mode’s effects instead. (*Cannot target self*). |
+| Enhanced Mobility\* | +1 SP | Gain both climb and swim speed = walking speed; can breathe air and water. |
+| Heightened Senses\* | +1 SP | Gain darkvision 60 ft; gain advantage on Wisdom (Perception) checks. |
+| Sustained Form | +1 SP / step | Increase Concentration duration step (10 min → 1 hour → 8 hours). |
+| Illusory Guise | +2 SP | Change appearance (visual only). Adv on Deception checks for disguise. Duration 1 hour, no Conc. (*Can add or cast alone*). |
+| Growth | +2 SP | Size becomes Large (if M/S). Gain Adv Str checks/saves, +5 ft reach, weapon/unarmed +1d4 damage. |
+| Shrink | +2 SP | Size becomes Small (if M/L). Gain Adv Dex checks/saves & Stealth, +1 AC & attack rolls. |
+| Inherent Form | +2 SP | Removes the need for Concentration. |
 
 <!-- markdownlint-disable MD041 -->
 
