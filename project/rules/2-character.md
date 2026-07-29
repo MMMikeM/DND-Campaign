@@ -25,60 +25,53 @@ Before touching dice or numbers, envision who your character is at their core:
 | 5. Street criminal     | 5. Ambition     | 5. Passionate    | 5. Adaptive improvisation |
 | 6. Accidental hero     | 6. Legacy       | 6. Cautious      | 6. Meticulous planning    |
 
-> **Concept Example:** Rolling 4-2-5-3 gives a guild artisan motivated by redemption with a passionate temperament who approaches problems through social manipulation; perhaps a silver-tongued former jeweler who betrayed their guild and now uses manipulation magic to make amends.
+> **Concept Example:** Rolling 4-2-5-3 gives a guild artisan motivated by redemption with a passionate temperament who approaches problems through social manipulation; perhaps a silver-tongued former jeweller who betrayed their guild and now uses manipulation magic to make amends.
 
 ### 2.2 Choosing Your Class
 
-Your Class defines *how* your character channels magical power and approaches challenges. It provides your core archetype and mechanical framework.
+Your Class defines _how_ your character channels magical power and approaches challenges. It provides your core archetype and mechanical framework.
 
 **Classes at a Glance:**
 
-| Class     | Key Ability  | Unique Spell | Hit Die | Archetype                         |
-|:----------|:-------------|:-------------|:--------|:----------------------------------|
-| Champion  | Strength     | Barrier      | d10     | Protector, mighty warrior         |
-| Trickster | Dexterity    | Move         | d8      | Swift, cunning combatant          |
-| Adapter   | Constitution | Adapt Self   | d10     | Resilient, shapeshifting survivor |
-| Scholar   | Intelligence | Manipulate   | d6      | Brilliant, calculated caster      |
-| Sage      | Wisdom       | Arcane Sight | d8      | Perceptive, intuitive guide       |
-| Orator    | Charisma     | Influence    | d8      | Compelling, force of personality  |
+| Class     | Key Attribute | Unique Spell | Hit Die | Archetype                         |
+|:----------|:--------------|:-------------|:--------|:----------------------------------|
+| Champion  | Strength      | Barrier      | d10     | Protector, mighty warrior         |
+| Trickster | Dexterity     | Move         | d8      | Swift, cunning combatant          |
+| Adapter   | Constitution  | Adapt Self   | d10     | Resilient, shapeshifting survivor |
+| Scholar   | Intelligence  | Manipulate   | d6      | Brilliant, calculated caster      |
+| Sage      | Wisdom        | Arcane Sight | d8      | Perceptive, intuitive guide       |
+| Orator    | Charisma      | Influence    | d8      | Compelling, force of personality  |
 
 Each class provides:
 
-- A **Key Ability** that powers your magic
+- A **Key Attribute** that powers your magic
 - A unique **Spell** only your class can access
 - **Hit Die** type determining your health
-- **Proficiencies** in armor, weapons, and saving throws
+- **Training** in specific armour and weapons
+- **Proficiency** in one saving throw
 
-**Class Flavor Examples:**
+Section 3 has the full writeup for each class, including proficiencies, spell options, and a scene of that class at the table. Read the one you're drawn to before you commit.
 
-**Champion:** *Kendra slams her warhammer into the ground, channeling earth essence. A wall of stone erupts before her, shielding her companions from the dragon's breath. "Stand behind me!" she commands, her magical barriers as unyielding as her resolve.*
+> **Selection Tip:** Your class's Key Attribute should represent what they're best at. That one choice sets your Spell Attack Bonus and your Spell Save DC.
 
-**Trickster:** *Vex winks at her pursuer before stepping into a shadow and seemingly vanishing. A heartbeat later, she materializes behind the guards, already halfway down the corridor. "Better luck next time, gentlemen," she calls back, tossing their stolen keys playfully.*
+### 2.3 Defining Your Attributes
 
-**Adapter:** *Cornered by the patrol, Kira closes her eyes and takes a deep breath. When she opens them, her skin has taken on the mottled gray of stone, her hands have transformed into jagged claws. "You really don't want this fight," she growls.*
+Your six **Attributes** are what your character is made of. Everything they attempt, from forcing a door to reading a room, resolves through one of them.
 
-**Scholar:** *As the lock mechanism activates, Elara quickly traces intricate geometric symbols. "The pattern suggests a quaternary sequence," she murmurs, as components begin to float apart in midair, rearranged by her telekinetic precision.*
+| Attribute              | Description                            | What It Represents                              |
+|:-----------------------|:---------------------------------------|:------------------------------------------------|
+| **Strength (Str)**     | Physical power and athletic capability | Lifting, melee attacks, breaking objects        |
+| **Dexterity (Dex)**    | Agility, reflexes and precision        | Balance, stealth, ranged attacks, reaction time |
+| **Constitution (Con)** | Endurance, vitality, resilience        | Health, stamina, resistance to poison/disease   |
+| **Intelligence (Int)** | Reasoning, knowledge                   | Problem-solving, recall, academic knowledge     |
+| **Wisdom (Wis)**       | Perception, intuition, awareness       | Noticing details, reading situations, willpower |
+| **Charisma (Cha)**     | Personal magnetism, force of will      | Social influence, leadership, performance       |
 
-**Sage:** *As the party debates their next move, Orrin closes his eyes and extends his awareness beyond physical sight. "Wait," he says quietly. "There's a presence here that doesn't belong to this time... and it's watching us right now."*
+These range from -1 to +3, and it means exactly what it says: a Strength attribute score of +2 adds 2 points to a strength roll.
 
-**Orator:** *When negotiations begin to collapse, Lyria steps forward, her voice resonating with subtle harmonics. "Perhaps we've been looking at this all wrong," she suggests, her words carrying an almost tangible weight as the hostile delegates find themselves nodding along.*
++3 is the ceiling and it holds for the entire campaign. The full range of mortal talent, from hopeless to the best anyone has seen, fits inside four points on a d20.
 
-> **Selection Tip:** Choose a class that aligns with your character concept and whose Key Ability you want to excel in.
-
-### 2.3 Defining Your Abilities
-
-Abilities represent your character's natural talents. In this system, we use **ability modifiers** (ranging from -1 to +3) to represent these talents:
-
-| Ability                | Description                               | What It Represents                              |
-|:-----------------------|:------------------------------------------|:------------------------------------------------|
-| **Strength (Str)**     | Physical power and athletic capability    | Lifting, melee attacks, breaking objects        |
-| **Dexterity (Dex)**    | Agility, reflexes and precision           | Balance, stealth, ranged attacks, reaction time |
-| **Constitution (Con)** | Endurance, vitality, resilience           | Health, stamina, resistance to poison/disease   |
-| **Intelligence (Int)** | Reasoning, knowledge                      | Problem-solving, recall, academic knowledge     |
-| **Wisdom (Wis)**       | Perception, intuition, awareness          | Noticing details, reading situations, willpower |
-| **Charisma (Cha)**     | Personal magnetism, force of will         | Social influence, leadership, performance       |
-
-**Ability Modifier Scale:**
+**What the Numbers Mean:**
 
 - **+3**: Exceptional talent, among the best in the world
 - **+2**: Remarkable aptitude, well above average
@@ -86,63 +79,110 @@ Abilities represent your character's natural talents. In this system, we use **a
 - **+0**: Average human capability
 - **-1**: Below average, a notable weakness
 
-> **Specialization Creates Depth:** A brilliant scholar might struggle to lift heavy objects. A mighty champion might miss social cues. These contrasts create interesting narrative opportunities and encourage teamwork.
+> **Take the -1.** The array forces one weakness. A Scholar with -1 Strength can't shift the portcullis, so somebody else has to, and that is the point.
 
-**Assign these modifiers to your abilities:**
+**Assign these numbers to your Attributes:**
 `+3, +2, +1, +0, +0, -1`
 
 **Recommended Distribution:**
 
-1. Assign your **+3** to your class's **Key Ability**
+1. Assign your **+3** to your class's **Key Attribute**
 2. Distribute remaining modifiers to reflect your character's other talents and weaknesses
 
-**Example Distribution:** *Thorne the Champion assigns +3 to Strength (his Key Ability), +2 to Constitution (for endurance), +1 to Charisma (natural leadership), +0 to Wisdom and Dexterity, and -1 to Intelligence (he's never been one for book learning).*
+**Example Distribution:** _Thorne the Champion assigns +3 to Strength (his Key Attribute), +2 to Constitution (for endurance), +1 to Charisma (natural leadership), +0 to Wisdom and Dexterity, and -1 to Intelligence (he's never been one for book learning)._
 
 ### 2.4 Core Mechanics
 
-#### Proficiency Bonus
+#### Proficiency
 
-This system uses a fixed **Proficiency Bonus (+3)** regardless of character level, emphasizing ability selection and specialization over level scaling.
+Your **Proficiency is +3** and never changes, at any level. A 1st level character and a 10th level character add the same number to a skill they're proficient in. What grows is what you can do with a spell, not what you add to a d20.
+
+Proficiency applies in two places only: your two trained skills, and your one trained saving throw. It never applies to an attack roll. A +3 that everyone always adds is not a bonus, it's a bigger base number, so this game only spends it where some characters have it and others don't.
 
 #### Skill Proficiencies
 
-Choose **two skills** from this list to gain proficiency. When making a skill check, add your ability modifier (and proficiency bonus if proficient) to a d20 roll.
+Choose **two skills** from this list to gain proficiency. When making a skill check, add your Attribute (and Proficiency if proficient) to a d20 roll.
 
 | Str       | Dex             | Int           | Wis             | Cha          | Con      |
 |:----------|:----------------|:--------------|:----------------|:-------------|:---------|
-| Athletics | Acrobatics      | Arcana        | Animal Handling | Deception    | *(None)* |
+| Athletics | Acrobatics      | Arcana        | Animal Handling | Deception    | _(None)_ |
 |           | Sleight of Hand | History       | Insight         | Intimidation |          |
 |           | Stealth         | Investigation | Medicine        | Performance  |          |
 |           |                 | Nature        | Perception      | Persuasion   |          |
 |           |                 | Religion      | Survival        |              |          |
 
-**Skill Check Formula:** `1d20 + Ability Modifier + Proficiency Bonus (if proficient)`
+**Skill Check Formula:** `1d20 + Attribute + Proficiency (if proficient)`
 
-**Example:** *Thorne the Champion has Athletics proficiency and Strength +3. When climbing a cliff, he rolls: 1d20 + 3 (Strength) + 3 (Proficiency) = 1d20 + 6*
+**Example:** _Thorne the Champion has Athletics proficiency and Strength +3. When climbing a cliff, he rolls: 1d20 + 3 (Strength) + 3 (Proficiency) = 1d20 + 6_
 
 #### Saving Throws
 
-Your class grants proficiency in two saving throws:
+Your class grants proficiency in **one** saving throw, and it is never your Key Attribute. You are already strong where your class is strong. This is the second thing your class taught you.
 
-- **Champion:** Strength, Constitution
-- **Trickster:** Dexterity, Intelligence
-- **Adapter:** Constitution, Wisdom
-- **Scholar:** Intelligence, Wisdom
-- **Sage:** Wisdom, Charisma
-- **Orator:** Charisma, Dexterity
+| Class     | Key Attribute | Save Proficiency | What it means at the table             |
+|:----------|:--------------|:-----------------|:---------------------------------------|
+| Champion  | Strength      | Constitution     | Takes a beating and keeps standing     |
+| Trickster | Dexterity     | Intelligence     | Sees the trick coming                  |
+| Adapter   | Constitution  | Strength         | Cannot be moved, held, or bound        |
+| Scholar   | Intelligence  | Wisdom           | A trained mind, hard to fool           |
+| Sage      | Wisdom        | Charisma         | Knows their own centre                 |
+| Orator    | Charisma      | Dexterity        | Reads the room and gets out of the way |
 
-**Saving Throw Formula:** `1d20 + Ability Modifier + Proficiency Bonus (if proficient)`
+**Saving Throw Formula:** `1d20 + Attribute + Proficiency (if proficient)`
 
-**Example:** *Thorne must resist a mind-affecting spell with a Wisdom save. He rolls: 1d20 + 0 (Wisdom) + 0 (not proficient) = 1d20 + 0*
+Your best save is somewhere between +2 and +5, depending on where you put your numbers, and your worst is -1. A caster who guesses wrong about which is which will watch a good spell do nothing.
+
+**Example:** _Thorne must resist a mind-affecting spell with a Wisdom save. Wisdom is +0 and Champions aren't proficient in it, so he rolls a flat 1d20 and hopes._
 
 #### Spellcasting
 
-Your **Spellcasting Ability Modifier** (Spell Mod) is the modifier from your class's Key Ability.
+Your **Spellcasting Attribute** (Spell Mod) is your class's Key Attribute. Spell text calls it Spell Mod, and it is the same number you wrote next to Strength or Wisdom or Charisma.
 
-- **Spell Attack Bonus = Your Spellcasting Ability Modifier**
-- **Spell Save DC = 10 + Your Spellcasting Ability Modifier**
+- **Spell Attack Bonus = Your Spellcasting Attribute**
+- **Spell Save DC = 10 + Your Spellcasting Attribute**
 
-**Example:** *Thorne has Strength +3 as his Key Ability. His Spell Attack Bonus is +3, and his Spell Save DC is 13.*
+**Example:** _Thorne has Strength +3 as his Key Attribute. His Spell Attack Bonus is +3, and his Spell Save DC is 13._
+
+#### Training
+
+Your class lists the armour and the weapons it **trained** you in. Training is not a bonus, it is permission: the gear you were trained on works for you, and everything else is just heavy.
+
+- **A weapon you're trained in** lets you add your Key Attribute to the attack roll and the damage roll.
+- **A weapon you aren't** gets you the bare die on both. No Key Attribute, no compensation.
+- **Armour you're trained in** gives you its AC.
+- **Armour you aren't** gives you nothing. Plate on an untrained Scholar is a costume.
+
+Training and Proficiency are different things and never overlap. Proficiency is the +3 on your two skills and your one save. Training is what your class taught you to hold and wear.
+
+#### Attack Rolls
+
+**Attack Formula:** `1d20 + Key Attribute (if trained) vs the target's AC`
+**Damage Formula:** `weapon die + Key Attribute (if trained)`
+
+Every attack uses your Key Attribute, armed or magical. Your Key Attribute is how you impose yourself on the world: the Champion's Strength drives the axe, the Adapter's Constitution is the claw, the Orator's Charisma lands the blow. There is no separate weapon Attribute, so no class is stuck attacking with a number it never invested in.
+
+A Scholar swinging a looted greataxe rolls a bare d20 for a bare 1d12. Their own quarterstaff hits at +3 for 1d6 + 3, because somebody taught them that one. The better weapon is the one you were trained on, every time.
+
+Proficiency, the +3, never applies to attacks. Everyone holding the right weapon attacks at +3. What separates a fighter from a caster is what happens on a hit, not how often they land one.
+
+#### Armour Class
+
+**AC = 10 + your armour.** Nothing else. Your Dexterity does not make you harder to hit, it makes you harder to catch, which is a Dexterity save.
+
+| Armour  | AC  | Hit by a +3 attacker |
+|:--------|:----|:---------------------|
+| None    | 10  | 70%                  |
+| Clothes | 11  | 65%                  |
+| Light   | 12  | 60%                  |
+| Medium  | 14  | 50%                  |
+| Heavy   | 16  | 40%                  |
+| Shield  | +1  |                      |
+
+A Champion in plate with a shield sits at 17 and gets hit about a third of the time. A Scholar in robes sits at 11 and gets hit about two thirds of the time. That gap is the whole of it, and it never widens at higher levels.
+
+The unarmoured are not helpless. `Defend` costs 0 SP for resistance to physical damage until your next turn, which halves what gets through, and it appears on five of the six class lists. Your defence is an action you spend rather than a number you bought.
+
+> **Everything lives in one band.** Player AC runs 10 to 17, Spell Save DCs run 10 to 13, and skill DCs work best between 8 and 19. Monsters use the same range. Nothing in this game, at any level, has an AC of 21.
 
 ### 2.5 Shaping Your Magic
 

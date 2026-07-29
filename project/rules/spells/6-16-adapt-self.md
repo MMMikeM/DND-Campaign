@@ -51,13 +51,13 @@ Starred Enhancements are the ones **Focused Adaptation** can take two of at no e
 
 #### Mode: Beast Shape ✦ 5 SP
 
-| Property     | Value                                                                                                                                                                                                                                               |
-|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Cast**     | 1 Action                                                                                                                                                                                                                                            |
-| **Range**    | Self                                                                                                                                                                                                                                                |
-| **Duration** | Concentration, up to 10 min                                                                                                                                                                                                                         |
-| **Effect**   | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), +2 AC, Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
-| **Limits**   | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion).                                                                                                                         |
+| Property     | Value                                                                                                                                                                                                                                                                                   |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Cast**     | 1 Action                                                                                                                                                                                                                                                                                |
+| **Range**    | Self                                                                                                                                                                                                                                                                                    |
+| **Duration** | Concentration, up to 10 min                                                                                                                                                                                                                                                             |
+| **Effect**   | Transform into a partial bestial form. Gain: Natural weapons (1d8 + Spell Mod Essence damage, magical), AC becomes 15 (use your armour if higher), Climb/Swim speed = walk speed (breathe underwater if apt), Adv vs Grapple/Restrain, Darkvision 60ft, Adv Perception (hearing/smell). |
+| **Limits**   | Cannot cast spells with Verbal components or perform tasks requiring fine motor control unless form allows (GM discretion).                                                                                                                                                             |
 
 #### Mode: Elemental Body ✦ 5 SP
 

@@ -47,18 +47,18 @@
 | Shield Other      | +2 SP   | Range becomes Touch. Use reaction when ally within 5 ft is hit; grant them the AC bonus. (Total 5 SP).       |
 | Deflecting Shield | +1 SP   | If the triggering attack misses due to the AC bonus, attacker takes 1d8 Force/Essence damage. (Total 4 SP+). |
 
-#### Mode: Enduring Armor ✦ 0 SP
+#### Mode: Enduring Armour ✦ 0 SP
 
-| Property     | Value                                                     |
-|:-------------|:----------------------------------------------------------|
-| **Cast**     | 10 Minutes (Ritual)                                       |
-| **Range**    | Self                                                      |
-| **Duration** | 8 hours                                                   |
-| **Effect**   | Your base AC becomes 13 + Dex modifier. No Concentration. |
+| Property     | Value                                                                                  |
+|:-------------|:---------------------------------------------------------------------------------------|
+| **Cast**     | 10 Minutes (Ritual)                                                                    |
+| **Range**    | Self                                                                                   |
+| **Duration** | 8 hours                                                                                |
+| **Effect**   | Your AC becomes 14. No Concentration. Use your armour instead if it is already higher. |
 
-##### Enduring Armor Enhancements
+##### Enduring Armour Enhancements
 
-| Enhancement   | SP Cost | Effect                                                                               |
-|:--------------|:--------|:-------------------------------------------------------------------------------------|
-| Armour Other  | +2 SP   | Target becomes one willing creature touched instead of Self.                         |
-| Greater Armor | +2 SP   | The AC formula becomes 14 + Dex Mod. (Total cost 2 SP+). Requires separate learning. |
+| Enhancement    | SP Cost | Effect                                                                            |
+|:---------------|:--------|:----------------------------------------------------------------------------------|
+| Armour Other   | +2 SP   | Target becomes one willing creature touched instead of Self.                      |
+| Greater Armour | +2 SP   | Your AC becomes 16 instead of 14. (Total cost 2 SP+). Requires separate learning. |

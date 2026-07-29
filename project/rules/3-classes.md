@@ -29,9 +29,10 @@ Champions transform raw physical power into tangible magical effects. Their migh
 
 | Aspect            | Details                                                             |
 |:------------------|:--------------------------------------------------------------------|
-| **Core Ability**  | Strength                                                            |
+| **Key Attribute** | Strength                                                            |
+| **Save Prof.**    | Constitution                                                        |
 | **Hit Dice**      | d10                                                                 |
-| **Armor**         | All armor types and shields                                         |
+| **Armour**        | All armour types and shields                                        |
 | **Weapons**       | Simple and martial weapons                                          |
 | **Core Attack**   | `Strike`                                                            |
 | **Unique Spell**  | `Barrier`                                                           |
@@ -52,19 +53,20 @@ Champions transform raw physical power into tangible magical effects. Their migh
 
 > *Swift, cunning, and always one step ahead*
 
-Key Ability: **Dexterity**
+Key Attribute: **Dexterity**
 
 Tricksters embody the magic of motion, precision, and cunning. Their supernatural agility allows them to be where they shouldn't, strike with uncanny accuracy, and slip away before consequences catch up. Whether dancing through shadows, performing impossible acrobatics, or throwing weapons with preternatural precision, the Trickster makes the extraordinary look effortless.
 
 **The Trickster's Edge:** Their unique spell, `Move`, represents their unmatched mobility. Combined with their choice of attack spell (`Strike` or `Bolt`), Tricksters excel at positioning, hit-and-run tactics, and confounding foes with misdirection.
 
-> **Trickster in Action:** With three guards closing in, Vex winks at her pursuer before stepping into a shadow and seemingly vanishing. A heartbeat later, she materializes behind them all, already halfway down the hall. "Better luck next time, gentlemen," she calls back with a laugh, tossing a stolen medallion playfully as she disappears around the corner.
+> **Trickster in Action:** With three guards closing in, Vex winks at her pursuer before stepping into a shadow and seemingly vanishing. A heartbeat later, she materialises behind them all, already halfway down the hall. "Better luck next time, gentlemen," she calls back with a laugh, tossing a stolen medallion playfully as she disappears around the corner.
 
 | Aspect            | Details                                                                     |
 |:------------------|:----------------------------------------------------------------------------|
-| **Core Ability**  | Dexterity                                                                   |
+| **Key Attribute** | Dexterity                                                                   |
+| **Save Prof.**    | Intelligence                                                                |
 | **Hit Dice**      | d8                                                                          |
-| **Armor**         | Light armor                                                                 |
+| **Armour**        | Light armour                                                                |
 | **Weapons**       | Simple weapons, hand crossbows, longswords, rapiers, shortswords, shortbows |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                                   |
 | **Unique Spell**  | `Move`                                                                      |
@@ -85,19 +87,20 @@ Tricksters embody the magic of motion, precision, and cunning. Their supernatura
 
 > *Evolution incarnate*
 
-Key Ability: **Constitution**
+Key Attribute: **Constitution**
 
 Adapters draw power from their remarkable resilience, channeling their life force into extraordinary transformations. Their bodies become both weapon and shield, changing to meet any challenge. Whether growing natural weapons, hardening their skin to deflect blows, or healing with unnatural speed, the Adapter's body is their greatest tool—constantly evolving, always surviving.
 
 **The Adapter's Transformation:** Their unique spell, `Adapt Self`, represents their physical mutability. Combined with their choice of attack spell and defensive capabilities, Adapters excel at survival, adaptation, and overcoming seemingly impossible obstacles.
 
-> **Adapter in Action:** Cornered by the patrol, Kira closes her eyes and takes a deep breath. When she opens them again, her skin has taken on the mottled gray of stone, her hands have transformed into jagged claws, and her senses have sharpened to predatory acuity. "You really don't want this fight," she growls, her voice now carrying a primal edge that makes even the veteran guards hesitate.
+> **Adapter in Action:** Cornered by the patrol, Kira closes her eyes and takes a deep breath. When she opens them again, her skin has taken on the mottled grey of stone, her hands have transformed into jagged claws, and her senses have sharpened to predatory acuity. "You really don't want this fight," she growls, her voice now carrying a primal edge that makes even the veteran guards hesitate.
 
 | Aspect            | Details                                                   |
 |:------------------|:----------------------------------------------------------|
-| **Core Ability**  | Constitution                                              |
+| **Key Attribute** | Constitution                                              |
+| **Save Prof.**    | Strength                                                  |
 | **Hit Dice**      | d10                                                       |
-| **Armor**         | Light armor, medium armor, shields                        |
+| **Armour**        | Light armour, medium armour, shields                      |
 | **Weapons**       | Simple weapons                                            |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                 |
 | **Unique Spell**  | `Adapt Self`                                              |
@@ -118,19 +121,20 @@ Adapters draw power from their remarkable resilience, channeling their life forc
 
 > *Knowledge that reshapes reality*
 
-Key Ability: **Intelligence**
+Key Attribute: **Intelligence**
 
-Scholars bend reality through careful study, pattern recognition, and the precise application of knowledge. Their intellect gives them power over forces that others barely comprehend, allowing them to affect the world through understanding rather than brute force. Whether translating ancient formulae into tangible effects, leveraging mathematical precision for telekinesis, or analyzing the weaknesses in reality's fabric, the Scholar's mind is their greatest weapon.
+Scholars bend reality through careful study, pattern recognition, and the precise application of knowledge. Their intellect gives them power over forces that others barely comprehend, allowing them to affect the world through understanding rather than brute force. Whether translating ancient formulae into tangible effects, leveraging mathematical precision for telekinesis, or analysing the weaknesses in reality's fabric, the Scholar's mind is their greatest weapon.
 
 **The Scholar's Mastery:** Their unique spell, `Manipulate`, represents their fine control over objects and energy. Combined with their ranged attacks (`Bolt`), Scholars excel at precision, problem-solving, and controlling the battlefield from a distance.
 
-> **Scholar in Action:** As the lock mechanism activates, Elara quickly traces the intricate geometric symbols she had memorized earlier and extends her hand toward the mechanism. "The pattern suggests a quaternary sequence," she murmurs, as components begin to float apart in midair. With careful gestures, she rearranges the tumblers telekinetically, bypassing the trap that would have triggered had anyone touched it physically.
+> **Scholar in Action:** As the lock mechanism activates, Elara quickly traces the intricate geometric symbols she had memorised earlier and extends her hand toward the mechanism. "The pattern suggests a quaternary sequence," she murmurs, as components begin to float apart in midair. With careful gestures, she rearranges the tumblers telekinetically, bypassing the trap that would have triggered had anyone touched it physically.
 
 | Aspect            | Details                                                            |
 |:------------------|:-------------------------------------------------------------------|
-| **Core Ability**  | Intelligence                                                       |
+| **Key Attribute** | Intelligence                                                       |
+| **Save Prof.**    | Wisdom                                                             |
 | **Hit Dice**      | d6                                                                 |
-| **Armor**         | None                                                               |
+| **Armour**        | None                                                               |
 | **Weapons**       | Daggers, darts, slings, quarterstaffs, light crossbows             |
 | **Core Attack**   | `Bolt`                                                             |
 | **Unique Spell**  | `Manipulate`                                                       |
@@ -161,9 +165,10 @@ Sages draw power from perception, intuition, and a deep connection to the world 
 
 | Aspect            | Details                                                      |
 |:------------------|:-------------------------------------------------------------|
-| **Core Ability**  | Wisdom                                                       |
+| **Key Attribute** | Wisdom                                                       |
+| **Save Prof.**    | Charisma                                                     |
 | **Hit Dice**      | d8                                                           |
-| **Armor**         | Light armor, medium armor, shields                           |
+| **Armour**        | Light armour, medium armour, shields                         |
 | **Weapons**       | Simple weapons                                               |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                    |
 | **Unique Spell**  | `Arcane Sight`                                               |
@@ -196,9 +201,10 @@ Orators command attention and shape reality through sheer force of personality. 
 
 | Aspect            | Details                                                                        |
 |:------------------|:-------------------------------------------------------------------------------|
-| **Core Ability**  | Charisma                                                                       |
+| **Key Attribute** | Charisma                                                                       |
+| **Save Prof.**    | Dexterity                                                                      |
 | **Hit Dice**      | d8                                                                             |
-| **Armor**         | Light armor                                                                    |
+| **Armour**        | Light armour                                                                   |
 | **Weapons**       | Simple weapons, hand crossbows, rapiers, shortswords                           |
 | **Core Attack**   | `Bolt`                                                                         |
 | **Unique Spell**  | `Influence`                                                                    |
