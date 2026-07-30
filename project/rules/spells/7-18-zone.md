@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.18 Zone
+### 7.18 Zone
 
 #### Basic Effect (0 SP)
 

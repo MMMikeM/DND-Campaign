@@ -2,7 +2,7 @@
 
 ## 2 Character Creation Guide: Forging Your Hero
 
-We recommend starting by deciding _who_ your character is, their core identity. Everything below exists to help you bring that person to table.
+We recommend starting by deciding _who_ your character is, their core identity. Everything below exists to help you bring that person to the table.
 
 ### 2.1 The Spark: Your Character Concept
 
@@ -50,7 +50,7 @@ Each class provides:
 - **Training** in specific armour and weapons
 - **Proficiency** in one saving throw
 
-Section 3 has the full writeup for each class, including proficiencies, spell options, and a scene of that class at the table. Read the one you're drawn to before you commit.
+Section 4 has the full writeup for each class, including proficiencies, spell options, and a scene of that class at the table. Read the one you're drawn to before you commit.
 
 > **Selection Tip:** Your class's Key Attribute should represent what they're best at. That one choice sets your Spell Attack Bonus and your Spell Save DC.
 
@@ -67,7 +67,7 @@ Your six **Attributes** are what your character is made of. Everything they atte
 | **Wisdom (Wis)**       | Perception, intuition, awareness       | Noticing details, reading situations, willpower |
 | **Charisma (Cha)**     | Personal magnetism, force of will      | Social influence, leadership, performance       |
 
-These range from -1 to +3, and it means exactly what it says: a Strength attribute score of +2 adds 2 points to a strength roll.
+These range from -1 to +3, and each means exactly what it says: a Strength of +2 adds 2 to a Strength roll.
 
 +3 is the ceiling and it holds for the entire campaign. The full range of mortal talent, from hopeless to the best anyone has seen, fits inside four points on a d20.
 
@@ -91,7 +91,7 @@ These range from -1 to +3, and it means exactly what it says: a Strength attribu
 
 **Example Distribution:** _Thorne the Champion assigns +3 to Strength (his Key Attribute), +2 to Constitution (for endurance), +1 to Charisma (natural leadership), +0 to Wisdom and Dexterity, and -1 to Intelligence (he's never been one for book learning)._
 
-### 2.4 Core Mechanics
+### 2.4 Filling In the Numbers
 
 #### Proficiency
 
@@ -136,6 +136,16 @@ Your **Spellcasting Attribute** (Spell Mod) is your class's Key Attribute. Spell
 
 **Example:** _Thorne has Strength +3 as his Key Attribute. His Spell Attack Bonus is +3, and his Spell Save DC is 13._
 
+#### Hit Points
+
+Starting HP = the maximum value of your class's Hit Die + your Constitution.
+
+> **Examples:**
+>
+> - A Champion (d10) with +1 Constitution starts with 11 HP
+> - A Scholar (d6) with +0 Constitution starts with 6 HP
+> - An Adapter (d10) with +2 Constitution starts with 12 HP
+
 #### Training
 
 Your class lists the armour and the weapons it **trained** you in. Training is not a bonus, it is permission: the gear you were trained on works for you, and everything else is just heavy.
@@ -147,35 +157,7 @@ Your class lists the armour and the weapons it **trained** you in. Training is n
 
 Training and Proficiency are different things and never overlap. Proficiency is the +3 on your two skills and your one save. Training is what your class taught you to hold and wear.
 
-#### Attack Rolls
-
-**Attack Formula:** `1d20 + Key Attribute (if trained) vs the target's AC`
-**Damage Formula:** `weapon die + Key Attribute (if trained)`
-
-Every attack uses your Key Attribute, armed or magical. Your Key Attribute is how you impose yourself on the world: the Champion's Strength drives the axe, the Adapter's Constitution is the claw, the Orator's Charisma lands the blow. There is no separate weapon Attribute, so no class is stuck attacking with a number it never invested in.
-
-A Scholar swinging a looted greataxe rolls a bare d20 for a bare 1d12. Their own quarterstaff hits at +3 for 1d6 + 3, because somebody taught them that one. The better weapon is the one you were trained on, every time.
-
-Proficiency, the +3, never applies to attacks. Everyone holding the right weapon attacks at +3. What separates a fighter from a caster is what happens on a hit, not how often they land one.
-
-#### Armour Class
-
-**AC = 10 + your armour.** Nothing else. Your Dexterity does not make you harder to hit, it makes you harder to catch, which is a Dexterity save.
-
-| Armour  | AC  | Hit by a +3 attacker |
-|:--------|:----|:---------------------|
-| None    | 10  | 70%                  |
-| Clothes | 11  | 65%                  |
-| Light   | 12  | 60%                  |
-| Medium  | 14  | 50%                  |
-| Heavy   | 16  | 40%                  |
-| Shield  | +1  |                      |
-
-A Champion in plate with a shield sits at 17 and gets hit about a third of the time. A Scholar in robes sits at 11 and gets hit about two thirds of the time. That gap is the whole of it, and it never widens at higher levels.
-
-The unarmoured are not helpless. `Defend` costs 0 SP for resistance to physical damage until your next turn, which halves what gets through, and it appears on five of the six class lists. Your defence is an action you spend rather than a number you bought.
-
-> **Everything lives in one band.** Player AC runs 10 to 17, Spell Save DCs run 10 to 13, and skill DCs work best between 8 and 19. Monsters use the same range. Nothing in this game, at any level, has an AC of 21.
+Section 3 has the weapon categories, the armour table, and what all of this does to a roll.
 
 ### 2.5 Shaping Your Magic
 
@@ -318,7 +300,7 @@ What immediately stands out about you? Any distinctive features?
 
 Note key traits, ideals, and bonds.
 
-> **Examples:** Quiet but observant, with occasional bursts of dry humor. Believes knowledge should be free to all
+> **Examples:** Quiet but observant, with occasional bursts of dry humour. Believes knowledge should be free to all
 
 ##### Anchor
 
@@ -340,29 +322,13 @@ What unresolved mystery drives you forward?
 > - **Identity:** "Am I truly the last of my kind?"
 > - **Purpose:** "What is my magic truly capable of?"
 
-### 2.7 Game Mechanics
+### 2.7 Looking Ahead
 
-#### Hit Points (HP)
+At 1st level you have **10 SP**, and a single cast can cost at most **3 SP**. Both numbers grow every level, and Section 6.4 has the table, the formulas, and the rules for learning Modes and Enhancements.
 
-Starting HP = Maximum value of your Class Hit Die + your Constitution modifier
+From 2nd level you get two picks per level, each one a new Mode or Enhancement for a spell you already know. Your four spells get deeper rather than more numerous.
 
-> **Examples:**
->
-> - A Champion (d10) with +1 Constitution starts with 11 HP
-> - A Scholar (d6) with +0 Constitution starts with 6 HP
-> - An Adapter (d10) with +2 Constitution starts with 12 HP
-
-#### Spell Points (SP)
-
-At 1st level you have **10 SP** and can spend at most **3 SP** on any single spell activation. You regain all SP after a Long Rest. Both numbers grow with level, see Table 5-1.
-
-> **SP in Action:** _Thorne knows `Bolt`. At 1st level he only has its Basic Effect, 0 SP for 1d10. At 2nd level he can learn the `Standard Bolt` Mode and spend 2 SP for 3d8 instead._
-
-#### Looking Ahead
-
-From 2nd level you get two picks per level. Each pick is a new Mode or a new Enhancement for a spell you already know, so your four spells get deeper rather than more numerous.
-
-> **Example:** _At 3rd level Thorne casts `Standard Bolt` for 2 SP and adds `Chain Bolt` for 2 more, a total of 4 SP, which is exactly his cap at that level. The bolt of earth hits the front goblin for 3d8, then leaps to a second goblin within 15 feet for half that._
+> **SP in Action:** _Thorne knows `Bolt`. At 1st level he only has its Basic Effect, 0 SP for 1d10. At 2nd level he learns the `Standard Bolt` Mode and spends 2 SP for 3d8 instead. At 3rd he adds `Chain Bolt` for 2 more, a total of 4 SP and exactly his cap: the bolt of earth hits the front goblin for 3d8, then leaps to a second within 15 feet for half that._
 >
 > **Remember:** You don't need every detail settled to start. Name, class, Attributes and spells are enough to play the first session, and the Anchor and Question usually get better once the table has met your character.
 

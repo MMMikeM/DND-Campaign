@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.11 Heal
+### 7.11 Heal
 
 #### Basic Effect (0 SP)
 

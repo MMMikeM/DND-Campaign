@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.8 Debilitate
+### 7.8 Debilitate
 
 #### Basic Effect (0 SP)
 

@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.15 Move
+### 7.15 Move
 
 #### Basic Effect (0 SP)
 

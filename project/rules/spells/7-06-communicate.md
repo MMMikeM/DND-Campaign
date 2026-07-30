@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.6 Communicate
+### 7.6 Communicate
 
 #### Basic Effect (0 SP)
 

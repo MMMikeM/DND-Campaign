@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.16 Adapt Self
+### 7.16 Adapt Self
 
 #### Basic Effect (0 SP)
 

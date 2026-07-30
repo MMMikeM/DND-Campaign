@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.7 Conduit
+### 7.7 Conduit
 
 #### Basic Effect (0 SP)
 

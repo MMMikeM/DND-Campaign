@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.12 Illusion
+### 7.12 Illusion
 
 #### Basic Effect (0 SP)
 

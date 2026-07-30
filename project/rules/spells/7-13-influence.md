@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.13 Influence
+### 7.13 Influence
 
 #### Basic Effect (0 SP)
 

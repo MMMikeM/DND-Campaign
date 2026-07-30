@@ -47,15 +47,16 @@ To play, you'll need a few things:
 This book is structured to get you playing quickly:
 
 1. **Section 2: Forging Your Hero:** Start here. It walks you from a concept to a finished sheet, in order, with a checklist at the end.
-2. **Sections 3-6:** Classes, Essences, Spells, and the Spell Reference. You look these up while building the character or levelling up, your character sheet should prevent from needing to look up specifics in game.
+2. **Section 3: Playing the Game:** Attacks, weapons, armour, and what the numbers on the sheet actually do. Short, and worth reading once before the first session.
+3. **Sections 4-7:** Classes, Essences, Spells, and the Spell Reference. You look these up while building the character or levelling up; your character sheet should stop you needing to look up specifics mid-game.
 
 To start, you only need the following:
 
 * Your character (Section 2)
-* The basics of their Class (Section 3)
-* Your two selected Essences (Section 4)
-* Your four selected Spells (Section 5)
+* The basics of their Class (Section 4)
+* Your two selected Essences (Section 5)
+* Your four selected Spells (Section 6)
 
-Spell Points (Section 5.4) and the Enhancements in Section 6 open up as you level. At 1st level you have 10 SP and a 3 SP ceiling on any single cast, which rules out most of Section 6 anyway.
+Spell Points (Section 6.4) and the Enhancements in Section 7 open up as you level. At 1st level you have 10 SP and a 3 SP ceiling on any single cast, which rules out most of Section 7 anyway.
 
 Turn to **Section 2: Forging Your Hero**.

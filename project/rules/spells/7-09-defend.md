@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.9 Defend
+### 7.9 Defend
 
 #### Basic Effect (0 SP)
 

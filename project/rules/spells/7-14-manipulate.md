@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.14 Manipulate
+### 7.14 Manipulate
 
 #### Basic Effect (0 SP)
 

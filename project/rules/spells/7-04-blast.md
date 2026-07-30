@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.4 Blast
+### 7.4 Blast
 
 #### Basic Effect (0 SP)
 

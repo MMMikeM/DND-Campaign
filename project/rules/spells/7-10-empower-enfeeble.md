@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.10 Empower/Enfeeble
+### 7.10 Empower/Enfeeble
 
 #### Basic Effect (0 SP)
 

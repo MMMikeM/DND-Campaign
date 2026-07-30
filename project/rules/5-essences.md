@@ -1,9 +1,9 @@
 <!-- markdownlint-disable MD041 -->
-## 4. Essences: The Flavours of Magic
+## 5. Essences: The Flavours of Magic
 
 > *A frostbite-inducing cold that creaks with each movement, a wildfire's devastating hunger, the silent embrace of shadow, the raw kinetic force of a thunderclap—Essences are the fundamental energies that give your magic its distinctive character.*
 
-### 4.1 What Are Essences?
+### 5.1 What Are Essences?
 
 **Essences** are the primal magical energies that transform abstract spells into vivid, sensory experiences. When you cast a generic `Bolt` spell, it's the **Fire Essence** that turns it into a searing flame, the **Lightning Essence** that makes it crackle with electricity, or the **Shadow Essence** that shapes it into a streak of devouring darkness.
 
@@ -19,7 +19,7 @@ Every spell you cast is shaped by the Essence you apply to it, making your magic
 >
 > More than just damage types, Essences are how your character expresses their magical identity. A scholarly wizard's fire might manifest as precise, geometric patterns of flame. A primal druid's lightning could appear as crackling vines of electric energy. A brooding warlock's cold essence might manifest as crystalline shards of midnight frost. How your Essences look and feel is entirely up to you!
 
-### 4.2 Learning Essences
+### 5.2 Learning Essences
 
 When you first gain access to Spells (typically at 1st level), you choose **two Essence Descriptors** from the list in section 4.5 that reflect your character's magical identity.
 
@@ -32,7 +32,7 @@ Your chosen Essences might be influenced by:
 
 Additional Essences might be learned through special feats or specific GM-granted opportunities as your adventure progresses.
 
-### 4.3 Using Essences
+### 5.3 Using Essences
 
 When you cast a Spell, you choose **one** of your known Essence Descriptors to apply. This choice shapes how your magic manifests and determines its damage type (if applicable).
 
@@ -54,7 +54,7 @@ When you cast a Spell, you choose **one** of your known Essence Descriptors to a
 >
 > *Orrin the Adapter channels **Life Essence** into his `Adapt Self` spell: "Bark-like patterns emerge across my skin as leafy vines coil around my arms, hardening into natural armour."*
 
-### 4.4 Mechanical Effects of Essences
+### 5.4 Mechanical Effects of Essences
 
 While primarily descriptive, Essences have several important mechanical implications:
 
@@ -74,7 +74,7 @@ Essences provide small, flavourful effects outside of combat—Fire might ignite
 
 The nature of an Essence might occasionally grant circumstantial benefits relevant to skills—a convincing Shadow illusion might aid Stealth, for instance. These situational benefits are adjudicated by the GM based on creative application.
 
-### 4.5 Essence Descriptors
+### 5.5 Essence Descriptors
 
 Each Essence represents a fundamental magical energy with unique properties. Choose one known Essence whenever you cast a spell to determine its damage type and potentially apply status effects with the right Enhancements.
 
@@ -113,7 +113,7 @@ The "Primary Effect," "Secondary Effect," and "Minor Effect" listed for each Ess
 >
 > *GM: "The ogre roars in pain as lightning dances across its body. It's now Conductive until the start of your next turn."*
 
-### 4.6 Evolving Your Essence Expressions
+### 5.6 Evolving Your Essence Expressions
 
 As you advance in experience, consider how your relationship with your Essences might develop:
 

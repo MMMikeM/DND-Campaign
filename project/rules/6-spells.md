@@ -1,8 +1,8 @@
-## 5. Spells: The Frameworks of Magic
+## 6. Spells: The Frameworks of Magic
 
 > *"A mage who knows a hundred specific spells is limited. A mage who masters a dozen fundamental magical concepts and can adapt them endlessly? They are truly powerful."*
 
-### 5.1 The Nature of Spells
+### 6.1 The Nature of Spells
 
 In this system, **Spells** are foundational magical concepts, versatile templates that represent core magical effects like projecting energy, healing wounds, or creating barriers. We focus on a curated set of core spells that you'll personalise through **Essences** and **Enhancements**.
 
@@ -32,12 +32,12 @@ This modular approach shifts the focus from memorising numerous specific rules t
 >
 > **Behind the Magic:** Same spell (`Barrier`), different execution. This time with **Light Essence** and the simpler "Standard Barrier" mode (3 SP) for a quick defensive reaction.
 
-### 5.2 Learning Spells
+### 6.2 Learning Spells
 
 Characters **know** a set number of Spells, representing the magical effects they have mastered. You don't prepare spells daily, your known spells are always available to you.
 
 Your four starting spells form the core of your magical repertoire, representing the foundational concepts your character has mastered.
-Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 6).
+Character progression primarily focuses on enhancing these core spells through Spell Points and Enhancements (see Section 7).
 While your character may rarely learn entirely new spells through specific feats or unique narrative opportunities, the emphasis of this system is on deepening mastery over breadth of effects.
 
 #### Starting Spells
@@ -56,9 +56,9 @@ At 1st level, you know **four Spells** determined as follows:
 
 Every 4th level (4th, 8th, 12th, 16th, 20th), when you would normally gain a Feat, you can replace one spell you know with a different spell from your class spell list, representing your character's evolving magical approach.
 
-### 5.3 How to Read a Spell Entry
+### 6.3 How to Read a Spell Entry
 
-Every spell in Section 6 opens with its **Basic Effect**, then lists its **Modes**, then the **Enhancements** that attach to them. The Basic Effect costs 0 SP and is always available, like a cantrip. Modes and Enhancements cost Spell Points.
+Every spell in Section 7 opens with its **Basic Effect**, then lists its **Modes**, then the **Enhancements** that attach to them. The Basic Effect costs 0 SP and is always available, like a cantrip. Modes and Enhancements cost Spell Points.
 
 Each spell follows a standard format detailing its core function before any Enhancements are applied:
 
@@ -101,7 +101,7 @@ Each spell follows a standard format detailing its core function before any Enha
 >
 > *Adding the "Chain Bolt" **Enhancement** (+2 SP, total 4 SP) creates a bolt that jumps to a second target after hitting the first.*
 
-### 5.4 Spell Points (SP)
+### 6.4 Spell Points (SP)
 
 Magic is fuelled by **Spell Points (SP)**, representing a caster's pool of magical energy. Activating Spell **Modes** and adding **Enhancements** costs SP.
 
@@ -112,11 +112,11 @@ Magic is fuelled by **Spell Points (SP)**, representing a caster's pool of magic
 
 #### Basic Effects (0 SP)
 
-Each core Spell has a **Basic Effect**, listed at the top of its entry in Section 6, that costs 0 SP to use. These represent minor manifestations of the Spell's concept and can be used at will.
+Each core Spell has a **Basic Effect**, listed at the top of its entry in Section 7, that costs 0 SP to use. These represent minor manifestations of the Spell's concept and can be used at will.
 
 #### Maximum SP per Activation
 
-There is a limit to the total SP you can spend on a single activation of a Spell (Mode cost + Enhancement costs). This limit prevents characters from expending their entire energy pool on one overwhelmingly powerful effect early on. The limit is 2 + (level / 2) rounded up, as shown on Table 5-1.
+There is a limit to the total SP you can spend on a single activation of a Spell (Mode cost + Enhancement costs). This limit prevents characters from expending their entire energy pool on one overwhelmingly powerful effect early on. The limit is 2 + (level / 2) rounded up, as shown on Table 6-1.
 
 #### Learning Modes and Enhancements
 
@@ -135,7 +135,7 @@ Enhancements are listed under the Mode they attach to, and you must already know
 
 Multiple *different* learned Enhancements can be applied to a single Spell activation, provided their effects are not contradictory. You cannot, for example, apply two Enhancements that change the saving throw to different stats. The SP costs are cumulative, and the total still cannot exceed your Maximum SP per Activation.
 
-#### Table 5-1: Spell Points and Maximum SP per Activation by Level
+#### Table 6-1: Spell Points and Maximum SP per Activation by Level
 
 | Level | Spell Points | Max SP Per Activation |
 |:------|:-------------|:----------------------|
@@ -160,9 +160,9 @@ Multiple *different* learned Enhancements can be applied to a single Spell activ
 | 19    | 100          | 12                    |
 | 20    | 105          | 12                    |
 
-### 5.5 The Eighteen Spells
+### 6.5 The Eighteen Spells
 
-Two of your four Spells come from your Class. This is the pool you pick the other two from. Every one of them does something for free, and every one of them has Modes and Enhancements you buy into later, so read this for the concept and turn to Section 6 when you want the numbers.
+Two of your four Spells come from your Class. This is the pool you pick the other two from. Every one of them does something for free, and every one of them has Modes and Enhancements you buy into later, so read this for the concept and turn to Section 7 when you want the numbers.
 
 | Spell              | What it does                                                                                                                                                           |
 |:-------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -187,7 +187,7 @@ Two of your four Spells come from your Class. This is the pool you pick the othe
 
 Six of these are Class Unique Spells and can only be taken by that Class: `Barrier` (Champion), `Move` (Trickster), `Adapt Self` (Adapter), `Manipulate` (Scholar), `Arcane Sight` (Sage), and `Influence` (Orator).
 
-### 5.6 Creativity in Action
+### 6.6 Creativity in Action
 
 The true power of this spell system emerges when you combine Spells, Essences, and Enhancements to create unique magical effects that perfectly suit the situation at hand.
 
@@ -207,4 +207,4 @@ The true power of this spell system emerges when you combine Spells, Essences, a
 >
 > *Same spell, five different answers, limited by what he has learned and what he can pay.*
 
-Every Mode and Enhancement for each spell is listed with that spell in Section 6.
+Every Mode and Enhancement for each spell is listed with that spell in Section 7.

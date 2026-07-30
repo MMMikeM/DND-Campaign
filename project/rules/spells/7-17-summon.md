@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.17 Summon
+### 7.17 Summon
 
 #### Basic Effect (0 SP)
 

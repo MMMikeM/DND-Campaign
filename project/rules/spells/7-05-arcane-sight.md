@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.5 Arcane Sight
+### 7.5 Arcane Sight
 
 #### Basic Effect (0 SP)
 

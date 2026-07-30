@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-### 6.3 Barrier
+### 7.3 Barrier
 
 #### Basic Effect (0 SP)
 
