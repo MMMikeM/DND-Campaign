@@ -4,7 +4,7 @@
 
 Character creation is done. This is what the numbers do once something is trying to kill you.
 
-Everything here works the same at 1st level and at 20th. No bonus in this section grows, which means a monster that was dangerous in the first session is still dangerous in the last one, and the fights get harder because of what you and it can *do*, not because the arithmetic drifted upward.
+Almost nothing here grows. A whole campaign of feats might carry your attack from +3 to +5, and that is the only movement in this section, ever. A monster that was dangerous in the first session is still dangerous in the last one, and fights get harder because of what you and it can *do*, not because the arithmetic drifted upward.
 
 ### 3.1 Attack Rolls
 
@@ -17,7 +17,26 @@ A Scholar swinging a looted greatsword rolls a bare d20 for a bare 1d12. Their o
 
 Proficiency, the +3, never applies to attacks. Everyone holding the right weapon attacks at +3. What separates a fighter from a caster is what happens on a hit, not how often they land one.
 
-### 3.2 Weapons
+### 3.2 Critical Hits
+
+A natural 20 on an attack roll hits, whatever the target's AC, and it **adds half the maximum of your damage dice** on top of the damage you rolled.
+
+Work it out once and write it on your sheet, because it never changes:
+
+| Damage dice | Maximum | A crit adds |
+|:------------|:--------|:------------|
+| 1d4         | 4       | +2          |
+| 1d6         | 6       | +3          |
+| 1d8         | 8       | +4          |
+| 1d12        | 12      | +6          |
+| 3d8         | 24      | +12         |
+| 4d12        | 48      | +24         |
+
+Half the maximum, not double the roll, so a crit is a guaranteed above-average hit rather than a lottery. Rolling 3 on a 1d8 crit gives 3 + 4 = 7, which beats the 4.5 you'd average, and rolling 8 gives 12.
+
+Your Key Attribute is added once as normal. It isn't doubled, and neither are the dice.
+
+### 3.3 Weapons
 
 Weapons come in five categories. The category sets the damage die, and which weapon you carry inside it is yours to describe. A dagger, a rapier and an arming sword are all Blades & Arms, all 1d8, and the difference between them is the picture in your head.
 
@@ -33,11 +52,11 @@ Three things are being traded here: damage, the free hand a shield needs, and no
 
 Simple and Sidearms are deliberately small. They are what a Scholar reaches for when the situation calls for a knife rather than a spell, not a damage plan. If your class's magic is where your damage lives, your weapon is a tool and it should feel like one.
 
-### 3.3 Shields
+### 3.4 Shields
 
 A shield is **+2 AC** and needs a hand. That is the whole rule, and it is why one-handed weapons are worth carrying: 1d8 and a shield against 1d12 and none is a real decision rather than an obvious one.
 
-### 3.4 Armour Class
+### 3.5 Armour Class
 
 **AC = 10 + your armour.** Nothing else. Your Dexterity does not make you harder to hit, it makes you harder to catch, which is a Dexterity save.
 
@@ -50,7 +69,7 @@ A shield is **+2 AC** and needs a hand. That is the whole rule, and it is why on
 | Heavy   | 16  | 40%                  |
 | Shield  | +2  | (needs a free hand)  |
 
-A Champion in plate with a shield sits at 17 and gets hit about a third of the time. A Scholar in robes sits at 11 and gets hit about two thirds of the time. That gap is the whole of it, and it never widens at higher levels.
+A Champion in plate with a shield sits at 17 and gets hit about a third of the time. A Scholar in robes sits at 11 and gets hit about two thirds of the time. That gap is the whole of it, and it barely moves for the rest of the campaign.
 
 The unarmoured are not helpless. `Defend` costs 0 SP for resistance to physical damage until your next turn, which halves what gets through, and it appears on five of the six class lists. Your defence is an action you spend rather than a number you bought.
 

@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 ## 8. Feat Catalog
 
-*(**Reminder:** Attributes are capped at +5)*
+*(**Reminder:** Attributes start at +3 or lower and cap at +5. See Section 2.3.)*
 *(Feats grant a +1 modifier increase, replacing traditional ASIs)*
 *(Action Economy: Action, Reaction, Movement, Free Action (usable once per turn))*
 
@@ -217,7 +217,7 @@
 
 > *Your attacks find the smallest gaps in a target's defences.*
 
-* **Prerequisite:** Dexterity modifier of +1 or higher, proficiency with at least one ranged or finesse weapon
+* **Prerequisite:** Dexterity +1 or higher, trained in Bows or Sidearms
 * **Sharpshooter:** Attacking at long range doesn't impose disadvantage on your ranged weapon attack rolls.
 * **Close-Range Accuracy:** Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack rolls.
 * **Attribute Increase:** Increase your Dexterity modifier by +1.
@@ -482,8 +482,8 @@
 
 > *Your defensive fighting style turns opponents' missed attacks into opportunities.*
 
-* **Prerequisite:** Level 8+, proficiency with a finesse or light weapon
-* **Parry & Riposte:** When a creature misses you with a melee attack while you're wielding a finesse or light weapon, you can use your reaction to make one melee weapon attack against that creature.
+* **Prerequisite:** Level 8+, trained in Blades & Arms
+* **Parry & Riposte:** When a creature misses you with a melee attack while you're wielding a Blades & Arms weapon, you can use your reaction to make one melee weapon attack against that creature.
 * **Reactive Fortitude:** When you use this feat's reaction, gain temporary HP equal to your Proficiency.
 * **Attribute Increase:** Increase your Strength or Dexterity modifier by +1.
 
@@ -646,7 +646,7 @@
 |:------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Combat: Attacks & Manoeuvres**                                                                                                                |                                                                                                                                                                                                       |                                                                                                                                                              |
 | **Exceptional Melee Attack (Heavy, e.g., Nat 20):** Powerful hit, breaks objects, fells significant foe, forces movement.                       | `Heavy Weapon Master`, `Battlefield Controller` (Pushing Attack), `Soulbound Weapon`, `Champion - Forceful Momentum`, `Echoing Strike`                                                                | Echoing Strike is L8+                                                                                                                                        |
-| **Exceptional Melee Attack (Finesse/Light, e.g., Nat 20):** Precise hit, exploits opening, flurry of blows, critical Riposte.                   | `Precision Striker` (Close-Range Accuracy), `Dual Wielder`, `Evasive Footwork`, `Riposte Master`, `Trickster - Calculated Opportunist`.                                                               | Riposte Master is L8+                                                                                                                                        |
+| **Exceptional Melee Attack (one-handed, e.g., Nat 20):** Precise hit, exploits opening, flurry of blows, critical Riposte.                   | `Precision Striker` (Close-Range Accuracy), `Dual Wielder`, `Evasive Footwork`, `Riposte Master`, `Trickster - Calculated Opportunist`.                                                               | Riposte Master is L8+                                                                                                                                        |
 | **Exceptional Ranged Attack (e.g., Nat 20):** Long-range hit, through cover, pinpoint accuracy, chains to multiple targets.                     | `Precision Striker` (Sharpshooter), `Battle Magic Focus`, `Trickster - Calculated Opportunist`.                                                                                                       |                                                                                                                                                              |
 | **Perfectly Timed Opportunity Attack (e.g., Nat 20):** Interrupts key foe movement, prevents escape.                                            | `Reactive Combatant` (Opportunist), `Riposte Master`                                                                                                                                                  | Riposte Master is L8+                                                                                                                                        |
 | **Utterly Successful Shove/Grapple/Trip:** Controls foe's position, restrains powerful enemy, uses magical force.                               | `Battlefield Controller`, `Shield Expert` (Shield Shove), `Manipulate Master`                                                                                                                         | Manipulate Master requires Scholar class.                                                                                                                    |

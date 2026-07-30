@@ -69,11 +69,13 @@ Your six **Attributes** are what your character is made of. Everything they atte
 
 These range from -1 to +3, and each means exactly what it says: a Strength of +2 adds 2 to a Strength roll.
 
-+3 is the ceiling and it holds for the entire campaign. The full range of mortal talent, from hopeless to the best anyone has seen, fits inside four points on a d20.
++3 is where you start, not where you finish. It's the best a 1st-level hero can be at anything, and a handful of feats can push one Attribute as far as +5 across a whole campaign. That's the whole range the game ever uses: from a nervous farmhand to the finest swordsman alive is seven points on a d20, and most of your growth happens somewhere other than this number.
 
 **What the Numbers Mean:**
 
-- **+3**: Exceptional talent, among the best in the world
+- **+5**: The peak, spoken about in other countries. Feats only, late
+- **+4**: Renowned even among specialists. Feats only
+- **+3**: Exceptional talent, and the highest you can begin with
 - **+2**: Remarkable aptitude, well above average
 - **+1**: Above average capability
 - **+0**: Average human capability
@@ -95,7 +97,7 @@ These range from -1 to +3, and each means exactly what it says: a Strength of +2
 
 #### Proficiency
 
-Your **Proficiency is +3** and never changes, at any level. A 1st level character and a 10th level character add the same number to a skill they're proficient in. What grows is what you can do with a spell, not what you add to a d20.
+Your **Proficiency is +3** and never changes, at any level. A 1st level character and a 10th level character add the same number to a skill they're proficient in. Attributes creep upward through feats; this one never does.
 
 Proficiency applies in two places only: your two trained skills, and your one trained saving throw. It never applies to an attack roll. A +3 that everyone always adds is not a bonus, it's a bigger base number, so this game only spends it where some characters have it and others don't.
 
@@ -172,7 +174,7 @@ Section 3 has the weapon categories, the armour table, and what all of this does
 
 - A Champion who served as a lighthouse keeper might choose **Light** and **Force**, manifesting shields of blinding energy
 - A Trickster raised among thieves might choose **Shadow** and **Sound**, creating diversions and illusions
-- A Sage who survived in the wilderness might choose **Life** and **Earth**, channeling primal nature forces
+- A Sage who survived in the wilderness might choose **Life** and **Earth**, channelling primal nature forces
 
 Each time you cast a spell, you choose which of your two essences to apply, determining both its damage type and how it manifests in the world.
 
@@ -186,15 +188,16 @@ Your Class grants you four **Base Spells**:
 
 Record your spells and their **Basic Effects**. Basic Effects cost 0 SP, so they are always available, no matter how empty your SP pool is.
 
-**Spell Examples:**
+Copy each Basic Effect onto your sheet from its entry in Section 7. They're short, and having them written down means you never need the book for the thing you can always do.
 
-- **Strike (Basic, 0 SP):** _One weapon attack, its damage becoming your Essence type and counting as magical. "My axe glows with earth energy as I swing it at the orc!"_
+What that sounds like at the table:
 
-- **Bolt (Basic, 0 SP):** _A ranged spell attack out to 60 feet. On a hit it deals 1d10 Essence damage. "I launch a streak of shadow energy at the distant archer!"_
+- _"My axe glows with earth energy as I swing it at the orc!"_ (`Strike`)
+- _"I launch a streak of shadow energy at the distant archer!"_ (`Bolt`)
+- _"I raise a slab of stone between me and the archers!"_ (`Barrier`)
+- _"I place my hands on your wound, channelling life Essence to knit the flesh."_ (`Heal`)
 
-- **Barrier (Basic, 0 SP):** _A 5x5 ft plane of energy within 30 feet. It gives half cover, has 5 HP, and collapses at the start of your next turn. "I raise a slab of stone between me and the archers!"_
-
-- **Heal (Basic, 0 SP):** _Touch a creature. It regains 1d4 + Spell Mod HP, or becomes stable with 1 HP if it was downed. "I place my hands on your wound, channeling life essence to knit the flesh."_
+Four spells, one Essence chosen per cast, and none of it costs a point.
 
 ### 2.6 Adding Character Depth
 

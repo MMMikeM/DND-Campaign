@@ -3,9 +3,9 @@
 
 * Anchor: A defining element (memento, promise, principle) that grounds a character emotionally or narratively. (See Section 2.6)
 
-* Armour Class (AC): The number an attack roll must meet or beat to hit. Equal to 10 + your armour, from 10 unarmoured to 17 in plate and shield. Dexterity does not contribute. (See Section 3.4)
+* Armour Class (AC): The number an attack roll must meet or beat to hit. Equal to 10 + your armour, from 10 unarmoured to 17 in plate and shield. Dexterity does not contribute. (See Section 3.5)
 
-* Attribute: One of the six qualities a character is built from: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma. Each is a number from -1 to +3, added directly to checks, saves, and attacks. (See Section 2.3)
+* Attribute: One of the six qualities a character is built from: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma. Each is a number added directly to checks, saves, and attacks: -1 to +3 at character creation, rising as far as +5 through feats. (See Section 2.3)
 
 * Base Spells: The four foundational spells a character knows at 1st level, consisting of their Core Attack Spell, Unique Spell, and two Choice Spells. (See Section 2.5, Section 4.1, Section 6.2)
 
@@ -16,6 +16,8 @@
 * Class: The character's primary archetype, defining their Key Attribute, Unique Spell, Hit Die, proficiencies, and general approach to challenges and magic. (See Section 2.2, Section 4)
 
 * Core Attack Spell: A character's primary offensive magical option (Strike or Bolt), granted by their Class. (See Section 2.5, Section 4.1, Section 6.2)
+
+* Critical Hit: A natural 20 on an attack roll. It always hits, and adds half the maximum of the damage dice to the damage rolled. (See Section 3.2)
 
 * Enhancement: A modification applied to a Spell by spending Spell Points (SP) to augment its effects (power, scope, duration, function). Learned as characters level up. (See Section 6.4, Section 7)
 
@@ -57,8 +59,9 @@
 
 * Spellcasting Attribute (Spell Mod): A character's Key Attribute, used for spell attacks, Spell Save DC, and any spell effect that scales with the caster. (See Section 2.4)
 
-* Trained: What your class taught you to hold and wear. A trained weapon lets you add your Key Attribute to attack and damage rolls; trained armour gives you its AC. Untrained gear gives you neither. Distinct from Proficiency. (See Section 2.4, Section 3.1)
-
 * Status Effect: A specific condition (e.g., Ignited, Frozen, Dazzled) associated with an Essence, typically applied via Enhancements. (See Section 5.4, Section 5.5)
 
+* Trained: What your class taught you to hold and wear. A trained weapon lets you add your Key Attribute to attack and damage rolls; trained armour gives you its AC. Untrained gear gives you neither. Distinct from Proficiency. (See Section 2.4, Section 3.1)
+
 * Unique Spell: A distinctive spell accessible only to a specific Class, representing its core magical approach. (See Section 2.2, Section 4.1, Section 6.2, Section 6.5)
+
