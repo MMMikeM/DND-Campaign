@@ -1,21 +1,11 @@
 <!-- markdownlint-disable MD041 -->
-## 3. Classes: The Heart of Your Hero
+## 4. Classes: The Heart of Your Hero
 
 Your class represents not merely what your character does, but *how* they channel magical power and approach challenges. Each class is built around one of the six Attributes, and that Attribute is where your +3 goes, but the framework leaves plenty of room for your own interpretation of it.
 
-### **3.1 Starting Spells**
+### **4.1 The Six Classes**
 
-At 1st level, you begin with **four foundational spells** that form the bedrock of your magical repertoire:
-
-1. **Core Attack Spell:** Your primary magical offensive option—either `Strike` (melee), `Bolt` (ranged), or a choice between them, depending on your class
-2. **Unique Spell:** A distinctive magical ability that only your class can access, representing its fundamental approach to magic
-3. **Choice Spells:** Two additional spells you select from your class's available options, allowing you to customise your initial capabilities
-
-> **Magical Foundation Tip:** When selecting your choice spells, consider balancing offence, defence, and utility. Even combat-focused characters benefit from having at least one non-combat option in their initial spell selection.
-
-### **3.2 The Six Classes**
-
-#### **3.2.1 Champion**
+#### **4.1.1 Champion**
 
 > *Force of will made manifest*
 
@@ -30,10 +20,10 @@ Champions transform raw physical power into tangible magical effects. Their migh
 | Aspect            | Details                                                             |
 |:------------------|:--------------------------------------------------------------------|
 | **Key Attribute** | Strength                                                            |
-| **Save Prof.**    | Constitution                                                        |
+| **Save Prof.**    | Choose one, not Strength                                            |
 | **Hit Dice**      | d10                                                                 |
 | **Armour**        | All armour types and shields                                        |
-| **Weapons**       | Simple and martial weapons                                          |
+| **Weapons**       | All categories                                                      |
 | **Core Attack**   | `Strike`                                                            |
 | **Unique Spell**  | `Barrier`                                                           |
 | **Spell Options** | `Blast`, `Debilitate`, `Defend`, `Empower/Enfeeble`, `Heal`, `Zone` |
@@ -49,7 +39,7 @@ Champions transform raw physical power into tangible magical effects. Their migh
 
 ---
 
-#### **3.2.2 Trickster**
+#### **4.1.2 Trickster**
 
 > *Swift, cunning, and always one step ahead*
 
@@ -61,16 +51,16 @@ Tricksters embody the magic of motion, precision, and cunning. Their supernatura
 
 > **Trickster in Action:** With three guards closing in, Vex winks at her pursuer before stepping into a shadow and seemingly vanishing. A heartbeat later, she materialises behind them all, already halfway down the hall. "Better luck next time, gentlemen," she calls back with a laugh, tossing a stolen medallion playfully as she disappears around the corner.
 
-| Aspect            | Details                                                                     |
-|:------------------|:----------------------------------------------------------------------------|
-| **Key Attribute** | Dexterity                                                                   |
-| **Save Prof.**    | Intelligence                                                                |
-| **Hit Dice**      | d8                                                                          |
-| **Armour**        | Light armour                                                                |
-| **Weapons**       | Simple weapons, hand crossbows, longswords, rapiers, shortswords, shortbows |
-| **Core Attack**   | Choose `Strike` OR `Bolt`                                                   |
-| **Unique Spell**  | `Move`                                                                      |
-| **Spell Options** | `Blast`, `Communicate`, `Conduit`, `Debilitate`, `Defend`, `Illusion`       |
+| Aspect            | Details                                                               |
+|:------------------|:----------------------------------------------------------------------|
+| **Key Attribute** | Dexterity                                                             |
+| **Save Prof.**    | Choose one, not Dexterity                                             |
+| **Hit Dice**      | d8                                                                    |
+| **Armour**        | Light armour                                                          |
+| **Weapons**       | Simple, Blades & Arms, Sidearms, Bows                                 |
+| **Core Attack**   | `Strike`                                                              |
+| **Unique Spell**  | `Move`                                                                |
+| **Spell Options** | `Blast`, `Communicate`, `Conduit`, `Debilitate`, `Defend`, `Illusion` |
 
 **What Might Shape Your Trickster?**
 
@@ -83,7 +73,7 @@ Tricksters embody the magic of motion, precision, and cunning. Their supernatura
 
 ---
 
-#### **3.2.3 Adapter**
+#### **4.1.3 Adapter**
 
 > *Evolution incarnate*
 
@@ -98,10 +88,10 @@ Adapters draw power from their remarkable resilience, channeling their life forc
 | Aspect            | Details                                                   |
 |:------------------|:----------------------------------------------------------|
 | **Key Attribute** | Constitution                                              |
-| **Save Prof.**    | Strength                                                  |
+| **Save Prof.**    | Choose one, not Constitution                              |
 | **Hit Dice**      | d10                                                       |
 | **Armour**        | Light armour, medium armour, shields                      |
-| **Weapons**       | Simple weapons                                            |
+| **Weapons**       | Simple, Blades & Arms                                     |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                 |
 | **Unique Spell**  | `Adapt Self`                                              |
 | **Spell Options** | `Blast`, `Debilitate`, `Defend`, `Heal`, `Summon`, `Zone` |
@@ -117,7 +107,7 @@ Adapters draw power from their remarkable resilience, channeling their life forc
 
 ---
 
-#### **3.2.4 Scholar**
+#### **4.1.4 Scholar**
 
 > *Knowledge that reshapes reality*
 
@@ -132,10 +122,10 @@ Scholars bend reality through careful study, pattern recognition, and the precis
 | Aspect            | Details                                                            |
 |:------------------|:-------------------------------------------------------------------|
 | **Key Attribute** | Intelligence                                                       |
-| **Save Prof.**    | Wisdom                                                             |
+| **Save Prof.**    | Choose one, not Intelligence                                       |
 | **Hit Dice**      | d6                                                                 |
 | **Armour**        | None                                                               |
-| **Weapons**       | Daggers, darts, slings, quarterstaffs, light crossbows             |
+| **Weapons**       | Simple, Sidearms                                                   |
 | **Core Attack**   | `Bolt`                                                             |
 | **Unique Spell**  | `Manipulate`                                                       |
 | **Spell Options** | `Blast`, `Communicate`, `Debilitate`, `Defend`, `Illusion`, `Zone` |
@@ -151,7 +141,7 @@ Scholars bend reality through careful study, pattern recognition, and the precis
 
 ---
 
-#### **3.2.5 Sage**
+#### **4.1.5 Sage**
 
 > *Perceiving what others cannot*
 
@@ -166,10 +156,10 @@ Sages draw power from perception, intuition, and a deep connection to the world 
 | Aspect            | Details                                                      |
 |:------------------|:-------------------------------------------------------------|
 | **Key Attribute** | Wisdom                                                       |
-| **Save Prof.**    | Charisma                                                     |
+| **Save Prof.**    | Choose one, not Wisdom                                       |
 | **Hit Dice**      | d8                                                           |
 | **Armour**        | Light armour, medium armour, shields                         |
-| **Weapons**       | Simple weapons                                               |
+| **Weapons**       | Simple, Blades & Arms                                        |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                    |
 | **Unique Spell**  | `Arcane Sight`                                               |
 | **Spell Options** | `Communicate`, `Conduit`, `Defend`, `Heal`, `Summon`, `Zone` |
@@ -185,7 +175,7 @@ Sages draw power from perception, intuition, and a deep connection to the world 
 
 ---
 
-#### **3.2.6 Orator**
+#### **4.1.6 Orator**
 
 **Orator** [**OR**-uh-ter]: A powerful, persuasive speaker whose words and presence can move hearts, change minds, and in this world—shape reality itself.
 
@@ -202,10 +192,10 @@ Orators command attention and shape reality through sheer force of personality. 
 | Aspect            | Details                                                                        |
 |:------------------|:-------------------------------------------------------------------------------|
 | **Key Attribute** | Charisma                                                                       |
-| **Save Prof.**    | Dexterity                                                                      |
+| **Save Prof.**    | Choose one, not Charisma                                                       |
 | **Hit Dice**      | d8                                                                             |
 | **Armour**        | Light armour                                                                   |
-| **Weapons**       | Simple weapons, hand crossbows, rapiers, shortswords                           |
+| **Weapons**       | Simple, Blades & Arms, Sidearms                                                |
 | **Core Attack**   | `Bolt`                                                                         |
 | **Unique Spell**  | `Influence`                                                                    |
 | **Spell Options** | `Blast`, `Communicate`, `Debilitate`, `Empower/Enfeeble`, `Illusion`, `Summon` |
@@ -221,7 +211,7 @@ Orators command attention and shape reality through sheer force of personality. 
 
 ---
 
-### **3.3 Class Selection Strategy**
+### **4.2 Class Selection Strategy**
 
 When choosing your class, consider both mechanical fit and narrative satisfaction:
 

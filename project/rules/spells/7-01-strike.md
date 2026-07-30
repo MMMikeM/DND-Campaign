@@ -1,14 +1,14 @@
 <!-- markdownlint-disable MD041 -->
-### 6.1 Strike
+### 7.1 Strike
 
 #### Basic Effect (0 SP)
 
-| Property      | Value                                                                                     |
-|:--------------|:------------------------------------------------------------------------------------------|
-| **Cast Time** | 1 Action                                                                                  |
-| **Range**     | Self                                                                                      |
-| **Duration**  | Instantaneous                                                                             |
-| **Effect**    | Make one weapon attack. Hit: deals extra damage = Spell Mod (min 1) of your Essence type. |
+| Property      | Value                                                                               |
+|:--------------|:------------------------------------------------------------------------------------|
+| **Cast Time** | 1 Action                                                                            |
+| **Range**     | Self                                                                                |
+| **Duration**  | Instantaneous                                                                       |
+| **Effect**    | Make one weapon attack. Its damage becomes your Essence type and counts as magical. |
 
 #### Mode: Empowered Strike ✦ 2 SP
 

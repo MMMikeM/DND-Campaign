@@ -117,22 +117,15 @@ Choose **two skills** from this list to gain proficiency. When making a skill ch
 
 #### Saving Throws
 
-Your class grants proficiency in **one** saving throw, and it is never your Key Attribute. You are already strong where your class is strong. This is the second thing your class taught you.
+You are proficient in **one** saving throw. Choose it, with one restriction: it cannot be your Key Attribute. You are already strong where your class is strong, so this is the place you decide what else you learned to survive.
 
-| Class     | Key Attribute | Save Proficiency | What it means at the table             |
-|:----------|:--------------|:-----------------|:---------------------------------------|
-| Champion  | Strength      | Constitution     | Takes a beating and keeps standing     |
-| Trickster | Dexterity     | Intelligence     | Sees the trick coming                  |
-| Adapter   | Constitution  | Strength         | Cannot be moved, held, or bound        |
-| Scholar   | Intelligence  | Wisdom           | A trained mind, hard to fool           |
-| Sage      | Wisdom        | Charisma         | Knows their own centre                 |
-| Orator    | Charisma      | Dexterity        | Reads the room and gets out of the way |
+Your class doesn't pick this one, you do. Choose the save your character has a reason to be good at: the poison a smuggler stopped fearing years ago, the lie a magistrate's daughter learned to hear coming. Proficiency is +3, so put it on an Attribute you actually invested in.
 
 **Saving Throw Formula:** `1d20 + Attribute + Proficiency (if proficient)`
 
-Your best save is somewhere between +2 and +5, depending on where you put your numbers, and your worst is -1. A caster who guesses wrong about which is which will watch a good spell do nothing.
+Your best save lands somewhere between +2 and +5 depending on where you put your numbers, and your worst is -1. A caster who guesses wrong about which is which will watch a good spell do nothing.
 
-**Example:** _Thorne must resist a mind-affecting spell with a Wisdom save. Wisdom is +0 and Champions aren't proficient in it, so he rolls a flat 1d20 and hopes._
+**Example:** _Thorne keys off Strength, so a Strength save is out. He takes Constitution. Temple guardians stood the night watch in full armour, and that discipline outlasted the temple itself; cold, poison and exhaustion have to work harder on him than they ought to. With +2 Constitution and Proficiency, that's +5. The ghosts that visit his sleep come at his Wisdom instead, which is +0 and untrained, and he has never once had an answer for them._
 
 #### Spellcasting
 
@@ -213,7 +206,7 @@ Record your spells and their **Basic Effects**. Basic Effects cost 0 SP, so they
 
 **Spell Examples:**
 
-- **Strike (Basic, 0 SP):** _One weapon attack. On a hit it deals extra Essence damage equal to your Spell Mod, minimum 1. "My axe glows with earth energy as I swing it at the orc!"_
+- **Strike (Basic, 0 SP):** _One weapon attack, its damage becoming your Essence type and counting as magical. "My axe glows with earth energy as I swing it at the orc!"_
 
 - **Bolt (Basic, 0 SP):** _A ranged spell attack out to 60 feet. On a hit it deals 1d10 Essence damage. "I launch a streak of shadow energy at the distant archer!"_
 
@@ -380,7 +373,7 @@ Use this quick reference to ensure you've completed all steps:
 1. ☐ **Develop your character concept**
 2. ☐ **Choose your class**
 3. ☐ **Assign Attributes** (+3, +2, +1, +0, +0, -1)
-4. ☐ **Note your saving throw proficiency** (from class)
+4. ☐ **Choose your saving throw proficiency** (any but your Key Attribute)
 5. ☐ **Select two skill proficiencies**
 6. ☐ **Choose two essence descriptors**
 7. ☐ **Record your four spells** (Core Attack, Unique, and two Choice spells)
