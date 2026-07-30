@@ -482,8 +482,8 @@
 
 > *Your defensive fighting style turns opponents' missed attacks into opportunities.*
 
-* **Prerequisite:** Level 8+, trained in Blades & Arms
-* **Parry & Riposte:** When a creature misses you with a melee attack while you're wielding a Blades & Arms weapon, you can use your reaction to make one melee weapon attack against that creature.
+* **Prerequisite:** Level 8+, trained in Light Blades
+* **Parry & Riposte:** When a creature misses you with a melee attack while you're wielding a Light Blade, you can use your reaction to make one melee weapon attack against that creature.
 * **Reactive Fortitude:** When you use this feat's reaction, gain temporary HP equal to your Proficiency.
 * **Attribute Increase:** Increase your Strength or Dexterity modifier by +1.
 

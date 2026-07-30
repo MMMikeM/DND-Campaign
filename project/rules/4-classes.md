@@ -57,7 +57,7 @@ Tricksters embody the magic of motion, precision, and cunning. Their supernatura
 | **Save Prof.**    | Choose one, not Dexterity                                             |
 | **Hit Dice**      | d8                                                                    |
 | **Armour**        | Light armour                                                          |
-| **Weapons**       | Simple, Blades & Arms, Sidearms, Bows                                 |
+| **Weapons**       | Simple, Light Blades, Sidearms, Bows                                  |
 | **Core Attack**   | `Strike`                                                              |
 | **Unique Spell**  | `Move`                                                                |
 | **Spell Options** | `Blast`, `Communicate`, `Conduit`, `Debilitate`, `Defend`, `Illusion` |
@@ -91,7 +91,7 @@ Adapters draw power from their remarkable resilience, channeling their life forc
 | **Save Prof.**    | Choose one, not Constitution                              |
 | **Hit Dice**      | d10                                                       |
 | **Armour**        | Light armour, medium armour, shields                      |
-| **Weapons**       | Simple, Blades & Arms                                     |
+| **Weapons**       | Simple, Light Blades                                      |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                 |
 | **Unique Spell**  | `Adapt Self`                                              |
 | **Spell Options** | `Blast`, `Debilitate`, `Defend`, `Heal`, `Summon`, `Zone` |
@@ -159,7 +159,7 @@ Sages draw power from perception, intuition, and a deep connection to the world 
 | **Save Prof.**    | Choose one, not Wisdom                                       |
 | **Hit Dice**      | d8                                                           |
 | **Armour**        | Light armour, medium armour, shields                         |
-| **Weapons**       | Simple, Blades & Arms                                        |
+| **Weapons**       | Simple, Light Blades                                         |
 | **Core Attack**   | Choose `Strike` OR `Bolt`                                    |
 | **Unique Spell**  | `Arcane Sight`                                               |
 | **Spell Options** | `Communicate`, `Conduit`, `Defend`, `Heal`, `Summon`, `Zone` |
@@ -195,7 +195,7 @@ Orators command attention and shape reality through sheer force of personality. 
 | **Save Prof.**    | Choose one, not Charisma                                                       |
 | **Hit Dice**      | d8                                                                             |
 | **Armour**        | Light armour                                                                   |
-| **Weapons**       | Simple, Blades & Arms, Sidearms                                                |
+| **Weapons**       | Simple, Light Blades, Sidearms                                                 |
 | **Core Attack**   | `Bolt`                                                                         |
 | **Unique Spell**  | `Influence`                                                                    |
 | **Spell Options** | `Blast`, `Communicate`, `Debilitate`, `Empower/Enfeeble`, `Illusion`, `Summon` |

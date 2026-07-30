@@ -38,15 +38,15 @@ Your Key Attribute is added once as normal. It isn't doubled, and neither are th
 
 ### 3.3 Weapons
 
-Weapons come in five categories. The category sets the damage die, and which weapon you carry inside it is yours to describe. A dagger, a rapier and an arming sword are all Blades & Arms, all 1d8, and the difference between them is the picture in your head.
+Weapons come in five categories. The category sets the damage die, and which weapon you carry inside it is yours to describe. A dagger, a rapier and an arming sword are all Light Blades, all 1d8, and the difference between them is the picture in your head.
 
-| Category          | Hands | Reach  | Damage | Covers                                        |
-|:------------------|:------|:-------|:-------|:----------------------------------------------|
-| **Simple**        | One   | Melee  | 1d4    | Club, knife, staff, whatever was on the wall  |
-| **Blades & Arms** | One   | Melee  | 1d8    | Dagger through arming sword, axe, mace, spear |
-| **Great Weapons** | Two   | Melee  | 1d12   | Greatsword, greataxe, maul, polearm           |
-| **Sidearms**      | One   | Ranged | 1d4    | Hand crossbow, sling, dart, thrown knife      |
-| **Bows**          | Two   | Ranged | 1d6    | Shortbow, longbow, crossbow                   |
+| Category          | Hands | Reach  | Damage | Covers                                                          |
+|:------------------|:------|:-------|:-------|:----------------------------------------------------------------|
+| **Simple**        | One   | Melee  | 1d4    | Club, knife, staff, whatever was on the wall                    |
+| **Light Blades**  | One   | Melee  | 1d8    | Dagger, shortsword, rapier, arming sword, hand axe, mace, spear |
+| **Great Weapons** | Two   | Melee  | 1d12   | Greatsword, greataxe, maul, polearm                             |
+| **Sidearms**      | One   | Ranged | 1d4    | Hand crossbow, sling, dart, thrown knife                        |
+| **Bows**          | Two   | Ranged | 1d6    | Shortbow, longbow, crossbow                                     |
 
 Three things are being traded here: damage, the free hand a shield needs, and not being in reach of the thing you're hitting. Every category gives up one of them. Great Weapons hit hardest and leave you no hand for a shield. Bows keep you out of reach and pay for it in damage. Sidearms buy both the shield and the distance, so they pay the most.
 
