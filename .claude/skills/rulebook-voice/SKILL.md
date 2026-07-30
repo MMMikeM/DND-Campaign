@@ -35,7 +35,14 @@ Related docs, do not duplicate them:
 
 - `project/writing/writing.md` covers story craft, plot structure, character
 - `project/philosophy.md` covers campaign DNA, tone mix, foreshadowing
+- `project/balance.md` records how spells were priced against each other, the
+  simulations behind it, and the known-open items. Read it before writing any
+  sentence that quotes a damage number, and never contradict it silently
 - This skill covers sentences
+
+**House conventions.** British spelling: armour, defence, centre, manoeuvre,
+colour, and -ise rather than -ize. Tables are pipe-aligned, so a rename that
+lengthens a cell means repadding the whole table.
 </scope>
 
 <fix_mode>
@@ -95,6 +102,29 @@ price alone is wrong even though the number is right.
 **Examples must add up.** Mode cost plus enhancement costs equals the SP spent.
 One Essence per cast, never two. Damage dice must match the mode, not the basic
 effect.
+
+**Never invent a mechanic to make an example work.** If a sentence needs a
+weapon category, a damage die, an AC or a rule that the book does not define,
+stop and say so. Do not coin it in passing. Four feats in `7-feats.md` gate on a
+"finesse" weapon category that has never existed anywhere in this system, and
+that is how such things get in: someone needed a word mid-sentence.
+
+**Check what the book quietly assumes.** Prose that says "a bare 1d12" for a
+greatsword is inheriting a weapon table from another game. When you find prose
+resting on an undefined rule, that is a bug in the book and it outranks anything
+about the sentence.
+
+**When a general rule is added, grep for what already granted it.** The attack
+rule now adds your Key Attribute to weapon damage, and `Strike`'s Basic Effect
+was already adding Spell Mod, so for an afternoon the same bonus applied twice
+and a free action did 93% of a 2 SP one. After any rule change, search for
+existing features that say the same thing in other words.
+
+**One term, one job.** "Proficiency" cannot be both a flat +3 and the thing that
+lets you use a weapon; those became Proficiency and Trained. "Ability" cannot be
+both a stat and something a character can do; the stat became Attribute. If a
+player could reasonably ask "which kind do you mean", the word is doing two jobs
+and one of them needs a new name.
 </verification_gate>
 
 <register_ladder>
@@ -114,6 +144,17 @@ sentence rather than a parenthetical buried in a clause.
 **Examples.** Named characters, specific actions, real numbers. Legal under the
 rules as written, citing actual mode and enhancement names, arithmetic correct.
 An example that contradicts its own chapter is worse than no example.
+
+An example of a *choice* must justify the choice in the fiction, then show the
+number. "He takes Constitution, where he already has +2" explains nothing, it
+just reads the sheet back. "Temple guardians stood the night watch in full
+armour, and that discipline outlasted the temple itself" is the same choice with
+a reason a player can copy. The number comes second and confirms it.
+
+Reuse the book's own people. Thorne already has a destroyed shrine and ghosts in
+his dreams by the end of 2.1, so a save example in 2.4 can hand him a weak
+Wisdom save and let the ghosts be why. A callback costs nothing and makes the
+mechanics feel like they grew out of a character rather than a spreadsheet.
 
 **Flavour.** Epigraphs, essence descriptions, class writeups, the second half of
 a good example. This is where the book is allowed to be a book. Metaphor, rhythm,
@@ -253,6 +294,9 @@ as prose, keep it as prose rather than converting it to a count.
 | Universal flattery | "Imagination: the most crucial component!" | Every RPG says this, so it distinguishes nothing |
 | Staccato fragment spam | "Fast. Modular. Fun." | One sentence with commas |
 | Clinical formality | "the character may elect to utilize" | "you use" |
+| Manufactured pivot | "Either answer points at the same thing" | Two options that resolve to one point is a fake reveal. Give the instruction |
+| Personified mechanic | "a save worth having wants a decent number under it" | Rules don't want things. "Put it on an Attribute you invested in" |
+| Vague where a number belongs | "a decent number", "a solid bonus" | Name the number, or name the Attribute |
 
 Every fix in that right-hand column is a *replacement*, not a deletion. Deleting
 a slop sentence and moving on leaves a hole where an intention was. The passage
@@ -300,7 +344,11 @@ questions, and a no to any one of them means the edit isn't finished:
 - Did the original reach for something human that the new version dropped?
 - Would a player who read only your version still want to make a character?
 
-**Step 8.** Apply fixes, then report.
+**Step 8.** Sweep downstream. A changed number or renamed term leaves copies of
+itself in other sections' examples, in the glossary, in the checklist, and in
+`5-spells.md`. Grep for the old value, not just the old word.
+
+**Step 9.** Apply fixes, then report.
 </audit_process>
 
 <output_format>
@@ -458,6 +506,8 @@ nothing here is slop.
 <success_criteria>
 - Register identified and judged on its own terms
 - Every number re-counted against `project/rules/` this session
+- No mechanic named that the book does not define
+- Choices in examples justified in the fiction before the arithmetic
 - Every named mode, spell and enhancement confirmed to exist
 - Example arithmetic checked
 - Ban list swept
