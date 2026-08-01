@@ -1,6 +1,6 @@
 import { search } from "fast-fuzzy"
+import { z } from "zod/v4"
 import { logger } from ".."
-import zodToMCP from "../zodToMcp"
 import { schemas } from "./help-tools.schema"
 import type { ToolDefinition } from "./utils/types"
 
@@ -19,9 +19,8 @@ type JsonSchemaObject = {
 	required?: string[]
 }
 
-const toJsonSchema = (tool: ToolDefinition): JsonSchemaObject => zodToMCP(tool.inputSchema) as JsonSchemaObject
-
-const isStringArray = (value: unknown): value is string[] => Array.isArray(value)
+const toJsonSchema = (tool: ToolDefinition): JsonSchemaObject =>
+	z.toJSONSchema(tool.inputSchema, { target: "draft-7" }) as JsonSchemaObject
 
 const formatEnumsForTool = (originalTool?: ToolDefinition): string => {
 	if (!originalTool?.enums || Object.keys(originalTool.enums).length === 0) {
@@ -56,7 +55,7 @@ const formatRegularToolParameters = (schema: JsonSchemaObject): string => {
 	const paramsInfo = schema.properties
 		? Object.entries(schema.properties)
 				.map(([param, paramSchema]) => {
-					const required = isStringArray(schema.required) && schema.required.includes(param) ? "(Required)" : "(Optional)"
+					const required = schema.required?.includes(param) ? "(Required)" : "(Optional)"
 					const description = paramSchema.description || "No description provided"
 					const type = paramSchema.type || "unknown"
 					return `- **${param}** ${required} (${type}): ${description}`
@@ -64,10 +63,9 @@ const formatRegularToolParameters = (schema: JsonSchemaObject): string => {
 				.join("\n")
 		: "No parameters available"
 
-	const requiredParams =
-		isStringArray(schema.required) && schema.required.length > 0
-			? `**Required Parameters:** \`${schema.required.join("`, `")}\``
-			: ""
+	const requiredParams = schema.required?.length
+		? `**Required Parameters:** \`${schema.required.join("`, `")}\``
+		: ""
 
 	return `${requiredParams}\n\n## Parameters\n${paramsInfo}`
 }
@@ -170,42 +168,14 @@ const handler = async (args?: Record<string, unknown>) => {
 
 	logger.info("Help handler called", { toolName, args })
 
-	// Imported lazily to avoid a module cycle (these files import utils that import this one's siblings)
-	const { npcToolDefinitions } = await import("./npc-tools")
-	const { conflictToolDefinitions } = await import("./conflict-tools")
-	const { factionToolDefinitions } = await import("./faction-tools")
-	const { itemToolDefinitions } = await import("./items-tools")
-	const { loreToolDefinitions } = await import("./lore-tools")
-	const { questToolDefinitions } = await import("./quest-tools")
-	const { regionToolDefinitions } = await import("./region-tools")
-	const { consequenceToolDefinitions } = await import("./consequence-tools")
-	const { fuzzySearchToolDefinitions } = await import("./utils/fuzzy-search")
-	const { getEntityToolDefinition } = await import("./get-entity")
-
-	const categories = {
-		conflicts: conflictToolDefinitions,
-		consequences: consequenceToolDefinitions,
-		factions: factionToolDefinitions,
-		items: itemToolDefinitions,
-		npcs: npcToolDefinitions,
-		quests: questToolDefinitions,
-		regions: regionToolDefinitions,
-		lore: loreToolDefinitions,
-	}
-
-	const generalTools = { ...getEntityToolDefinition, ...fuzzySearchToolDefinitions }
-
-	const allDefinitions: Record<string, ToolDefinition> = {
-		...Object.assign({}, ...Object.values(categories)),
-		...generalTools,
-		...helpToolDefinitions,
-	}
+	// Imported lazily to avoid a module cycle (tools.ts statically imports this file)
+	const { allToolDefinitions, generalToolDefinitions, toolCategories } = await import("./tools")
 
 	if (toolName) {
-		return createToolHelpResponse(toolName, allDefinitions)
+		return createToolHelpResponse(toolName, allToolDefinitions)
 	}
 
-	return createGeneralHelpResponse(categories, generalTools)
+	return createGeneralHelpResponse(toolCategories, generalToolDefinitions)
 }
 
 export const helpToolDefinitions: Record<string, ToolDefinition> = {

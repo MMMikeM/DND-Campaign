@@ -22,6 +22,11 @@ const errorFormat = winston.format((info) => {
 	return info
 })
 
+export const serializeError = (error: unknown) =>
+	error instanceof Error
+		? { name: error.name, message: error.message, stack: error.stack, cause: error.cause }
+		: { errorType: typeof error, errorValue: error, errorString: String(error) }
+
 export const createLogger = () => {
 	const logger = winston.createLogger({
 		level: "debug",

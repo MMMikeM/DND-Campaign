@@ -7,7 +7,7 @@
  */
 
 import { logger } from "../.."
-import { createTextMessage, type PromptDefinition } from "../types"
+import { createPromptDefinition, createTextMessage, type PromptDefinition } from "../types"
 import { gatherFactionCreationContext } from "./context"
 import { type FactionCreationArgs, factionCreationSchema } from "./types"
 
@@ -93,10 +93,9 @@ A user wants to create a new Faction. Your job is to analyze their request and t
 
 // Create the prompt definition
 export const factionPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-faction": {
-		description:
-			"Create a detailed faction with comprehensive political analysis, relationship mapping, and campaign integration suggestions",
-		schema: factionCreationSchema,
-		handler: enhancedFactionCreationHandler,
-	},
+	"create-faction": createPromptDefinition(
+		"Create a detailed faction with comprehensive political analysis, relationship mapping, and campaign integration suggestions",
+		factionCreationSchema,
+		enhancedFactionCreationHandler,
+	),
 }

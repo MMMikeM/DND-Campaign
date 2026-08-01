@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { z } from "zod/v4"
-import zodToMCP from "../../zodToMcp"
 import { createManageSchema } from "./schema"
 
 // createManageSchema now returns the zod schema itself (the SDK converts it for
 // tools/list); these tests inspect the JSON Schema the SDK would advertise.
 const createManageJsonSchema = (...args: Parameters<typeof createManageSchema>) =>
-	zodToMCP(createManageSchema(...args))
+	z.toJSONSchema(createManageSchema(...args), { target: "draft-7" })
 
 describe("createManageSchema", () => {
 	// Mock schemas for testing

@@ -8,7 +8,7 @@ import {
 	getNpcContext,
 	getQuestContext,
 } from "../baseContext"
-import type { PromptDefinition } from "../types"
+import { createPromptDefinition, type PromptDefinition } from "../types"
 import { cleanObject } from "../utils"
 import { type CampaignContextArgs, campaignContextSchema } from "./types"
 
@@ -57,9 +57,9 @@ async function campaignContextHandler(args: CampaignContextArgs) {
 }
 
 export const campaignContextPromptDefinitions: Record<string, PromptDefinition> = {
-	load_campaign_context: {
-		description: "Loads a comprehensive overview of the current campaign state into the context.",
-		schema: campaignContextSchema,
-		handler: campaignContextHandler,
-	},
+	load_campaign_context: createPromptDefinition(
+		"Loads a comprehensive overview of the current campaign state into the context.",
+		campaignContextSchema,
+		campaignContextHandler,
+	),
 }

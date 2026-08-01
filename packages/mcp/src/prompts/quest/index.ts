@@ -7,7 +7,7 @@
  */
 
 import { logger } from "../.."
-import type { PromptDefinition } from "../types"
+import { createPromptDefinition, type PromptDefinition } from "../types"
 
 import { gatherQuestCreationContext } from "./context"
 import { type QuestCreationArgs, questCreationSchema } from "./types"
@@ -103,11 +103,11 @@ Ensure the quest feels naturally embedded in the campaign world, creates meaning
 }
 
 export const questPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-quest": {
-		description: "Create a quest with full campaign context, NPC integration, and narrative consequences",
-		schema: questCreationSchema,
-		handler: enhancedQuestCreationHandler,
-	},
+	"create-quest": createPromptDefinition(
+		"Create a quest with full campaign context, NPC integration, and narrative consequences",
+		questCreationSchema,
+		enhancedQuestCreationHandler,
+	),
 }
 
 export { gatherQuestCreationContext }

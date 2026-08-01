@@ -5,7 +5,7 @@ import { campaignResourceDefinitions } from "."
 // Register resource handlers with the MCP server; the SDK handles list/read
 // routing and URI-template matching per registered resource.
 export function registerResourceHandlers(server: McpServer) {
-	logger.info("Registering resource handlers")
+	logger.debug("Registering resource handlers")
 
 	for (const [key, definition] of Object.entries(campaignResourceDefinitions)) {
 		const { uriTemplate, name, description, mimeType, handler, lister } = definition
@@ -21,7 +21,9 @@ export function registerResourceHandlers(server: McpServer) {
 			}
 		}
 
-		if (uriTemplate.includes("{")) {
+		// A definition with a lister must go through ResourceTemplate even when its
+		// URI has no variables — the static branch has no way to expose the listing.
+		if (lister || uriTemplate.includes("{")) {
 			const template = new ResourceTemplate(uriTemplate, {
 				list: lister ? async () => ({ resources: await lister() }) : undefined,
 			})
@@ -31,5 +33,5 @@ export function registerResourceHandlers(server: McpServer) {
 		}
 	}
 
-	logger.info(`Registered ${Object.keys(campaignResourceDefinitions).length} resources`)
+	logger.debug(`Registered ${Object.keys(campaignResourceDefinitions).length} resources`)
 }

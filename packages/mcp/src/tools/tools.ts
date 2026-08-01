@@ -1,5 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/server"
 import { logger } from ".."
+import { serializeError } from "../logger"
 import { conflictToolDefinitions } from "./conflict-tools"
 import { consequenceToolDefinitions } from "./consequence-tools"
 import { factionToolDefinitions } from "./faction-tools"
@@ -14,26 +15,33 @@ import { questStageToolDefinitions } from "./quest-stage-tools"
 import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
+import { createErrorResponse, createResponse } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 
-export const allToolDefinitions: Record<string, ToolDefinition> = {
-	// Utility tools
-	...helpToolDefinitions,
+/** Category groupings for the help tool; every category is registered with the server. */
+export const toolCategories: Record<string, Record<string, ToolDefinition>> = {
+	conflicts: conflictToolDefinitions,
+	consequences: consequenceToolDefinitions,
+	factions: factionToolDefinitions,
+	foreshadowing: foreshadowingToolDefinitions,
+	items: itemToolDefinitions,
+	lore: loreToolDefinitions,
+	maps: mapToolDefinitions,
+	npcs: npcToolDefinitions,
+	quests: questToolDefinitions,
+	"quest-stages": questStageToolDefinitions,
+	regions: regionToolDefinitions,
+}
+
+export const generalToolDefinitions: Record<string, ToolDefinition> = {
 	...getEntityToolDefinition,
 	...fuzzySearchToolDefinitions,
-	...mapToolDefinitions,
+}
 
-	// Manage tools
-	...conflictToolDefinitions,
-	...consequenceToolDefinitions,
-	...factionToolDefinitions,
-	...foreshadowingToolDefinitions,
-	...itemToolDefinitions,
-	...loreToolDefinitions,
-	...npcToolDefinitions,
-	...questToolDefinitions,
-	...questStageToolDefinitions,
-	...regionToolDefinitions,
+export const allToolDefinitions: Record<string, ToolDefinition> = {
+	...helpToolDefinitions,
+	...generalToolDefinitions,
+	...Object.assign({}, ...Object.values(toolCategories)),
 }
 
 export function registerToolHandlers(server: McpServer) {
@@ -41,45 +49,15 @@ export function registerToolHandlers(server: McpServer) {
 		server.registerTool(name, { description, inputSchema, annotations }, async (args) => {
 			try {
 				const result = await handler(args as Record<string, unknown>)
-				return {
-					content: [
-						{
-							type: "text",
-							text: JSON.stringify(result, null, 2),
-						},
-					],
-				}
+				return createResponse(JSON.stringify(result, null, 2))
 			} catch (error) {
-				logger.error("Error calling tool", {
-					tool: name,
-					args,
-					error:
-						error && error instanceof Error
-							? {
-									name: error.name,
-									message: error.message,
-									stack: error.stack,
-									cause: error.cause,
-								}
-							: {
-									errorType: typeof error,
-									errorValue: error,
-									errorString: String(error),
-									errorJSON: error ? JSON.stringify(error) : "null",
-								},
-				})
-				return {
-					isError: true,
-					content: [
-						{
-							type: "text",
-							text: `Error: ${error && error instanceof Error ? error.message : String(error || "Unknown error")}`,
-						},
-					],
-				}
+				logger.error("Error calling tool", { tool: name, args, error: serializeError(error) })
+				return createErrorResponse(
+					`Error: ${error instanceof Error ? error.message : String(error || "Unknown error")}`,
+				)
 			}
 		})
 	}
 
-	logger.info("MCP Tool handlers registered")
+	logger.debug("MCP Tool handlers registered")
 }

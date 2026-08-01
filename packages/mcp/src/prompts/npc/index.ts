@@ -7,7 +7,7 @@
  */
 
 import { logger } from "../.."
-import { createTextMessage, type PromptDefinition } from "../types"
+import { createPromptDefinition, createTextMessage, type PromptDefinition } from "../types"
 import { getBaseNPCContext } from "./context"
 import { type EnhancedNpcCreationArgs, enhancedNpcCreationSchema } from "./types"
 
@@ -125,11 +125,11 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
 }
 
 export const npcPromptDefinitions: Record<string, PromptDefinition> = {
-	create_npc: {
-		description: "Create NPC with comprehensive campaign context, relationship mapping, and narrative integration",
-		schema: enhancedNpcCreationSchema,
-		handler: enhancedNPCCreationHandler,
-	},
+	create_npc: createPromptDefinition(
+		"Create NPC with comprehensive campaign context, relationship mapping, and narrative integration",
+		enhancedNpcCreationSchema,
+		enhancedNPCCreationHandler,
+	),
 }
 
 export { getBaseNPCContext as gatherNPCCreationContext }

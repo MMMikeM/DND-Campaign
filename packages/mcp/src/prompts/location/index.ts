@@ -8,6 +8,7 @@
 
 import { logger } from "../.."
 import {
+	createPromptDefinition,
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
@@ -109,9 +110,9 @@ Generate a location that not only fits the specified hints but leverages the pro
 
 // Create the prompt definition
 export const locationPromptDefinitions: Record<string, PromptDefinition> = {
-	"create-location": {
-		description: "Create a location with full geographic context, faction control, and campaign integration",
-		schema: enhancedLocationCreationSchema,
-		handler: enhancedLocationCreationHandler,
-	},
+	"create-location": createPromptDefinition(
+		"Create a location with full geographic context, faction control, and campaign integration",
+		enhancedLocationCreationSchema,
+		enhancedLocationCreationHandler,
+	),
 }

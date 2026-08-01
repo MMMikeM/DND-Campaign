@@ -15,6 +15,7 @@ import { db, logger } from ".."
 import { searchBySimilarity } from "../tools/utils/search"
 import { gatherQuestCreationContext } from "./quest"
 import {
+	createPromptDefinition,
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
@@ -190,36 +191,27 @@ const questWorkflowSchema = z.object({
 })
 
 // Enhanced prompt handlers with hybrid search
-const handleNPCDialogue = async (args: unknown): Promise<GetPromptResult> => {
-	const parseResult = npcDialogueSchema.safeParse(args)
-	if (!parseResult.success) {
-		return createPromptResult(
-			[createTextMessage("assistant", `❌ Invalid arguments: ${parseResult.error.message}`)],
-			"Invalid arguments for NPC dialogue",
-		)
-	}
+const handleNPCDialogue = async (args: z.infer<typeof npcDialogueSchema>): Promise<GetPromptResult> => {
+	logger.info("Generating NPC dialogue with smart search", args)
 
-	const validatedArgs = parseResult.data
-	logger.info("Generating NPC dialogue with smart search", validatedArgs)
-
-	const searchResult = await smartEntitySearch(validatedArgs.npc_name, "npc")
+	const searchResult = await smartEntitySearch(args.npc_name, "npc")
 
 	if (searchResult.results.length === 0) {
 		return createPromptResult(
 			[
 				createTextMessage(
 					"assistant",
-					`❌ No NPCs found matching "${validatedArgs.npc_name}". Try:\n- Different spelling or partial names (fuzzy search)\n- Descriptive terms like "corrupt noble" or "nervous blacksmith" (semantic search)\n- Character traits, occupations, or plot roles`,
+					`❌ No NPCs found matching "${args.npc_name}". Try:\n- Different spelling or partial names (fuzzy search)\n- Descriptive terms like "corrupt noble" or "nervous blacksmith" (semantic search)\n- Character traits, occupations, or plot roles`,
 				),
 			],
-			`No NPC matches for "${validatedArgs.npc_name}"`,
+			`No NPC matches for "${args.npc_name}"`,
 		)
 	}
 
 	if (searchResult.results.length === 1) {
 		// Perfect match - generate context-rich dialogue
 		const npc = searchResult.results[0]
-		const dialogueContext = await buildNPCDialogueContext(npc.id, validatedArgs.player_query)
+		const dialogueContext = await buildNPCDialogueContext(npc.id, args.player_query)
 		return createPromptResult(dialogueContext, `NPC dialogue for ${npc.name} (found via ${searchResult.method} search)`)
 	}
 
@@ -234,35 +226,18 @@ const handleNPCDialogue = async (args: unknown): Promise<GetPromptResult> => {
 				role: "assistant",
 				content: {
 					type: "text",
-					text: `🔍 Found ${searchResult.results.length} NPCs via ${searchResult.method} search for "${validatedArgs.npc_name}":\n\n${matchList}\n\n**To continue:**\n- Use the exact name from the list above\n- Or try running this prompt again with more specific details`,
+					text: `🔍 Found ${searchResult.results.length} NPCs via ${searchResult.method} search for "${args.npc_name}":\n\n${matchList}\n\n**To continue:**\n- Use the exact name from the list above\n- Or try running this prompt again with more specific details`,
 				},
 			},
 		],
-		description: `Multiple NPC matches for "${validatedArgs.npc_name}" (${searchResult.method} search)`,
+		description: `Multiple NPC matches for "${args.npc_name}" (${searchResult.method} search)`,
 	}
 }
 
-const handleQuestAdaptation = async (args: unknown): Promise<GetPromptResult> => {
-	const parseResult = questAdaptationSchema.safeParse(args)
-	if (!parseResult.success) {
-		return {
-			messages: [
-				{
-					role: "assistant",
-					content: {
-						type: "text",
-						text: `❌ Invalid arguments: ${parseResult.error.message}`,
-					},
-				},
-			],
-			description: "Invalid arguments for quest adaptation",
-		}
-	}
+const handleQuestAdaptation = async (args: z.infer<typeof questAdaptationSchema>): Promise<GetPromptResult> => {
+	logger.info("Adapting quest with smart search", args)
 
-	const validatedArgs = parseResult.data
-	logger.info("Adapting quest with smart search", validatedArgs)
-
-	const searchResult = await smartEntitySearch(validatedArgs.quest_name, "quest")
+	const searchResult = await smartEntitySearch(args.quest_name, "quest")
 
 	if (searchResult.results.length === 0) {
 		return {
@@ -271,11 +246,11 @@ const handleQuestAdaptation = async (args: unknown): Promise<GetPromptResult> =>
 					role: "assistant",
 					content: {
 						type: "text",
-						text: `❌ No quests found matching "${validatedArgs.quest_name}". Try checking active quests or using partial names.`,
+						text: `❌ No quests found matching "${args.quest_name}". Try checking active quests or using partial names.`,
 					},
 				},
 			],
-			description: `No quest matches for "${validatedArgs.quest_name}"`,
+			description: `No quest matches for "${args.quest_name}"`,
 		}
 	}
 
@@ -289,7 +264,7 @@ const handleQuestAdaptation = async (args: unknown): Promise<GetPromptResult> =>
 					role: "user",
 					content: {
 						type: "text",
-						text: `Quest "${quest.name}" (${quest.status}) needs adaptation.\n\nUnexpected player action: "${validatedArgs.unexpected_action}"\n\nHow can I adapt this quest while ${validatedArgs.preserve_themes ? "preserving the original themes" : "allowing complete pivoting"}? Provide specific suggestions for next steps.`,
+						text: `Quest "${quest.name}" (${quest.status}) needs adaptation.\n\nUnexpected player action: "${args.unexpected_action}"\n\nHow can I adapt this quest while ${args.preserve_themes ? "preserving the original themes" : "allowing complete pivoting"}? Provide specific suggestions for next steps.`,
 					},
 				},
 			],
@@ -308,29 +283,28 @@ const handleQuestAdaptation = async (args: unknown): Promise<GetPromptResult> =>
 				role: "assistant",
 				content: {
 					type: "text",
-					text: `🔍 Found ${searchResult.results.length} quests via ${searchResult.method} search for "${validatedArgs.quest_name}":\n\n${matchList}\n\nPlease run the prompt again with the exact quest name from above.`,
+					text: `🔍 Found ${searchResult.results.length} quests via ${searchResult.method} search for "${args.quest_name}":\n\n${matchList}\n\nPlease run the prompt again with the exact quest name from above.`,
 				},
 			},
 		],
-		description: `Multiple quest matches for "${validatedArgs.quest_name}" (${searchResult.method} search)`,
+		description: `Multiple quest matches for "${args.quest_name}" (${searchResult.method} search)`,
 	}
 }
 
-const handleFactionResponse = async (args: unknown): Promise<GetPromptResult> => {
-	const validatedArgs = factionResponseSchema.parse(args)
+const handleFactionResponse = async (args: z.infer<typeof factionResponseSchema>): Promise<GetPromptResult> => {
 	logger.info("Generating faction response", args)
 
-	const searchResult = await smartEntitySearch(validatedArgs.faction_name, "faction")
+	const searchResult = await smartEntitySearch(args.faction_name, "faction")
 
 	if (searchResult.results.length === 0) {
 		return createPromptResult(
 			[
 				createTextMessage(
 					"assistant",
-					`❌ No factions found matching "${validatedArgs.faction_name}". Try checking existing factions or using partial names.`,
+					`❌ No factions found matching "${args.faction_name}". Try checking existing factions or using partial names.`,
 				),
 			],
-			`No faction matches for "${validatedArgs.faction_name}"`,
+			`No faction matches for "${args.faction_name}"`,
 		)
 	}
 
@@ -341,8 +315,8 @@ const handleFactionResponse = async (args: unknown): Promise<GetPromptResult> =>
 				faction_name: faction.name,
 				faction_type: faction.type,
 				faction_alignment: faction.alignment,
-				player_action: validatedArgs.player_action,
-				response_urgency: validatedArgs.response_urgency,
+				player_action: args.player_action,
+				response_urgency: args.response_urgency,
 			},
 			campaign_context: {
 				faction_relationships: "Current alliances and rivalries",
@@ -353,8 +327,8 @@ const handleFactionResponse = async (args: unknown): Promise<GetPromptResult> =>
 
 		const promptText = `Faction Response: ${faction.name}
 
-Player Action: "${validatedArgs.player_action}"
-Response Urgency: ${validatedArgs.response_urgency}
+Player Action: "${args.player_action}"
+Response Urgency: ${args.response_urgency}
 
 Generate a faction response including:
 1. Immediate reaction to the player action
@@ -362,7 +336,7 @@ Generate a faction response including:
 3. Public vs private responses
 4. Impact on faction goals and relationships
 5. Specific actions the faction will take
-6. Timeline for response (${validatedArgs.response_urgency})
+6. Timeline for response (${args.response_urgency})
 7. Consequences for future interactions
 8. Opportunities for player involvement
 
@@ -390,20 +364,19 @@ Consider the faction's type (${faction.type}), alignment (${faction.alignment}),
 		[
 			createTextMessage(
 				"assistant",
-				`🔍 Found ${searchResult.results.length} factions via ${searchResult.method} search for "${validatedArgs.faction_name}":\n\n${matchList}\n\nPlease run the prompt again with the exact faction name from above.`,
+				`🔍 Found ${searchResult.results.length} factions via ${searchResult.method} search for "${args.faction_name}":\n\n${matchList}\n\nPlease run the prompt again with the exact faction name from above.`,
 			),
 		],
-		`Multiple faction matches for "${validatedArgs.faction_name}" (${searchResult.method} search)`,
+		`Multiple faction matches for "${args.faction_name}" (${searchResult.method} search)`,
 	)
 }
 
 // Add the handler after existing handlers
 
-const handleQuestWorkflow = async (args: unknown): Promise<GetPromptResult> => {
-	const validatedArgs = questWorkflowSchema.parse(args)
-	logger.info("Quest workflow step", validatedArgs)
+const handleQuestWorkflow = async (args: z.infer<typeof questWorkflowSchema>): Promise<GetPromptResult> => {
+	logger.info("Quest workflow step", args)
 
-	const { step, quest_name, previous_choices = {} } = validatedArgs
+	const { step, quest_name, previous_choices = {} } = args
 
 	switch (step) {
 		case "start":
@@ -579,28 +552,28 @@ Make this quest feel like a natural part of the ongoing campaign narrative.`,
 // Export enhanced prompt definitions
 export const enhancedCampaignPrompts = {
 	// Interactive prompts
-	generate_npc_dialogue: {
-		description: "Generate contextual NPC dialogue with full campaign awareness (supports fuzzy name search)",
-		schema: npcDialogueSchema,
-		handler: handleNPCDialogue,
-	},
-	adapt_quest_progression: {
-		description: "Adapt quest progression when players take unexpected actions (supports fuzzy quest search)",
-		schema: questAdaptationSchema,
-		handler: handleQuestAdaptation,
-	},
+	generate_npc_dialogue: createPromptDefinition(
+		"Generate contextual NPC dialogue with full campaign awareness (supports fuzzy name search)",
+		npcDialogueSchema,
+		handleNPCDialogue,
+	),
+	adapt_quest_progression: createPromptDefinition(
+		"Adapt quest progression when players take unexpected actions (supports fuzzy quest search)",
+		questAdaptationSchema,
+		handleQuestAdaptation,
+	),
 
 	// Faction response system
-	faction_response: {
-		description: "Generate faction responses to player actions with political consequences",
-		schema: factionResponseSchema,
-		handler: handleFactionResponse,
-	},
+	faction_response: createPromptDefinition(
+		"Generate faction responses to player actions with political consequences",
+		factionResponseSchema,
+		handleFactionResponse,
+	),
 
 	// Quest workflow
-	"quest-workflow": {
-		description: "Multi-step guided quest creation workflow with campaign integration",
-		schema: questWorkflowSchema,
-		handler: handleQuestWorkflow,
-	},
+	"quest-workflow": createPromptDefinition(
+		"Multi-step guided quest creation workflow with campaign integration",
+		questWorkflowSchema,
+		handleQuestWorkflow,
+	),
 } satisfies Record<string, PromptDefinition>

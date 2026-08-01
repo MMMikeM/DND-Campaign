@@ -16,15 +16,15 @@ export { createManageSchema } from "./schema"
 
 // --- Response Helpers ---
 
-export const createResponse = (message: string): ToolHandlerReturn => ({
-	content: [{ type: "text", text: message }],
+export const createResponse = (message: string) => ({
+	content: [{ type: "text" as const, text: message }],
 })
 
-export const createErrorResponse = (message: string): ToolHandlerReturn => {
+export const createErrorResponse = (message: string) => {
 	logger.error(message)
 	return {
 		isError: true,
-		content: [{ type: "text", text: message }],
+		content: [{ type: "text" as const, text: message }],
 	}
 }
 
