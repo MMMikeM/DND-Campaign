@@ -11,8 +11,6 @@ import {
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
-	createTypedHandler,
-	extractArgsFromZodSchema,
 	type PromptDefinition,
 } from "../types"
 import { gatherLocationCreationContext } from "./context"
@@ -114,7 +112,6 @@ export const locationPromptDefinitions: Record<string, PromptDefinition> = {
 	"create-location": {
 		description: "Create a location with full geographic context, faction control, and campaign integration",
 		schema: enhancedLocationCreationSchema,
-		arguments: extractArgsFromZodSchema(enhancedLocationCreationSchema),
-		handler: createTypedHandler(enhancedLocationCreationSchema, enhancedLocationCreationHandler),
+		handler: enhancedLocationCreationHandler,
 	},
 }

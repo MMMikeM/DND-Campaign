@@ -1,5 +1,4 @@
 import { z } from "zod/v4"
-import zodToMCP from "../../zodToMcp"
 
 export const createManageSchema = <T extends Record<K[number], z.ZodObject>, K extends readonly [string, ...string[]]>(
 	schemaObject: T,
@@ -47,5 +46,5 @@ export const createManageSchema = <T extends Record<K[number], z.ZodObject>, K e
 			}
 		})
 
-	return zodToMCP(baseSchema)
+	return baseSchema
 }

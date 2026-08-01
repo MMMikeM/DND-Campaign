@@ -12,7 +12,7 @@ export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<str
 export type ToolDefinition = {
 	enums?: Record<string, readonly string[]>
 	description: string
-	inputSchema: z.core.JSONSchema.BaseSchema
+	inputSchema: z.ZodObject
 	handler: ToolHandler
 	annotations?: {
 		title?: string

@@ -7,7 +7,7 @@
  */
 
 import { logger } from "../.."
-import { createTextMessage, createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
+import { createTextMessage, type PromptDefinition } from "../types"
 import { getBaseNPCContext } from "./context"
 import { type EnhancedNpcCreationArgs, enhancedNpcCreationSchema } from "./types"
 
@@ -128,8 +128,7 @@ export const npcPromptDefinitions: Record<string, PromptDefinition> = {
 	create_npc: {
 		description: "Create NPC with comprehensive campaign context, relationship mapping, and narrative integration",
 		schema: enhancedNpcCreationSchema,
-		handler: createTypedHandler(enhancedNpcCreationSchema, enhancedNPCCreationHandler),
-		arguments: extractArgsFromZodSchema(enhancedNpcCreationSchema),
+		handler: enhancedNPCCreationHandler,
 	},
 }
 

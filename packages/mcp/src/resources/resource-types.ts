@@ -1,4 +1,4 @@
-import type { Resource, ResourceTemplateType } from "@modelcontextprotocol/server"
+import type { Resource } from "@modelcontextprotocol/server"
 
 export type ResourceContent = {
 	uri: string
@@ -17,13 +17,4 @@ export type ResourceDefinition = {
 	mimeType?: string
 	handler: ResourceHandler
 	lister?: ResourceLister
-}
-
-export type ResourceListHandler = () => Promise<Resource[]>
-export type ResourceTemplateListHandler = () => Promise<ResourceTemplateType[]>
-
-export type CampaignResourceHandlers = {
-	listResources: ResourceListHandler
-	listResourceTemplates: ResourceTemplateListHandler
-	readResource: (uri: string) => Promise<ResourceContent[]>
 }

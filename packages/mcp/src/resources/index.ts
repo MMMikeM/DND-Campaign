@@ -1,5 +1,4 @@
 import { getFactionContext } from "../prompts/baseContext"
-import { campaignSeedSchema, handleCampaignSeed } from "./campaign-seed"
 import { factionResponseResourceDefinition } from "./faction-response"
 import { locationContextResourceDefinition } from "./location-context"
 import { mapResourceDefinition } from "./map"
@@ -37,23 +36,6 @@ export const campaignResourceDefinitions: Record<string, ResourceDefinition> = {
 				description: `Context for ${faction.name}`,
 				mimeType: "application/json",
 			}))
-		},
-	},
-	"campaign-seed": {
-		name: "Campaign Seed",
-		description: "Seeds the campaign with initial lore, narrative events, destinations, and foreshadowing.",
-		uriTemplate: "file://**/*.seed.json",
-		handler: async (uri: string, content?: string) => {
-			if (!content) {
-				throw new Error("Content is required for campaign seed")
-			}
-			const seedData = campaignSeedSchema.parse(JSON.parse(content))
-			await handleCampaignSeed(seedData)
-			return {
-				uri,
-				text: "Campaign seeded successfully.",
-				mimeType: "text/plain",
-			}
 		},
 	},
 }

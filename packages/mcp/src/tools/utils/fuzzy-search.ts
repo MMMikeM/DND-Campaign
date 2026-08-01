@@ -1,5 +1,4 @@
 import { z } from "zod/v4"
-import zodToMCP from "../../zodToMcp"
 import { searchBySimilarity } from "./search"
 import { createErrorResponse, createResponse } from "./tool.utils"
 import type { ToolDefinition } from "./types"
@@ -11,7 +10,7 @@ const searchSchema = z.object({
 export const fuzzySearchToolDefinitions: Record<"fuzzy_search", ToolDefinition> = {
 	fuzzy_search: {
 		description: "Search for entities by similarity.",
-		inputSchema: zodToMCP(searchSchema),
+		inputSchema: searchSchema,
 		handler: async (args) => {
 			if (!args) {
 				return createErrorResponse("No arguments provided to fuzzy_search handler.")

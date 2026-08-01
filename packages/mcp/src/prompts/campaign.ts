@@ -18,7 +18,6 @@ import {
 	createPromptResult,
 	createResourceMessage,
 	createTextMessage,
-	extractArgsFromZodSchema,
 	type GetPromptResult,
 	type PromptDefinition,
 } from "./types"
@@ -175,7 +174,7 @@ const npcDialogueSchema = z.object({
 const questAdaptationSchema = z.object({
 	quest_name: z.string().describe("Quest name (fuzzy search supported)"),
 	unexpected_action: z.string().describe("What unexpected action did the players take?"),
-	preserve_themes: z.boolean().default(true).describe("Try to preserve the original quest themes"),
+	preserve_themes: z.stringbool().default(true).describe("Try to preserve the original quest themes"),
 })
 
 const factionResponseSchema = z.object({
@@ -584,13 +583,11 @@ export const enhancedCampaignPrompts = {
 		description: "Generate contextual NPC dialogue with full campaign awareness (supports fuzzy name search)",
 		schema: npcDialogueSchema,
 		handler: handleNPCDialogue,
-		arguments: extractArgsFromZodSchema(npcDialogueSchema),
 	},
 	adapt_quest_progression: {
 		description: "Adapt quest progression when players take unexpected actions (supports fuzzy quest search)",
 		schema: questAdaptationSchema,
 		handler: handleQuestAdaptation,
-		arguments: extractArgsFromZodSchema(questAdaptationSchema),
 	},
 
 	// Faction response system
@@ -598,7 +595,6 @@ export const enhancedCampaignPrompts = {
 		description: "Generate faction responses to player actions with political consequences",
 		schema: factionResponseSchema,
 		handler: handleFactionResponse,
-		arguments: extractArgsFromZodSchema(factionResponseSchema),
 	},
 
 	// Quest workflow
@@ -606,6 +602,5 @@ export const enhancedCampaignPrompts = {
 		description: "Multi-step guided quest creation workflow with campaign integration",
 		schema: questWorkflowSchema,
 		handler: handleQuestWorkflow,
-		arguments: extractArgsFromZodSchema(questWorkflowSchema),
 	},
-} satisfies Record<string, PromptDefinition<z.ZodTypeAny>>
+} satisfies Record<string, PromptDefinition>

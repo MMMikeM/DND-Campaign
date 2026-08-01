@@ -8,7 +8,7 @@ import {
 	getNpcContext,
 	getQuestContext,
 } from "../baseContext"
-import { createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
+import type { PromptDefinition } from "../types"
 import { cleanObject } from "../utils"
 import { type CampaignContextArgs, campaignContextSchema } from "./types"
 
@@ -60,7 +60,6 @@ export const campaignContextPromptDefinitions: Record<string, PromptDefinition> 
 	load_campaign_context: {
 		description: "Loads a comprehensive overview of the current campaign state into the context.",
 		schema: campaignContextSchema,
-		handler: createTypedHandler(campaignContextSchema, campaignContextHandler),
-		arguments: extractArgsFromZodSchema(campaignContextSchema),
+		handler: campaignContextHandler,
 	},
 }

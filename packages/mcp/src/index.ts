@@ -1,7 +1,7 @@
 import { createServer } from "node:http"
-import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node"
-import { Server } from "@modelcontextprotocol/server"
-import { StdioServerTransport } from "@modelcontextprotocol/server/stdio"
+import { toNodeHandler } from "@modelcontextprotocol/node"
+import { createMcpHandler, McpServer } from "@modelcontextprotocol/server"
+import { serveStdio } from "@modelcontextprotocol/server/stdio"
 import { initializeDatabase } from "@tome-master/shared"
 import { createLogger } from "./logger"
 import { registerPromptHandlers } from "./prompts"
@@ -28,33 +28,18 @@ export const db: ReturnType<typeof initializeDatabase> = initializeDatabase(dbPa
 
 logger.info("Database initialized successfully")
 
-const mcpServer = new Server(
-	{
+function buildServer(): McpServer {
+	const mcpServer = new McpServer({
 		name: "DND MCP",
 		version: "0.1.0",
-	},
-	{
-		capabilities: {
-			resources: {
-				subscribe: true,
-				listChanged: true,
-			},
-			tools: {},
-			prompts: {},
-		},
-	},
-)
+	})
 
-logger.info("Registering tool handlers")
+	registerToolHandlers(mcpServer)
+	registerResourceHandlers(mcpServer)
+	registerPromptHandlers(mcpServer)
 
-registerToolHandlers(mcpServer)
-logger.info("Tool handlers registered")
-
-registerResourceHandlers(mcpServer)
-logger.info("Resource handlers registered")
-
-registerPromptHandlers(mcpServer)
-logger.info("Prompt handlers registered")
+	return mcpServer
+}
 
 async function startServer() {
 	logger.info("Starting server...")
@@ -73,10 +58,7 @@ async function startServer() {
 		}
 		logger.info("Starting server with Streamable HTTP transport...")
 
-		const transport = new NodeStreamableHTTPServerTransport({
-			sessionIdGenerator: () => crypto.randomUUID(),
-		})
-		await mcpServer.connect(transport)
+		const mcpHandler = toNodeHandler(createMcpHandler(buildServer))
 
 		const httpServer = createServer(async (req, res) => {
 			logger.debug("Received request", {
@@ -90,7 +72,7 @@ async function startServer() {
 			const pathname = url.pathname
 
 			if (pathname === "/mcp") {
-				await transport.handleRequest(req, res)
+				await mcpHandler(req, res)
 			} else {
 				logger.warn("Invalid request path", { pathname })
 				res.writeHead(404).end()
@@ -107,8 +89,7 @@ async function startServer() {
 	} else {
 		logger.info("Starting server with stdio transport...")
 		// Default to stdio transport
-		const transport = new StdioServerTransport()
-		await mcpServer.connect(transport)
+		serveStdio(buildServer, { onerror: (error) => logger.error("Stdio transport error", { error }) })
 		logger.info("Server started with stdio transport")
 	}
 }

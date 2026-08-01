@@ -8,7 +8,7 @@
 
 import { logger } from "../.."
 import type { PromptDefinition } from "../types"
-import { createPromptResult, createTextMessage, createTypedHandler, extractArgsFromZodSchema } from "../types"
+import { createPromptResult, createTextMessage } from "../types"
 import { formatPromptDiscovery, formatSpecificPromptHelp } from "./formatters"
 import { type PromptHelpArgs, promptHelpSchema } from "./types"
 
@@ -30,7 +30,6 @@ export const promptHelpDefinitions: Record<string, PromptDefinition> = {
 	"prompt-help": {
 		description: "Get help and examples for enhanced entity creation prompts",
 		schema: promptHelpSchema,
-		arguments: extractArgsFromZodSchema(promptHelpSchema),
-		handler: createTypedHandler(promptHelpSchema, promptHelpHandler),
+		handler: promptHelpHandler,
 	},
 }

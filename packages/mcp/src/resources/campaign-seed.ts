@@ -1,5 +1,5 @@
 import { z } from "zod/v4"
-import { foreshadowing, lore } from "../tools/tools"
+import { allToolDefinitions } from "../tools/tools"
 
 const loreSeedSchema = z.object({
 	name: z.string(),
@@ -39,12 +39,12 @@ export type CampaignSeed = z.infer<typeof campaignSeedSchema>
 export async function handleCampaignSeed(seed: CampaignSeed) {
 	if (seed.lore) {
 		for (const loreItem of seed.lore) {
-			await lore.handlers.manage_lore({ create: { lore: loreItem } })
+			await allToolDefinitions.manage_lore?.handler({ create: { lore: loreItem } })
 		}
 	}
 	if (seed.foreshadowing) {
 		for (const item of seed.foreshadowing) {
-			await foreshadowing.handlers.manage_foreshadowing({ create: { foreshadowing: item } })
+			await allToolDefinitions.manage_foreshadowing?.handler({ create: { foreshadowing: item } })
 		}
 	}
 }

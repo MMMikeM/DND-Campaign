@@ -3,7 +3,6 @@ import { extname, join, parse } from "node:path"
 import { tables } from "@tome-master/shared"
 import { imageSize } from "image-size"
 import { db, logger } from "../index"
-import zodToMCP from "../zodToMcp"
 import { schemas, syncMapsSchema, tableEnum } from "./map-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition, ToolHandler } from "./utils/types"
@@ -152,7 +151,7 @@ export const mapToolDefinitions: Record<
 	synchronize_maps: {
 		enums: tables.mapTables.enums,
 		description: "Synchronize map images from a directory with the database.",
-		inputSchema: zodToMCP(syncMapsSchema),
+		inputSchema: syncMapsSchema,
 		handler: synchronizeMapsHandler,
 		annotations: {
 			title: "Synchronize Maps",

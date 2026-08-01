@@ -5,21 +5,20 @@
  * prompt messages with type safety and standardized formatting.
  */
 
-import type { GetPromptResult, PromptArgument, PromptMessage } from "@modelcontextprotocol/server"
-import { z } from "zod/v4"
+import type { GetPromptResult, PromptMessage } from "@modelcontextprotocol/server"
+import type { z } from "zod/v4"
 
 /**
  * Enhanced prompt definition using proper MCP SDK types
  */
-export interface PromptDefinition<T extends z.ZodTypeAny = z.ZodTypeAny> {
+// biome-ignore lint/suspicious/noExplicitAny: the default keeps heterogeneous prompt records assignable
+export interface PromptDefinition<T extends z.ZodObject<any> = any> {
 	/** Human-readable description of what this prompt does */
 	description: string
-	/** Zod schema for validating prompt arguments */
+	/** Zod schema for validating prompt arguments; the SDK validates and derives discovery metadata from it */
 	schema: T
-	/** MCP-compatible argument definitions for discovery */
-	arguments: PromptArgument[]
-	/** Handler function that processes arguments and returns MCP-compliant result */
-	handler: (args: unknown) => Promise<GetPromptResult>
+	/** Handler function that receives schema-validated arguments and returns MCP-compliant result */
+	handler: (args: z.infer<T>) => Promise<GetPromptResult>
 }
 
 export type { GetPromptResult }
@@ -58,29 +57,10 @@ export const createPromptResult = (messages: PromptMessage[], description?: stri
 })
 
 /**
- * Helper to create type-safe prompt handlers that validate arguments with Zod
- * This provides internal type safety while maintaining MCP SDK compatibility
+ * Creates a complete prompt definition; the SDK validates arguments and derives
+ * discovery metadata from the Zod schema at registration time
  */
-export const createTypedHandler = <T extends z.ZodTypeAny>(
-	schema: T,
-	handler: (args: z.infer<T>) => Promise<GetPromptResult>,
-) => {
-	return async (args: unknown): Promise<GetPromptResult> => {
-		const parseResult = schema.safeParse(args)
-		if (!parseResult.success) {
-			return createPromptResult(
-				[createTextMessage("assistant", `❌ Invalid arguments: ${parseResult.error.message}`)],
-				"Invalid arguments",
-			)
-		}
-		return handler(parseResult.data)
-	}
-}
-
-/**
- * Creates a complete prompt definition with automatic argument extraction from Zod schema
- */
-export const createPromptDefinition = <T extends z.ZodObject<Record<string, z.ZodAny>>>(
+export const createPromptDefinition = <T extends z.ZodObject<any>>(
 	description: string,
 	schema: T,
 	handler: (args: z.infer<T>) => Promise<GetPromptResult>,
@@ -88,41 +68,6 @@ export const createPromptDefinition = <T extends z.ZodObject<Record<string, z.Zo
 	return {
 		description,
 		schema,
-		arguments: extractArgsFromZodSchema(schema),
-		handler: createTypedHandler(schema, handler),
+		handler,
 	}
-}
-
-/**
- * Extracts argument information from a Zod schema
- */
-export const extractArgsFromZodSchema = <T extends z.ZodObject>(schema: T): PromptArgument[] => {
-	const result: PromptArgument[] = []
-
-	// Get the shape of the schema
-	const shape = schema.shape
-
-	// Process each property in the schema
-	for (const [name, field] of Object.entries(shape)) {
-		// Extract description
-		let description = name
-		if (field instanceof z.ZodType) {
-			// Try to extract description from the field
-			const desc = field.description
-			if (desc) {
-				description = desc
-			}
-		}
-
-		// Determine if the field is required
-		const isOptional = field instanceof z.ZodOptional || field instanceof z.ZodDefault
-
-		result.push({
-			name,
-			description,
-			required: !isOptional,
-		})
-	}
-
-	return result
 }

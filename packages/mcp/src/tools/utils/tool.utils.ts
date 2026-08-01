@@ -179,27 +179,18 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 			return createErrorResponse(`Arguments provided to ${categoryToolName} are malformed`)
 		}
 
-		const tableName = z.enum(tableEnum).safeParse(args?.table)
+		// The SDK validates table/operation against the tool's schema before dispatch
+		const tableName = args.table as TK[number]
+		const table = tables[tableName]
+		const operation = args.operation as "create" | "update" | "delete"
 
-		if (!tableName.success) {
-			return createErrorResponse(`Invalid table name '${args?.table}' provided to ${categoryToolName} handler.`)
-		}
-
-		const table = tables[tableName.data]
-
-		const operation = z.enum(["create", "update", "delete"]).safeParse(args?.operation)
-
-		if (!operation.success) {
-			return createErrorResponse(`Invalid operation '${args?.operation}' provided to ${categoryToolName} handler.`)
-		}
-
-		switch (operation.data) {
+		switch (operation) {
 			case "delete":
-				return handleDelete(args, table, tableName.data, categoryToolName)
+				return handleDelete(args, table, tableName, categoryToolName)
 			case "create":
-				return handleCreate(args, table, tableName.data, schemas, categoryToolName)
+				return handleCreate(args, table, tableName, schemas, categoryToolName)
 			case "update":
-				return handleUpdate(args, table, tableName.data, schemas, categoryToolName)
+				return handleUpdate(args, table, tableName, schemas, categoryToolName)
 			default:
 				return createErrorResponse(`An unknown error occurred in ${categoryToolName} handler.`)
 		}

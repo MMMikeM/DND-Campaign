@@ -7,7 +7,7 @@
  */
 
 import { logger } from "../.."
-import { createTextMessage, createTypedHandler, extractArgsFromZodSchema, type PromptDefinition } from "../types"
+import { createTextMessage, type PromptDefinition } from "../types"
 import { gatherFactionCreationContext } from "./context"
 import { type FactionCreationArgs, factionCreationSchema } from "./types"
 
@@ -97,7 +97,6 @@ export const factionPromptDefinitions: Record<string, PromptDefinition> = {
 		description:
 			"Create a detailed faction with comprehensive political analysis, relationship mapping, and campaign integration suggestions",
 		schema: factionCreationSchema,
-		handler: createTypedHandler(factionCreationSchema, enhancedFactionCreationHandler),
-		arguments: extractArgsFromZodSchema(factionCreationSchema),
+		handler: enhancedFactionCreationHandler,
 	},
 }

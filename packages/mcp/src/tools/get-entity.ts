@@ -1,5 +1,4 @@
 import { logger } from ".."
-import zodToMCP from "../zodToMcp"
 import { entityGetters as conflictGetters } from "./conflict-tools"
 import { entityGetters as consequenceGetters } from "./consequence-tools"
 import { entityGetters as factionGetters } from "./faction-tools"
@@ -104,7 +103,7 @@ const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => 
 export const getEntityToolDefinition: Record<string, ToolDefinition> = {
 	get_entity: {
 		description: getEntitySchema.description ?? "Get any entity by type and optional ID",
-		inputSchema: zodToMCP(getEntitySchema),
+		inputSchema: getEntitySchema,
 		handler: getEntityHandler,
 		annotations: {
 			title: "Get Entity",

@@ -1,42 +1,37 @@
 /**
  * Prompt Server Registration - MCP Protocol Handler
  *
- * Registers prompt handlers with the MCP server for AI assistant integration.
- * Handles ListPrompts and GetPrompt requests, routing to the prompt registry.
+ * Registers each prompt from the registry with the MCP server; the SDK
+ * handles ListPrompts/GetPrompt routing and argument validation.
  */
 
-import type { GetPromptResult, Server } from "@modelcontextprotocol/server"
+import type { McpServer } from "@modelcontextprotocol/server"
 import { logger } from ".."
-import { executePrompt, listablePrompts } from "./registry"
+import { prompts } from "./registry"
 
-export function registerPromptHandlers(server: Server) {
-	server.setRequestHandler("prompts/list", async () => ({ prompts: listablePrompts }))
-
-	// Handler for getting a specific prompt
-	server.setRequestHandler("prompts/get", async (request): Promise<GetPromptResult> => {
-		const { name, arguments: promptArgs = {} } = request.params
-		logger.info(`Getting prompt: ${name}`, promptArgs)
-
-		try {
-			// Execute the prompt with the provided arguments
-			const result = await executePrompt(name, promptArgs)
-			return result
-		} catch (error) {
-			logger.error(`Error in prompt ${name}:`, {
-				error:
-					error instanceof Error
-						? {
-								name: error.name,
-								message: error.message,
-								stack: error.stack,
-							}
-						: error,
-				promptName: name,
-				promptArgs,
-			})
-			throw error
-		}
-	})
+export function registerPromptHandlers(server: McpServer) {
+	for (const [name, { description, schema, handler }] of Object.entries(prompts)) {
+		server.registerPrompt(name, { description, argsSchema: schema }, async (args: Record<string, unknown>) => {
+			logger.info(`Executing prompt: ${name}`, args)
+			try {
+				return await handler(args)
+			} catch (error) {
+				logger.error(`Error in prompt ${name}:`, {
+					error:
+						error instanceof Error
+							? {
+									name: error.name,
+									message: error.message,
+									stack: error.stack,
+								}
+							: error,
+					promptName: name,
+					promptArgs: args,
+				})
+				throw error
+			}
+		})
+	}
 
 	logger.info("MCP Prompt handlers registered")
 }

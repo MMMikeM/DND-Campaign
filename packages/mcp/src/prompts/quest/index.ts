@@ -8,7 +8,7 @@
 
 import { logger } from "../.."
 import type { PromptDefinition } from "../types"
-import { createTypedHandler, extractArgsFromZodSchema } from "../types"
+
 import { gatherQuestCreationContext } from "./context"
 import { type QuestCreationArgs, questCreationSchema } from "./types"
 
@@ -106,8 +106,7 @@ export const questPromptDefinitions: Record<string, PromptDefinition> = {
 	"create-quest": {
 		description: "Create a quest with full campaign context, NPC integration, and narrative consequences",
 		schema: questCreationSchema,
-		handler: createTypedHandler(questCreationSchema, enhancedQuestCreationHandler),
-		arguments: extractArgsFromZodSchema(questCreationSchema),
+		handler: enhancedQuestCreationHandler,
 	},
 }
 

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
 import { z } from "zod/v4"
+import zodToMCP from "../../zodToMcp"
 import { createManageSchema } from "./schema"
+
+// createManageSchema now returns the zod schema itself (the SDK converts it for
+// tools/list); these tests inspect the JSON Schema the SDK would advertise.
+const createManageJsonSchema = (...args: Parameters<typeof createManageSchema>) =>
+	zodToMCP(createManageSchema(...args))
 
 describe("createManageSchema", () => {
 	// Mock schemas for testing
@@ -20,7 +26,7 @@ describe("createManageSchema", () => {
 	const testTableEnum = ["users", "posts"] as const
 
 	it("should create an MCP schema with the correct structure", () => {
-		const mcpSchema = createManageSchema(testSchemas, testTableEnum)
+		const mcpSchema = createManageJsonSchema(testSchemas, testTableEnum)
 
 		// The MCP schema should be a single object, not a union
 		expect(mcpSchema).toHaveProperty("type", "object")
@@ -43,7 +49,7 @@ describe("createManageSchema", () => {
 
 	it("should have table-specific data validation (functional test)", () => {
 		// This is a functional test since we can't easily inspect superRefine logic in JSON schema
-		const mcpSchema = createManageSchema(testSchemas, testTableEnum)
+		const mcpSchema = createManageJsonSchema(testSchemas, testTableEnum)
 
 		// The schema should exist and have data field
 		const jsonSchema = mcpSchema as any
@@ -52,7 +58,7 @@ describe("createManageSchema", () => {
 	})
 
 	it("should have required fields for the base schema", () => {
-		const mcpSchema = createManageSchema(testSchemas, testTableEnum)
+		const mcpSchema = createManageJsonSchema(testSchemas, testTableEnum)
 		const jsonSchema = mcpSchema as any
 
 		// Should have table, operation, and data as properties
@@ -68,7 +74,7 @@ describe("createManageSchema", () => {
 	})
 
 	it("should not wrap data in unnecessary object structure", () => {
-		const mcpSchema = createManageSchema(testSchemas, testTableEnum)
+		const mcpSchema = createManageJsonSchema(testSchemas, testTableEnum)
 		const jsonSchema = mcpSchema as any
 
 		// The data property should be a simple unknown type, not an object with table-specific properties
@@ -119,7 +125,7 @@ describe("createManageSchema", () => {
 	})
 
 	it("should be much more compact than the union approach", () => {
-		const mcpSchema = createManageSchema(testSchemas, testTableEnum)
+		const mcpSchema = createManageJsonSchema(testSchemas, testTableEnum)
 		const jsonSchema = mcpSchema as any
 
 		console.log(JSON.stringify(jsonSchema, null, 2))
