@@ -22,8 +22,8 @@ catalogs:
       specifier: ^3.2.4
       version: 3.2.4
     zod:
-      specifier: ^3.25.67
-      version: 3.25.67
+      specifier: ^4.2.0
+      version: 4.4.3
 
 importers:
 
@@ -47,9 +47,15 @@ importers:
 
   packages/mcp:
     dependencies:
-      '@modelcontextprotocol/sdk':
-        specifier: ^1.13.0
-        version: 1.13.0
+      '@modelcontextprotocol/core':
+        specifier: ^2.0.0
+        version: 2.0.0
+      '@modelcontextprotocol/node':
+        specifier: ^2.0.0
+        version: 2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.12.33)
+      '@modelcontextprotocol/server':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@swc/helpers':
         specifier: ^0.5.17
         version: 0.5.17
@@ -61,7 +67,7 @@ importers:
         version: 0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5)
       drizzle-zod:
         specifier: ^0.8.2
-        version: 0.8.2(drizzle-orm@0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5))(zod@3.25.67)
+        version: 0.8.2(drizzle-orm@0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5))(zod@4.4.3)
       fast-fuzzy:
         specifier: ^1.12.0
         version: 1.12.0
@@ -76,7 +82,7 @@ importers:
         version: 3.17.0
       zod:
         specifier: 'catalog:'
-        version: 3.25.67
+        version: 4.4.3
     devDependencies:
       '@modelcontextprotocol/inspector':
         specifier: ^0.14.3
@@ -272,7 +278,7 @@ importers:
         version: 1.1.2(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
         specifier: 'catalog:'
-        version: 3.25.67
+        version: 4.4.3
     devDependencies:
       '@react-router/dev':
         specifier: 7.5.3
@@ -940,6 +946,12 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
+  '@hono/node-server@1.19.17':
+    resolution: {integrity: sha512-dSneS5qhiauZWGDCeK4o695Xd9nUNjviSZCMQrj10eetr8Uln1ucn6bbphOM6UynAMMtNIzZNSpL9vnASJwrPQ==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
+
   '@hookform/resolvers@4.1.3':
     resolution: {integrity: sha512-Jsv6UOWYTrEFJ/01ZrnwVXs7KDvP8XIo115i++5PWvNkNvkrsTfGiLS6w+eJ57CYtUtDQalUWovCZDHFJ8u1VQ==}
     peerDependencies:
@@ -980,6 +992,10 @@ packages:
   '@mjackson/node-fetch-server@0.2.0':
     resolution: {integrity: sha512-EMlH1e30yzmTpGLQjlFmaDAjyOeZhng1/XCd7DExR8PNAnG/G1tyruZxEoUe11ClnwGhGrtsdnyyUx1frSzjng==}
 
+  '@modelcontextprotocol/core@2.0.0':
+    resolution: {integrity: sha512-pJCEwGG7Lfr/+PQp9ZTwKXNeO5wzbfKL7H3MYpCorM4oFBoQrdjnBgEoqG+RjhsvS1FKrDbKux+M1HhlnGWqcA==}
+    engines: {node: '>=20'}
+
   '@modelcontextprotocol/inspector-cli@0.14.3':
     resolution: {integrity: sha512-cAjCfwJUfN1WHc/sGgY/yAQ7K02WOKIso+LzVoKzEr50Nf4R+WKEuq6lhnLfG3f61sU823V8TxRscc8NTYTgww==}
     hasBin: true
@@ -996,9 +1012,23 @@ packages:
     resolution: {integrity: sha512-WtEDqVwXnICveGd39BOF0Q3WxCPQg3MhBzMEDDZp2AZn+pO+eTiRR4bqxTiGkqHUjHODckHkSpu2FQ/A+x5mnQ==}
     hasBin: true
 
+  '@modelcontextprotocol/node@2.0.0':
+    resolution: {integrity: sha512-Y4hAC2XdGDUdDOCbLDOCA4+aL3NUldjsOWlDL/YwpAxrPhRm1xHd7lZ+mLacvZ9t3PaH28wgNoaLQGrIk1P2pg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@modelcontextprotocol/server': ^2.0.0
+      hono: ^4.11.4
+    peerDependenciesMeta:
+      hono:
+        optional: true
+
   '@modelcontextprotocol/sdk@1.13.0':
     resolution: {integrity: sha512-P5FZsXU0kY881F6Hbk9GhsYx02/KgWK1DYf7/tyE/1lcFKhDYPQR9iYjhQXJn+Sg6hQleMo3DB7h7+p4wgp2Lw==}
     engines: {node: '>=18'}
+
+  '@modelcontextprotocol/server@2.0.0':
+    resolution: {integrity: sha512-YhHWdHfpFMQfd0prsEnxKeS3Qz3ytIGmsS0sth4KDjnacIT7hxk6hXHkJ9KysxlkvTM+WZAtQbbcUhdoP4Hvtw==}
+    engines: {node: '>=20'}
 
   '@napi-rs/wasm-runtime@0.2.10':
     resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
@@ -3392,6 +3422,10 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
+  hono@4.12.33:
+    resolution: {integrity: sha512-+SwvkaiJtxsiPjhy9LivY/1m7UsNqCJetM1BrZl9A5DkQhlbHQDU730mMiDPWjnoCYOM8Chf3WrCJw27kNTPFQ==}
+    engines: {node: '>=16.9.0'}
+
   hosted-git-info@6.1.3:
     resolution: {integrity: sha512-HVJyzUrLIL1c0QmviVh5E8VGyUS7xCFPS6yydaVd1UegW+ibV/CohqTH9MkOLDp5o+rb82DMo77PTuc9F/8GKw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -5247,6 +5281,9 @@ packages:
   zod@3.25.67:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
   zustand@4.5.6:
     resolution: {integrity: sha512-ibr/n1hBzLLj5Y+yUcU7dYw8p6WnIVzdJbnX+1YpaScvZVF2ziugqHs+LAmHw4lWO9c/zRj+K1ncgWDQuthEdQ==}
     engines: {node: '>=12.7.0'}
@@ -5802,6 +5839,10 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
+  '@hono/node-server@1.19.17(hono@4.12.33)':
+    dependencies:
+      hono: 4.12.33
+
   '@hookform/resolvers@4.1.3(react-hook-form@7.55.0(react@19.1.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
@@ -5849,6 +5890,10 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.0
 
   '@mjackson/node-fetch-server@0.2.0': {}
+
+  '@modelcontextprotocol/core@2.0.0':
+    dependencies:
+      zod: 4.4.3
 
   '@modelcontextprotocol/inspector-cli@0.14.3':
     dependencies:
@@ -5927,6 +5972,13 @@ snapshots:
       - typescript
       - utf-8-validate
 
+  '@modelcontextprotocol/node@2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.12.33)':
+    dependencies:
+      '@hono/node-server': 1.19.17(hono@4.12.33)
+      '@modelcontextprotocol/server': 2.0.0
+    optionalDependencies:
+      hono: 4.12.33
+
   '@modelcontextprotocol/sdk@1.13.0':
     dependencies:
       ajv: 6.12.6
@@ -5942,6 +5994,11 @@ snapshots:
       zod-to-json-schema: 3.24.5(zod@3.25.67)
     transitivePeerDependencies:
       - supports-color
+
+  '@modelcontextprotocol/server@2.0.0':
+    dependencies:
+      '@modelcontextprotocol/core': 2.0.0
+      zod: 4.4.3
 
   '@napi-rs/wasm-runtime@0.2.10':
     dependencies:
@@ -8241,10 +8298,10 @@ snapshots:
       pg: 8.16.0
       postgres: 3.4.5
 
-  drizzle-zod@0.8.2(drizzle-orm@0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5))(zod@3.25.67):
+  drizzle-zod@0.8.2(drizzle-orm@0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5))(zod@4.4.3):
     dependencies:
       drizzle-orm: 0.44.2(@electric-sql/pglite@0.2.17)(@types/better-sqlite3@7.6.12)(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.2)(pg@8.16.0)(postgres@3.4.5)
-      zod: 3.25.67
+      zod: 4.4.3
 
   dunder-proto@1.0.1:
     dependencies:
@@ -8672,6 +8729,8 @@ snapshots:
   hoist-non-react-statics@3.3.2:
     dependencies:
       react-is: 16.13.1
+
+  hono@4.12.33: {}
 
   hosted-git-info@6.1.3:
     dependencies:
@@ -10573,6 +10632,8 @@ snapshots:
   zod@3.25.23: {}
 
   zod@3.25.67: {}
+
+  zod@4.4.3: {}
 
   zustand@4.5.6(@types/react@19.1.8)(react@19.1.0):
     dependencies:

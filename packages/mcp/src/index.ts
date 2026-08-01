@@ -1,7 +1,7 @@
 import { createServer } from "node:http"
-import { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node"
+import { Server } from "@modelcontextprotocol/server"
+import { StdioServerTransport } from "@modelcontextprotocol/server/stdio"
 import { initializeDatabase } from "@tome-master/shared"
 import { createLogger } from "./logger"
 import { registerPromptHandlers } from "./prompts"
@@ -65,12 +65,19 @@ async function startServer() {
 	})
 
 	const port = process.env.MCP_PORT ? Number(process.env.MCP_PORT) : 3100
-	let transport: StdioServerTransport | SSEServerTransport
 
-	if (process.env.MCP_TRANSPORT! === "sse") {
-		logger.info("Starting server with SSE transport...")
+	const transportMode = process.env.MCP_TRANSPORT
+	if (transportMode === "http" || transportMode === "sse") {
+		if (transportMode === "sse") {
+			logger.warn("MCP_TRANSPORT=sse is deprecated; serving Streamable HTTP instead. Use MCP_TRANSPORT=http.")
+		}
+		logger.info("Starting server with Streamable HTTP transport...")
 
-		// Create HTTP server for SSE
+		const transport = new NodeStreamableHTTPServerTransport({
+			sessionIdGenerator: () => crypto.randomUUID(),
+		})
+		await mcpServer.connect(transport)
+
 		const httpServer = createServer(async (req, res) => {
 			logger.debug("Received request", {
 				url: req.url,
@@ -82,22 +89,8 @@ async function startServer() {
 			const url = new URL(req.url || "", `http://${req.headers.host}`)
 			const pathname = url.pathname
 
-			if (pathname === "/mcp" && req.method === "GET") {
-				logger.info("Establishing SSE connection")
-				// SSE connection
-				transport = new SSEServerTransport("/mcp", res)
-				await mcpServer.connect(transport)
-				logger.info("SSE connection established")
-			} else if (pathname === "/mcp" && req.method === "POST") {
-				logger.info("Handling POST request")
-				// Handle incoming messages
-				if (transport instanceof SSEServerTransport) {
-					await transport.handlePostMessage(req, res)
-					logger.info("POST request handled successfully")
-				} else {
-					logger.error("No SSE connection established for POST request")
-					res.writeHead(500).end("No SSE connection established")
-				}
+			if (pathname === "/mcp") {
+				await transport.handleRequest(req, res)
 			} else {
 				logger.warn("Invalid request path", { pathname })
 				res.writeHead(404).end()
@@ -105,16 +98,16 @@ async function startServer() {
 		})
 
 		httpServer.listen(port, () => {
-			logger.info("SSE server listening", {
+			logger.info("Streamable HTTP server listening", {
 				url: `http://localhost:${port}/mcp`,
-				transport: process.env.MCP_TRANSPORT,
+				transport: transportMode,
 				port: port,
 			})
 		})
 	} else {
 		logger.info("Starting server with stdio transport...")
 		// Default to stdio transport
-		transport = new StdioServerTransport()
+		const transport = new StdioServerTransport()
 		await mcpServer.connect(transport)
 		logger.info("Server started with stdio transport")
 	}

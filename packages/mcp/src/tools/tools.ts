@@ -1,6 +1,4 @@
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import type { Tool } from "@modelcontextprotocol/sdk/types.js"
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js"
+import type { Server, Tool } from "@modelcontextprotocol/server"
 import { logger } from ".."
 import { conflictToolDefinitions } from "./conflict-tools"
 import { consequenceToolDefinitions } from "./consequence-tools"
@@ -92,9 +90,9 @@ export function registerToolHandlers(server: Server) {
 		...regions.handlers,
 	}
 
-	server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }))
+	server.setRequestHandler("tools/list", async () => ({ tools }))
 
-	server.setRequestHandler(CallToolRequestSchema, async (request) => {
+	server.setRequestHandler("tools/call", async (request) => {
 		const { name, arguments: args } = request.params
 
 		const handler = allToolHandlers[name as keyof typeof allToolHandlers]

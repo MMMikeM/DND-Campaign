@@ -18,7 +18,9 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "^1.13.0",
+		"@modelcontextprotocol/core": "^2.0.0",
+		"@modelcontextprotocol/node": "^2.0.0",
+		"@modelcontextprotocol/server": "^2.0.0",
 		"@swc/helpers": "^0.5.17",
 		"@tome-master/shared": "workspace:*",
 		"drizzle-orm": "catalog:",

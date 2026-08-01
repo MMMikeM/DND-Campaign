@@ -5,7 +5,7 @@
  * prompt messages with type safety and standardized formatting.
  */
 
-import type { GetPromptResult, PromptArgument, PromptMessage } from "@modelcontextprotocol/sdk/types.js"
+import type { GetPromptResult, PromptArgument, PromptMessage } from "@modelcontextprotocol/server"
 import { z } from "zod/v4"
 
 /**

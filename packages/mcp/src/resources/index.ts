@@ -25,7 +25,7 @@ export const campaignResourceDefinitions: Record<string, ResourceDefinition> = {
 			const faction = factions.find((f) => f.id === Number(factionId))
 			return {
 				uri,
-				content: JSON.stringify(faction, null, 2),
+				text: JSON.stringify(faction, null, 2),
 				mimeType: "application/json",
 			}
 		},
@@ -51,7 +51,7 @@ export const campaignResourceDefinitions: Record<string, ResourceDefinition> = {
 			await handleCampaignSeed(seedData)
 			return {
 				uri,
-				content: "Campaign seeded successfully.",
+				text: "Campaign seeded successfully.",
 				mimeType: "text/plain",
 			}
 		},

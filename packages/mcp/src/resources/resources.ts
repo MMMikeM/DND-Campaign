@@ -1,10 +1,4 @@
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import {
-	ListResourcesRequestSchema,
-	ListResourceTemplatesRequestSchema,
-	ReadResourceRequestSchema,
-	type Resource,
-} from "@modelcontextprotocol/sdk/types.js"
+import type { Resource, Server } from "@modelcontextprotocol/server"
 import { logger } from ".."
 import { campaignResourceDefinitions } from "."
 import type { CampaignResourceHandlers, ResourceContent } from "./resource-types"
@@ -101,7 +95,7 @@ export function registerResourceHandlers(server: Server) {
 	const handlers = createResourceHandlers()
 
 	// List available resources
-	server.setRequestHandler(ListResourcesRequestSchema, async (request) => {
+	server.setRequestHandler("resources/list", async (request) => {
 		logger.debug("Handling resources/list request", { params: request.params })
 
 		try {
@@ -118,7 +112,7 @@ export function registerResourceHandlers(server: Server) {
 	})
 
 	// List resource templates
-	server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+	server.setRequestHandler("resources/templates/list", async () => {
 		logger.debug("Handling resources/templates/list request")
 
 		try {
@@ -131,7 +125,7 @@ export function registerResourceHandlers(server: Server) {
 	})
 
 	// Read resource content
-	server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+	server.setRequestHandler("resources/read", async (request) => {
 		const { uri } = request.params
 		logger.debug("Handling resources/read request", { uri })
 

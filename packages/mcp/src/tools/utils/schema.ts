@@ -38,8 +38,10 @@ export const createManageSchema = <T extends Record<K[number], z.ZodObject>, K e
 				// Add all validation errors to the data field
 				result.error.issues.forEach((issue) => {
 					ctx.issues.push({
-						...issue,
+						code: "custom",
+						input: ctx.value.data,
 						path: ["data", ...issue.path],
+						message: issue.message,
 					})
 				})
 			}

@@ -1,4 +1,4 @@
-import type { Resource } from "@modelcontextprotocol/sdk/types.js"
+import type { Resource } from "@modelcontextprotocol/server"
 import { db, logger } from ".."
 import type { ResourceDefinition, ResourceHandler, ResourceLister } from "./resource-types"
 import { createJsonResource } from "./resource-utils"

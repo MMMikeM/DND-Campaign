@@ -5,20 +5,15 @@
  * Handles ListPrompts and GetPrompt requests, routing to the prompt registry.
  */
 
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js"
-import {
-	GetPromptRequestSchema,
-	type GetPromptResult,
-	ListPromptsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js"
+import type { GetPromptResult, Server } from "@modelcontextprotocol/server"
 import { logger } from ".."
 import { executePrompt, listablePrompts } from "./registry"
 
 export function registerPromptHandlers(server: Server) {
-	server.setRequestHandler(ListPromptsRequestSchema, async () => ({ prompts: listablePrompts }))
+	server.setRequestHandler("prompts/list", async () => ({ prompts: listablePrompts }))
 
 	// Handler for getting a specific prompt
-	server.setRequestHandler(GetPromptRequestSchema, async (request): Promise<GetPromptResult> => {
+	server.setRequestHandler("prompts/get", async (request): Promise<GetPromptResult> => {
 		const { name, arguments: promptArgs = {} } = request.params
 		logger.info(`Getting prompt: ${name}`, promptArgs)
 

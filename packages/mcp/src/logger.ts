@@ -1,6 +1,6 @@
 import winston from "winston"
 
-const LOG_FILE = "/Users/mikemurray/Development/DND-Campaign/server.log"
+const LOG_FILE = process.env.LOG_FILE ?? new URL("../server.log", import.meta.url).pathname
 
 const errorFormat = winston.format((info) => {
 	if (info instanceof Error) {

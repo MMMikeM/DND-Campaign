@@ -1,4 +1,4 @@
-import type { Resource } from "@modelcontextprotocol/sdk/types.js"
+import type { Resource } from "@modelcontextprotocol/server"
 import { tables } from "@tome-master/shared"
 import { eq } from "drizzle-orm"
 import { db, logger } from ".."
