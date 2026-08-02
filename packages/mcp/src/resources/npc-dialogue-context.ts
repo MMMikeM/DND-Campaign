@@ -1,6 +1,4 @@
 import type { Resource } from "@modelcontextprotocol/server"
-import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { db, logger } from ".."
 import type { ResourceDefinition, ResourceHandler, ResourceLister } from "./resource-types"
 import { createJsonResource } from "./resource-utils"
@@ -31,7 +29,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 
 	try {
 		const npc = await db.query.npcs.findFirst({
-			where: eq(tables.npcTables.npcs.id, npcId),
+			where: { id: npcId },
 			with: {
 				details: true,
 				factionMemberships: {
@@ -49,7 +47,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 
 		const site = npc.siteId
 			? await db.query.sites.findFirst({
-					where: eq(tables.regionTables.sites.id, npc.siteId),
+					where: { id: npc.siteId },
 					columns: { name: true, intendedSiteFunction: true },
 				})
 			: null

@@ -14,7 +14,7 @@ export const entityGetters = createEntityGetters({
 
 	quest_stage_by_id: (id: number) =>
 		db.query.questStages.findFirst({
-			where: (questStages, { eq }) => eq(questStages.id, id),
+			where: { id },
 			with: {
 				npcInvolvement: true,
 				itemConnections: true,
@@ -33,7 +33,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	quest_stage_decision_by_id: (id: number) =>
 		db.query.questStageDecisions.findFirst({
-			where: (stageDecisions, { eq }) => eq(stageDecisions.id, id),
+			where: { id },
 			with: {
 				quest: nameAndId,
 				sourceStage: nameAndId,
@@ -43,7 +43,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	npc_stage_involvement_by_id: (id: number) =>
 		db.query.npcStageInvolvement.findFirst({
-			where: (npcStageInvolvement, { eq }) => eq(npcStageInvolvement.id, id),
+			where: { id },
 			with: {
 				questStage: nameAndId,
 				npc: nameAndId,

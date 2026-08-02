@@ -30,7 +30,7 @@ export const entityGetters = createEntityGetters({
 
 	lore_by_id: (id: number) =>
 		db.query.lore.findFirst({
-			where: (lore, { eq }) => eq(lore.id, id),
+			where: { id },
 			with: {
 				incomingForeshadowing: { with: { targetLore: nameAndId } },
 				outgoingForeshadowing: { with: { sourceLore: nameAndId } },
@@ -53,7 +53,7 @@ export const entityGetters = createEntityGetters({
 
 	lore_link_by_id: (id: number) =>
 		db.query.loreLinks.findFirst({
-			where: (loreLinks, { eq }) => eq(loreLinks.id, id),
+			where: { id },
 			with: {
 				item: true,
 				lore: true,

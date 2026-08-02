@@ -12,7 +12,7 @@ export const entityGetters = createEntityGetters({
 
 	consequence_by_id: (id: number) =>
 		db.query.consequences.findFirst({
-			where: (consequences, { eq }) => eq(consequences.id, id),
+			where: { id },
 			with: {
 				affectedConsequence: true,
 				affectingConsequences: true,

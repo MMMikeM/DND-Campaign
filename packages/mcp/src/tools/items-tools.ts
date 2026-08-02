@@ -12,7 +12,7 @@ export const entityGetters = createEntityGetters({
 	all_item_connections: () => db.query.itemConnections.findMany({}),
 	item_by_id: (id: number) =>
 		db.query.items.findFirst({
-			where: (items, { eq }) => eq(items.id, id),
+			where: { id },
 			with: {
 				outgoingForeshadowing: { with: { sourceItem: nameAndId } },
 				incomingForeshadowing: { with: { targetItem: nameAndId } },
@@ -34,7 +34,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	item_connection_by_id: (id: number) =>
 		db.query.itemConnections.findFirst({
-			where: (itemConnections, { eq }) => eq(itemConnections.id, id),
+			where: { id },
 			with: {
 				sourceItem: true,
 				item: true,

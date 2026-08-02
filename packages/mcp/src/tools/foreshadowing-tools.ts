@@ -12,7 +12,7 @@ export const entityGetters = createEntityGetters({
 
 	foreshadowing_by_id: (id: number) =>
 		db.query.foreshadowing.findFirst({
-			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
+			where: { id },
 			with: {
 				incomingLoreLinks: nameAndId,
 				sourceItem: nameAndId,

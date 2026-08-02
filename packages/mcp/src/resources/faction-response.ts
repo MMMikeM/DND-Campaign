@@ -29,7 +29,7 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 
 	try {
 		const faction = await db.query.factions.findFirst({
-			where: (factions, { eq }) => eq(factions.name, factionName),
+			where: { name: factionName },
 			with: {
 				agendas: true,
 				outgoingRelations: {

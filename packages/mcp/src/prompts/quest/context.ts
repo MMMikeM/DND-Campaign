@@ -5,8 +5,6 @@
  * including existing entities, conflicts, and relationship analysis.
  */
 
-import { tables } from "@tome-master/shared"
-import { eq, inArray } from "drizzle-orm"
 import { db, logger } from "../.."
 import { searchBySimilarity } from "../../tools/utils/search"
 import { analyzeQuestTypePatterns, analyzeThemeCompatibility } from "./analysis"
@@ -18,19 +16,12 @@ import {
 } from "./suggestions"
 import type { QuestContext, QuestCreationArgs } from "./types"
 
-const {
-	conflictTables: { conflicts },
-	factionTables: { factions },
-	npcTables: { npcFactionMemberships },
-	questTables: { quests },
-} = tables
-
 // Helper functions for database queries
 async function findQuestsByIds(questIds: number[]) {
 	if (questIds.length === 0) return []
 
 	const results = await db.query.quests.findMany({
-		where: inArray(quests.id, questIds),
+		where: { id: { in: questIds } },
 		columns: { id: true, name: true, type: true },
 	})
 	return results.map((quest) => ({
@@ -44,7 +35,7 @@ async function findFactionsByIds(factionIds: number[]) {
 	if (factionIds.length === 0) return []
 
 	const results = await db.query.factions.findMany({
-		where: inArray(factions.id, factionIds),
+		where: { id: { in: factionIds } },
 		columns: {
 			id: true,
 			name: true,
@@ -193,7 +184,7 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 				// Get active conflicts for quest integration
 				db.query.conflicts
 					.findMany({
-						where: eq(conflicts.status, "active"),
+						where: { status: "active" },
 						columns: {
 							id: true,
 							name: true,
@@ -300,7 +291,7 @@ async function gatherFactionContext(factionHint?: string) {
 
 		// Get NPCs in the faction via junction table
 		const factionNPCRelations = await db.query.npcFactionMemberships.findMany({
-			where: inArray(npcFactionMemberships.factionId, factionIds),
+			where: { factionId: { in: factionIds } },
 			with: {
 				npc: {
 					columns: { id: true, name: true, occupation: true },

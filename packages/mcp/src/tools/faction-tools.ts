@@ -12,12 +12,12 @@ export const entityGetters = createEntityGetters({
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
 	faction_diplomacy_by_id: (id: number) =>
-		db.query.factionDiplomacy.findFirst({ where: (factionDiplomacy, { eq }) => eq(factionDiplomacy.id, id) }),
+		db.query.factionDiplomacy.findFirst({ where: { id } }),
 	all_faction_influence: () => db.query.factionInfluence.findMany({}),
 
 	faction_by_id: (id: number) =>
 		db.query.factions.findFirst({
-			where: (factions, { eq }) => eq(factions.id, id),
+			where: { id },
 			with: {
 				agendas: true,
 				members: true,
@@ -38,12 +38,12 @@ export const entityGetters = createEntityGetters({
 
 	faction_agenda_by_id: (id: number) =>
 		db.query.factionAgendas.findFirst({
-			where: (factionAgendas, { eq }) => eq(factionAgendas.id, id),
+			where: { id },
 			with: { faction: { columns: { name: true, id: true } } },
 		}),
 	faction_influence_by_id: (id: number) =>
 		db.query.factionInfluence.findFirst({
-			where: (factionInfluence, { eq }) => eq(factionInfluence.id, id),
+			where: { id },
 			with: {
 				faction: { columns: { name: true, id: true } },
 				region: { columns: { name: true, id: true } },

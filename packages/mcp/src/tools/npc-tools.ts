@@ -15,7 +15,7 @@ export const entityGetters = createEntityGetters({
 
 	npc_by_id: (id: number) =>
 		db.query.npcs.findFirst({
-			where: (npcs, { eq }) => eq(npcs.id, id),
+			where: { id },
 			with: {
 				affectingConsequences: true,
 				incomingForeshadowing: true,
@@ -35,7 +35,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	npc_faction_membership_by_id: (id: number) =>
 		db.query.npcFactionMemberships.findFirst({
-			where: (npcFactionMemberships, { eq }) => eq(npcFactionMemberships.id, id),
+			where: { id },
 			with: {
 				npc: true,
 				faction: true,
@@ -44,7 +44,7 @@ export const entityGetters = createEntityGetters({
 
 	npc_relation_by_id: (id: number) =>
 		db.query.npcRelations.findFirst({
-			where: (npcRelations, { eq }) => eq(npcRelations.id, id),
+			where: { id },
 			with: {
 				sourceNpc: true,
 				targetNpc: true,
@@ -52,7 +52,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	npc_detail_by_id: (id: number) =>
 		db.query.npcDetails.findFirst({
-			where: (npcDetails, { eq }) => eq(npcDetails.npcId, id),
+			where: { npcId: id },
 		}),
 })
 

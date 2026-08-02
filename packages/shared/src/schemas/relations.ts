@@ -67,7 +67,7 @@ export const relations = defineRelations(schema, (r) => ({
 		loreLinks: r.many.loreLinks({ from: r.conflicts.id, to: r.loreLinks.conflictId }),
 	},
 	conflictParticipants: {
-		conflict: r.one.conflicts({ from: r.conflictParticipants.conflictId, to: r.conflicts.id }),
+		conflict: r.one.conflicts({ from: r.conflictParticipants.conflictId, to: r.conflicts.id, optional: false }),
 		faction: r.one.factions({ from: r.conflictParticipants.factionId, to: r.factions.id }),
 		npc: r.one.npcs({ from: r.conflictParticipants.npcId, to: r.npcs.id }),
 	},
@@ -113,14 +113,14 @@ export const relations = defineRelations(schema, (r) => ({
 		primaryHqSite: r.one.sites({ from: r.factions.hqSiteId, to: r.sites.id }),
 	},
 	factionDiplomacy: {
-		sourceFaction: r.one.factions({ from: r.factionDiplomacy.sourceFactionId, to: r.factions.id }),
-		targetFaction: r.one.factions({ from: r.factionDiplomacy.targetFactionId, to: r.factions.id }),
+		sourceFaction: r.one.factions({ from: r.factionDiplomacy.sourceFactionId, to: r.factions.id, optional: false }),
+		targetFaction: r.one.factions({ from: r.factionDiplomacy.targetFactionId, to: r.factions.id, optional: false }),
 	},
 	factionAgendas: {
-		faction: r.one.factions({ from: r.factionAgendas.factionId, to: r.factions.id }),
+		faction: r.one.factions({ from: r.factionAgendas.factionId, to: r.factions.id, optional: false }),
 	},
 	factionInfluence: {
-		faction: r.one.factions({ from: r.factionInfluence.factionId, to: r.factions.id }),
+		faction: r.one.factions({ from: r.factionInfluence.factionId, to: r.factions.id, optional: false }),
 		region: r.one.regions({ from: r.factionInfluence.regionId, to: r.regions.id }),
 		area: r.one.areas({ from: r.factionInfluence.areaId, to: r.areas.id }),
 		site: r.one.sites({ from: r.factionInfluence.siteId, to: r.sites.id }),
@@ -129,20 +129,20 @@ export const relations = defineRelations(schema, (r) => ({
 	// ── foreshadowing ────────────────────────────────────────────────────
 	foreshadowing: {
 		incomingLoreLinks: r.many.loreLinks({ from: r.foreshadowing.id, to: r.loreLinks.foreshadowingId }),
-		targetQuest: r.one.quests({ from: r.foreshadowing.targetQuestId, to: r.quests.id }),
-		targetNpc: r.one.npcs({ from: r.foreshadowing.targetNpcId, to: r.npcs.id }),
-		targetConflict: r.one.conflicts({ from: r.foreshadowing.targetConflictId, to: r.conflicts.id }),
-		targetItem: r.one.items({ from: r.foreshadowing.targetItemId, to: r.items.id }),
-		targetLore: r.one.lore({ from: r.foreshadowing.targetLoreId, to: r.lore.id }),
-		targetFaction: r.one.factions({ from: r.foreshadowing.targetFactionId, to: r.factions.id }),
-		targetSite: r.one.sites({ from: r.foreshadowing.targetSiteId, to: r.sites.id }),
-		targetConsequence: r.one.consequences({ from: r.foreshadowing.targetConsequenceId, to: r.consequences.id }),
-		sourceQuest: r.one.quests({ from: r.foreshadowing.sourceQuestId, to: r.quests.id }),
-		sourceQuestStage: r.one.questStages({ from: r.foreshadowing.sourceQuestStageId, to: r.questStages.id }),
-		sourceSite: r.one.sites({ from: r.foreshadowing.sourceSiteId, to: r.sites.id }),
-		sourceNpc: r.one.npcs({ from: r.foreshadowing.sourceNpcId, to: r.npcs.id }),
-		sourceLore: r.one.lore({ from: r.foreshadowing.sourceLoreId, to: r.lore.id }),
-		sourceItem: r.one.items({ from: r.foreshadowing.sourceItemId, to: r.items.id }),
+		targetQuest: r.one.quests({ from: r.foreshadowing.targetQuestId, to: r.quests.id, optional: false }),
+		targetNpc: r.one.npcs({ from: r.foreshadowing.targetNpcId, to: r.npcs.id, optional: false }),
+		targetConflict: r.one.conflicts({ from: r.foreshadowing.targetConflictId, to: r.conflicts.id, optional: false }),
+		targetItem: r.one.items({ from: r.foreshadowing.targetItemId, to: r.items.id, optional: false }),
+		targetLore: r.one.lore({ from: r.foreshadowing.targetLoreId, to: r.lore.id, optional: false }),
+		targetFaction: r.one.factions({ from: r.foreshadowing.targetFactionId, to: r.factions.id, optional: false }),
+		targetSite: r.one.sites({ from: r.foreshadowing.targetSiteId, to: r.sites.id, optional: false }),
+		targetConsequence: r.one.consequences({ from: r.foreshadowing.targetConsequenceId, to: r.consequences.id, optional: false }),
+		sourceQuest: r.one.quests({ from: r.foreshadowing.sourceQuestId, to: r.quests.id, optional: false }),
+		sourceQuestStage: r.one.questStages({ from: r.foreshadowing.sourceQuestStageId, to: r.questStages.id, optional: false }),
+		sourceSite: r.one.sites({ from: r.foreshadowing.sourceSiteId, to: r.sites.id, optional: false }),
+		sourceNpc: r.one.npcs({ from: r.foreshadowing.sourceNpcId, to: r.npcs.id, optional: false }),
+		sourceLore: r.one.lore({ from: r.foreshadowing.sourceLoreId, to: r.lore.id, optional: false }),
+		sourceItem: r.one.items({ from: r.foreshadowing.sourceItemId, to: r.items.id, optional: false }),
 	},
 
 	// ── items ────────────────────────────────────────────────────────────
@@ -153,7 +153,7 @@ export const relations = defineRelations(schema, (r) => ({
 		incomingForeshadowing: r.many.foreshadowing({ from: r.items.id, to: r.foreshadowing.targetItemId }),
 	},
 	itemConnections: {
-		sourceItem: r.one.items({ from: r.itemConnections.itemId, to: r.items.id }),
+		sourceItem: r.one.items({ from: r.itemConnections.itemId, to: r.items.id, optional: false }),
 		item: r.one.items({ from: r.itemConnections.connectedItemId, to: r.items.id }),
 		npc: r.one.npcs({ from: r.itemConnections.connectedNpcId, to: r.npcs.id }),
 		faction: r.one.factions({ from: r.itemConnections.connectedFactionId, to: r.factions.id }),
@@ -172,7 +172,7 @@ export const relations = defineRelations(schema, (r) => ({
 		relatedLinks: r.many.loreLinks({ from: r.lore.id, to: r.loreLinks.relatedLoreId }),
 	},
 	loreLinks: {
-		lore: r.one.lore({ from: r.loreLinks.loreId, to: r.lore.id }),
+		lore: r.one.lore({ from: r.loreLinks.loreId, to: r.lore.id, optional: false }),
 		region: r.one.regions({ from: r.loreLinks.regionId, to: r.regions.id }),
 		faction: r.one.factions({ from: r.loreLinks.factionId, to: r.factions.id }),
 		npc: r.one.npcs({ from: r.loreLinks.npcId, to: r.npcs.id }),
@@ -192,8 +192,8 @@ export const relations = defineRelations(schema, (r) => ({
 		site: r.one.sites({ from: r.mapGroups.id, to: r.sites.mapGroupId }),
 	},
 	mapVariants: {
-		mapGroup: r.one.mapGroups({ from: r.mapVariants.mapGroupId, to: r.mapGroups.id }),
-		mapFile: r.one.mapFiles({ from: r.mapVariants.mapFileId, to: r.mapFiles.id }),
+		mapGroup: r.one.mapGroups({ from: r.mapVariants.mapGroupId, to: r.mapGroups.id, optional: false }),
+		mapFile: r.one.mapFiles({ from: r.mapVariants.mapFileId, to: r.mapFiles.id, optional: false }),
 		siteEncounters: r.many.siteEncounters({ from: r.mapVariants.id, to: r.siteEncounters.mapVariantId }),
 	},
 
@@ -216,15 +216,15 @@ export const relations = defineRelations(schema, (r) => ({
 		details: r.one.npcDetails({ from: r.npcs.id, to: r.npcDetails.npcId }),
 	},
 	npcDetails: {
-		npc: r.one.npcs({ from: r.npcDetails.npcId, to: r.npcs.id }),
+		npc: r.one.npcs({ from: r.npcDetails.npcId, to: r.npcs.id, optional: false }),
 	},
 	npcRelations: {
-		sourceNpc: r.one.npcs({ from: r.npcRelations.sourceNpcId, to: r.npcs.id }),
-		targetNpc: r.one.npcs({ from: r.npcRelations.targetNpcId, to: r.npcs.id }),
+		sourceNpc: r.one.npcs({ from: r.npcRelations.sourceNpcId, to: r.npcs.id, optional: false }),
+		targetNpc: r.one.npcs({ from: r.npcRelations.targetNpcId, to: r.npcs.id, optional: false }),
 	},
 	npcFactionMemberships: {
-		npc: r.one.npcs({ from: r.npcFactionMemberships.npcId, to: r.npcs.id }),
-		faction: r.one.factions({ from: r.npcFactionMemberships.factionId, to: r.factions.id }),
+		npc: r.one.npcs({ from: r.npcFactionMemberships.npcId, to: r.npcs.id, optional: false }),
+		faction: r.one.factions({ from: r.npcFactionMemberships.factionId, to: r.factions.id, optional: false }),
 	},
 
 	// ── quests ───────────────────────────────────────────────────────────
@@ -245,17 +245,17 @@ export const relations = defineRelations(schema, (r) => ({
 		loreLinks: r.many.loreLinks({ from: r.quests.id, to: r.loreLinks.questId }),
 	},
 	questRelations: {
-		sourceQuest: r.one.quests({ from: r.questRelations.sourceQuestId, to: r.quests.id }),
-		targetQuest: r.one.quests({ from: r.questRelations.targetQuestId, to: r.quests.id }),
+		sourceQuest: r.one.quests({ from: r.questRelations.sourceQuestId, to: r.quests.id, optional: false }),
+		targetQuest: r.one.quests({ from: r.questRelations.targetQuestId, to: r.quests.id, optional: false }),
 	},
 	questHooks: {
-		quest: r.one.quests({ from: r.questHooks.questId, to: r.quests.id }),
+		quest: r.one.quests({ from: r.questHooks.questId, to: r.quests.id, optional: false }),
 		site: r.one.sites({ from: r.questHooks.siteId, to: r.sites.id }),
 		faction: r.one.factions({ from: r.questHooks.factionId, to: r.factions.id }),
 		deliveryNpc: r.one.npcs({ from: r.questHooks.deliveryNpcId, to: r.npcs.id }),
 	},
 	questParticipants: {
-		quest: r.one.quests({ from: r.questParticipants.questId, to: r.quests.id }),
+		quest: r.one.quests({ from: r.questParticipants.questId, to: r.quests.id, optional: false }),
 		npc: r.one.npcs({ from: r.questParticipants.npcId, to: r.npcs.id }),
 		faction: r.one.factions({ from: r.questParticipants.factionId, to: r.factions.id }),
 	},
@@ -271,11 +271,11 @@ export const relations = defineRelations(schema, (r) => ({
 		loreLinks: r.many.loreLinks({ from: r.regions.id, to: r.loreLinks.regionId }),
 	},
 	regionConnections: {
-		sourceRegion: r.one.regions({ from: r.regionConnections.sourceRegionId, to: r.regions.id }),
-		targetRegion: r.one.regions({ from: r.regionConnections.targetRegionId, to: r.regions.id }),
+		sourceRegion: r.one.regions({ from: r.regionConnections.sourceRegionId, to: r.regions.id, optional: false }),
+		targetRegion: r.one.regions({ from: r.regionConnections.targetRegionId, to: r.regions.id, optional: false }),
 	},
 	areas: {
-		region: r.one.regions({ from: r.areas.regionId, to: r.regions.id }),
+		region: r.one.regions({ from: r.areas.regionId, to: r.regions.id, optional: false }),
 		sites: r.many.sites({ from: r.areas.id, to: r.sites.areaId }),
 		consequences: r.many.consequences({ from: r.areas.id, to: r.consequences.affectedAreaId }),
 		factionInfluence: r.many.factionInfluence({ from: r.areas.id, to: r.factionInfluence.areaId }),
@@ -283,7 +283,7 @@ export const relations = defineRelations(schema, (r) => ({
 	sites: {
 		outgoingRelations: r.many.siteLinks({ from: r.sites.id, to: r.siteLinks.sourceSiteId }),
 		incomingRelations: r.many.siteLinks({ from: r.sites.id, to: r.siteLinks.targetSiteId }),
-		area: r.one.areas({ from: r.sites.areaId, to: r.areas.id }),
+		area: r.one.areas({ from: r.sites.areaId, to: r.areas.id, optional: false }),
 		encounters: r.many.siteEncounters({ from: r.sites.id, to: r.siteEncounters.siteId }),
 		secret: r.one.siteSecrets({ from: r.sites.id, to: r.siteSecrets.siteId }),
 		questStages: r.many.questStages({ from: r.sites.id, to: r.questStages.siteId }),
@@ -294,24 +294,24 @@ export const relations = defineRelations(schema, (r) => ({
 		outgoingForeshadowing: r.many.foreshadowing({ from: r.sites.id, to: r.foreshadowing.sourceSiteId }),
 		incomingForeshadowing: r.many.foreshadowing({ from: r.sites.id, to: r.foreshadowing.targetSiteId }),
 		itemConnections: r.many.itemConnections({ from: r.sites.id, to: r.itemConnections.connectedSiteId }),
-		mapGroup: r.one.mapGroups({ from: r.sites.mapGroupId, to: r.mapGroups.id }),
+		mapGroup: r.one.mapGroups({ from: r.sites.mapGroupId, to: r.mapGroups.id, optional: false }),
 		npcs: r.many.npcs({ from: r.sites.id, to: r.npcs.siteId }),
 	},
 	siteLinks: {
-		sourceSite: r.one.sites({ from: r.siteLinks.sourceSiteId, to: r.sites.id }),
-		targetSite: r.one.sites({ from: r.siteLinks.targetSiteId, to: r.sites.id }),
+		sourceSite: r.one.sites({ from: r.siteLinks.sourceSiteId, to: r.sites.id, optional: false }),
+		targetSite: r.one.sites({ from: r.siteLinks.targetSiteId, to: r.sites.id, optional: false }),
 	},
 	siteEncounters: {
-		site: r.one.sites({ from: r.siteEncounters.siteId, to: r.sites.id }),
-		mapVariant: r.one.mapVariants({ from: r.siteEncounters.mapVariantId, to: r.mapVariants.id }),
+		site: r.one.sites({ from: r.siteEncounters.siteId, to: r.sites.id, optional: false }),
+		mapVariant: r.one.mapVariants({ from: r.siteEncounters.mapVariantId, to: r.mapVariants.id, optional: false }),
 	},
 	siteSecrets: {
-		site: r.one.sites({ from: r.siteSecrets.siteId, to: r.sites.id }),
+		site: r.one.sites({ from: r.siteSecrets.siteId, to: r.sites.id, optional: false }),
 	},
 
 	// ── stages ───────────────────────────────────────────────────────────
 	questStages: {
-		quest: r.one.quests({ from: r.questStages.questId, to: r.quests.id }),
+		quest: r.one.quests({ from: r.questStages.questId, to: r.quests.id, optional: false }),
 		site: r.one.sites({ from: r.questStages.siteId, to: r.sites.id }),
 		deliveryNpc: r.one.npcs({ from: r.questStages.deliveryNpcId, to: r.npcs.id }),
 		outgoingDecisions: r.many.questStageDecisions({
@@ -330,8 +330,8 @@ export const relations = defineRelations(schema, (r) => ({
 		outgoingForeshadowing: r.many.foreshadowing({ from: r.questStages.id, to: r.foreshadowing.sourceQuestStageId }),
 	},
 	questStageDecisions: {
-		quest: r.one.quests({ from: r.questStageDecisions.questId, to: r.quests.id }),
-		sourceStage: r.one.questStages({ from: r.questStageDecisions.fromQuestStageId, to: r.questStages.id }),
+		quest: r.one.quests({ from: r.questStageDecisions.questId, to: r.quests.id, optional: false }),
+		sourceStage: r.one.questStages({ from: r.questStageDecisions.fromQuestStageId, to: r.questStages.id, optional: false }),
 		targetStage: r.one.questStages({ from: r.questStageDecisions.toQuestStageId, to: r.questStages.id }),
 		consequences: r.many.consequences({
 			from: r.questStageDecisions.id,
@@ -339,7 +339,7 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 	},
 	npcStageInvolvement: {
-		questStage: r.one.questStages({ from: r.npcStageInvolvement.questStageId, to: r.questStages.id }),
-		npc: r.one.npcs({ from: r.npcStageInvolvement.npcId, to: r.npcs.id }),
+		questStage: r.one.questStages({ from: r.npcStageInvolvement.questStageId, to: r.questStages.id, optional: false }),
+		npc: r.one.npcs({ from: r.npcStageInvolvement.npcId, to: r.npcs.id, optional: false }),
 	},
 }))

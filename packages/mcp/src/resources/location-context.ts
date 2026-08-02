@@ -49,7 +49,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 		// Try to find as site first, then region
 		const [site, region] = await Promise.all([
 			db.query.sites.findFirst({
-				where: (sites, { eq }) => eq(sites.name, locationName),
+				where: { name: locationName },
 				with: {
 					area: {
 						with: { region: { columns: { name: true, type: true } } },
@@ -59,7 +59,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 				},
 			}),
 			db.query.regions.findFirst({
-				where: (regions, { eq }) => eq(regions.name, locationName),
+				where: { name: locationName },
 				with: {
 					areas: {
 						with: {

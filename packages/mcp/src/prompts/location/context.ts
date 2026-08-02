@@ -9,7 +9,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 	try {
 		// Check for name conflicts
 		const nameConflicts = await db.query.sites.findMany({
-			where: (sites, { like }) => like(sites.name, `%${args.name}%`),
+			where: { name: { like: `%${args.name}%` } },
 			columns: { id: true, name: true },
 		})
 
@@ -85,7 +85,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get NPC site associations - NPCs have siteId field
 		const npcSiteAssociations = await db.query.npcs.findMany({
-			where: (npc, { isNotNull }) => isNotNull(npc.siteId),
+			where: { siteId: { isNotNull: true } },
 			with: {
 				site: { columns: { id: true, name: true } },
 			},
@@ -115,7 +115,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get quest stages at locations
 		const questStages = await db.query.questStages.findMany({
-			where: (qs, { isNotNull }) => isNotNull(qs.siteId),
+			where: { siteId: { isNotNull: true } },
 			with: {
 				quest: { columns: { id: true, name: true } },
 				site: { columns: { id: true, name: true } },
@@ -131,7 +131,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get foreshadowing seeds related to sites
 		const foreshadowing = await db.query.foreshadowing.findMany({
-			where: (fs, { or, isNotNull }) => or(isNotNull(fs.sourceSiteId), isNotNull(fs.targetSiteId)),
+			where: { OR: [{ sourceSiteId: { isNotNull: true } }, { targetSiteId: { isNotNull: true } }] },
 			with: {
 				sourceSite: { columns: { id: true, name: true } },
 				targetSite: { columns: { id: true, name: true } },
@@ -146,7 +146,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 		// Get item connections to locations
 		const itemConnections = await db.query.itemConnections.findMany({
-			where: (ic, { isNotNull }) => isNotNull(ic.connectedSiteId),
+			where: { connectedSiteId: { isNotNull: true } },
 			with: {
 				sourceItem: { columns: { id: true, name: true, itemType: true } },
 				site: { columns: { id: true, name: true } },
@@ -164,7 +164,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		if (args.region_hint) {
 			// Get regions that match the hint
 			const matchingRegions = await db.query.regions.findMany({
-				where: (regions, { like }) => like(regions.name, `%${args.region_hint}%`),
+				where: { name: { like: `%${args.region_hint}%` } },
 				columns: { id: true, name: true, type: true },
 			})
 
@@ -173,30 +173,21 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 				// Get areas in those regions
 				const nearbyAreas = await db.query.areas.findMany({
-					where: (areas, { inArray }) => inArray(areas.regionId, regionIds),
+					where: { regionId: { in: regionIds } },
 					columns: { id: true, name: true, type: true },
 				})
 
 				// Get sites in those areas
 				const nearbySites = await db.query.sites.findMany({
-					where: (sites, { inArray }) =>
-						inArray(
-							sites.areaId,
-							nearbyAreas.map((a) => a.id),
-						),
+					where: { areaId: { in: nearbyAreas.map((a) => a.id) } },
 					columns: { id: true, name: true, intendedSiteFunction: true },
 				})
 
 				// Get faction influence in the regions
 				const nearbyFactionInfluence = await db.query.factionInfluence.findMany({
-					where: (fi, { inArray, or }) =>
-						or(
-							inArray(fi.regionId, regionIds),
-							inArray(
-								fi.areaId,
-								nearbyAreas.map((a) => a.id),
-							),
-						),
+					where: {
+						OR: [{ regionId: { in: regionIds } }, { areaId: { in: nearbyAreas.map((a) => a.id) } }],
+					},
 					with: {
 						faction: { columns: { id: true, name: true, type: true } },
 						region: { columns: { id: true, name: true } },
@@ -207,11 +198,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 
 				// Get NPCs in nearby sites
 				const nearbyNPCs = await db.query.npcs.findMany({
-					where: (npcs, { inArray }) =>
-						inArray(
-							npcs.siteId,
-							nearbySites.map((s) => s.id),
-						),
+					where: { siteId: { in: nearbySites.map((s) => s.id) } },
 					columns: { id: true, name: true, occupation: true, siteId: true },
 				})
 
@@ -252,7 +239,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 		})
 
 		const activeConflicts = await db.query.conflicts.findMany({
-			where: (conflicts, { eq }) => eq(conflicts.status, "active"),
+			where: { status: "active" },
 			with: {
 				participants: {
 					with: {

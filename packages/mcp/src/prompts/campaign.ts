@@ -7,8 +7,6 @@
  * - "faction-response" - Generate faction reactions to player actions
  */
 
-import { tables } from "@tome-master/shared"
-import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from ".."
 // Import centralized search function
@@ -37,7 +35,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 				switch (row.source_table) {
 					case "npcs": {
 						const npc = await db.query.npcs.findFirst({
-							where: eq(tables.npcTables.npcs.id, row.id),
+							where: { id: row.id },
 							columns: { id: true, name: true, occupation: true },
 							with: {
 								site: { columns: { name: true } },
@@ -54,7 +52,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 
 					case "factions": {
 						const faction = await db.query.factions.findFirst({
-							where: eq(tables.factionTables.factions.id, row.id),
+							where: { id: row.id },
 							columns: { id: true, name: true, type: true, publicAlignment: true, secretAlignment: true },
 						})
 						return faction ? { ...faction, source_table: "factions" } : null
@@ -62,7 +60,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 
 					case "quests": {
 						const quest = await db.query.quests.findFirst({
-							where: eq(tables.questTables.quests.id, row.id),
+							where: { id: row.id },
 							columns: { id: true, name: true, urgency: true, type: true },
 						})
 						return quest ? { ...quest, source_table: "quests" } : null
@@ -132,7 +130,7 @@ const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | 
 // Build comprehensive NPC context for dialogue
 const buildNPCDialogueContext = async (npcId: number, playerQuery: string) => {
 	// Simple basic query first to avoid schema issues
-	const npcContext = await db.query.npcs.findFirst({ where: eq(tables.npcTables.npcs.id, npcId) })
+	const npcContext = await db.query.npcs.findFirst({ where: { id: npcId } })
 
 	if (!npcContext) {
 		throw new Error(`NPC with ID ${npcId} not found`)

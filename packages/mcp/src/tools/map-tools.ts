@@ -21,7 +21,7 @@ export const entityGetters = createEntityGetters({
 		db.query.mapFiles.findMany({
 			with: { variant: { columns: { id: true } } },
 			columns: { fileName: true, id: true },
-			orderBy: (mapFiles, { asc }) => [asc(mapFiles.fileName)],
+			orderBy: { fileName: "asc" },
 		}),
 	all_map_groups: () =>
 		db.query.mapGroups.findMany({
@@ -38,17 +38,17 @@ export const entityGetters = createEntityGetters({
 
 	map_group_by_id: (id: number) =>
 		db.query.mapGroups.findFirst({
-			where: (mapGroups, { eq }) => eq(mapGroups.id, id),
+			where: { id },
 			with: { variants: true },
 		}),
 	map_variant_by_id: (id: number) =>
 		db.query.mapVariants.findFirst({
-			where: (mapVariants, { eq }) => eq(mapVariants.id, id),
+			where: { id },
 			with: { mapGroup: nameAndId },
 		}),
 	map_file_by_id: (id: number) =>
 		db.query.mapFiles.findFirst({
-			where: (mapFiles, { eq }) => eq(mapFiles.id, id),
+			where: { id },
 			with: { variant: { columns: { id: true } } },
 			columns: { id: true, fileName: true },
 		}),
@@ -76,7 +76,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 		for (const fileName of sortedImageFiles) {
 			const mapName = parse(fileName).name
 			const existingMap = await db.query.mapFiles.findFirst({
-				where: (maps, { eq }) => eq(maps.fileName, mapName),
+				where: { fileName: mapName },
 			})
 
 			if (existingMap) {

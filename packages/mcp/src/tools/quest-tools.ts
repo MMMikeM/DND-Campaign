@@ -15,7 +15,7 @@ export const entityGetters = createEntityGetters({
 
 	quest_by_id: (id: number) =>
 		db.query.quests.findFirst({
-			where: (quests, { eq }) => eq(quests.id, id),
+			where: { id },
 			with: {
 				dependentQuests: true,
 				prerequisiteQuest: true,
@@ -36,7 +36,7 @@ export const entityGetters = createEntityGetters({
 
 	quest_hook_by_id: (id: number) =>
 		db.query.questHooks.findFirst({
-			where: (questHooks, { eq }) => eq(questHooks.id, id),
+			where: { id },
 			with: {
 				deliveryNpc: nameAndId,
 				faction: nameAndId,
@@ -46,7 +46,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	quest_participant_by_id: (id: number) =>
 		db.query.questParticipants.findFirst({
-			where: (questParticipants, { eq }) => eq(questParticipants.id, id),
+			where: { id },
 			with: {
 				quest: nameAndId,
 				faction: nameAndId,
@@ -55,7 +55,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	quest_relation_by_id: (id: number) =>
 		db.query.questRelations.findFirst({
-			where: (questRelations, { eq }) => eq(questRelations.id, id),
+			where: { id },
 			with: {
 				sourceQuest: nameAndId,
 				targetQuest: nameAndId,

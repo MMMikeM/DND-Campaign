@@ -68,7 +68,7 @@ export const entityGetters = createEntityGetters({
 
 	region_by_id: (id: number) =>
 		db.query.regions.findFirst({
-			where: (regions, { eq }) => eq(regions.id, id),
+			where: { id },
 			with: {
 				areas: true,
 				conflicts: true,
@@ -79,7 +79,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	area_by_id: (id: number) =>
 		db.query.areas.findFirst({
-			where: (areas, { eq }) => eq(areas.id, id),
+			where: { id },
 			with: {
 				factionInfluence: true,
 				sites: true,
@@ -88,7 +88,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	site_by_id: (id: number) =>
 		db.query.sites.findFirst({
-			where: (sites, { eq }) => eq(sites.id, id),
+			where: { id },
 			with: {
 				factionHqs: true,
 				mapGroup: nameAndId,
@@ -103,7 +103,7 @@ export const entityGetters = createEntityGetters({
 
 	site_link_by_id: (id: number) =>
 		db.query.siteLinks.findFirst({
-			where: (siteLinks, { eq }) => eq(siteLinks.id, id),
+			where: { id },
 			with: {
 				targetSite: { with: { outgoingRelations: { with: { targetSite: nameAndId } } } },
 				sourceSite: { with: { incomingRelations: { with: { sourceSite: nameAndId } } } },
@@ -111,12 +111,12 @@ export const entityGetters = createEntityGetters({
 		}),
 	site_encounter_by_id: (id: number) =>
 		db.query.siteEncounters.findFirst({
-			where: (siteEncounters, { eq }) => eq(siteEncounters.id, id),
+			where: { id },
 			with: { site: true },
 		}),
 	site_secret_by_id: (id: number) =>
 		db.query.siteSecrets.findFirst({
-			where: (siteSecrets, { eq }) => eq(siteSecrets.siteId, id),
+			where: { siteId: id },
 			with: { site: true },
 		}),
 	all_region_connections: () =>
@@ -128,7 +128,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	region_connection_by_id: (id: number) =>
 		db.query.regionConnections.findFirst({
-			where: (regionConnections, { eq }) => eq(regionConnections.id, id),
+			where: { id },
 			with: {
 				sourceRegion: nameAndId,
 				targetRegion: nameAndId,

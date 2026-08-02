@@ -12,7 +12,7 @@ export const entityGetters = createEntityGetters({
 	all_conflict_participants: () => db.query.conflictParticipants.findMany({}),
 	conflict_by_id: (id: number) =>
 		db.query.conflicts.findFirst({
-			where: (conflicts, { eq }) => eq(conflicts.id, id),
+			where: { id },
 			with: {
 				affectingConsequences: true,
 				incomingForeshadowing: true,
@@ -24,7 +24,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	conflict_participant_by_id: (id: number) =>
 		db.query.conflictParticipants.findFirst({
-			where: (conflictParticipants, { eq }) => eq(conflictParticipants.id, id),
+			where: { id },
 			with: {
 				conflict: true,
 				faction: true,
