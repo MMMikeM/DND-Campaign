@@ -13,7 +13,7 @@ export function DetailsContent({
 	incomingForeshadowing,
 	narrativeDestinationInvolvement,
 	conflicts,
-	itemRelations,
+	itemConnections,
 	loreLinks,
 	creativePrompts,
 	affectingConsequences,
@@ -30,7 +30,7 @@ export function DetailsContent({
 	| "incomingForeshadowing"
 	| "narrativeDestinationInvolvement"
 	| "conflicts"
-	| "itemRelations"
+	| "itemConnections"
 	| "loreLinks"
 	| "creativePrompts"
 	| "affectingConsequences"
@@ -109,7 +109,7 @@ export function DetailsContent({
 				icon={<Icons.Link className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No connections"
 			>
-				{JSON.stringify(itemRelations)}
+				{JSON.stringify(itemConnections)}
 				{JSON.stringify(loreLinks)}
 			</InfoCard>
 

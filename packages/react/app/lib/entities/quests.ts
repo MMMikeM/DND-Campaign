@@ -12,7 +12,7 @@ const questConfig = {
 				affectingConsequences: true,
 				hooks: true,
 				incomingForeshadowing: true,
-				itemRelations: true,
+				itemConnections: { with: { sourceItem: nameAndId } },
 				loreLinks: true,
 				participants: true,
 				stages: nameAndId,

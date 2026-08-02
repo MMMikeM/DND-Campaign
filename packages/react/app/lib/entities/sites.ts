@@ -8,13 +8,18 @@ const siteConfig = {
 	findById: (id: number) =>
 		db.query.sites.findFirst({
 			where: { id },
+			columns: {
+				areaId: false,
+				mapGroupId: false
+			},
 			with: {
+				secrets: true,
 				encounters: true,
 				consequences: true,
 				incomingForeshadowing: true,
 				factionHqs: nameAndId,
 				factionInfluence: nameAndId,
-				itemConnections: nameAndId,
+				itemConnections: { with: { sourceItem: nameAndId } },
 				questHooks: {
 					with: {
 						quest: nameAndId,

@@ -2,11 +2,10 @@ import * as Icons from "lucide-react"
 import { useEffect } from "react"
 import { Outlet, useFetcher } from "react-router"
 import type { Items } from "~/routes/api/items"
-import type { Route } from "../routes/api/+types/items"
 import { SidebarNav } from "./sidebar/SidebarNav"
 import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider } from "./ui/sidebar"
 
-export function MainLayout({ loaderData }: Route.ComponentProps) {
+export function MainLayout() {
 	const fetcher = useFetcher<Items>()
 
 	useEffect(() => {

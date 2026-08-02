@@ -9,7 +9,7 @@ const conflictConfig = {
 			where: { id },
 			with: {
 				region: nameAndId,
-				itemConnections: nameAndId,
+				itemConnections: { with: { sourceItem: nameAndId } },
 				loreLinks: {
 					columns: {
 						loreId: false,

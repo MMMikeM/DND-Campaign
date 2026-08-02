@@ -16,7 +16,7 @@ const npcConfig = {
 				conflictParticipation: true,
 				factionMemberships: { with: { faction: nameAndId } },
 				incomingForeshadowing: true,
-				itemRelations: true,
+				itemConnections: { with: { sourceItem: nameAndId } },
 				questHooks: { with: { quest: nameAndId } },
 				questStageDeliveries: { with: { quest: nameAndId } },
 				questParticipants: { with: { quest: nameAndId } },

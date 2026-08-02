@@ -59,7 +59,7 @@ export const alignmentConfig: Record<Alignment, { icon: React.ReactNode; color: 
 }
 
 interface AlignmentBadgeProps {
-	alignment: Alignment | string
+	alignment: Alignment
 	className?: string
 }
 

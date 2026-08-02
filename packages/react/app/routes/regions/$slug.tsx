@@ -32,32 +32,18 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 
 	const {
 		areas,
-		atmosphereType,
 		conflicts,
 		consequences,
-		creativePrompts,
-		culturalNotes,
 		dangerLevel,
 		description,
-		economy,
 		factionInfluence,
-		gmNotes,
-		hazards,
-		history,
 		loreLinks,
 		name,
-		narrativeDestinations,
-		pointsOfInterest,
-		population,
-		quests,
 		relations,
-		revelationLayersSummary,
-		rumors,
-		secrets,
-		security,
 		slug,
 		tags,
 		type,
+		atmosphereAndCulture,featuresAndHazards,historyAndEconomy,id,loreAndSecrets
 	} = region
 
 	const handleTabChange = (value: string) => {

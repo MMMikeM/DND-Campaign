@@ -8,8 +8,7 @@ export function AreaHeader({
 	name,
 	type,
 	region,
-	dangerLevel,
-}: Pick<Area, "name" | "type" | "region" | "dangerLevel">) {
+}: Pick<Area, "name" | "type" | "region" >) {
 	return (
 		<div className="p-4 mb-6 border rounded bg-card text-card-foreground shadow-sm">
 			<div className="flex justify-between items-start">
@@ -31,11 +30,6 @@ export function AreaHeader({
 						</NavLink>
 					)}
 				</div>
-			</div>
-			<div className="mt-3">
-				<Badge variant={getDangerVariant(dangerLevel)} className="capitalize">
-					{dangerLevel}
-				</Badge>
 			</div>
 		</div>
 	)

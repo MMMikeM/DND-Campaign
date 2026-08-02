@@ -63,7 +63,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<AreaHeader name={name} type={type} region={region} dangerLevel={region?.dangerLevel} />
+			<AreaHeader name={name} type={type} region={region} />
 
 			<Tags tags={tags} className="mb-6" />
 

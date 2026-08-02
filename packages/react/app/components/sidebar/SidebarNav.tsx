@@ -28,7 +28,7 @@ interface SidebarNavProps {
 const categoriesConfig: {
 	key: keyof ItemsData
 	title: string
-	icon: React.ComponentType<{ className?: string }>
+	icon: Icons.LucideIcon
 	path?: string
 }[] = [
 	{ key: "lore", title: "Lore", icon: Icons.Library },

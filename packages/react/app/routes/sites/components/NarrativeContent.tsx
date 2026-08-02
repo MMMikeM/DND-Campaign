@@ -3,10 +3,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
-type qhkeys = keyof Site["questHooks"][number]
-type qskeys = keyof Site["questStages"][number]
-type ifkeys = keyof Site["incomingForeshadowing"][number]
-type ckeys = keyof Site["consequences"][number]
+
 
 export const NarrativeContent = ({
 	questHooks,
@@ -27,7 +24,6 @@ export const NarrativeContent = ({
 						name,
 						creativePrompts,
 						description,
-						gmNotes,
 						tags,
 						questId,
 						siteId,
@@ -86,27 +82,25 @@ export const NarrativeContent = ({
 						name,
 						creativePrompts,
 						description,
-						gmNotes,
-						tags,
-						targetQuestId,
-						targetNpcId,
-						targetNarrativeEventId,
-						targetConflictId,
-						targetItemId,
-						targetNarrativeDestinationId,
-						targetLoreId,
-						targetFactionId,
-						targetSiteId,
+						narrativeWeight,
+						slug,
+						sourceItemId,
+						sourceLoreId,
+						sourceNpcId,
 						sourceQuestId,
 						sourceQuestStageId,
 						sourceSiteId,
-						sourceNpcId,
-						sourceItemDescriptionId,
-						sourceLoreId,
 						subtlety,
-						narrativeWeight,
 						suggestedDeliveryMethods,
-						slug,
+						tags,
+						targetConflictId,
+						targetConsequenceId,
+						targetFactionId,
+						targetItemId,
+						targetLoreId,
+						targetNpcId,
+						targetQuestId,
+						targetSiteId,
 					}) => (
 						<div key={id} className="border rounded p-3 mb-2">
 							<h4 className="font-medium">{name}</h4>

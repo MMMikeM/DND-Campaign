@@ -59,7 +59,6 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 						description,
 						values,
 						history,
-						gmNotes,
 						creativePrompts,
 						aesthetics,
 						hqSiteId,

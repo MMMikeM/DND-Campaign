@@ -20,9 +20,7 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 	const filteredRegions = regions.filter(
 		(region) =>
 			region.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			region.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			region.economy.toLowerCase().includes(searchTerm.toLowerCase()),
-	)
+			region.type.toLowerCase().includes(searchTerm.toLowerCase()))
 
 	return (
 		<div className="container mx-auto py-6">
@@ -55,21 +53,17 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredRegions.map((region) => {
 					const {
-						creativePrompts,
-						culturalNotes,
-						description,
-						economy,
-						hazards,
-						name,
-						pointsOfInterest,
-						population,
-						type,
+						atmosphereAndCulture,
 						dangerLevel,
+						description,
+						featuresAndHazards,
+						historyAndEconomy,
+						id,
+						loreAndSecrets,
+						name,
 						slug,
-						history,
-						rumors,
-						secrets,
-						security,
+						tags,
+						type,
 					} = region
 
 					return (

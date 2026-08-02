@@ -41,16 +41,14 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		affectingConsequences,
 		creativePrompts,
 		description,
-		gmNotes,
 		incomingForeshadowing,
-		itemRelations,
+		itemConnections,
 		loreLinks,
 		questHooks,
 		conflicts,
 		members,
 		questParticipation,
 		influence,
-		narrativeDestinationInvolvement,
 		primaryHqSite,
 		relations,
 		slug,
@@ -73,6 +71,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		symbols,
 		transparencyLevel,
 		type,
+		hqSiteId,id
 	} = faction
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
@@ -145,7 +144,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 							incomingForeshadowing={incomingForeshadowing}
 							narrativeDestinationInvolvement={narrativeDestinationInvolvement}
 							conflicts={conflicts}
-							itemRelations={itemRelations}
+							itemConnections={itemConnections}
 							loreLinks={loreLinks}
 							creativePrompts={creativePrompts}
 							affectingConsequences={affectingConsequences}

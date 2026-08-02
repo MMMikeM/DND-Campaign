@@ -1,11 +1,10 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Conflict } from "~/lib/entities"
 
-export function ItemsContent({ itemRelations }: Pick<Conflict, "itemRelations">) {
+export function ItemsContent({ itemConnections }: Pick<Conflict, "itemConnections">) {
 	return (
 		<InfoCard
 			title="Related Items"
@@ -13,72 +12,36 @@ export function ItemsContent({ itemRelations }: Pick<Conflict, "itemRelations">)
 			emptyMessage="No items related to this conflict."
 		>
 			<div className="space-y-6">
-				{itemRelations.map(
-					({ id, creativePrompts, description, gmNotes, tags, relationshipType, relationshipDetails, sourceItem }) => (
-						<div key={id} className="border rounded-lg p-4 bg-background dark:bg-muted/30">
-							{/* Header with item name and relationship type */}
-							<div className="flex justify-between items-start mb-3">
-								<div>
-									<Link
-										href={`/items/${sourceItem?.slug || sourceItem?.id}`}
-										className="text-lg font-semibold text-primary hover:underline"
-									>
-										{sourceItem?.name}
-									</Link>
-									<p className="text-sm text-muted-foreground mt-1">
-										<strong>Relationship:</strong> {relationshipType.replace(/_/g, " ")}
-									</p>
-								</div>
-							</div>
-
-							{/* Tags */}
-							{tags && tags.length > 0 && (
-								<div className="mb-3">
-									<Tags tags={tags} variant="secondary" maxDisplay={6} />
-								</div>
-							)}
-
-							{/* Content sections */}
-							<div className="space-y-3">
-								{/* Relationship details */}
-								{relationshipDetails && (
-									<div>
-										<h4 className="text-sm font-medium text-foreground mb-1">Details</h4>
-										<p className="text-sm text-muted-foreground">{relationshipDetails}</p>
-									</div>
-								)}
-
-								{/* Description */}
-								<List
-									heading="Description"
-									icon={<Icons.FileText className="h-4 w-4 mr-2" />}
-									items={description}
-									spacing="sm"
-									textSize="sm"
-									bulletColor="blue"
-								/>
-
-								<List
-									heading="Creative Prompts"
-									icon={<Icons.Lightbulb className="h-4 w-4 mr-2" />}
-									items={creativePrompts}
-									spacing="sm"
-									textSize="sm"
-									bulletColor="amber"
-								/>
-
-								<List
-									heading="GM Notes"
-									icon={<Icons.Eye className="h-4 w-4 mr-2" />}
-									items={gmNotes}
-									spacing="sm"
-									textSize="sm"
-									bulletColor="red"
-								/>
+				{itemConnections.map(({ id, relationship, details, sourceItem }) => (
+					<div key={id} className="border rounded-lg p-4 bg-background dark:bg-muted/30">
+						{/* Header with item name and relationship */}
+						<div className="flex justify-between items-start mb-3">
+							<div>
+								<Link
+									href={`/items/${sourceItem.id}`}
+									className="text-lg font-semibold text-primary hover:underline"
+								>
+									{sourceItem.name}
+								</Link>
+								<p className="text-sm text-muted-foreground mt-1">
+									<strong>Relationship:</strong> {relationship.replace(/_/g, " ")}
+								</p>
 							</div>
 						</div>
-					),
-				)}
+
+						{/* Content sections */}
+						<div className="space-y-3">
+							<List
+								heading="Details"
+								icon={<Icons.FileText className="h-4 w-4 mr-2" />}
+								items={details}
+								spacing="sm"
+								textSize="sm"
+								bulletColor="blue"
+							/>
+						</div>
+					</div>
+				))}
 			</div>
 		</InfoCard>
 	)

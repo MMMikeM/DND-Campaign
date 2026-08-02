@@ -53,18 +53,11 @@ export default function NpcsIndexPage({ loaderData }: Route.ComponentProps) {
 						race,
 						occupation,
 						appearance,
-						background,
-						alignment,
 						gender,
-						wealth,
 						quirk,
-						personalityTraits,
 						attitude,
-						biases,
-						secrets,
-						trustLevel,
-						adaptability,
 						slug,
+						age,conversationHook,id,roleplayingGuide,siteId,socialStatusAndReputation,summary,tags,voiceNotes
 					} = npc
 
 					return (

@@ -22,15 +22,14 @@ export const ConsequencesContent = ({ consequences }: Pick<Area, "consequences">
 						visibility,
 						sourceType,
 						triggerQuest,
-						triggerConflict,
 						conflictImpactDescription,
 						creativePrompts,
-						gmNotes,
 						playerImpactFeel,
 						slug,
 						tags,
 						timeframe,
 						triggerQuestStageDecision,
+
 					}) => (
 						<div key={id} className="border rounded p-4">
 							<h4 className="font-medium text-lg">{name}</h4>
@@ -49,7 +48,7 @@ export const ConsequencesContent = ({ consequences }: Pick<Area, "consequences">
 								</span>
 							</div>
 							<List items={description} />
-							{(triggerQuest || triggerQuestStageDecision || triggerConflict) && (
+							{(triggerQuest || triggerQuestStageDecision) && (
 								<div className="mt-2">
 									<h5 className="font-semibold">Triggered By:</h5>
 									{triggerQuest && (

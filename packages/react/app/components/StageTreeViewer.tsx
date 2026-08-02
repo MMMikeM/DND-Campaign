@@ -44,15 +44,15 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 
 			// Process outgoing decisions
 			stage.outgoingDecisions?.forEach((decision: StageDecision) => {
-				if (decision.toStageId) {
+				if (decision.toQuestStageId) {
 					// Add child to parent's children list
 					parentToChildrenMap.get(stage.id)?.push({
-						childId: decision.toStageId,
+						childId: decision.toQuestStageId,
 						decision,
 					})
 
 					// Add parent reference to child
-					childToParentMap.set(decision.toStageId, {
+					childToParentMap.set(decision.toQuestStageId, {
 						parentId: stage.id,
 						decision,
 					})
@@ -114,8 +114,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 									{hierarchicalNumber}: {stage.name}
 								</strong>
 							</div>
-							{stage.location && <div>Location: {stage.location.name}</div>}
-							{stage.clues?.length > 0 && <div>Clues: {stage.clues.length}</div>}
+							{stage.site && <div>Location: {stage.site.name}</div>}
 						</div>
 					),
 				},
@@ -138,8 +137,8 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 			const sourceId = `stage-${stage.id}`
 
 			stage.outgoingDecisions?.forEach((decision: StageDecision) => {
-				if (decision.toStageId) {
-					const targetId = `stage-${decision.toStageId}`
+				if (decision.toQuestStageId) {
+					const targetId = `stage-${decision.toQuestStageId}`
 					const edgeId = `edge-${sourceId}-${targetId}`
 
 					// Add edge to Dagre graph

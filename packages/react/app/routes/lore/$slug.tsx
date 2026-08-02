@@ -33,17 +33,10 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
-		aesthetics_and_symbols,
-		conflicting_narratives,
-		connections_to_world,
-		core_tenets_and_traditions,
 		creativePrompts,
 		description,
-		gmNotes,
 		hiddenTruths,
-		history_and_legacy,
 		incomingForeshadowing,
-		interactions_and_rules,
 		links,
 		livedReality,
 		loreType,
@@ -53,6 +46,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 		summary,
 		surfaceImpression,
 		tags,
+		aestheticsAndSymbols,conflictingNarratives,connectionsToWorld,coreTenetsAndTraditions,historyAndLegacy,id,interactionsAndRules
 	} = loaderData
 
 	const activeTab = tab || "details"

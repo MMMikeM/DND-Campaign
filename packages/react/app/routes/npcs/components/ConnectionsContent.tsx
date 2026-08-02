@@ -12,7 +12,7 @@ export function ConnectionsContent({
 	relations,
 	factionMemberships,
 	questParticipants,
-	itemRelations,
+	itemConnections,
 	loreLinks,
 	questHooks,
 	stageInvolvement,
@@ -23,7 +23,7 @@ export function ConnectionsContent({
 	| "relations"
 	| "factionMemberships"
 	| "questParticipants"
-	| "itemRelations"
+	| "itemConnections"
 	| "loreLinks"
 	| "questHooks"
 	| "stageInvolvement"
@@ -199,14 +199,14 @@ export function ConnectionsContent({
 				emptyMessage="No items are related to this NPC"
 				className="mb-6"
 			>
-				{itemRelations.map(({ id, sourceItem, relationshipType }) => (
+				{itemConnections.map(({ id, sourceItem, relationship }) => (
 					<div key={`item-relation-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 						<div className="flex justify-between">
-							<Link href={`/items/${sourceItem?.slug}`}>
-								<h4 className="font-medium">{sourceItem?.name}</h4>
+							<Link href={`/items/${sourceItem.id}`}>
+								<h4 className="font-medium">{sourceItem.name}</h4>
 							</Link>
 							<BadgeWithTooltip variant="secondary" tooltipContent="Relationship Type">
-								{relationshipType}
+								{relationship}
 							</BadgeWithTooltip>
 						</div>
 					</div>

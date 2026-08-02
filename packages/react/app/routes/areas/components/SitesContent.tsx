@@ -1,6 +1,5 @@
 import * as Icons from "lucide-react"
 import type React from "react"
-import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Area } from "~/lib/entities"
@@ -13,7 +12,7 @@ export const SitesContent: React.FC<Pick<Area, "sites">> = ({ sites }) => {
 			emptyMessage="No specific sites listed within this area."
 			contentClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
 		>
-			{sites.map(({ name, type, id, slug }) => (
+			{sites.map(({ name, id, slug }) => (
 				<div key={`site-${id}`} className="border rounded p-4">
 					<Link href={`/sites/${slug}`}>
 						<h4 className="font-medium flex items-center">
@@ -21,9 +20,6 @@ export const SitesContent: React.FC<Pick<Area, "sites">> = ({ sites }) => {
 							{name}
 						</h4>
 					</Link>
-					<BadgeWithTooltip variant="outline" className="mt-1 capitalize" tooltipContent={`Site type`}>
-						{type}
-					</BadgeWithTooltip>
 				</div>
 			))}
 		</InfoCard>

@@ -37,40 +37,23 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 
 	const {
 		area,
-		areaId,
-		climate,
+		itemConnections,
 		consequences,
 		creativePrompts,
-		creatures,
 		description,
-		descriptors,
 		encounters,
-		environment,
 		factionHqs,
 		factionInfluence,
-		features,
-		gmNotes,
 		incomingForeshadowing,
 		intendedSiteFunction,
-		itemHistory,
-		itemRelations,
-		lightingDescription,
 		mapGroup,
-		mood,
 		name,
-		npcAssociations,
 		questHooks,
 		questStages,
 		relations,
 		secrets,
 		slug,
-		smells,
-		soundscape,
 		tags,
-		terrain,
-		treasures,
-		type,
-		weather,
 	} = site
 
 	const handleTabChange = (value: string) => {
@@ -90,12 +73,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 
 			<SiteHeader
 				name={name}
-				type={type}
 				area={area}
-				terrain={terrain}
-				climate={climate}
-				mood={mood}
-				environment={environment}
 			/>
 
 			{/* Tags */}
@@ -115,25 +93,18 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsList>
 
 				<TabsContent value="overview">
-					<OverviewContent creatures={creatures} description={description} features={features} treasures={treasures} />
+					<OverviewContent description={description} />
 				</TabsContent>
 
 				<TabsContent value="details">
 					<DetailsContent
-						weather={weather}
 						creativePrompts={creativePrompts}
-						descriptors={descriptors}
-						lightingDescription={lightingDescription}
-						soundscape={soundscape}
-						smells={smells}
 						intendedSiteFunction={intendedSiteFunction}
-						gmNotes={gmNotes}
 					/>
 				</TabsContent>
 
 				<TabsContent value="inhabitants">
 					<InhabitantsContent
-						npcAssociations={npcAssociations}
 						factionInfluence={factionInfluence}
 						factionHqs={factionHqs}
 					/>
@@ -165,7 +136,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="items">
-					<ItemsContent itemHistory={itemHistory} itemRelations={itemRelations} />
+					<ItemsContent itemConnections={itemConnections} />
 				</TabsContent>
 			</Tabs>
 		</div>

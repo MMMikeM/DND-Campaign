@@ -25,7 +25,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return conflict
 }
 
-export function Header({ name, scope, natures, status }: Pick<Conflict, "name" | "scope" | "natures" | "status">) {
+export function Header({ name, scope, nature, status }: Pick<Conflict, "name" | "scope" | "nature" | "status">) {
 	return (
 		<div>
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
@@ -39,7 +39,7 @@ export function Header({ name, scope, natures, status }: Pick<Conflict, "name" |
 				</BadgeWithTooltip>
 				<BadgeWithTooltip variant="outline" tooltipContent="Nature of the conflict">
 					<Icons.ShieldAlert className="h-3.5 w-3.5 mr-1" />
-					{natures}
+					{nature}
 				</BadgeWithTooltip>
 				<BadgeWithTooltip variant={getConflictStatusVariant(status)} tooltipContent={`Current status: ${status}`}>
 					<Icons.Activity className="h-3.5 w-3.5 mr-1" />
@@ -70,25 +70,20 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 		creativePrompts,
 		currentTensionLevel,
 		description,
-		gmNotes,
 		hiddenTruths,
 		incomingForeshadowing,
-		itemRelations,
 		loreLinks,
 		moralDilemma,
 		name,
-		narrativeDestinations,
-		natures,
 		participants,
 		possibleOutcomes,
-		questImpacts,
 		region,
 		scope,
 		slug,
 		stakes,
 		status,
 		tags,
-		triggeredConsequences,
+		id,itemConnections,nature,regionId,
 	} = loaderData
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
@@ -163,7 +158,7 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="items" className="animate-in fade-in-50 duration-300">
-					<ItemsContent itemRelations={itemRelations} />
+					<ItemsContent itemConnections={itemConnections} />
 				</TabsContent>
 
 				<TabsContent value="participants" className="animate-in fade-in-50 duration-300">

@@ -42,7 +42,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 		factionMemberships,
 		gender,
 		incomingForeshadowing,
-		itemRelations,
+		itemConnections,
 		loreLinks,
 		name,
 		occupation,
@@ -193,7 +193,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 						relations={relations}
 						factionMemberships={factionMemberships}
 						loreLinks={loreLinks}
-						itemRelations={itemRelations}
+						itemConnections={itemConnections}
 						questHooks={questHooks}
 						questStageDeliveries={questStageDeliveries}
 						stageInvolvement={stageInvolvement}

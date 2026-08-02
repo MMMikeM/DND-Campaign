@@ -25,10 +25,7 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 		(quest) =>
 			quest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			quest.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			quest.mood?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			quest.description?.some((desc) => desc.toLowerCase().includes(searchTerm.toLowerCase())) ||
-			quest.objectives?.some((obj) => obj.toLowerCase().includes(searchTerm.toLowerCase())) ||
-			false,
+			quest.description?.some((desc) => desc.toLowerCase().includes(searchTerm.toLowerCase()))
 	)
 
 	return (
@@ -65,17 +62,9 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 						name,
 						type,
 						urgency,
-						visibility,
-						mood,
 						description,
-						objectives,
-						rewards,
-						themes,
-						inspirations,
-						successOutcomes,
-						failureOutcomes,
-						creativePrompts,
 						slug,
+						id
 					} = quest
 
 					return (

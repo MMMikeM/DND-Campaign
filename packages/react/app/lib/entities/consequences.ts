@@ -15,6 +15,7 @@ const consequenceConfig = {
 				affectedNpc: nameAndId,
 				affectedRegion: nameAndId,
 				affectedConflict: nameAndId,
+				incomingForeshadowing: true,
 			},
 		}),
 	getAll: () => db.query.consequences.findMany({}),
