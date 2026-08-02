@@ -25,6 +25,7 @@ export const entityGetters = createEntityGetters({
 				affectedArea: true,
 				affectedSite: true,
 				affectedFaction: true,
+				incomingForeshadowing: true,
 			},
 		}),
 })

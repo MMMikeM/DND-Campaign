@@ -20,7 +20,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 					with: { region: { columns: { id: true, name: true } } },
 				},
 				encounters: { columns: { id: true, name: true, objectiveType: true } },
-				secret: true,
+				secrets: true,
 				npcs: { columns: { id: true, name: true, occupation: true } },
 			},
 			columns: {
@@ -277,7 +277,11 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 					objectiveType: e.objectiveType,
 					encounterCategory: "combat", // Default category
 				})),
-				secrets: [], // Will be populated separately
+				secrets: s.secrets.map((sec) => ({
+					id: sec.id,
+					secretType: sec.secretType,
+					difficultyToDiscover: sec.difficultyToDiscover,
+				})),
 			})),
 			existingEncounters: existingEncounters.map((e) => ({
 				objectiveType: e.objectiveType,
@@ -319,7 +323,11 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 					objectiveType: e.objectiveType,
 					encounterCategory: "combat", // Add required field with default value
 				})),
-				secrets: [], // Add required field
+				secrets: s.secrets.map((sec) => ({
+					id: sec.id,
+					secretType: sec.secretType,
+					difficultyToDiscover: sec.difficultyToDiscover,
+				})),
 				npcs: [], // Add required field
 			})),
 

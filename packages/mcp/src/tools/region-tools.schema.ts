@@ -81,7 +81,7 @@ export const schemas = {
 
 	sites: createInsertSchema(sites, {
 		areaId: id.describe("Required ID of area this site is located within"),
-		mapGroupId: id.describe("Required ID of the map variant this site is associated with"),
+		mapGroupId: optionalId.describe("Optional ID of the map group this site is associated with"),
 		creativePrompts: list.describe("Scene ideas and narrative opportunities"),
 		description: list.describe("Visual details and layout in point form"),
 		intendedSiteFunction: z.enum(siteFunctions).describe("Function of this site"),

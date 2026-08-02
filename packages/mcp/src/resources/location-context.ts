@@ -55,7 +55,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 						with: { region: { columns: { name: true, type: true } } },
 					},
 					encounters: true,
-					secret: true,
+					secrets: true,
 				},
 			}),
 			db.query.regions.findFirst({
@@ -84,14 +84,10 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 					name: enc.name,
 					type: enc.objectiveType,
 				})),
-				secrets: site.secret
-					? [
-							{
-								type: site.secret.secretType,
-								difficulty: site.secret.difficultyToDiscover,
-							},
-						]
-					: [],
+				secrets: site.secrets.map((secret) => ({
+					type: secret.secretType,
+					difficulty: secret.difficultyToDiscover,
+				})),
 			}
 		} else if (region) {
 			contextData = {

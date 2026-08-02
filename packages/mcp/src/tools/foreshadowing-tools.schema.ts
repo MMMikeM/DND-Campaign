@@ -28,13 +28,18 @@ export const schemas = {
 		sourceSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
 		sourceNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
 		sourceLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
+		sourceItemId: optionalId.describe("ID of the item this foreshadowing is related to"),
 
 		targetQuestId: optionalId.describe("ID of the quest this foreshadowing is related to"),
 		targetNpcId: optionalId.describe("ID of the NPC this foreshadowing is related to"),
 		targetConflictId: optionalId.describe("ID of the conflict this foreshadowing is related to"),
+		targetItemId: optionalId.describe("ID of the item this foreshadowing points at"),
 		targetLoreId: optionalId.describe("ID of the lore this foreshadowing is related to"),
 		targetFactionId: optionalId.describe("ID of the faction this foreshadowing is related to"),
 		targetSiteId: optionalId.describe("ID of the site this foreshadowing is related to"),
+		targetConsequenceId: optionalId.describe("ID of the consequence this foreshadowing points at"),
+		targetRegionId: optionalId.describe("ID of the region this foreshadowing points at"),
+		targetAreaId: optionalId.describe("ID of the area this foreshadowing points at"),
 
 		subtlety: z
 			.enum(discoverySubtlety)

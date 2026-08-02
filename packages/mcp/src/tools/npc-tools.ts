@@ -22,7 +22,7 @@ export const entityGetters = createEntityGetters({
 				outgoingForeshadowing: true,
 				details: true,
 				questHooks: { with: { quest: nameAndId } },
-				itemRelations: { with: { sourceItem: nameAndId } },
+				itemConnections: { with: { sourceItem: nameAndId } },
 				stageInvolvement: { with: { questStage: nameAndId } },
 				loreLinks: { with: { lore: nameAndId } },
 				incomingRelations: { with: { sourceNpc: nameAndId } },

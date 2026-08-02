@@ -92,7 +92,7 @@ export const entityGetters = createEntityGetters({
 			with: {
 				factionHqs: true,
 				mapGroup: nameAndId,
-				secret: true,
+				secrets: true,
 				questStages: nameAndId,
 				questHooks: nameAndId,
 				area: nameAndId,

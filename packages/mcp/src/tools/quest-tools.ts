@@ -26,7 +26,7 @@ export const entityGetters = createEntityGetters({
 				outgoingForeshadowing: true,
 				hooks: true,
 				incomingRelations: true,
-				itemRelations: true,
+				itemConnections: true,
 				outgoingRelations: true,
 				participants: true,
 				loreLinks: true,

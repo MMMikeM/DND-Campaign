@@ -17,7 +17,7 @@ export const entityGetters = createEntityGetters({
 				outgoingForeshadowing: { with: { sourceItem: nameAndId } },
 				incomingForeshadowing: { with: { targetItem: nameAndId } },
 				loreLinks: true,
-				relations: {
+				outgoingRelations: {
 					with: {
 						sourceItem: true,
 						lore: true,
