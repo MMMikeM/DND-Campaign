@@ -8,12 +8,24 @@
 import type { McpServer } from "@modelcontextprotocol/server"
 import { logger } from ".."
 import { serializeError } from "../logger"
+import { withCachedJsonSchema } from "../schema-cache"
 import { prompts } from "./registry"
 import type { PromptDefinition } from "./types"
 
+// Built once at module scope: registerPromptHandlers runs per request under
+// the sessionless createMcpHandler model, so schema facades must be shared.
+const promptRegistrations = Object.entries<PromptDefinition>(prompts).map(
+	([name, { description, schema, handler }]) => ({
+		name,
+		description,
+		argsSchema: withCachedJsonSchema(schema),
+		handler,
+	}),
+)
+
 export function registerPromptHandlers(server: McpServer) {
-	for (const [name, { description, schema, handler }] of Object.entries<PromptDefinition>(prompts)) {
-		server.registerPrompt(name, { description, argsSchema: schema }, async (args: Record<string, unknown>) => {
+	for (const { name, description, argsSchema, handler } of promptRegistrations) {
+		server.registerPrompt(name, { description, argsSchema }, async (args: Record<string, unknown>) => {
 			logger.info(`Executing prompt: ${name}`, args)
 			try {
 				return await handler(args)

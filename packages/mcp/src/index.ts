@@ -3,7 +3,7 @@ import { toNodeHandler } from "@modelcontextprotocol/node"
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server"
 import { serveStdio } from "@modelcontextprotocol/server/stdio"
 import { initializeDatabase } from "@tome-master/shared"
-import { createLogger } from "./logger"
+import { createLogger, serializeError } from "./logger"
 import { registerPromptHandlers } from "./prompts"
 import { registerResourceHandlers } from "./resources/resources"
 import { registerToolHandlers } from "./tools/tools"
@@ -58,7 +58,14 @@ async function startServer() {
 		}
 		logger.info("Starting server with Streamable HTTP transport...")
 
-		const mcpHandler = toNodeHandler(createMcpHandler(buildServer))
+		// Sessionless: a fresh server serves each request. The default legacy
+		// posture ('stateless') also serves 2025-era clients from the same
+		// factory — no sessions on either leg, GET/DELETE answered 405.
+		const mcpHandler = toNodeHandler(
+			createMcpHandler(buildServer, {
+				onerror: (error) => logger.error("MCP handler error", { error: serializeError(error) }),
+			}),
+		)
 
 		const httpServer = createServer(async (req, res) => {
 			logger.debug("Received request", {

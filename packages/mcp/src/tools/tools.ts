@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/server"
 import { logger } from ".."
 import { serializeError } from "../logger"
+import { withCachedJsonSchema } from "../schema-cache"
 import { conflictToolDefinitions } from "./conflict-tools"
 import { consequenceToolDefinitions } from "./consequence-tools"
 import { factionToolDefinitions } from "./faction-tools"
@@ -44,8 +45,18 @@ export const allToolDefinitions: Record<string, ToolDefinition> = {
 	...Object.assign({}, ...Object.values(toolCategories)),
 }
 
+// Built once at module scope: registerToolHandlers runs per request under the
+// sessionless createMcpHandler model, and the facade's JSON-conversion cache
+// only pays off if the same instance is reused across servers.
+const toolRegistrations = Object.entries(allToolDefinitions).map(([name, definition]) => ({
+	name,
+	definition,
+	inputSchema: withCachedJsonSchema(definition.inputSchema),
+}))
+
 export function registerToolHandlers(server: McpServer) {
-	for (const [name, { description, inputSchema, annotations, handler }] of Object.entries(allToolDefinitions)) {
+	for (const { name, definition, inputSchema } of toolRegistrations) {
+		const { description, annotations, handler } = definition
 		server.registerTool(name, { description, inputSchema, annotations }, async (args) => {
 			try {
 				const result = await handler(args as Record<string, unknown>)
