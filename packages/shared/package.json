@@ -41,7 +41,7 @@
     "@types/node": "catalog:",
     "@types/pg": "^8.15.4",
     "bunchee": "^6.5.3",
-    "drizzle-kit": "^0.31.1",
+    "drizzle-kit": "1.0.0-rc.4",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
