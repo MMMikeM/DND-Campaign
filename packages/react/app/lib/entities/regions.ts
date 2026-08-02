@@ -7,7 +7,7 @@ import { nameAndId } from "."
 const regionConfig = {
 	findById: (id: number) =>
 		db.query.regions.findFirst({
-			where: (regions, { eq }) => eq(regions.id, id),
+			where: { id },
 			with: {
 				factionInfluence: {
 					with: {

@@ -19,8 +19,8 @@ export function OverviewContent({
 	NPC,
 	"summary" | "appearance" | "attitude" | "occupation" | "socialStatusAndReputation" | "quirk" | "tags" | "name"
 > & {
-	alignment: NPC["details"]["alignment"]
-	goalsAndFears: NPC["details"]["goalsAndFears"]
+	alignment: NonNullable<NPC["details"]>["alignment"] | undefined
+	goalsAndFears: NonNullable<NPC["details"]>["goalsAndFears"] | undefined
 }) {
 	return (
 		<div className="space-y-6">

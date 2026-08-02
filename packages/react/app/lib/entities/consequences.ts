@@ -6,7 +6,7 @@ import { nameAndId } from "."
 const consequenceConfig = {
 	findById: (id: number) =>
 		db.query.consequences.findFirst({
-			where: (arcs, { eq }) => eq(arcs.id, id),
+			where: { id },
 			with: {
 				affectedArea: nameAndId,
 				affectedFaction: nameAndId,

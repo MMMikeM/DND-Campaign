@@ -6,7 +6,7 @@ import { nameAndId } from "."
 const foreshadowingConfig = {
 	findById: (id: number) =>
 		db.query.foreshadowing.findFirst({
-			where: (foreshadowing, { eq }) => eq(foreshadowing.id, id),
+			where: { id },
 			with: {
 				sourceNpc: nameAndId,
 				sourceQuest: nameAndId,

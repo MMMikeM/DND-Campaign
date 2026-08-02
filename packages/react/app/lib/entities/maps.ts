@@ -12,7 +12,7 @@ const mapFileColumns = {
 const mapConfig = {
 	findById: (id: number) =>
 		db.query.mapGroups.findFirst({
-			where: (arcs, { eq }) => eq(arcs.id, id),
+			where: { id },
 			with: {
 				site: nameAndId,
 				variants: {

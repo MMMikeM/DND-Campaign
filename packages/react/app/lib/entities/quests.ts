@@ -7,7 +7,7 @@ import { nameAndId } from "."
 const questConfig = {
 	findById: (id: number) =>
 		db.query.quests.findFirst({
-			where: (quests, { eq }) => eq(quests.id, id),
+			where: { id },
 			with: {
 				affectingConsequences: true,
 				hooks: true,

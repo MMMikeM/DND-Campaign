@@ -7,7 +7,7 @@ import { nameAndId } from "."
 const factionConfig = {
 	findById: (id: number) =>
 		db.query.factions.findFirst({
-			where: (factions, { eq }) => eq(factions.id, id),
+			where: { id },
 			with: {
 				agendas: true,
 				conflicts: true,

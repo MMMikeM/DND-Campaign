@@ -2,7 +2,7 @@ import { db } from "../db"
 
 const getRawQuestStages = async (id: number) =>
 	await db.query.questStages.findMany({
-		where: (questStages, { eq }) => eq(questStages.questId, id),
+		where: { questId: id },
 		with: {
 			outgoingDecisions: { with: { targetStage: true } },
 			incomingDecisions: { with: { sourceStage: true } },

@@ -7,7 +7,7 @@ import { nameAndId } from "."
 const npcConfig = {
 	findById: (id: number) =>
 		db.query.npcs.findFirst({
-			where: (npcs, { eq }) => eq(npcs.id, id),
+			where: { id },
 			with: {
 				incomingRelations: { with: { sourceNpc: nameAndId } },
 				outgoingRelations: { with: { targetNpc: nameAndId } },

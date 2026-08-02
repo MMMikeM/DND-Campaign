@@ -7,7 +7,7 @@ import { nameAndId } from "."
 const siteConfig = {
 	findById: (id: number) =>
 		db.query.sites.findFirst({
-			where: (sites, { eq }) => eq(sites.id, id),
+			where: { id },
 			with: {
 				encounters: true,
 				consequences: true,

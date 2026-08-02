@@ -9,7 +9,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 
 	const mapFile = await db.query.mapFiles.findFirst({
-		where: (mapFiles, { eq }) => eq(mapFiles.id, fileId),
+		where: { id: fileId },
 		columns: {
 			mapImage: true,
 			imageFormat: true,

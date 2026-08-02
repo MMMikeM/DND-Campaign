@@ -6,7 +6,7 @@ import { nameAndId } from "."
 const areaConfig = {
 	findById: (id: number) =>
 		db.query.areas.findFirst({
-			where: (areas, { eq }) => eq(areas.id, id),
+			where: { id },
 			columns: {
 				regionId: false,
 			},
@@ -28,7 +28,7 @@ const areaConfig = {
 						tags: true,
 						timeframe: true,
 					},
-					where: (consequences, { eq }) => eq(consequences.affectedAreaId, id),
+					where: { affectedAreaId: id },
 					with: {
 						triggerQuest: nameAndId,
 						triggerQuestStageDecision: nameAndId,

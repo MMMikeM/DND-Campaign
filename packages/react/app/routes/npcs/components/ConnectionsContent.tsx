@@ -128,7 +128,7 @@ export function ConnectionsContent({
 					emptyMessage="No known faction affiliations for this NPC"
 					contentClassName="space-y-4"
 				>
-					{factionMemberships.map(({ id, justification, loyalty, rank, role, secrets, faction }) => (
+					{factionMemberships?.map(({ id, justification, loyalty, rank, role, secrets, faction }) => (
 						<div key={`faction-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 							<div className="flex justify-between">
 								<h4 className="font-medium">

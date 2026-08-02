@@ -6,7 +6,7 @@ import { nameAndId } from "."
 const conflictConfig = {
 	findById: (id: number) =>
 		db.query.conflicts.findFirst({
-			where: (conflicts, { eq }) => eq(conflicts.id, id),
+			where: { id },
 			with: {
 				region: nameAndId,
 				itemConnections: nameAndId,

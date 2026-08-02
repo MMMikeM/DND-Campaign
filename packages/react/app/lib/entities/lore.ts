@@ -14,7 +14,7 @@ const nameIdAndDescription = {
 const loreConfig = {
 	findById: (id: number) =>
 		db.query.lore.findFirst({
-			where: (lore, { eq }) => eq(lore.id, id),
+			where: { id },
 			with: {
 				incomingForeshadowing: true,
 				links: {
