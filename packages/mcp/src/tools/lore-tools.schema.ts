@@ -1,5 +1,5 @@
 import { tables } from "@tome-master/shared"
-import { createInsertSchema } from "drizzle-zod"
+import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
