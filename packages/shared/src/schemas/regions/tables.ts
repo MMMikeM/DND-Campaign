@@ -1,7 +1,7 @@
 // regions/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
 import { mapGroups, mapVariants } from "../maps/tables"
 import { enums } from "./enums"
 
@@ -87,7 +87,7 @@ export const sites = pgTable("sites", {
 
 	intendedSiteFunction: oneOf("intended_site_function", siteFunctions),
 
-	mapGroupId: cascadeFk("map_group_id", mapGroups.id).unique(),
+	mapGroupId: nullableFk("map_group_id", mapGroups.id).unique(),
 })
 
 export const siteLinks = pgTable(

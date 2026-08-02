@@ -68,7 +68,7 @@ export const npcDetails = pgTable("npc_details", {
 
 	knowledge: list("knowledge"),
 	rumours: list("rumours"),
-})
+}, (t) => [unique().on(t.npcId)])
 
 export const npcFactionMemberships = pgTable(
 	"npc_faction_memberships",
