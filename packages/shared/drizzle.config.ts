@@ -9,9 +9,11 @@ export default defineConfig({
 		url: dbUrl,
 	},
 	schema: [
-		"/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/tables.ts",
-		// "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/**/views.ts",
-		// "/Users/mikemurray/Development/DND-Campaign/packages/shared/src/schemas/search-view.ts",
+		"./src/schemas/**/tables.ts",
+		// Views (including the search materialized view) are hand-maintained in
+		// migration SQL and deliberately excluded from generation.
 	],
 	out: "./drizzle",
+	// kit v1 manages ALL schemas by default; pin to public to keep 0.x behavior
+	schemaFilter: ["public"],
 })
