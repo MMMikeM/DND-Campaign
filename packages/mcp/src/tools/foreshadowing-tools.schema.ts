@@ -48,9 +48,10 @@ export const schemas = {
 			.enum(narrativeWeight)
 			.describe("Story importance of what this foreshadows - major revelations need more subtle early hints"),
 		suggestedDeliveryMethods: z
-			.enum(seedDeliveryMethods)
+			.array(z.enum(seedDeliveryMethods))
+			.min(1)
 			.describe(
-				"Best method for presenting this clue in context - choose based on source entity and discovery circumstances",
+				"Best methods for presenting this clue in context - choose based on source entity and discovery circumstances",
 			),
 		creativePrompts: list.describe(
 			"Specific ideas for presenting this foreshadowing element - focus on discovery scenarios, not exposition",

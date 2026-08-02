@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from "../../index"
+import { serializeError } from "../../logger"
 import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./types"
 
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
@@ -93,7 +94,8 @@ async function handleCreate<TS extends Schema<string>>(
 	} catch (error) {
 		logger.error(`Database error creating ${tableName}`, {
 			tableName: tableName,
-			error: error instanceof Error ? error.message : error,
+			error: serializeError(error),
+			cause: error instanceof Error && error.cause ? serializeError(error.cause) : undefined,
 		})
 
 		return createErrorResponse(`Database error when creating ${tableName}.`)

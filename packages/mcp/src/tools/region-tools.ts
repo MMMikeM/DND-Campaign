@@ -73,6 +73,7 @@ export const entityGetters = createEntityGetters({
 				areas: true,
 				conflicts: true,
 				factionInfluence: true,
+				incomingForeshadowing: true,
 				incomingRelations: { with: { sourceRegion: nameAndId } },
 				outgoingRelations: { with: { targetRegion: nameAndId } },
 			},
@@ -82,6 +83,7 @@ export const entityGetters = createEntityGetters({
 			where: { id },
 			with: {
 				factionInfluence: true,
+				incomingForeshadowing: true,
 				sites: true,
 				region: nameAndId,
 			},
