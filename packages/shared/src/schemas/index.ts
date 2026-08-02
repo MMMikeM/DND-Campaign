@@ -1,28 +1,4 @@
-import * as factionRelations from "../schemas/factions/relations"
-import * as itemRelations from "../schemas/items/relations"
-import * as questRelations from "../schemas/quests/relations"
-import * as regionRelations from "../schemas/regions/relations"
-import * as questStageRelations from "../schemas/stages/relations"
-import * as conflictRelations from "./conflicts/relations"
-import * as consequenceRelations from "./consequences/relations"
-import * as foreshadowingRelations from "./foreshadowing/relations"
-import * as loreRelations from "./lore/relations"
-import * as mapRelations from "./maps/relations"
-import * as npcRelations from "./npcs/relations"
-
-export const relations = {
-	conflictRelations,
-	consequenceRelations,
-	factionRelations,
-	foreshadowingRelations,
-	itemRelations,
-	loreRelations,
-	mapRelations,
-	npcRelations,
-	questRelations,
-	questStageRelations,
-	regionRelations,
-}
+export { relations } from "./relations"
 
 import * as factionTables from "../schemas/factions/tables"
 import * as itemTables from "../schemas/items/tables"

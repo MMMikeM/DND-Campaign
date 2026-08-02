@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
 import pgvector from "pgvector/pg"
-import { relations, tables } from "../schemas"
+import { relations } from "../schemas"
 
 export { sql } from "drizzle-orm"
 export { relations, tables } from "../schemas"
@@ -29,33 +29,7 @@ export function initializeDatabase(connectionString: string) {
 		console.warn("Vector extension initialization warning:", err.message)
 	})
 
-	const schema = {
-		...tables.conflictTables,
-		...tables.consequenceTables,
-		...tables.factionTables,
-		...tables.npcTables,
-		...tables.questTables,
-		...tables.questStageTables,
-		...tables.regionTables,
-		...tables.itemTables,
-		...tables.mapTables,
-		...tables.foreshadowingTables,
-		...tables.loreTables,
-		...relations.conflictRelations,
-		...relations.consequenceRelations,
-		...relations.factionRelations,
-		...relations.npcRelations,
-		...relations.questRelations,
-		...relations.questStageRelations,
-		...relations.regionRelations,
-		...relations.itemRelations,
-		...relations.mapRelations,
-		...relations.loreRelations,
-		...relations.foreshadowingRelations,
-	}
-
-	// Create Drizzle ORM instance with all schemas
-	return drizzle(pool, { schema, logger: false })
+	return drizzle({ client: pool, relations, logger: false })
 }
 
 // Use the proper type from pg
