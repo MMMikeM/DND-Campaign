@@ -4,3 +4,4 @@ export * from "./db/utils"
 
 // Export schemas
 export * from "./schemas/index"
+export * from "./db/search-query"

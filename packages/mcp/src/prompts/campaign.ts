@@ -24,7 +24,7 @@ import {
 const fuzzySearchEntities = async (query: string, entityType?: string) => {
 	const { rows } = await searchBySimilarity(query)
 
-	let filteredRows = rows as Array<{ id: number; name: string; source_table: string }>
+	let filteredRows = rows
 	if (entityType) {
 		filteredRows = filteredRows.filter((row) => row.source_table === entityType)
 	}
