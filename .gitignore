@@ -52,3 +52,7 @@ tmp/
 
 /maps/
 /backup/
+# Database dumps / backups
+*.dump
+*.sql.gz
+*.bak

@@ -4,27 +4,26 @@
   "private": true,
   "description": "",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "scripts": {
-    "build": "bunchee",
+    "build": "tsdown",
     "check": "tsc --noEmit",
-    "db:custom": "sh -c 'NODE_OPTIONS=\"--import tsx\" drizzle-kit generate --custom --name=\"$1\"' --",
-    "db:generate": "NODE_OPTIONS='--import tsx' drizzle-kit generate",
-    "db:migrate": "NODE_OPTIONS='--import tsx' drizzle-kit migrate",
-    "db:studio": "NODE_OPTIONS='--import tsx' drizzle-kit studio",
-    "dev": "bunchee --watch",
+    "db:custom": "sh -c 'drizzle-kit generate --custom --name=\"$1\"' --",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "dev": "tsdown --watch",
     "lint:fix": "biome check . --write",
     "lint": "biome check .",
-    "proxy": "tsx src/proxy.ts",
     "test": "vitest"
   },
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       }
     }
   },
@@ -38,16 +37,15 @@
     "pgvector": "^0.2.1"
   },
   "devDependencies": {
+    "@testcontainers/postgresql": "^12.0.4",
     "@types/node": "catalog:",
     "@types/pg": "^8.15.4",
-    "bunchee": "^6.5.3",
     "drizzle-kit": "1.0.0-rc.4",
-    "tsx": "catalog:",
+    "tsdown": "0.22.14",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {
     "node": ">=22.0.0"
-  },
-  "packageManager": "pnpm@9.14.2"
+  }
 }
