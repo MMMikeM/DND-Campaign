@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { unifyTestData } from "./addSlugs.test.data"
 import { unifyRelations } from "./unify"
 

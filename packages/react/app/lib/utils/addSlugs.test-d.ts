@@ -1,4 +1,4 @@
-import { assertType, expectTypeOf } from "vitest"
+import { assertType, expectTypeOf } from "vite-plus/test"
 import type { Slug, WithSlug, WithSlugsAdded } from "./addSlugs"
 import addSlugs, { createSlug } from "./addSlugs"
 

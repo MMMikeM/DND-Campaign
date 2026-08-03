@@ -10,7 +10,7 @@
 		"build": "tsup",
 		"dev": "tsx watch ./src/index.ts",
 		"lint": "biome check .",
-		"test": "vitest",
+		"test": "vp test",
 		"check": "tsc --noEmit",
 		"lint:fix": "biome check . --write"
 	},

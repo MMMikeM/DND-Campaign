@@ -1,4 +1,4 @@
-import { describe, expect, expectTypeOf, it } from "vitest"
+import { describe, expect, expectTypeOf, it } from "vite-plus/test"
 import { testData } from "../addSlugs.test.data"
 import type { Slug, WithSlug, WithSlugsAdded } from "./addSlugs"
 import addSlugs, { createSlug } from "./addSlugs"

@@ -25,7 +25,9 @@
 		"@types/node": "catalog:",
 		"knip": "^6.0.0",
 		"turbo": "^2.10.0",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vite": "catalog:",
+		"vite-plus": "catalog:"
 	},
 	"engines": {
 		"node": ">=22.0.0"

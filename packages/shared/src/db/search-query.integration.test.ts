@@ -1,7 +1,7 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql"
 import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
-import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test"
 import { buildSimilarityQuery, type SimilarityHit } from "./search-query"
 
 // Booting a container and pulling the image the first time is slow.

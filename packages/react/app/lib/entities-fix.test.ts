@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { unifyRelations } from "./utils/unify"
 
 // Define the outgoing relation type for testing

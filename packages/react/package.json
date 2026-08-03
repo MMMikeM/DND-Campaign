@@ -9,8 +9,8 @@
     "lint:fix": "biome check . --write",
     "lint": "biome check .",
     "start": "NODE_OPTIONS=\"--no-warnings --enable-source-maps --import=./patches/cjs-compat.js\" NODE_BETTER_SQLITE3=\"./patches/mock-sqlite.js\" react-router-serve ./build/server/index.js",
-    "test:watch": "vitest --watch",
-    "test": "vitest",
+    "test:watch": "vp test --watch",
+    "test": "vp test",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
@@ -82,7 +82,7 @@
     "react-router-devtools": "^5.0.6",
     "tailwindcss": "^4.1.10",
     "typescript": "catalog:",
-    "vite": "^6.3.5",
+    "vite": "catalog:",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "catalog:"
   }

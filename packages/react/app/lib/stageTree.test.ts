@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vite-plus/test"
 import { buildStageTree, type RawQuestStage, type StageNode } from "./entities"
 
 // Create a mock of RawQuestStage type for testing

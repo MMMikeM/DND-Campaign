@@ -17,3 +17,15 @@ catalog:
   vitest: 4.1.10
   zod: ^4.0.0
   tsx: ^4.0.0
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.7
+  vite-plus: 0.2.7
+overrides:
+  vite: 'catalog:'
+  vitest: 'catalog:'
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'
