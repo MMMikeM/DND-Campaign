@@ -12,8 +12,23 @@ export default defineConfig({
 		singleQuote: false,
 		semi: false,
 		// replaces biome's assist.actions.source.organizeImports
-		experimentalSortImports: true,
+		// experimentalSortImports: true,
+		sortImports: {
+			newlinesBetween: false
+		},
+		// biome's files.includes was a whitelist of **/*.ts and **/*.tsx, so it never
+		// touched markdown, JSON, or the generated drizzle snapshots. Keep that scope:
+		// oxfmt formats everything by default.
 		ignorePatterns: [
+			"**/*.md",
+			"**/*.json",
+			"**/*.jsonc",
+			"**/*.css",
+			"**/*.js",
+			"**/*.mjs",
+			"**/*.cjs",
+			"**/*.yaml",
+			"**/*.yml",
 			"**/dist/**",
 			"**/build/**",
 			"**/.react-router/**",
