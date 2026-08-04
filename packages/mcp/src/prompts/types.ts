@@ -11,7 +11,7 @@ import type { z } from "zod/v4"
 /**
  * Enhanced prompt definition using proper MCP SDK types
  */
-// biome-ignore lint/suspicious/noExplicitAny: the default keeps heterogeneous prompt records assignable
+// oxlint-disable-next-line typescript/no-explicit-any -- the default keeps heterogeneous prompt records assignable
 export interface PromptDefinition<T extends z.ZodObject<any> = any> {
 	/** Human-readable description of what this prompt does */
 	description: string

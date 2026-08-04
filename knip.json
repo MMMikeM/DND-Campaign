@@ -50,7 +50,7 @@
     "**/*.test.ts"
   ],
   "ignoreDependencies": [
-    "@biomejs/biome"
+    "vite-plus"
   ],
   "includeEntryExports": true,
   "ignoreExportsUsedInFile": true

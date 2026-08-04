@@ -97,7 +97,7 @@ const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | 
 	logger.info(`Smart search for ${entityType}: "${query}"`)
 
 	// Step 1: Try fuzzy search first
-	// biome-ignore lint/suspicious/noExplicitAny: <AI sucks>
+	// oxlint-disable-next-line typescript/no-explicit-any -- <AI sucks>
 	let fuzzyResults: any[] = []
 	switch (entityType) {
 		case "npc":

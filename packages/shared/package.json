@@ -15,8 +15,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "dev": "vp pack --watch",
-    "lint:fix": "biome check . --write",
-    "lint": "biome check .",
+    "lint:fix": "vp lint --fix",
+    "format": "vp fmt",
+    "lint": "vp lint",
     "test": "vp test"
   },
   "exports": {

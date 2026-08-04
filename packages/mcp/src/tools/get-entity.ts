@@ -76,7 +76,7 @@ const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => 
 		}
 
 		// @ts-ignore - We've checked the key exists, but TS can't infer the function signature dynamically
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// oxlint-disable-next-line typescript/no-explicit-any -- <explanation>
 		const getter: (...args: any[]) => Promise<any> = combinedGetters[getterKey]
 
 		const result = await getter(...getterArgs)

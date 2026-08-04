@@ -9,10 +9,11 @@
 		"build:watch": "tsup --watch",
 		"build": "tsup",
 		"dev": "tsx watch ./src/index.ts",
-		"lint": "biome check .",
+		"lint": "vp lint",
 		"test": "vp test",
 		"check": "tsc --noEmit",
-		"lint:fix": "biome check . --write"
+		"lint:fix": "vp lint --fix",
+		"format": "vp fmt"
 	},
 	"keywords": [],
 	"author": "",

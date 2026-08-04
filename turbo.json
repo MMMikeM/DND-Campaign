@@ -23,6 +23,9 @@
     "lint:fix": {
       "dependsOn": ["^build"]
     },
+    "format": {
+      "dependsOn": ["^build"]
+    },
     "check": {
       "dependsOn": ["^build"]
     },

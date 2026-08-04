@@ -214,12 +214,12 @@ describe("addSlugs function", () => {
 
 		// Test deeply nested relationships - outgoingRelations has no name property, so no slug
 		// Relation only has regionId, otherRegionId, relationType, but no name
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// oxlint-disable-next-line typescript/no-explicit-any -- <explanation>
 		expect((result.outgoingRelations[0] as any).slug).toBe(undefined)
 		// But target region should have a slug
 		expect(result.outgoingRelations[0].targetRegion.slug).toBe("akamas-peninsula")
 
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// oxlint-disable-next-line typescript/no-explicit-any -- <explanation>
 		expect((result.outgoingRelations[0].connections[0] as any).slug).toBe(undefined) // Not sluggable, no name property
 
 		// Test incoming relationships with deep nesting, if they exist in the test data
