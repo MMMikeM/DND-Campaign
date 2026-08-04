@@ -58,7 +58,12 @@ export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps
 		targetQuestId,
 		targetSiteId,
 		targetNpcId,
-		incomingLoreLinks,sourceItem,sourceItemId,sourceLore,targetConsequence,targetConsequenceId,
+		incomingLoreLinks,
+		sourceItem,
+		sourceItemId,
+		sourceLore,
+		targetConsequence,
+		targetConsequenceId,
 	} = foreshadowing
 
 	if (!foreshadowing) {

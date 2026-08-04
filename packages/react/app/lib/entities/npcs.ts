@@ -1,8 +1,8 @@
+import { nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { nameAndId } from "."
 
 const npcConfig = {
 	findById: (id: number) =>

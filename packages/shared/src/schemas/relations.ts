@@ -337,7 +337,11 @@ export const relations = defineRelations(schema, (r) => ({
 	},
 	questStageDecisions: {
 		quest: r.one.quests({ from: r.questStageDecisions.questId, to: r.quests.id, optional: false }),
-		sourceStage: r.one.questStages({ from: r.questStageDecisions.fromQuestStageId, to: r.questStages.id, optional: false }),
+		sourceStage: r.one.questStages({
+			from: r.questStageDecisions.fromQuestStageId,
+			to: r.questStages.id,
+			optional: false,
+		}),
 		targetStage: r.one.questStages({ from: r.questStageDecisions.toQuestStageId, to: r.questStages.id }),
 		consequences: r.many.consequences({
 			from: r.questStageDecisions.id,

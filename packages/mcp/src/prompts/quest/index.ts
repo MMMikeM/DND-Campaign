@@ -8,7 +8,6 @@
 
 import { logger } from "../.."
 import { createPromptDefinition, type PromptDefinition } from "../types"
-
 import { gatherQuestCreationContext } from "./context"
 import { type QuestCreationArgs, questCreationSchema } from "./types"
 

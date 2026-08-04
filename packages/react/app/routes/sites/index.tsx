@@ -1,7 +1,6 @@
 import * as Icons from "lucide-react"
 import { useState } from "react"
 import { NavLink } from "react-router"
-
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Input } from "~/components/ui/input"
@@ -48,17 +47,7 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredSites.map((site) => {
-					const {
-						id,
-						name,
-						slug,
-						description,
-						areaId,
-						creativePrompts,
-						intendedSiteFunction,
-						mapGroupId,
-						tags,
-					} = site
+					const { id, name, slug, description, areaId, creativePrompts, intendedSiteFunction, mapGroupId, tags } = site
 
 					const icon = <Icons.LocateFixed className="h-4 w-4 text-primary" />
 

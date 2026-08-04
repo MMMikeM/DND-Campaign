@@ -7,7 +7,6 @@ import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
-
 import { conflictParticipants, conflicts } from "./tables"
 
 export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb) =>

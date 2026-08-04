@@ -47,8 +47,7 @@ export const schemas = {
 		conflictingNarratives: longList.describe("Competing interpretations, propaganda, or viewpoints about this concept"),
 	})
 		.omit({ id: true })
-		.strict()
-		.describe(`FOUNDATIONAL WORLDBUILDING CONCEPTS that multiple entities reference. 
+		.strict().describe(`FOUNDATIONAL WORLDBUILDING CONCEPTS that multiple entities reference. 
 		
 		USE FOR: Cultural movements, belief systems, natural phenomena, magical systems, historical events, divine hierarchies, political situations, species/racial concepts, philosophical schools.
 		

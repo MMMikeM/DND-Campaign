@@ -44,31 +44,35 @@ export const npcs = pgTable("npcs", {
 	voiceNotes: string("voice_notes"),
 })
 
-export const npcDetails = pgTable("npc_details", {
-	id: pk(),
-	npcId: cascadeFk("npc_id", npcs.id),
+export const npcDetails = pgTable(
+	"npc_details",
+	{
+		id: pk(),
+		npcId: cascadeFk("npc_id", npcs.id),
 
-	alignment: oneOf("alignment", alignments),
-	wealth: oneOf("wealth", wealthLevels),
+		alignment: oneOf("alignment", alignments),
+		wealth: oneOf("wealth", wealthLevels),
 
-	availability: oneOf("availability", availabilityLevels),
-	adaptability: oneOf("adaptability", adaptabilityLevels),
-	complexity: oneOf("complexity", characterComplexityProfiles),
+		availability: oneOf("availability", availabilityLevels),
+		adaptability: oneOf("adaptability", adaptabilityLevels),
+		complexity: oneOf("complexity", characterComplexityProfiles),
 
-	goalsAndFears: list("goals_and_fears"),
-	secretsAndHistory: list("secrets_and_history"),
+		goalsAndFears: list("goals_and_fears"),
+		secretsAndHistory: list("secrets_and_history"),
 
-	capability: oneOf("capability", cprScores),
-	proactivity: oneOf("proactivity", cprScores),
-	relatability: oneOf("relatability", cprScores),
+		capability: oneOf("capability", cprScores),
+		proactivity: oneOf("proactivity", cprScores),
+		relatability: oneOf("relatability", cprScores),
 
-	biases: list("biases"),
-	preferredTopics: list("preferred_topics"),
-	avoidTopics: list("avoid_topics"),
+		biases: list("biases"),
+		preferredTopics: list("preferred_topics"),
+		avoidTopics: list("avoid_topics"),
 
-	knowledge: list("knowledge"),
-	rumours: list("rumours"),
-}, (t) => [unique().on(t.npcId)])
+		knowledge: list("knowledge"),
+		rumours: list("rumours"),
+	},
+	(t) => [unique().on(t.npcId)],
+)
 
 export const npcFactionMemberships = pgTable(
 	"npc_faction_memberships",

@@ -11,8 +11,7 @@ export const entityGetters = createEntityGetters({
 	all_factions: () => db.query.factions.findMany({}),
 	all_faction_agendas: () => db.query.factionAgendas.findMany({}),
 	all_faction_diplomacy: () => db.query.factionDiplomacy.findMany({}),
-	faction_diplomacy_by_id: (id: number) =>
-		db.query.factionDiplomacy.findFirst({ where: { id } }),
+	faction_diplomacy_by_id: (id: number) => db.query.factionDiplomacy.findFirst({ where: { id } }),
 	all_faction_influence: () => db.query.factionInfluence.findMany({}),
 
 	faction_by_id: (id: number) =>

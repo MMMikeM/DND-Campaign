@@ -3,8 +3,6 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
-
-
 export const NarrativeContent = ({
 	questHooks,
 	questStages,

@@ -17,10 +17,7 @@ export function ItemsContent({ itemConnections }: Pick<Conflict, "itemConnection
 						{/* Header with item name and relationship */}
 						<div className="flex justify-between items-start mb-3">
 							<div>
-								<Link
-									href={`/items/${sourceItem.id}`}
-									className="text-lg font-semibold text-primary hover:underline"
-								>
+								<Link href={`/items/${sourceItem.id}`} className="text-lg font-semibold text-primary hover:underline">
 									{sourceItem.name}
 								</Link>
 								<p className="text-sm text-muted-foreground mt-1">

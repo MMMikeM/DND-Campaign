@@ -46,7 +46,13 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 		summary,
 		surfaceImpression,
 		tags,
-		aestheticsAndSymbols,conflictingNarratives,connectionsToWorld,coreTenetsAndTraditions,historyAndLegacy,id,interactionsAndRules
+		aestheticsAndSymbols,
+		conflictingNarratives,
+		connectionsToWorld,
+		coreTenetsAndTraditions,
+		historyAndLegacy,
+		id,
+		interactionsAndRules,
 	} = loaderData
 
 	const activeTab = tab || "details"

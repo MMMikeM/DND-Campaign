@@ -1,7 +1,7 @@
+import { nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors" // Import custom error
 import addSlugs from "../utils/addSlugs"
-import { nameAndId } from "."
 
 const areaConfig = {
 	findById: (id: number) =>

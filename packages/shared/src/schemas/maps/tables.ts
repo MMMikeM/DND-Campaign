@@ -45,7 +45,9 @@ export const mapVariants = pgTable(
 	},
 	(t) => [
 		unique("map_id_variant_name_unique").on(t.mapGroupId, t.variantName),
-		uniqueIndex("one_default_per_group_idx").on(t.mapGroupId).where(sql`${t.isDefault} = true`),
+		uniqueIndex("one_default_per_group_idx")
+			.on(t.mapGroupId)
+			.where(sql`${t.isDefault} = true`),
 	],
 )
 export const enums = {

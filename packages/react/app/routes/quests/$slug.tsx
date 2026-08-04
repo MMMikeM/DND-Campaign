@@ -54,8 +54,18 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 		affectingConsequences,
 		incomingForeshadowing,
 		slug,
-		dependentQuests,emotionalShape,eventType,
-		impactSeverity,intendedRhythmEffect,narrativePlacement,payoff,prerequisiteQuest,promise,stageDecisions,stakes,triggeredConsequences,
+		dependentQuests,
+		emotionalShape,
+		eventType,
+		impactSeverity,
+		intendedRhythmEffect,
+		narrativePlacement,
+		payoff,
+		prerequisiteQuest,
+		promise,
+		stageDecisions,
+		stakes,
+		triggeredConsequences,
 	} = quest
 
 	const { tab, stageSlug, stageTab } = useParams()

@@ -20,7 +20,8 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 	const filteredRegions = regions.filter(
 		(region) =>
 			region.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			region.type.toLowerCase().includes(searchTerm.toLowerCase()))
+			region.type.toLowerCase().includes(searchTerm.toLowerCase()),
+	)
 
 	return (
 		<div className="container mx-auto py-6">

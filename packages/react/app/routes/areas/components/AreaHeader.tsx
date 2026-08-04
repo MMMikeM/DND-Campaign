@@ -1,14 +1,9 @@
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
-
 import { Badge } from "~/components/ui/badge"
 import type { Area } from "~/lib/entities"
 
-export function AreaHeader({
-	name,
-	type,
-	region,
-}: Pick<Area, "name" | "type" | "region" >) {
+export function AreaHeader({ name, type, region }: Pick<Area, "name" | "type" | "region">) {
 	return (
 		<div className="p-4 mb-6 border rounded bg-card text-card-foreground shadow-sm">
 			<div className="flex justify-between items-start">

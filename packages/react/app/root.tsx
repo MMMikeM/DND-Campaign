@@ -1,5 +1,4 @@
 import { isRouteErrorResponse, Links, Meta, Scripts, ScrollRestoration } from "react-router"
-
 import type { Route } from "./+types/root"
 import "./app.css"
 import { MainLayout } from "./components/MainLayout"

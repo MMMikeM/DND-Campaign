@@ -1,9 +1,9 @@
+import Dagre from "@dagrejs/dagre"
 import type { Edge, Node } from "@xyflow/react"
 import { Position, ReactFlow, useEdgesState, useNodesState } from "@xyflow/react"
 import type React from "react"
-import { useCallback, useEffect } from "react"
 import "@xyflow/react/dist/style.css"
-import Dagre from "@dagrejs/dagre"
+import { useCallback, useEffect } from "react"
 import type { RawQuestStage, StageDecision } from "../lib/entities"
 
 // Define types for the component props

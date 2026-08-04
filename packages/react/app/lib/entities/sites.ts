@@ -1,8 +1,8 @@
+import { nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
-import { nameAndId } from "."
 
 const siteConfig = {
 	findById: (id: number) =>
@@ -10,7 +10,7 @@ const siteConfig = {
 			where: { id },
 			columns: {
 				areaId: false,
-				mapGroupId: false
+				mapGroupId: false,
 			},
 			with: {
 				secrets: true,

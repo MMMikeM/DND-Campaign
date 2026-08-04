@@ -71,10 +71,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<SiteHeader
-				name={name}
-				area={area}
-			/>
+			<SiteHeader name={name} area={area} />
 
 			{/* Tags */}
 			<Tags tags={tags} variant="secondary" maxDisplay={8} className="mb-6" />
@@ -97,17 +94,11 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="details">
-					<DetailsContent
-						creativePrompts={creativePrompts}
-						intendedSiteFunction={intendedSiteFunction}
-					/>
+					<DetailsContent creativePrompts={creativePrompts} intendedSiteFunction={intendedSiteFunction} />
 				</TabsContent>
 
 				<TabsContent value="inhabitants">
-					<InhabitantsContent
-						factionInfluence={factionInfluence}
-						factionHqs={factionHqs}
-					/>
+					<InhabitantsContent factionInfluence={factionInfluence} factionHqs={factionHqs} />
 				</TabsContent>
 
 				<TabsContent value="encounters">

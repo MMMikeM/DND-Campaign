@@ -1,7 +1,7 @@
+import { nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
-import { nameAndId } from "."
 
 const foreshadowingConfig = {
 	findById: (id: number) =>

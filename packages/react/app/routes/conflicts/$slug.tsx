@@ -83,7 +83,10 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 		stakes,
 		status,
 		tags,
-		id,itemConnections,nature,regionId,
+		id,
+		itemConnections,
+		nature,
+		regionId,
 	} = loaderData
 	const { tab } = useParams()
 	const activeTab = tab || "overview"

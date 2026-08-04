@@ -71,7 +71,8 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		symbols,
 		transparencyLevel,
 		type,
-		hqSiteId,id
+		hqSiteId,
+		id,
 	} = faction
 	const { tab } = useParams()
 	const activeTab = tab || "overview"

@@ -14,7 +14,7 @@ export default defineConfig({
 		// replaces biome's assist.actions.source.organizeImports
 		// experimentalSortImports: true,
 		sortImports: {
-			newlinesBetween: false
+			newlinesBetween: false,
 		},
 		// biome's files.includes was a whitelist of **/*.ts and **/*.tsx, so it never
 		// touched markdown, JSON, or the generated drizzle snapshots. Keep that scope:

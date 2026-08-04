@@ -3,10 +3,7 @@ import { NavLink } from "react-router"
 // import { getSiteTypeIcon } from "../utils" // Import utils if needed
 import type { Site } from "~/lib/entities" // Import the Site type
 
-export const SiteHeader = ({
-	name,
-	area,
-}: Pick<Site, "name" | "area">) => {
+export const SiteHeader = ({ name, area }: Pick<Site, "name" | "area">) => {
 	return (
 		<div className="p-4 mb-6 border rounded bg-card text-card-foreground shadow-sm">
 			<div className="flex justify-between items-start mb-2">

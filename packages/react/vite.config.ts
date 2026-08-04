@@ -4,14 +4,13 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite-plus"
 
 export default defineConfig({
-
 	plugins: [
 		tailwindcss(),
 		// reactRouterDevTools(),
 		reactRouter(),
 	],
 	resolve: {
-		tsconfigPaths: true
+		tsconfigPaths: true,
 	},
 	ssr: {
 		external: ["node:fs", "node:path"],

@@ -29,7 +29,6 @@ export const ConsequencesContent = ({ consequences }: Pick<Area, "consequences">
 						tags,
 						timeframe,
 						triggerQuestStageDecision,
-
 					}) => (
 						<div key={id} className="border rounded p-4">
 							<h4 className="font-medium text-lg">{name}</h4>

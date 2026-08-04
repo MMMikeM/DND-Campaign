@@ -25,7 +25,7 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 		(quest) =>
 			quest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			quest.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			quest.description?.some((desc) => desc.toLowerCase().includes(searchTerm.toLowerCase()))
+			quest.description?.some((desc) => desc.toLowerCase().includes(searchTerm.toLowerCase())),
 	)
 
 	return (
@@ -58,14 +58,7 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredQuests.map((quest) => {
-					const {
-						name,
-						type,
-						urgency,
-						description,
-						slug,
-						id
-					} = quest
+					const { name, type, urgency, description, slug, id } = quest
 
 					return (
 						<NavLink key={quest.id} to={`/quests/${slug}`}>

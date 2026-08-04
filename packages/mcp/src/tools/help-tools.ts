@@ -63,9 +63,7 @@ const formatRegularToolParameters = (schema: JsonSchemaObject): string => {
 				.join("\n")
 		: "No parameters available"
 
-	const requiredParams = schema.required?.length
-		? `**Required Parameters:** \`${schema.required.join("`, `")}\``
-		: ""
+	const requiredParams = schema.required?.length ? `**Required Parameters:** \`${schema.required.join("`, `")}\`` : ""
 
 	return `${requiredParams}\n\n## Parameters\n${paramsInfo}`
 }

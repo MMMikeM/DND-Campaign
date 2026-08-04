@@ -43,7 +43,11 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 		slug,
 		tags,
 		type,
-		atmosphereAndCulture,featuresAndHazards,historyAndEconomy,id,loreAndSecrets
+		atmosphereAndCulture,
+		featuresAndHazards,
+		historyAndEconomy,
+		id,
+		loreAndSecrets,
 	} = region
 
 	const handleTabChange = (value: string) => {

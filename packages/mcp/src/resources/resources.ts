@@ -1,6 +1,6 @@
 import { type McpServer, ResourceTemplate } from "@modelcontextprotocol/server"
-import { logger } from ".."
 import { campaignResourceDefinitions } from "."
+import { logger } from ".."
 
 // Built once at module scope: registerResourceHandlers runs per request under
 // the sessionless createMcpHandler model, so templates and read callbacks are
