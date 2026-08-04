@@ -84,7 +84,6 @@
     "tailwindcss": "^4.1.10",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "catalog:"
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }
