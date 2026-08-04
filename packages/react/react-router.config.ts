@@ -7,7 +7,4 @@ export default {
 
 	// Custom application directory path
 	appDirectory: "./app",
-
-	// No additional configuration needed for aliases - they're handled by
-	// vite-tsconfig-paths plugin in vite.config.ts
 } satisfies Config

@@ -83,7 +83,6 @@
     "react-router-devtools": "^5.0.6",
     "tailwindcss": "^4.1.10",
     "typescript": "catalog:",
-    "vite": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite": "catalog:"
   }
 }
