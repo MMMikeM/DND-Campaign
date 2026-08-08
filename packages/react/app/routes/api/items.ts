@@ -1,56 +1,56 @@
 import {
-	getAllAreas,
-	getAllConflicts,
-	getAllFactions,
-	getAllForeshadowing,
-	getAllLore,
-	getAllMaps,
-	getAllConsequences,
-	getAllNpcs,
-	getAllQuests,
-	getAllRegions,
-	getAllSites,
+	getAreaNames,
+	getConflictNames,
+	getConsequenceNames,
+	getFactionNames,
+	getForeshadowingNames,
+	getLoreNames,
+	getMapNames,
+	getNpcNames,
+	getQuestNames,
+	getRegionNames,
+	getSiteNames,
 } from "~/lib/entities"
+import type { NavData, NavItem, NavKey } from "~/lib/nav"
 import type { Route } from "./+types/items"
 
-const fetchDataSources = {
-	areas: getAllAreas,
-	conflicts: getAllConflicts,
-	factions: getAllFactions,
-	foreshadowing: getAllForeshadowing,
-	maps: getAllMaps,
-	npcs: getAllNpcs,
-	quests: getAllQuests,
-	regions: getAllRegions,
-	sites: getAllSites,
-	lore: getAllLore,
+type NavFetcher = () => Promise<NavItem[]>
+
+/**
+ * `satisfies` makes this exhaustive in both directions against `navEntities`:
+ * a nav entry with no fetcher and a fetcher with no nav entry are both errors.
+ */
+const navFetchers = {
+	areas: getAreaNames,
+	conflicts: getConflictNames,
+	consequences: getConsequenceNames,
+	factions: getFactionNames,
+	foreshadowing: getForeshadowingNames,
+	lore: getLoreNames,
+	maps: getMapNames,
+	npcs: getNpcNames,
+	quests: getQuestNames,
+	regions: getRegionNames,
+	sites: getSiteNames,
+} satisfies Record<NavKey, NavFetcher>
+
+const loadNavItems = async (key: NavKey, fetch: NavFetcher): Promise<NavItem[]> => {
+	try {
+		return await fetch()
+	} catch (error) {
+		console.error(`Failed to load sidebar items for ${key}:`, error)
+		return []
+	}
 }
 
-const fetchData = async () => {
+export const loadNavData = async (): Promise<NavData> => {
 	const entries = await Promise.all(
-		Object.entries(fetchDataSources).map(async ([key, fetcher]) => {
-			try {
-				console.log(`Fetching ${key}...`)
-				const data = await fetcher()
-				console.log(`Fetched ${data?.length || 0} ${key}`)
-				return [key, data] as const
-			} catch (error) {
-				console.error(`Error fetching ${key}:`, error)
-				return [key, null] as const
-			}
-		}),
+		Object.entries(navFetchers).map(async ([key, fetch]) => [key, await loadNavItems(key as NavKey, fetch)] as const),
 	)
 
-	// Log summary instead of trying to stringify everything
-	const summary = entries.map(([key, data]) => `${key}: ${data?.length || 0} items`).join(", ")
-	console.log(`Data fetch complete: ${summary}`)
-
-	return Object.fromEntries(entries)
+	return Object.fromEntries(entries) as NavData
 }
 
 export async function loader(_: Route.LoaderArgs) {
-	const fetchedData = await fetchData()
-	return Response.json(fetchedData)
+	return Response.json(await loadNavData())
 }
-
-export type Items = Awaited<ReturnType<typeof fetchData>>

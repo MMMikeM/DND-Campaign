@@ -70,6 +70,4 @@ export const getLore = async (slug: string) => {
 	throw new EntityNotFoundError("Lore", selectedLore.id)
 }
 
-export async function getLoreNames() {
-	return loreConfig.getNamesAndIds()
-}
+export const getLoreNames = () => loreConfig.getNamesAndIds().then(addSlugs)

@@ -3,6 +3,7 @@ import * as Icons from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useLocation } from "react-router"
 import { Link } from "~/components/ui/link"
+import type { NavItem } from "~/lib/nav"
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 
 const menuVariants = {
@@ -34,19 +35,13 @@ const chevronVariants = {
 	closed: { rotate: -90 },
 }
 
-export type MenuItem = {
-	id: string | number
-	name: string
-	slug: string
-}
-
 interface CategoryMenuProps {
 	title: string
 	icon: LucideIcon
 	isExpanded: boolean
 	onToggle: () => void
 	basePath: string
-	menuItems: MenuItem[]
+	menuItems: NavItem[]
 }
 
 export function CategoryMenu({ title, icon: Icon, isExpanded, onToggle, basePath, menuItems }: CategoryMenuProps) {

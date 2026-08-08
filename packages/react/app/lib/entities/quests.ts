@@ -73,3 +73,5 @@ export const getQuest = async (slug: string) => {
 
 	throw new EntityNotFoundError("Quest", selectedQuest.id)
 }
+
+export const getQuestNames = () => questConfig.getNamesAndIds().then(addSlugs)

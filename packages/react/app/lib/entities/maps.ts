@@ -89,3 +89,5 @@ export const getMap = async (slug: string) => {
 }
 
 export type MapVariant = Awaited<ReturnType<typeof getMap>>["variants"][number]
+
+export const getMapNames = () => mapConfig.getNamesAndIds().then(addSlugs)

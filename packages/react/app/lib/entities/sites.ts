@@ -88,3 +88,5 @@ export const getSite = async (slug: string) => {
 
 	throw new EntityNotFoundError("Site", selectedSite.id)
 }
+
+export const getSiteNames = () => siteConfig.getNamesAndIds().then(addSlugs)

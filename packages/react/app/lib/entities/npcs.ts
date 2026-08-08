@@ -65,3 +65,5 @@ export const getNpc = async (slug: string) => {
 
 	throw new EntityNotFoundError("NPC", selectedNpc.id)
 }
+
+export const getNpcNames = () => npcConfig.getNamesAndIds().then(addSlugs)

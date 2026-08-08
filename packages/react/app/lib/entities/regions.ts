@@ -77,3 +77,5 @@ export const getRegion = async (slug: string) => {
 
 	throw new EntityNotFoundError("Region", selectedRegion.id)
 }
+
+export const getRegionNames = () => regionConfig.getNamesAndIds().then(addSlugs)

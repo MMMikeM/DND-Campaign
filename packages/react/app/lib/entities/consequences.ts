@@ -48,3 +48,5 @@ export const getConsequence = async (slug: string) => {
 
 	throw new EntityNotFoundError("Consequence", selectedEvent.id)
 }
+
+export const getConsequenceNames = () => consequenceConfig.getNamesAndIds().then(addSlugs)

@@ -108,3 +108,5 @@ export const getFaction = async (slug: string) => {
 
 	throw new EntityNotFoundError("Faction", selectedFaction.id)
 }
+
+export const getFactionNames = () => factionConfig.getNamesAndIds().then(addSlugs)

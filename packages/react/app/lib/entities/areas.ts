@@ -80,3 +80,5 @@ export const getArea = async (slug: string) => {
 
 	throw new EntityNotFoundError("Area", selectedArea.id)
 }
+
+export const getAreaNames = () => areaConfig.getNamesAndIds().then(addSlugs)

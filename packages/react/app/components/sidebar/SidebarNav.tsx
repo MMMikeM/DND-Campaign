@@ -2,58 +2,13 @@ import * as Icons from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router"
 import { Link } from "~/components/ui/link"
+import { navBasePath, type NavData, navEntities } from "~/lib/nav"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
-import { CategoryMenu, type MenuItem } from "./CategoryMenu"
-
-type Categories =
-	| "factions"
-	| "npcs"
-	| "regions"
-	| "areas"
-	| "sites"
-	| "quests"
-	| "conflicts"
-	| "foreshadowing"
-	| "narrativeEvents"
-	| "narrativeDestinations"
-	| "lore"
-	| "maps"
-
-type ItemsData = Record<Categories, MenuItem[] | undefined>
+import { CategoryMenu } from "./CategoryMenu"
 
 interface SidebarNavProps {
-	menuData: ItemsData
+	menuData: NavData
 }
-
-const categoriesConfig: {
-	key: keyof ItemsData
-	title: string
-	icon: Icons.LucideIcon
-	path?: string
-}[] = [
-	{ key: "lore", title: "Lore", icon: Icons.Library },
-	{ key: "maps", title: "Maps", icon: Icons.Map },
-	{ key: "factions", title: "Factions", icon: Icons.Users },
-	{ key: "npcs", title: "NPCs", icon: Icons.User },
-	{ key: "regions", title: "Regions", icon: Icons.Globe },
-	{ key: "areas", title: "Areas", icon: Icons.MapPin },
-	{ key: "sites", title: "Sites", icon: Icons.LocateFixed },
-	{ key: "quests", title: "Quests", icon: Icons.Scroll },
-	{ key: "conflicts", title: "Conflicts", icon: Icons.Swords },
-	{ key: "foreshadowing", title: "Foreshadowing", icon: Icons.Eye },
-	{
-		key: "narrativeEvents",
-		title: "Narrative Events",
-		icon: Icons.Milestone,
-		path: "narrative-events",
-	},
-	{
-		key: "narrativeDestinations",
-		title: "Narrative Destinations",
-		icon: Icons.Book,
-		path: "narrative-destinations",
-	},
-]
 
 export function SidebarNav({ menuData }: SidebarNavProps) {
 	const location = useLocation()
@@ -61,10 +16,9 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 
 	useEffect(() => {
 		const currentPath = location.pathname
-		for (const config of categoriesConfig) {
-			const basePath = config.path ?? config.key
-			const pathToCheck = `/${basePath}`
-			if (currentPath.startsWith(pathToCheck)) {
+		for (const entity of navEntities) {
+			const basePath = navBasePath(entity)
+			if (currentPath.startsWith(`/${basePath}`)) {
 				setActiveMenu(basePath)
 				return
 			}
@@ -98,16 +52,16 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 			<div className="mt-8 mb-3 px-4">
 				<h3 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">World Elements</h3>
 			</div>
-			{categoriesConfig.map((config) => {
-				const menuItems = menuData[config.key]
-				if (!menuItems) return null
-				const basePath = config.path ?? config.key
+			{navEntities.map((entity) => {
+				const menuItems = menuData[entity.key]
+				if (menuItems.length === 0) return null
+				const basePath = navBasePath(entity)
 
 				return (
 					<CategoryMenu
 						key={basePath}
-						title={config.title}
-						icon={config.icon}
+						title={entity.title}
+						icon={entity.icon}
 						isExpanded={activeMenu === basePath}
 						onToggle={() => toggleMenu(basePath)}
 						basePath={basePath}

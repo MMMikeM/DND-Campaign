@@ -1,33 +1,18 @@
 import * as Icons from "lucide-react"
 import { useEffect } from "react"
 import { Outlet, useFetcher } from "react-router"
-import type { Items } from "~/routes/api/items"
+import { emptyNavData, type NavData } from "~/lib/nav"
 import { SidebarNav } from "./sidebar/SidebarNav"
 import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider } from "./ui/sidebar"
 
 export function MainLayout() {
-	const fetcher = useFetcher<Items>()
+	const fetcher = useFetcher<NavData>()
 
 	useEffect(() => {
 		if (fetcher.state === "idle" && fetcher.data == null) {
 			fetcher.load("/api/items")
 		}
 	}, [fetcher])
-
-	const formattedData = {
-		factions: fetcher.data?.factions,
-		npcs: fetcher.data?.npcs,
-		regions: fetcher.data?.regions,
-		areas: fetcher.data?.areas,
-		sites: fetcher.data?.sites,
-		quests: fetcher.data?.quests,
-		conflicts: fetcher.data?.conflicts,
-		foreshadowing: fetcher.data?.foreshadowing,
-		narrativeEvents: fetcher.data?.narrativeEvents,
-		narrativeDestinations: fetcher.data?.narrativeDestinations,
-		lore: fetcher.data?.lore,
-		maps: fetcher.data?.maps,
-	}
 
 	return (
 		<SidebarProvider defaultOpen={true}>
@@ -54,7 +39,7 @@ export function MainLayout() {
 						</div>
 					</SidebarHeader>
 					<SidebarContent className="px-3 py-5 relative z-10">
-						<SidebarNav menuData={formattedData} />
+						<SidebarNav menuData={fetcher.data ?? emptyNavData} />
 					</SidebarContent>
 				</Sidebar>
 				<main className="flex-1 overflow-auto p-6">

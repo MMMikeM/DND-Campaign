@@ -60,3 +60,5 @@ export const getForeshadowing = async (slug: string) => {
 
 	throw new EntityNotFoundError("Foreshadowing", selectedForeshadowing.id) // Use custom error
 }
+
+export const getForeshadowingNames = () => foreshadowingConfig.getNamesAndIds().then(addSlugs)

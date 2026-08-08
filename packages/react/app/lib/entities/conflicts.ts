@@ -88,3 +88,5 @@ export const getConflict = async (slug: string) => {
 
 	throw new EntityNotFoundError("Conflict", selectedConflict.id)
 }
+
+export const getConflictNames = () => conflictConfig.getNamesAndIds().then(addSlugs)
