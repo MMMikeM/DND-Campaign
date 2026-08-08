@@ -9,6 +9,7 @@ allowBuilds:
   cpu-features: false
   protobufjs: false
   ssh2: false
+  '@modelcontextprotocol/inspector': true
 catalog:
   "@types/node": ^26.0.0
   drizzle-orm: 1.0.0-rc.4
