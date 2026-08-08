@@ -7,6 +7,11 @@ const factionConfig = {
 	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.factions.findFirst({
 			where,
+			columns: {
+				primaryHqSiteId: false,
+				id: false,
+				hqSiteId: false,
+			},
 			with: {
 				agendas: true,
 				conflicts: true,
@@ -15,7 +20,6 @@ const factionConfig = {
 				incomingRelations: { with: { sourceFaction: nameAndId } },
 				outgoingRelations: { with: { targetFaction: nameAndId } },
 				affectingConsequences: consequenceWithTrigger,
-
 				incomingForeshadowing: foreshadowingWithSources,
 				influence: {
 					with: {

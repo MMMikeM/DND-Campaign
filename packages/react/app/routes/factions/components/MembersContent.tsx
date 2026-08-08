@@ -14,7 +14,7 @@ export function MembersContent({ members }: Pick<Faction, "members">) {
 			emptyMessage={`No known members of ${name}`}
 		>
 			{members.map(
-				({ id, creativePrompts, description, gmNotes, tags, secrets, loyalty, role, justification, rank, npc }) => (
+				({ id, creativePrompts, description, tags, secrets, loyalty, role, justification, rank, npc }) => (
 					<div key={`npc-${id}`} className="border rounded p-4">
 						<div className="flex items-center justify-between">
 							<h4 className="font-medium">
@@ -51,7 +51,6 @@ export function MembersContent({ members }: Pick<Faction, "members">) {
 						<List items={secrets} heading="Secrets" />
 						<List items={description} heading="Description" />
 						<List items={creativePrompts} heading="Creative Prompts" />
-						<List items={gmNotes} heading="GM Notes" />
 						<Tags tags={tags} />
 					</div>
 				),

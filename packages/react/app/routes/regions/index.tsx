@@ -72,11 +72,7 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 							<Card className="h-full hover:shadow-md transition-shadow">
 								<CardHeader>
 									<CardTitle className="flex items-center">
-										{type === "city" ? (
-											<Icons.Pin className="h-5 w-5 mr-2 text-indigo-500" />
-										) : (
-											<Icons.Map className="h-5 w-5 mr-2 text-indigo-500" />
-										)}
+										<Icons.Map className="h-5 w-5 mr-2 text-indigo-500" />
 										{name}
 									</CardTitle>
 									<CardDescription>

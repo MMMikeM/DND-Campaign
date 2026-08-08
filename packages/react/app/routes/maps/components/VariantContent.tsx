@@ -55,18 +55,12 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 						isDefault,
 						id,
 						mapFile,
-						description,
-						gmNotes,
+						atmosphereAndSensoryDetails,
 						creativePrompts,
-						coverOptions,
-						elevationFeatures,
-						movementRoutes,
-						difficultTerrain,
-						chokePoints,
-						sightLines,
-						tacticalPositions,
-						interactiveElements,
+						description,
 						environmentalHazards,
+						interactiveElements,
+						tacticalFeatures,
 						tags,
 					}) => (
 						<TabsContent key={id} value={id.toString()} forceMount className="w-full mt-4 data-[state=inactive]:hidden">
@@ -103,7 +97,13 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 									contentClassName="grid grid-cols-1 lg:grid-cols-2 gap-6"
 								>
 									<List items={description} heading="Description" spacing="xs" textSize="sm" collapsible={false} />
-									<List items={gmNotes} heading="GM Notes" spacing="xs" textSize="sm" collapsible={false} />
+									<List
+										items={atmosphereAndSensoryDetails}
+										heading="Atmosphere & Sensory Detail"
+										spacing="xs"
+										textSize="sm"
+										collapsible={false}
+									/>
 									<List
 										items={creativePrompts}
 										heading="Creative Prompts"
@@ -126,13 +126,7 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 									contentClassName="grid grid-cols-1 lg:grid-cols-2 gap-6"
 									className={`${getOrientation(mapFile) === "landscape" ? "col-span-2" : "col-span-1"} w-full h-fit`}
 								>
-									<List items={coverOptions} heading="Cover Options" spacing="xs" textSize="sm" />
-									<List items={elevationFeatures} heading="Elevation Features" spacing="xs" textSize="sm" />
-									<List items={movementRoutes} heading="Movement Routes" spacing="xs" textSize="sm" />
-									<List items={difficultTerrain} heading="Difficult Terrain" spacing="xs" textSize="sm" />
-									<List items={chokePoints} heading="Choke Points" spacing="xs" textSize="sm" />
-									<List items={sightLines} heading="Sight Lines" spacing="xs" textSize="sm" />
-									<List items={tacticalPositions} heading="Tactical Positions" spacing="xs" textSize="sm" />
+									<List items={tacticalFeatures} heading="Tactical Features" spacing="xs" textSize="sm" />
 									<List items={environmentalHazards} heading="Environmental Hazards" spacing="xs" textSize="sm" />
 								</InfoCard>
 							</motion.div>

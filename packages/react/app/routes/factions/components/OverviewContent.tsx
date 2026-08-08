@@ -11,7 +11,6 @@ export function OverviewContent({
 	secretGoal,
 	primaryHqSite,
 	description,
-	gmNotes,
 	history,
 	publicPerception,
 	values,
@@ -22,7 +21,6 @@ export function OverviewContent({
 	| "secretGoal"
 	| "primaryHqSite"
 	| "description"
-	| "gmNotes"
 	| "history"
 	| "publicPerception"
 	| "values"
@@ -86,7 +84,6 @@ export function OverviewContent({
 				emptyMessage={`No GM notes for ${name}`}
 				className="lg:col-span-2"
 			>
-				<List items={gmNotes} />
 			</InfoCard>
 			<InfoCard
 				title="History"

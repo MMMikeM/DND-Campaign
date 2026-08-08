@@ -13,7 +13,6 @@ export function DetailsContent({
 	transparencyLevel,
 	tags,
 	incomingForeshadowing,
-	narrativeDestinationInvolvement,
 	conflicts,
 	itemConnections,
 	loreLinks,
@@ -30,7 +29,6 @@ export function DetailsContent({
 	| "transparencyLevel"
 	| "tags"
 	| "incomingForeshadowing"
-	| "narrativeDestinationInvolvement"
 	| "conflicts"
 	| "itemConnections"
 	| "loreLinks"

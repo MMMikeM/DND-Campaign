@@ -20,7 +20,6 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 						creativePrompts,
 						description,
 						faction,
-						gmNotes,
 						importanceInQuest,
 						involvementDetails,
 						npc,
@@ -51,7 +50,6 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 							<p>Importance in Quest: {importanceInQuest}</p>
 							<List items={description} heading="Description" />
 							<List items={creativePrompts} heading="Creative Prompts" />
-							<List items={gmNotes} heading="GM Notes" />
 							<List items={tags} heading="Tags" />
 							<List items={involvementDetails} heading="Involvement Details" />
 						</div>
@@ -63,7 +61,6 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 						name,
 						creativePrompts,
 						description,
-						gmNotes,
 						tags,
 						hookSourceType,
 						hookType,
@@ -117,7 +114,6 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 
 							<List items={description} heading="Description" />
 							<List items={creativePrompts} heading="Creative Prompts" />
-							<List items={gmNotes} heading="GM Notes" />
 							<List items={hookContent} heading="Hook Content" />
 							<List items={discoveryConditions} heading="Discovery Conditions" />
 							<Tags tags={tags} />

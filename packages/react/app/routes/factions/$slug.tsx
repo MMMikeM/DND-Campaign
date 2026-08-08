@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import { redirect, replace, useNavigate, useParams } from "react-router"
+import { replace, useNavigate, useParams } from "react-router"
 import { AlignmentBadge } from "~/components/alignment-badge"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Link } from "~/components/ui/link"
@@ -71,8 +71,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 		symbols,
 		transparencyLevel,
 		type,
-		hqSiteId,
-		id,
 	} = faction
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
@@ -127,7 +125,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 						<OverviewContent
 							values={values}
 							description={description}
-							gmNotes={gmNotes}
 							name={name}
 							publicGoal={publicGoal}
 							secretGoal={secretGoal}
@@ -143,7 +140,6 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 							transparencyLevel={transparencyLevel}
 							tags={tags}
 							incomingForeshadowing={incomingForeshadowing}
-							narrativeDestinationInvolvement={narrativeDestinationInvolvement}
 							conflicts={conflicts}
 							itemConnections={itemConnections}
 							loreLinks={loreLinks}

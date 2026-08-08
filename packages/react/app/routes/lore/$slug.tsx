@@ -41,7 +41,6 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 		description,
 		hiddenTruths,
 		historyAndLegacy,
-		id,
 		incomingForeshadowing,
 		interactionsAndRules,
 		links,
