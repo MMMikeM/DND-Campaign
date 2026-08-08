@@ -50,17 +50,7 @@ export function Header({ name, scope, nature, status }: Pick<Conflict, "name" | 
 	)
 }
 
-const tabs = [
-	"Overview",
-	"Participants",
-	"Progression",
-	"Items",
-	"Narrative Destinations",
-	"Region",
-	"Lore",
-	"Foreshadowing",
-	"Consequences",
-]
+const tabs = ["Overview", "Participants", "Progression", "Items", "Lore", "Foreshadowing", "Consequences"]
 
 export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 	const {
@@ -107,7 +97,7 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<Header name={name} scope={scope} natures={natures} status={status} />
+			<Header name={name} scope={scope} nature={nature} status={status} />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
 				<TabsList>
@@ -128,32 +118,23 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 						stakes={stakes}
 						status={status}
 						scope={scope}
-						natures={natures}
+						nature={nature}
 						region={region}
-						narrativeDestinations={narrativeDestinations}
 						cause={cause}
 						clarityOfRightWrong={clarityOfRightWrong}
 						moralDilemma={moralDilemma}
 						tags={tags}
 						creativePrompts={creativePrompts}
-						gmNotes={gmNotes}
 						hiddenTruths={hiddenTruths}
 					/>
 				</TabsContent>
 
 				<TabsContent value="progression" className="animate-in fade-in-50 duration-300">
-					<ProgressionContent
-						currentTensionLevel={currentTensionLevel}
-						possibleOutcomes={possibleOutcomes}
-						questImpacts={questImpacts}
-					/>
+					<ProgressionContent currentTensionLevel={currentTensionLevel} possibleOutcomes={possibleOutcomes} />
 				</TabsContent>
 
 				<TabsContent value="consequences" className="animate-in fade-in-50 duration-300">
-					<ConsequencesContent
-						affectingConsequences={affectingConsequences}
-						triggeredConsequences={triggeredConsequences}
-					/>
+					<ConsequencesContent affectingConsequences={affectingConsequences} />
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">

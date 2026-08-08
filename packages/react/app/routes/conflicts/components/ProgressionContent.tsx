@@ -3,9 +3,9 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Conflict } from "~/lib/entities"
 
-type ProgressionContentProps = Pick<Conflict, "currentTensionLevel" | "possibleOutcomes" | "questImpacts">
+type ProgressionContentProps = Pick<Conflict, "currentTensionLevel" | "possibleOutcomes">
 
-export function ProgressionContent({ currentTensionLevel, possibleOutcomes, questImpacts }: ProgressionContentProps) {
+export function ProgressionContent({ currentTensionLevel, possibleOutcomes }: ProgressionContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div className="space-y-6">
@@ -28,16 +28,6 @@ export function ProgressionContent({ currentTensionLevel, possibleOutcomes, ques
 					emptyMessage="No possible outcomes defined."
 				>
 					<List items={possibleOutcomes} spacing="sm" textColor="muted" />
-				</InfoCard>
-			</div>
-
-			<div className="space-y-6">
-				<InfoCard
-					title="Quest Impacts"
-					icon={<Icons.Scroll className="h-4 w-4 mr-2 text-purple-600" />}
-					emptyMessage="No quest impacts recorded."
-				>
-					<List items={questImpacts} spacing="sm" textColor="muted" />
 				</InfoCard>
 			</div>
 		</div>

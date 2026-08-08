@@ -31,7 +31,29 @@ const conflictConfig = {
 					},
 				},
 				affectingConsequences: {
+					columns: {
+						complicationDetails: true,
+						conflictImpactDescription: true,
+						description: true,
+						escalationDetails: true,
+						id: true,
+						name: true,
+						playerImpactFeel: true,
+						consequenceType: true,
+						severity: true,
+						slug: true,
+						sourceType: true,
+						tags: true,
+						timeframe: true,
+						visibility: true,
+						creativePrompts: true,
+						twistRevealDetails: true,
+					},
+					// The affected* relations are omitted deliberately: chk_single_affected_entity
+					// allows exactly one, and for this list it is always the parent conflict.
 					with: {
+						affectingConsequences: nameAndId,
+						incomingForeshadowing: nameAndId,
 						triggerQuest: nameAndId,
 						triggerQuestStageDecision: nameAndId,
 					},

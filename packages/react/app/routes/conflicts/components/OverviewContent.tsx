@@ -12,33 +12,29 @@ type OverviewContentProps = Pick<
 	| "stakes"
 	| "status"
 	| "scope"
-	| "natures"
+	| "nature"
 	| "region"
-	| "narrativeDestinations"
 	| "cause"
 	| "clarityOfRightWrong"
 	| "moralDilemma"
 	| "tags"
 	| "creativePrompts"
-	| "gmNotes"
 	| "hiddenTruths"
 >
 
 export function OverviewContent({
-	description,
-	stakes,
-	status,
-	scope,
-	natures,
-	region,
-	narrativeDestinations,
 	cause,
 	clarityOfRightWrong,
-	moralDilemma,
-	tags,
 	creativePrompts,
-	gmNotes,
+	description,
 	hiddenTruths,
+	moralDilemma,
+	nature,
+	region,
+	scope,
+	stakes,
+	status,
+	tags,
 }: OverviewContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -72,18 +68,6 @@ export function OverviewContent({
 				>
 					{cause}
 				</InfoCard>
-
-				<InfoCard
-					title="Narrative Destinations"
-					icon={<Icons.MapPin className="h-4 w-4 mr-2 text-green-600" />}
-					emptyMessage="No narrative destinations defined."
-				>
-					{narrativeDestinations.map((destination) => (
-						<Link key={destination.id} href={`/narrative-destinations/${destination.slug}`}>
-							{destination.name}
-						</Link>
-					))}
-				</InfoCard>
 			</div>
 
 			<div className="space-y-6">
@@ -104,14 +88,6 @@ export function OverviewContent({
 					emptyMessage="No creative prompts available."
 				>
 					<List items={creativePrompts} spacing="sm" textColor="muted" />
-				</InfoCard>
-
-				<InfoCard
-					title="GM Notes"
-					icon={<Icons.Eye className="h-4 w-4 mr-2 text-red-600" />}
-					emptyMessage="No GM notes recorded."
-				>
-					<List items={gmNotes} spacing="sm" textColor="muted" />
 				</InfoCard>
 
 				<InfoCard

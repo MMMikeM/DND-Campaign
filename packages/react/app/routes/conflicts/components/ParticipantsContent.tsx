@@ -22,7 +22,6 @@ export function ParticipantsContent({ participants, name }: Pick<Conflict, "part
 						id,
 						creativePrompts,
 						description,
-						gmNotes,
 						tags,
 						role,
 						motivation,
@@ -87,13 +86,6 @@ export function ParticipantsContent({ participants, name }: Pick<Conflict, "part
 									Description
 								</h4>
 								<List items={description} spacing="xs" textColor="muted" textSize="sm" />
-							</div>
-							<div>
-								<h4 className="font-medium text-sm mb-1 flex items-center">
-									<Icons.Container className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-									GM Notes
-								</h4>
-								<List items={gmNotes} spacing="xs" textColor="muted" textSize="sm" />
 							</div>
 							<div>
 								<h4 className="font-medium text-sm mb-1 flex items-center">

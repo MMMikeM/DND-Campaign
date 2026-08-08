@@ -15,28 +15,27 @@ export function LoreContent({ loreLinks }: Pick<Conflict, "loreLinks">) {
 			<div className="space-y-4">
 				{loreLinks.map(
 					({
-						id,
+						conflict,
 						creativePrompts,
 						description,
-						gmNotes,
-						tags,
-						linkRoleOrTypeText,
-						linkStrength,
-						linkDetailsText,
-						lore,
-						conflict,
 						faction,
 						foreshadowingId,
-						narrativeDestinationId,
+						id,
+						itemId,
+						linkDetailsText,
+						linkRoleOrTypeText,
+						linkStrength,
+						lore,
 						npc,
 						quest,
 						region,
 						relatedLore,
+						tags,
 					}) => (
 						<div key={id} className="border rounded p-4 bg-background dark:bg-muted/30">
 							<div className="flex justify-between items-start mb-3">
 								<Link
-									href={`/world-concepts/${lore?.slug || lore?.id}`}
+									href={`/lore/${lore?.slug ?? lore?.id}`}
 									className="text-lg font-semibold text-primary hover:underline"
 								>
 									{lore?.name}
@@ -75,7 +74,6 @@ export function LoreContent({ loreLinks }: Pick<Conflict, "loreLinks">) {
 
 							<List items={description} heading="Description" />
 							<List items={creativePrompts} heading="Creative Prompts" />
-							<List items={gmNotes} heading="GM Notes" />
 							<Tags tags={tags} />
 						</div>
 					),
