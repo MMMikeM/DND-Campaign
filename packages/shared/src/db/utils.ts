@@ -20,13 +20,13 @@ const string = (description: string) => text(description).notNull()
 
 const nullableString = (description: string) => text(description)
 
-const oneOf = (description: string, options: readonly [string, ...string[]]) =>
+const oneOf = <const T extends readonly [string, ...string[]]>(description: string, options: T) =>
 	text(description, { enum: options }).notNull()
 
-const nullableOneOf = (description: string, options: readonly [string, ...string[]]) =>
+const nullableOneOf = <const T extends readonly [string, ...string[]]>(description: string, options: T) =>
 	text(description, { enum: options })
 
-const manyOf = (description: string, options: readonly [string, ...string[]]) =>
+const manyOf = <const T extends readonly [string, ...string[]]>(description: string, options: T) =>
 	text(description, { enum: options }).array().notNull()
 
 const pk = () => serial("id").primaryKey()
@@ -43,10 +43,8 @@ const embeddingVector = (name: string = "embedding") => {
 }
 
 // Custom bytea type for binary image data
-const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
-	dataType() {
-		return "bytea"
-	},
+const bytea = customType<{ data: Buffer; notNull: true; default: false }>({
+	dataType: () => "bytea"
 })
 
 export {
