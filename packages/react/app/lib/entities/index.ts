@@ -1,6 +1,6 @@
 // Re-export all entity logic, types, and shared utils
 
-import { sql } from "@tome-master/shared"
+import { buildSimilarityQuery } from "@tome-master/shared/db"
 import { db } from "../db"
 
 export * from "./areas"
@@ -15,7 +15,8 @@ export * from "./quests"
 export * from "./regions"
 export * from "./sites"
 
-export const updateMaterializedView = async () => await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
+// export const updateMaterializedView = async () => await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
+
 
 export const searchBySimilarity = async (
 	searchTerm: string,
@@ -24,15 +25,13 @@ export const searchBySimilarity = async (
 	maxLevenshtein = 2,
 	phoneticStrength = 4,
 ) =>
-	await db.execute(sql`
-    SELECT * FROM search_fuzzy_combined(
-      ${searchTerm},
-      ${fuzzyWeight},
-      ${similarityThreshold},
-      ${maxLevenshtein},
-      ${phoneticStrength}
-    )
-  `)
+	await buildSimilarityQuery(
+		searchTerm,
+		fuzzyWeight,
+		similarityThreshold,
+		maxLevenshtein,
+		phoneticStrength
+	)
 
 export const nameAndId = { columns: { id: true, name: true, slug: true } } as const
 

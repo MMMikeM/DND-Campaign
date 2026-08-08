@@ -1,19 +1,8 @@
+import { alignments } from "@tome-master/shared/enums"
 import * as Icons from "lucide-react"
 import type * as React from "react"
 import { cn } from "~/lib/utils"
 import { BadgeWithTooltip } from "./badge-with-tooltip"
-
-export const alignments = [
-	"lawful good",
-	"neutral good",
-	"chaotic good",
-	"lawful neutral",
-	"true neutral",
-	"chaotic neutral",
-	"lawful evil",
-	"neutral evil",
-	"chaotic evil",
-] as const
 
 type Alignment = (typeof alignments)[number]
 
