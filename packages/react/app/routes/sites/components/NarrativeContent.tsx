@@ -38,7 +38,6 @@ export const NarrativeContent = ({
 						dialogueHint,
 						hookContent,
 						discoveryConditions,
-						slug,
 						quest,
 					}) => (
 						<div key={id} className="border rounded p-3 mb-2">

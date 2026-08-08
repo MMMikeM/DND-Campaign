@@ -35,7 +35,12 @@ export const searchBySimilarity = async (
     )
   `)
 
-export const nameAndId = { columns: { id: true, name: true } } as const
+export const nameAndId = { columns: { id: true, name: true, slug: true } } as const
+
+export const bySlugOrId = (slugOrId: string): { id: number } | { slug: string } => {
+	const id = Number(slugOrId)
+	return Number.isInteger(id) && id > 0 ? { id } : { slug: slugOrId }
+}
 
 export const foreshadowingWithTargets = {
 	with: {

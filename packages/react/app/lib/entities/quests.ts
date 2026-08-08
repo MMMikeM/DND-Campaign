@@ -1,13 +1,12 @@
-import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const questConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.quests.findFirst({
-			where: { id },
+			where,
 			with: {
 				affectingConsequences: true,
 				hooks: true,
@@ -30,6 +29,7 @@ const questConfig = {
 			columns: {
 				id: true,
 				name: true,
+				slug: true,
 				type: true,
 				urgency: true,
 				description: true,
@@ -38,40 +38,21 @@ const questConfig = {
 	getNamesAndIds: () => db.query.quests.findMany(nameAndId),
 }
 
-export const getAllQuests = async () => {
-	const quests = await questConfig.getAll()
-
-	return addSlugs(quests)
-}
+export const getAllQuests = () => questConfig.getAll()
 
 export type Quest = Awaited<ReturnType<typeof getQuest>>
 
-export const getQuest = async (slug: string) => {
-	const selectedQuest = await questConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((quests) => quests.find((quest) => quest.slug === slug || quest.id === Number(slug)))
+export const getQuest = async (slugOrId: string) => {
+	const quest = await questConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedQuest) {
-		throw new EntityNotFoundError("Quest", slug)
+	if (!quest) {
+		throw new EntityNotFoundError("Quest", slugOrId)
 	}
 
-	const byId = await questConfig.findById(selectedQuest.id)
-
-	if (!byId) {
-		throw new EntityNotFoundError("Quest", selectedQuest.id)
-	}
-
-	const unified = unifyRelations(byId)
+	return unifyRelations(quest)
 		.from({ property: "incomingRelations", key: "sourceQuest" })
 		.with({ property: "outgoingRelations", key: "targetQuest" })
 		.to({ property: "relations", key: "quest" })
-
-	if (unified) {
-		return addSlugs(unified)
-	}
-
-	throw new EntityNotFoundError("Quest", selectedQuest.id)
 }
 
-export const getQuestNames = () => questConfig.getNamesAndIds().then(addSlugs)
+export const getQuestNames = () => questConfig.getNamesAndIds()

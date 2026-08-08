@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { boolean, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
@@ -15,6 +15,7 @@ const { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageI
 export const questStages = pgTable("quest_stages", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	tags: list("tags"),
@@ -44,6 +45,7 @@ export const questStageDecisions = pgTable(
 	{
 		id: pk(),
 		name: string("name").unique(),
+		slug: slug(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		tags: list("tags"),

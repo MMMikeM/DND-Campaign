@@ -1,12 +1,11 @@
-import { nameAndId } from "."
+import { bySlugOrId, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 
 const foreshadowingConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.foreshadowing.findFirst({
-			where: { id },
+			where,
 			with: {
 				sourceNpc: nameAndId,
 				sourceQuest: nameAndId,
@@ -27,38 +26,21 @@ const foreshadowingConfig = {
 		}),
 	getAll: () => db.query.foreshadowing.findMany({}),
 	getNamesAndIds: () =>
-		db.query.foreshadowing.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+		db.query.foreshadowing.findMany(nameAndId),
 }
 
-export const getAllForeshadowing = async () => {
-	const foreshadowing = await foreshadowingConfig.getAll()
-	return addSlugs(foreshadowing)
-}
+export const getAllForeshadowing = () => foreshadowingConfig.getAll()
 
-export type Foreshadowing = Awaited<ReturnType<typeof getForeshadowing>>
+export type Foreshadowing = NonNullable<Awaited<ReturnType<typeof foreshadowingConfig.findBy>>>
 
-export const getForeshadowing = async (slug: string) => {
-	const selectedForeshadowing = await foreshadowingConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((items) => items.find((item) => item.slug === slug || item.id === Number(slug)))
+export const getForeshadowing = async (slugOrId: string) => {
+	const foreshadowing = await foreshadowingConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedForeshadowing) {
-		throw new EntityNotFoundError("Foreshadowing", slug)
+	if (!foreshadowing) {
+		throw new EntityNotFoundError("Foreshadowing", slugOrId)
 	}
 
-	const byId = await foreshadowingConfig.findById(selectedForeshadowing.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Foreshadowing", selectedForeshadowing.id) // Use custom error
+	return foreshadowing
 }
 
-export const getForeshadowingNames = () => foreshadowingConfig.getNamesAndIds().then(addSlugs)
+export const getForeshadowingNames = () => foreshadowingConfig.getNamesAndIds()

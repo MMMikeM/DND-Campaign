@@ -1,7 +1,6 @@
-import { nameAndId } from "."
+import { bySlugOrId, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 
 const mapFileColumns = {
 	id: true,
@@ -10,9 +9,9 @@ const mapFileColumns = {
 } as const
 
 const mapConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.mapGroups.findFirst({
-			where: { id },
+			where,
 			with: {
 				site: nameAndId,
 				variants: {
@@ -59,35 +58,24 @@ const sortByDefaultThenName = (a: MapVariant, b: MapVariant) => {
 export const getAllMaps = async () => {
 	const maps = await mapConfig.getAllMetadata()
 
-	const sorted = maps.map((map) => ({
+	return maps.map((map) => ({
 		...map,
 		variants: map.variants.toSorted(sortByDefaultThenName),
 	}))
-
-	return addSlugs(sorted)
 }
 
-export type Map = Awaited<ReturnType<typeof getMap>>
+export type Map = NonNullable<Awaited<ReturnType<typeof mapConfig.findBy>>>
 
-export const getMap = async (slug: string) => {
-	const selectedMap = await mapConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((maps) => maps.find((map) => map.slug === slug || map.id === Number(slug)))
+export const getMap = async (slugOrId: string) => {
+	const map = await mapConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedMap) {
-		throw new EntityNotFoundError("Map", slug)
+	if (!map) {
+		throw new EntityNotFoundError("Map", slugOrId)
 	}
 
-	const byId = await mapConfig.findById(selectedMap.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Map", selectedMap.id)
+	return map
 }
 
-export type MapVariant = Awaited<ReturnType<typeof getMap>>["variants"][number]
+export type MapVariant = Map["variants"][number]
 
-export const getMapNames = () => mapConfig.getNamesAndIds().then(addSlugs)
+export const getMapNames = () => mapConfig.getNamesAndIds()

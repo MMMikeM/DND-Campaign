@@ -1,12 +1,11 @@
-import { nameAndId } from "."
+import { bySlugOrId, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 
 const conflictConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.conflicts.findFirst({
-			where: { id },
+			where,
 			with: {
 				region: nameAndId,
 				itemConnections: { with: { sourceItem: nameAndId } },
@@ -84,31 +83,18 @@ const conflictConfig = {
 	getNamesAndIds: () => db.query.conflicts.findMany(nameAndId),
 }
 
-export const getAllConflicts = async () => {
-	const conflicts = await conflictConfig.getAll()
+export const getAllConflicts = () => conflictConfig.getAll()
 
-	return addSlugs(conflicts)
-}
+export type Conflict = NonNullable<Awaited<ReturnType<typeof conflictConfig.findBy>>>
 
-export type Conflict = Awaited<ReturnType<typeof getConflict>>
+export const getConflict = async (slugOrId: string) => {
+	const conflict = await conflictConfig.findBy(bySlugOrId(slugOrId))
 
-export const getConflict = async (slug: string) => {
-	const selectedConflict = await conflictConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((conflicts) => conflicts.find((conflict) => conflict.slug === slug || conflict.id === Number(slug)))
-
-	if (!selectedConflict) {
-		throw new EntityNotFoundError("Conflict", slug)
+	if (!conflict) {
+		throw new EntityNotFoundError("Conflict", slugOrId)
 	}
 
-	const byId = await conflictConfig.findById(selectedConflict.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Conflict", selectedConflict.id)
+	return conflict
 }
 
-export const getConflictNames = () => conflictConfig.getNamesAndIds().then(addSlugs)
+export const getConflictNames = () => conflictConfig.getNamesAndIds()

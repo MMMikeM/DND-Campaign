@@ -1,12 +1,11 @@
-import { foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
-import { EntityNotFoundError } from "../errors" // Import custom error
-import addSlugs from "../utils/addSlugs"
+import { EntityNotFoundError } from "../errors"
 
 const areaConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.areas.findFirst({
-			where: { id },
+			where,
 			columns: {
 				regionId: false,
 			},
@@ -17,6 +16,7 @@ const areaConfig = {
 					columns: {
 						id: true,
 						name: true,
+						slug: true,
 						description: true,
 						consequenceType: true,
 						severity: true,
@@ -28,7 +28,6 @@ const areaConfig = {
 						tags: true,
 						timeframe: true,
 					},
-					where: { affectedAreaId: id },
 					with: {
 						triggerQuest: nameAndId,
 						triggerQuestStageDecision: nameAndId,
@@ -44,41 +43,21 @@ const areaConfig = {
 			}
 		}),
 	getAll: () => db.query.areas.findMany({ with: { region: nameAndId } }),
-	getNamesAndIds: () =>
-		db.query.areas.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.areas.findMany(nameAndId),
 }
 
-export const getAllAreas = async () => {
-	const areas = await areaConfig.getAll()
+export const getAllAreas = () => areaConfig.getAll()
 
-	return addSlugs(areas)
-}
+export type Area = NonNullable<Awaited<ReturnType<typeof areaConfig.findBy>>>
 
-export type Area = Awaited<ReturnType<typeof getArea>>
+export const getArea = async (slugOrId: string) => {
+	const area = await areaConfig.findBy(bySlugOrId(slugOrId))
 
-export const getArea = async (slug: string) => {
-	const selectedArea = await areaConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((areas) => areas.find((area) => area.slug === slug || area.id === Number(slug)))
-
-	if (!selectedArea) {
-		throw new EntityNotFoundError("Area",
-			slug)
+	if (!area) {
+		throw new EntityNotFoundError("Area", slugOrId)
 	}
 
-	const byId = await areaConfig.findById(selectedArea.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Area", selectedArea.id)
+	return area
 }
 
-export const getAreaNames = () => areaConfig.getNamesAndIds().then(addSlugs)
+export const getAreaNames = () => areaConfig.getNamesAndIds()

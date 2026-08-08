@@ -1,13 +1,12 @@
-import { foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const regionConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.regions.findFirst({
-			where: { id },
+			where,
 			with: {
 				factionInfluence: {
 					with: {
@@ -43,39 +42,21 @@ const regionConfig = {
 	getNamesAndIds: () => db.query.regions.findMany(nameAndId),
 }
 
-export const getAllRegions = async () => {
-	const regions = await regionConfig.getAll()
-	return addSlugs(regions)
-}
+export const getAllRegions = () => regionConfig.getAll()
 
 export type Region = Awaited<ReturnType<typeof getRegion>>
 
-export const getRegion = async (slug: string) => {
-	const selectedRegion = await regionConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((regions) => regions.find((region) => region.slug === slug || region.id === Number(slug)))
+export const getRegion = async (slugOrId: string) => {
+	const region = await regionConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedRegion) {
-		throw new EntityNotFoundError("Region", slug)
+	if (!region) {
+		throw new EntityNotFoundError("Region", slugOrId)
 	}
 
-	const byId = await regionConfig.findById(selectedRegion.id)
-
-	if (!byId) {
-		throw new EntityNotFoundError("Region", selectedRegion.id)
-	}
-
-	const unified = unifyRelations(byId)
+	return unifyRelations(region)
 		.from({ property: "incomingRelations", key: "sourceRegion" })
 		.with({ property: "outgoingRelations", key: "targetRegion" })
 		.to({ property: "relations", key: "region" })
-
-	if (unified) {
-		return addSlugs(unified)
-	}
-
-	throw new EntityNotFoundError("Region", selectedRegion.id)
 }
 
-export const getRegionNames = () => regionConfig.getNamesAndIds().then(addSlugs)
+export const getRegionNames = () => regionConfig.getNamesAndIds()

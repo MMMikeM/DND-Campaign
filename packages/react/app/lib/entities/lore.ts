@@ -1,7 +1,6 @@
-import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 
 const nameIdAndDescription = {
 	columns: {
@@ -12,9 +11,9 @@ const nameIdAndDescription = {
 } as const
 
 const loreConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.lore.findFirst({
-			where: { id },
+			where,
 			with: {
 				incomingForeshadowing: foreshadowingWithSources,
 				outgoingForeshadowing: foreshadowingWithTargets,
@@ -36,38 +35,20 @@ const loreConfig = {
 	getNamesAndIds: () => db.query.lore.findMany(nameAndId),
 }
 
-export type Lore = NonNullable<Awaited<ReturnType<typeof loreConfig.findById>>>
+export type Lore = NonNullable<Awaited<ReturnType<typeof loreConfig.findBy>>>
 
-export const getAllLore = async () => {
-	const lore = await loreConfig.getAll()
-	return addSlugs(lore)
-}
+export const getAllLore = () => loreConfig.getAll()
 
-export async function getLoreById(id: number) {
-	const lore = await loreConfig.findById(id)
+export const getLoreById = (id: number) => loreConfig.findBy({ id })
+
+export const getLore = async (slugOrId: string) => {
+	const lore = await loreConfig.findBy(bySlugOrId(slugOrId))
+
 	if (!lore) {
-		return null
+		throw new EntityNotFoundError("Lore", slugOrId)
 	}
-	return addSlugs(lore)
+
+	return lore
 }
 
-export const getLore = async (slug: string) => {
-	const selectedLore = await loreConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((lore) => lore.find((lore) => lore.slug === slug || lore.id === Number(slug)))
-
-	if (!selectedLore) {
-		throw new EntityNotFoundError("Lore", slug)
-	}
-
-	const byId = await loreConfig.findById(selectedLore.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Lore", selectedLore.id)
-}
-
-export const getLoreNames = () => loreConfig.getNamesAndIds().then(addSlugs)
+export const getLoreNames = () => loreConfig.getNamesAndIds()

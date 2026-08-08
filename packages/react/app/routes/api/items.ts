@@ -14,7 +14,7 @@ import {
 import type { NavData, NavItem, NavKey } from "~/lib/nav"
 import type { Route } from "./+types/items"
 
-type NavFetcher = () => Promise<NavItem[]>
+type NavFetcher = () => PromiseLike<NavItem[]>
 
 /**
  * `satisfies` makes this exhaustive in both directions against `navEntities`:

@@ -1,12 +1,11 @@
-import { foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 
 const consequenceConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.consequences.findFirst({
-			where: { id },
+			where,
 			with: {
 				affectedArea: nameAndId,
 				affectedFaction: nameAndId,
@@ -22,31 +21,18 @@ const consequenceConfig = {
 	getNamesAndIds: () => db.query.consequences.findMany(nameAndId),
 }
 
-export const getAllConsequences = async () => {
-	const arcs = await consequenceConfig.getAll()
+export const getAllConsequences = () => consequenceConfig.getAll()
 
-	return addSlugs(arcs)
-}
+export type Consequence = NonNullable<Awaited<ReturnType<typeof consequenceConfig.findBy>>>
 
-export type Consequence = Awaited<ReturnType<typeof getConsequence>>
+export const getConsequence = async (slugOrId: string) => {
+	const consequence = await consequenceConfig.findBy(bySlugOrId(slugOrId))
 
-export const getConsequence = async (slug: string) => {
-	const selectedEvent = await consequenceConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((events) => events.find((event) => event.slug === slug || event.id === Number(slug)))
-
-	if (!selectedEvent) {
-		throw new EntityNotFoundError("Consequence", slug)
+	if (!consequence) {
+		throw new EntityNotFoundError("Consequence", slugOrId)
 	}
 
-	const byId = await consequenceConfig.findById(selectedEvent.id)
-
-	if (byId) {
-		return addSlugs(byId)
-	}
-
-	throw new EntityNotFoundError("Consequence", selectedEvent.id)
+	return consequence
 }
 
-export const getConsequenceNames = () => consequenceConfig.getNamesAndIds().then(addSlugs)
+export const getConsequenceNames = () => consequenceConfig.getNamesAndIds()

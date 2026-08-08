@@ -1,13 +1,12 @@
-import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const npcConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.npcs.findFirst({
-			where: { id },
+			where,
 			with: {
 				incomingRelations: { with: { sourceNpc: nameAndId } },
 				outgoingRelations: { with: { targetNpc: nameAndId } },
@@ -31,39 +30,21 @@ const npcConfig = {
 	getNamesAndIds: () => db.query.npcs.findMany(nameAndId),
 }
 
-export const getAllNpcs = async () => {
-	const npcs = await npcConfig.getAll()
-	return addSlugs(npcs)
-}
+export const getAllNpcs = () => npcConfig.getAll()
 
 export type NPC = Awaited<ReturnType<typeof getNpc>>
 
-export const getNpc = async (slug: string) => {
-	const selectedNpc = await npcConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((npcs) => npcs.find((npc) => npc.slug === slug || npc.id === Number(slug)))
+export const getNpc = async (slugOrId: string) => {
+	const npc = await npcConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedNpc) {
-		throw new EntityNotFoundError("NPC", slug)
+	if (!npc) {
+		throw new EntityNotFoundError("NPC", slugOrId)
 	}
 
-	const byId = await npcConfig.findById(selectedNpc.id)
-
-	if (!byId) {
-		throw new EntityNotFoundError("NPC", selectedNpc.id)
-	}
-
-	const unified = unifyRelations(byId)
+	return unifyRelations(npc)
 		.from({ property: "incomingRelations", key: "sourceNpc" })
 		.with({ property: "outgoingRelations", key: "targetNpc" })
 		.to({ property: "relations", key: "npc" })
-
-	if (unified) {
-		return addSlugs(unified)
-	}
-
-	throw new EntityNotFoundError("NPC", selectedNpc.id)
 }
 
-export const getNpcNames = () => npcConfig.getNamesAndIds().then(addSlugs)
+export const getNpcNames = () => npcConfig.getNamesAndIds()

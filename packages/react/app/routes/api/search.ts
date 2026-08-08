@@ -1,5 +1,5 @@
 import { searchBySimilarity } from "~/lib/entities"
-import { toSlug } from "~/lib/utils/addSlugs"
+import { toSlug } from "~/lib/utils/slug"
 import type { Route } from "./+types/items"
 
 export async function loader({ request }: Route.LoaderArgs) {

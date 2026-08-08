@@ -1,13 +1,12 @@
-import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const siteConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.sites.findFirst({
-			where: { id },
+			where,
 			columns: {
 				areaId: false,
 				mapGroupId: false,
@@ -45,48 +44,24 @@ const siteConfig = {
 			},
 		}),
 	getAll: () => db.query.sites.findMany({}),
-	getNamesAndIds: () =>
-		db.query.sites.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.sites.findMany(nameAndId),
 }
 
-export const getAllSites = async () => {
-	const sites = await siteConfig.getAll()
-	return addSlugs(sites)
-}
+export const getAllSites = () => siteConfig.getAll()
 
 export type Site = Awaited<ReturnType<typeof getSite>>
 
-export const getSite = async (slug: string) => {
-	const selectedSite = await siteConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((sites) => sites.find((site) => site.slug === slug || site.id === Number(slug)))
+export const getSite = async (slugOrId: string) => {
+	const site = await siteConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedSite) {
-		throw new EntityNotFoundError("Site", slug)
+	if (!site) {
+		throw new EntityNotFoundError("Site", slugOrId)
 	}
 
-	const byId = await siteConfig.findById(selectedSite.id)
-
-	if (!byId) {
-		throw new EntityNotFoundError("Site", selectedSite.id)
-	}
-
-	const unified = unifyRelations(byId)
+	return unifyRelations(site)
 		.from({ property: "incomingRelations", key: "sourceSite" })
 		.with({ property: "outgoingRelations", key: "targetSite" })
 		.to({ property: "relations", key: "site" })
-
-	if (unified) {
-		return addSlugs(unified)
-	}
-
-	throw new EntityNotFoundError("Site", selectedSite.id)
 }
 
-export const getSiteNames = () => siteConfig.getNamesAndIds().then(addSlugs)
+export const getSiteNames = () => siteConfig.getNamesAndIds()

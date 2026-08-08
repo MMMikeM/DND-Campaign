@@ -1,13 +1,12 @@
-import { foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import addSlugs from "../utils/addSlugs"
 import { unifyRelations } from "../utils/unify"
 
 const factionConfig = {
-	findById: (id: number) =>
+	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.factions.findFirst({
-			where: { id },
+			where,
 			with: {
 				agendas: true,
 				conflicts: true,
@@ -65,48 +64,24 @@ const factionConfig = {
 			},
 		}),
 	getAll: () => db.query.factions.findMany({}),
-	getNamesAndIds: () =>
-		db.query.factions.findMany({
-			columns: {
-				id: true,
-				name: true,
-			},
-		}),
+	getNamesAndIds: () => db.query.factions.findMany(nameAndId),
 }
 
-export const getAllFactions = async () => {
-	const factions = await factionConfig.getAll()
-	return addSlugs(factions)
-}
+export const getAllFactions = () => factionConfig.getAll()
 
 export type Faction = Awaited<ReturnType<typeof getFaction>>
 
-export const getFaction = async (slug: string) => {
-	const selectedFaction = await factionConfig
-		.getNamesAndIds()
-		.then(addSlugs)
-		.then((factions) => factions.find((faction) => faction.slug === slug || faction.id === Number(slug)))
+export const getFaction = async (slugOrId: string) => {
+	const faction = await factionConfig.findBy(bySlugOrId(slugOrId))
 
-	if (!selectedFaction) {
-		throw new EntityNotFoundError("Faction", slug)
+	if (!faction) {
+		throw new EntityNotFoundError("Faction", slugOrId)
 	}
 
-	const byId = await factionConfig.findById(selectedFaction.id)
-
-	if (!byId) {
-		throw new EntityNotFoundError("Faction", selectedFaction.id)
-	}
-
-	const unified = unifyRelations(byId)
+	return unifyRelations(faction)
 		.from({ property: "incomingRelations", key: "sourceFaction" })
 		.with({ property: "outgoingRelations", key: "targetFaction" })
 		.to({ property: "relations", key: "faction" })
-
-	if (unified) {
-		return addSlugs(unified)
-	}
-
-	throw new EntityNotFoundError("Faction", selectedFaction.id)
 }
 
-export const getFactionNames = () => factionConfig.getNamesAndIds().then(addSlugs)
+export const getFactionNames = () => factionConfig.getNamesAndIds()
