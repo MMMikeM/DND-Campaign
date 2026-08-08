@@ -1,4 +1,11 @@
-import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import {
+	bySlugOrId,
+	consequenceWithAffected,
+	consequenceWithTrigger,
+	foreshadowingWithSources,
+	foreshadowingWithTargets,
+	nameAndId,
+} from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import { unifyRelations } from "../utils/unify"
@@ -8,20 +15,36 @@ const questConfig = {
 		db.query.quests.findFirst({
 			where,
 			with: {
-				affectingConsequences: true,
+				affectingConsequences: consequenceWithTrigger,
 				hooks: true,
 				incomingForeshadowing: foreshadowingWithSources,
 				outgoingForeshadowing: foreshadowingWithTargets,
 				itemConnections: { with: { sourceItem: nameAndId } },
 				loreLinks: true,
 				participants: { with: { npc: nameAndId, faction: nameAndId } },
-				stages: nameAndId,
+				stages: {
+					columns: {
+						deliveryNpcId: false,
+						siteId: false,
+					},
+					with: {
+						deliveryNpc: nameAndId,
+						incomingDecisions: { with: { sourceStage: true } },
+						itemConnections: { with: { sourceItem: nameAndId } },
+						items: true,
+						npcInvolvement: true,
+						outgoingDecisions: { with: { targetStage: true, consequences: true } },
+						outgoingForeshadowing: true,
+						quest: nameAndId,
+						site: nameAndId,
+					}
+				},
 				outgoingRelations: { with: { targetQuest: nameAndId } },
 				incomingRelations: { with: { sourceQuest: nameAndId } },
 				dependentQuests: true,
 				prerequisiteQuest: true,
-				stageDecisions: true,
-				triggeredConsequences: true,
+				triggeredConsequences: consequenceWithAffected,
+
 			},
 		}),
 	getAll: () =>
@@ -33,6 +56,9 @@ const questConfig = {
 				type: true,
 				urgency: true,
 				description: true,
+				mood: true,
+				objectives: true,
+				rewards: true,
 			},
 		}),
 	getNamesAndIds: () => db.query.quests.findMany(nameAndId),
@@ -56,3 +82,7 @@ export const getQuest = async (slugOrId: string) => {
 }
 
 export const getQuestNames = () => questConfig.getNamesAndIds()
+
+export type QuestStage = Quest["stages"][number]
+
+export type StageDecision = QuestStage["outgoingDecisions"][number]

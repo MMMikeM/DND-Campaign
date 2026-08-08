@@ -1,13 +1,13 @@
 import { Navigate, useNavigate, useOutletContext, useParams } from "react-router"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import type { Quest } from "~/lib/entities"
+import type { QuestStage } from "~/lib/entities"
 import Decisions from "./components/decisions"
 import Details from "./components/details"
 import Overview from "./components/overview"
 
 export default function StageOverviewTab() {
 	// Get the selected stage from outlet context
-	const { selectedStage, questSlug } = useOutletContext<{ selectedStage: Quest["stages"][0]; questSlug: string }>()
+	const { selectedStage, questSlug } = useOutletContext<{ selectedStage: QuestStage; questSlug: string }>()
 
 	const { stageTab, stageSlug } = useParams()
 	const navigate = useNavigate()

@@ -4,11 +4,10 @@ import { Position, ReactFlow, useEdgesState, useNodesState } from "@xyflow/react
 import type React from "react"
 import "@xyflow/react/dist/style.css"
 import { useCallback, useEffect } from "react"
-import type { RawQuestStage, StageDecision } from "../lib/entities"
+import type { Quest, StageDecision } from "../lib/entities"
 
 // Define types for the component props
-interface QuestStageFlowProps {
-	stages: RawQuestStage[]
+interface QuestStageFlowProps extends Pick<Quest, "stages"> {
 	currentStageId: number | null
 	onStageSelect: (stageId: number) => void
 }
@@ -36,7 +35,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 		const parentToChildrenMap = new Map<number, Array<{ childId: number; decision: StageDecision }>>()
 
 		// Build relationship maps
-		stages.forEach((stage: RawQuestStage) => {
+		stages.forEach((stage) => {
 			// Initialize empty children array for this stage
 			if (!parentToChildrenMap.has(stage.id)) {
 				parentToChildrenMap.set(stage.id, [])
@@ -61,7 +60,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 		})
 
 		// Find root node (has no parent)
-		const rootStage = stages.find((stage: RawQuestStage) => !childToParentMap.has(stage.id))
+		const rootStage = stages.find((stage) => !childToParentMap.has(stage.id))
 		if (!rootStage) return { nodes, edges }
 
 		// Generate hierarchical numbers
@@ -99,7 +98,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 		}
 
 		// Create nodes with hierarchical numbers
-		stages.forEach((stage: RawQuestStage) => {
+		stages.forEach((stage) => {
 			const stageId = `stage-${stage.id}`
 			const hierarchicalNumber = hierarchicalNumbers.get(stage.id) || ""
 
@@ -133,7 +132,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 		})
 
 		// Create edges with animation on path to root
-		stages.forEach((stage: RawQuestStage) => {
+		stages.forEach((stage) => {
 			const sourceId = `stage-${stage.id}`
 
 			stage.outgoingDecisions?.forEach((decision: StageDecision) => {

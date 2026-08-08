@@ -1,16 +1,17 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
-import { Button } from "~/components/ui/button"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
+import { Tags } from "~/components/Tags"
+import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getQuest, getQuestStages } from "~/lib/entities"
+import { getQuest } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 import { OverviewContent } from "./components/OverviewContent"
 import { QuestHeader } from "./components/QuestHeader"
 import { StagesContent } from "./components/StagesContent"
 import { ThemesContent } from "./components/ThemesContent"
-import { TwistsContent } from "./components/TwistsContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	if (!params.slug) {
@@ -19,65 +20,53 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const quest = await getQuest(params.slug)
 
-	if (!quest) {
-		throw new Response("Quest not found", { status: 404 })
-	}
-
-	const stages = await getQuestStages(quest.id)
-
-	return { quest, stages }
+	return quest
 }
 
-// type q = keyof Route.ComponentProps["loaderData"]["quest"]
-// type s = keyof Route.ComponentProps["loaderData"]["stages"]
-
 export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
-	const { quest, stages } = loaderData
 	const {
-		loreLinks,
-		itemConnections,
-		id,
-		name,
-		creativePrompts,
-		description,
-		tags,
-		type,
-		mood,
-		objectives,
-		urgency,
-		primaryPlayerExperienceGoal,
-		rewards,
-		prerequisiteQuestId,
-		otherUnlockConditionsNotes,
-		relations,
-		hooks,
-		participants,
 		affectingConsequences,
-		incomingForeshadowing,
-		outgoingForeshadowing,
-		slug,
+		creativePrompts,
 		dependentQuests,
+		description,
 		emotionalShape,
 		eventType,
+		hooks,
 		impactSeverity,
+		incomingForeshadowing,
 		intendedRhythmEffect,
+		itemConnections,
+		loreLinks,
+		mood,
+		name,
 		narrativePlacement,
+		objectives,
+		otherUnlockConditionsNotes,
+		outgoingForeshadowing,
+		participants,
 		payoff,
 		prerequisiteQuest,
+		primaryPlayerExperienceGoal,
 		promise,
-		stageDecisions,
+		relations,
+		rewards,
+		slug,
+		stages,
 		stakes,
+		tags,
 		triggeredConsequences,
-	} = quest
+		type,
+		urgency,
+	} = loaderData
 
 	const { tab, stageSlug, stageTab } = useParams()
 
 	const activeTab = stageSlug ? "stages" : tab || "overview"
 	const navigate = useNavigate()
 
-	const selectedStage = stageSlug ? quest.stages.find((stage) => stage.slug === stageSlug) : quest.stages[0] || null
+	const selectedStage = stageSlug ? stages.find((stage) => stage.slug === stageSlug) : (stages[0] ?? null)
 
-	const selectedStageId = selectedStage?.id || null
+	const selectedStageId = selectedStage?.id ?? null
 
 	const handleTabChange = (value: string) => {
 		if (value === "stages" && selectedStage) {
@@ -88,7 +77,7 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	}
 
 	const handleStageSelect = (stageId: number) => {
-		const stage = quest.stages.find((s) => s.id === stageId)
+		const stage = stages.find((s) => s.id === stageId)
 		if (stage) {
 			if (stageTab) {
 				navigate(`/quests/${slug}/stages/${stage.slug}/${stageTab}`)
@@ -109,7 +98,9 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<QuestHeader {...quest} />
+			<QuestHeader name={name} type={type} urgency={urgency} mood={mood} />
+
+			<Tags tags={tags} variant="secondary" maxDisplay={8} className="mb-6" />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="mb-10">
 				<TabsList className="grid grid-cols-5">
@@ -117,17 +108,28 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 					<TabsTrigger value="stages">Stages</TabsTrigger>
 					<TabsTrigger value="themes">Themes</TabsTrigger>
 					<TabsTrigger value="connections">Connections</TabsTrigger>
-					<TabsTrigger value="twists">Twists</TabsTrigger>
+					<TabsTrigger value="consequences">Consequences</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="overview" className="space-y-6 mt-6">
-					<OverviewContent quest={quest} />
+					<OverviewContent
+						description={description}
+						hooks={hooks}
+						objectives={objectives}
+						otherUnlockConditionsNotes={otherUnlockConditionsNotes}
+						payoff={payoff}
+						prerequisiteQuest={prerequisiteQuest}
+						promise={promise}
+						rewards={rewards}
+						stakes={stakes}
+					/>
 				</TabsContent>
 
 				<TabsContent value="stages" className="space-y-6 mt-6">
 					{stageSlug && selectedStage ? (
 						<StagesContent
-							quest={quest}
+							name={name}
+							slug={slug}
 							stages={stages}
 							selectedStageId={selectedStageId}
 							onStageSelect={handleStageSelect}
@@ -141,11 +143,25 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="themes" className="space-y-6 mt-6">
-					<ThemesContent quest={quest} />
+					<ThemesContent
+						creativePrompts={creativePrompts}
+						emotionalShape={emotionalShape}
+						eventType={eventType}
+						impactSeverity={impactSeverity}
+						intendedRhythmEffect={intendedRhythmEffect}
+						narrativePlacement={narrativePlacement}
+						primaryPlayerExperienceGoal={primaryPlayerExperienceGoal}
+					/>
 				</TabsContent>
 
 				<TabsContent value="connections" className="space-y-6">
-					<ConnectionsContent quest={quest} />
+					<ConnectionsContent
+						dependentQuests={dependentQuests}
+						itemConnections={itemConnections}
+						loreLinks={loreLinks}
+						participants={participants}
+						relations={relations}
+					/>
 					<ForeshadowingList
 						incoming={incomingForeshadowing}
 						outgoing={outgoingForeshadowing}
@@ -153,8 +169,12 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 					/>
 				</TabsContent>
 
-				<TabsContent value="twists" className="space-y-6 mt-6">
-					<TwistsContent quest={quest} />
+				<TabsContent value="consequences" className="space-y-6 mt-6">
+					<ConsequenceList
+						triggered={triggeredConsequences}
+						affecting={affectingConsequences}
+						emptyMessage="No consequences are linked to this quest."
+					/>
 				</TabsContent>
 			</Tabs>
 		</div>

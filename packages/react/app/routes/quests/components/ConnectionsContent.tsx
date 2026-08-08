@@ -6,9 +6,10 @@ import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Quest } from "~/lib/entities"
 
-interface ConnectionsContentProps {
-	quest: Quest
-}
+type ConnectionsContentProps = Pick<
+	Quest,
+	"dependentQuests" | "itemConnections" | "loreLinks" | "participants" | "relations"
+>
 
 type Participant = Quest["participants"][number]
 type Relation = Quest["relations"][number]
@@ -20,9 +21,13 @@ const importanceVariant = (importance: string) => {
 	return "outline" as const
 }
 
-export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest }) => {
-	const { participants, relations } = quest
-
+export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({
+	dependentQuests,
+	itemConnections,
+	loreLinks,
+	participants,
+	relations,
+}) => {
 	const factionParticipants = participants.filter((participant) => participant.faction !== null)
 	const npcParticipants = participants.filter((participant) => participant.npc !== null)
 
@@ -66,6 +71,47 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 						name={participant.npc?.name}
 						icon={<Icons.User className="h-4 w-4 mr-2" />}
 					/>
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Unlocks"
+				icon={<Icons.KeyRound className="h-4 w-4 mr-2 text-primary" />}
+				emptyMessage="No quests are gated behind this one"
+			>
+				{dependentQuests.map(({ id, name, slug }) => (
+					<div key={`dependent-${id}`} className="border-b last:border-0 p-3">
+						<Link href={`/quests/${slug}`} className="font-medium hover:text-primary">
+							{name}
+						</Link>
+					</div>
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Items"
+				icon={<Icons.Package className="h-4 w-4 mr-2 text-primary" />}
+				emptyMessage="No items are tied to this quest"
+			>
+				{itemConnections.map(({ id, sourceItem, relationship }) => (
+					<div key={`item-${id}`} className="border-b last:border-0 p-3">
+						<span className="font-medium">{sourceItem.name}</span>
+						<span className="text-sm text-muted-foreground ml-2">{relationship}</span>
+					</div>
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Lore"
+				icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-primary" />}
+				emptyMessage="No lore is linked to this quest"
+				className="lg:col-span-2"
+			>
+				{loreLinks.map(({ id, linkRoleOrTypeText, linkDetailsText }) => (
+					<div key={`lore-${id}`} className="border-b last:border-0 p-3">
+						<p className="text-sm font-medium">{linkRoleOrTypeText}</p>
+						<p className="text-sm text-muted-foreground">{linkDetailsText}</p>
+					</div>
 				))}
 			</InfoCard>
 

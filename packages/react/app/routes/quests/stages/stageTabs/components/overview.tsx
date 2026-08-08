@@ -1,14 +1,14 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import type { Quest } from "~/lib/entities"
+import type { QuestStage } from "~/lib/entities"
 
 export default function StageOverviewTab({
 	description,
 	objectives,
 	completionPaths,
 	creativePrompts,
-}: Quest["stages"][0]) {
+}: QuestStage) {
 	return (
 		<div className="space-y-6">
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

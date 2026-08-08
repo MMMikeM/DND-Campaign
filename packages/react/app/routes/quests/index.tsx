@@ -58,7 +58,7 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredQuests.map((quest) => {
-					const { name, type, urgency, description, slug, id } = quest
+					const { name, type, urgency, description, slug, id, mood, objectives, rewards } = quest
 
 					return (
 						<NavLink key={quest.id} to={`/quests/${slug}`}>
@@ -101,22 +101,6 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 										>
 											<Icons.Clock className="h-3 w-3 mr-1" />
 											{urgency}
-										</BadgeWithTooltip>
-										<BadgeWithTooltip
-											variant="outline"
-											className="capitalize"
-											tooltipContent={
-												visibility === "hidden"
-													? "Not yet discovered by players"
-													: visibility === "rumored"
-														? "Hints circulating in the world"
-														: visibility === "known"
-															? "Actively available to players"
-															: "Currently in spotlight"
-											}
-										>
-											<Icons.EyeIcon className="h-3 w-3 mr-1" />
-											{visibility}
 										</BadgeWithTooltip>
 									</div>
 								</div>
@@ -162,17 +146,6 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 								<div className="mt-4 pt-3 border-t flex flex-col gap-2">
 									<div className="text-xs text-muted-foreground flex items-center gap-2">
 										<span className="font-medium">Mood:</span> {mood}
-										{themes?.length > 0 && (
-											<>
-												<span>•</span>
-												<span>{themes.length} themes</span>
-											</>
-										)}
-									</div>
-									<div className="text-xs text-muted-foreground">
-										<span>{successOutcomes?.length || 0} success outcomes</span>
-										<span className="mx-1">•</span>
-										<span>{failureOutcomes?.length || 0} failure outcomes</span>
 									</div>
 								</div>
 							</InfoCard>

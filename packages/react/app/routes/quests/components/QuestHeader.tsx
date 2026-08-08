@@ -3,9 +3,11 @@ import type React from "react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Link } from "~/components/ui/link"
 import type { Quest } from "~/lib/entities"
-import { getTypeVariant, getUrgencyVariant, getVisibilityVariant } from "../utils"
+import { getTypeVariant, getUrgencyVariant } from "../utils"
 
-export const QuestHeader: React.FC<Quest> = ({ name, type, urgency, visibility, mood, factions, region }) => (
+type QuestHeaderProps = Pick<Quest, "name" | "type" | "urgency" | "mood">
+
+export const QuestHeader: React.FC<QuestHeaderProps> = ({ name, type, urgency, mood }) => (
 	<div className="mb-6">
 		<h1 className="text-3xl font-bold flex items-center">
 			<Icons.Scroll className="h-6 w-6 mr-3 text-indigo-500" />
@@ -28,37 +30,6 @@ export const QuestHeader: React.FC<Quest> = ({ name, type, urgency, visibility, 
 				<Icons.Clock className="h-3.5 w-3.5 mr-1" />
 				{urgency}
 			</BadgeWithTooltip>
-			<BadgeWithTooltip
-				variant={getVisibilityVariant(visibility)}
-				className="flex items-center"
-				tooltipContent={`This quest is ${visibility === "hidden" ? "not yet known to players" : visibility === "rumored" ? "rumors are circulating" : visibility === "known" ? "known to players" : "prominently featured in the campaign"}`}
-			>
-				<Icons.Eye className="h-3.5 w-3.5 mr-1" />
-				{visibility}
-			</BadgeWithTooltip>
-			{factions && factions.length > 0 && factions[0]?.faction && (
-				<Link href={`/factions/${factions[0].faction.slug}/influence`}>
-					<BadgeWithTooltip
-						className="flex items-center cursor-pointer hover:bg-indigo-600"
-						tooltipContent={`Primary faction involved: ${factions[0].faction.name}`}
-					>
-						<Icons.Flag className="h-3.5 w-3.5 mr-1" />
-						{factions[0].faction.name}
-					</BadgeWithTooltip>
-				</Link>
-			)}
-			{region && (
-				<Link href={`/regions/${region.slug}/connections`}>
-					<BadgeWithTooltip
-						variant="outline"
-						className="flex items-center cursor-pointer hover:bg-indigo-600"
-						tooltipContent={`This quest takes place in ${region.name}`}
-					>
-						<Icons.MapPin className="h-3.5 w-3.5 mr-1" />
-						{region.name}
-					</BadgeWithTooltip>
-				</Link>
-			)}
 		</div>
 		<p className="mt-4 text-muted-foreground italic">"{mood}"</p>
 	</div>

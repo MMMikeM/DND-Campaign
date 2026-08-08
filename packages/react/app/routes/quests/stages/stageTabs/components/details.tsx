@@ -1,10 +1,38 @@
 import * as Icons from "lucide-react"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import type { Quest } from "~/lib/entities"
+import { Link } from "~/components/ui/link"
+import type { QuestStage } from "~/lib/entities"
 
-export default function StageDetailsTab(selectedStage: Quest["stages"][0]) {
-	const { clues, incomingConsequences, location, dramatic_moments, sensory_elements, encounters } = selectedStage
+export default function StageDetailsTab(selectedStage: QuestStage) {
+	const {
+		dramatic_moments,
+		sensory_elements,
+		encounters,
+		site,
+		completionPaths,
+		creativePrompts,
+		description,
+		dramatic_question,
+		deliveryNpc,
+		id,
+		incomingDecisions,
+		intendedComplexityLevel,
+		itemConnections,
+		name,
+		npcInvolvement,
+		objectives,
+		outgoingDecisions,
+		outgoingForeshadowing,
+		quest,
+		questId,
+		slug,
+		stageImportance,
+		stageOrder,
+		stageType,
+		tags,
+	} = selectedStage
 
 	return (
 		<div className="space-y-6">
@@ -12,121 +40,70 @@ export default function StageDetailsTab(selectedStage: Quest["stages"][0]) {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Dramatic Elements */}
 				<InfoCard title="Dramatic Elements" icon={<Icons.Theater className="h-4 w-4 mr-2" />}>
-					<List
-						items={dramatic_moments}
-						spacing="sm"
-						textColor="default"
-					/>
+					<List items={dramatic_moments} spacing="sm" textColor="default" />
 				</InfoCard>
 
 				{/* Sensory Elements */}
 				<InfoCard title="Sensory Elements" icon={<Icons.Eye className="h-4 w-4 mr-2" />}>
-					<List
-						items={sensory_elements}
-						spacing="sm"
-						textColor="default"
-					/>
+					<List items={sensory_elements} spacing="sm" textColor="default" />
 				</InfoCard>
 			</div>
 
 			{/* Encounters */}
 			{encounters && encounters.length > 0 && (
 				<InfoCard title="Encounters" icon={<Icons.Swords className="h-4 w-4 mr-2" />}>
-					<List
-						items={encounters}
-						spacing="sm"
-						textColor="default"
-					/>
+					<List items={encounters} spacing="sm" textColor="default" />
 				</InfoCard>
 			)}
 
-			{/* Clues */}
-			{clues && clues.length > 0 ? (
-				<InfoCard title="Clues" icon={<Icons.Search className="h-4 w-4 mr-2" />}>
-					<div className="space-y-4">
-						{clues.map((clue, index) => (
-							<div key={clue.id || index} className="space-y-2 border-b pb-2 last:border-0">
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-									<List
-										heading="Description"
-										items={clue.description}
-										spacing="sm"
-										textColor="default"
-										icon={<Icons.FileText className="h-4 w-4 mr-2 text-blue-500" />}
-									/>
-									<List
-										heading="Reveals"
-										items={clue.reveals}
-										spacing="sm"
-										textColor="default"
-										icon={<Icons.Lightbulb className="h-4 w-4 mr-2 text-amber-500" />}
-									/>
-								</div>
-								<List
-									heading="Discovery Condition"
-									items={clue.discoveryCondition}
-									spacing="sm"
-									textColor="default"
-									icon={<Icons.Key className="h-4 w-4 mr-2 text-green-500" />}
-								/>
-							</div>
-						))}
-					</div>
-				</InfoCard>
-			) : (
-				<InfoCard title="Clues" icon={<Icons.Search className="h-4 w-4 mr-2" />}>
-					<p className="text-sm text-muted-foreground">No clues available for this stage.</p>
-				</InfoCard>
-			)}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+				{site && (
+					<InfoCard title="Site" icon={<Icons.MapPin className="h-4 w-4 mr-2" />}>
+						<Link href={`/sites/${site.slug}`} className="text-sm text-primary hover:underline">
+							{site.name}
+						</Link>
+					</InfoCard>
+				)}
 
-			{/* Incoming Consequences */}
-			{incomingConsequences && incomingConsequences.length > 0 ? (
-				<InfoCard title="Incoming Consequences" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2" />}>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						{incomingConsequences.map((consequence, index) => (
-							<div key={consequence.id || index} className="space-y-2 border p-3 rounded-md">
-								<div className="flex items-center space-x-2">
-									<span className="font-medium text-sm">Type:</span>
-									<span className="text-sm">{consequence.consequence_type}</span>
-								</div>
-								<div className="flex items-center space-x-2">
-									<span className="font-medium text-sm">Severity:</span>
-									<span className="text-sm">{consequence.severity}</span>
-								</div>
-								<div className="flex items-center space-x-2">
-									<span className="font-medium text-sm">Visibility:</span>
-									<span className="text-sm">{consequence.visibility}</span>
-								</div>
-								<List
-									heading="Description"
-									items={consequence.description}
-									spacing="sm"
-									textColor="default"
-									icon={<Icons.Info className="h-4 w-4 mr-2" />}
-								/>
-							</div>
-						))}
-					</div>
-				</InfoCard>
-			) : (
-				<InfoCard title="Incoming Consequences" icon={<Icons.AlertTriangle className="h-4 w-4 mr-2" />}>
-					<p className="text-sm text-muted-foreground">No incoming consequences for this stage.</p>
-				</InfoCard>
-			)}
+				{deliveryNpc && (
+					<InfoCard title="Delivered By" icon={<Icons.UserCircle className="h-4 w-4 mr-2" />}>
+						<Link href={`/npcs/${deliveryNpc.slug}`} className="text-sm text-primary hover:underline">
+							{deliveryNpc.name}
+						</Link>
+					</InfoCard>
+				)}
+			</div>
 
-			{/* Location */}
-			{location && (
-				<InfoCard title="Location" icon={<Icons.MapPin className="h-4 w-4 mr-2" />}>
-					<div className="space-y-3">
-						<div className="text-sm">
-							<span className="font-medium">Name:</span> {location.name}
-						</div>
-						<div className="text-sm">
-							<span className="font-medium">ID:</span> {location.id}
-						</div>
+			<InfoCard
+				title="NPC Involvement"
+				icon={<Icons.Users className="h-4 w-4 mr-2" />}
+				emptyMessage="No NPCs are involved in this stage."
+			>
+				{npcInvolvement.map(({ id: involvementId, roleInStage, involvementDetails }) => (
+					<div key={`involvement-${involvementId}`} className="border-b last:border-b-0 p-3">
+						<p className="text-sm font-medium">{roleInStage}</p>
+						<List items={involvementDetails} spacing="sm" textColor="muted" />
 					</div>
-				</InfoCard>
-			)}
+				))}
+			</InfoCard>
+
+			<InfoCard
+				title="Items"
+				icon={<Icons.Package className="h-4 w-4 mr-2" />}
+				emptyMessage="No items are tied to this stage."
+			>
+				{itemConnections.map(({ id: connectionId, sourceItem, relationship }) => (
+					<div key={`item-${connectionId}`} className="border-b last:border-b-0 p-3">
+						<span className="text-sm font-medium">{sourceItem.name}</span>
+						<span className="text-sm text-muted-foreground ml-2">{relationship}</span>
+					</div>
+				))}
+			</InfoCard>
+
+			<ForeshadowingList
+				outgoing={outgoingForeshadowing}
+				emptyMessage="This stage plants no foreshadowing."
+			/>
 		</div>
 	)
 }

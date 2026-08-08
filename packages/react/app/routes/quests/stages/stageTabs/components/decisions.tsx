@@ -2,11 +2,11 @@ import * as Icons from "lucide-react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import type { Quest } from "~/lib/entities"
+import type { QuestStage } from "~/lib/entities"
 import { cn } from "~/lib/utils"
 import { getConditionTypeBadgeProps, getDecisionTypeBadgeProps } from "../../utils"
 
-export default function StageDecisionsTab(selectedStage: Quest["stages"][0]) {
+export default function StageDecisionsTab(selectedStage: QuestStage) {
 	return selectedStage?.outgoingDecisions.length > 0 ? (
 		selectedStage.outgoingDecisions.map((decision) => (
 			<InfoCard
@@ -19,7 +19,7 @@ export default function StageDecisionsTab(selectedStage: Quest["stages"][0]) {
 					<h4 className="font-semibold text-lg">{decision.name}</h4>
 					<div className="flex gap-2 my-2">
 						<BadgeWithTooltip {...getConditionTypeBadgeProps(decision.conditionType)} />
-						<BadgeWithTooltip {...getDecisionTypeBadgeProps(decision.decision_type)} />
+						<BadgeWithTooltip {...getDecisionTypeBadgeProps(decision.decisionType)} />
 					</div>
 					<div>
 						<h5 className="text-sm font-medium">Condition Value</h5>
@@ -98,13 +98,13 @@ export default function StageDecisionsTab(selectedStage: Quest["stages"][0]) {
 													<Icons.Info className="h-4 w-4 mr-2" />
 													{consequence.visibility}
 												</BadgeWithTooltip>
-												<BadgeWithTooltip tooltipContent={"Delay"} className="flex items-center">
+												<BadgeWithTooltip tooltipContent={"Timeframe"} className="flex items-center">
 													<Icons.Info className="h-4 w-4 mr-2" />
-													{consequence.delay_factor}
+													{consequence.timeframe}
 												</BadgeWithTooltip>
 												<BadgeWithTooltip tooltipContent={"Type"} className="flex items-center">
 													<Icons.Info className="h-4 w-4 mr-2" />
-													{consequence.consequence_type}
+													{consequence.consequenceType}
 												</BadgeWithTooltip>
 											</div>
 
