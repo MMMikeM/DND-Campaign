@@ -10,18 +10,30 @@ interface ConnectionsContentProps {
 	quest: Quest
 }
 
+type Participant = Quest["participants"][number]
+type Relation = Quest["relations"][number]
+
+const importanceVariant = (importance: string) => {
+	if (importance === "critical") return "destructive" as const
+	if (importance === "major") return "default" as const
+	if (importance === "supporting") return "secondary" as const
+	return "outline" as const
+}
+
 export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest }) => {
-	const { factions, npcs, relations } = quest
+	const { participants, relations } = quest
 
-	const precedes =
-		relations?.filter((rel) => rel.dependencyType === "prerequisite" || rel.dependencyType === "hidden_connection") ||
-		[]
+	const factionParticipants = participants.filter((participant) => participant.faction !== null)
+	const npcParticipants = participants.filter((participant) => participant.npc !== null)
 
-	const follows =
-		relations?.filter(
-			(rel) =>
-				rel.dependencyType === "sequel" || rel.dependencyType === "parallel" || rel.dependencyType === "alternative",
-		) || []
+	// "prerequisite" and "hidden_connection" point away from this quest; the rest point back toward it.
+	const leadsTo = relations.filter(
+		({ relationshipType }) => relationshipType === "prerequisite" || relationshipType === "hidden_connection",
+	)
+	const followsFrom = relations.filter(
+		({ relationshipType }) =>
+			relationshipType === "sequel" || relationshipType === "parallel" || relationshipType === "alternative",
+	)
 
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -30,27 +42,15 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				icon={<Icons.Flag className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No related factions"
 			>
-				{factions.map(({ faction, role, interest, creativePrompts }) => {
-					return (
-						<div key={`faction-${faction?.id}`} className="border-b pb-4 last:border-0">
-							<div className="flex justify-between items-center mb-2">
-								<Link href={`/factions/${faction?.slug}`} className="font-medium hover:text-primary flex items-center">
-									<Icons.Users className="h-4 w-4 mr-2" />
-									{faction?.name}
-								</Link>
-								<BadgeWithTooltip variant="outline" tooltipContent={`Role in this quest`}>
-									{role}
-								</BadgeWithTooltip>
-							</div>
-
-							<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
-								{interest?.map((item, i) => (
-									<li key={`interest-${faction?.id}-${i}`}>{item}</li>
-								))}
-							</ul>
-						</div>
-					)
-				})}
+				{factionParticipants.map((participant) => (
+					<ParticipantEntry
+						key={`faction-participant-${participant.id}`}
+						participant={participant}
+						href={`/factions/${participant.faction?.slug}`}
+						name={participant.faction?.name}
+						icon={<Icons.Users className="h-4 w-4 mr-2" />}
+					/>
+				))}
 			</InfoCard>
 
 			<InfoCard
@@ -58,53 +58,15 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 				icon={<Icons.UserCircle className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No related NPCs"
 			>
-				{npcs.map((npcRel) => {
-					if (!npcRel.npc) return null
-
-					const { npc, role, importance, dramaticMoments } = npcRel
-					return (
-						<div key={`npc-${npc.id}`} className="border-b pb-4 last:border-0">
-							<div className="flex justify-between items-center mb-2">
-								<Link href={`/npcs/${npc.slug}`} className="font-medium hover:text-primary flex items-center">
-									<Icons.User className="h-4 w-4 mr-2" />
-									{npc.name}
-								</Link>
-
-								<div className="flex items-center gap-2">
-									<BadgeWithTooltip
-										variant={
-											importance === "critical"
-												? "destructive"
-												: importance === "major"
-													? "default"
-													: importance === "supporting"
-														? "secondary"
-														: "outline"
-										}
-										tooltipContent="Importance to quest"
-									>
-										{importance}
-									</BadgeWithTooltip>
-
-									<BadgeWithTooltip variant="outline" tooltipContent="Role in quest">
-										{role}
-									</BadgeWithTooltip>
-								</div>
-							</div>
-
-							{dramaticMoments && dramaticMoments.length > 0 && (
-								<div className="mt-2">
-									<h4 className="text-xs font-medium text-muted-foreground mb-1">Key Scenes:</h4>
-									<ul className="text-sm list-disc list-inside text-muted-foreground ml-2">
-										{dramaticMoments.map((moment, idx) => (
-											<li key={`moment-${npc.id}-${idx}`}>{moment}</li>
-										))}
-									</ul>
-								</div>
-							)}
-						</div>
-					)
-				})}
+				{npcParticipants.map((participant) => (
+					<ParticipantEntry
+						key={`npc-participant-${participant.id}`}
+						participant={participant}
+						href={`/npcs/${participant.npc?.slug}`}
+						name={participant.npc?.name}
+						icon={<Icons.User className="h-4 w-4 mr-2" />}
+					/>
+				))}
 			</InfoCard>
 
 			<InfoCard
@@ -120,44 +82,11 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 							Leads To
 						</h3>
 
-						{precedes.length > 0 ? (
+						{leadsTo.length > 0 ? (
 							<div className="space-y-4">
-								{precedes.map(({ creativePrompts, description, quest, dependencyType }) => {
-									if (!quest) return null
-									return (
-										<div key={`follows-${quest.id}`} className="border-b pb-3 last:border-0">
-											<Link href={`/quests/${quest.slug}`} className="font-medium hover:text-primary">
-												{quest.name}
-											</Link>
-											<BadgeWithTooltip
-												variant="outline"
-												className="ml-2"
-												tooltipContent={
-													dependencyType === "prerequisite"
-														? "This quest must be completed before the linked quest"
-														: "Hidden connection to this quest"
-												}
-											>
-												{dependencyType.replace("_", " ")}
-											</BadgeWithTooltip>
-
-											<List
-												heading="Description"
-												items={description}
-												spacing="sm"
-												textColor="muted"
-												icon={<Icons.Info className="h-4 w-4 mr-2" />}
-											/>
-											<List
-												heading="Creative Prompts"
-												items={creativePrompts}
-												spacing="sm"
-												textColor="muted"
-												icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
-											/>
-										</div>
-									)
-								})}
+								{leadsTo.map((relation) => (
+									<RelationEntry key={`leads-to-${relation.id}`} relation={relation} />
+								))}
 							</div>
 						) : (
 							<p className="text-muted-foreground text-sm italic">No following quests defined</p>
@@ -170,45 +99,11 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 							Follows From
 						</h3>
 
-						{follows.length > 0 ? (
+						{followsFrom.length > 0 ? (
 							<div className="space-y-4">
-								{follows.map(({ creativePrompts, description, quest, dependencyType }) => {
-									return (
-										<div key={`precedes-${quest?.id}`} className="border-b pb-3 last:border-0">
-											<Link href={`/quests/${quest?.slug}`} className="font-medium hover:text-primary">
-												{quest?.name}
-											</Link>
-											<BadgeWithTooltip
-												variant="outline"
-												className="ml-2"
-												tooltipContent={
-													dependencyType === "sequel"
-														? "This quest follows the linked quest"
-														: dependencyType === "parallel"
-															? "This quest runs alongside the linked quest"
-															: "Alternative path to the linked quest"
-												}
-											>
-												{dependencyType.replace("_", " ")}
-											</BadgeWithTooltip>
-
-											<List
-												heading="Description"
-												items={description}
-												spacing="sm"
-												textColor="muted"
-												icon={<Icons.Info className="h-4 w-4 mr-2" />}
-											/>
-											<List
-												heading="Creative Prompts"
-												items={creativePrompts}
-												spacing="sm"
-												textColor="muted"
-												icon={<Icons.Sparkles className="h-4 w-4 mr-2" />}
-											/>
-										</div>
-									)
-								})}
+								{followsFrom.map((relation) => (
+									<RelationEntry key={`follows-from-${relation.id}`} relation={relation} />
+								))}
 							</div>
 						) : (
 							<p className="text-muted-foreground text-sm italic">No preceding quests defined</p>
@@ -216,6 +111,69 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({ quest })
 					</div>
 				</div>
 			</InfoCard>
+		</div>
+	)
+}
+
+const ParticipantEntry = ({
+	participant,
+	href,
+	name,
+	icon,
+}: {
+	participant: Participant
+	href: string
+	name?: string
+	icon: React.ReactNode
+}) => {
+	const { creativePrompts, description, importanceInQuest, involvementDetails, roleInQuest } = participant
+
+	return (
+		<div className="border-b pb-4 last:border-0">
+			<div className="flex justify-between items-center mb-2">
+				<Link href={href} className="font-medium hover:text-primary flex items-center">
+					{icon}
+					{name}
+				</Link>
+				<div className="flex items-center gap-2">
+					<BadgeWithTooltip variant={importanceVariant(importanceInQuest)} tooltipContent="Importance to quest">
+						{importanceInQuest}
+					</BadgeWithTooltip>
+					<BadgeWithTooltip variant="outline" tooltipContent="Role in this quest">
+						{roleInQuest}
+					</BadgeWithTooltip>
+				</div>
+			</div>
+
+			<List heading="Involvement" items={involvementDetails} spacing="sm" textColor="muted" />
+			<List heading="Description" items={description} spacing="sm" textColor="muted" />
+			<List heading="Creative Prompts" items={creativePrompts} spacing="sm" textColor="muted" />
+		</div>
+	)
+}
+
+const relationTooltips: Record<string, string> = {
+	prerequisite: "This quest must be completed before the linked quest",
+	hidden_connection: "Hidden connection to this quest",
+	sequel: "This quest follows the linked quest",
+	parallel: "This quest runs alongside the linked quest",
+	alternative: "Alternative path to the linked quest",
+}
+
+const RelationEntry = ({ relation }: { relation: Relation }) => {
+	const { creativePrompts, description, quest, relationshipType } = relation
+
+	return (
+		<div className="border-b pb-3 last:border-0">
+			<Link href={`/quests/${quest.slug}`} className="font-medium hover:text-primary">
+				{quest.name}
+			</Link>
+			<BadgeWithTooltip variant="outline" className="ml-2" tooltipContent={relationTooltips[relationshipType]}>
+				{relationshipType.replace("_", " ")}
+			</BadgeWithTooltip>
+
+			<List heading="Description" items={description} spacing="sm" textColor="muted" />
+			<List heading="Creative Prompts" items={creativePrompts} spacing="sm" textColor="muted" />
 		</div>
 	)
 }

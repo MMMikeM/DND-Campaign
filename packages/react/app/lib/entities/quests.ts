@@ -15,7 +15,7 @@ const questConfig = {
 				outgoingForeshadowing: foreshadowingWithTargets,
 				itemConnections: { with: { sourceItem: nameAndId } },
 				loreLinks: true,
-				participants: true,
+				participants: { with: { npc: nameAndId, faction: nameAndId } },
 				stages: nameAndId,
 				outgoingRelations: { with: { targetQuest: nameAndId } },
 				incomingRelations: { with: { sourceQuest: nameAndId } },

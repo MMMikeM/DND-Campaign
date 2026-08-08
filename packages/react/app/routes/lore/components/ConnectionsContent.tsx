@@ -6,18 +6,18 @@ import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Lore } from "~/lib/entities"
 
-type ConnectionsContentProps = Pick<Lore, "incomingForeshadowing" | "outgoingForeshadowing" | "connections_to_world" | "links">
+type ConnectionsContentProps = Pick<Lore, "incomingForeshadowing" | "outgoingForeshadowing" | "connectionsToWorld" | "links">
 
 export function ConnectionsContent({
 	incomingForeshadowing,
 	outgoingForeshadowing,
-	connections_to_world,
+	connectionsToWorld,
 	links,
 }: ConnectionsContentProps) {
 	return (
 		<div className="space-y-6">
 			<InfoCard title="Connections to World" icon={<Icons.Globe className="h-4 w-4 mr-2" />}>
-				<List items={connections_to_world} />
+				<List items={connectionsToWorld} />
 			</InfoCard>
 
 			<ForeshadowingList
@@ -41,7 +41,6 @@ const LoreLinks = ({ links }: Pick<Lore, "links">) => {
 				({
 					creativePrompts,
 					description,
-					gmNotes,
 					linkDetailsText,
 					linkRoleOrTypeText,
 					linkStrength,
@@ -61,7 +60,6 @@ const LoreLinks = ({ links }: Pick<Lore, "links">) => {
 						<p>{linkRoleOrTypeText}</p>
 						<p>{linkStrength}</p>
 						<List items={description} heading="Description" spacing="sm" textColor="muted" />
-						<List items={gmNotes} heading="GM Notes" spacing="sm" textColor="muted" />
 						<List items={creativePrompts} heading="Creative Prompts" spacing="sm" textColor="muted" />
 						<LoreLink link={conflict} type="conflict" />
 						<LoreLink link={faction} type="faction" />
@@ -82,7 +80,7 @@ const LoreLink = ({
 	link,
 	type,
 }: {
-	link: { id: number; name: string; description: string[] | null } | null
+	link: { id: number; name: string; description?: string[] | null } | null
 	type: string
 }) => {
 	if (!link) return null

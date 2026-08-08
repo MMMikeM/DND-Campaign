@@ -48,20 +48,6 @@ export const getAdaptabilityVariant = (adaptability: string) => {
 	}
 }
 
-export const getRelationshipStrengthVariant = (strength: string) => {
-	switch (strength) {
-		case "unbreakable":
-		case "strong":
-			return "default"
-		case "moderate":
-			return "secondary"
-		case "weak":
-			return "outline"
-		default:
-			return "outline"
-	}
-}
-
 export const getRelationshipTypeVariant = (type: string) => {
 	switch (type) {
 		case "ally":

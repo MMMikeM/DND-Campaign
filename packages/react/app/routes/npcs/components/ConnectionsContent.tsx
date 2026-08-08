@@ -2,10 +2,55 @@ import * as Icons from "lucide-react"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Optional } from "~/components/Optional"
 import { Link } from "~/components/ui/link"
 import type { NPC } from "~/lib/entities"
-import { getRelationshipStrengthVariant } from "../utils"
+
+const loyaltyVariant = (loyalty: string) => {
+	if (loyalty === "high") return "default" as const
+	if (loyalty === "medium") return "secondary" as const
+	if (loyalty === "low") return "outline" as const
+	return "destructive" as const
+}
+
+/**
+ * npc_faction_memberships is unique on npcId, so an NPC has at most one membership.
+ */
+const FactionMembership = ({ membership }: { membership: NonNullable<NPC["factionMemberships"]> }) => {
+	const { justification, loyalty, rank, role, secrets, faction } = membership
+
+	return (
+		<div className="p-3 space-y-3">
+			<div className="flex justify-between">
+				<h4 className="font-medium">{faction && <Link href={`/factions/${faction.slug}`}>{faction.name}</Link>}</h4>
+				<BadgeWithTooltip
+					variant={loyaltyVariant(loyalty)}
+					tooltipContent={`Loyalty level: ${loyalty} - How loyal this NPC is to the faction`}
+				>
+					{loyalty} loyalty
+				</BadgeWithTooltip>
+			</div>
+			<div className="flex">
+				<span className="font-medium mr-2">Role:</span>
+				<span className="text-muted-foreground">{role}</span>
+			</div>
+			<div className="flex">
+				<span className="font-medium mr-2">Rank:</span>
+				<span className="text-muted-foreground">{rank}</span>
+			</div>
+			<div className="text-sm">Justification: {justification}</div>
+
+			<List
+				heading="Secrets"
+				icon={<Icons.Lock className="h-3 w-3 mr-1" />}
+				items={secrets}
+				spacing="sm"
+				textColor="muted"
+				textSize="xs"
+				collapsible={false}
+			/>
+		</div>
+	)
+}
 
 export function ConnectionsContent({
 	name,
@@ -39,137 +84,55 @@ export function ConnectionsContent({
 					emptyMessage="No known relationships for this NPC"
 					contentClassName="space-y-4"
 				>
-					{relations.map(
-						({
-							id,
-							creativePrompts,
-							description,
-							history,
-							narrativeTensions,
-							npc,
-							relationshipDynamics,
-							sharedGoals,
-							strength,
-							relationshipType,
-						}) => (
-							<div key={`relationship-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
-								<div className="flex justify-between">
-									<Link href={`/npcs/${npc?.slug}`}>
-										<h4 className="font-medium">{npc?.name}</h4>
-									</Link>
-								</div>
-								<BadgeWithTooltip
-									variant={getRelationshipStrengthVariant(strength)}
-									className="capitalize"
-									tooltipContent={`Relationship type - Strength`}
-								>
-									{strength} - {relationshipType}
-								</BadgeWithTooltip>
-
-								<List
-									heading="Description"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={description}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-									collapsible={false}
-								/>
-
-								<List
-									heading="Tensions"
-									icon={<Icons.AlertTriangle className="h-3 w-3 mr-1 text-amber-500" />}
-									items={narrativeTensions}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-								<List
-									heading="Shared Goals"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={sharedGoals}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-								<List
-									heading="Relationship Dynamics"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={relationshipDynamics}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-								<List
-									heading="Creative Prompts"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={creativePrompts}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-								<List
-									heading="History"
-									icon={<Icons.Info className="h-3 w-3 mr-1" />}
-									items={history}
-									spacing="sm"
-									textColor="muted"
-									textSize="xs"
-								/>
-							</div>
-						),
-					)}
-				</InfoCard>
-
-				<InfoCard
-					title="Faction Affiliations"
-					description="Organizations {name} is associated with"
-					icon={<Icons.Flag className="h-4 w-4 mr-2 text-red-600" />}
-					emptyMessage="No known faction affiliations for this NPC"
-					contentClassName="space-y-4"
-				>
-					{factionMemberships?.map(({ id, justification, loyalty, rank, role, secrets, faction }) => (
-						<div key={`faction-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
+					{relations.map(({ id, creativePrompts, description, npc, dynamicsAndHistory, relationship }) => (
+						<div key={`relationship-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 							<div className="flex justify-between">
-								<h4 className="font-medium">
-									{faction && <Link href={`/factions/${faction.slug}`}>{faction.name}</Link>}
-								</h4>
-								<BadgeWithTooltip
-									variant={
-										loyalty === "high"
-											? "default"
-											: loyalty === "medium"
-												? "secondary"
-												: loyalty === "low"
-													? "outline"
-													: "destructive"
-									}
-									tooltipContent={`Loyalty level: ${loyalty} - How loyal this NPC is to the faction`}
-								>
-									{loyalty} loyalty
-								</BadgeWithTooltip>
+								<Link href={`/npcs/${npc?.slug}`}>
+									<h4 className="font-medium">{npc?.name}</h4>
+								</Link>
 							</div>
-							<div className="flex">
-								<span className="font-medium mr-2">Role:</span>
-								<span className="text-muted-foreground">{role}</span>
-							</div>
-							<div className="flex">
-								<span className="font-medium mr-2">Rank:</span>
-								<span className="text-muted-foreground">{rank}</span>
-							</div>
-							<div className=" text-sm">Justification: {justification}</div>
+							<BadgeWithTooltip variant="outline" className="capitalize" tooltipContent="Relationship type">
+								{relationship}
+							</BadgeWithTooltip>
 
 							<List
-								heading="Secrets"
-								icon={<Icons.Lock className="h-3 w-3 mr-1" />}
-								items={secrets}
+								heading="Description"
+								icon={<Icons.Info className="h-3 w-3 mr-1" />}
+								items={description}
 								spacing="sm"
 								textColor="muted"
 								textSize="xs"
 								collapsible={false}
 							/>
+
+							<List
+								heading="Dynamics & History"
+								icon={<Icons.History className="h-3 w-3 mr-1" />}
+								items={dynamicsAndHistory}
+								spacing="sm"
+								textColor="muted"
+								textSize="xs"
+							/>
+							<List
+								heading="Creative Prompts"
+								icon={<Icons.Sparkles className="h-3 w-3 mr-1" />}
+								items={creativePrompts}
+								spacing="sm"
+								textColor="muted"
+								textSize="xs"
+							/>
 						</div>
 					))}
+				</InfoCard>
+
+				<InfoCard
+					title="Faction Affiliation"
+					description={`The organization ${name} belongs to`}
+					icon={<Icons.Flag className="h-4 w-4 mr-2 text-red-600" />}
+					emptyMessage="No known faction affiliation for this NPC"
+					contentClassName="space-y-4"
+				>
+					{factionMemberships && <FactionMembership membership={factionMemberships} />}
 				</InfoCard>
 			</div>
 
@@ -228,7 +191,6 @@ export function ConnectionsContent({
 							description,
 							involvementDetails,
 							creativePrompts,
-							gmNotes,
 							tags,
 							roleInQuest,
 						}) => (
@@ -264,8 +226,6 @@ export function ConnectionsContent({
 									collapsible={false}
 								/>
 								<List items={involvementDetails} spacing="sm" textColor="muted" textSize="xs" />
-
-								<List items={gmNotes} spacing="sm" textColor="muted" textSize="xs" />
 								<List items={tags} spacing="sm" textColor="muted" textSize="xs" />
 
 								<List
@@ -291,10 +251,10 @@ export function ConnectionsContent({
 					</div>
 					<div className="p-3 space-y-3">
 						<h4 className="font-medium">Quest Stage Deliveries</h4>
-						{questStageDeliveries.map(({ id, quest, questStage }) => (
+						{questStageDeliveries.map(({ id, name, quest, slug }) => (
 							<div key={`quest-stage-delivery-${id}`} className="text-sm">
-								<Link href={`/quests/${quest?.slug}`}>
-									Delivers: {quest?.name} - {questStage?.name}
+								<Link href={`/quests/${quest?.slug}/stages/${slug}`}>
+									Delivers: {quest?.name} - {name}
 								</Link>
 							</div>
 						))}

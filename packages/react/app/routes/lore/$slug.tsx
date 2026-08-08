@@ -119,7 +119,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 						links={links}
 						incomingForeshadowing={incomingForeshadowing}
 						outgoingForeshadowing={outgoingForeshadowing}
-						connections_to_world={connectionsToWorld}
+						connectionsToWorld={connectionsToWorld}
 					/>
 				</TabsContent>
 			</Tabs>

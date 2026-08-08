@@ -110,7 +110,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<ConnectionsContent relations={relations} territorialControl={factionInfluence} />
+					<ConnectionsContent relations={relations} factionInfluence={factionInfluence} />
 					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this region." />
 				</TabsContent>
 			</Tabs>
