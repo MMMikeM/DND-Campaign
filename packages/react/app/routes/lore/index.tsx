@@ -55,9 +55,13 @@ export default function LoreIndex({ loaderData }: Route.ComponentProps) {
 							conflictingNarratives,
 							connectionsToWorld,
 							coreTenetsAndTraditions,
+							creativePrompts,
+							description,
+							hiddenTruths,
 							historyAndLegacy,
 							id,
 							interactionsAndRules,
+							livedReality,
 							loreType,
 							modernRelevance,
 							name,
@@ -65,10 +69,6 @@ export default function LoreIndex({ loaderData }: Route.ComponentProps) {
 							summary,
 							surfaceImpression,
 							tags,
-							creativePrompts,
-							description,
-							hiddenTruths,
-							livedReality,
 						}) => (
 							<NavLink key={id} to={`/lore/${slug}`} className="no-underline">
 								<InfoCard
