@@ -30,11 +30,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
-	const site = loaderData
-	const { tab } = useParams()
-	const activeTab = tab || "overview"
-	const navigate = useNavigate()
-
 	const {
 		area,
 		itemConnections,
@@ -45,6 +40,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 		factionHqs,
 		factionInfluence,
 		incomingForeshadowing,
+		outgoingForeshadowing,
 		intendedSiteFunction,
 		mapGroup,
 		name,
@@ -54,7 +50,10 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 		secrets,
 		slug,
 		tags,
-	} = site
+	} = loaderData
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
 		navigate(`/sites/${slug}/${value === "overview" ? "" : value}`)
@@ -122,6 +121,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 						questHooks={questHooks}
 						questStages={questStages}
 						incomingForeshadowing={incomingForeshadowing}
+						outgoingForeshadowing={outgoingForeshadowing}
 						consequences={consequences}
 					/>
 				</TabsContent>

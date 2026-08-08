@@ -7,6 +7,7 @@ import { getArea } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { AreaHeader } from "./components/AreaHeader"
 import { ConsequencesContent } from "./components/ConsequencesContent"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { DetailsContent } from "./components/DetailsContent"
 import { InfluenceContent } from "./components/InfluenceContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -25,7 +26,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return area
 }
 
-const tabList = ["overview", "details", "sites", "influence", "consequences"]
+const tabList = ["overview", "details", "sites", "influence", "consequences", "foreshadowing"]
 
 export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 	const { tab } = useParams()
@@ -42,6 +43,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 		sites,
 		factionInfluence,
 		consequences,
+		incomingForeshadowing,
 		cultureAndLeadership,
 		featuresAndHazards,
 		loreAndSecrets,
@@ -67,7 +69,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 			<Tags tags={tags} className="mb-6" />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-				<TabsList className="grid grid-cols-5 mb-8">
+				<TabsList className="grid grid-cols-6 mb-8">
 					{tabList.map((tab) => (
 						<TabsTrigger key={tab} value={tab} className="capitalize">
 							{tab}
@@ -93,6 +95,10 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="consequences">
 					<ConsequencesContent consequences={consequences} />
+				</TabsContent>
+
+				<TabsContent value="foreshadowing">
+					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this area." />
 				</TabsContent>
 			</Tabs>
 		</div>

@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -15,7 +15,7 @@ const consequenceConfig = {
 				affectedNpc: nameAndId,
 				affectedRegion: nameAndId,
 				affectedConflict: nameAndId,
-				incomingForeshadowing: true,
+				incomingForeshadowing: foreshadowingWithSources,
 			},
 		}),
 	getAll: () => db.query.consequences.findMany({}),

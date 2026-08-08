@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Conflict } from "~/lib/entities"
@@ -8,7 +9,6 @@ import { getConflict } from "~/lib/entities"
 import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
 import { ConsequencesContent } from "./components/ConsequencesContent"
-import { ForeshadowingContent } from "./components/ForeshadowingContent"
 import { ItemsContent } from "./components/ItemsContent"
 import { LoreContent } from "./components/LoreContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -157,7 +157,10 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">
-					<ForeshadowingContent incomingForeshadowing={incomingForeshadowing} />
+					<ForeshadowingList
+						incoming={incomingForeshadowing}
+						emptyMessage="No foreshadowing points toward this conflict."
+					/>
 				</TabsContent>
 
 				<TabsContent value="items" className="animate-in fade-in-50 duration-300">

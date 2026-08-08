@@ -2,6 +2,7 @@ import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getConsequence, type Consequence } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -94,6 +95,10 @@ export default function ConsequenceDetail({ loaderData }: Route.ComponentProps) 
 						description={description}
 						creativePrompts={creativePrompts}
 						gmNotes={gmNotes}
+					/>
+					<ForeshadowingList
+						incoming={incomingForeshadowing}
+						emptyMessage="No foreshadowing points toward this consequence."
 					/>
 				</TabsContent>
 

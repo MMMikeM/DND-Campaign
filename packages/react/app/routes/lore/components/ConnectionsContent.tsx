@@ -1,28 +1,30 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Lore } from "~/lib/entities"
 
-type ConnectionsContentProps = Pick<Lore, "incomingForeshadowing" | "connections_to_world" | "links">
+type ConnectionsContentProps = Pick<Lore, "incomingForeshadowing" | "outgoingForeshadowing" | "connections_to_world" | "links">
 
-export function ConnectionsContent({ incomingForeshadowing, connections_to_world, links }: ConnectionsContentProps) {
+export function ConnectionsContent({
+	incomingForeshadowing,
+	outgoingForeshadowing,
+	connections_to_world,
+	links,
+}: ConnectionsContentProps) {
 	return (
 		<div className="space-y-6">
 			<InfoCard title="Connections to World" icon={<Icons.Globe className="h-4 w-4 mr-2" />}>
 				<List items={connections_to_world} />
 			</InfoCard>
 
-			<InfoCard title="Foreshadowing" icon={<Icons.Eye className="h-4 w-4 mr-2" />}>
-				<div className="space-y-2">
-					{incomingForeshadowing.map((foreshadow) => (
-						<Link key={foreshadow.id} href={`/foreshadowing/${foreshadow.id}`} className="block">
-							{foreshadow.name}
-						</Link>
-					))}
-				</div>
-			</InfoCard>
+			<ForeshadowingList
+				incoming={incomingForeshadowing}
+				outgoing={outgoingForeshadowing}
+				emptyMessage="No foreshadowing is linked to this lore."
+			/>
 			<LoreLinks links={links} />
 		</div>
 	)

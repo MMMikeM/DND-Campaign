@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -28,15 +28,7 @@ const factionConfig = {
 					},
 				},
 
-				incomingForeshadowing: {
-					with: {
-						sourceNpc: nameAndId,
-						sourceQuest: nameAndId,
-						sourceSite: nameAndId,
-						sourceQuestStage: nameAndId,
-						sourceLore: nameAndId,
-					},
-				},
+				incomingForeshadowing: foreshadowingWithSources,
 				influence: {
 					with: {
 						area: nameAndId,

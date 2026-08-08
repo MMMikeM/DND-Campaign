@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -11,7 +11,8 @@ const questConfig = {
 			with: {
 				affectingConsequences: true,
 				hooks: true,
-				incomingForeshadowing: true,
+				incomingForeshadowing: foreshadowingWithSources,
+				outgoingForeshadowing: foreshadowingWithTargets,
 				itemConnections: { with: { sourceItem: nameAndId } },
 				loreLinks: true,
 				participants: true,

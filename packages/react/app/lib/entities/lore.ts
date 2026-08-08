@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -16,7 +16,8 @@ const loreConfig = {
 		db.query.lore.findFirst({
 			where: { id },
 			with: {
-				incomingForeshadowing: true,
+				incomingForeshadowing: foreshadowingWithSources,
+				outgoingForeshadowing: foreshadowingWithTargets,
 				links: {
 					with: {
 						region: nameIdAndDescription,

@@ -37,6 +37,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 		description,
 		hiddenTruths,
 		incomingForeshadowing,
+		outgoingForeshadowing,
 		links,
 		livedReality,
 		loreType,
@@ -117,6 +118,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 					<ConnectionsContent
 						links={links}
 						incomingForeshadowing={incomingForeshadowing}
+						outgoingForeshadowing={outgoingForeshadowing}
 						connections_to_world={connectionsToWorld}
 					/>
 				</TabsContent>

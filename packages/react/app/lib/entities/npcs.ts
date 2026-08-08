@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -15,14 +15,14 @@ const npcConfig = {
 				affectingConsequences: true,
 				conflictParticipation: true,
 				factionMemberships: { with: { faction: nameAndId } },
-				incomingForeshadowing: true,
+				incomingForeshadowing: foreshadowingWithSources,
 				itemConnections: { with: { sourceItem: nameAndId } },
 				questHooks: { with: { quest: nameAndId } },
 				questStageDeliveries: { with: { quest: nameAndId } },
 				questParticipants: { with: { quest: nameAndId } },
 				stageInvolvement: true,
 				loreLinks: true,
-				outgoingForeshadowing: true,
+				outgoingForeshadowing: foreshadowingWithTargets,
 				details: true,
 			},
 		}),

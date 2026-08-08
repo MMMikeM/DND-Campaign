@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -32,22 +33,23 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 
 	const {
 		areas,
+		atmosphereAndCulture,
 		conflicts,
 		consequences,
 		dangerLevel,
 		description,
 		factionInfluence,
+		featuresAndHazards,
+		incomingForeshadowing,
+		historyAndEconomy,
+		id,
+		loreAndSecrets,
 		loreLinks,
 		name,
 		relations,
 		slug,
 		tags,
 		type,
-		atmosphereAndCulture,
-		featuresAndHazards,
-		historyAndEconomy,
-		id,
-		loreAndSecrets,
 	} = region
 
 	const handleTabChange = (value: string) => {
@@ -109,6 +111,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="connections">
 					<ConnectionsContent relations={relations} territorialControl={factionInfluence} />
+					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this region." />
 				</TabsContent>
 			</Tabs>
 		</div>

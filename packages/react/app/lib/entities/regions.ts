@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import addSlugs from "../utils/addSlugs"
@@ -31,6 +31,7 @@ const regionConfig = {
 				},
 				conflicts: nameAndId,
 				consequences: nameAndId,
+				incomingForeshadowing: foreshadowingWithSources,
 				loreLinks: {
 					with: {
 						lore: nameAndId,

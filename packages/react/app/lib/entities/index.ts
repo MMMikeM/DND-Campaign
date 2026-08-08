@@ -36,3 +36,29 @@ export const searchBySimilarity = async (
   `)
 
 export const nameAndId = { columns: { id: true, name: true } } as const
+
+export const foreshadowingWithTargets = {
+	with: {
+		targetArea: nameAndId,
+		targetConflict: nameAndId,
+		targetConsequence: nameAndId,
+		targetFaction: nameAndId,
+		targetItem: nameAndId,
+		targetLore: nameAndId,
+		targetNpc: nameAndId,
+		targetQuest: nameAndId,
+		targetRegion: nameAndId,
+		targetSite: nameAndId,
+	},
+} as const
+
+export const foreshadowingWithSources = {
+	with: {
+		sourceItem: nameAndId,
+		sourceLore: nameAndId,
+		sourceNpc: nameAndId,
+		sourceQuest: nameAndId,
+		sourceQuestStage: nameAndId,
+		sourceSite: nameAndId,
+	},
+} as const

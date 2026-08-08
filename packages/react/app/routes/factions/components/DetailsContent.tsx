@@ -1,5 +1,6 @@
 import * as Icons from "lucide-react"
 import { AlignmentBadge } from "~/components/alignment-badge"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
@@ -100,9 +101,10 @@ export function DetailsContent({
 				emptyMessage="No narrative links"
 			>
 				{JSON.stringify(conflicts)}
-				{JSON.stringify(incomingForeshadowing)}
 				{JSON.stringify(narrativeDestinationInvolvement)}
 			</InfoCard>
+
+			<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this faction." />
 
 			<InfoCard
 				title="Connections"

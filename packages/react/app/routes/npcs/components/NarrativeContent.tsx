@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { NPC } from "~/lib/entities"
@@ -31,33 +32,11 @@ export function NarrativeContent({
 				))}
 			</InfoCard>
 
-			<InfoCard
-				title="Outgoing Foreshadowing"
-				description={`Foreshadowing elements that ${name} creates or hints at`}
-				icon={<Icons.GitMerge className="h-4 w-4 mr-2 text-purple-600" />}
-				emptyMessage="No outgoing foreshadowing elements."
-			>
-				{outgoingForeshadowing.map(({ id, name: foreshadowingName, description }) => (
-					<div key={`outgoing-foreshadowing-${id}`} className="border-b last:border-b-0 p-3">
-						<h4 className="font-medium">{foreshadowingName}</h4>
-						<p className="text-sm text-muted-foreground">{description.join(" ")}</p>
-					</div>
-				))}
-			</InfoCard>
-
-			<InfoCard
-				title="Incoming Foreshadowing"
-				description={`Foreshadowing that hints at ${name}'s role`}
-				icon={<Icons.Eye className="h-4 w-4 mr-2 text-blue-600" />}
-				emptyMessage="No incoming foreshadowing for this NPC."
-			>
-				{incomingForeshadowing.map(({ id, name: foreshadowingName, description }) => (
-					<div key={`incoming-foreshadowing-${id}`} className="border-b last:border-b-0 p-3">
-						<h4 className="font-medium">{foreshadowingName}</h4>
-						<p className="text-sm text-muted-foreground">{description.join(" ")}</p>
-					</div>
-				))}
-			</InfoCard>
+			<ForeshadowingList
+				incoming={incomingForeshadowing}
+				outgoing={outgoingForeshadowing}
+				emptyMessage="No foreshadowing is linked to this NPC."
+			/>
 
 			<InfoCard
 				title="Affecting Consequences"

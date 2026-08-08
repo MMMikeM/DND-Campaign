@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getQuest, getQuestStages } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -53,6 +54,7 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 		participants,
 		affectingConsequences,
 		incomingForeshadowing,
+		outgoingForeshadowing,
 		slug,
 		dependentQuests,
 		emotionalShape,
@@ -144,6 +146,11 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="connections" className="space-y-6">
 					<ConnectionsContent quest={quest} />
+					<ForeshadowingList
+						incoming={incomingForeshadowing}
+						outgoing={outgoingForeshadowing}
+						emptyMessage="No foreshadowing is linked to this quest."
+					/>
 				</TabsContent>
 
 				<TabsContent value="twists" className="space-y-6 mt-6">

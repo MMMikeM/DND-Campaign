@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
@@ -7,8 +8,9 @@ export const NarrativeContent = ({
 	questHooks,
 	questStages,
 	incomingForeshadowing,
+	outgoingForeshadowing,
 	consequences,
-}: Pick<Site, "questHooks" | "questStages" | "incomingForeshadowing" | "consequences">) => {
+}: Pick<Site, "questHooks" | "questStages" | "incomingForeshadowing" | "outgoingForeshadowing" | "consequences">) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<InfoCard
@@ -69,44 +71,11 @@ export const NarrativeContent = ({
 				))}
 			</InfoCard>
 
-			<InfoCard
-				title="Foreshadowing"
-				icon={<Icons.Eye className="h-4 w-4 text-primary" />}
+			<ForeshadowingList
+				incoming={incomingForeshadowing}
+				outgoing={outgoingForeshadowing}
 				emptyMessage="No foreshadowing is linked to this site."
-			>
-				{incomingForeshadowing.map(
-					({
-						id,
-						name,
-						creativePrompts,
-						description,
-						narrativeWeight,
-						slug,
-						sourceItemId,
-						sourceLoreId,
-						sourceNpcId,
-						sourceQuestId,
-						sourceQuestStageId,
-						sourceSiteId,
-						subtlety,
-						suggestedDeliveryMethods,
-						tags,
-						targetConflictId,
-						targetConsequenceId,
-						targetFactionId,
-						targetItemId,
-						targetLoreId,
-						targetNpcId,
-						targetQuestId,
-						targetSiteId,
-					}) => (
-						<div key={id} className="border rounded p-3 mb-2">
-							<h4 className="font-medium">{name}</h4>
-							<p className="text-sm mt-1">{description}</p>
-						</div>
-					),
-				)}
-			</InfoCard>
+			/>
 
 			<InfoCard
 				title="Consequences"

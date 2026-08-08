@@ -1,4 +1,4 @@
-import { nameAndId } from "."
+import { foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors" // Import custom error
 import addSlugs from "../utils/addSlugs"
@@ -39,7 +39,9 @@ const areaConfig = {
 						faction: nameAndId,
 					},
 				},
-			},
+				incomingForeshadowing: foreshadowingWithSources,
+
+			}
 		}),
 	getAll: () => db.query.areas.findMany({ with: { region: nameAndId } }),
 	getNamesAndIds: () =>
@@ -66,7 +68,8 @@ export const getArea = async (slug: string) => {
 		.then((areas) => areas.find((area) => area.slug === slug || area.id === Number(slug)))
 
 	if (!selectedArea) {
-		throw new EntityNotFoundError("Area", slug)
+		throw new EntityNotFoundError("Area",
+			slug)
 	}
 
 	const byId = await areaConfig.findById(selectedArea.id)
