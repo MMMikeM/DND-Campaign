@@ -22,10 +22,8 @@ export function BadgeWithTooltip({
 	return (
 		<div className="inline-flex h-fit">
 			<Tooltip>
-				<TooltipTrigger asChild>
-					<Badge className={cn("grow-0 shrink-0 capitalize", className)} {...badgeProps}>
-						{children}
-					</Badge>
+				<TooltipTrigger render={<Badge className={cn("grow-0 shrink-0 capitalize", className)} {...badgeProps} />}>
+					{children}
 				</TooltipTrigger>
 				<TooltipContent side={tooltipSide} align={tooltipAlign}>
 					{tooltipContent}

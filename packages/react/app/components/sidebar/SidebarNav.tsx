@@ -34,7 +34,7 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 		<SidebarMenu>
 			<SidebarMenuItem>
 				<SidebarMenuButton
-					asChild
+					render={<Link href="/" />}
 					isActive={location.pathname === "/"}
 					className={`py-3 px-4 rounded-md transition-all font-medium hover:bg-muted/60 ${
 						location.pathname === "/"
@@ -42,10 +42,8 @@ export function SidebarNav({ menuData }: SidebarNavProps) {
 							: ""
 					}`}
 				>
-					<Link href="/">
-						<Icons.Home className="mr-3 h-4 w-4" />
-						<span>Dashboard</span>
-					</Link>
+					<Icons.Home className="mr-3 h-4 w-4" />
+					<span>Dashboard</span>
 				</SidebarMenuButton>
 			</SidebarMenuItem>
 

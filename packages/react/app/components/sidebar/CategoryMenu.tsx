@@ -84,25 +84,21 @@ export function CategoryMenu({ title, icon: Icon, isExpanded, onToggle, basePath
 						exit="exit"
 					>
 						<SidebarMenuButton
-							asChild
+							render={<Link href={`/${basePath}`} className="flex items-center" />}
 							isActive={location.pathname === `/${basePath}`}
 							className={`py-2 px-3 rounded-md transition-all ${location.pathname === `/${basePath}` ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-medium" : ""}`}
 						>
-							<Link href={`/${basePath}`} className="flex items-center">
-								<Icons.List className="mr-2 h-3.5 w-3.5" />
-								<span>All {title}</span>
-							</Link>
+							<Icons.List className="mr-2 h-3.5 w-3.5" />
+							<span>All {title}</span>
 						</SidebarMenuButton>
 						{menuItems.map((item) => (
 							<SidebarMenuButton
-								asChild
+								render={<Link href={`/${basePath}/${item.slug}`} className="flex items-center" />}
 								key={item.slug || item.id}
 								isActive={location.pathname === `/${basePath}/${item.slug}`}
 								className={`py-2 px-3 rounded-md transition-all text-sm ${location.pathname === `/${basePath}/${item.slug}` ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-medium" : ""}`}
 							>
-								<Link href={`/${basePath}/${item.slug}`} className="flex items-center">
-									<span>{item.name}</span>
-								</Link>
+								<span>{item.name}</span>
 							</SidebarMenuButton>
 						))}
 					</motion.div>

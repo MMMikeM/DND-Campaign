@@ -63,7 +63,7 @@ export default function MapVariants({ variants }: { variants: MapVariant[] }) {
 						tacticalFeatures,
 						tags,
 					}) => (
-						<TabsContent key={id} value={id.toString()} forceMount className="w-full mt-4 data-[state=inactive]:hidden">
+						<TabsContent key={id} value={id.toString()} keepMounted className="w-full mt-4">
 							<motion.div
 								className="space-y-6"
 								variants={tabContentVariants}
