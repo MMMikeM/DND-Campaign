@@ -2,7 +2,7 @@ import { defineConfig } from "vite-plus"
 
 export default defineConfig({
 	pack: {
-		entry: ["src/index.ts"],
+		entry: ["src/*.ts"],
 		format: ["esm"],
 		platform: "node",
 		target: "node22",

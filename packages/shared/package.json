@@ -1,50 +1,47 @@
 {
-  "name": "@tome-master/shared",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
-  "type": "module",
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "scripts": {
-    "build": "vp pack",
-    "check": "tsc --noEmit",
-    "db:custom": "sh -c 'drizzle-kit generate --custom --name=\"$1\"' --",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "dev": "vp pack --watch",
-    "lint:fix": "vp lint --fix",
-    "format": "vp fmt",
-    "lint": "vp lint",
-    "test": "vp test"
-  },
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      }
-    }
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@swc/helpers": "^0.5.17",
-    "drizzle-orm": "catalog:",
-    "pg": "^8.16.0",
-    "pgvector": "^0.2.1"
-  },
-  "devDependencies": {
-    "@testcontainers/postgresql": "^12.0.4",
-    "@types/node": "catalog:",
-    "@types/pg": "^8.15.4",
-    "drizzle-kit": "1.0.0-rc.4",
-    "typescript": "catalog:"
-  },
-  "engines": {
-    "node": ">=22.0.0"
-  }
+	"name": "@tome-master/shared",
+	"version": "1.0.0",
+	"private": true,
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"build": "vp pack",
+		"check": "tsc --noEmit",
+		"db:custom": "sh -c 'drizzle-kit generate --custom --name=\"$1\"' --",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"dev": "vp pack --watch",
+		"lint:fix": "vp lint --fix",
+		"format": "vp fmt",
+		"lint": "vp lint",
+		"test": "vp test"
+	},
+	"exports": {
+		"./*": {
+			"import": {
+				"types": "./dist/*.d.mts",
+				"default": "./dist/*.mjs"
+			}
+		}
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@swc/helpers": "^0.5.17",
+		"drizzle-orm": "catalog:",
+		"pg": "^8.16.0",
+		"pgvector": "^0.2.1"
+	},
+	"devDependencies": {
+		"@testcontainers/postgresql": "^12.0.4",
+		"@types/node": "catalog:",
+		"@types/pg": "^8.15.4",
+		"drizzle-kit": "1.0.0-rc.4",
+		"typescript": "catalog:"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	}
 }
