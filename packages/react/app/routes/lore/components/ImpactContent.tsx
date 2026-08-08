@@ -10,9 +10,9 @@ type ImpactContentProps = Pick<
 
 export function ImpactContent({
 	modernRelevance,
-	aesthetics_and_symbols,
-	interactions_and_rules,
-	conflicting_narratives,
+	aestheticsAndSymbols: aesthetics_and_symbols,
+	interactionsAndRules: interactions_and_rules,
+	conflictingNarratives: conflicting_narratives,
 }: ImpactContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">

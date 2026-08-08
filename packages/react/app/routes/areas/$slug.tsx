@@ -44,7 +44,6 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 		consequences,
 		cultureAndLeadership,
 		featuresAndHazards,
-		id,
 		loreAndSecrets,
 	} = loaderData
 

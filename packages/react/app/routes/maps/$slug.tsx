@@ -18,8 +18,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function MapDetail({ loaderData }: Route.ComponentProps) {
-	const map = loaderData
-	const { name, description, creativePrompts, tags, variants, site } = map
+	const { name, description, creativePrompts, tags, variants, site } = loaderData
 
 	return (
 		<>

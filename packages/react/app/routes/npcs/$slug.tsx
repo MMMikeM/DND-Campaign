@@ -26,11 +26,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
-	const npc = loaderData
-	const { tab } = useParams()
-	const activeTab = tab || "overview"
-	const navigate = useNavigate()
-
 	const {
 		affectingConsequences,
 		age,
@@ -61,25 +56,13 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 		summary,
 		tags,
 		voiceNotes,
-	} = npc
+	} = loaderData
+	const { tab } = useParams()
+	const activeTab = tab || "overview"
+	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
 		navigate(`/npcs/${slug}/${value === "overview" ? "" : value}`)
-	}
-
-	if (!npc) {
-		return (
-			<div className="container mx-auto py-12 text-center">
-				<h2 className="text-2xl font-bold mb-4">NPC Not Found</h2>
-				<p className="mb-6">The requested NPC could not be found</p>
-				<Button asChild>
-					<NavLink to="/npcs">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to NPCs
-					</NavLink>
-				</Button>
-			</div>
-		)
 	}
 
 	return (

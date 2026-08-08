@@ -12,8 +12,8 @@ export function DetailsContent({
 	surfaceImpression,
 	livedReality,
 	hiddenTruths,
-	core_tenets_and_traditions,
-	history_and_legacy,
+	coreTenetsAndTraditions: core_tenets_and_traditions,
+	historyAndLegacy: history_and_legacy,
 }: DetailsContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">

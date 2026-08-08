@@ -49,22 +49,43 @@ export default function LoreIndex({ loaderData }: Route.ComponentProps) {
 
 			{filteredLore.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredLore.map((lore) => (
-						<NavLink key={lore.id} to={`/lore/${lore.slug}`} className="no-underline">
-							<InfoCard
-								title={lore.name}
-								icon={<Icons.History className="h-5 w-5 mr-2 text-blue-500" />}
-								className="h-full hover:shadow-md transition-shadow"
-							>
-								<div className="p-4">
-									<p className="text-sm text-muted-foreground mb-2">Type: {lore.loreType ?? "N/A"}</p>{" "}
-									<p className="text-sm line-clamp-3">
-										{Array.isArray(lore.summary) ? lore.summary.join(" ") : lore.summary || "No summary."}
-									</p>
-								</div>
-							</InfoCard>
-						</NavLink>
-					))}
+					{filteredLore.map(
+						({
+							aestheticsAndSymbols,
+							conflictingNarratives,
+							connectionsToWorld,
+							coreTenetsAndTraditions,
+							historyAndLegacy,
+							id,
+							interactionsAndRules,
+							loreType,
+							modernRelevance,
+							name,
+							slug,
+							summary,
+							surfaceImpression,
+							tags,
+							creativePrompts,
+							description,
+							hiddenTruths,
+							livedReality,
+						}) => (
+							<NavLink key={id} to={`/lore/${slug}`} className="no-underline">
+								<InfoCard
+									title={name}
+									icon={<Icons.History className="h-5 w-5 mr-2 text-blue-500" />}
+									className="h-full hover:shadow-md transition-shadow"
+								>
+									<div className="p-4">
+										<p className="text-sm text-muted-foreground mb-2">Type: {loreType ?? "N/A"}</p>{" "}
+										<p className="text-sm line-clamp-3">
+											{Array.isArray(summary) ? summary.join(" ") : summary || "No summary."}
+										</p>
+									</div>
+								</InfoCard>
+							</NavLink>
+						),
+					)}
 				</div>
 			) : (
 				<div className="text-center py-12">

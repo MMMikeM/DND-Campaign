@@ -25,8 +25,8 @@ export default [
 		route("maps", "./routes/maps/index.tsx"),
 		route("maps/:slug/:variantSlug?", "./routes/maps/$slug.tsx"),
 
-		route("narrative-events", "./routes/narrative-events/index.tsx"),
-		route("narrative-events/:slug/:tab?", "./routes/narrative-events/$slug.tsx"),
+		route("consequences", "./routes/consequences/index.tsx"),
+		route("consequences/:slug/:tab?", "./routes/consequences/$slug.tsx"),
 
 		// route("narrative-destinations", "./routes/narrative-destinations/index.tsx"),
 		// route("narrative-destinations/:slug/:tab?", "./routes/narrative-destinations/$slug.tsx"),

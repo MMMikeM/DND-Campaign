@@ -23,8 +23,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps) {
-	const foreshadowing = loaderData
-
 	const {
 		id,
 		name,
@@ -64,11 +62,50 @@ export default function ForeshadowingDetail({ loaderData }: Route.ComponentProps
 		sourceLore,
 		targetConsequence,
 		targetConsequenceId,
-	} = foreshadowing
+	} = loaderData
 
-	if (!foreshadowing) {
-		return <div>Error: Foreshadowing data could not be loaded.</div>
-	}
-
-	return <div className="container mx-auto py-6 px-4 sm:px-6 space-y-6">{JSON.stringify(foreshadowing)}</div>
+	return (
+		<div className="container mx-auto py-6 px-4 sm:px-6 space-y-6">
+			{JSON.stringify({
+				id,
+				name,
+				creativePrompts,
+				description,
+				tags,
+				subtlety,
+				narrativeWeight,
+				suggestedDeliveryMethods,
+				targetQuest,
+				targetNpc,
+				targetConflict,
+				targetItem,
+				targetLore,
+				targetFaction,
+				targetSite,
+				sourceQuest,
+				sourceQuestStage,
+				sourceSite,
+				slug,
+				sourceNpc,
+				sourceLoreId,
+				sourceNpcId,
+				sourceQuestId,
+				sourceQuestStageId,
+				sourceSiteId,
+				targetConflictId,
+				targetFactionId,
+				targetItemId,
+				targetLoreId,
+				targetQuestId,
+				targetSiteId,
+				targetNpcId,
+				incomingLoreLinks,
+				sourceItem,
+				sourceItemId,
+				sourceLore,
+				targetConsequence,
+				targetConsequenceId,
+			})}
+		</div>
+	)
 }

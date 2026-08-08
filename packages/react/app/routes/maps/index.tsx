@@ -56,25 +56,25 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 
 			{filteredMaps.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredMaps.map((map) => (
-						<NavLink key={map.id} to={`/maps/${map.slug}`} className="no-underline">
+					{filteredMaps.map(({ creativePrompts, description, id, name, slug, tags, variants }) => (
+						<NavLink key={id} to={`/maps/${slug}`} className="no-underline">
 							<InfoCard
-								title={map.name}
+								title={name}
 								icon={<Icons.Map className="h-5 w-5 mr-2 text-blue-600" />}
 								className="h-full hover:shadow-md transition-shadow"
 							>
 								<div className="p-4">
-									{map.description && map.description.length > 0 && (
+									{description && description.length > 0 && (
 										<div className="mb-3">
-											<List items={map.description} spacing="sm" emptyText="No description." />
+											<List items={description} spacing="sm" emptyText="No description." />
 										</div>
 									)}
 
-									{map.variants && map.variants.length > 0 && (
+									{variants && variants.length > 0 && (
 										<div className="mb-3">
 											<h4 className="text-sm font-medium mb-2">Variants</h4>
 											<div className="space-y-1">
-												{map.variants.map((variant) => (
+												{variants.map((variant) => (
 													<div key={variant.id} className="flex justify-between items-center text-xs">
 														<span className="text-muted-foreground">{variant.variantName || "Default"}</span>
 														{variant.isDefault && (
@@ -88,9 +88,9 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 										</div>
 									)}
 
-									{map.tags && map.tags.length > 0 && (
+									{tags && tags.length > 0 && (
 										<div className="mb-3">
-											<Tags tags={map.tags} variant="secondary" maxDisplay={3} />
+											<Tags tags={tags} variant="secondary" maxDisplay={3} />
 										</div>
 									)}
 								</div>
@@ -98,7 +98,7 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 								<div className="border-t p-4">
 									<div className="flex justify-between items-center text-sm text-muted-foreground">
 										<span>
-											{map.variants?.length || 0} variant{map.variants?.length !== 1 ? "s" : ""}
+											{variants?.length || 0} variant{variants?.length !== 1 ? "s" : ""}
 										</span>
 									</div>
 								</div>

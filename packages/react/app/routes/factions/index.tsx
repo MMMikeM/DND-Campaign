@@ -45,8 +45,8 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{filteredFactions.map((faction) => {
-					const {
+				{filteredFactions.map(
+					({
 						name,
 						type,
 						publicAlignment,
@@ -72,48 +72,48 @@ export default function FactionsIndex({ loaderData }: Route.ComponentProps) {
 						tags,
 						transparencyLevel,
 						slug,
-					} = faction
-
-					return (
-						<Link
-							key={faction.id}
-							href={`/factions/${slug}`}
-							className="block hover:shadow-lg transition-shadow rounded-lg"
-						>
-							<InfoCard title={name} icon={<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />} className="h-full">
-								<div className="p-4">
-									<p className="text-sm text-muted-foreground mb-2">{publicGoal}</p>
-									<List items={description} />
-									{publicPerception && (
-										<p className="text-xs text-muted-foreground mt-2">
-											<span className="font-medium">Public Perception:</span> {publicPerception}
-										</p>
-									)}
-									{secretGoal && (
-										<p className="text-xs text-muted-foreground mt-1 italic">
-											<span className="font-medium">Secret Goal:</span> {secretGoal}
-										</p>
-									)}
-								</div>
-								<div className="border-t p-4">
-									<div className="flex flex-col w-full gap-2">
-										<div className="text-xs text-muted-foreground flex items-center gap-2">
-											<span className="capitalize">{size}</span>
-											<span>•</span>
-											<span className="capitalize">{reach}</span>
-											<span>•</span>
-											<span className="capitalize">{wealth}</span>
-										</div>
-										<div className="text-xs text-muted-foreground">
-											<span>{values?.length || 0} values</span>
-											<span className="mx-1">•</span>
+					}) => {
+						return (
+							<Link key={id} href={`/factions/${slug}`} className="block hover:shadow-lg transition-shadow rounded-lg">
+								<InfoCard
+									title={name}
+									icon={<Icons.Flag className="h-5 w-5 mr-2 text-indigo-500" />}
+									className="h-full"
+								>
+									<div className="p-4">
+										<p className="text-sm text-muted-foreground mb-2">{publicGoal}</p>
+										<List items={description} />
+										{publicPerception && (
+											<p className="text-xs text-muted-foreground mt-2">
+												<span className="font-medium">Public Perception:</span> {publicPerception}
+											</p>
+										)}
+										{secretGoal && (
+											<p className="text-xs text-muted-foreground mt-1 italic">
+												<span className="font-medium">Secret Goal:</span> {secretGoal}
+											</p>
+										)}
+									</div>
+									<div className="border-t p-4">
+										<div className="flex flex-col w-full gap-2">
+											<div className="text-xs text-muted-foreground flex items-center gap-2">
+												<span className="capitalize">{size}</span>
+												<span>•</span>
+												<span className="capitalize">{reach}</span>
+												<span>•</span>
+												<span className="capitalize">{wealth}</span>
+											</div>
+											<div className="text-xs text-muted-foreground">
+												<span>{values?.length || 0} values</span>
+												<span className="mx-1">•</span>
+											</div>
 										</div>
 									</div>
-								</div>
-							</InfoCard>
-						</Link>
-					)
-				})}
+								</InfoCard>
+							</Link>
+						)
+					},
+				)}
 			</div>
 
 			{filteredFactions.length === 0 && (

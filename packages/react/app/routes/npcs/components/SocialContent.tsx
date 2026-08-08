@@ -3,7 +3,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function SocialContent({}: Pick<NPC, "">) {
+export function SocialContent({}: Pick<NPC, "conflictParticipation" | "conversationHook">) {
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

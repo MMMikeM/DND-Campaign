@@ -90,7 +90,6 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 						tags={tags}
 						description={description}
 						summary={summary}
-						gmNotes={gmNotes}
 						creativePrompts={creativePrompts}
 					/>
 				</TabsContent>
@@ -100,17 +99,17 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 						surfaceImpression={surfaceImpression}
 						livedReality={livedReality}
 						hiddenTruths={hiddenTruths}
-						core_tenets_and_traditions={core_tenets_and_traditions}
-						history_and_legacy={history_and_legacy}
+						coreTenetsAndTraditions={coreTenetsAndTraditions}
+						historyAndLegacy={historyAndLegacy}
 					/>
 				</TabsContent>
 
 				<TabsContent value="impact" className="animate-in fade-in-50 duration-300">
 					<ImpactContent
 						modernRelevance={modernRelevance}
-						aesthetics_and_symbols={aesthetics_and_symbols}
-						interactions_and_rules={interactions_and_rules}
-						conflicting_narratives={conflicting_narratives}
+						aestheticsAndSymbols={aestheticsAndSymbols}
+						interactionsAndRules={interactionsAndRules}
+						conflictingNarratives={conflictingNarratives}
 					/>
 				</TabsContent>
 
@@ -118,7 +117,7 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 					<ConnectionsContent
 						links={links}
 						incomingForeshadowing={incomingForeshadowing}
-						connections_to_world={connections_to_world}
+						connections_to_world={connectionsToWorld}
 					/>
 				</TabsContent>
 			</Tabs>
