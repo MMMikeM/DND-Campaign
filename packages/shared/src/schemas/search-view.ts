@@ -395,7 +395,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 			rawData: sql`jsonb_build_object(
         'consequence', ${consequenceSearchDataView.entityMain},
         'triggerQuest', ${consequenceSearchDataView.triggerQuest},
-        'triggerConflict', ${consequenceSearchDataView.triggerConflict},
         'affectedFaction', ${consequenceSearchDataView.affectedFaction},
         'affectedRegion', ${consequenceSearchDataView.affectedRegion},
         'affectedArea', ${consequenceSearchDataView.affectedArea},
@@ -406,7 +405,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
       )`.as("raw_data"),
 			content: sql<string>`jsonb_deep_text_values(${consequenceSearchDataView.entityMain}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.triggerQuest}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.triggerConflict}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedFaction}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedRegion}) || ' ' ||
       jsonb_deep_text_values(${consequenceSearchDataView.affectedArea}) || ' ' ||
@@ -418,7 +416,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         ${consequenceSearchDataView.entityMain},
         jsonb_build_object(
           'triggerQuest', ${consequenceSearchDataView.triggerQuest},
-          'triggerConflict', ${consequenceSearchDataView.triggerConflict},
           'affectedFaction', ${consequenceSearchDataView.affectedFaction},
           'affectedRegion', ${consequenceSearchDataView.affectedRegion},
           'affectedArea', ${consequenceSearchDataView.affectedArea},

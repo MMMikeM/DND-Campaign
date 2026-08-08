@@ -1,5 +1,5 @@
-import { sql } from "drizzle-orm"
-import { pgView } from "drizzle-orm/pg-core"
+import { eq, sql } from "drizzle-orm"
+import { alias, pgView } from "drizzle-orm/pg-core"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -7,7 +7,26 @@ import { items } from "../items/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
+import { jsonAgg, jsonObject, optionalEntityJson } from "../view-utils"
 import { lore, loreLinks } from "./tables"
+
+// Only tables joined more than once need an alias: lore is both the subject and a
+// link target, and foreshadowing appears three times.
+const relatedLore = alias(lore, "related_lore")
+const linkedForeshadowing = alias(foreshadowing, "linked_foreshadowing")
+const outgoingForeshadowing = alias(foreshadowing, "outgoing_foreshadowing")
+
+/** lore_links is a reified relationship: lore -> one of eight targets, carrying a payload. */
+const linkTargets = [
+	optionalEntityJson("region", loreLinks.regionId, regions),
+	optionalEntityJson("faction", loreLinks.factionId, factions),
+	optionalEntityJson("npc", loreLinks.npcId, npcs),
+	optionalEntityJson("conflict", loreLinks.conflictId, conflicts),
+	optionalEntityJson("quest", loreLinks.questId, quests),
+	optionalEntityJson("item", loreLinks.itemId, items),
+	optionalEntityJson("relatedLore", loreLinks.relatedLoreId, relatedLore),
+	optionalEntityJson("foreshadowing", loreLinks.foreshadowingId, linkedForeshadowing),
+]
 
 export const loreSearchDataView = pgView("lore_search_data_view").as((qb) =>
 	qb
@@ -15,37 +34,23 @@ export const loreSearchDataView = pgView("lore_search_data_view").as((qb) =>
 			id: lore.id,
 			sourceTable: sql<string>`'lore'`.as("source_table"),
 			entityMain: sql`to_jsonb(${lore}.*)`.as("entity_main"),
-			links: sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
-					'link', to_jsonb(${loreLinks}.*),
-					'region', CASE WHEN ${loreLinks.regionId} IS NOT NULL THEN jsonb_build_object('id', lr.id, 'name', lr.name) END,
-					'faction', CASE WHEN ${loreLinks.factionId} IS NOT NULL THEN jsonb_build_object('id', lf.id, 'name', lf.name) END,
-					'npc', CASE WHEN ${loreLinks.npcId} IS NOT NULL THEN jsonb_build_object('id', ln.id, 'name', ln.name) END,
-					'conflict', CASE WHEN ${loreLinks.conflictId} IS NOT NULL THEN jsonb_build_object('id', lc.id, 'name', lc.name) END,
-					'quest', CASE WHEN ${loreLinks.questId} IS NOT NULL THEN jsonb_build_object('id', lq.id, 'name', lq.name) END,
-					'foreshadowing', CASE WHEN ${loreLinks.foreshadowingId} IS NOT NULL THEN jsonb_build_object('id', lfs.id, 'name', lfs.name) END,
-					'relatedLore', CASE WHEN ${loreLinks.relatedLoreId} IS NOT NULL THEN jsonb_build_object('id', ll.id, 'name', ll.name) END,
-					'item', CASE WHEN ${loreLinks.itemId} IS NOT NULL THEN jsonb_build_object('id', li.id, 'name', li.name) END
-				)) FILTER (WHERE ${loreLinks.id} IS NOT NULL), '[]'::jsonb)`.as("links"),
-			incomingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${foreshadowing}.*)) FILTER (WHERE ${foreshadowing.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"incoming_foreshadowing",
-				),
-			outgoingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_out.*)) FILTER (WHERE fs_out.id IS NOT NULL), '[]'::jsonb)`.as(
-					"outgoing_foreshadowing",
-				),
+			links: jsonAgg(jsonObject([sql`'link', to_jsonb(${loreLinks}.*)`, ...linkTargets]), loreLinks.id).as("links"),
+			incomingForeshadowing: jsonAgg(sql`to_jsonb(${foreshadowing}.*)`, foreshadowing.id).as("incoming_foreshadowing"),
+			outgoingForeshadowing: jsonAgg(sql`to_jsonb(${outgoingForeshadowing}.*)`, outgoingForeshadowing.id).as(
+				"outgoing_foreshadowing",
+			),
 		})
 		.from(lore)
-		.leftJoin(loreLinks, sql`${loreLinks.loreId} = ${lore.id}`)
-		.leftJoin(sql`${regions} AS lr`, sql`${loreLinks.regionId} = lr.id`)
-		.leftJoin(sql`${factions} AS lf`, sql`${loreLinks.factionId} = lf.id`)
-		.leftJoin(sql`${npcs} AS ln`, sql`${loreLinks.npcId} = ln.id`)
-		.leftJoin(sql`${conflicts} AS lc`, sql`${loreLinks.conflictId} = lc.id`)
-		.leftJoin(sql`${quests} AS lq`, sql`${loreLinks.questId} = lq.id`)
-		.leftJoin(sql`${lore} AS ll`, sql`${loreLinks.relatedLoreId} = ll.id`)
-		.leftJoin(sql`${foreshadowing} AS lfs`, sql`${loreLinks.foreshadowingId} = lfs.id`)
-		.leftJoin(sql`${items} as li`, sql`${loreLinks.itemId} = li.id`)
-		.leftJoin(foreshadowing, sql`${foreshadowing.targetLoreId} = ${lore.id}`)
-		.leftJoin(sql`${foreshadowing} as fs_out`, sql`fs_out.source_lore_id = ${lore.id}`)
+		.leftJoin(loreLinks, eq(loreLinks.loreId, lore.id))
+		.leftJoin(regions, eq(loreLinks.regionId, regions.id))
+		.leftJoin(factions, eq(loreLinks.factionId, factions.id))
+		.leftJoin(npcs, eq(loreLinks.npcId, npcs.id))
+		.leftJoin(conflicts, eq(loreLinks.conflictId, conflicts.id))
+		.leftJoin(quests, eq(loreLinks.questId, quests.id))
+		.leftJoin(items, eq(loreLinks.itemId, items.id))
+		.leftJoin(relatedLore, eq(loreLinks.relatedLoreId, relatedLore.id))
+		.leftJoin(linkedForeshadowing, eq(loreLinks.foreshadowingId, linkedForeshadowing.id))
+		.leftJoin(outgoingForeshadowing, eq(outgoingForeshadowing.sourceLoreId, lore.id))
+		.leftJoin(foreshadowing, eq(foreshadowing.targetLoreId, lore.id))
 		.groupBy(lore.id),
 )

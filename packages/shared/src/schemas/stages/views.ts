@@ -69,8 +69,8 @@ export const questStageDecisionSearchDataView = pgView("quest_stage_decision_sea
 				),
 		})
 		.from(questStageDecisions)
-		.leftJoin(quests, sql`${questStageDecisions.questId} = ${quests.id}`)
 		.leftJoin(sql`${questStages} AS fs`, sql`${questStageDecisions.fromQuestStageId} = fs.id`)
+		.leftJoin(quests, sql`fs.quest_id = ${quests.id}`)
 		.leftJoin(sql`${questStages} AS ts`, sql`${questStageDecisions.toQuestStageId} = ts.id`)
 		.leftJoin(consequences, sql`${consequences.triggerQuestStageDecisionId} = ${questStageDecisions.id}`)
 		.groupBy(questStageDecisions.id, quests.id, sql`fs.id`, sql`ts.id`),
