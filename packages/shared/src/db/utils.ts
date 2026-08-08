@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm"
-import { type AnyPgColumn, customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
+import { type AnyPgColumn, customType, integer, type PgColumn, serial, text } from "drizzle-orm/pg-core"
 
 const list = (description: string) => text(description).array().notNull()
 
@@ -38,10 +38,6 @@ const slug = () =>
 			sql`btrim(regexp_replace(regexp_replace(lower(name), '[^a-z0-9_[:space:]-]', '', 'g'), '[[:space:]-]+', '-', 'g'), '-')`,
 		)
 
-const embeddingVector = (name: string = "embedding") => {
-	return vector(name, { dimensions: 3072 })
-}
-
 // Custom bytea type for binary image data
 const bytea = customType<{ data: Buffer; notNull: true; default: false }>({
 	dataType: () => "bytea"
@@ -58,6 +54,5 @@ export {
 	manyOf,
 	pk,
 	slug,
-	embeddingVector,
 	bytea,
 }

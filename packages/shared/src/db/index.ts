@@ -3,8 +3,6 @@ import pg from "pg"
 import pgvector from "pgvector/pg"
 import { relations } from "../schemas/relations"
 
-export { sql } from "drizzle-orm"
-
 /**
  * Initialize the database connection and return operation adapters
  * @param connectionString Connection string for the PostgreSQL database
