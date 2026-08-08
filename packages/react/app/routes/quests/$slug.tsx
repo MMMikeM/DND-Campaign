@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tags } from "~/components/Tags"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getQuest } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -90,12 +90,10 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/quests" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to Quests
-					</NavLink>
-				</Button>
+				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to Quests
+				</NavLink>
 			</div>
 
 			<QuestHeader name={name} type={type} urgency={urgency} mood={mood} />

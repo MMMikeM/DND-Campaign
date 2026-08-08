@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getNpc } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -68,12 +68,10 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/npcs" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to NPCs
-					</NavLink>
-				</Button>
+				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to NPCs
+				</NavLink>
 			</div>
 
 			<div className="mb-6">

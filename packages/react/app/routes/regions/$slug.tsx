@@ -1,8 +1,8 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
-import { Button } from "~/components/ui/button"
 import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
+import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -60,12 +60,10 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/regions" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to Regions
-					</NavLink>
-				</Button>
+				<NavLink to="/regions" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to Regions
+				</NavLink>
 			</div>
 
 			<RegionHeader name={name} type={type} dangerLevel={dangerLevel} />
@@ -102,7 +100,10 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="connections">
 					<ConnectionsContent relations={relations} factionInfluence={factionInfluence} />
-					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this region." />
+					<ForeshadowingList
+						incoming={incomingForeshadowing}
+						emptyMessage="No foreshadowing points toward this region."
+					/>
 					<ConsequenceList affecting={consequences} emptyMessage="No consequences have affected this region." />
 				</TabsContent>
 			</Tabs>

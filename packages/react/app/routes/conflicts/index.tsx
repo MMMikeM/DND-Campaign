@@ -4,7 +4,7 @@ import { NavLink } from "react-router" // Corrected import source
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllConflicts } from "~/lib/entities"
@@ -34,12 +34,10 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 						Browse and manage ongoing or historical conflicts in the campaign world.
 					</p>
 				</div>
-				<Button asChild>
-					<NavLink to="/conflicts/new" className="flex items-center">
-						<span className="mr-2">New Conflict</span>
-						<Icons.Swords className="h-4 w-4" />
-					</NavLink>
-				</Button>
+				<NavLink to="/conflicts/new" className={buttonVariants({ variant: "default", size: "sm" })}>
+					<span className="mr-2">New Conflict</span>
+					<Icons.Swords className="h-4 w-4" />
+				</NavLink>
 			</div>
 
 			<div className="mb-6">

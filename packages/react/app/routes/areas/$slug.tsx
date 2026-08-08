@@ -1,13 +1,13 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
+import { ConsequenceList } from "~/components/ConsequenceList"
+import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tags } from "~/components/Tags"
-import { Button } from "~/components/ui/button"
+import { Button, buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { AreaHeader } from "./components/AreaHeader"
-import { ConsequenceList } from "~/components/ConsequenceList"
-import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { DetailsContent } from "./components/DetailsContent"
 import { InfluenceContent } from "./components/InfluenceContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -56,12 +56,10 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/areas" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to Areas
-					</NavLink>
-				</Button>
+				<NavLink to="/areas" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to Areas
+				</NavLink>
 			</div>
 
 			<AreaHeader name={name} type={type} region={region} />
@@ -98,7 +96,10 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="foreshadowing">
-					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this area." />
+					<ForeshadowingList
+						incoming={incomingForeshadowing}
+						emptyMessage="No foreshadowing points toward this area."
+					/>
 				</TabsContent>
 			</Tabs>
 		</div>

@@ -3,7 +3,7 @@ import { NavLink } from "react-router"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { getMap } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import MapVariants from "./components/VariantContent"
@@ -24,12 +24,10 @@ export default function MapDetail({ loaderData }: Route.ComponentProps) {
 		<>
 			<div className="container mx-auto py-6 px-4 sm:px-6 space-y-6">
 				<div className="flex justify-between items-center mb-6">
-					<Button variant="outline" size="sm" asChild>
-						<NavLink to="/maps" className="flex items-center">
-							<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-							Back to Maps
-						</NavLink>
-					</Button>
+					<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+						Back to Maps
+					</NavLink>
 				</div>
 
 				<div className="mb-6">

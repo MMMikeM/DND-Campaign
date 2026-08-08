@@ -1,14 +1,14 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Conflict } from "~/lib/entities"
 import { getConflict } from "~/lib/entities"
 import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
-import { ConsequenceList } from "~/components/ConsequenceList"
 import { ItemsContent } from "./components/ItemsContent"
 import { LoreContent } from "./components/LoreContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -61,7 +61,6 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 		currentTensionLevel,
 		description,
 		hiddenTruths,
-		id,
 		incomingForeshadowing,
 		itemConnections,
 		loreLinks,
@@ -71,7 +70,6 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 		participants,
 		possibleOutcomes,
 		region,
-		regionId,
 		scope,
 		slug,
 		stakes,
@@ -89,12 +87,10 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
 			<div className="flex justify-between items-center mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/conflicts" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to Conflicts
-					</NavLink>
-				</Button>
+				<NavLink to="/conflicts" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to Conflicts
+				</NavLink>
 			</div>
 
 			<Header name={name} scope={scope} nature={nature} status={status} />
@@ -134,7 +130,10 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="consequences" className="animate-in fade-in-50 duration-300">
-					<ConsequenceList affecting={affectingConsequences} emptyMessage="No consequences have affected this conflict." />
+					<ConsequenceList
+						affecting={affectingConsequences}
+						emptyMessage="No consequences have affected this conflict."
+					/>
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">

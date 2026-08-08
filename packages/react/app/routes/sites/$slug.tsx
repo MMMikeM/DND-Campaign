@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { Tags } from "~/components/Tags"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getSite } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
@@ -63,12 +63,10 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/sites" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to Sites
-					</NavLink>
-				</Button>
+				<NavLink to="/sites" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to Sites
+				</NavLink>
 			</div>
 
 			<SiteHeader name={name} area={area} />

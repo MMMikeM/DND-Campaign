@@ -1,7 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import type { NPC } from "~/lib/entities"
 import { getAdaptabilityVariant, getAlignmentVariant, getWealthVariant } from "../utils"
 
@@ -15,12 +15,10 @@ export function NPCHeader({ npc }: NPCHeaderProps) {
 	return (
 		<>
 			<div className="mb-6">
-				<Button variant="outline" size="sm" asChild>
-					<NavLink to="/npcs" className="flex items-center">
-						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
-						Back to NPCs
-					</NavLink>
-				</Button>
+				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
+					Back to NPCs
+				</NavLink>
 			</div>
 
 			<div className="mb-6">

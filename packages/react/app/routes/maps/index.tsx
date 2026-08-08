@@ -5,7 +5,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
 import { Badge } from "~/components/ui/badge"
-import { Button } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllMaps } from "~/lib/entities"
@@ -33,12 +33,10 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Battle Maps</h1>
 					<p className="text-muted-foreground">Browse tactical battle maps for encounters and locations.</p>
 				</div>
-				<Button asChild>
-					<NavLink to="/maps/new" className="flex items-center">
-						<span className="mr-2">New Map</span>
-						<Icons.Map className="h-4 w-4" />
-					</NavLink>
-				</Button>
+				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<span className="mr-2">New Map</span>
+					<Icons.Map className="h-4 w-4" />
+				</NavLink>
 			</div>
 
 			<div className="mb-6">
