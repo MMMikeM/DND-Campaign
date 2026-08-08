@@ -23,7 +23,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const mimeType = mapFile.imageFormat === "jpg" ? "image/jpeg" : `image/${mapFile.imageFormat}`
 
-	return new Response(mapFile.mapImage, {
+	// Copy into a plain Uint8Array: Buffer is backed by ArrayBufferLike, which BodyInit rejects
+	return new Response(new Uint8Array(mapFile.mapImage), {
 		headers: {
 			"Content-Type": mimeType,
 			"Cache-Control": "public, max-age=31536000, immutable", // Cache for 1 year

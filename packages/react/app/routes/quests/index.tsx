@@ -9,7 +9,7 @@ import { getAllQuests } from "~/lib/entities"
 import type { Route } from "./+types/index"
 import { getTypeVariant, getUrgencyVariant } from "./utils"
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader() {
 	const quests = await getAllQuests()
 	if (!quests) {
 		throw new Response("No quests found", { status: 404 })
@@ -58,7 +58,7 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredQuests.map((quest) => {
-					const { name, type, urgency, description, slug, id, mood, objectives, rewards } = quest
+					const { name, type, urgency, description, slug, mood, objectives, rewards } = quest
 
 					return (
 						<NavLink key={quest.id} to={`/quests/${slug}`}>

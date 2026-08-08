@@ -3,6 +3,7 @@ import { ConsequenceList } from "~/components/ConsequenceList"
 import { AlignmentBadge } from "~/components/alignment-badge"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
+import { Link } from "~/components/ui/link"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
 import { Badge } from "~/components/ui/badge"
@@ -115,8 +116,25 @@ export function DetailsContent({
 				icon={<Icons.Link className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No connections"
 			>
-				{JSON.stringify(itemConnections)}
-				{JSON.stringify(loreLinks)}
+				{itemConnections.map(({ id, relationship, details, sourceItem }) => (
+					<div key={`item-${id}`} className="border-b last:border-0 p-3">
+						<Link href={`/items/${sourceItem.slug}`} className="text-sm font-medium">
+							{sourceItem.name}
+						</Link>
+						<p className="text-sm text-muted-foreground">{relationship}</p>
+						<List items={details} />
+					</div>
+				))}
+				{loreLinks.map(({ id, lore, linkRoleOrTypeText, linkDetailsText, description }) => (
+					<div key={`lore-${id}`} className="border-b last:border-0 p-3">
+						<Link href={`/lore/${lore.slug}`} className="text-sm font-medium">
+							{lore.name}
+						</Link>
+						<p className="text-sm text-muted-foreground">{linkRoleOrTypeText}</p>
+						<p className="text-sm text-muted-foreground">{linkDetailsText}</p>
+						<List items={description} />
+					</div>
+				))}
 			</InfoCard>
 
 			<ConsequenceList affecting={affectingConsequences} emptyMessage="No consequences have affected this faction." />
