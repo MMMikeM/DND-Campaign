@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { tables, enums } from "@tome-master/shared/conflicts"
 import { db } from "../index"
 import { schemas, tableEnum } from "./conflict-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.conflictTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_conflicts: () => db.query.conflicts.findMany({}),
@@ -35,10 +35,10 @@ export const entityGetters = createEntityGetters({
 
 export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> = {
 	manage_conflict: {
-		enums: tables.conflictTables.enums,
+		enums,
 		description: "Manage conflict-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_conflict", tables.conflictTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_conflict", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Conflicts",
 			readOnlyHint: false,

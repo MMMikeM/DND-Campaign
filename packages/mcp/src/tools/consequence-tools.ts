@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { tables, enums } from "@tome-master/shared/consequences"
 import { db } from "../index"
 import { schemas, tableEnum } from "./consequence-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.consequenceTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_consequences: () => db.query.consequences.findMany({}),
@@ -32,10 +32,10 @@ export const entityGetters = createEntityGetters({
 
 export const consequenceToolDefinitions: Record<"manage_consequence", ToolDefinition> = {
 	manage_consequence: {
-		enums: tables.consequenceTables.enums,
+		enums: enums,
 		description: "Manage consequence-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_consequence", tables.consequenceTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_consequence", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Consequences",
 			readOnlyHint: false,

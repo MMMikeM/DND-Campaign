@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { tables, enums } from "@tome-master/shared/factions"
 import { db } from "../index"
 import { schemas, tableEnum } from "./faction-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.factionTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_factions: () => db.query.factions.findMany({}),
@@ -54,10 +54,10 @@ export const entityGetters = createEntityGetters({
 
 export const factionToolDefinitions: Record<"manage_faction", ToolDefinition> = {
 	manage_faction: {
-		enums: tables.factionTables.enums,
+		enums: enums,
 		description: "Manage faction-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_faction", tables.factionTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_faction", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Factions",
 			readOnlyHint: false,
