@@ -3,13 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "NODE_OPTIONS=\"--no-warnings --enable-source-maps --import=./patches/cjs-compat.js\" react-router build",
+    "build": "react-router build",
     "check": "tsc --noEmit",
     "dev": "react-router dev",
     "lint:fix": "vp lint --fix",
     "format": "vp fmt",
     "lint": "vp lint",
-    "start": "NODE_OPTIONS=\"--no-warnings --enable-source-maps --import=./patches/cjs-compat.js\" NODE_BETTER_SQLITE3=\"./patches/mock-sqlite.js\" react-router-serve ./build/server/index.js",
+    "start": "NODE_OPTIONS=\"--enable-source-maps\" react-router-serve ./build/server/index.js",
     "test:watch": "vp test --watch",
     "test": "vp test",
     "typecheck": "react-router typegen && tsc"
