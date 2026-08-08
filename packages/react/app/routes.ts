@@ -40,7 +40,6 @@ export default [
 		]),
 
 		route("regions", "./routes/regions/index.tsx"),
-		route("regions/:regionSlug/locations/:locationSlug/:tab?", "./routes/regions/locations/$locationSlug.tsx"),
 		route("regions/:slug/:tab?", "./routes/regions/$slug.tsx"),
 
 		route("sites", "./routes/sites/index.tsx"),
