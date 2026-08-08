@@ -29,20 +29,3 @@ export function AreaHeader({ name, type, region }: Pick<Area, "name" | "type" | 
 		</div>
 	)
 }
-
-const getDangerVariant = (level: string) => {
-	switch (level) {
-		case "safe":
-			return "outline"
-		case "low":
-			return "secondary"
-		case "moderate":
-			return "default"
-		case "high":
-			return "destructive"
-		case "deadly":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}

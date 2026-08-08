@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
+import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import type { Area } from "~/lib/entities"
 
@@ -31,8 +32,11 @@ export const ConsequencesContent = ({ consequences }: Pick<Area, "consequences">
 						triggerQuestStageDecision,
 					}) => (
 						<div key={id} className="border rounded p-4">
-							<h4 className="font-medium text-lg">{name}</h4>
-							<div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+							<div className="flex justify-between items-start">
+								<h4 className="font-medium text-lg">{name}</h4>
+								<Tags tags={tags} />
+							</div>
+							<div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-2">
 								<span className="capitalize">
 									<strong>Severity:</strong> {severity}
 								</span>
@@ -45,8 +49,24 @@ export const ConsequencesContent = ({ consequences }: Pick<Area, "consequences">
 								<span className="capitalize">
 									<strong>Source:</strong> {sourceType}
 								</span>
+								{timeframe && (
+									<span className="capitalize">
+										<strong>Timeframe:</strong> {timeframe}
+									</span>
+								)}
 							</div>
 							<List items={description} />
+							{playerImpactFeel && (
+								<p className="text-sm text-muted-foreground mt-2">
+									<strong>Player impact:</strong> {playerImpactFeel}
+								</p>
+							)}
+							<List items={creativePrompts} heading="Creative Prompts" spacing="sm" className="mt-2" />
+							{conflictImpactDescription && (
+								<p className="text-sm text-muted-foreground mt-1">
+									<strong>Conflict impact:</strong> {conflictImpactDescription}
+								</p>
+							)}
 							{(triggerQuest || triggerQuestStageDecision) && (
 								<div className="mt-2">
 									<h5 className="font-semibold">Triggered By:</h5>
