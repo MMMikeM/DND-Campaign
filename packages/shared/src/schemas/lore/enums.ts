@@ -1,4 +1,4 @@
-const loreTypes = [
+export const loreTypes = [
 	"cultural",
 	"political",
 	"religious",
@@ -9,9 +9,4 @@ const loreTypes = [
 	"philosophical",
 ] as const
 
-const linkStrengths = ["tenuous", "moderate", "strong", "defining"] as const
-
-export const enums = {
-	loreTypes,
-	linkStrengths,
-}
+export const linkStrengths = ["tenuous", "moderate", "strong", "defining"] as const

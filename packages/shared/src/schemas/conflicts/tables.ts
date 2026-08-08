@@ -5,18 +5,7 @@ import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } 
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const {
-	conflictClarity,
-	conflictNatures,
-	conflictScopes,
-	conflictStatuses,
-	participantRolesInConflict,
-	tensionLevels,
-} = enums
+import { conflictScopes, conflictStatuses, conflictClarity, tensionLevels, conflictNatures, participantRolesInConflict } from "./enums"
 
 export const conflicts = pgTable("conflicts", {
 	id: pk(),

@@ -3,11 +3,7 @@ import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { areas, regions, sites } from "../regions/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const {
+import {
 	agendaImportance,
 	agendaStages,
 	agendaTypes,
@@ -20,7 +16,8 @@ const {
 	relationshipStrengths,
 	transparencyLevels,
 	wealthLevels,
-} = enums
+} from "./enums"
+
 
 export const factions = pgTable(
 	"factions",

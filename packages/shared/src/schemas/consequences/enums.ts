@@ -1,13 +1,5 @@
-const impactSeverity = ["minor", "moderate", "major"] as const
-const rhythmEffects = [
-	"spike_immediate_tension",
-	"introduce_new_mystery",
-	"force_strategic_reassessment",
-	"escalate_existing_stakes",
-	"reveal_and_twist",
-] as const
-
-const consequenceTypes = [
+export { impactSeverity } from "../shared-enums"
+export const consequenceTypes = [
 	"character_reaction",
 	"npc_status_change",
 	"relationship_change",
@@ -27,9 +19,9 @@ const consequenceTypes = [
 	"story_progression",
 ] as const
 
-const consequenceVisibility = ["obvious", "subtle", "hidden"] as const
-const consequenceTimeframe = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
-const consequenceSources = [
+export const consequenceVisibility = ["obvious", "subtle", "hidden"] as const
+export const consequenceTimeframe = ["immediate", "next_session", "specific_trigger", "later_in_campaign"] as const
+export const consequenceSources = [
 	"decision",
 	"quest_completion",
 	"world_event",
@@ -37,7 +29,7 @@ const consequenceSources = [
 	"time_passage",
 	"quest_completion_affecting_conflict",
 ] as const
-const playerImpactFeels = [
+export const playerImpactFeels = [
 	"empowering_reward",
 	"earned_progress",
 	"challenging_setback",
@@ -46,12 +38,3 @@ const playerImpactFeels = [
 	"just_consequence",
 ] as const
 
-export const enums = {
-	consequenceSources,
-	consequenceTimeframe,
-	consequenceTypes,
-	consequenceVisibility,
-	impactSeverity,
-	playerImpactFeels,
-	rhythmEffects,
-}

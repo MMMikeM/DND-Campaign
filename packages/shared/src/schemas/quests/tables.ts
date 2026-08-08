@@ -5,14 +5,12 @@ import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, 
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { sites } from "../regions/tables"
-import { enums } from "./enums"
-
-const {
+import {
 	hookTypes,
 	participantImportanceLevels,
 	presentationStyles,
 	questTypes,
-	relationshipTypes,
+	questRelationshipTypes,
 	trustLevels,
 	urgencyLevels,
 	questHookSourceTypes,
@@ -21,7 +19,8 @@ const {
 	narrativePlacements,
 	rhythmEffects,
 	emotionalShapes,
-} = enums
+} from "./enums"
+
 
 export const quests = pgTable("quests", {
 	id: pk(),
@@ -63,7 +62,7 @@ export const questRelations = pgTable(
 
 		sourceQuestId: cascadeFk("source_quest_id", quests.id),
 		targetQuestId: cascadeFk("target_quest_id", quests.id),
-		relationshipType: oneOf("relationship_type", relationshipTypes),
+		relationshipType: oneOf("relationship_type", questRelationshipTypes),
 	},
 	(t) => [
 		unique().on(t.sourceQuestId, t.targetQuestId),
@@ -144,5 +143,3 @@ export const questParticipants = pgTable(
 		),
 	],
 )
-
-export { enums }

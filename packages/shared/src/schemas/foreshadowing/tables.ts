@@ -12,11 +12,7 @@ import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { questStages } from "../stages/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const { discoverySubtlety, narrativeWeight, seedDeliveryMethods } = enums
+import { discoverySubtlety, narrativeWeight, seedDeliveryMethods } from "./enums"
 
 export const foreshadowing = pgTable(
 	"foreshadowing",

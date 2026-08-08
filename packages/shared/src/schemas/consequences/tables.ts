@@ -9,18 +9,14 @@ import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
 import { questStageDecisions } from "../stages/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const {
+import {
 	consequenceSources,
 	consequenceTimeframe,
 	consequenceTypes,
 	consequenceVisibility,
 	impactSeverity,
 	playerImpactFeels,
-} = enums
+} from "./enums"
 
 export const consequences = pgTable(
 	"consequences",

@@ -35,3 +35,4 @@ export const narrativeWeight = ["minor", "supporting", "major", "crucial"] as co
 export const trustLevels = ["none", "low", "medium", "high"] as const
 
 export const dangerLevels = ["safe", "low", "moderate", "high", "deadly"] as const
+export const impactSeverity = ["minor", "moderate", "major"] as const

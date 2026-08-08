@@ -1,4 +1,4 @@
-const decisionTypes = [
+export const decisionTypes = [
 	"moral_choice",
 	"tactical_decision",
 	"resource_allocation",
@@ -7,7 +7,7 @@ const decisionTypes = [
 	"identity_question",
 ] as const
 
-const conditionTypes = [
+export const conditionTypes = [
 	"choice",
 	"skill_check",
 	"item",
@@ -18,7 +18,7 @@ const conditionTypes = [
 	"custom_event",
 ] as const
 
-const stageTypes = [
+export const stageTypes = [
 	"revelation_point",
 	"decision_point",
 	"consequence_point",
@@ -28,20 +28,14 @@ const stageTypes = [
 	"setup_foreshadowing",
 ] as const
 
-const ambiguityLevels = [
+export const ambiguityLevels = [
 	"clear_best_option_obvious_tradeoff",
 	"balanced_valid_options",
 	"truly_ambiguous_no_clear_right",
 ] as const
 
-const stageImportanceLevels = ["minor_step", "standard", "major_point", "climax_point"] as const
-const complexityLevels = ["low_complexity_breather", "medium_complexity_standard", "high_complexity_peak"] as const
+export const stageImportanceLevels = ["minor_step", "standard", "major_point", "climax_point"] as const
+export const complexityLevels = ["low_complexity_breather", "medium_complexity_standard", "high_complexity_peak"] as const
 
-export const enums = {
-	ambiguityLevels,
-	complexityLevels,
-	conditionTypes,
-	decisionTypes,
-	stageImportanceLevels,
-	stageTypes,
-}
+
+

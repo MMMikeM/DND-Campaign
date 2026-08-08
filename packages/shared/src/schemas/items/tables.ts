@@ -10,11 +10,7 @@ import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { questStages } from "../stages/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const { itemTypes, narrativeRoles, rarityLevels } = enums
+import { itemTypes, narrativeRoles, rarityLevels } from "./enums"
 
 export const items = pgTable("items", {
 	id: pk(),

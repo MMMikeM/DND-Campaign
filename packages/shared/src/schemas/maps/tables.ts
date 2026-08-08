@@ -3,8 +3,7 @@
 import { sql } from "drizzle-orm"
 import { boolean, integer, pgTable, unique, uniqueIndex } from "drizzle-orm/pg-core"
 import { bytea, cascadeFk, list, oneOf, pk, slug, string } from "../../db/utils"
-
-const imageFormats = ["png", "jpg", "webp"] as const
+import { imageFormats } from "./enums"
 
 export const mapFiles = pgTable("map_files", {
 	id: pk(),
@@ -51,6 +50,3 @@ export const mapVariants = pgTable(
 			.where(sql`${t.isDefault} = true`),
 	],
 )
-export const enums = {
-	imageFormats,
-}

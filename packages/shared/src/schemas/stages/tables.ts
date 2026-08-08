@@ -6,11 +6,8 @@ import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } 
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
-import { enums } from "./enums"
+import { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageImportanceLevels, stageTypes } from "./enums"
 
-export { enums }
-
-const { ambiguityLevels, complexityLevels, conditionTypes, decisionTypes, stageImportanceLevels, stageTypes } = enums
 
 export const questStages = pgTable("quest_stages", {
 	id: pk(),

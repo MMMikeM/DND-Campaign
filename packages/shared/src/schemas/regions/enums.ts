@@ -1,6 +1,6 @@
-import { dangerLevels } from "../shared-enums"
+export { dangerLevels } from "../shared-enums"
 
-const objectiveTypes = [
+export const objectiveTypes = [
 	"DEATHMATCH",
 	"STOP_THE_RITUAL",
 	"DARING_ESCAPE",
@@ -16,54 +16,18 @@ const objectiveTypes = [
 	"SOCIAL_ENCOUNTER_WITH_STAKES",
 ] as const
 
-const difficultyLevels = ["easy", "medium", "hard"] as const
-const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
-const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
-const siteFunctions = [
+export const difficultyLevels = ["easy", "medium", "hard"] as const
+export const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
+export const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
+export const siteFunctions = [
 	"rest_stop_recovery",
 	"challenge_hub_obstacle",
 	"information_node_lore",
 	"thematic_showcase_mood",
 	"social_interaction_nexus",
 ] as const
-const siteTypes = [
-	"building",
-	"fortress",
-	"castle",
-	"tower",
-	"temple",
-	"market",
-	"town_square",
-	"port",
-	"graveyard",
-	"arena",
-	"warehouse",
-	"slum",
-	"farm",
 
-	"cave",
-	"clearing",
-	"beach",
-	"river_crossing",
-	"waterfall",
-	"mountain_pass",
-	"cliff",
-	"oasis",
-	"field",
-	"grove",
-
-	"ruins",
-	"cemetery",
-	"mine",
-
-	"road",
-	"bridge",
-	"camp",
-	"crossroads",
-	"trail",
-] as const
-
-const regionTypes = [
+export const regionTypes = [
 	"coastal",
 	"desert",
 	"forest",
@@ -88,7 +52,7 @@ const regionTypes = [
 	"elemental",
 ] as const
 
-const areaTypes = [
+export const areaTypes = [
 	"city",
 	"town",
 	"village",
@@ -105,34 +69,7 @@ const areaTypes = [
 	"farmland_district",
 ] as const
 
-const atmosphereTypes = [
-	"safe_haven_rest",
-	"oppressive_tense",
-	"mysterious_intriguing",
-	"mundane_stable",
-	"wild_dangerous_challenging",
-	"wonder_awe",
-] as const
 
-const encounterCategories = ["combat", "puzzle", "trap", "social", "exploration_hazard"] as const
-
-const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
-const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
-const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const
-
-export const enums = {
-	areaTypes,
-	atmosphereTypes,
-	difficultyLevels,
-	dangerLevels,
-	linkTypes,
-	objectiveTypes,
-	regionTypes,
-	secretTypes,
-	siteFunctions,
-	siteTypes,
-	encounterCategories,
-	connectionTypes,
-	routeTypes,
-	travelDifficulties,
-}
+export const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
+export const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const
+export const travelDifficulties = ["trivial", "easy", "moderate", "difficult", "treacherous"] as const

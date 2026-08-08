@@ -1,6 +1,6 @@
-import { discoverySubtlety, narrativeWeight } from "../shared-enums"
+export { discoverySubtlety, narrativeWeight } from "../shared-enums"
 
-const seedDeliveryMethods = [
+export const seedDeliveryMethods = [
 	"npc_dialogue",
 	"item_description",
 	"environmental_detail",
@@ -11,9 +11,3 @@ const seedDeliveryMethods = [
 	"player_intuition_prompt",
 	" overheard_conversation",
 ] as const
-
-export const enums = {
-	discoverySubtlety,
-	narrativeWeight,
-	seedDeliveryMethods,
-}

@@ -10,11 +10,7 @@ import { items } from "../items/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { regions } from "../regions/tables"
-import { enums } from "./enums"
-
-export { enums } from "./enums"
-
-const { loreTypes, linkStrengths } = enums
+import { linkStrengths, loreTypes } from "./enums"
 
 export const lore = pgTable("lore", {
 	id: pk(),

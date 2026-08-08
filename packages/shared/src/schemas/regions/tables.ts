@@ -3,11 +3,7 @@ import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { mapGroups, mapVariants } from "../maps/tables"
-import { enums } from "./enums"
-
-export { enums }
-
-const {
+import {
 	areaTypes,
 	connectionTypes,
 	dangerLevels,
@@ -19,7 +15,8 @@ const {
 	secretTypes,
 	siteFunctions,
 	travelDifficulties,
-} = enums
+} from "./enums"
+
 
 export const regions = pgTable("regions", {
 	id: pk(),

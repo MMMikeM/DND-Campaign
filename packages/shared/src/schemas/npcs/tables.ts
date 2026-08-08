@@ -1,14 +1,10 @@
 // npcs/tables.ts
 import { sql } from "drizzle-orm"
-import { check, pgTable, primaryKey, unique } from "drizzle-orm/pg-core"
+import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import { cascadeFk, list, nullableFk, oneOf, pk, slug, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { sites } from "../regions/tables"
-import { enums } from "./enums"
-
-export { enums }
-
-const {
+import {
 	adaptabilityLevels,
 	alignments,
 	availabilityLevels,
@@ -19,7 +15,8 @@ const {
 	races,
 	trustLevels,
 	wealthLevels,
-} = enums
+} from "./enums"
+
 
 export const npcs = pgTable("npcs", {
 	id: pk(),
