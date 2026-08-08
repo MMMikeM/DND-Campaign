@@ -92,18 +92,19 @@ export default function ConsequencesIndex({ loaderData }: Route.ComponentProps) 
 									className="h-full hover:shadow-md transition-shadow"
 								>
 									<div className="p-4">
-										<p className="text-sm text-muted-foreground mb-2">Type: {type ?? "N/A"}</p>
-										<p className="text-sm line-clamp-3">Promise: {promise || "No goal specified."}</p>
+										<p className="text-sm text-muted-foreground mb-2 capitalize">{consequenceType}</p>
+										<p className="text-sm line-clamp-3">{playerImpactFeel}</p>
 									</div>
-									<div className="border-t p-4">
-										<BadgeWithTooltip
-											variant={getArcStatusVariant(status)}
-											tooltipContent={`Status: ${status ?? "Unknown"}`}
-											className="capitalize"
-										>
-											{status ?? "Unknown"}
+									<div className="border-t p-4 flex flex-wrap gap-2">
+										<BadgeWithTooltip variant="outline" tooltipContent="Severity" className="capitalize">
+											{severity}
 										</BadgeWithTooltip>
-										{members && <span className="text-xs text-muted-foreground ml-2">({members.length} Quests)</span>}
+										<BadgeWithTooltip variant="outline" tooltipContent="Visibility" className="capitalize">
+											{visibility}
+										</BadgeWithTooltip>
+										<BadgeWithTooltip variant="outline" tooltipContent="Timeframe" className="capitalize">
+											{timeframe}
+										</BadgeWithTooltip>
 									</div>
 								</InfoCard>
 							</NavLink>

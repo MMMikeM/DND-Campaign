@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
+import { consequenceWithAffected, consequenceWithTrigger, bySlugOrId, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 
@@ -6,14 +6,23 @@ const consequenceConfig = {
 	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.consequences.findFirst({
 			where,
+			columns: {
+				affectedAreaId: false,
+				affectedConflictId: false,
+				affectedConsequenceId: false,
+				affectedFactionId: false,
+				affectedNpcId: false,
+				affectedQuestId: false,
+				affectedRegionId: false,
+				affectedSiteId: false,
+				affectingConsequences: false,
+				triggerQuestId: false,
+				triggerQuestStageDecisionId: false,
+			},
 			with: {
-				affectedArea: nameAndId,
-				affectedFaction: nameAndId,
-				affectedSite: nameAndId,
-				affectedQuest: nameAndId,
-				affectedNpc: nameAndId,
-				affectedRegion: nameAndId,
-				affectedConflict: nameAndId,
+				...consequenceWithTrigger.with,
+				...consequenceWithAffected.with,
+				affectingConsequences: nameAndId,
 				incomingForeshadowing: foreshadowingWithSources,
 			},
 		}),
