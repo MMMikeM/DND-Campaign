@@ -1,3 +1,4 @@
+// oxlint-disable no-unused-expressions
 import { describe, expectTypeOf, test } from "vite-plus/test"
 import { unifyRelations } from "./unify"
 
