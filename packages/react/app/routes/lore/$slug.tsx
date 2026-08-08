@@ -33,27 +33,27 @@ export default function LoreDetail({ loaderData }: Route.ComponentProps) {
 	const navigate = useNavigate()
 
 	const {
+		aestheticsAndSymbols,
+		conflictingNarratives,
+		connectionsToWorld,
+		coreTenetsAndTraditions,
 		creativePrompts,
 		description,
 		hiddenTruths,
+		historyAndLegacy,
+		id,
 		incomingForeshadowing,
-		outgoingForeshadowing,
+		interactionsAndRules,
 		links,
 		livedReality,
 		loreType,
 		modernRelevance,
 		name,
+		outgoingForeshadowing,
 		slug,
 		summary,
 		surfaceImpression,
 		tags,
-		aestheticsAndSymbols,
-		conflictingNarratives,
-		connectionsToWorld,
-		coreTenetsAndTraditions,
-		historyAndLegacy,
-		id,
-		interactionsAndRules,
 	} = loaderData
 
 	const activeTab = tab || "details"

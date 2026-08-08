@@ -5,15 +5,15 @@ import type { Lore } from "~/lib/entities"
 
 type DetailsContentProps = Pick<
 	Lore,
-	"surfaceImpression" | "livedReality" | "hiddenTruths" | "core_tenets_and_traditions" | "history_and_legacy"
+	"surfaceImpression" | "livedReality" | "hiddenTruths" | "coreTenetsAndTraditions" | "historyAndLegacy"
 >
 
 export function DetailsContent({
 	surfaceImpression,
 	livedReality,
 	hiddenTruths,
-	coreTenetsAndTraditions: core_tenets_and_traditions,
-	historyAndLegacy: history_and_legacy,
+	coreTenetsAndTraditions,
+	historyAndLegacy,
 }: DetailsContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -31,10 +31,10 @@ export function DetailsContent({
 
 			<div className="space-y-6">
 				<InfoCard title="Core Tenets & Traditions" icon={<Icons.BookOpen className="h-4 w-4 mr-2" />}>
-					<List items={core_tenets_and_traditions} />
+					<List items={coreTenetsAndTraditions} />
 				</InfoCard>
 				<InfoCard title="History & Legacy" icon={<Icons.Landmark className="h-4 w-4 mr-2" />}>
-					<List items={history_and_legacy} />
+					<List items={historyAndLegacy} />
 				</InfoCard>
 			</div>
 		</div>
