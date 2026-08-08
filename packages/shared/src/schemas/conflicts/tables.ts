@@ -1,7 +1,7 @@
 // conflicts/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
@@ -21,6 +21,7 @@ const {
 export const conflicts = pgTable("conflicts", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	tags: list("tags"),

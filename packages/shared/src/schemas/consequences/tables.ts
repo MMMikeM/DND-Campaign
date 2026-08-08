@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, pgTable } from "drizzle-orm/pg-core"
-import { list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
@@ -27,6 +27,7 @@ export const consequences = pgTable(
 	{
 		id: pk(),
 		name: string("name").unique(),
+		slug: slug(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		tags: list("tags"),

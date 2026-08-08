@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { boolean, integer, pgTable, unique, uniqueIndex } from "drizzle-orm/pg-core"
-import { bytea, cascadeFk, list, oneOf, pk, string } from "../../db/utils"
+import { bytea, cascadeFk, list, oneOf, pk, slug, string } from "../../db/utils"
 
 const imageFormats = ["png", "jpg", "webp"] as const
 
@@ -19,6 +19,7 @@ export const mapFiles = pgTable("map_files", {
 export const mapGroups = pgTable("map_groups", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	tags: list("tags"),

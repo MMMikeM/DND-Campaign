@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable, text, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -19,6 +19,7 @@ const { loreTypes, linkStrengths } = enums
 export const lore = pgTable("lore", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	description: text("description").array(),
 	creativePrompts: list("creative_prompts"),
 	tags: list("tags"),

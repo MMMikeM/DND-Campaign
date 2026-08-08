@@ -1,7 +1,7 @@
 // regions/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { mapGroups, mapVariants } from "../maps/tables"
 import { enums } from "./enums"
 
@@ -24,6 +24,7 @@ const {
 export const regions = pgTable("regions", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	description: list("description"),
 	tags: list("tags"),
 
@@ -65,6 +66,7 @@ export const regionConnections = pgTable(
 export const areas = pgTable("areas", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	description: list("description"),
 	tags: list("tags"),
 
@@ -79,6 +81,7 @@ export const areas = pgTable("areas", {
 export const sites = pgTable("sites", {
 	id: pk(),
 	name: string("name").unique(),
+	slug: slug(),
 	creativePrompts: list("creative_prompts"),
 	description: list("description"),
 	tags: list("tags"),

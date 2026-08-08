@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable } from "drizzle-orm/pg-core"
-import { list, manyOf, nullableFk, oneOf, pk, string } from "../../db/utils"
+import { list, manyOf, nullableFk, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
@@ -23,6 +23,7 @@ export const foreshadowing = pgTable(
 	{
 		id: pk(),
 		name: string("name").unique(),
+		slug: slug(),
 		creativePrompts: list("creative_prompts"),
 		description: list("description"),
 		tags: list("tags"),

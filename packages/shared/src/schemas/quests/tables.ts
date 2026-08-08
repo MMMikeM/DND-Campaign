@@ -1,7 +1,7 @@
 // quests/tables.ts
 import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, string } from "../../db/utils"
+import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { sites } from "../regions/tables"
@@ -30,6 +30,7 @@ export const quests = pgTable("quests", {
 	tags: list("tags"),
 
 	name: string("name").unique(),
+	slug: slug(),
 	type: oneOf("type", questTypes),
 	urgency: oneOf("urgency", urgencyLevels),
 	mood: string("mood"),

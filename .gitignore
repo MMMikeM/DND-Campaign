@@ -56,3 +56,6 @@ tmp/
 *.dump
 *.sql.gz
 *.bak
+
+
+data/postgres/*

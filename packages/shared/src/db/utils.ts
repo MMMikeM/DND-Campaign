@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm"
 import { type AnyPgColumn, customType, integer, type PgColumn, serial, text, vector } from "drizzle-orm/pg-core"
 
 const list = (description: string) => text(description).array().notNull()
@@ -30,6 +31,13 @@ const manyOf = (description: string, options: readonly [string, ...string[]]) =>
 
 const pk = () => serial("id").primaryKey()
 
+const slug = () =>
+	text("slug")
+		.notNull()
+		.generatedAlwaysAs(
+			sql`btrim(regexp_replace(regexp_replace(lower(name), '[^a-z0-9_[:space:]-]', '', 'g'), '[[:space:]-]+', '-', 'g'), '-')`,
+		)
+
 const embeddingVector = (name: string = "embedding") => {
 	return vector(name, { dimensions: 3072 })
 }
@@ -41,4 +49,17 @@ const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
 	},
 })
 
-export { list, nullableFk, cascadeFk, string, nullableString, oneOf, nullableOneOf, manyOf, pk, embeddingVector, bytea }
+export {
+	list,
+	nullableFk,
+	cascadeFk,
+	string,
+	nullableString,
+	oneOf,
+	nullableOneOf,
+	manyOf,
+	pk,
+	slug,
+	embeddingVector,
+	bytea,
+}
