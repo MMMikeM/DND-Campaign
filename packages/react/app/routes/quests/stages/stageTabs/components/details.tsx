@@ -16,7 +16,6 @@ export default function StageDetailsTab(selectedStage: Quest["stages"][0]) {
 						items={dramatic_moments}
 						spacing="sm"
 						textColor="default"
-						icon={<Icons.Star className="h-4 w-4 mr-2 text-amber-500" />}
 					/>
 				</InfoCard>
 
@@ -26,7 +25,6 @@ export default function StageDetailsTab(selectedStage: Quest["stages"][0]) {
 						items={sensory_elements}
 						spacing="sm"
 						textColor="default"
-						icon={<Icons.Eye className="h-4 w-4 mr-2 text-purple-500" />}
 					/>
 				</InfoCard>
 			</div>
@@ -38,7 +36,6 @@ export default function StageDetailsTab(selectedStage: Quest["stages"][0]) {
 						items={encounters}
 						spacing="sm"
 						textColor="default"
-						icon={<Icons.Target className="h-4 w-4 mr-2 text-red-500" />}
 					/>
 				</InfoCard>
 			)}

@@ -18,7 +18,7 @@ export const ThemesContent: React.FC<ThemesContentProps> = ({ quest }) => {
 				icon={<Icons.Layers className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No themes defined"
 			>
-				<List items={themes} spacing="sm" icon={<Icons.Palette className="h-4 w-4 mr-2 text-indigo-500" />} />
+				<List items={themes} spacing="sm" />
 			</InfoCard>
 
 			<InfoCard
@@ -26,7 +26,7 @@ export const ThemesContent: React.FC<ThemesContentProps> = ({ quest }) => {
 				icon={<Icons.Lightbulb className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No inspirations listed"
 			>
-				<List items={inspirations} spacing="sm" icon={<Icons.BookOpen className="h-4 w-4 mr-2 text-amber-500" />} />
+				<List items={inspirations} spacing="sm" />
 			</InfoCard>
 
 			<InfoCard
@@ -35,7 +35,7 @@ export const ThemesContent: React.FC<ThemesContentProps> = ({ quest }) => {
 				emptyMessage="No creative prompts available"
 				className="md:col-span-2"
 			>
-				<List items={creativePrompts} spacing="sm" icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-green-500" />} />
+				<List items={creativePrompts} spacing="sm" />
 			</InfoCard>
 		</div>
 	)

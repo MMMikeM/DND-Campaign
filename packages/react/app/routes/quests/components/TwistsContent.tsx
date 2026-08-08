@@ -80,7 +80,6 @@ export const TwistsContent: React.FC<TwistsContentProps> = ({ quest }) => {
 								items={creativePrompts}
 								spacing="sm"
 								textColor="muted"
-								icon={<Icons.Lightbulb className="h-4 w-4 mr-2 text-amber-500" />}
 							/>
 						</div>
 					</div>

@@ -42,6 +42,8 @@ interface BaseListProps extends VariantProps<typeof listVariants> {
 	emptyText?: string
 	bulletColor?: "amber" | "red" | "green" | "blue" | "purple" | "gray"
 	className?: string
+	/** Show only the first N items behind a "Show N more" toggle. */
+	maxItems?: number
 }
 
 // Props for list without heading (non-collapsible)
@@ -84,16 +86,21 @@ export function List({
 	bulletColor = "gray",
 	initialCollapsed,
 	collapsible = true,
+	maxItems,
 	...props
 }: ListProps) {
 	// Make collapsed true by default for collapsible lists
 	const isCollapsible = !!(collapsible !== false && heading)
 	const defaultCollapsed = isCollapsible && initialCollapsed !== undefined ? initialCollapsed : isCollapsible
 	const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
+	const [showAll, setShowAll] = useState(false)
 	const isFirstRender = useRef(true)
 
 	const animationSpeed = 0.5 / 10
 	const isCollapsibleHeading = heading && collapsible
+
+	const isTruncated = maxItems !== undefined && !!items && items.length > maxItems
+	const visibleItems = isTruncated && !showAll ? items.slice(0, maxItems) : (items ?? [])
 
 	// Skip the initial animation on mount
 	useEffect(() => {
@@ -128,21 +135,21 @@ export function List({
 						animate={{
 							height: "auto",
 							transition: {
-								duration: items.length * animationSpeed,
+								duration: visibleItems.length * animationSpeed,
 								ease: "easeOut",
 							},
 						}}
 						exit={{
 							height: 0,
 							transition: {
-								duration: items.length * animationSpeed,
+								duration: visibleItems.length * animationSpeed,
 								ease: "easeInOut",
 								delay: animationSpeed,
 							},
 						}}
 					>
 						<ul className={cn(listVariants({ listStyle, spacing, textSize, textColor }), className)}>
-							{items.map((item, index) => (
+							{visibleItems.map((item, index) => (
 								<motion.li
 									key={`${item.substring(0, 20)}-${index}`}
 									className={cn(
@@ -160,7 +167,7 @@ export function List({
 									exit={{
 										opacity: 0,
 										transition: {
-											delay: animationSpeed * (items.length - index - 1),
+											delay: animationSpeed * (visibleItems.length - index - 1),
 											duration: animationSpeed,
 										},
 									}}
@@ -171,6 +178,16 @@ export function List({
 								</motion.li>
 							))}
 						</ul>
+
+						{isTruncated && (
+							<button
+								type="button"
+								onClick={() => setShowAll(!showAll)}
+								className="mt-2 text-sm text-muted-foreground hover:text-foreground underline underline-offset-2"
+							>
+								{showAll ? "Show less" : `Show ${items.length - (maxItems ?? 0)} more`}
+							</button>
+						)}
 					</motion.div>
 				)}
 			</AnimatePresence>

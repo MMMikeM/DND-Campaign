@@ -49,7 +49,6 @@ export default function StageOverviewTab({
 						items={creativePrompts}
 						spacing="sm"
 						textColor="default"
-						icon={<Icons.Sparkles className="h-4 w-4 mr-2 text-amber-500" />}
 					/>
 				</InfoCard>
 			</div>
