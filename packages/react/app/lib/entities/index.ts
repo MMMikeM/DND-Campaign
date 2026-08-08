@@ -11,7 +11,6 @@ export * from "./foreshadowing"
 export * from "./lore"
 export * from "./maps"
 export * from "./npcs"
-export * from "./questStages"
 export * from "./quests"
 export * from "./regions"
 export * from "./sites"
@@ -54,6 +53,26 @@ export const foreshadowingWithTargets = {
 		targetQuest: nameAndId,
 		targetRegion: nameAndId,
 		targetSite: nameAndId,
+	},
+} as const
+
+export const consequenceWithTrigger = {
+	with: {
+		triggerQuest: nameAndId,
+		triggerQuestStageDecision: nameAndId,
+	},
+} as const
+
+export const consequenceWithAffected = {
+	with: {
+		affectedArea: nameAndId,
+		affectedConflict: nameAndId,
+		affectedConsequence: nameAndId,
+		affectedFaction: nameAndId,
+		affectedNpc: nameAndId,
+		affectedQuest: nameAndId,
+		affectedRegion: nameAndId,
+		affectedSite: nameAndId,
 	},
 } as const
 

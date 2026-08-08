@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, consequenceWithTrigger, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import { unifyRelations } from "../utils/unify"
@@ -11,7 +11,7 @@ const npcConfig = {
 				incomingRelations: { with: { sourceNpc: nameAndId } },
 				outgoingRelations: { with: { targetNpc: nameAndId } },
 				site: nameAndId,
-				affectingConsequences: true,
+				affectingConsequences: consequenceWithTrigger,
 				conflictParticipation: { with: { conflict: nameAndId } },
 				factionMemberships: { with: { faction: nameAndId } },
 				incomingForeshadowing: foreshadowingWithSources,

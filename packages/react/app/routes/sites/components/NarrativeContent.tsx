@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
@@ -76,18 +77,7 @@ export const NarrativeContent = ({
 				emptyMessage="No foreshadowing is linked to this site."
 			/>
 
-			<InfoCard
-				title="Consequences"
-				icon={<Icons.AlertTriangle className="h-4 w-4 text-primary" />}
-				emptyMessage="No consequences have affected this site."
-			>
-				{consequences.map((consequence) => (
-					<div key={consequence.id} className="border rounded p-3 mb-2">
-						<h4 className="font-medium">{consequence.name}</h4>
-						<p className="text-sm mt-1">{consequence.description}</p>
-					</div>
-				))}
-			</InfoCard>
+			<ConsequenceList affecting={consequences} emptyMessage="No consequences have affected this site." />
 		</div>
 	)
 }

@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
+import { bySlugOrId, consequenceWithTrigger, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import { unifyRelations } from "../utils/unify"
@@ -15,7 +15,7 @@ const siteConfig = {
 				npcs: nameAndId,
 				secrets: true,
 				encounters: true,
-				consequences: true,
+				consequences: consequenceWithTrigger,
 				incomingForeshadowing: foreshadowingWithSources,
 				outgoingForeshadowing: foreshadowingWithTargets,
 				factionHqs: nameAndId,

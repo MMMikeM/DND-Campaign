@@ -8,7 +8,7 @@ import type { Conflict } from "~/lib/entities"
 import { getConflict } from "~/lib/entities"
 import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
-import { ConsequencesContent } from "./components/ConsequencesContent"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ItemsContent } from "./components/ItemsContent"
 import { LoreContent } from "./components/LoreContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -134,7 +134,7 @@ export default function ConflictDetail({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="consequences" className="animate-in fade-in-50 duration-300">
-					<ConsequencesContent affectingConsequences={affectingConsequences} />
+					<ConsequenceList affecting={affectingConsequences} emptyMessage="No consequences have affected this conflict." />
 				</TabsContent>
 
 				<TabsContent value="foreshadowing" className="animate-in fade-in-50 duration-300">

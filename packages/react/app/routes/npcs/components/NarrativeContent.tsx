@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
@@ -38,19 +39,7 @@ export function NarrativeContent({
 				emptyMessage="No foreshadowing is linked to this NPC."
 			/>
 
-			<InfoCard
-				title="Affecting Consequences"
-				description={`Events that have impacted ${name}`}
-				icon={<Icons.Activity className="h-4 w-4 mr-2 text-amber-600" />}
-				emptyMessage="No consequences have affected this NPC."
-			>
-				{affectingConsequences.map(({ id, name: consequenceName, description }) => (
-					<div key={`consequence-${id}`} className="border-b last:border-b-0 p-3">
-						<h4 className="font-medium">{consequenceName}</h4>
-						<p className="text-sm text-muted-foreground">{description.join(" ")}</p>
-					</div>
-				))}
-			</InfoCard>
+			<ConsequenceList affecting={affectingConsequences} emptyMessage={`No consequences have affected ${name}.`} />
 		</div>
 	)
 }

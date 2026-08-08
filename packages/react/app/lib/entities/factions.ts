@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, consequenceWithTrigger, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import { unifyRelations } from "../utils/unify"
@@ -14,18 +14,7 @@ const factionConfig = {
 				members: { with: { npc: nameAndId } },
 				incomingRelations: { with: { sourceFaction: nameAndId } },
 				outgoingRelations: { with: { targetFaction: nameAndId } },
-				affectingConsequences: {
-					with: {
-						affectedFaction: nameAndId,
-						affectedNpc: nameAndId,
-						affectedRegion: nameAndId,
-						affectedSite: nameAndId,
-						affectedQuest: nameAndId,
-						affectedArea: nameAndId,
-						affectedConflict: nameAndId,
-						affectedConsequence: nameAndId,
-					},
-				},
+				affectingConsequences: consequenceWithTrigger,
 
 				incomingForeshadowing: foreshadowingWithSources,
 				influence: {

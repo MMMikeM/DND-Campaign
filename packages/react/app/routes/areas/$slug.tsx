@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { AreaHeader } from "./components/AreaHeader"
-import { ConsequencesContent } from "./components/ConsequencesContent"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { DetailsContent } from "./components/DetailsContent"
 import { InfluenceContent } from "./components/InfluenceContent"
@@ -94,7 +94,7 @@ export default function AreaDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="consequences">
-					<ConsequencesContent consequences={consequences} />
+					<ConsequenceList affecting={consequences} emptyMessage="No consequences have affected this area." />
 				</TabsContent>
 
 				<TabsContent value="foreshadowing">

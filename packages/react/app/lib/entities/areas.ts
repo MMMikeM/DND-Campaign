@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, consequenceWithTrigger, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 
@@ -12,27 +12,7 @@ const areaConfig = {
 			with: {
 				region: nameAndId,
 				sites: nameAndId,
-				consequences: {
-					columns: {
-						id: true,
-						name: true,
-						slug: true,
-						description: true,
-						consequenceType: true,
-						severity: true,
-						visibility: true,
-						sourceType: true,
-						conflictImpactDescription: true,
-						creativePrompts: true,
-						playerImpactFeel: true,
-						tags: true,
-						timeframe: true,
-					},
-					with: {
-						triggerQuest: nameAndId,
-						triggerQuestStageDecision: nameAndId,
-					},
-				},
+				consequences: consequenceWithTrigger,
 				factionInfluence: {
 					with: {
 						faction: nameAndId,

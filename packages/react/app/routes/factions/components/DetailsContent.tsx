@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { AlignmentBadge } from "~/components/alignment-badge"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { InfoCard } from "~/components/InfoCard"
@@ -115,13 +116,7 @@ export function DetailsContent({
 				{JSON.stringify(loreLinks)}
 			</InfoCard>
 
-			<InfoCard
-				title="Affecting Consequences"
-				icon={<Icons.AlertTriangle className="h-4 w-4 mr-2 text-primary" />}
-				emptyMessage="No affecting consequences"
-			>
-				{JSON.stringify(affectingConsequences)}
-			</InfoCard>
+			<ConsequenceList affecting={affectingConsequences} emptyMessage="No consequences have affected this faction." />
 		</div>
 	)
 }

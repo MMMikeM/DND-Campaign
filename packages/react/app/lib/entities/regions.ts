@@ -1,4 +1,4 @@
-import { bySlugOrId, foreshadowingWithSources, nameAndId } from "."
+import { bySlugOrId, consequenceWithTrigger, foreshadowingWithSources, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 import { unifyRelations } from "../utils/unify"
@@ -29,7 +29,7 @@ const regionConfig = {
 					},
 				},
 				conflicts: nameAndId,
-				consequences: nameAndId,
+				consequences: consequenceWithTrigger,
 				incomingForeshadowing: foreshadowingWithSources,
 				loreLinks: {
 					with: {

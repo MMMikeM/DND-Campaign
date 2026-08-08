@@ -1,6 +1,7 @@
 import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { Button } from "~/components/ui/button"
+import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
@@ -112,6 +113,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				<TabsContent value="connections">
 					<ConnectionsContent relations={relations} factionInfluence={factionInfluence} />
 					<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this region." />
+					<ConsequenceList affecting={consequences} emptyMessage="No consequences have affected this region." />
 				</TabsContent>
 			</Tabs>
 		</div>
