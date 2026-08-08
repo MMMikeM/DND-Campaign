@@ -68,7 +68,7 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</Button>
 			</div>
 
-			<RegionHeader name={name} type={type} dangerLevel={dangerLevel} economy={economy} population={population} />
+			<RegionHeader name={name} type={type} dangerLevel={dangerLevel} />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 				<TabsList className="grid grid-cols-5 mb-6">
@@ -81,33 +81,23 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 
 				<TabsContent value="overview">
 					<OverviewContent
-						areas={areas}
-						quests={quests}
-						description={description}
-						culturalNotes={culturalNotes}
+						atmosphereAndCulture={atmosphereAndCulture}
 						dangerLevel={dangerLevel}
-						economy={economy}
-						population={population}
+						description={description}
 						type={type}
 					/>
 				</TabsContent>
 
 				<TabsContent value="details">
-					<DetailsContent hazards={hazards} pointsOfInterest={pointsOfInterest} security={security} rumors={rumors} />
+					<DetailsContent featuresAndHazards={featuresAndHazards} />
 				</TabsContent>
 
 				<TabsContent value="areas">
-					<AreasContent
-						areas={areas}
-						slug={slug}
-						economy={economy}
-						population={population}
-						creativePrompts={creativePrompts}
-					/>
+					<AreasContent areas={areas} slug={slug} />
 				</TabsContent>
 
 				<TabsContent value="lore">
-					<LoreContent history={history} secrets={secrets} rumors={rumors} />
+					<LoreContent historyAndEconomy={historyAndEconomy} loreAndSecrets={loreAndSecrets} />
 				</TabsContent>
 
 				<TabsContent value="connections">

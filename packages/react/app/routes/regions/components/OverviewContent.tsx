@@ -6,19 +6,13 @@ import { List } from "~/components/List"
 import type { Region } from "~/lib/entities"
 import { getDangerVariant } from "../utils"
 
-type OverviewContentProps = Pick<
-	Region,
-	"description" | "culturalNotes" | "type" | "dangerLevel" | "population" | "economy" | "quests" | "areas"
->
+type OverviewContentProps = Pick<Region, "atmosphereAndCulture" | "dangerLevel" | "description" | "type">
 
 export const OverviewContent: React.FC<OverviewContentProps> = ({
-	description,
-	culturalNotes,
-	type,
+	atmosphereAndCulture,
 	dangerLevel,
-	population,
-	economy,
-	quests,
+	description,
+	type,
 }) => {
 	return (
 		<>
@@ -37,8 +31,8 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({
 
 					<div className="border-t pt-4">
 						<List
-							heading="Culture"
-							items={culturalNotes}
+							heading="Atmosphere & Culture"
+							items={atmosphereAndCulture}
 							spacing="sm"
 							textColor="muted"
 							icon={<Icons.Building className="h-4 w-4 mr-2" />}
@@ -78,25 +72,6 @@ export const OverviewContent: React.FC<OverviewContentProps> = ({
 					</div>
 				</InfoCard>
 
-				{/* Key Stats Card */}
-				<InfoCard title="Key Stats" icon={<Icons.NetworkIcon className="h-4 w-4 mr-2 text-primary" />}>
-					<div className="space-y-2">
-						<div className="">
-							<div className="font-medium">Population:</div>
-							<div>{population}</div>
-						</div>
-						<div className="">
-							<div className="font-medium">Economy:</div>
-							<div>{economy}</div>
-						</div>
-						<div className="flex items-center justify-between">
-							<div className="font-medium">Active Quests:</div>
-							<BadgeWithTooltip variant="outline" tooltipContent={`Quests in this region`}>
-								{quests.length}
-							</BadgeWithTooltip>
-						</div>
-					</div>
-				</InfoCard>
 			</div>
 		</>
 	)

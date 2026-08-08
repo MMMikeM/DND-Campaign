@@ -80,11 +80,10 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 										{name}
 									</CardTitle>
 									<CardDescription>
-										<span className="capitalize">{type}</span> • {population}
+										<span className="capitalize">{type}</span>
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									<p className="text-sm text-muted-foreground mb-2">{economy}</p>
 									{description?.[0] && <p className="text-sm line-clamp-2">{description[0]}</p>}
 									<div className="flex flex-wrap items-center gap-2 mt-3">
 										<BadgeWithTooltip
@@ -116,12 +115,8 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 								<CardFooter>
 									<div className="flex flex-col w-full gap-2">
 										<div className="flex items-center text-xs text-muted-foreground justify-between">
-											<span>{hazards?.length || 0} hazards</span>
-											<span>{pointsOfInterest?.length || 0} points of interest</span>
-										</div>
-										<div className="flex items-center text-xs text-muted-foreground justify-between">
-											<span>{rumors?.length || 0} rumors</span>
-											<span>{secrets?.length || 0} secrets</span>
+											<span>{featuresAndHazards?.length || 0} features & hazards</span>
+											<span>{loreAndSecrets?.length || 0} lore & secrets</span>
 										</div>
 									</div>
 								</CardFooter>

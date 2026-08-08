@@ -6,9 +6,9 @@ import { List } from "~/components/List"
 import { Link } from "~/components/ui/link"
 import type { Region } from "~/lib/entities"
 
-type AreasContentProps = Pick<Region, "areas" | "slug" | "economy" | "population" | "creativePrompts">
+type AreasContentProps = Pick<Region, "areas" | "slug">
 
-export const AreasContent: React.FC<AreasContentProps> = ({ areas, slug, economy, population, creativePrompts }) => {
+export const AreasContent: React.FC<AreasContentProps> = ({ areas, slug }) => {
 	return (
 		<>
 			<div className="grid grid-cols-1 gap-6 mb-6">
@@ -59,25 +59,6 @@ export const AreasContent: React.FC<AreasContentProps> = ({ areas, slug, economy
 				</InfoCard>
 			</div>
 
-			{/* Economy and Creative Prompts cards remain the same for the region */}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<InfoCard title="Economy" icon={<Icons.CircleDollarSign className="h-4 w-4 mr-2 text-primary" />}>
-					<p>{economy ?? "N/A"}</p>
-					{population && economy && (
-						<p className="mt-4 text-sm text-muted-foreground">
-							The region has a {population} population with a {economy}-based economy.
-						</p>
-					)}
-				</InfoCard>
-
-				<InfoCard
-					title="Creative Prompts"
-					icon={<Icons.Eye className="h-4 w-4 mr-2 text-primary" />}
-					emptyMessage="No creative prompts available"
-				>
-					<List items={creativePrompts} spacing="sm" textColor="default" emptyText="No creative prompts available" />
-				</InfoCard>
-			</div>
 		</>
 	)
 }
