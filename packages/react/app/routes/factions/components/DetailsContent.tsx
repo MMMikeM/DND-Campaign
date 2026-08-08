@@ -99,8 +99,13 @@ export function DetailsContent({
 				icon={<Icons.BookHeart className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No narrative links"
 			>
-				{JSON.stringify(conflicts)}
-				{JSON.stringify(narrativeDestinationInvolvement)}
+				{conflicts.map(({ id, role, motivation, publicStance }) => (
+					<div key={`conflict-${id}`} className="border-b last:border-0 p-3">
+						<p className="text-sm font-medium capitalize">{role}</p>
+						<p className="text-sm text-muted-foreground">{motivation}</p>
+						<p className="text-sm text-muted-foreground">{publicStance}</p>
+					</div>
+				))}
 			</InfoCard>
 
 			<ForeshadowingList incoming={incomingForeshadowing} emptyMessage="No foreshadowing points toward this faction." />

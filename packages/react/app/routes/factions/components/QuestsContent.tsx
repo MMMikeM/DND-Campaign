@@ -75,10 +75,9 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 						site,
 						quest,
 						deliveryNpc,
-						slug,
 					}) => (
 						<div key={id} className="border rounded p-4">
-							<Link href={`/quests/${slug}`} className="text-sm text-indigo-500">
+							<Link href={`/quests/${quest.slug}`} className="text-sm text-indigo-500">
 								{name}
 							</Link>
 							<p>Hook Type: {hookType}</p>

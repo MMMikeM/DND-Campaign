@@ -1,8 +1,6 @@
 // Re-export all entity logic, types, and shared utils
 
 import { buildSimilarityQuery } from "@tome-master/shared/db"
-import { db } from "../db"
-
 export * from "./areas"
 export * from "./conflicts"
 export * from "./consequences"
