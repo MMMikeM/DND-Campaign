@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { getNarrativeEvent, type NarrativeEvent } from "~/lib/entities"
+import { getConsequence, type Consequence } from "~/lib/entities"
 import type { Route } from "./+types/$slug"
 import { OverviewContent } from "./components/OverviewContent"
 import { QuestsContent } from "./components/QuestsContent"
@@ -13,51 +13,57 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw new Response("No slug provided", { status: 400 })
 	}
 
-	const narrativeEvent = await getNarrativeEvent(params.slug)
-	if (!narrativeEvent) {
-		throw new Response("Narrative Arc not found", { status: 404 })
+	const consequence = await getConsequence(params.slug)
+	if (!consequence) {
+		throw new Response("Consequence not found", { status: 404 })
 	}
 
-	return narrativeEvent
+	return consequence
 }
 
-type key = keyof NarrativeEvent
-
-export default function NarrativeEventDetail({ loaderData }: Route.ComponentProps) {
-	const narrativeEvent = loaderData
+export default function ConsequenceDetail({ loaderData }: Route.ComponentProps) {
 	const {
 		id,
 		name,
 		creativePrompts,
 		description,
-		gmNotes,
-		tags,
-		questStageId,
-		eventType,
-		intendedRhythmEffect,
-		narrativePlacement,
-		impactSeverity,
-		triggeringStageDecisionId,
-		relatedQuestId,
-		complication_details,
-		escalation_details,
-		twist_reveal_details,
-		questStage,
-		triggeringStageDecision,
-		relatedQuest,
+		affectedArea,
+		affectedAreaId,
+		affectedConflict,
+		affectedConflictId,
+		affectedConsequenceId,
+		affectedFaction,
+		affectedFactionId,
+		affectedNpc,
+		affectedNpcId,
+		affectedQuest,
+		affectedQuestId,
+		affectedSite,
+		affectedSiteId,
+		affectedRegion,
+		affectedRegionId,
+		complicationDetails,
+		conflictImpactDescription,
+		consequenceType,
+		escalationDetails,
 		incomingForeshadowing,
+		playerImpactFeel,
+		severity,
+		sourceType,
+		tags,
+		timeframe,
+		triggerQuestId,
+		triggerQuestStageDecisionId,
+		twistRevealDetails,
+		visibility,
 		slug,
-	} = narrativeEvent
+	} = loaderData
 	const { tab } = useParams()
 	const activeTab = tab || "overview"
 	const navigate = useNavigate()
 
 	const handleTabChange = (value: string) => {
 		navigate(`/narrative-events/${slug}/${value === "overview" ? "" : value}`)
-	}
-
-	if (!narrativeEvent) {
-		return <div>Error: Narrative Arc data could not be loaded.</div>
 	}
 
 	return (
@@ -99,7 +105,7 @@ export default function NarrativeEventDetail({ loaderData }: Route.ComponentProp
 	)
 }
 
-export function Header({ name, eventType }: Pick<NarrativeEvent, "name" | "eventType">) {
+export function Header({ name, eventType }: Pick<Consequence, "name" | "eventType">) {
 	return (
 		<div>
 			<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2 flex items-center">
