@@ -12,7 +12,7 @@ const npcConfig = {
 				outgoingRelations: { with: { targetNpc: nameAndId } },
 				site: nameAndId,
 				affectingConsequences: true,
-				conflictParticipation: true,
+				conflictParticipation: { with: { conflict: nameAndId } },
 				factionMemberships: { with: { faction: nameAndId } },
 				incomingForeshadowing: foreshadowingWithSources,
 				itemConnections: { with: { sourceItem: nameAndId } },

@@ -12,13 +12,14 @@ const siteConfig = {
 				mapGroupId: false,
 			},
 			with: {
+				npcs: nameAndId,
 				secrets: true,
 				encounters: true,
 				consequences: true,
 				incomingForeshadowing: foreshadowingWithSources,
 				outgoingForeshadowing: foreshadowingWithTargets,
 				factionHqs: nameAndId,
-				factionInfluence: nameAndId,
+				factionInfluence: { with: { faction: nameAndId } },
 				itemConnections: { with: { sourceItem: nameAndId } },
 				questHooks: {
 					with: {

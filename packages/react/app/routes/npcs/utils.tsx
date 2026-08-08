@@ -1,19 +1,4 @@
-export const getTrustLevelVariant = (level: string) => {
-	switch (level) {
-		case "high":
-			return "default"
-		case "medium":
-			return "secondary"
-		case "low":
-			return "outline"
-		case "none":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}
-
-export const getWealthVariant = (wealth: string) => {
+export const getWealthVariant = (wealth: string | undefined) => {
 	switch (wealth) {
 		case "wealthy":
 		case "rich":
@@ -28,13 +13,14 @@ export const getWealthVariant = (wealth: string) => {
 	}
 }
 
-export const getAlignmentVariant = (alignment: string) => {
+export const getAlignmentVariant = (alignment: string | undefined) => {
+	if (!alignment) return "outline"
 	if (alignment.includes("good")) return "default"
 	if (alignment.includes("evil")) return "destructive"
 	return "secondary"
 }
 
-export const getAdaptabilityVariant = (adaptability: string) => {
+export const getAdaptabilityVariant = (adaptability: string | undefined) => {
 	switch (adaptability) {
 		case "opportunistic":
 		case "flexible":

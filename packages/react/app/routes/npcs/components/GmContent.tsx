@@ -3,7 +3,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function GmContent({ name, gmNotes, creativePrompts }: Pick<NPC, "name" | "gmNotes" | "creativePrompts">) {
+export function GmContent({ name, details, roleplayingGuide }: Pick<NPC, "name" | "details" | "roleplayingGuide">) {
 	return (
 		<InfoCard
 			title="GM Notes"
@@ -12,8 +12,9 @@ export function GmContent({ name, gmNotes, creativePrompts }: Pick<NPC, "name" |
 			emptyMessage="No GM notes for this NPC."
 		>
 			<div className="space-y-4">
-				<List heading="GM Notes" items={gmNotes} spacing="sm" textColor="muted" collapsible />
-				<List heading="Creative Prompts" items={creativePrompts} spacing="sm" textColor="muted" collapsible />
+				<List heading="Roleplaying Guide" items={roleplayingGuide} spacing="sm" textColor="muted" collapsible />
+				<List heading="Goals & Fears" items={details?.goalsAndFears} spacing="sm" textColor="muted" collapsible />
+				<List heading="Biases" items={details?.biases} spacing="sm" textColor="muted" collapsible />
 			</div>
 		</InfoCard>
 	)

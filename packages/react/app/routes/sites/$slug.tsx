@@ -44,6 +44,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 		intendedSiteFunction,
 		mapGroup,
 		name,
+		npcs,
 		questHooks,
 		questStages,
 		relations,
@@ -97,7 +98,7 @@ export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="inhabitants">
-					<InhabitantsContent factionInfluence={factionInfluence} factionHqs={factionHqs} />
+					<InhabitantsContent npcs={npcs} factionInfluence={factionInfluence} factionHqs={factionHqs} />
 				</TabsContent>
 
 				<TabsContent value="encounters">

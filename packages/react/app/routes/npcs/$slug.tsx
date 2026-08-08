@@ -159,15 +159,11 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="social">
-					<SocialContent
-						conversationHook={conversationHook}
-						rumours={details?.rumours}
-						preferredTopics={details?.preferredTopics}
-					/>
+					<SocialContent conversationHook={conversationHook} details={details} />
 				</TabsContent>
 
 				<TabsContent value="knowledge">
-					<KnowledgeContent knowledge={details?.knowledge} secrets={details?.secretsAndHistory} />
+					<KnowledgeContent details={details} />
 				</TabsContent>
 
 				<TabsContent value="connections">

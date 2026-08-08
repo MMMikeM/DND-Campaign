@@ -3,14 +3,14 @@ import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { Button } from "~/components/ui/button"
 import type { NPC } from "~/lib/entities"
-import { getAdaptabilityVariant, getAlignmentVariant, getTrustLevelVariant, getWealthVariant } from "../utils"
+import { getAdaptabilityVariant, getAlignmentVariant, getWealthVariant } from "../utils"
 
 interface NPCHeaderProps {
 	npc: NPC
 }
 
 export function NPCHeader({ npc }: NPCHeaderProps) {
-	const { name, race, age, disposition, wealth, gender, trustLevel, adaptability, occupation, alignment, slug } = npc
+	const { name, race, age, attitude, gender, occupation, details, slug } = npc
 
 	return (
 		<>
@@ -45,16 +45,16 @@ export function NPCHeader({ npc }: NPCHeaderProps) {
 						tooltipContent="General attitude toward others"
 					>
 						<Icons.Smile className="h-3.5 w-3.5 mr-1" />
-						{disposition}
+						{attitude}
 					</BadgeWithTooltip>
 
 					<BadgeWithTooltip
-						variant={getWealthVariant(wealth)}
+						variant={getWealthVariant(details?.wealth)}
 						className="flex items-center"
 						tooltipContent="Economic standing and available resources"
 					>
 						<Icons.Building className="h-3.5 w-3.5 mr-1" />
-						{wealth}
+						{details?.wealth}
 					</BadgeWithTooltip>
 
 					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character identity">
@@ -63,30 +63,21 @@ export function NPCHeader({ npc }: NPCHeaderProps) {
 					</BadgeWithTooltip>
 
 					<BadgeWithTooltip
-						variant={getTrustLevelVariant(trustLevel)}
-						className="flex items-center"
-						tooltipContent="How readily this character trusts others"
-					>
-						<Icons.UserCheck className="h-3.5 w-3.5 mr-1" />
-						{trustLevel} trust
-					</BadgeWithTooltip>
-
-					<BadgeWithTooltip
-						variant={getAdaptabilityVariant(adaptability)}
+						variant={getAdaptabilityVariant(details?.adaptability)}
 						className="flex items-center"
 						tooltipContent="Flexibility in response to changing situations"
 					>
 						<Icons.Sparkles className="h-3.5 w-3.5 mr-1" />
-						{adaptability}
+						{details?.adaptability}
 					</BadgeWithTooltip>
 
 					<BadgeWithTooltip
-						variant={getAlignmentVariant(alignment)}
+						variant={getAlignmentVariant(details?.alignment)}
 						className="flex items-center"
 						tooltipContent="Moral and ethical alignment"
 					>
 						<Icons.Heart className="h-3.5 w-3.5 mr-1" />
-						{alignment}
+						{details?.alignment}
 					</BadgeWithTooltip>
 
 					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Role in society">

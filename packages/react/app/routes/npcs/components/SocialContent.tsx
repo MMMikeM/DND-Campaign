@@ -3,7 +3,9 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { NPC } from "~/lib/entities"
 
-export function SocialContent({}: Pick<NPC, "conflictParticipation" | "conversationHook">) {
+export function SocialContent({ conversationHook, details }: Pick<NPC, "conversationHook" | "details">) {
+	const { avoidTopics, preferredTopics, rumours } = details ?? {}
+
 	return (
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

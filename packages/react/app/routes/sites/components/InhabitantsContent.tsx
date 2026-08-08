@@ -6,10 +6,10 @@ import { Link } from "~/components/ui/link"
 import type { Site } from "~/lib/entities"
 
 export const InhabitantsContent = ({
-	npcAssociations,
+	npcs,
 	factionInfluence,
 	factionHqs,
-}: Pick<Site, "npcAssociations" | "factionInfluence" | "factionHqs">) => {
+}: Pick<Site, "npcs" | "factionInfluence" | "factionHqs">) => {
 	return (
 		<div className="space-y-6">
 			<InfoCard
@@ -17,8 +17,12 @@ export const InhabitantsContent = ({
 				icon={<Icons.Users className="h-4 w-4 mr-2 text-primary" />}
 				emptyMessage="No NPCs are present at this site."
 			>
-				{npcAssociations.map((npc) => (
-					<div key={`npc-${npc.id}`} className="border rounded p-4"></div>
+				{npcs.map(({ id, name, slug }) => (
+					<div key={`npc-${id}`} className="border rounded p-3 mb-2">
+						<Link href={`/npcs/${slug}`}>
+							<h4 className="font-medium text-primary hover:underline">{name}</h4>
+						</Link>
+					</div>
 				))}
 			</InfoCard>
 
@@ -49,7 +53,6 @@ export const InhabitantsContent = ({
 						presenceTypes,
 						presenceDetails,
 						priorities,
-						gmNotes,
 						tags,
 						faction,
 					}) => (
@@ -64,7 +67,6 @@ export const InhabitantsContent = ({
 							<List items={presenceDetails} heading="Presence Details" />
 							<List items={priorities} heading="Priorities" />
 							<List items={creativePrompts} heading="Creative Prompts" />
-							<List items={gmNotes} heading="GM Notes" />
 						</div>
 					),
 				)}
