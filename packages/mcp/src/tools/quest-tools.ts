@@ -19,7 +19,6 @@ export const entityGetters = createEntityGetters({
 			with: {
 				dependentQuests: true,
 				prerequisiteQuest: true,
-				stageDecisions: true,
 				affectingConsequences: true,
 				triggeredConsequences: true,
 				incomingForeshadowing: true,
@@ -30,7 +29,7 @@ export const entityGetters = createEntityGetters({
 				outgoingRelations: true,
 				participants: true,
 				loreLinks: true,
-				stages: true,
+				stages: { with: { outgoingDecisions: true, incomingDecisions: true } },
 			},
 		}),
 

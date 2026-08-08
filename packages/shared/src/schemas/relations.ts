@@ -238,7 +238,6 @@ export const relations = defineRelations(schema, (r) => ({
 		outgoingRelations: r.many.questRelations({ from: r.quests.id, to: r.questRelations.sourceQuestId }),
 		incomingRelations: r.many.questRelations({ from: r.quests.id, to: r.questRelations.targetQuestId }),
 		stages: r.many.questStages({ from: r.quests.id, to: r.questStages.questId }),
-		stageDecisions: r.many.questStageDecisions({ from: r.quests.id, to: r.questStageDecisions.questId }),
 		hooks: r.many.questHooks({ from: r.quests.id, to: r.questHooks.questId }),
 		participants: r.many.questParticipants({ from: r.quests.id, to: r.questParticipants.questId }),
 		triggeredConsequences: r.many.consequences({ from: r.quests.id, to: r.consequences.triggerQuestId }),
@@ -336,7 +335,6 @@ export const relations = defineRelations(schema, (r) => ({
 		outgoingForeshadowing: r.many.foreshadowing({ from: r.questStages.id, to: r.foreshadowing.sourceQuestStageId }),
 	},
 	questStageDecisions: {
-		quest: r.one.quests({ from: r.questStageDecisions.questId, to: r.quests.id, optional: false }),
 		sourceStage: r.one.questStages({
 			from: r.questStageDecisions.fromQuestStageId,
 			to: r.questStages.id,

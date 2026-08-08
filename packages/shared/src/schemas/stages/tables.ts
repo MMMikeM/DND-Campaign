@@ -50,8 +50,6 @@ export const questStageDecisions = pgTable(
 		description: list("description"),
 		tags: list("tags"),
 
-		questId: cascadeFk("quest_id", () => quests.id),
-
 		fromQuestStageId: cascadeFk("from_quest_stage_id", questStages.id),
 		toQuestStageId: nullableFk("to_quest_stage_id", questStages.id),
 
@@ -70,7 +68,7 @@ export const questStageDecisions = pgTable(
 		failure_lesson_learned: nullableString("failure_lesson_learned"),
 	},
 	(t) => [
-		unique().on(t.questId, t.fromQuestStageId, t.toQuestStageId),
+		unique().on(t.fromQuestStageId, t.toQuestStageId),
 		check("chk_stage_decision_no_self_loop", sql`COALESCE(${t.fromQuestStageId} != ${t.toQuestStageId}, TRUE)`),
 		check(
 			"chk_failure_retry_lesson",

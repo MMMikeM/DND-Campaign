@@ -36,7 +36,6 @@ export const schemas = {
 		.describe("Discrete chapters within quests that represent key locations, challenges, or narrative beats"),
 
 	questStageDecisions: createInsertSchema(questStageDecisions, {
-		questId: id.describe("ID of quest this decision belongs to"),
 		fromQuestStageId: id.describe("ID of stage where this decision occurs"),
 		toQuestStageId: optionalId.describe("ID of stage this decision leads to if taken"),
 		conditionType: z
