@@ -8,6 +8,9 @@ import { createManageEntityHandler, createManageSchema, nameAndId } from "./util
 import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
+const isImageFormat = (value: string): value is (typeof enums.imageFormats)[number] =>
+	(enums.imageFormats as readonly string[]).includes(value)
+
 const mapTables = {
 	mapFiles: tables.mapFiles,
 	mapGroups: tables.mapGroups,
@@ -87,7 +90,14 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 
 			const filePath = join(directory, fileName)
 			const mapImage = await readFile(filePath)
-			const imageFormat = extname(fileName).slice(1) as "jpeg" | "png" | "webp"
+			// The column enum spells it "jpg"; on disk the extension may be either.
+			const extension = extname(fileName).slice(1).toLowerCase()
+			const imageFormat = extension === "jpeg" ? "jpg" : extension
+			if (!isImageFormat(imageFormat)) {
+				logger.info(`Skipping '${fileName}': unsupported image format '${extension}'.`)
+				newMaps.push(null)
+				continue
+			}
 			const imageBytes = await stat(filePath).then((stats) => stats.size)
 			const { width, height } = imageSize(mapImage)
 
