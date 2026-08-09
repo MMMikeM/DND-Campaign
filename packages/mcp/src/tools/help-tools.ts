@@ -1,4 +1,4 @@
-import { createFuzzySearch } from "ekrina"
+import { createFuzzySearch, SCORES } from "ekrina"
 import { z } from "zod/v4"
 import { logger } from ".."
 import { schemas } from "./help-tools.schema"
@@ -101,11 +101,16 @@ ${toolName}({
 `
 
 const createToolHelpResponse = (toolName: string, allDefinitions: Record<string, ToolDefinition>) => {
-	const results = createFuzzySearch(Object.keys(allDefinitions))(toolName)
-	const foundName = results.length > 0 ? results[0]?.item : undefined
-	const tool = foundName ? allDefinitions[foundName] : undefined
+	// Searching the entries carries the definition through with the match, so a
+	// hit needs no second lookup and can't come back without its tool.
+	const searchTools = createFuzzySearch(Object.entries(allDefinitions), ([name]) => name)
+	const [match] = searchTools(toolName)
 
-	if (!foundName || !tool) {
+	// Anything scoring above CONTAINS is a fuzzy chain or a one-edit typo rescue.
+	// Taking those answers a help request about one tool with a different one.
+	const found = match && match.score <= SCORES.CONTAINS ? match.item : undefined
+
+	if (!found) {
 		return {
 			content: [
 				{
@@ -116,6 +121,7 @@ const createToolHelpResponse = (toolName: string, allDefinitions: Record<string,
 		}
 	}
 
+	const [foundName, tool] = found
 	const description = tool.description || "No description available"
 	const enumsText = formatEnumsForTool(tool)
 	const schema = toJsonSchema(tool)

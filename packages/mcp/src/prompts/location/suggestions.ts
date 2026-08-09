@@ -1,4 +1,4 @@
-import { createFuzzySearch, fuzzyMatch } from "ekrina"
+import { createFuzzySearch, SCORES } from "ekrina"
 import type {
 	EnhancedLocationCreationArgs,
 	LinkForAnalysis,
@@ -6,6 +6,8 @@ import type {
 	RegionForAnalysis,
 	SiteForAnalysis,
 } from "./types"
+
+const NO_MEANINGFUL_CONNECTION = "near"
 
 function getAppropriateConnectionType(newType: string, existingType: string): string {
 	const connectionMap: Record<string, Record<string, string>> = {
@@ -15,7 +17,7 @@ function getAppropriateConnectionType(newType: string, existingType: string): st
 		cave: { mountain: "within", mine: "connects to", ruins: "hidden beneath" },
 	}
 
-	return connectionMap[newType]?.[existingType] || "near"
+	return connectionMap[newType]?.[existingType] || NO_MEANINGFUL_CONNECTION
 }
 
 function getStrategicReason(type: string): string {
@@ -83,28 +85,22 @@ export function generateLocationConnectionSuggestions(
 		uniqueConnectionOpportunities: [],
 	}
 
-	// Type-based connection suggestions
-	if (args.type_hint && args.type_hint !== "" && args.type_hint !== undefined) {
+	if (args.type_hint) {
 		const typeHint = args.type_hint
-		const sites = existingSites.filter((site) => {
-			// Find sites that would logically connect to this type
-			const connectionType = getAppropriateConnectionType(typeHint, site.type)
-			return connectionType !== "near" // Only include meaningful connections
-		})
+		const connectableSites = existingSites.filter(
+			(site) => getAppropriateConnectionType(typeHint, site.type) !== NO_MEANINGFUL_CONNECTION,
+		)
 
-		suggestions.typeBasedConnections = sites.map((site) => {
+		suggestions.typeBasedConnections = connectableSites.map((site) => {
 			const connectionType = getAppropriateConnectionType(typeHint, site.type)
 			return `${connectionType} ${site.name} (${site.type}) - ${getStrategicReason(typeHint)}`
 		})
 	}
 
-	// Regional connection suggestions with fuzzy matching
 	if (args.region_hint) {
 		const regionHint = args.region_hint
-		// Use fuzzy search to find matching regions
-		const matchingRegions = createFuzzySearch(availableRegions, (region) => region.name)(regionHint).map(
-			({ item }) => item,
-		)
+		const searchRegions = createFuzzySearch(availableRegions, (region) => region.name)
+		const matchingRegions = searchRegions(regionHint).map(({ item }) => item)
 
 		suggestions.regionalConnections = matchingRegions.flatMap((region) => {
 			const regionSites = existingSites.filter((site) => site.area?.region.name === region.name)
@@ -116,25 +112,19 @@ export function generateLocationConnectionSuggestions(
 		})
 	}
 
-	// Purpose-based connections with fuzzy matching
 	if (args.purpose_hint) {
-		const purposeKeywords = args.purpose_hint.toLowerCase().split(" ")
+		const purposeHint = args.purpose_hint
+		const searchSites = createFuzzySearch(existingSites, [
+			{ text: ({ description }) => description.join(" ") },
+			{ text: ({ features }) => features.join(" "), atBest: SCORES.CONTAINS },
+		])
 
-		const sites = existingSites.filter((site) => {
-			const siteDescription = site.description.join(" ").toLowerCase()
-			const siteFeatures = site.features.join(" ").toLowerCase()
-			const searchableText = `${siteDescription} ${siteFeatures}`
-
-			// Use fuzzy search on the combined text
-			return purposeKeywords.some((keyword) => fuzzyMatch(searchableText, keyword) !== null)
-		})
-
-		suggestions.purposeBasedConnections = sites.map((site) => {
-			return `Functional connection to ${site.name} - shared ${args.purpose_hint} purpose`
-		})
+		// Scores run low-to-high; past CONTAINS the hint no longer literally appears.
+		suggestions.purposeBasedConnections = searchSites(purposeHint)
+			.filter(({ score }) => score <= SCORES.CONTAINS)
+			.map(({ item }) => `Functional connection to ${item.name} - shared ${purposeHint} purpose`)
 	}
 
-	// Strategic positioning suggestions
 	const existingLinkTypes = existingLinks.map((link) => link.linkType)
 	const underrepresentedLinkTypes = ["portal", "tunnel", "historical", "conceptual"].filter(
 		(type) => !existingLinkTypes.includes(type),
@@ -146,7 +136,6 @@ export function generateLocationConnectionSuggestions(
 		)
 	}
 
-	// Look for sites with few connections
 	const siteConnectionCounts = existingSites.map((site) => {
 		const connectionCount = existingLinks.filter(
 			(link) => link.sourceSite?.id === site.id || link.targetSite?.id === site.id,
@@ -165,8 +154,6 @@ export function generateLocationConnectionSuggestions(
 		}
 	}
 
-	// Unique connection opportunities
-	// Look for atmosphere-based connections
 	if (availableRegions?.[0]) {
 		const atmosphereTypes = Array.from(new Set(availableRegions.map((r) => r.atmosphereType)))
 
@@ -182,7 +169,6 @@ export function generateLocationConnectionSuggestions(
 		})
 	}
 
-	// Look for encounter-based connections
 	const encounterSites = existingSites.filter((site) => site.encounters.length > 0)
 	if (encounterSites?.[0]) {
 		const [firstEncounterSite] = encounterSites
@@ -193,7 +179,6 @@ export function generateLocationConnectionSuggestions(
 		}
 	}
 
-	// Look for secret-based connections
 	const secretSites = existingSites.filter((site) => site.secrets.length > 0)
 	if (secretSites?.[0]) {
 		const [firstSecretSite] = secretSites
@@ -204,7 +189,6 @@ export function generateLocationConnectionSuggestions(
 		}
 	}
 
-	// NPC-based connection opportunities
 	const npcSites = existingSites.filter((site) => site.npcs.length > 0)
 	if (npcSites?.[0]) {
 		const [firstNpcSite] = npcSites
