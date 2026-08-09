@@ -21,7 +21,6 @@ import {
 	emotionalShapes,
 } from "./enums"
 
-
 export const quests = pgTable("quests", {
 	id: pk(),
 	creativePrompts: list("creative_prompts"),

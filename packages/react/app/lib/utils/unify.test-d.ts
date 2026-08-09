@@ -178,9 +178,6 @@ describe("unifyRelations types", () => {
 		// @ts-expect-error - source3 should not exist
 		result.source3
 
-		// Get the type of the unified items for testing
-		type UnifiedItem = (typeof result.unified)[number]
-
 		// Test union type properties
 		if (result.unified.length > 0) {
 			const item = result.unified[0]

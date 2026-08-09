@@ -40,19 +40,7 @@ const slug = () =>
 
 // Custom bytea type for binary image data
 const bytea = customType<{ data: Buffer; notNull: true; default: false }>({
-	dataType: () => "bytea"
+	dataType: () => "bytea",
 })
 
-export {
-	list,
-	nullableFk,
-	cascadeFk,
-	string,
-	nullableString,
-	oneOf,
-	nullableOneOf,
-	manyOf,
-	pk,
-	slug,
-	bytea,
-}
+export { list, nullableFk, cascadeFk, string, nullableString, oneOf, nullableOneOf, manyOf, pk, slug, bytea }

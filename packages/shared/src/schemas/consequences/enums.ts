@@ -37,4 +37,3 @@ export const playerImpactFeels = [
 	"unexpected_opportunity",
 	"just_consequence",
 ] as const
-

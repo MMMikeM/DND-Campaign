@@ -4,8 +4,7 @@ import type { PgColumn } from "drizzle-orm/pg-core"
 type NamedEntity = { id: PgColumn; name: PgColumn }
 
 /** An entity as `{ id, name }` JSON — the SQL counterpart of the `nameAndId` query fragment. */
-export const entityJson = (entity: NamedEntity) =>
-	sql`jsonb_build_object('id', ${entity.id}, 'name', ${entity.name})`
+export const entityJson = (entity: NamedEntity) => sql`jsonb_build_object('id', ${entity.id}, 'name', ${entity.name})`
 
 /**
  * One arm of an exclusive arc, as a `'key', value` pair for `jsonb_build_object`.

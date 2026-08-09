@@ -2,11 +2,16 @@ export { trustLevels, impactSeverity } from "../shared-enums"
 
 export const questTypes = ["main", "side", "faction", "character", "generic"] as const
 export const urgencyLevels = ["background", "developing", "urgent", "critical"] as const
-export const questRelationshipTypes = ["prerequisite", "sequel", "parallel", "alternative", "hidden_connection"] as const
+export const questRelationshipTypes = [
+	"prerequisite",
+	"sequel",
+	"parallel",
+	"alternative",
+	"hidden_connection",
+] as const
 export const participantImportanceLevels = ["minor", "supporting", "major", "critical"] as const
 export const hookTypes = ["rumor", "npc_interaction", "location_discovery"] as const
 export const presentationStyles = ["subtle", "clear", "urgent", "mysterious"] as const
-
 
 export const questHookSourceTypes = ["site", "faction", "npc"] as const
 
@@ -19,8 +24,6 @@ export const rhythmEffects = [
 	"escalate_existing_stakes",
 	"reveal_and_twist",
 ] as const
-
-
 
 export const emotionalShapes = [
 	"heroic_journey",

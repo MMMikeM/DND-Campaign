@@ -17,7 +17,16 @@ export const objectiveTypes = [
 ] as const
 
 export const difficultyLevels = ["easy", "medium", "hard"] as const
-export const linkTypes = ["adjacent", "road", "tunnel", "portal", "historical", "visible", "path", "conceptual"] as const
+export const linkTypes = [
+	"adjacent",
+	"road",
+	"tunnel",
+	"portal",
+	"historical",
+	"visible",
+	"path",
+	"conceptual",
+] as const
 export const secretTypes = ["historical", "hidden area", "concealed item", "true purpose", "connection"] as const
 export const siteFunctions = [
 	"rest_stop_recovery",
@@ -68,7 +77,6 @@ export const areaTypes = [
 	"mining_district",
 	"farmland_district",
 ] as const
-
 
 export const connectionTypes = ["allied", "hostile", "trade", "cultural", "historical", "vassal", "contested"] as const
 export const routeTypes = ["road", "river", "mountain_pass", "sea_route", "portal", "wilderness"] as const

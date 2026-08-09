@@ -6,7 +6,15 @@ export const diplomaticStatuses = ["ally", "enemy", "neutral", "vassal", "suzera
 export const agendaTypes = ["economic", "military", "political", "social", "occult", "technological"] as const
 export const agendaStages = ["preparatory", "active", "concluding", "resolved"] as const
 export const agendaImportance = ["peripheral", "significant", "central"] as const
-export const influenceLevels = ["contested", "minor", "influenced", "moderate", "strong", "controlled", "dominated"] as const
+export const influenceLevels = [
+	"contested",
+	"minor",
+	"influenced",
+	"moderate",
+	"strong",
+	"controlled",
+	"dominated",
+] as const
 export const factionTypes = [
 	"guild",
 	"cult",
@@ -21,5 +29,3 @@ export const factionTypes = [
 ] as const
 
 export const transparencyLevels = ["transparent", "secretive", "deceptive"] as const
-
-

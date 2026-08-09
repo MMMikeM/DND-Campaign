@@ -35,7 +35,8 @@ export const ambiguityLevels = [
 ] as const
 
 export const stageImportanceLevels = ["minor_step", "standard", "major_point", "climax_point"] as const
-export const complexityLevels = ["low_complexity_breather", "medium_complexity_standard", "high_complexity_peak"] as const
-
-
-
+export const complexityLevels = [
+	"low_complexity_breather",
+	"medium_complexity_standard",
+	"high_complexity_peak",
+] as const

@@ -2,11 +2,9 @@ import { sql } from "drizzle-orm"
 import { pgView } from "drizzle-orm/pg-core"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
-import { foreshadowing } from "../foreshadowing/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
-import { questStageDecisions, questStages } from "../stages/tables"
 import { consequences } from "./tables"
 
 export const consequenceSearchDataView = pgView("consequence_search_data_view").as((qb) =>

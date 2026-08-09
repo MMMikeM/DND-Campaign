@@ -17,7 +17,6 @@ import {
 	travelDifficulties,
 } from "./enums"
 
-
 export const regions = pgTable("regions", {
 	id: pk(),
 	name: string("name").unique(),

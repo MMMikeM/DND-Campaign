@@ -17,7 +17,6 @@ import {
 	wealthLevels,
 } from "./enums"
 
-
 export const npcs = pgTable("npcs", {
 	id: pk(),
 	name: string("name").unique(),

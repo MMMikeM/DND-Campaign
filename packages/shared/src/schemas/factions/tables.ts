@@ -1,7 +1,18 @@
 // factions/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, manyOf, nullableFk, nullableOneOf, nullableString, oneOf, pk, slug, string } from "../../db/utils"
+import {
+	cascadeFk,
+	list,
+	manyOf,
+	nullableFk,
+	nullableOneOf,
+	nullableString,
+	oneOf,
+	pk,
+	slug,
+	string,
+} from "../../db/utils"
 import { areas, regions, sites } from "../regions/tables"
 import {
 	agendaImportance,
@@ -17,7 +28,6 @@ import {
 	transparencyLevels,
 	wealthLevels,
 } from "./enums"
-
 
 export const factions = pgTable(
 	"factions",

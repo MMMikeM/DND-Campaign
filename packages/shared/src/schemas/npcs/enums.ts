@@ -41,9 +41,4 @@ export const characterComplexityProfiles = [
 	"simple_what_you_see",
 ] as const
 
-
-
 export const availabilityLevels = ["always", "often", "sometimes", "rarely", "unavailable"] as const
-
-
-
