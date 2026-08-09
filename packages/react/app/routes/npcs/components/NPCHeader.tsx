@@ -22,10 +22,12 @@ export function NPCHeader({ npc }: NPCHeaderProps) {
 			</div>
 
 			<div className="mb-6">
-				<h1 className="text-3xl font-bold flex items-center">
-					<Icons.UserCircle className="h-6 w-6 mr-3 text-indigo-500" />
-					{name}
-				</h1>
+				<NavLink to={`/npcs/${slug}`} className="no-underline">
+					<h1 className="text-3xl font-bold flex items-center">
+						<Icons.UserCircle className="h-6 w-6 mr-3 text-indigo-500" />
+						{name}
+					</h1>
+				</NavLink>
 				<div className="flex flex-wrap gap-2 mt-2">
 					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character species">
 						<Icons.BadgeInfo className="h-3.5 w-3.5 mr-1" />

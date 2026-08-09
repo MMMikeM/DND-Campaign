@@ -1,4 +1,5 @@
 import * as Icons from "lucide-react"
+import { AlignmentBadge } from "~/components/alignment-badge"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
@@ -57,6 +58,14 @@ export function OverviewContent({
 					<div className="p-4 bg-muted rounded-md">
 						<p className="text-lg italic">{quirk}</p>
 					</div>
+				</div>
+				<AlignmentBadge alignment={alignment!} />
+				<div className="col-span-1 md:col-span-2 lg:col-span-3">
+					<h3 className="font-medium mb-2 flex items-center">
+						<Icons.Target className="h-4 w-4 mr-2 text-red-600" />
+						Goals and Fears
+					</h3>
+					<p className="text-muted-foreground">{goalsAndFears}</p>
 				</div>
 			</InfoCard>
 

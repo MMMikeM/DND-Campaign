@@ -11,7 +11,7 @@ import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllMaps } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader() {
 	const maps = await getAllMaps()
 	if (!maps) {
 		throw new Response("Maps not found", { status: 404 })
@@ -62,35 +62,40 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 								className="h-full hover:shadow-md transition-shadow"
 							>
 								<div className="p-4">
-									{description && description.length > 0 && (
-										<div className="mb-3">
-											<List items={description} spacing="sm" emptyText="No description." />
-										</div>
-									)}
+									<div className="mb-3">
+										<List items={description} spacing="sm" emptyText="No description." />
+									</div>
 
-									{variants && variants.length > 0 && (
-										<div className="mb-3">
-											<h4 className="text-sm font-medium mb-2">Variants</h4>
-											<div className="space-y-1">
-												{variants.map((variant) => (
-													<div key={variant.id} className="flex justify-between items-center text-xs">
-														<span className="text-muted-foreground">{variant.variantName || "Default"}</span>
-														{variant.isDefault && (
-															<Badge variant="outline" className="h-4 px-1 text-xs">
-																Default
-															</Badge>
-														)}
-													</div>
-												))}
-											</div>
+									<div className="mb-3">
+										<h4 className="text-sm font-medium mb-2">Creative Prompts</h4>
+										<div className="space-y-1">
+											{creativePrompts.map((prompt, index) => (
+												<div key={index} className="text-sm text-muted-foreground">
+													{prompt}
+												</div>
+											))}
 										</div>
-									)}
+									</div>
 
-									{tags && tags.length > 0 && (
-										<div className="mb-3">
-											<Tags tags={tags} variant="secondary" maxDisplay={3} />
+									<div className="mb-3">
+										<h4 className="text-sm font-medium mb-2">Variants</h4>
+										<div className="space-y-1">
+											{variants.map((variant) => (
+												<div key={variant.id} className="flex justify-between items-center text-xs">
+													<span className="text-muted-foreground">{variant.variantName || "Default"}</span>
+													{variant.isDefault && (
+														<Badge variant="outline" className="h-4 px-1 text-xs">
+															Default
+														</Badge>
+													)}
+												</div>
+											))}
 										</div>
-									)}
+									</div>
+
+									<div className="mb-3">
+										<Tags tags={tags} variant="secondary" maxDisplay={3} />
+									</div>
 								</div>
 
 								<div className="border-t p-4">

@@ -55,29 +55,27 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 
 			{filteredConflicts.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredConflicts.map(
-						({ cause, clarityOfRightWrong, description, id, name, nature, scope, slug, status }) => (
-							<NavLink key={id} to={`/conflicts/${slug}`} className="no-underline">
-								<InfoCard
-									title={name}
-									icon={<Icons.Swords className="h-5 w-5 mr-2 text-destructive" />}
-									className="h-full hover:shadow-md transition-shadow"
-								>
-									<div className="p-4">
-										<List items={description} spacing="sm" emptyText="No description." />
-									</div>
-									<div className="border-t p-4">
-										<BadgeWithTooltip
-											variant={getConflictStatusVariant(status)}
-											tooltipContent={`Status: ${status ?? "Unknown"}`}
-										>
-											{status ?? "Unknown"}
-										</BadgeWithTooltip>
-									</div>
-								</InfoCard>
-							</NavLink>
-						),
-					)}
+					{filteredConflicts.map(({ description, id, name, slug, status }) => (
+						<NavLink key={id} to={`/conflicts/${slug}`} className="no-underline">
+							<InfoCard
+								title={name}
+								icon={<Icons.Swords className="h-5 w-5 mr-2 text-destructive" />}
+								className="h-full hover:shadow-md transition-shadow"
+							>
+								<div className="p-4">
+									<List items={description} spacing="sm" emptyText="No description." />
+								</div>
+								<div className="border-t p-4">
+									<BadgeWithTooltip
+										variant={getConflictStatusVariant(status)}
+										tooltipContent={`Status: ${status ?? "Unknown"}`}
+									>
+										{status ?? "Unknown"}
+									</BadgeWithTooltip>
+								</div>
+							</InfoCard>
+						</NavLink>
+					))}
 				</div>
 			) : (
 				<div className="text-center py-12">
