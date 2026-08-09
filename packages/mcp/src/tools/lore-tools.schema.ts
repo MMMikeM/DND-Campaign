@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/lore"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const { lore, loreLinks, enums } = tables.loreTables
+const { lore, loreLinks } = tables
 
-type TableNames = CreateTableNames<typeof tables.loreTables>
+type TableNames = CreateTableNames<typeof tables>
 
 const { loreTypes, linkStrengths } = enums
 

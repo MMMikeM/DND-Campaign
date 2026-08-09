@@ -1,4 +1,4 @@
-import { buildSimilarityQuery, type SimilarityHit } from "@tome-master/shared"
+import { buildSimilarityQuery, type SimilarityHit } from "@tome-master/shared/db"
 import { db } from "../.."
 
 /**

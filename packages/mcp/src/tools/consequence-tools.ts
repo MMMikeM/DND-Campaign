@@ -1,4 +1,4 @@
-import { tables, enums } from "@tome-master/shared/consequences"
+import { enums, tables } from "@tome-master/shared/entities/consequences"
 import { db } from "../index"
 import { schemas, tableEnum } from "./consequence-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"

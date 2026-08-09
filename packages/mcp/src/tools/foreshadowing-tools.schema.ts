@@ -1,15 +1,13 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/foreshadowing"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	foreshadowingTables: { foreshadowing, enums },
-} = tables
+const { foreshadowing } = tables
 
 const { discoverySubtlety, narrativeWeight, seedDeliveryMethods } = enums
 
-type TableNames = CreateTableNames<typeof tables.foreshadowingTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["foreshadowing"] as const satisfies TableNames
 

@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
-import pgvector from "pgvector/pg"
 import { relations } from "../schemas/relations"
 
 /**
@@ -13,18 +12,7 @@ export function initializeDatabase(connectionString: string) {
 		throw new Error("Database connection string is required")
 	}
 
-	const client = new pg.Pool({
-		connectionString,
-	})
-
-	client.on("connect", async (client) => {
-		await pgvector.registerTypes(client)
-	})
-
-	// Initialize pgvector extension if it doesn't exist
-	client.query("CREATE EXTENSION IF NOT EXISTS vector;").catch((err: Error) => {
-		console.warn("Vector extension initialization warning:", err.message)
-	})
+	const client = new pg.Pool({ connectionString })
 
 	return drizzle({ client, relations, logger: false })
 }

@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/npcs"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, type Schema } from "./utils/tool.utils"
 
-const {
-	npcTables: { npcs, npcRelations, npcFactionMemberships, npcDetails, enums },
-} = tables
+const { npcs, npcRelations, npcFactionMemberships, npcDetails } = tables
 
 const {
 	adaptabilityLevels,
@@ -20,7 +18,7 @@ const {
 	npcFactionRoles,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.npcTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["npcs", "npcRelations", "npcFactionMemberships", "npcDetails"] as const satisfies TableNames
 

@@ -1,15 +1,15 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/lore"
 import { db } from "../index"
 import { schemas, tableEnum } from "./lore-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.loreTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 const loreTableDefs = {
-	lore: tables.loreTables.lore,
-	loreLinks: tables.loreTables.loreLinks,
+	lore: tables.lore,
+	loreLinks: tables.loreLinks,
 }
 
 export const entityGetters = createEntityGetters({
@@ -70,7 +70,7 @@ export const entityGetters = createEntityGetters({
 
 export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 	manage_lore: {
-		enums: tables.loreTables.enums,
+		enums,
 		description: "Manage lore-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_lore", loreTableDefs, tableEnum, schemas),

@@ -1,4 +1,4 @@
-import { tables, enums } from "@tome-master/shared/conflicts"
+import { enums, tables } from "@tome-master/shared/entities/conflicts"
 import { db } from "../index"
 import { schemas, tableEnum } from "./conflict-tools.schema"
 import { createManageEntityHandler, createManageSchema } from "./utils/tool.utils"

@@ -33,7 +33,7 @@ export function generateFactionRelationshipSuggestions({
 	}
 
 	if (type_hint) {
-		const matchingType = factions.filter((f) => f.type.includes(type_hint))
+		const matchingType = factions.filter((f) => f.type.some((t) => t === type_hint))
 		matchingType.forEach((faction) => {
 			suggestions.potentialAllies.push({
 				faction: { id: faction.id, name: faction.name },

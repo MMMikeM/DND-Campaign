@@ -1,10 +1,10 @@
-import { tables } from "@tome-master/shared"
+import { enums } from "@tome-master/shared/entities/factions"
 import { logger } from "../.."
 import { unifyRelations } from "../../unify"
 import type { Context } from "../baseContext"
 import { countBy, getUnderrepresentedKeys } from "../utils"
 
-const { agendaTypes, alignments, diplomaticStatuses, factionTypes } = tables.factionTables.enums
+const { agendaTypes, alignments, diplomaticStatuses, factionTypes } = enums
 
 export function analyzePoliticalLandscape(context: Context) {
 	const gaps: Record<

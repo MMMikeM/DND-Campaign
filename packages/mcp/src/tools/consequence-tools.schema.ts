@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/consequences"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	consequenceTables: { consequences, enums },
-} = tables
+const { consequences } = tables
 
 const {
 	consequenceSources,
@@ -16,7 +14,7 @@ const {
 	playerImpactFeels,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.consequenceTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["consequences"] as const satisfies TableNames
 

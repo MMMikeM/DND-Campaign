@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/conflicts"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	conflictTables: { conflicts, conflictParticipants, enums },
-} = tables
+const { conflicts, conflictParticipants } = tables
 
 const {
 	conflictClarity,
@@ -16,7 +14,7 @@ const {
 	tensionLevels,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.conflictTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["conflicts", "conflictParticipants"] as const satisfies TableNames
 

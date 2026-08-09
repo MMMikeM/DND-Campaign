@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/items"
 import { db } from "../index"
 import { schemas, tableEnum } from "./items-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.itemTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_items: () => db.query.items.findMany({}),
@@ -49,10 +49,10 @@ export const entityGetters = createEntityGetters({
 
 export const itemToolDefinitions: Record<"manage_item", ToolDefinition> = {
 	manage_item: {
-		enums: tables.itemTables.enums,
+		enums,
 		description: "Manage item-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_item", tables.itemTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_item", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Items",
 			readOnlyHint: false,

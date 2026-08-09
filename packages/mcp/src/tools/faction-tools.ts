@@ -1,4 +1,4 @@
-import { tables, enums } from "@tome-master/shared/factions"
+import { enums, tables } from "@tome-master/shared/entities/factions"
 import { db } from "../index"
 import { schemas, tableEnum } from "./faction-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"

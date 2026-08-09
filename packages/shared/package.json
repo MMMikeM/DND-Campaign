@@ -4,6 +4,9 @@
 	"private": true,
 	"description": "",
 	"type": "module",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "vp pack",
 		"check": "tsc --noEmit",
@@ -18,12 +21,21 @@
 		"test": "vp test"
 	},
 	"exports": {
-		"./*": {
-			"import": {
-				"types": "./dist/*.d.mts",
-				"default": "./dist/*.mjs"
-			}
-		}
+		"./db": "./dist/db.mjs",
+		"./entities": "./dist/entities/index.mjs",
+		"./entities/conflicts": "./dist/entities/conflicts.mjs",
+		"./entities/consequences": "./dist/entities/consequences.mjs",
+		"./entities/factions": "./dist/entities/factions.mjs",
+		"./entities/foreshadowing": "./dist/entities/foreshadowing.mjs",
+		"./entities/items": "./dist/entities/items.mjs",
+		"./entities/lore": "./dist/entities/lore.mjs",
+		"./entities/maps": "./dist/entities/maps.mjs",
+		"./entities/npcs": "./dist/entities/npcs.mjs",
+		"./entities/quests": "./dist/entities/quests.mjs",
+		"./entities/regions": "./dist/entities/regions.mjs",
+		"./entities/stages": "./dist/entities/stages.mjs",
+		"./enums": "./dist/enums.mjs",
+		"./package.json": "./package.json"
 	},
 	"keywords": [],
 	"author": "",
@@ -38,7 +50,9 @@
 		"@testcontainers/postgresql": "^12.0.4",
 		"@types/node": "catalog:",
 		"@types/pg": "^8.15.4",
+		"@arethetypeswrong/core": "^0.18.0",
 		"drizzle-kit": "1.0.0-rc.4",
+		"publint": "^0.3.23",
 		"typescript": "catalog:"
 	},
 	"engines": {

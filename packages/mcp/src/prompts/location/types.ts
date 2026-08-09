@@ -124,7 +124,6 @@ export interface ItemHistoryForAnalysis {
 
 // Analysis result types
 export interface LocationLandscapeAnalysis {
-	siteTypeGaps: string[]
 	encounterTypeGaps: string[]
 	secretTypeGaps: string[]
 	functionGaps: string[]

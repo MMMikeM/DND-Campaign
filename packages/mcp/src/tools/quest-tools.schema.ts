@@ -1,18 +1,16 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/quests"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	questTables: { quests, questRelations, questHooks, questParticipants, enums },
-} = tables
+const { quests, questRelations, questHooks, questParticipants } = tables
 
 const {
 	hookTypes,
 	participantImportanceLevels,
 	presentationStyles,
 	questTypes,
-	relationshipTypes,
+	questRelationshipTypes,
 	trustLevels,
 	urgencyLevels,
 	questHookSourceTypes,
@@ -23,7 +21,7 @@ const {
 	emotionalShapes,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.questTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["quests", "questRelations", "questHooks", "questParticipants"] as const satisfies TableNames
 
@@ -60,7 +58,7 @@ export const schemas = {
 		sourceQuestId: id.describe("ID of the source quest in this relationship"),
 		targetQuestId: optionalId.describe("ID of the target quest in this relationship"),
 		relationshipType: z
-			.enum(relationshipTypes)
+			.enum(questRelationshipTypes)
 			.describe("Connection type (prerequisite, sequel, parallel, alternative, hidden_connection)"),
 		description: list.describe("How these quests interconnect narratively in point form"),
 		creativePrompts: list.describe("Ideas for emphasizing connections between quests"),

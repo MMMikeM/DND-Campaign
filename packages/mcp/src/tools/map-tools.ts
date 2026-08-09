@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from "node:fs/promises"
 import { extname, join, parse } from "node:path"
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/maps"
 import { imageSize } from "image-size"
 import { db, logger } from "../index"
 import { schemas, syncMapsSchema, tableEnum } from "./map-tools.schema"
@@ -9,9 +9,9 @@ import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
 const mapTables = {
-	mapFiles: tables.mapTables.mapFiles,
-	mapGroups: tables.mapTables.mapGroups,
-	mapVariants: tables.mapTables.mapVariants,
+	mapFiles: tables.mapFiles,
+	mapGroups: tables.mapGroups,
+	mapVariants: tables.mapVariants,
 }
 
 const createEntityGetters = createEntityGettersFactory(mapTables)
@@ -92,7 +92,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 			const { width, height } = imageSize(mapImage)
 
 			const [newMap] = await db
-				.insert(tables.mapTables.mapFiles)
+				.insert(tables.mapFiles)
 				.values({
 					fileName: mapName,
 					mapImage,
@@ -123,7 +123,7 @@ export const mapToolDefinitions: Record<
 	ToolDefinition
 > = {
 	manage_map_group: {
-		enums: tables.mapTables.enums,
+		enums,
 		description: "Manage map groups and their associated tactical details.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_map_group", mapTables, tableEnum, schemas),
@@ -136,7 +136,7 @@ export const mapToolDefinitions: Record<
 		},
 	},
 	manage_map_variant: {
-		enums: tables.mapTables.enums,
+		enums,
 		description: "Manage map assets and their associated tactical details.",
 		inputSchema: createManageSchema(schemas, tableEnum),
 		handler: createManageEntityHandler("manage_map_variant", mapTables, tableEnum, schemas),
@@ -149,7 +149,7 @@ export const mapToolDefinitions: Record<
 		},
 	},
 	synchronize_maps: {
-		enums: tables.mapTables.enums,
+		enums,
 		description: "Synchronize map images from a directory with the database.",
 		inputSchema: syncMapsSchema,
 		handler: synchronizeMapsHandler,

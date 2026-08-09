@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/npcs"
 import { db } from "../index"
 import { schemas, tableEnum } from "./npc-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.npcTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_npcs: () => db.query.npcs.findMany({}),
@@ -58,10 +58,10 @@ export const entityGetters = createEntityGetters({
 
 export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
 	manage_npc: {
-		enums: tables.npcTables.enums,
+		enums,
 		description: "Manage NPC-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_npc", tables.npcTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_npc", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage NPCs",
 			readOnlyHint: false,

@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/regions"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	regionTables: { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, regionConnections, enums },
-} = tables
+const { regions, areas, sites, siteEncounters, siteLinks, siteSecrets, regionConnections } = tables
 
 const {
 	dangerLevels,
@@ -21,7 +19,7 @@ const {
 	connectionTypes,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.regionTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = [
 	"regions",

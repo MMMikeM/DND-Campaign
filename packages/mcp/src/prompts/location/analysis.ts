@@ -1,13 +1,6 @@
-import { tables } from "@tome-master/shared"
+import { secretTypes, siteFunctions, objectiveTypes, stageTypes } from "@tome-master/shared/enums"
 import { fuzzy } from "fast-fuzzy"
 import type { LocationLandscapeAnalysis } from "./types"
-
-const {
-	enums: { siteTypes, secretTypes, siteFunctions, objectiveTypes },
-} = tables.regionTables
-const {
-	enums: { stageTypes },
-} = tables.questStageTables
 
 // Helper function to count occurrences of types
 function countTypes<T>(items: T[], extractor: (item: T) => string): Record<string, number> {
@@ -28,17 +21,15 @@ function findTypeGaps(expectedTypes: readonly string[], existingCounts: Record<s
 
 // Analyze site and encounter type distributions
 function analyzeContentGaps(data: {
-	existingSites: Array<{ type: string; intendedSiteFunction: string }>
+	existingSites: Array<{ intendedSiteFunction: string }>
 	existingEncounters: Array<{ objectiveType: string }>
 	existingSecrets: Array<{ secretType: string }>
 }) {
-	const siteTypeCounts = countTypes(data.existingSites, (s) => s.type)
 	const siteFunctionCounts = countTypes(data.existingSites, (s) => s.intendedSiteFunction)
 	const encounterTypeCounts = countTypes(data.existingEncounters, (e) => e.objectiveType)
 	const secretTypeCounts = countTypes(data.existingSecrets, (s) => s.secretType)
 
 	return {
-		siteTypeGaps: findTypeGaps(siteTypes, siteTypeCounts),
 		encounterTypeGaps: findTypeGaps(objectiveTypes, encounterTypeCounts),
 		secretTypeGaps: findTypeGaps(secretTypes, secretTypeCounts),
 		functionGaps: findTypeGaps(siteFunctions, siteFunctionCounts),

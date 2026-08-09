@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/factions"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	factionTables: { factions, factionAgendas, factionDiplomacy, factionInfluence, enums },
-} = tables
+const { factions, factionAgendas, factionDiplomacy, factionInfluence } = tables
 
 const {
 	alignments,
@@ -22,7 +20,7 @@ const {
 	relationshipStrengths,
 } = enums
 
-type TableNames = CreateTableNames<typeof tables.factionTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = [
 	"factions",

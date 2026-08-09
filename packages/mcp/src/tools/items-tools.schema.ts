@@ -1,15 +1,13 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/items"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const {
-	itemTables: { items, itemConnections, enums },
-} = tables
+const { items, itemConnections } = tables
 
 const { itemTypes, rarityLevels, narrativeRoles } = enums
 
-type TableNames = CreateTableNames<typeof tables.itemTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["items", "itemConnections"] as const satisfies TableNames
 

@@ -1,11 +1,9 @@
-import { tables } from "@tome-master/shared"
+import { tables } from "@tome-master/shared/entities"
 import { z } from "zod/v4"
 
 const camelToSnake = (str: string) => str.replace(/([A-Z])/g, "_$1").toLowerCase()
 
-const combinedTableNames = Object.values(tables).flatMap((tableList) =>
-	Object.keys(tableList).map((table) => camelToSnake(table)),
-)
+const combinedTableNames = Object.keys(tables).map((key) => camelToSnake(key))
 
 export const getEntitySchema = z
 	.object({

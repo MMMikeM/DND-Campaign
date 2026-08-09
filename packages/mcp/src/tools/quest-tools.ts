@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/quests"
 import { db } from "../index"
 import { schemas, tableEnum } from "./quest-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.questTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_quests: () => db.query.quests.findMany({}),
@@ -64,10 +64,10 @@ export const entityGetters = createEntityGetters({
 
 export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
 	manage_quest: {
-		enums: tables.questTables.enums,
+		enums,
 		description: "Manage quest-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_quest", tables.questTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_quest", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Quests",
 			readOnlyHint: false,

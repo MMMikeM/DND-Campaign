@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/regions"
 import { db } from "../index"
 import { schemas, tableEnum } from "./region-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.regionTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_regions: () =>
@@ -140,11 +140,11 @@ export const entityGetters = createEntityGetters({
 
 export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 	manage_region: {
-		enums: tables.regionTables.enums,
+		enums,
 		description:
 			"Manage region-related entities. Sites are tactical locations and MUST be linked to an existing map via `mapId` on creation.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_region", tables.regionTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_region", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Regions",
 			readOnlyHint: false,

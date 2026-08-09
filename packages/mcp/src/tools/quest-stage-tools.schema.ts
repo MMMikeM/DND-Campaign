@@ -1,13 +1,13 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/stages"
 import { createInsertSchema } from "drizzle-orm/zod"
 import { z } from "zod/v4"
 import { type CreateTableNames, id, list, optionalId, type Schema } from "./utils/tool.utils"
 
-const { questStages, questStageDecisions, npcStageInvolvement, enums } = tables.questStageTables
+const { questStages, questStageDecisions, npcStageInvolvement } = tables
 
 const { ambiguityLevels, conditionTypes, decisionTypes, stageImportanceLevels, stageTypes, complexityLevels } = enums
 
-type TableNames = CreateTableNames<typeof tables.questStageTables>
+type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = ["questStages", "questStageDecisions", "npcStageInvolvement"] as const satisfies TableNames
 

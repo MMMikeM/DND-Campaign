@@ -1,11 +1,11 @@
-import { tables } from "@tome-master/shared"
+import { enums, tables } from "@tome-master/shared/entities/foreshadowing"
 import { db } from "../index"
 import { schemas, tableEnum } from "./foreshadowing-tools.schema"
 import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
-const createEntityGetters = createEntityGettersFactory(tables.foreshadowingTables)
+const createEntityGetters = createEntityGettersFactory(tables)
 
 export const entityGetters = createEntityGetters({
 	all_foreshadowing: () => db.query.foreshadowing.findMany({}),
@@ -35,10 +35,10 @@ export const entityGetters = createEntityGetters({
 
 export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDefinition> = {
 	manage_foreshadowing: {
-		enums: tables.foreshadowingTables.enums,
+		enums,
 		description: "Manage foreshadowing-related entities.",
 		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_foreshadowing", tables.foreshadowingTables, tableEnum, schemas),
+		handler: createManageEntityHandler("manage_foreshadowing", tables, tableEnum, schemas),
 		annotations: {
 			title: "Manage Foreshadowing",
 			readOnlyHint: false,

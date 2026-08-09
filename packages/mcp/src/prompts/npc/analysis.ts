@@ -1,4 +1,4 @@
-import { tables } from "@tome-master/shared"
+import { conflictStatuses, questTypes } from "@tome-master/shared/enums"
 import { logger } from "../.."
 import type { Context } from "../baseContext"
 import { countBy, getUnderrepresentedKeys } from "../utils"
@@ -78,7 +78,7 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, regions, 
 	}
 
 	// Analyze quest distribution
-	const questTypeDistribution = countBy(quests, (q) => q.type, tables.questTables.enums.questTypes)
+	const questTypeDistribution = countBy(quests, (q) => q.type, questTypes)
 
 	if (questTypeDistribution.main.count < 1) {
 		gaps.questGaps.push("There are no 'main' quests to drive the central plot.")
@@ -104,7 +104,7 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, regions, 
 	}
 
 	// Analyze conflict dynamics
-	const conflictStatusDistribution = countBy(conflicts, (c) => c.status, tables.conflictTables.enums.conflictStatuses)
+	const conflictStatusDistribution = countBy(conflicts, (c) => c.status, conflictStatuses)
 
 	logger.info("Conflict status distribution", conflictStatusDistribution)
 
