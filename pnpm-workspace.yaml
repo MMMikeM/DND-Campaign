@@ -3,13 +3,15 @@ packages:
   - packages/*
 allowBuilds:
   '@swc/core': true
-  better-sqlite3: true
   '@tailwindcss/oxide': true
   esbuild: true
   cpu-features: false
   protobufjs: false
   ssh2: false
   '@modelcontextprotocol/inspector': true
+  # Unused: a stale optional peer of drizzle-orm, left resolved in the lockfile
+  # from when react depended on it directly. Never needs its native build.
+  better-sqlite3: false
 catalog:
   "@types/node": ^26.0.0
   drizzle-orm: 1.0.0-rc.4
