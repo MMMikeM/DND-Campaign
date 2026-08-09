@@ -87,7 +87,7 @@ const handleFactionResponseContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather faction response context", { error, factionName })
+		logger.error({ error, factionName }, "Failed to gather faction response context")
 		throw new Error(`Failed to gather context for faction: ${factionName}`)
 	}
 }

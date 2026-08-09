@@ -13,7 +13,7 @@ import { cleanObject } from "../utils"
 import { type CampaignContextArgs, campaignContextSchema } from "./types"
 
 async function campaignContextHandler(args: CampaignContextArgs) {
-	logger.info("Executing campaign context prompt", args)
+	logger.info(args, "Executing campaign context prompt")
 
 	const [lore, conflicts, foreshadowing, npcs, consequences] = await Promise.all([
 		getLoreContext(),

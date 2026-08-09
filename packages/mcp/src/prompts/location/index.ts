@@ -18,7 +18,7 @@ import { gatherLocationCreationContext } from "./context"
 import { type EnhancedLocationCreationArgs, enhancedLocationCreationSchema } from "./types"
 
 async function enhancedLocationCreationHandler(args: EnhancedLocationCreationArgs) {
-	logger.info("Executing enhanced location creation prompt", args)
+	logger.info(args, "Executing enhanced location creation prompt")
 
 	const context = await gatherLocationCreationContext(args)
 

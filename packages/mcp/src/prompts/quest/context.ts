@@ -69,7 +69,7 @@ const findFactionMatches = async (factionHint: string) =>
  * conflicts, and suggested connections
  */
 export async function gatherQuestCreationContext(args: QuestCreationArgs): Promise<QuestContext> {
-	logger.info("Gathering quest creation context", args)
+	logger.info(args, "Gathering quest creation context")
 
 	try {
 		// Check for name conflicts using fuzzy search
@@ -242,33 +242,39 @@ export async function gatherQuestCreationContext(args: QuestCreationArgs): Promi
 			futureHookSuggestions,
 		}
 
-		logger.info("Quest context gathered successfully", {
-			nameConflicts: nameConflicts.length,
-			existingQuests: existingQuests.length,
-			availableLocations: availableLocations.length,
-			availableFactions: availableFactions.length,
-			availableNPCs: availableNPCs.length,
-			factionContext: factionContext ? Object.keys(factionContext).length : 0,
-			questTypeAnalysis: questTypeAnalysis.length,
-			themeAnalysis: themeAnalysis.length,
-			rewardSuggestions: rewardSuggestions.length,
-			complicationSuggestions: complicationSuggestions.length,
-			futureHookSuggestions: futureHookSuggestions.length,
-		})
+		logger.info(
+			{
+				nameConflicts: nameConflicts.length,
+				existingQuests: existingQuests.length,
+				availableLocations: availableLocations.length,
+				availableFactions: availableFactions.length,
+				availableNPCs: availableNPCs.length,
+				factionContext: factionContext ? Object.keys(factionContext).length : 0,
+				questTypeAnalysis: questTypeAnalysis.length,
+				themeAnalysis: themeAnalysis.length,
+				rewardSuggestions: rewardSuggestions.length,
+				complicationSuggestions: complicationSuggestions.length,
+				futureHookSuggestions: futureHookSuggestions.length,
+			},
+			"Quest context gathered successfully",
+		)
 
 		return context
 	} catch (error) {
-		logger.error("Error gathering quest creation context:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			questArgs: args,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				questArgs: args,
+			},
+			"Error gathering quest creation context:",
+		)
 		throw new Error(
 			`Failed to gather quest creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`,
 		)
@@ -318,17 +324,20 @@ async function gatherFactionContext(factionHint?: string) {
 			members: factionNPCs,
 		}
 	} catch (error) {
-		logger.error("Error gathering faction context:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			factionHint,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				factionHint,
+			},
+			"Error gathering faction context:",
+		)
 		return null
 	}
 }

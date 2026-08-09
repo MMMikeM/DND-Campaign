@@ -62,7 +62,7 @@ export function registerToolHandlers(server: McpServer) {
 				const result = await handler(args as Record<string, unknown>)
 				return createResponse(JSON.stringify(result, null, 2))
 			} catch (error) {
-				logger.error("Error calling tool", { tool: name, args, error: serializeError(error) })
+				logger.error({ tool: name, args, error: serializeError(error) }, "Error calling tool")
 				return createErrorResponse(
 					`Error: ${error instanceof Error ? error.message : String(error || "Unknown error")}`,
 				)

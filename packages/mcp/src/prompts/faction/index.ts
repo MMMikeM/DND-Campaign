@@ -12,7 +12,7 @@ import { gatherFactionCreationContext } from "./context"
 import { type FactionCreationArgs, factionCreationSchema } from "./types"
 
 async function enhancedFactionCreationHandler(args: FactionCreationArgs) {
-	logger.info("Executing enhanced faction creation prompt", args)
+	logger.info(args, "Executing enhanced faction creation prompt")
 
 	const context = await gatherFactionCreationContext(args)
 

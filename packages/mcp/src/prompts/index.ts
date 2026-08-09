@@ -26,15 +26,18 @@ const promptRegistrations = Object.entries<PromptDefinition>(prompts).map(
 export function registerPromptHandlers(server: McpServer) {
 	for (const { name, description, argsSchema, handler } of promptRegistrations) {
 		server.registerPrompt(name, { description, argsSchema }, async (args: Record<string, unknown>) => {
-			logger.info(`Executing prompt: ${name}`, args)
+			logger.info(args, `Executing prompt: ${name}`)
 			try {
 				return await handler(args)
 			} catch (error) {
-				logger.error(`Error in prompt ${name}:`, {
-					error: serializeError(error),
-					promptName: name,
-					promptArgs: args,
-				})
+				logger.error(
+					{
+						error: serializeError(error),
+						promptName: name,
+						promptArgs: args,
+					},
+					`Error in prompt ${name}:`,
+				)
 				throw error
 			}
 		})

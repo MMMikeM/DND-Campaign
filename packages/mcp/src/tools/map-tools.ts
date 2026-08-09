@@ -123,7 +123,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 			success: true,
 		}
 	} catch (error) {
-		logger.error("Failed to synchronize maps directory", { err: error, directory })
+		logger.error({ err: error, directory }, "Failed to synchronize maps directory")
 		throw new Error(`Failed to synchronize maps from directory: ${directory}`)
 	}
 }

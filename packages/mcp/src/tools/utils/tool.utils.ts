@@ -52,7 +52,7 @@ async function handleDelete(
 	if (!deleteId.success) {
 		return createErrorResponse(`Invalid id '${args?.id}' provided to ${categoryToolName} handler.`)
 	}
-	logger.info(`Deleting ${tableName} (via ${categoryToolName})`, { id: deleteId.data })
+	logger.info({ id: deleteId.data }, `Deleting ${tableName} (via ${categoryToolName})`)
 	const result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
 	return createResponse(
 		result.length > 0
@@ -92,11 +92,14 @@ async function handleCreate<TS extends Schema<string>>(
 		const entityName = "name" in createData && typeof createData.name === "string" ? createData.name : tableName
 		return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
 	} catch (error) {
-		logger.error(`Database error creating ${tableName}`, {
-			tableName: tableName,
-			error: serializeError(error),
-			cause: error instanceof Error && error.cause ? serializeError(error.cause) : undefined,
-		})
+		logger.error(
+			{
+				tableName: tableName,
+				error: serializeError(error),
+				cause: error instanceof Error && error.cause ? serializeError(error.cause) : undefined,
+			},
+			`Database error creating ${tableName}`,
+		)
 
 		return createErrorResponse(`Database error when creating ${tableName}.`)
 	}
@@ -149,18 +152,21 @@ async function handleUpdate<TS extends Schema<string>>(
 
 		return createResponse(`Successfully updated ${tableName} with ID: ${updateId}`)
 	} catch (error) {
-		logger.error(`Database error updating ${tableName}`, {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			tableName: tableName,
-			data: dataToUpdate,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				tableName: tableName,
+				data: dataToUpdate,
+			},
+			`Database error updating ${tableName}`,
+		)
 
 		return createErrorResponse(
 			`Database error: Failed to update ${tableName}. ${error instanceof Error ? error.message : "Unknown error"}`,
@@ -175,7 +181,7 @@ export function createManageEntityHandler<TS extends Schema<TK[number]>, TK exte
 	schemas: TS,
 ): ToolHandler {
 	return async (args?: Record<string, unknown>): Promise<ToolHandlerReturn> => {
-		logger.info(`Creating manage entity handler for ${categoryToolName}`, { args })
+		logger.info({ args }, `Creating manage entity handler for ${categoryToolName}`)
 		if (!args) {
 			logger.error(`No arguments provided to ${categoryToolName} handler.`)
 			return createErrorResponse(`Arguments provided to ${categoryToolName} are malformed`)

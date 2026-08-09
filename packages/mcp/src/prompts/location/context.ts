@@ -4,7 +4,7 @@ import { generateLocationConnectionSuggestions } from "./suggestions"
 import type { CampaignThemes, EnhancedLocationCreationArgs, NearbyEntitiesForLocation } from "./types"
 
 export async function gatherLocationCreationContext(args: EnhancedLocationCreationArgs) {
-	logger.info("Gathering location creation context", args)
+	logger.info(args, "Gathering location creation context")
 
 	try {
 		// Check for name conflicts
@@ -373,7 +373,7 @@ export async function gatherLocationCreationContext(args: EnhancedLocationCreati
 			connectionSuggestions,
 		}
 	} catch (error) {
-		logger.error("Error gathering location creation context", error)
+		logger.error(error, "Error gathering location creation context")
 		throw error
 	}
 }

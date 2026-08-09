@@ -9,12 +9,12 @@ const resourceRegistrations = Object.entries(campaignResourceDefinitions).map(([
 	const { uriTemplate, name, description, mimeType, handler, lister } = definition
 
 	const readResource = async (uri: URL) => {
-		logger.info(`Reading resource: ${uri.href}`, { key })
+		logger.info({ key }, `Reading resource: ${uri.href}`)
 		try {
 			const result = await handler(uri.href)
 			return { contents: Array.isArray(result) ? result : [result] }
 		} catch (error) {
-			logger.error(`Error handling resource ${uri.href}`, { error, key })
+			logger.error({ error, key }, `Error handling resource ${uri.href}`)
 			throw error
 		}
 	}

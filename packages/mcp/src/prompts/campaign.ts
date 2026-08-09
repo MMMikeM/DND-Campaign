@@ -70,7 +70,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 						return { ...row }
 				}
 			} catch (error) {
-				logger.warn(`Failed to enhance ${row.source_table} entity ${row.id}`, { error })
+				logger.warn({ error }, `Failed to enhance ${row.source_table} entity ${row.id}`)
 				return { ...row }
 			}
 		}),
@@ -190,7 +190,7 @@ const questWorkflowSchema = z.object({
 
 // Enhanced prompt handlers with hybrid search
 const handleNPCDialogue = async (args: z.infer<typeof npcDialogueSchema>): Promise<GetPromptResult> => {
-	logger.info("Generating NPC dialogue with smart search", args)
+	logger.info(args, "Generating NPC dialogue with smart search")
 
 	const searchResult = await smartEntitySearch(args.npc_name, "npc")
 
@@ -233,7 +233,7 @@ const handleNPCDialogue = async (args: z.infer<typeof npcDialogueSchema>): Promi
 }
 
 const handleQuestAdaptation = async (args: z.infer<typeof questAdaptationSchema>): Promise<GetPromptResult> => {
-	logger.info("Adapting quest with smart search", args)
+	logger.info(args, "Adapting quest with smart search")
 
 	const searchResult = await smartEntitySearch(args.quest_name, "quest")
 
@@ -290,7 +290,7 @@ const handleQuestAdaptation = async (args: z.infer<typeof questAdaptationSchema>
 }
 
 const handleFactionResponse = async (args: z.infer<typeof factionResponseSchema>): Promise<GetPromptResult> => {
-	logger.info("Generating faction response", args)
+	logger.info(args, "Generating faction response")
 
 	const searchResult = await smartEntitySearch(args.faction_name, "faction")
 
@@ -372,7 +372,7 @@ Consider the faction's type (${faction.type}), alignment (${faction.alignment}),
 // Add the handler after existing handlers
 
 const handleQuestWorkflow = async (args: z.infer<typeof questWorkflowSchema>): Promise<GetPromptResult> => {
-	logger.info("Quest workflow step", args)
+	logger.info(args, "Quest workflow step")
 
 	const { step, quest_name, previous_choices = {} } = args
 

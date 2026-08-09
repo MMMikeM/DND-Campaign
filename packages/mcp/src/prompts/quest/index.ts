@@ -12,7 +12,7 @@ import { gatherQuestCreationContext } from "./context"
 import { type QuestCreationArgs, questCreationSchema } from "./types"
 
 async function enhancedQuestCreationHandler(args: QuestCreationArgs) {
-	logger.info("Executing enhanced quest creation prompt", args)
+	logger.info(args, "Executing enhanced quest creation prompt")
 
 	try {
 		const context = await gatherQuestCreationContext(args)
@@ -86,17 +86,20 @@ Ensure the quest feels naturally embedded in the campaign world, creates meaning
 			],
 		}
 	} catch (error) {
-		logger.error("Error in enhanced quest creation handler:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			questArgs: args,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				questArgs: args,
+			},
+			"Error in enhanced quest creation handler:",
+		)
 		throw error
 	}
 }

@@ -6,7 +6,7 @@ import { generateFactionRelationshipSuggestions } from "./suggestions"
 import type { FactionCreationArgs } from "./types"
 
 export async function gatherFactionCreationContext(args: FactionCreationArgs) {
-	logger.info("Gathering enhanced faction creation context", args)
+	logger.info(args, "Gathering enhanced faction creation context")
 
 	try {
 		const context = await getFullContext()
@@ -32,17 +32,20 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 
 		return cleanObject(data)
 	} catch (error) {
-		logger.error("Error gathering faction creation context:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			factionArgs: args,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				factionArgs: args,
+			},
+			"Error gathering faction creation context:",
+		)
 		throw new Error(
 			`Failed to gather faction creation context for "${args.name}": ${
 				error instanceof Error ? error.message : String(error)

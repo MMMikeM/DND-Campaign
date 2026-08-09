@@ -6,7 +6,7 @@ const safeStringify = (data: unknown): string => {
 	try {
 		return JSON.stringify(data, null, 2)
 	} catch (error) {
-		logger.warn("Failed to stringify data", { error })
+		logger.warn({ error }, "Failed to stringify data")
 		return String(data)
 	}
 }

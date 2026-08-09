@@ -12,14 +12,17 @@ console.error("Starting MCP server")
 
 export const logger = createLogger()
 
-logger.info("Environment variables", {
-	MCP_PORT: process.env.MCP_PORT,
-	MCP_TRANSPORT: process.env.MCP_TRANSPORT,
-	DB_PATH: process.env.DB_PATH,
-	LOG_LEVEL: process.env.LOG_LEVEL,
-	LOG_FILE: process.env.LOG_FILE,
-	NODE_ENV: process.env.NODE_ENV,
-})
+logger.info(
+	{
+		MCP_PORT: process.env.MCP_PORT,
+		MCP_TRANSPORT: process.env.MCP_TRANSPORT,
+		DB_PATH: process.env.DB_PATH,
+		LOG_LEVEL: process.env.LOG_LEVEL,
+		LOG_FILE: process.env.LOG_FILE,
+		NODE_ENV: process.env.NODE_ENV,
+	},
+	"Environment variables",
+)
 
 logger.info("Initializing database...")
 const dbPath = "postgres://postgres:postgres@localhost:5432/dnd_campaign"
@@ -44,10 +47,13 @@ function buildServer(): McpServer {
 async function startServer() {
 	logger.info("Starting server...")
 	logger.info("Initializing server...")
-	logger.debug("Server configuration", {
-		port: process.env.MCP_PORT,
-		transport: process.env.MCP_TRANSPORT,
-	})
+	logger.debug(
+		{
+			port: process.env.MCP_PORT,
+			transport: process.env.MCP_TRANSPORT,
+		},
+		"Server configuration",
+	)
 
 	const port = process.env.MCP_PORT ? Number(process.env.MCP_PORT) : 3100
 
@@ -63,16 +69,19 @@ async function startServer() {
 		// factory — no sessions on either leg, GET/DELETE answered 405.
 		const mcpHandler = toNodeHandler(
 			createMcpHandler(buildServer, {
-				onerror: (error) => logger.error("MCP handler error", { error: serializeError(error) }),
+				onerror: (error) => logger.error({ error: serializeError(error) }, "MCP handler error"),
 			}),
 		)
 
 		const httpServer = createServer(async (req, res) => {
-			logger.debug("Received request", {
-				url: req.url,
-				method: req.method,
-				headers: req.headers,
-			})
+			logger.debug(
+				{
+					url: req.url,
+					method: req.method,
+					headers: req.headers,
+				},
+				"Received request",
+			)
 
 			// Parse the URL to handle query parameters
 			const url = new URL(req.url || "", `http://${req.headers.host}`)
@@ -81,27 +90,30 @@ async function startServer() {
 			if (pathname === "/mcp") {
 				await mcpHandler(req, res)
 			} else {
-				logger.warn("Invalid request path", { pathname })
+				logger.warn({ pathname }, "Invalid request path")
 				res.writeHead(404).end()
 			}
 		})
 
 		httpServer.listen(port, () => {
-			logger.info("Streamable HTTP server listening", {
-				url: `http://localhost:${port}/mcp`,
-				transport: transportMode,
-				port: port,
-			})
+			logger.info(
+				{
+					url: `http://localhost:${port}/mcp`,
+					transport: transportMode,
+					port: port,
+				},
+				"Streamable HTTP server listening",
+			)
 		})
 	} else {
 		logger.info("Starting server with stdio transport...")
 		// Default to stdio transport
-		serveStdio(buildServer, { onerror: (error) => logger.error("Stdio transport error", { error }) })
+		serveStdio(buildServer, { onerror: (error) => logger.error({ error }, "Stdio transport error") })
 		logger.info("Server started with stdio transport")
 	}
 }
 
 startServer().catch((err) => {
-	logger.error("Unhandled error during server startup", { err })
+	logger.error({ err }, "Unhandled error during server startup")
 	process.exit(1)
 })

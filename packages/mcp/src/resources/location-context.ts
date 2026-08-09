@@ -111,7 +111,7 @@ const handleLocationContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather location context", { error, locationName })
+		logger.error({ error, locationName }, "Failed to gather location context")
 		throw new Error(`Failed to gather context for location: ${locationName}`)
 	}
 }

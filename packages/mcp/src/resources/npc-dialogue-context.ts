@@ -103,7 +103,7 @@ const handleNpcDialogueContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather NPC dialogue context", { error, npcId })
+		logger.error({ error, npcId }, "Failed to gather NPC dialogue context")
 		throw new Error(`Failed to gather context for NPC ID: ${npcId}`)
 	}
 }

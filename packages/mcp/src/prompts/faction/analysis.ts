@@ -67,10 +67,10 @@ export function analyzePoliticalLandscape(context: Context) {
 		)
 		.map((r) => ({ ...r, relationCount: r.relations.length }))
 
-	logger.info("Normalised relations", normalisedRelations)
+	logger.info(normalisedRelations, "Normalised relations")
 	const factionRelationCountDistribution = countBy(normalisedRelations, (f) => f.relationCount.toString())
 
-	logger.info("Faction relation count distribution", factionRelationCountDistribution)
+	logger.info(factionRelationCountDistribution, "Faction relation count distribution")
 	const underrepresentedRelationCounts = getUnderrepresentedKeys(factionRelationCountDistribution)
 
 	if (underrepresentedRelationCounts.length > 0) {

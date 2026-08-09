@@ -106,7 +106,7 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, regions, 
 	// Analyze conflict dynamics
 	const conflictStatusDistribution = countBy(conflicts, (c) => c.status, conflictStatuses)
 
-	logger.info("Conflict status distribution", conflictStatusDistribution)
+	logger.info(conflictStatusDistribution, "Conflict status distribution")
 
 	if (conflictStatusDistribution.active.count < 1) {
 		gaps.conflictGaps.push(
@@ -119,7 +119,7 @@ export function getNpcContentGaps({ conflicts, factions, npcs, quests, regions, 
 		)
 	}
 
-	logger.info("NPC Content Gaps", { gaps })
+	logger.info({ gaps }, "NPC Content Gaps")
 
 	return gaps
 }

@@ -164,7 +164,7 @@ const createGeneralHelpResponse = (
 const handler = async (args?: Record<string, unknown>) => {
 	const toolName = args?.tool as string | undefined
 
-	logger.info("Help handler called", { toolName, args })
+	logger.info({ toolName, args }, "Help handler called")
 
 	// Imported lazily to avoid a module cycle (tools.ts statically imports this file)
 	const { allToolDefinitions, generalToolDefinitions, toolCategories } = await import("./tools")

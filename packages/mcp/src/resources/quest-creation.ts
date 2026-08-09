@@ -62,18 +62,21 @@ const handleQuestCreationContext: ResourceHandler = async (uri: string) => {
 
 		return [createJsonResource(uri, contextData)]
 	} catch (error) {
-		logger.error("Failed to gather quest creation context", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			questName,
-			uri,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				questName,
+				uri,
+			},
+			"Failed to gather quest creation context",
+		)
 		throw new Error(
 			`Failed to gather context for quest: ${questName} - ${error instanceof Error ? error.message : String(error)}`,
 		)

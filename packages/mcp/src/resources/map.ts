@@ -78,7 +78,7 @@ const handleMapResource: ResourceHandler = async (uri: string) => {
 
 			return createJsonResource(uri, mapData)
 		} catch (error) {
-			logger.error("Failed to fetch map data", { error })
+			logger.error({ error }, "Failed to fetch map data")
 			throw new Error(`Failed to fetch map data: ${error instanceof Error ? error.message : String(error)}`)
 		}
 	}

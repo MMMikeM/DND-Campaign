@@ -12,7 +12,7 @@ import { getBaseNPCContext } from "./context"
 import { type EnhancedNpcCreationArgs, enhancedNpcCreationSchema } from "./types"
 
 async function enhancedNPCCreationHandler(args: EnhancedNpcCreationArgs) {
-	logger.info("Executing enhanced NPC creation prompt", args)
+	logger.info(args, "Executing enhanced NPC creation prompt")
 
 	const context = await getBaseNPCContext(args)
 

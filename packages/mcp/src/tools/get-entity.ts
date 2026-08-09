@@ -38,7 +38,7 @@ const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => 
 	logger.info(`Received arguments for get_entity: ${JSON.stringify(args)}`)
 	const parseResult = getEntitySchema.safeParse(args)
 	if (!parseResult.success) {
-		logger.error(`Invalid arguments for get_entity`, { errors: parseResult.error.flatten() })
+		logger.error({ errors: parseResult.error.flatten() }, `Invalid arguments for get_entity`)
 		return formatResponse(`Invalid arguments: ${parseResult.error.message}`, true)
 	}
 
@@ -92,7 +92,7 @@ const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => 
 		return result
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error)
-		logger.error("Error fetching entity", { err: error, entity_type, id, getterKey })
+		logger.error({ err: error, entity_type, id, getterKey }, "Error fetching entity")
 		return formatResponse(
 			id
 				? `Error fetching ${entity_type} by ID ${id}: ${errorMessage}`

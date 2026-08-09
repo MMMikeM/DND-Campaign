@@ -5,7 +5,7 @@ import { generateNPCCreationSuggestions } from "./suggestions"
 import type { EnhancedNpcCreationArgs } from "./types"
 
 export async function getBaseNPCContext(args: EnhancedNpcCreationArgs) {
-	logger.info("Gathering enhanced NPC creation context", args)
+	logger.info(args, "Gathering enhanced NPC creation context")
 
 	try {
 		const context = await getFullContext()
@@ -23,21 +23,24 @@ export async function getBaseNPCContext(args: EnhancedNpcCreationArgs) {
 			relationshipSuggestions,
 		}
 
-		logger.info("Enhanced NPC creation context gathered successfully", data)
+		logger.info(data, "Enhanced NPC creation context gathered successfully")
 
 		return cleanObject(data)
 	} catch (error) {
-		logger.error("Error gathering NPC creation context:", {
-			error:
-				error instanceof Error
-					? {
-							name: error.name,
-							message: error.message,
-							stack: error.stack,
-						}
-					: error,
-			npcArgs: args,
-		})
+		logger.error(
+			{
+				error:
+					error instanceof Error
+						? {
+								name: error.name,
+								message: error.message,
+								stack: error.stack,
+							}
+						: error,
+				npcArgs: args,
+			},
+			"Error gathering NPC creation context:",
+		)
 		throw new Error(
 			`Failed to gather NPC creation context for "${args.name}": ${error instanceof Error ? error.message : String(error)}`,
 		)

@@ -13,7 +13,7 @@ import { formatPromptDiscovery, formatSpecificPromptHelp } from "./formatters"
 import { type PromptHelpArgs, promptHelpSchema } from "./types"
 
 async function promptHelpHandler(args: PromptHelpArgs) {
-	logger.info("Providing prompt help", args)
+	logger.info(args, "Providing prompt help")
 
 	const { prompt_name, category, show_examples } = args
 
