@@ -1,7 +1,6 @@
-import { fuzzy } from "fast-fuzzy"
 import { db, logger } from "../.."
 import { getFullContext } from "../baseContext"
-import { cleanObject } from "../utils"
+import { cleanObject, isNameClash } from "../utils"
 import { analyzeFactionGaps } from "./analysis"
 import { generateFactionRelationshipSuggestions } from "./suggestions"
 import type { FactionCreationArgs } from "./types"
@@ -12,7 +11,7 @@ export async function gatherFactionCreationContext(args: FactionCreationArgs) {
 	try {
 		const context = await getFullContext()
 
-		const nameConflicts = context.factions.filter((faction) => fuzzy(args.name, faction.name) > 0.5)
+		const nameConflicts = context.factions.filter((faction) => isNameClash(faction.name, args.name))
 
 		if (nameConflicts.length > 0) {
 			throw new Error(

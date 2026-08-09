@@ -1,4 +1,4 @@
-import { search } from "fast-fuzzy"
+import { createFuzzySearch, fuzzyMatch } from "ekrina"
 import type {
 	EnhancedLocationCreationArgs,
 	LinkForAnalysis,
@@ -102,10 +102,9 @@ export function generateLocationConnectionSuggestions(
 	if (args.region_hint) {
 		const regionHint = args.region_hint
 		// Use fuzzy search to find matching regions
-		const regionNames = availableRegions.map((r) => r.name)
-		const fuzzyMatches = search(regionHint, regionNames, { threshold: 0.6 })
-
-		const matchingRegions = availableRegions.filter((region) => fuzzyMatches.includes(region.name))
+		const matchingRegions = createFuzzySearch(availableRegions, (region) => region.name)(regionHint).map(
+			({ item }) => item,
+		)
 
 		suggestions.regionalConnections = matchingRegions.flatMap((region) => {
 			const regionSites = existingSites.filter((site) => site.area?.region.name === region.name)
@@ -127,7 +126,7 @@ export function generateLocationConnectionSuggestions(
 			const searchableText = `${siteDescription} ${siteFeatures}`
 
 			// Use fuzzy search on the combined text
-			return purposeKeywords.some((keyword) => search(keyword, [searchableText], { threshold: 0.4 }).length > 0)
+			return purposeKeywords.some((keyword) => fuzzyMatch(searchableText, keyword) !== null)
 		})
 
 		suggestions.purposeBasedConnections = sites.map((site) => {

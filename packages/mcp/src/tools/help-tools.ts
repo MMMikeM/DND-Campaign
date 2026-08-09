@@ -1,4 +1,4 @@
-import { search } from "fast-fuzzy"
+import { createFuzzySearch } from "ekrina"
 import { z } from "zod/v4"
 import { logger } from ".."
 import { schemas } from "./help-tools.schema"
@@ -101,8 +101,8 @@ ${toolName}({
 `
 
 const createToolHelpResponse = (toolName: string, allDefinitions: Record<string, ToolDefinition>) => {
-	const results = search(toolName, Object.keys(allDefinitions))
-	const foundName = results.length > 0 ? results[0] : undefined
+	const results = createFuzzySearch(Object.keys(allDefinitions))(toolName)
+	const foundName = results.length > 0 ? results[0]?.item : undefined
 	const tool = foundName ? allDefinitions[foundName] : undefined
 
 	if (!foundName || !tool) {

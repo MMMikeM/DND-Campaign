@@ -1,7 +1,6 @@
-import { fuzzy } from "fast-fuzzy"
 import { logger } from "../.."
 import { getFullContext } from "../baseContext"
-import { cleanObject } from "../utils"
+import { cleanObject, isNameClash } from "../utils"
 import { generateNPCCreationSuggestions } from "./suggestions"
 import type { EnhancedNpcCreationArgs } from "./types"
 
@@ -11,7 +10,7 @@ export async function getBaseNPCContext(args: EnhancedNpcCreationArgs) {
 	try {
 		const context = await getFullContext()
 
-		const nameConflicts = context.npcs.filter((npc) => fuzzy(args.name, npc.name) > 0.5)
+		const nameConflicts = context.npcs.filter((npc) => isNameClash(npc.name, args.name))
 
 		if (nameConflicts.length > 0) {
 			throw new Error(`NPC with name "${args.name}" already exists: ${nameConflicts.map((npc) => npc.name).join(", ")}`)

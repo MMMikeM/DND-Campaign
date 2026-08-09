@@ -1,5 +1,5 @@
 import { secretTypes, siteFunctions, objectiveTypes, stageTypes } from "@tome-master/shared/enums"
-import { fuzzy } from "fast-fuzzy"
+import { fuzzyMatch } from "ekrina"
 import type { LocationLandscapeAnalysis } from "./types"
 
 // Helper function to count occurrences of types
@@ -123,7 +123,7 @@ function analyzeConflictIntegration(
 	const conflictSites = questStages.map((qs) => qs.site?.name).filter((name): name is string => Boolean(name))
 
 	const unrepresentedConflicts = activeConflicts.filter(
-		(conflict) => !conflictSites.some((site) => fuzzy(conflict.name, site) > 0.1),
+		(conflict) => !conflictSites.some((site) => fuzzyMatch(site, conflict.name) !== null),
 	)
 
 	if (unrepresentedConflicts.length > 0) {

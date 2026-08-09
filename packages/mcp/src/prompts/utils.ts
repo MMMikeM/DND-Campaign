@@ -1,3 +1,5 @@
+import { fuzzyMatch, SCORES } from "ekrina"
+
 const isObject = (val: unknown): val is Record<string, unknown> => {
 	return val != null && typeof val === "object" && Array.isArray(val) === false
 }
@@ -49,4 +51,19 @@ export const cleanObject = <T extends Record<string, unknown>>(obj: T): Partial<
 		}
 	}
 	return newObj
+}
+
+/**
+ * True when two entity names are close enough to count as duplicates: one name's
+ * text literally appears in the other, in either direction. Fuzzy chains and typo
+ * rescues (score > SCORES.CONTAINS) are deliberately excluded — they are too loose
+ * to block entity creation on.
+ */
+export const isNameClash = (existingName: string, newName: string): boolean => {
+	const isLiteral = (text: string, query: string) => {
+		const match = fuzzyMatch(text, query)
+		return match !== null && match.score <= SCORES.CONTAINS
+	}
+
+	return isLiteral(existingName, newName) || isLiteral(newName, existingName)
 }
