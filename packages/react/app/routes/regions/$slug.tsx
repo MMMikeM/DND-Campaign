@@ -2,6 +2,7 @@ import * as Icons from "lucide-react"
 import { NavLink, useNavigate, useParams } from "react-router"
 import { ConsequenceList } from "~/components/ConsequenceList"
 import { ForeshadowingList } from "~/components/ForeshadowingList"
+import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
@@ -43,7 +44,6 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 		featuresAndHazards,
 		incomingForeshadowing,
 		historyAndEconomy,
-		id,
 		loreAndSecrets,
 		loreLinks,
 		name,
@@ -67,6 +67,8 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 			</div>
 
 			<RegionHeader name={name} type={type} dangerLevel={dangerLevel} />
+
+			<Tags tags={tags} className="mb-6" />
 
 			<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 				<TabsList className="grid grid-cols-5 mb-6">
@@ -95,11 +97,15 @@ export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {
 				</TabsContent>
 
 				<TabsContent value="lore">
-					<LoreContent historyAndEconomy={historyAndEconomy} loreAndSecrets={loreAndSecrets} />
+					<LoreContent
+						historyAndEconomy={historyAndEconomy}
+						loreAndSecrets={loreAndSecrets}
+						loreLinks={loreLinks}
+					/>
 				</TabsContent>
 
 				<TabsContent value="connections">
-					<ConnectionsContent relations={relations} factionInfluence={factionInfluence} />
+					<ConnectionsContent relations={relations} factionInfluence={factionInfluence} conflicts={conflicts} />
 					<ForeshadowingList
 						incoming={incomingForeshadowing}
 						emptyMessage="No foreshadowing points toward this region."

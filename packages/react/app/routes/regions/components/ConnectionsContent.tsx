@@ -5,9 +5,9 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import type { Region } from "~/lib/entities"
 
-type ConnectionsContentProps = Pick<Region, "factionInfluence" | "relations">
+type ConnectionsContentProps = Pick<Region, "conflicts" | "factionInfluence" | "relations">
 
-export function ConnectionsContent({ factionInfluence, relations }: ConnectionsContentProps) {
+export function ConnectionsContent({ conflicts, factionInfluence, relations }: ConnectionsContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 			<InfoCard
@@ -94,6 +94,21 @@ export function ConnectionsContent({ factionInfluence, relations }: ConnectionsC
 						</div>
 					),
 				)}
+			</InfoCard>
+
+			<InfoCard
+				title="Conflicts"
+				icon={<Icons.Swords className="h-4 w-4 mr-2" />}
+				emptyMessage="No conflicts are centered on this region."
+				className="md:col-span-2"
+			>
+				{conflicts.map(({ id, name, slug }) => (
+					<div key={`region-conflict-${id}`} className="border-b pb-3 last:border-b-0 last:pb-0">
+						<NavLink to={`/conflicts/${slug}`} className="font-medium hover:text-primary transition-colors">
+							{name}
+						</NavLink>
+					</div>
+				))}
 			</InfoCard>
 		</div>
 	)
