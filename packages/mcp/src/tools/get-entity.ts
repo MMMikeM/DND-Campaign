@@ -8,6 +8,7 @@ import { entityGetters as itemsGetters } from "./items-tools"
 import { entityGetters as loreGetters } from "./lore-tools"
 import { entityGetters as mapGetters } from "./map-tools"
 import { entityGetters as npcGetters } from "./npc-tools"
+import { entityGetters as questStageGetters } from "./quest-stage-tools"
 import { entityGetters as questGetters } from "./quest-tools"
 import { entityGetters as regionGetters } from "./region-tools"
 import type { ToolDefinition, ToolHandler, ToolHandlerReturn } from "./utils/types"
@@ -25,6 +26,7 @@ const combinedGetters = {
 	...regionGetters,
 	...loreGetters,
 	...mapGetters,
+	...questStageGetters,
 }
 
 const formatResponse = (message: string, isError = false): ToolHandlerReturn => ({
