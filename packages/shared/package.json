@@ -8,7 +8,6 @@
 		"dist"
 	],
 	"scripts": {
-		"db:custom": "sh -c 'drizzle-kit generate --custom --name=\"$1\"' --",
 		"db:studio": "drizzle-kit studio",
 		"dev": "vp pack --watch --no-clean",
 		"format": "vp fmt"
