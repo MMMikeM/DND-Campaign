@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from "../../index"
 import { serializeError } from "../../logger"
+import { invalidateSearch } from "./search"
 import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./types"
 
 export type CreateTableNames<T> = ReadonlyArray<keyof Omit<T, "enums">>
@@ -54,6 +55,7 @@ async function handleDelete(
 	}
 	logger.info({ id: deleteId.data }, `Deleting ${tableName} (via ${categoryToolName})`)
 	const result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
+	await invalidateSearch()
 	return createResponse(
 		result.length > 0
 			? `Successfully deleted ${tableName} with ID: ${deleteId.data}`
@@ -88,6 +90,7 @@ async function handleCreate<TS extends Schema<string>>(
 
 	try {
 		const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
+		await invalidateSearch()
 
 		const entityName = "name" in createData && typeof createData.name === "string" ? createData.name : tableName
 		return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
@@ -144,6 +147,7 @@ async function handleUpdate<TS extends Schema<string>>(
 			.set(dataToUpdate)
 			.where(eq(table.id, updateId))
 			.returning({ successfullyUpdated: table.id })
+		await invalidateSearch()
 
 		if (result.length !== 1 || result[0] === undefined) {
 			logger.error(`No ${tableName} found with ID: ${updateId}`)

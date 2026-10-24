@@ -47,5 +47,6 @@ export default [
 	]),
 	route("api/items", "./routes/api/items.ts"),
 	route("api/search", "./routes/api/search.ts"),
+	route("api/entity-names", "./routes/api/entity-names.ts"),
 	route("api/maps/images/:fileId", "./routes/api/maps/images/$fileId.tsx"),
 ] satisfies RouteConfig

@@ -10,6 +10,7 @@ export default defineConfig({
 			db: "src/db/index.ts",
 			"entities/*": "src/entities/*.ts",
 			enums: "src/enums.ts",
+			search: "src/search.ts",
 		},
 		format: ["esm"],
 		platform: "node",

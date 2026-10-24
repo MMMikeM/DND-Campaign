@@ -5,9 +5,6 @@
  * and entity matching capabilities.
  */
 
-// Re-export the centralized search function for backward compatibility
-export { searchBySimilarity } from "../../tools/utils/search"
-
 /**
  * Analyzes quest type patterns to suggest quest structures
  */

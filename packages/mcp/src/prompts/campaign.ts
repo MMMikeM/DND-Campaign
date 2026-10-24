@@ -10,7 +10,7 @@
 import { z } from "zod/v4"
 import { db, logger } from ".."
 // Import centralized search function
-import { searchBySimilarity } from "../tools/utils/search"
+import { searchEntities } from "../tools/utils/search"
 import { gatherQuestCreationContext } from "./quest"
 import {
 	createPromptDefinition,
@@ -22,17 +22,17 @@ import {
 } from "./types"
 
 const fuzzySearchEntities = async (query: string, entityType?: string) => {
-	const { rows } = await searchBySimilarity(query)
+	const rows = await searchEntities(query)
 
 	let filteredRows = rows
 	if (entityType) {
-		filteredRows = filteredRows.filter((row) => row.source_table === entityType)
+		filteredRows = filteredRows.filter((row) => row.table === entityType)
 	}
 
 	const results = await Promise.all(
 		filteredRows.map(async (row) => {
 			try {
-				switch (row.source_table) {
+				switch (row.table) {
 					case "npcs": {
 						const npc = await db.query.npcs.findFirst({
 							where: { id: row.id },
@@ -70,7 +70,7 @@ const fuzzySearchEntities = async (query: string, entityType?: string) => {
 						return { ...row }
 				}
 			} catch (error) {
-				logger.warn({ error }, `Failed to enhance ${row.source_table} entity ${row.id}`)
+				logger.warn({ error }, `Failed to enhance ${row.table} entity ${row.id}`)
 				return { ...row }
 			}
 		}),

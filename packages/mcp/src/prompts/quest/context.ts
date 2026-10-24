@@ -6,7 +6,7 @@
  */
 
 import { db, logger } from "../.."
-import { searchBySimilarity } from "../../tools/utils/search"
+import { searchEntities } from "../../tools/utils/search"
 import { analyzeQuestTypePatterns, analyzeThemeCompatibility } from "./analysis"
 import {
 	generateQuestConnectionSuggestions,
@@ -55,14 +55,10 @@ async function findFactionsByIds(factionIds: number[]) {
 }
 
 const findQuestConflicts = async (name: string) =>
-	(await searchBySimilarity(name, 1.0, 0.3, 2, 2, 5)).rows
-		.filter((row) => row.source_table === "quests")
-		.map(({ id }) => id as number)
+	(await searchEntities(name, 5)).filter((row) => row.table === "quests").map(({ id }) => id)
 
 const findFactionMatches = async (factionHint: string) =>
-	(await searchBySimilarity(factionHint, 1.0, 0.3, 2, 2, 5)).rows
-		.filter((row) => row.source_table === "factions")
-		.map(({ id }) => id as number)
+	(await searchEntities(factionHint, 5)).filter((row) => row.table === "factions").map(({ id }) => id)
 
 /**
  * Gathers comprehensive context for quest creation including existing entities,

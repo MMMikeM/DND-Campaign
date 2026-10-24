@@ -2,6 +2,9 @@ import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
 import { relations } from "../schemas/relations"
 
+export { selectEntityNames } from "./entity-names"
+export { buildFullTextQuery, type FullTextHit } from "./search-query"
+
 /**
  * Initialize the database connection and return operation adapters
  * @param connectionString Connection string for the PostgreSQL database

@@ -1,9 +1,13 @@
 import * as Icons from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useState } from "react"
+import { createNameSearch, mergeSearchResults, type SearchResult } from "@tome-master/shared/search"
+import { useMemo, useState } from "react"
 import { NavLink, useFetcher, useNavigation } from "react-router"
+import { useEntityNames } from "~/lib/search"
 import type { loader } from "~/routes/api/search"
 import { Input } from "./ui/input"
+
+const RESULT_LIMIT = 10
 
 export function Search() {
 	const navigation = useNavigation()
@@ -12,6 +16,12 @@ export function Search() {
 	const isPending = navigation.state === "loading"
 	const [isFocused, setIsFocused] = useState(false)
 	const [searchQuery, setSearchQuery] = useState("")
+	const { names, refresh: refreshNames } = useEntityNames()
+	const searchNames = useMemo(() => createNameSearch(names ?? []), [names])
+
+	const query = searchQuery.trim()
+	const textHits = query.length >= 3 ? (fetcher.data ?? []) : []
+	const results = query ? mergeSearchResults(searchNames(query), textHits, RESULT_LIMIT) : []
 
 	return (
 		<div className="max-w-md mx-auto relative">
@@ -28,7 +38,10 @@ export function Search() {
 								fetcher.submit(event.currentTarget.form)
 							}
 						}}
-						onFocus={() => setIsFocused(true)}
+						onFocus={() => {
+							setIsFocused(true)
+							refreshNames()
+						}}
 						onBlur={() => {
 							// Small delay to allow clicking on results
 							setTimeout(() => setIsFocused(false), 200)
@@ -42,7 +55,7 @@ export function Search() {
 			</div>
 
 			{/* Search Results */}
-			<AnimatePresence>{isFocused && <SearchResults data={fetcher.data} searchQuery={searchQuery} />}</AnimatePresence>
+			<AnimatePresence>{isFocused && <SearchResults results={results} query={query} />}</AnimatePresence>
 		</div>
 	)
 }
@@ -76,15 +89,15 @@ const SearchWrapper = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
-const SearchResults = ({ data, searchQuery }: { data?: Awaited<ReturnType<typeof loader>>; searchQuery: string }) => {
+const SearchResults = ({ results, query }: { results: SearchResult[]; query: string }) => {
 	return (
 		<SearchWrapper>
-			{searchQuery.length < 3 ? (
-				<div className="p-3 text-muted-foreground">Type more to find something</div>
-			) : data && data.length === 0 ? (
+			{!query ? (
+				<div className="p-3 text-muted-foreground">Search names and descriptions</div>
+			) : results.length === 0 ? (
 				<div className="p-3 text-muted-foreground">No results found</div>
 			) : (
-				data?.map(({ id, table, slug, name }, index) => (
+				results.map(({ id, table, slug, name, matchedBy }, index) => (
 					<motion.div
 						key={`${table}-${id}`}
 						initial={{ opacity: 0 }}
@@ -111,6 +124,9 @@ const SearchResults = ({ data, searchQuery }: { data?: Awaited<ReturnType<typeof
 								<Icons.Search className="h-4 w-4 text-muted-foreground mr-2" />
 								<span className="font-semibold">{name}</span>
 								<span className="text-sm text-muted-foreground ml-2">{table}</span>
+								{matchedBy === "text" && (
+									<span className="text-xs text-muted-foreground ml-auto">in description</span>
+								)}
 							</div>
 						</NavLink>
 					</motion.div>

@@ -1,6 +1,8 @@
 // Re-export all entity logic, types, and shared utils
 
-import { buildSimilarityQuery } from "@tome-master/shared/db"
+import { buildFullTextQuery, type FullTextHit } from "@tome-master/shared/db"
+import type { EntityRef } from "@tome-master/shared/search"
+import { db } from "../db"
 export * from "./areas"
 export * from "./conflicts"
 export * from "./consequences"
@@ -16,20 +18,10 @@ export * from "./sites"
 // export const updateMaterializedView = async () => await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
 
 
-export const searchBySimilarity = async (
-	searchTerm: string,
-	fuzzyWeight = 1.0,
-	similarityThreshold = 0.3,
-	maxLevenshtein = 2,
-	phoneticStrength = 4,
-) =>
-	await buildSimilarityQuery(
-		searchTerm,
-		fuzzyWeight,
-		similarityThreshold,
-		maxLevenshtein,
-		phoneticStrength
-	)
+export const fullTextSearch = async (searchTerm: string, limit = 10): Promise<EntityRef[]> => {
+	const { rows } = await db.execute<FullTextHit>(buildFullTextQuery(searchTerm, limit))
+	return rows.map(({ id, source_table, name, slug }) => ({ id, table: source_table, name, slug }))
+}
 
 export const nameAndId = { columns: { id: true, name: true, slug: true } } as const
 

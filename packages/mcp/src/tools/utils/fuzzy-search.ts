@@ -1,5 +1,5 @@
 import { z } from "zod/v4"
-import { searchBySimilarity } from "./search"
+import { searchEntities } from "./search"
 import { createErrorResponse, createResponse } from "./tool.utils"
 import type { ToolDefinition } from "./types"
 
@@ -20,8 +20,7 @@ export const fuzzySearchToolDefinitions: Record<"fuzzy_search", ToolDefinition> 
 				return createErrorResponse("Invalid arguments provided to fuzzy_search handler.")
 			}
 			const { searchTerm } = parseResult.data
-			const { rows } = await searchBySimilarity(searchTerm, 1.0, 0.3, 2, 2, 3) // limit to 3 results for tool
-			return createResponse(rows as any)
+			return createResponse((await searchEntities(searchTerm, 3)) as any)
 		},
 		annotations: {
 			title: "Fuzzy Search",

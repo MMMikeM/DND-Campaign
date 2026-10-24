@@ -1,23 +1,12 @@
-import { searchBySimilarity } from "~/lib/entities"
-import { toSlug } from "~/lib/utils/slug"
-import type { Route } from "./+types/items"
+import { fullTextSearch } from "~/lib/entities"
+import { routedTables } from "~/lib/search"
+import type { Route } from "./+types/search"
 
 export async function loader({ request }: Route.LoaderArgs) {
-	const url = new URL(request.url)
-	const query = url.searchParams.get("q")
+	const query = new URL(request.url).searchParams.get("q")
 	if (!query) {
 		return []
 	}
 
-	console.log(`Searching for: ${query}`)
-	const { rows } = await searchBySimilarity(query)
-
-	const results = rows.map((row) => ({
-		id: row.id as string,
-		name: row.name as string,
-		slug: toSlug(row.name as string),
-		table: row.source_table as string,
-	}))
-
-	return results
+	return (await fullTextSearch(query)).filter((hit) => routedTables.has(hit.table))
 }
