@@ -3,8 +3,9 @@ import type { Config } from "@react-router/dev/config"
 export default {
 	// Server-side render by default
 	ssr: true,
-	// API routes read live data per request; a prerendered copy is served for every query string, frozen at build time.
-	prerender: ({ getStaticPaths }) => getStaticPaths().filter((path) => !path.startsWith("/api/")),
+	// Only the dashboard has no loader. A prerendered page or API route is a build-time snapshot,
+	// served even after the data changes (and for API routes, for every query string).
+	prerender: ["/"],
 
 	// Custom application directory path
 	appDirectory: "./app",
