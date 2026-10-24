@@ -1,5 +1,5 @@
-import { sql } from "drizzle-orm"
-import { pgView } from "drizzle-orm/pg-core"
+import { eq, sql } from "drizzle-orm"
+import { alias, pgView } from "drizzle-orm/pg-core"
 import { conflictParticipants, conflicts } from "../conflicts/tables"
 import { consequences } from "../consequences/tables"
 import { factions } from "../factions/tables"
@@ -7,9 +7,22 @@ import { foreshadowing } from "../foreshadowing/tables"
 import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { questHooks, quests } from "../quests/tables"
-import { areas, regions, sites } from "../regions/tables"
+import { sites } from "../regions/tables"
 import { npcStageInvolvement, questStages } from "../stages/tables"
-import { npcFactionMemberships, npcs } from "./tables"
+import { entityJson, jsonAgg, jsonObject } from "../view-utils"
+import { npcFactionMemberships, npcRelations, npcs } from "./tables"
+
+const outgoingForeshadowing = alias(foreshadowing, "outgoing_foreshadowing")
+const incomingForeshadowing = alias(foreshadowing, "incoming_foreshadowing")
+const hookQuest = alias(quests, "hook_quest")
+const deliveryStage = alias(questStages, "delivery_stage")
+const deliveryStageQuest = alias(quests, "delivery_stage_quest")
+const involvementStage = alias(questStages, "involvement_stage")
+const involvementQuest = alias(quests, "involvement_quest")
+const outgoingRelations = alias(npcRelations, "outgoing_relations")
+const relatedNpc = alias(npcs, "related_npc")
+const incomingRelations = alias(npcRelations, "incoming_relations")
+const sourceNpc = alias(npcs, "source_npc")
 
 export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 	qb
@@ -17,80 +30,88 @@ export const npcSearchDataView = pgView("npc_search_data_view").as((qb) =>
 			id: npcs.id,
 			sourceTable: sql<string>`'npcs'`.as("source_table"),
 			entityMain: sql`to_jsonb(${npcs}.*)`.as("entity_main"),
-			factionMemberships:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('membership', to_jsonb(${npcFactionMemberships}.*), 'faction', jsonb_build_object('id', ${factions.id}, 'name', ${factions.name}))) FILTER (WHERE ${npcFactionMemberships.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"faction_memberships",
-				),
-			conflictParticipation:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('participant', to_jsonb(${conflictParticipants}.*), 'conflict', jsonb_build_object('id', ${conflicts.id}, 'name', ${conflicts.name}))) FILTER (WHERE ${conflictParticipants.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"conflict_participation",
-				),
-			affectedByConsequences:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${consequences.id}, 'description', ${consequences.description})) FILTER (WHERE ${consequences.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"affected_by_consequences",
-				),
-			outgoingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_out.*)) FILTER (WHERE fs_out.id IS NOT NULL), '[]'::jsonb)`.as(
-					"outgoing_foreshadowing",
-				),
-			incomingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(fs_in.*)) FILTER (WHERE fs_in.id IS NOT NULL), '[]'::jsonb)`.as(
-					"incoming_foreshadowing",
-				),
-			itemConnections:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${itemConnections}.*)) FILTER (WHERE ${itemConnections.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"item_connections",
-				),
-			questHooks:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${questHooks.id}, 'source', ${questHooks.source}, 'hook_content', ${questHooks.hookContent}, 'quest', jsonb_build_object('id', qh_quest.id, 'name', qh_quest.name))) FILTER (WHERE ${questHooks.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"quest_hooks",
-				),
-			questStageDeliveries:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', qs_delivery.id, 'name', qs_delivery.name, 'quest', jsonb_build_object('id', q_stage_delivery.id, 'name', q_stage_delivery.name))) FILTER (WHERE qs_delivery.id IS NOT NULL), '[]'::jsonb)`.as(
-					"quest_stage_deliveries",
-				),
-			stageInvolvement:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${npcStageInvolvement}.*), 'stage', jsonb_build_object('id', si.id, 'name', si.name), 'quest', jsonb_build_object('id', q_involvement.id, 'name', q_involvement.name))) FILTER (WHERE ${npcStageInvolvement.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"stage_involvement",
-				),
-			loreLinks:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${loreLinks.id}, 'lore_id', ${loreLinks.loreId})) FILTER (WHERE ${loreLinks.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"lore_links",
-				),
-			outgoingRelations:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_out.*), 'relatedNpc', jsonb_build_object('id', rn_out.id, 'name', rn_out.name))) FILTER (WHERE nr_out.id IS NOT NULL), '[]'::jsonb)`.as(
-					"outgoing_relations",
-				),
-			incomingRelations:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('relationship', to_jsonb(nr_in.*), 'sourceNpc', jsonb_build_object('id', sn_in.id, 'name', sn_in.name))) FILTER (WHERE nr_in.id IS NOT NULL), '[]'::jsonb)`.as(
-					"incoming_relations",
-				),
-			siteAssociations:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(s.*)) FILTER (WHERE s.id IS NOT NULL), '[]'::jsonb)`.as(
-					"site_associations",
-				),
+			factionMemberships: jsonAgg(
+				jsonObject([
+					sql`'membership', to_jsonb(${npcFactionMemberships}.*)`,
+					sql`'faction', ${entityJson(factions)}`,
+				]),
+				npcFactionMemberships.id,
+			).as("faction_memberships"),
+			conflictParticipation: jsonAgg(
+				jsonObject([
+					sql`'participant', to_jsonb(${conflictParticipants}.*)`,
+					sql`'conflict', ${entityJson(conflicts)}`,
+				]),
+				conflictParticipants.id,
+			).as("conflict_participation"),
+			affectedByConsequences: jsonAgg(
+				sql`jsonb_build_object('id', ${consequences.id}, 'name', ${consequences.name}, 'description', ${consequences.description})`,
+				consequences.id,
+			).as("affected_by_consequences"),
+			outgoingForeshadowing: jsonAgg(sql`to_jsonb(${outgoingForeshadowing}.*)`, outgoingForeshadowing.id).as(
+				"outgoing_foreshadowing",
+			),
+			incomingForeshadowing: jsonAgg(sql`to_jsonb(${incomingForeshadowing}.*)`, incomingForeshadowing.id).as(
+				"incoming_foreshadowing",
+			),
+			itemConnections: jsonAgg(sql`to_jsonb(${itemConnections}.*)`, itemConnections.id).as("item_connections"),
+			questHooks: jsonAgg(
+				sql`jsonb_build_object('id', ${questHooks.id}, 'source', ${questHooks.source}, 'hook_content', ${questHooks.hookContent}, 'quest', ${entityJson(hookQuest)})`,
+				questHooks.id,
+			).as("quest_hooks"),
+			questStageDeliveries: jsonAgg(
+				jsonObject([sql`'stage', ${entityJson(deliveryStage)}`, sql`'quest', ${entityJson(deliveryStageQuest)}`]),
+				deliveryStage.id,
+			).as("quest_stage_deliveries"),
+			stageInvolvement: jsonAgg(
+				jsonObject([
+					sql`'involvement', to_jsonb(${npcStageInvolvement}.*)`,
+					sql`'stage', ${entityJson(involvementStage)}`,
+					sql`'quest', ${entityJson(involvementQuest)}`,
+				]),
+				npcStageInvolvement.id,
+			).as("stage_involvement"),
+			loreLinks: jsonAgg(
+				sql`jsonb_build_object('id', ${loreLinks.id}, 'lore_id', ${loreLinks.loreId})`,
+				loreLinks.id,
+			).as("lore_links"),
+			outgoingRelations: jsonAgg(
+				jsonObject([
+					sql`'relationship', to_jsonb(${outgoingRelations}.*)`,
+					sql`'relatedNpc', ${entityJson(relatedNpc)}`,
+				]),
+				outgoingRelations.id,
+			).as("outgoing_relations"),
+			incomingRelations: jsonAgg(
+				jsonObject([
+					sql`'relationship', to_jsonb(${incomingRelations}.*)`,
+					sql`'sourceNpc', ${entityJson(sourceNpc)}`,
+				]),
+				incomingRelations.id,
+			).as("incoming_relations"),
+			siteAssociations: jsonAgg(sql`to_jsonb(${sites}.*)`, sites.id).as("site_associations"),
 		})
 		.from(npcs)
-		.leftJoin(npcFactionMemberships, sql`${npcFactionMemberships.npcId} = ${npcs.id}`)
-		.leftJoin(factions, sql`${npcFactionMemberships.factionId} = ${factions.id}`)
-		.leftJoin(areas, sql`${sites.areaId} = ${areas.id}`)
-		.leftJoin(regions, sql`${areas.regionId} = ${regions.id}`)
-		.leftJoin(conflictParticipants, sql`${conflictParticipants.npcId} = ${npcs.id}`)
-		.leftJoin(conflicts, sql`${conflictParticipants.conflictId} = ${conflicts.id}`)
-		.leftJoin(consequences, sql`${consequences.affectedNpcId} = ${npcs.id}`)
-		.leftJoin(sql`${foreshadowing} AS fs_out`, sql`fs_out.source_npc_id = ${npcs.id}`)
-		.leftJoin(sql`${foreshadowing} AS fs_in`, sql`fs_in.target_npc_id = ${npcs.id}`)
-		.leftJoin(itemConnections, sql`${itemConnections.connectedNpcId} = ${npcs.id}`)
-		.leftJoin(questHooks, sql`${questHooks.deliveryNpcId} = ${npcs.id}`)
-		.leftJoin(sql`${quests} AS qh_quest`, sql`${questHooks.questId} = qh_quest.id`)
-		.leftJoin(sql`${questStages} AS qs_delivery`, sql`qs_delivery.delivery_npc_id = ${npcs.id}`)
-		.leftJoin(sql`${quests} AS q_stage_delivery`, sql`qs_delivery.quest_id = q_stage_delivery.id`)
-		.leftJoin(npcStageInvolvement, sql`${npcStageInvolvement.npcId} = ${npcs.id}`)
-		.leftJoin(sql`${questStages} AS si`, sql`${npcStageInvolvement.questStageId} = si.id`)
-		.leftJoin(sql`${quests} AS q_involvement`, sql`si.quest_id = q_involvement.id`)
-		.leftJoin(loreLinks, sql`${loreLinks.npcId} = ${npcs.id}`)
-		.leftJoin(sql`${npcs} AS rn_out`, sql`${loreLinks.relatedLoreId} = rn_out.id`)
-		.leftJoin(sql`${npcs} AS sn_in`, sql`${loreLinks.npcId} = sn_in.id`)
-		.leftJoin(sql`${sites} AS s`, sql`${npcs.siteId} = s.id`)
+		.leftJoin(npcFactionMemberships, eq(npcFactionMemberships.npcId, npcs.id))
+		.leftJoin(factions, eq(npcFactionMemberships.factionId, factions.id))
+		.leftJoin(sites, eq(npcs.siteId, sites.id))
+		.leftJoin(conflictParticipants, eq(conflictParticipants.npcId, npcs.id))
+		.leftJoin(conflicts, eq(conflictParticipants.conflictId, conflicts.id))
+		.leftJoin(consequences, eq(consequences.affectedNpcId, npcs.id))
+		.leftJoin(outgoingForeshadowing, eq(outgoingForeshadowing.sourceNpcId, npcs.id))
+		.leftJoin(incomingForeshadowing, eq(incomingForeshadowing.targetNpcId, npcs.id))
+		.leftJoin(itemConnections, eq(itemConnections.connectedNpcId, npcs.id))
+		.leftJoin(questHooks, eq(questHooks.deliveryNpcId, npcs.id))
+		.leftJoin(hookQuest, eq(questHooks.questId, hookQuest.id))
+		.leftJoin(deliveryStage, eq(deliveryStage.deliveryNpcId, npcs.id))
+		.leftJoin(deliveryStageQuest, eq(deliveryStage.questId, deliveryStageQuest.id))
+		.leftJoin(npcStageInvolvement, eq(npcStageInvolvement.npcId, npcs.id))
+		.leftJoin(involvementStage, eq(npcStageInvolvement.questStageId, involvementStage.id))
+		.leftJoin(involvementQuest, eq(involvementStage.questId, involvementQuest.id))
+		.leftJoin(loreLinks, eq(loreLinks.npcId, npcs.id))
+		.leftJoin(outgoingRelations, eq(outgoingRelations.sourceNpcId, npcs.id))
+		.leftJoin(relatedNpc, eq(outgoingRelations.targetNpcId, relatedNpc.id))
+		.leftJoin(incomingRelations, eq(incomingRelations.targetNpcId, npcs.id))
+		.leftJoin(sourceNpc, eq(incomingRelations.sourceNpcId, sourceNpc.id))
 		.groupBy(npcs.id),
 )

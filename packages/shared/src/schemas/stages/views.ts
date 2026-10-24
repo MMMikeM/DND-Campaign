@@ -1,12 +1,19 @@
-import { sql } from "drizzle-orm"
-import { pgView } from "drizzle-orm/pg-core"
+import { eq, sql } from "drizzle-orm"
+import { alias, pgView } from "drizzle-orm/pg-core"
 import { consequences } from "../consequences/tables"
 import { foreshadowing } from "../foreshadowing/tables"
-import { items } from "../items/tables"
+import { itemConnections, items } from "../items/tables"
 import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
+import { entityJson, entityJsonWhen, jsonAgg, jsonObject } from "../view-utils"
 import { npcStageInvolvement, questStageDecisions, questStages } from "./tables"
+
+const outgoingDecisions = alias(questStageDecisions, "outgoing_decisions")
+const toStage = alias(questStages, "to_stage")
+const incomingDecisions = alias(questStageDecisions, "incoming_decisions")
+const fromStage = alias(questStages, "from_stage")
+const involvedNpc = alias(npcs, "involved_npc")
 
 export const questStageSearchDataView = pgView("quest_stage_search_data_view").as((qb) =>
 	qb
@@ -14,45 +21,45 @@ export const questStageSearchDataView = pgView("quest_stage_search_data_view").a
 			id: questStages.id,
 			sourceTable: sql<string>`'quest_stages'`.as("source_table"),
 			entityMain: sql`to_jsonb(${questStages}.*)`.as("entity_main"),
-			quest: sql`COALESCE(jsonb_build_object('id', ${quests.id}, 'name', ${quests.name}), '{}'::jsonb)`.as("quest"),
-			site: sql`COALESCE(jsonb_build_object('id', ${sites.id}, 'name', ${sites.name}), '{}'::jsonb)`.as("site"),
-			deliveryNpc: sql`COALESCE(jsonb_build_object('id', ${npcs.id}, 'name', ${npcs.name}), '{}'::jsonb)`.as(
-				"delivery_npc",
-			),
-			outgoingDecisions:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('decision', to_jsonb(qsd_out.*), 'toStage', jsonb_build_object('id', ts_out.id, 'name', ts_out.name))) FILTER (WHERE qsd_out.id IS NOT NULL), '[]'::jsonb)`.as(
-					"outgoing_decisions",
-				),
-			incomingDecisions:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('decision', to_jsonb(qsd_in.*), 'fromStage', jsonb_build_object('id', ts_in.id, 'name', ts_in.name))) FILTER (WHERE qsd_in.id IS NOT NULL), '[]'::jsonb)`.as(
-					"incoming_decisions",
-				),
-			items:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${items.id}, 'name', ${items.name})) FILTER (WHERE ${items.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"items",
-				),
-			npcInvolvement:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('involvement', to_jsonb(${npcStageInvolvement}.*), 'npc', jsonb_build_object('id', inv_npc.id, 'name', inv_npc.name))) FILTER (WHERE ${npcStageInvolvement.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"npc_involvement",
-				),
-			outgoingForeshadowing:
-				sql`COALESCE(jsonb_agg(DISTINCT to_jsonb(${foreshadowing}.*)) FILTER (WHERE ${foreshadowing.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"outgoing_foreshadowing",
-				),
+			quest: entityJson(quests).as("quest"),
+			site: entityJsonWhen(questStages.siteId, sites).as("site"),
+			deliveryNpc: entityJsonWhen(questStages.deliveryNpcId, npcs).as("delivery_npc"),
+			outgoingDecisions: jsonAgg(
+				jsonObject([sql`'decision', to_jsonb(${outgoingDecisions}.*)`, sql`'toStage', ${entityJson(toStage)}`]),
+				outgoingDecisions.id,
+			).as("outgoing_decisions"),
+			incomingDecisions: jsonAgg(
+				jsonObject([sql`'decision', to_jsonb(${incomingDecisions}.*)`, sql`'fromStage', ${entityJson(fromStage)}`]),
+				incomingDecisions.id,
+			).as("incoming_decisions"),
+			items: jsonAgg(entityJson(items), items.id).as("items"),
+			npcInvolvement: jsonAgg(
+				jsonObject([
+					sql`'involvement', to_jsonb(${npcStageInvolvement}.*)`,
+					sql`'npc', ${entityJson(involvedNpc)}`,
+				]),
+				npcStageInvolvement.id,
+			).as("npc_involvement"),
+			outgoingForeshadowing: jsonAgg(sql`to_jsonb(${foreshadowing}.*)`, foreshadowing.id).as("outgoing_foreshadowing"),
 		})
 		.from(questStages)
-		.leftJoin(quests, sql`${questStages.questId} = ${quests.id}`)
-		.leftJoin(sites, sql`${questStages.siteId} = ${sites.id}`)
-		.leftJoin(npcs, sql`${questStages.deliveryNpcId} = ${npcs.id}`)
-		.leftJoin(sql`${questStageDecisions} AS qsd_out`, sql`qsd_out.from_quest_stage_id = ${questStages.id}`)
-		.leftJoin(sql`${questStages} AS ts_out`, sql`qsd_out.to_quest_stage_id = ts_out.id`)
-		.leftJoin(sql`${questStageDecisions} AS qsd_in`, sql`qsd_in.to_quest_stage_id = ${questStages.id}`)
-		.leftJoin(sql`${questStages} AS ts_in`, sql`qsd_in.from_quest_stage_id = ts_in.id`)
-		.leftJoin(npcStageInvolvement, sql`${npcStageInvolvement.questStageId} = ${questStages.id}`)
-		.leftJoin(sql`${npcs} AS inv_npc`, sql`${npcStageInvolvement.npcId} = inv_npc.id`)
-		.leftJoin(foreshadowing, sql`${foreshadowing.sourceQuestStageId} = ${questStages.id}`)
+		.innerJoin(quests, eq(questStages.questId, quests.id))
+		.leftJoin(sites, eq(questStages.siteId, sites.id))
+		.leftJoin(npcs, eq(questStages.deliveryNpcId, npcs.id))
+		.leftJoin(outgoingDecisions, eq(outgoingDecisions.fromQuestStageId, questStages.id))
+		.leftJoin(toStage, eq(outgoingDecisions.toQuestStageId, toStage.id))
+		.leftJoin(incomingDecisions, eq(incomingDecisions.toQuestStageId, questStages.id))
+		.leftJoin(fromStage, eq(incomingDecisions.fromQuestStageId, fromStage.id))
+		.leftJoin(itemConnections, eq(itemConnections.connectedQuestStageId, questStages.id))
+		.leftJoin(items, eq(itemConnections.itemId, items.id))
+		.leftJoin(npcStageInvolvement, eq(npcStageInvolvement.questStageId, questStages.id))
+		.leftJoin(involvedNpc, eq(npcStageInvolvement.npcId, involvedNpc.id))
+		.leftJoin(foreshadowing, eq(foreshadowing.sourceQuestStageId, questStages.id))
 		.groupBy(questStages.id, quests.id, sites.id, npcs.id),
 )
+
+const decisionFromStage = alias(questStages, "decision_from_stage")
+const decisionToStage = alias(questStages, "decision_to_stage")
 
 export const questStageDecisionSearchDataView = pgView("quest_stage_decision_search_data_view").as((qb) =>
 	qb
@@ -60,18 +67,18 @@ export const questStageDecisionSearchDataView = pgView("quest_stage_decision_sea
 			id: questStageDecisions.id,
 			sourceTable: sql<string>`'quest_stage_decisions'`.as("source_table"),
 			entityMain: sql`to_jsonb(${questStageDecisions}.*)`.as("entity_main"),
-			quest: sql`COALESCE(jsonb_build_object('id', ${quests.id}, 'name', ${quests.name}), '{}'::jsonb)`.as("quest"),
-			fromStage: sql`COALESCE(jsonb_build_object('id', fs.id, 'name', fs.name), '{}'::jsonb)`.as("from_stage"),
-			toStage: sql`COALESCE(jsonb_build_object('id', ts.id, 'name', ts.name), '{}'::jsonb)`.as("to_stage"),
-			consequences:
-				sql`COALESCE(jsonb_agg(DISTINCT jsonb_build_object('id', ${consequences.id}, 'description', ${consequences.description})) FILTER (WHERE ${consequences.id} IS NOT NULL), '[]'::jsonb)`.as(
-					"consequences",
-				),
+			quest: entityJson(quests).as("quest"),
+			fromStage: entityJson(decisionFromStage).as("from_stage"),
+			toStage: entityJsonWhen(questStageDecisions.toQuestStageId, decisionToStage).as("to_stage"),
+			consequences: jsonAgg(
+				sql`jsonb_build_object('id', ${consequences.id}, 'name', ${consequences.name}, 'description', ${consequences.description})`,
+				consequences.id,
+			).as("consequences"),
 		})
 		.from(questStageDecisions)
-		.leftJoin(sql`${questStages} AS fs`, sql`${questStageDecisions.fromQuestStageId} = fs.id`)
-		.leftJoin(quests, sql`fs.quest_id = ${quests.id}`)
-		.leftJoin(sql`${questStages} AS ts`, sql`${questStageDecisions.toQuestStageId} = ts.id`)
-		.leftJoin(consequences, sql`${consequences.triggerQuestStageDecisionId} = ${questStageDecisions.id}`)
-		.groupBy(questStageDecisions.id, quests.id, sql`fs.id`, sql`ts.id`),
+		.innerJoin(decisionFromStage, eq(questStageDecisions.fromQuestStageId, decisionFromStage.id))
+		.innerJoin(quests, eq(decisionFromStage.questId, quests.id))
+		.leftJoin(decisionToStage, eq(questStageDecisions.toQuestStageId, decisionToStage.id))
+		.leftJoin(consequences, eq(consequences.triggerQuestStageDecisionId, questStageDecisions.id))
+		.groupBy(questStageDecisions.id, quests.id, decisionFromStage.id, decisionToStage.id),
 )

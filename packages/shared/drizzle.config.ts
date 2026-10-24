@@ -10,8 +10,10 @@ export default defineConfig({
 	},
 	schema: [
 		"./src/schemas/**/tables.ts",
-		// Views (including the search materialized view) are hand-maintained in
-		// migration SQL and deliberately excluded from generation.
+		// Removing these makes the next generate drop every view, which is how
+		// 20250701055741_deep_crystal deleted search.
+		"./src/schemas/**/views.ts",
+		"./src/schemas/search-view.ts",
 	],
 	out: "./drizzle",
 	// kit v1 manages ALL schemas by default; pin to public to keep 0.x behavior

@@ -10,6 +10,7 @@ import { npcSearchDataView } from "./npcs/views"
 import { questSearchDataView } from "./quests/views"
 import { areaSearchDataView, regionSearchDataView, siteSearchDataView } from "./regions/views"
 import { questStageDecisionSearchDataView, questStageSearchDataView } from "./stages/views"
+import { deepText, weightedSearchVector } from "./view-utils"
 
 export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 	// Start with regions
@@ -17,10 +18,11 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${regionSearchDataView.id}::text`.as("id"),
 			sourceTable: regionSearchDataView.sourceTable,
+			name: sql<string>`${regionSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${regionSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'region', ${regionSearchDataView.entityMain},
         'areas', ${regionSearchDataView.areas},
-        'quests', ${regionSearchDataView.quests},
         'conflicts', ${regionSearchDataView.conflicts},
         'consequences', ${regionSearchDataView.consequences},
         'factionInfluence', ${regionSearchDataView.factionInfluence},
@@ -30,19 +32,15 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'incoming', ${regionSearchDataView.incomingRelations}
         )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${regionSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(jsonb_build_object(
+			content: sql<string>`${deepText(regionSearchDataView.entityMain)} || ' ' ||
+      ${deepText(sql`jsonb_build_object(
         'areas', ${regionSearchDataView.areas},
-        'quests', ${regionSearchDataView.quests},
         'conflicts', ${regionSearchDataView.conflicts}
-      ))`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${regionSearchDataView.entityMain},
-        jsonb_build_object(
+      )`)}`.as("content"),
+			contentTsv: weightedSearchVector(regionSearchDataView.entityMain, sql`jsonb_build_object(
           'areas', ${regionSearchDataView.areas},
-          'quests', ${regionSearchDataView.quests}
-        )
-      )`.as("content_tsv"),
+          'conflicts', ${regionSearchDataView.conflicts}
+        )`).as("content_tsv"),
 		})
 		.from(regionSearchDataView)
 
@@ -51,6 +49,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${siteSearchDataView.id}::text`.as("id"),
 			sourceTable: siteSearchDataView.sourceTable,
+			name: sql<string>`${siteSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${siteSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'site', ${siteSearchDataView.entityMain},
         'area', ${siteSearchDataView.area},
@@ -65,7 +65,6 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'outgoing', ${siteSearchDataView.outgoingForeshadowing}, 
           'incoming', ${siteSearchDataView.incomingForeshadowing}
         ),
-        'itemHistory', ${siteSearchDataView.itemHistory},
         'itemRelations', ${siteSearchDataView.itemRelations},
         'relations', jsonb_build_object(
           'outgoing', ${siteSearchDataView.outgoingRelations}, 
@@ -73,16 +72,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         ),
         'mapGroup', ${siteSearchDataView.mapGroup}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${siteSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${siteSearchDataView.area}) || ' ' ||
-      jsonb_deep_text_values(${siteSearchDataView.encounters})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${siteSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(siteSearchDataView.entityMain)} || ' ' ||
+      ${deepText(siteSearchDataView.area)} || ' ' ||
+      ${deepText(siteSearchDataView.encounters)}`.as("content"),
+			contentTsv: weightedSearchVector(siteSearchDataView.entityMain, sql`jsonb_build_object(
           'area', ${siteSearchDataView.area},
           'encounters', ${siteSearchDataView.encounters}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(siteSearchDataView)
 
@@ -91,6 +87,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${npcSearchDataView.id}::text`.as("id"),
 			sourceTable: npcSearchDataView.sourceTable,
+			name: sql<string>`${npcSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${npcSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'npc', ${npcSearchDataView.entityMain},
         'factionMemberships', ${npcSearchDataView.factionMemberships},
@@ -111,16 +109,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'incoming', ${npcSearchDataView.incomingRelations}
         )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${npcSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${npcSearchDataView.factionMemberships}) || ' ' ||
-      jsonb_deep_text_values(${npcSearchDataView.siteAssociations})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${npcSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(npcSearchDataView.entityMain)} || ' ' ||
+      ${deepText(npcSearchDataView.factionMemberships)} || ' ' ||
+      ${deepText(npcSearchDataView.siteAssociations)}`.as("content"),
+			contentTsv: weightedSearchVector(npcSearchDataView.entityMain, sql`jsonb_build_object(
           'factionMemberships', ${npcSearchDataView.factionMemberships},
           'siteAssociations', ${npcSearchDataView.siteAssociations}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(npcSearchDataView)
 
@@ -129,9 +124,10 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${questSearchDataView.id}::text`.as("id"),
 			sourceTable: questSearchDataView.sourceTable,
+			name: sql<string>`${questSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${questSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'quest', ${questSearchDataView.entityMain},
-        'region', ${questSearchDataView.region},
         'stages', ${questSearchDataView.stages},
         'hooks', ${questSearchDataView.hooks},
         'participants', ${questSearchDataView.participants},
@@ -148,16 +144,9 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'incoming', ${questSearchDataView.incomingRelations}
         )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${questSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${questSearchDataView.region}) || ' ' ||
-      jsonb_deep_text_values(${questSearchDataView.stages})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${questSearchDataView.entityMain},
-        jsonb_build_object(
-          'region', ${questSearchDataView.region},
-          'stages', ${questSearchDataView.stages}
-        )
-      )`.as("content_tsv"),
+			content: sql<string>`${deepText(questSearchDataView.entityMain)} || ' ' ||
+      ${deepText(questSearchDataView.stages)}`.as("content"),
+			contentTsv: weightedSearchVector(questSearchDataView.entityMain, questSearchDataView.stages).as("content_tsv"),
 		})
 		.from(questSearchDataView)
 
@@ -166,6 +155,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${factionSearchDataView.id}::text`.as("id"),
 			sourceTable: factionSearchDataView.sourceTable,
+			name: sql<string>`${factionSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${factionSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'faction', ${factionSearchDataView.entityMain},
         'primaryHqSite', ${factionSearchDataView.primaryHqSite},
@@ -184,16 +175,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'outgoing', ${factionSearchDataView.outgoingRelations}
         )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${factionSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${factionSearchDataView.agendas}) || ' ' ||
-      jsonb_deep_text_values(${factionSearchDataView.members})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${factionSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(factionSearchDataView.entityMain)} || ' ' ||
+      ${deepText(factionSearchDataView.agendas)} || ' ' ||
+      ${deepText(factionSearchDataView.members)}`.as("content"),
+			contentTsv: weightedSearchVector(factionSearchDataView.entityMain, sql`jsonb_build_object(
           'agendas', ${factionSearchDataView.agendas},
           'members', ${factionSearchDataView.members}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(factionSearchDataView)
 
@@ -202,26 +190,24 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${conflictSearchDataView.id}::text`.as("id"),
 			sourceTable: conflictSearchDataView.sourceTable,
+			name: sql<string>`${conflictSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${conflictSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'conflict', ${conflictSearchDataView.entityMain},
         'region', ${conflictSearchDataView.region},
         'participants', ${conflictSearchDataView.participants},
-        'consequences', ${conflictSearchDataView.consequences},
         'affectedByConsequences', ${conflictSearchDataView.affectedByConsequences},
         'incomingForeshadowing', ${conflictSearchDataView.incomingForeshadowing},
         'itemConnections', ${conflictSearchDataView.itemConnections},
         'loreLinks', ${conflictSearchDataView.loreLinks}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${conflictSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${conflictSearchDataView.participants}) || ' ' ||
-      jsonb_deep_text_values(${conflictSearchDataView.consequences})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${conflictSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(conflictSearchDataView.entityMain)} || ' ' ||
+      ${deepText(conflictSearchDataView.participants)} || ' ' ||
+      ${deepText(conflictSearchDataView.affectedByConsequences)}`.as("content"),
+			contentTsv: weightedSearchVector(conflictSearchDataView.entityMain, sql`jsonb_build_object(
           'participants', ${conflictSearchDataView.participants},
-          'consequences', ${conflictSearchDataView.consequences}
-        )
-      )`.as("content_tsv"),
+          'affectedByConsequences', ${conflictSearchDataView.affectedByConsequences}
+        )`).as("content_tsv"),
 		})
 		.from(conflictSearchDataView)
 
@@ -230,27 +216,19 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${itemSearchDataView.id}::text`.as("id"),
 			sourceTable: itemSearchDataView.sourceTable,
+			name: sql<string>`${itemSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${itemSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'item', ${itemSearchDataView.entityMain},
-        'questStage', ${itemSearchDataView.questStage},
-        'quest', ${itemSearchDataView.quest},
         'relations', jsonb_build_object(
-          'outgoing', ${itemSearchDataView.relations}, 
+          'outgoing', ${itemSearchDataView.relations},
           'incoming', ${itemSearchDataView.incomingRelations}
         ),
-        'notableHistory', ${itemSearchDataView.notableHistory},
         'incomingForeshadowing', ${itemSearchDataView.incomingForeshadowing}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${itemSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${itemSearchDataView.quest}) || ' ' ||
-      jsonb_deep_text_values(${itemSearchDataView.notableHistory})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${itemSearchDataView.entityMain},
-        jsonb_build_object(
-          'quest', ${itemSearchDataView.quest},
-          'notableHistory', ${itemSearchDataView.notableHistory}
-        )
-      )`.as("content_tsv"),
+			content: sql<string>`${deepText(itemSearchDataView.entityMain)} || ' ' ||
+      ${deepText(itemSearchDataView.relations)}`.as("content"),
+			contentTsv: weightedSearchVector(itemSearchDataView.entityMain, itemSearchDataView.relations).as("content_tsv"),
 		})
 		.from(itemSearchDataView)
 
@@ -259,6 +237,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${foreshadowingSearchDataView.id}::text`.as("id"),
 			sourceTable: foreshadowingSearchDataView.sourceTable,
+			name: sql<string>`${foreshadowingSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${foreshadowingSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'foreshadowing', ${foreshadowingSearchDataView.entityMain},
         'sourceQuest', ${foreshadowingSearchDataView.sourceQuest},
@@ -274,16 +254,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'targetFaction', ${foreshadowingSearchDataView.targetFaction},
         'targetSite', ${foreshadowingSearchDataView.targetSite}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${foreshadowingSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${foreshadowingSearchDataView.sourceQuest}) || ' ' ||
-      jsonb_deep_text_values(${foreshadowingSearchDataView.targetQuest})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${foreshadowingSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(foreshadowingSearchDataView.entityMain)} || ' ' ||
+      ${deepText(foreshadowingSearchDataView.sourceQuest)} || ' ' ||
+      ${deepText(foreshadowingSearchDataView.targetQuest)}`.as("content"),
+			contentTsv: weightedSearchVector(foreshadowingSearchDataView.entityMain, sql`jsonb_build_object(
           'sourceQuest', ${foreshadowingSearchDataView.sourceQuest},
           'targetQuest', ${foreshadowingSearchDataView.targetQuest}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(foreshadowingSearchDataView)
 
@@ -292,6 +269,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${loreSearchDataView.id}::text`.as("id"),
 			sourceTable: loreSearchDataView.sourceTable,
+			name: sql<string>`${loreSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${loreSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'lore', ${loreSearchDataView.entityMain},
         'links', ${loreSearchDataView.links},
@@ -300,11 +279,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'outgoing', ${loreSearchDataView.outgoingForeshadowing}
         )
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${loreSearchDataView.entityMain})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${loreSearchDataView.entityMain},
-        ${loreSearchDataView.links}
-      )`.as("content_tsv"),
+			content: sql<string>`${deepText(loreSearchDataView.entityMain)}`.as("content"),
+			contentTsv: weightedSearchVector(loreSearchDataView.entityMain, loreSearchDataView.links).as("content_tsv"),
 		})
 		.from(loreSearchDataView)
 
@@ -313,6 +289,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${questStageSearchDataView.id}::text`.as("id"),
 			sourceTable: questStageSearchDataView.sourceTable,
+			name: sql<string>`${questStageSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${questStageSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'questStage', ${questStageSearchDataView.entityMain},
         'quest', ${questStageSearchDataView.quest},
@@ -324,16 +302,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'npcInvolvement', ${questStageSearchDataView.npcInvolvement},
         'outgoingForeshadowing', ${questStageSearchDataView.outgoingForeshadowing}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${questStageSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${questStageSearchDataView.quest}) || ' ' ||
-      jsonb_deep_text_values(${questStageSearchDataView.site})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${questStageSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(questStageSearchDataView.entityMain)} || ' ' ||
+      ${deepText(questStageSearchDataView.quest)} || ' ' ||
+      ${deepText(questStageSearchDataView.site)}`.as("content"),
+			contentTsv: weightedSearchVector(questStageSearchDataView.entityMain, sql`jsonb_build_object(
           'quest', ${questStageSearchDataView.quest},
           'site', ${questStageSearchDataView.site}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(questStageSearchDataView)
 
@@ -342,6 +317,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${questStageDecisionSearchDataView.id}::text`.as("id"),
 			sourceTable: questStageDecisionSearchDataView.sourceTable,
+			name: sql<string>`${questStageDecisionSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${questStageDecisionSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'questStageDecision', ${questStageDecisionSearchDataView.entityMain},
         'quest', ${questStageDecisionSearchDataView.quest},
@@ -349,16 +326,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'toStage', ${questStageDecisionSearchDataView.toStage},
         'consequences', ${questStageDecisionSearchDataView.consequences}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${questStageDecisionSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${questStageDecisionSearchDataView.quest}) || ' ' ||
-      jsonb_deep_text_values(${questStageDecisionSearchDataView.fromStage})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${questStageDecisionSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(questStageDecisionSearchDataView.entityMain)} || ' ' ||
+      ${deepText(questStageDecisionSearchDataView.quest)} || ' ' ||
+      ${deepText(questStageDecisionSearchDataView.fromStage)}`.as("content"),
+			contentTsv: weightedSearchVector(questStageDecisionSearchDataView.entityMain, sql`jsonb_build_object(
           'quest', ${questStageDecisionSearchDataView.quest},
           'fromStage', ${questStageDecisionSearchDataView.fromStage}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(questStageDecisionSearchDataView)
 
@@ -367,6 +341,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${areaSearchDataView.id}::text`.as("id"),
 			sourceTable: areaSearchDataView.sourceTable,
+			name: sql<string>`${areaSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${areaSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'area', ${areaSearchDataView.entityMain},
         'region', ${areaSearchDataView.region},
@@ -374,16 +350,13 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'consequences', ${areaSearchDataView.consequences},
         'factionInfluence', ${areaSearchDataView.factionInfluence}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${areaSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${areaSearchDataView.region}) || ' ' ||
-      jsonb_deep_text_values(${areaSearchDataView.sites})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${areaSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(areaSearchDataView.entityMain)} || ' ' ||
+      ${deepText(areaSearchDataView.region)} || ' ' ||
+      ${deepText(areaSearchDataView.sites)}`.as("content"),
+			contentTsv: weightedSearchVector(areaSearchDataView.entityMain, sql`jsonb_build_object(
           'region', ${areaSearchDataView.region},
           'sites', ${areaSearchDataView.sites}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(areaSearchDataView)
 
@@ -392,6 +365,8 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
 		.select({
 			id: sql<string>`${consequenceSearchDataView.id}::text`.as("id"),
 			sourceTable: consequenceSearchDataView.sourceTable,
+			name: sql<string>`${consequenceSearchDataView.entityMain}->>'name'`.as("name"),
+			slug: sql<string>`${consequenceSearchDataView.entityMain}->>'slug'`.as("slug"),
 			rawData: sql`jsonb_build_object(
         'consequence', ${consequenceSearchDataView.entityMain},
         'triggerQuest', ${consequenceSearchDataView.triggerQuest},
@@ -403,18 +378,16 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
         'affectedConflict', ${consequenceSearchDataView.affectedConflict},
         'affectedQuest', ${consequenceSearchDataView.affectedQuest}
       )`.as("raw_data"),
-			content: sql<string>`jsonb_deep_text_values(${consequenceSearchDataView.entityMain}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.triggerQuest}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedFaction}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedRegion}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedArea}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedSite}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedNpc}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedConflict}) || ' ' ||
-      jsonb_deep_text_values(${consequenceSearchDataView.affectedQuest})`.as("content"),
-			contentTsv: sql`weighted_search_vector(
-        ${consequenceSearchDataView.entityMain},
-        jsonb_build_object(
+			content: sql<string>`${deepText(consequenceSearchDataView.entityMain)} || ' ' ||
+      ${deepText(consequenceSearchDataView.triggerQuest)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedFaction)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedRegion)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedArea)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedSite)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedNpc)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedConflict)} || ' ' ||
+      ${deepText(consequenceSearchDataView.affectedQuest)}`.as("content"),
+			contentTsv: weightedSearchVector(consequenceSearchDataView.entityMain, sql`jsonb_build_object(
           'triggerQuest', ${consequenceSearchDataView.triggerQuest},
           'affectedFaction', ${consequenceSearchDataView.affectedFaction},
           'affectedRegion', ${consequenceSearchDataView.affectedRegion},
@@ -423,8 +396,7 @@ export const searchIndex = pgMaterializedView("search_index").as((qb) => {
           'affectedNpc', ${consequenceSearchDataView.affectedNpc},
           'affectedConflict', ${consequenceSearchDataView.affectedConflict},
           'affectedQuest', ${consequenceSearchDataView.affectedQuest}
-        )
-      )`.as("content_tsv"),
+        )`).as("content_tsv"),
 		})
 		.from(consequenceSearchDataView)
 

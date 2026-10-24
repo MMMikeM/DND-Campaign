@@ -1,5 +1,5 @@
-import { sql } from "drizzle-orm"
-import { pgView } from "drizzle-orm/pg-core"
+import { eq, sql } from "drizzle-orm"
+import { alias, pgView } from "drizzle-orm/pg-core"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { items } from "../items/tables"
@@ -8,71 +8,55 @@ import { npcs } from "../npcs/tables"
 import { quests } from "../quests/tables"
 import { sites } from "../regions/tables"
 import { questStages } from "../stages/tables"
+import { entityJson, entityJsonWhen } from "../view-utils"
 import { foreshadowing } from "./tables"
+
+// Every join here is many-to-one from foreshadowing, so there is no aggregation.
+// Tables that are both a source and a target need an alias per role.
+const sourceQuest = alias(quests, "source_quest")
+const sourceStageQuest = alias(quests, "source_stage_quest")
+const targetQuest = alias(quests, "target_quest")
+const sourceSite = alias(sites, "source_site")
+const targetSite = alias(sites, "target_site")
+const sourceNpc = alias(npcs, "source_npc")
+const targetNpc = alias(npcs, "target_npc")
+const sourceLore = alias(lore, "source_lore")
+const targetLore = alias(lore, "target_lore")
 
 export const foreshadowingSearchDataView = pgView("foreshadowing_search_data_view").as((qb) =>
 	qb
 		.select({
 			id: foreshadowing.id,
 			sourceTable: sql<string>`'foreshadowing'`.as("source_table"),
-			entityMain: sql<string>`to_jsonb(${foreshadowing})`.as("entity_main"),
-			sourceQuest: sql<string>`COALESCE(jsonb_build_object('id', sq.id, 'name', sq.name), '{}'::jsonb)`.as(
-				"sourceQuest",
-			),
-			sourceQuestStage:
-				sql<string>`COALESCE(jsonb_build_object('stage', jsonb_build_object('id', sqs.id, 'name', sqs.name), 'quest', jsonb_build_object('id', sq_stage.id, 'name', sq_stage.name)), '{}'::jsonb)`.as(
-					"sourceQuestStage",
-				),
-			sourceSite: sql<string>`COALESCE(jsonb_build_object('id', ss.id, 'name', ss.name), '{}'::jsonb)`.as("sourceSite"),
-			sourceNpc: sql<string>`COALESCE(jsonb_build_object('id', sn.id, 'name', sn.name), '{}'::jsonb)`.as("sourceNpc"),
-			sourceLore: sql<string>`COALESCE(jsonb_build_object('id', sl.id, 'name', sl.name), '{}'::jsonb)`.as("sourceLore"),
-			targetQuest: sql<string>`COALESCE(jsonb_build_object('id', tq.id, 'name', tq.name), '{}'::jsonb)`.as(
-				"targetQuest",
-			),
-			targetNpc: sql<string>`COALESCE(jsonb_build_object('id', tn.id, 'name', tn.name), '{}'::jsonb)`.as("targetNpc"),
-			targetNarrativeEvent: sql<string>`COALESCE(jsonb_build_object('id', tne.id, 'name', tne.name), '{}'::jsonb)`.as(
-				"targetNarrativeEvent",
-			),
-			targetConflict: sql<string>`COALESCE(jsonb_build_object('id', tmc.id, 'name', tmc.name), '{}'::jsonb)`.as(
-				"targetConflict",
-			),
-			targetItem: sql<string>`COALESCE(jsonb_build_object('id', ti.id, 'name', ti.name), '{}'::jsonb)`.as("targetItem"),
-			targetLore: sql<string>`COALESCE(jsonb_build_object('id', tl.id, 'name', tl.name), '{}'::jsonb)`.as("targetLore"),
-			targetFaction: sql<string>`COALESCE(jsonb_build_object('id', tf.id, 'name', tf.name), '{}'::jsonb)`.as(
-				"targetFaction",
-			),
-			targetSite: sql<string>`COALESCE(jsonb_build_object('id', ts.id, 'name', ts.name), '{}'::jsonb)`.as("targetSite"),
+			entityMain: sql`to_jsonb(${foreshadowing}.*)`.as("entity_main"),
+			sourceQuest: entityJsonWhen(foreshadowing.sourceQuestId, sourceQuest).as("source_quest"),
+			sourceQuestStage: sql`CASE WHEN ${foreshadowing.sourceQuestStageId} IS NOT NULL THEN jsonb_build_object(
+				'stage', ${entityJson(questStages)},
+				'quest', ${entityJson(sourceStageQuest)}
+			) END`.as("source_quest_stage"),
+			sourceSite: entityJsonWhen(foreshadowing.sourceSiteId, sourceSite).as("source_site"),
+			sourceNpc: entityJsonWhen(foreshadowing.sourceNpcId, sourceNpc).as("source_npc"),
+			sourceLore: entityJsonWhen(foreshadowing.sourceLoreId, sourceLore).as("source_lore"),
+			targetQuest: entityJsonWhen(foreshadowing.targetQuestId, targetQuest).as("target_quest"),
+			targetNpc: entityJsonWhen(foreshadowing.targetNpcId, targetNpc).as("target_npc"),
+			targetConflict: entityJsonWhen(foreshadowing.targetConflictId, conflicts).as("target_conflict"),
+			targetItem: entityJsonWhen(foreshadowing.targetItemId, items).as("target_item"),
+			targetLore: entityJsonWhen(foreshadowing.targetLoreId, targetLore).as("target_lore"),
+			targetFaction: entityJsonWhen(foreshadowing.targetFactionId, factions).as("target_faction"),
+			targetSite: entityJsonWhen(foreshadowing.targetSiteId, targetSite).as("target_site"),
 		})
 		.from(foreshadowing)
-		.leftJoin(sql`${quests} AS sq`, sql`${foreshadowing.sourceQuestId} = sq.id`)
-		.leftJoin(sql`${questStages} AS sqs`, sql`${foreshadowing.sourceQuestStageId} = sqs.id`)
-		.leftJoin(sql`${quests} AS sq_stage`, sql`sqs.quest_id = sq_stage.id`)
-		.leftJoin(sql`${sites} AS ss`, sql`${foreshadowing.sourceSiteId} = ss.id`)
-		.leftJoin(sql`${npcs} AS sn`, sql`${foreshadowing.sourceNpcId} = sn.id`)
-		.leftJoin(sql`${lore} AS sl`, sql`${foreshadowing.sourceLoreId} = sl.id`)
-		.leftJoin(sql`${quests} AS tq`, sql`${foreshadowing.targetQuestId} = tq.id`)
-		.leftJoin(sql`${npcs} AS tn`, sql`${foreshadowing.targetNpcId} = tn.id`)
-		.leftJoin(sql`${conflicts} AS tmc`, sql`${foreshadowing.targetConflictId} = tmc.id`)
-		.leftJoin(sql`${items} AS ti`, sql`${foreshadowing.targetItemId} = ti.id`)
-		.leftJoin(sql`${lore} AS tl`, sql`${foreshadowing.targetLoreId} = tl.id`)
-		.leftJoin(sql`${factions} AS tf`, sql`${foreshadowing.targetFactionId} = tf.id`)
-		.leftJoin(sql`${sites} AS ts`, sql`${foreshadowing.targetSiteId} = ts.id`)
-		.groupBy(
-			foreshadowing.id,
-			sql`sq.id`,
-			sql`sqs.id`,
-			sql`sq_stage.id`,
-			sql`ss.id`,
-			sql`sn.id`,
-			sql`sl.id`,
-			sql`tq.id`,
-			sql`tn.id`,
-			sql`tne.id`,
-			sql`tmc.id`,
-			sql`ti.id`,
-			sql`tnd.id`,
-			sql`tl.id`,
-			sql`tf.id`,
-			sql`ts.id`,
-		),
+		.leftJoin(sourceQuest, eq(foreshadowing.sourceQuestId, sourceQuest.id))
+		.leftJoin(questStages, eq(foreshadowing.sourceQuestStageId, questStages.id))
+		.leftJoin(sourceStageQuest, eq(questStages.questId, sourceStageQuest.id))
+		.leftJoin(sourceSite, eq(foreshadowing.sourceSiteId, sourceSite.id))
+		.leftJoin(sourceNpc, eq(foreshadowing.sourceNpcId, sourceNpc.id))
+		.leftJoin(sourceLore, eq(foreshadowing.sourceLoreId, sourceLore.id))
+		.leftJoin(targetQuest, eq(foreshadowing.targetQuestId, targetQuest.id))
+		.leftJoin(targetNpc, eq(foreshadowing.targetNpcId, targetNpc.id))
+		.leftJoin(conflicts, eq(foreshadowing.targetConflictId, conflicts.id))
+		.leftJoin(items, eq(foreshadowing.targetItemId, items.id))
+		.leftJoin(targetLore, eq(foreshadowing.targetLoreId, targetLore.id))
+		.leftJoin(factions, eq(foreshadowing.targetFactionId, factions.id))
+		.leftJoin(targetSite, eq(foreshadowing.targetSiteId, targetSite.id)),
 )
