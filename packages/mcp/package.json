@@ -7,34 +7,27 @@
 	"type": "module",
 	"scripts": {
 		"build:watch": "vp pack --watch",
-		"build": "vp pack",
-		"dev": "tsx watch ./src/index.ts",
-		"lint": "vp lint",
-		"test": "vp test",
-		"check": "tsc --noEmit",
-		"lint:fix": "vp lint --fix",
 		"format": "vp fmt"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@modelcontextprotocol/core": "^2.0.0",
-		"@modelcontextprotocol/node": "^2.0.0",
-		"@modelcontextprotocol/server": "^2.0.0",
-		"@swc/helpers": "^0.5.17",
+		"@modelcontextprotocol/core": "^2.3.1",
+		"@modelcontextprotocol/node": "^2.1.1",
+		"@modelcontextprotocol/server": "^2.3.1",
+		"@swc/helpers": "^0.5.23",
 		"@tome-master/shared": "workspace:*",
 		"drizzle-orm": "catalog:",
 		"ekrina": "^1.0.0",
-		"image-size": "^2.0.2",
-		"pino": "^10.3.1",
+		"image-size": "^2.0.4",
+		"pino": "^10.4.0",
 		"pino-roll": "^4.0.0",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@modelcontextprotocol/inspector": "^2.0.0",
+		"@modelcontextprotocol/inspector": "^2.12.0",
 		"@types/node": "catalog:",
-		"tsx": "catalog:",
 		"typescript": "catalog:"
 	},
 	"engines": {

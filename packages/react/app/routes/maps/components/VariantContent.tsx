@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react"
-import { motion } from "motion/react"
+import { motion, type Variants } from "motion/react"
 import { useState } from "react"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
@@ -8,7 +8,7 @@ import { Badge } from "~/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { MapVariant } from "~/lib/entities"
 
-const tabContentVariants = {
+const tabContentVariants: Variants = {
 	active: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut" } },
 	inactive: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" } },
 }

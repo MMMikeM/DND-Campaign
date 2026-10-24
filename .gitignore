@@ -6,7 +6,6 @@ node_modules/
 dist/
 .output/
 .astro/
-.turbo/
 
 # Environment files
 .env

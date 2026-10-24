@@ -1,12 +1,12 @@
 import type { LucideIcon } from "lucide-react"
 import * as Icons from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, motion, type Variants } from "motion/react"
 import { useLocation } from "react-router"
 import { Link } from "~/components/ui/link"
 import type { NavItem } from "~/lib/nav"
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar"
 
-const menuVariants = {
+const menuVariants: Variants = {
 	hidden: {
 		opacity: 0,
 		height: 0,

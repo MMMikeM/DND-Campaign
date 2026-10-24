@@ -8,17 +8,10 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "vp pack",
-		"check": "tsc --noEmit",
 		"db:custom": "sh -c 'drizzle-kit generate --custom --name=\"$1\"' --",
-		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"dev": "vp pack --watch",
-		"lint:fix": "vp lint --fix",
-		"format": "vp fmt",
-		"lint": "vp lint",
-		"test": "vp test"
+		"dev": "vp pack --watch --no-clean",
+		"format": "vp fmt"
 	},
 	"exports": {
 		"./db": "./dist/db.mjs",
@@ -35,23 +28,25 @@
 		"./entities/regions": "./dist/entities/regions.mjs",
 		"./entities/stages": "./dist/entities/stages.mjs",
 		"./enums": "./dist/enums.mjs",
+		"./search": "./dist/search.mjs",
 		"./package.json": "./package.json"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@swc/helpers": "^0.5.17",
+		"@swc/helpers": "^0.5.23",
 		"drizzle-orm": "catalog:",
-		"pg": "^8.16.0"
+		"ekrina": "^1.0.0",
+		"pg": "^8.23.1"
 	},
 	"devDependencies": {
-		"@testcontainers/postgresql": "^12.0.4",
+		"@arethetypeswrong/core": "^0.18.5",
+		"@testcontainers/postgresql": "^12.2.1",
 		"@types/node": "catalog:",
-		"@types/pg": "^8.15.4",
-		"@arethetypeswrong/core": "^0.18.0",
+		"@types/pg": "^8.23.1",
 		"drizzle-kit": "1.0.0-rc.4",
-		"publint": "^0.3.23",
+		"publint": "^0.3.25",
 		"typescript": "catalog:"
 	},
 	"engines": {
