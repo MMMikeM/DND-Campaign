@@ -43,7 +43,7 @@ const loadNavItems = async (key: NavKey, fetch: NavFetcher): Promise<NavItem[]> 
 	}
 }
 
-export const loadNavData = async (): Promise<NavData> => {
+const loadNavData = async (): Promise<NavData> => {
 	const entries = await Promise.all(
 		Object.entries(navFetchers).map(async ([key, fetch]) => [key, await loadNavItems(key as NavKey, fetch)] as const),
 	)
