@@ -35,8 +35,7 @@ export const entityGetters = createEntityGetters({
 		db.query.questStageDecisions.findFirst({
 			where: { id },
 			with: {
-				quest: nameAndId,
-				sourceStage: nameAndId,
+				sourceStage: { ...nameAndId, with: { quest: nameAndId } },
 				targetStage: nameAndId,
 				consequences: true,
 			},
@@ -60,7 +59,7 @@ export const questStageToolDefinitions: Record<"manage_stage", ToolDefinition> =
 		annotations: {
 			title: "Manage Quest Stages",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

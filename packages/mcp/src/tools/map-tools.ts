@@ -3,8 +3,14 @@ import { extname, join, parse } from "node:path"
 import { enums, tables } from "@tome-master/shared/entities/maps"
 import { imageSize } from "image-size"
 import { db, logger } from "../index"
-import { schemas, syncMapsSchema, tableEnum } from "./map-tools.schema"
-import { createManageEntityHandler, createManageSchema, nameAndId } from "./utils/tool.utils"
+import { mapGroupTableEnum, mapVariantTableEnum, schemas, syncMapsSchema } from "./map-tools.schema"
+import {
+	createErrorResponse,
+	createManageEntityHandler,
+	createManageSchema,
+	createResponse,
+	nameAndId,
+} from "./utils/tool.utils"
 import type { ToolDefinition, ToolHandler } from "./utils/types"
 import { createEntityGettersFactory } from "./utils/types"
 
@@ -60,7 +66,9 @@ export const entityGetters = createEntityGetters({
 const synchronizeMapsHandler: ToolHandler = async () => {
 	const directory = process.env.MAPS_DIRECTORY
 	if (!directory) {
-		throw new Error("MAPS_DIRECTORY environment variable is not set. Please configure the path to your maps folder.")
+		return createErrorResponse(
+			"MAPS_DIRECTORY environment variable is not set. Please configure the path to your maps folder.",
+		)
 	}
 	const supportedFormats = [".jpeg", ".jpg", ".png", ".webp"]
 
@@ -69,7 +77,7 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 		const imageFiles = files.filter((file) => supportedFormats.includes(extname(file).toLowerCase()))
 
 		if (imageFiles.length === 0) {
-			throw new Error("No new map images found to synchronize.")
+			return createErrorResponse(`No map images found in ${directory}.`)
 		}
 
 		// Sort files alphabetically to ensure consistent ordering
@@ -118,13 +126,10 @@ const synchronizeMapsHandler: ToolHandler = async () => {
 		}
 
 		const addedMaps = newMaps.filter(Boolean)
-		return {
-			message: `Synchronization complete. Added ${addedMaps.length} new maps.`,
-			success: true,
-		}
+		return createResponse(`Synchronization complete. Added ${addedMaps.length} new maps.`)
 	} catch (error) {
 		logger.error({ err: error, directory }, "Failed to synchronize maps directory")
-		throw new Error(`Failed to synchronize maps from directory: ${directory}`)
+		return createErrorResponse(`Failed to synchronize maps from directory: ${directory}`)
 	}
 }
 
@@ -134,26 +139,26 @@ export const mapToolDefinitions: Record<
 > = {
 	manage_map_group: {
 		enums,
-		description: "Manage map groups and their associated tactical details.",
-		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_map_group", mapTables, tableEnum, schemas),
+		description: "Manage map groups, which collect the variants of one map under a shared theme or setting.",
+		inputSchema: createManageSchema(schemas, mapGroupTableEnum),
+		handler: createManageEntityHandler("manage_map_group", mapTables, mapGroupTableEnum, schemas),
 		annotations: {
 			title: "Manage Map Groups",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},
 	},
 	manage_map_variant: {
 		enums,
-		description: "Manage map assets and their associated tactical details.",
-		inputSchema: createManageSchema(schemas, tableEnum),
-		handler: createManageEntityHandler("manage_map_variant", mapTables, tableEnum, schemas),
+		description: "Manage map variants: the individual map images in a group and their tactical details.",
+		inputSchema: createManageSchema(schemas, mapVariantTableEnum),
+		handler: createManageEntityHandler("manage_map_variant", mapTables, mapVariantTableEnum, schemas),
 		annotations: {
-			title: "Manage Maps",
+			title: "Manage Map Variants",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

@@ -110,8 +110,8 @@ export const schemas = {
 		.omit({ id: true })
 		.strict()
 		.describe("Geographic areas where factions have power, control, or significant presence")
-		.refine((data) => ((data.regionId !== undefined) !== (data.areaId !== undefined)) !== (data.siteId !== undefined), {
-			message: "Only one of regionId, areaId, or siteId must be provided",
+		.refine((data) => [data.regionId, data.areaId, data.siteId].filter((id) => id !== undefined).length === 1, {
+			message: "Exactly one of regionId, areaId, or siteId must be provided",
 			path: ["regionId", "areaId", "siteId"],
 		}),
 } as const satisfies Schema<TableNames[number]>

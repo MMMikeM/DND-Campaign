@@ -42,7 +42,7 @@ export const conflictToolDefinitions: Record<"manage_conflict", ToolDefinition> 
 		annotations: {
 			title: "Manage Conflicts",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

@@ -56,7 +56,7 @@ export const itemToolDefinitions: Record<"manage_item", ToolDefinition> = {
 		annotations: {
 			title: "Manage Items",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

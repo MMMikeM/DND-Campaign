@@ -53,7 +53,7 @@ export const schemas = {
 		sourceType: z
 			.enum(consequenceSources)
 			.describe(
-				"The ultimate cause of this change. Was it a specific 'Decision', the result of a 'Quest Completion', or an autonomous 'World Event' that happens regardless of player action?",
+				"The ultimate cause of this change. Was it a specific 'Decision', the result of a 'Quest Completion', or an autonomous 'World Event' that happens regardless of player action? It decides the trigger: 'decision' needs triggerQuestStageDecisionId, both quest completions need triggerQuestId, 'player_choice' may give triggerQuestStageDecisionId, and 'world_event' and 'time_passage' take no trigger.",
 			),
 		playerImpactFeel: z
 			.enum(playerImpactFeels)
@@ -68,13 +68,15 @@ export const schemas = {
 		affectedQuestId: optionalId.describe("The ID of the quest that this consequence impacts."),
 		affectedConflictId: optionalId.describe("The ID of the conflict that this consequence impacts."),
 		affectedConsequenceId: optionalId.describe("The ID of the consequence that this consequence impacts."),
-		complicationDetails: list.describe("The details of the complication that this consequence impacts."),
-		escalationDetails: list.describe("The details of the escalation that this consequence impacts."),
-		twistRevealDetails: list.describe("The details of the twist reveal that this consequence impacts."),
+		complicationDetails: (s) => s.describe("The details of the complication that this consequence impacts."),
+		escalationDetails: (s) => s.describe("The details of the escalation that this consequence impacts."),
+		twistRevealDetails: (s) => s.describe("The details of the twist reveal that this consequence impacts."),
 
-		triggerQuestId: optionalId.describe("The ID of the quest that caused this consequence."),
+		triggerQuestId: optionalId.describe(
+			"The ID of the quest whose completion caused this consequence. Required for the quest completion source types, and not allowed for any other.",
+		),
 		triggerQuestStageDecisionId: optionalId.describe(
-			"The ID of the quest stage decision that caused this consequence.",
+			"The ID of the quest stage decision that caused this consequence. Required when sourceType is 'decision', optional for 'player_choice', and not allowed for any other.",
 		),
 		conflictImpactDescription: (s) =>
 			s

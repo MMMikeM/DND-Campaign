@@ -1,4 +1,4 @@
-import { createServer } from "node:http"
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http"
 import { toNodeHandler } from "@modelcontextprotocol/node"
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server"
 import { serveStdio } from "@modelcontextprotocol/server/stdio"
@@ -16,7 +16,7 @@ logger.info(
 	{
 		MCP_PORT: process.env.MCP_PORT,
 		MCP_TRANSPORT: process.env.MCP_TRANSPORT,
-		DB_PATH: process.env.DB_PATH,
+		DATABASE_URL: process.env.DATABASE_URL ? "set" : "unset (using local default)",
 		LOG_LEVEL: process.env.LOG_LEVEL,
 		LOG_FILE: process.env.LOG_FILE,
 		NODE_ENV: process.env.NODE_ENV,
@@ -25,9 +25,8 @@ logger.info(
 )
 
 logger.info("Initializing database...")
-const dbPath = "postgres://postgres:postgres@localhost:5432/dnd_campaign"
-logger.info(`Using database at: ${dbPath}`)
-export const db: ReturnType<typeof initializeDatabase> = initializeDatabase(dbPath)
+const databaseUrl = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/dnd_campaign"
+export const db: ReturnType<typeof initializeDatabase> = initializeDatabase(databaseUrl)
 
 logger.info("Database initialized successfully")
 
@@ -73,7 +72,7 @@ async function startServer() {
 			}),
 		)
 
-		const httpServer = createServer(async (req, res) => {
+		const handleRequest = async (req: IncomingMessage, res: ServerResponse) => {
 			logger.debug(
 				{
 					url: req.url,
@@ -83,9 +82,14 @@ async function startServer() {
 				"Received request",
 			)
 
-			// Parse the URL to handle query parameters
-			const url = new URL(req.url || "", `http://${req.headers.host}`)
-			const pathname = url.pathname
+			let pathname: string
+			try {
+				pathname = new URL(req.url || "", `http://${req.headers.host}`).pathname
+			} catch {
+				logger.warn({ url: req.url, host: req.headers.host }, "Unparseable request URL")
+				res.writeHead(400).end()
+				return
+			}
 
 			if (pathname === "/mcp") {
 				await mcpHandler(req, res)
@@ -93,6 +97,18 @@ async function startServer() {
 				logger.warn({ pathname }, "Invalid request path")
 				res.writeHead(404).end()
 			}
+		}
+
+		// An unhandled rejection exits the process (see logger.ts), so one bad request must not escape.
+		const httpServer = createServer((req, res) => {
+			handleRequest(req, res).catch((error) => {
+				logger.error({ error: serializeError(error), url: req.url }, "Error handling HTTP request")
+				if (res.headersSent) {
+					res.destroy()
+				} else {
+					res.writeHead(500).end()
+				}
+			})
 		})
 
 		httpServer.listen(port, () => {

@@ -118,7 +118,7 @@ export const entityGetters = createEntityGetters({
 		}),
 	site_secret_by_id: (id: number) =>
 		db.query.siteSecrets.findFirst({
-			where: { siteId: id },
+			where: { id },
 			with: { site: true },
 		}),
 	all_region_connections: () =>
@@ -148,7 +148,7 @@ export const regionToolDefinitions: Record<"manage_region", ToolDefinition> = {
 		annotations: {
 			title: "Manage Regions",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

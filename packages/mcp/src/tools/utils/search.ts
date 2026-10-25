@@ -12,11 +12,12 @@ const getNameSearch = () => {
 
 /**
  * mcp is the only process that writes, so a write here is the only thing that can
- * make the cached names or `search_index` stale. Call it after every one.
+ * make the cached names, `search_index` or `entity_words` stale. Call it after every one.
  */
 export const invalidateSearch = async () => {
 	nameSearch = undefined
-	await db.execute(sql`REFRESH MATERIALIZED VIEW search_index`)
+	await db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY search_index`)
+	await db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY entity_words`)
 }
 
 /** Entities matching by name (typo-tolerant), then by what they say about themselves. */

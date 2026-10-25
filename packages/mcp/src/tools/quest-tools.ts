@@ -71,7 +71,7 @@ export const questToolDefinitions: Record<"manage_quest", ToolDefinition> = {
 		annotations: {
 			title: "Manage Quests",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

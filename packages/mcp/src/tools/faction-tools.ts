@@ -61,7 +61,7 @@ export const factionToolDefinitions: Record<"manage_faction", ToolDefinition> = 
 		annotations: {
 			title: "Manage Factions",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

@@ -77,7 +77,7 @@ export const loreToolDefinitions: Record<"manage_lore", ToolDefinition> = {
 		annotations: {
 			title: "Manage Lore",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

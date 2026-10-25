@@ -8,7 +8,7 @@
 import type { EntityTypeInfo, PromptHelpData } from "./types"
 
 export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
-	"create-npc": {
+	create_npc: {
 		description: "Create NPCs with rich campaign context and relationship suggestions",
 		purpose: "Generate detailed NPCs that automatically integrate with your existing campaign",
 		arguments: {
@@ -126,7 +126,7 @@ export const PROMPT_HELP_DATA: Record<string, PromptHelpData> = {
 export const ENTITY_TYPES: EntityTypeInfo[] = [
 	{
 		type: "npc",
-		prompt: "create-npc",
+		prompt: "create_npc",
 		title: "📝 NPCs (Non-Player Characters)",
 		description: "Create rich, connected NPCs with automatic relationship suggestions",
 	},

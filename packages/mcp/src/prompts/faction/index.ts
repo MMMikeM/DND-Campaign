@@ -31,7 +31,7 @@ A user wants to create a new Faction. Your job is to analyze their request and t
     *   Synthesize the user's hints (name, location, type) with the contextual opportunities.
 
 2.  **Create the Core Faction:**
-    *   First, you **must** call the \`manage_faction\` tool with \`create\` on the \`faction\` table to establish the foundational entity.
+    *   First, you **must** call the \`manage_faction\` tool with \`create\` on the \`factions\` table to establish the foundational entity.
     *   Use the context and hints to populate the Faction's core attributes (description, goals, etc.) thoughtfully. Ground them in the world.
 
 3.  **Establish Connections (CRUCIAL):**
@@ -65,12 +65,12 @@ A user wants to create a new Faction. Your job is to analyze their request and t
 
 	prompt += `
 4.  **Create Optional Connections:**
-    *   \`manage_faction\` on the \`faction_agenda\` table to define goals.
-    *   \`manage_faction\` on the \`faction_diplomacy\` table to set relations.
-    *   \`manage_faction\` on the \`faction_influence\` table to claim territory.
-    *   \`manage_faction\` on the \`faction_member\` table to add NPCs.
-    *   \`manage_conflict\` on the \`conflict_participant\` table.
-    *   \`manage_narrative_destination\` on the \`narrative_destination_participant\` table.
+    *   \`manage_faction\` on the \`factionAgendas\` table to define goals.
+    *   \`manage_faction\` on the \`factionDiplomacy\` table to set relations.
+    *   \`manage_faction\` on the \`factionInfluence\` table to claim territory.
+    *   \`manage_npc\` on the \`npcFactionMemberships\` table to add NPCs.
+    *   \`manage_conflict\` on the \`conflictParticipants\` table.
+    *   \`manage_quest\` on the \`questParticipants\` table.
   `
 
 	return {

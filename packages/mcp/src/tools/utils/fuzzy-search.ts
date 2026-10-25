@@ -20,7 +20,7 @@ export const fuzzySearchToolDefinitions: Record<"fuzzy_search", ToolDefinition> 
 				return createErrorResponse("Invalid arguments provided to fuzzy_search handler.")
 			}
 			const { searchTerm } = parseResult.data
-			return createResponse((await searchEntities(searchTerm, 3)) as any)
+			return createResponse(JSON.stringify(await searchEntities(searchTerm, 3), null, 2))
 		},
 		annotations: {
 			title: "Fuzzy Search",

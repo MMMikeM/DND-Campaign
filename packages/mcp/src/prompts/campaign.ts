@@ -92,7 +92,6 @@ const fuzzySearchQuests = async (query: string, limit = 5) => {
 	return fuzzySearchEntities(query, "quests").then((results) => results.slice(0, limit))
 }
 
-// Hybrid smart search: fuzzy first, then embedding fallback
 const smartEntitySearch = async (query: string, entityType: "npc" | "faction" | "quest", limit = 5) => {
 	logger.info(`Smart search for ${entityType}: "${query}"`)
 
@@ -185,8 +184,24 @@ const factionResponseSchema = z.object({
 const questWorkflowSchema = z.object({
 	step: z.enum(["start", "objectives", "npcs", "locations", "complications"]).default("start"),
 	quest_name: z.string().describe("Quest name"),
-	previous_choices: z.record(z.string(), z.any()).optional().describe("Choices made in previous steps"),
+	previous_choices: z
+		.string()
+		.optional()
+		.describe('JSON object of choices made in previous steps, e.g. {"objective": "investigation", "locations": "..."}'),
 })
+
+const previousChoicesSchema = z.record(z.string(), z.string())
+
+const parsePreviousChoices = (json: string | undefined) => {
+	if (!json) {
+		return {}
+	}
+	try {
+		return previousChoicesSchema.parse(JSON.parse(json))
+	} catch {
+		throw new Error('previous_choices must be a JSON object of strings, e.g. {"objective": "investigation"}')
+	}
+}
 
 // Enhanced prompt handlers with hybrid search
 const handleNPCDialogue = async (args: z.infer<typeof npcDialogueSchema>): Promise<GetPromptResult> => {
@@ -262,7 +277,7 @@ const handleQuestAdaptation = async (args: z.infer<typeof questAdaptationSchema>
 					role: "user",
 					content: {
 						type: "text",
-						text: `Quest "${quest.name}" (${quest.status}) needs adaptation.\n\nUnexpected player action: "${args.unexpected_action}"\n\nHow can I adapt this quest while ${args.preserve_themes ? "preserving the original themes" : "allowing complete pivoting"}? Provide specific suggestions for next steps.`,
+						text: `Quest "${quest.name}" (${quest.type}, ${quest.urgency} urgency) needs adaptation.\n\nUnexpected player action: "${args.unexpected_action}"\n\nHow can I adapt this quest while ${args.preserve_themes ? "preserving the original themes" : "allowing complete pivoting"}? Provide specific suggestions for next steps.`,
 					},
 				},
 			],
@@ -272,7 +287,7 @@ const handleQuestAdaptation = async (args: z.infer<typeof questAdaptationSchema>
 
 	// Multiple matches
 	const matchList = searchResult.results
-		.map((quest, i) => `${i + 1}. **${quest.name}** (${quest.status}) - ${quest.type} quest`)
+		.map((quest, i) => `${i + 1}. **${quest.name}** (${quest.urgency} urgency) - ${quest.type} quest`)
 		.join("\n")
 
 	return {
@@ -312,7 +327,8 @@ const handleFactionResponse = async (args: z.infer<typeof factionResponseSchema>
 			faction_response: {
 				faction_name: faction.name,
 				faction_type: faction.type,
-				faction_alignment: faction.alignment,
+				public_alignment: faction.publicAlignment,
+				secret_alignment: faction.secretAlignment,
 				player_action: args.player_action,
 				response_urgency: args.response_urgency,
 			},
@@ -338,7 +354,7 @@ Generate a faction response including:
 7. Consequences for future interactions
 8. Opportunities for player involvement
 
-Consider the faction's type (${faction.type}), alignment (${faction.alignment}), and current political situation.`
+Consider the faction's type (${faction.type}), public alignment (${faction.publicAlignment})${faction.secretAlignment ? `, secret alignment (${faction.secretAlignment})` : ""}, and current political situation.`
 
 		return createPromptResult(
 			[
@@ -355,7 +371,7 @@ Consider the faction's type (${faction.type}), alignment (${faction.alignment}),
 
 	// Multiple matches
 	const matchList = searchResult.results
-		.map((faction, i) => `${i + 1}. **${faction.name}** (${faction.type}) - ${faction.alignment}`)
+		.map((faction, i) => `${i + 1}. **${faction.name}** (${faction.type}) - ${faction.publicAlignment}`)
 		.join("\n")
 
 	return createPromptResult(
@@ -374,7 +390,8 @@ Consider the faction's type (${faction.type}), alignment (${faction.alignment}),
 const handleQuestWorkflow = async (args: z.infer<typeof questWorkflowSchema>): Promise<GetPromptResult> => {
 	logger.info(args, "Quest workflow step")
 
-	const { step, quest_name, previous_choices = {} } = args
+	const { step, quest_name } = args
+	const previous_choices = parsePreviousChoices(args.previous_choices)
 
 	switch (step) {
 		case "start":

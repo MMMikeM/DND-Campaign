@@ -23,7 +23,7 @@ export const schemas = {
 			.describe("Item category (weapon, armor, tool, treasure, document, key_item, consumable)"),
 		rarity: z.enum(rarityLevels).describe("Rarity level (common, uncommon, rare, very_rare, legendary, artifact)"),
 		mechanicalEffects: list.describe("Game mechanical effects and abilities of this item"),
-		narrativeSignificance: list.describe("Narrative significance of the item"),
+		narrativeSignificance: (s) => s.describe("Narrative significance of the item"),
 		provenanceAndHistory: list.describe("Provenance and history of the item"),
 	})
 		.omit({ id: true })
@@ -40,7 +40,7 @@ export const schemas = {
 		connectedItemId: optionalId.describe("ID of item this relationship belongs to"),
 		details: list.describe("Details about the connection between items"),
 		itemId: id.describe("ID of item this connection belongs to"),
-		relationship: list.describe("Type of relationship"),
+		relationship: (s) => s.describe("Type of relationship"),
 	})
 		.omit({ id: true })
 		.strict()

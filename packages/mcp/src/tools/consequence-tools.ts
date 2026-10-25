@@ -39,7 +39,7 @@ export const consequenceToolDefinitions: Record<"manage_consequence", ToolDefini
 		annotations: {
 			title: "Manage Consequences",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

@@ -16,7 +16,7 @@ import { questStageToolDefinitions } from "./quest-stage-tools"
 import { questToolDefinitions } from "./quest-tools"
 import { regionToolDefinitions } from "./region-tools"
 import { fuzzySearchToolDefinitions } from "./utils/fuzzy-search"
-import { createErrorResponse, createResponse } from "./utils/tool.utils"
+import { createErrorResponse } from "./utils/tool.utils"
 import type { ToolDefinition } from "./utils/types"
 
 /** Category groupings for the help tool; every category is registered with the server. */
@@ -59,13 +59,10 @@ export function registerToolHandlers(server: McpServer) {
 		const { description, annotations, handler } = definition
 		server.registerTool(name, { description, inputSchema, annotations }, async (args) => {
 			try {
-				const result = await handler(args as Record<string, unknown>)
-				return createResponse(JSON.stringify(result, null, 2))
+				return await handler(args as Record<string, unknown>)
 			} catch (error) {
 				logger.error({ tool: name, args, error: serializeError(error) }, "Error calling tool")
-				return createErrorResponse(
-					`Error: ${error instanceof Error ? error.message : String(error || "Unknown error")}`,
-				)
+				return createErrorResponse(`Unexpected error while running ${name}. Details are in the server log.`)
 			}
 		})
 	}

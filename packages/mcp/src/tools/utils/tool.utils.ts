@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm"
 import { z } from "zod/v4"
 import { db, logger } from "../../index"
 import { serializeError } from "../../logger"
+import { createUpdateSchema } from "./schema"
 import { invalidateSearch } from "./search"
 import type { baseTableWithId, ToolHandler, ToolHandlerReturn } from "./types"
 
@@ -30,6 +31,39 @@ export const createErrorResponse = (message: string) => {
 	}
 }
 
+/**
+ * Runs after the write has committed. Reporting a refresh failure as a failed write would invite the model to
+ * retry and create a duplicate, so it is only logged.
+ */
+const refreshSearchAfterWrite = async (tableName: string) => {
+	try {
+		await invalidateSearch()
+	} catch (error) {
+		logger.error({ tableName, error: serializeError(error) }, "Search refresh failed after a committed write")
+	}
+}
+
+const constraintViolationReasons: Record<string, string> = {
+	"23502": "A required field is missing",
+	"23503": "A referenced id does not exist, or other rows still reference this one",
+	"23505": "An entry with these values already exists",
+	"23514": "The values break a rule on this table",
+}
+
+/** Drizzle's own message contains the SQL, so only the Postgres error code and constraint name are passed on. */
+const describeDatabaseError = (error: unknown) => {
+	const cause = error instanceof Error ? error.cause : undefined
+	if (!cause || typeof cause !== "object" || !("code" in cause)) {
+		return ""
+	}
+	const reason = constraintViolationReasons[String(cause.code)]
+	if (!reason) {
+		return ""
+	}
+	const constraint = "constraint" in cause && cause.constraint ? ` (${cause.constraint})` : ""
+	return ` ${reason}${constraint}.`
+}
+
 const safelyParseJSON = (data: unknown) => {
 	if (typeof data !== "string") {
 		return { success: true as const, data }
@@ -54,8 +88,14 @@ async function handleDelete(
 		return createErrorResponse(`Invalid id '${args?.id}' provided to ${categoryToolName} handler.`)
 	}
 	logger.info({ id: deleteId.data }, `Deleting ${tableName} (via ${categoryToolName})`)
-	const result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
-	await invalidateSearch()
+	let result: { deletedId: unknown }[]
+	try {
+		result = await db.delete(table).where(eq(table.id, deleteId.data)).returning({ deletedId: table.id })
+	} catch (error) {
+		logger.error({ tableName, error: serializeError(error) }, `Database error deleting ${tableName}`)
+		return createErrorResponse(`Database error when deleting ${tableName}.${describeDatabaseError(error)}`)
+	}
+	await refreshSearchAfterWrite(tableName)
 	return createResponse(
 		result.length > 0
 			? `Successfully deleted ${tableName} with ID: ${deleteId.data}`
@@ -90,7 +130,7 @@ async function handleCreate<TS extends Schema<string>>(
 
 	try {
 		const [result] = await db.insert(table).values(createData).returning({ successfullyCreated: table.id })
-		await invalidateSearch()
+		await refreshSearchAfterWrite(tableName)
 
 		const entityName = "name" in createData && typeof createData.name === "string" ? createData.name : tableName
 		return createResponse(`Successfully created new ${entityName} with ID: ${result?.successfullyCreated}`)
@@ -104,7 +144,7 @@ async function handleCreate<TS extends Schema<string>>(
 			`Database error creating ${tableName}`,
 		)
 
-		return createErrorResponse(`Database error when creating ${tableName}.`)
+		return createErrorResponse(`Database error when creating ${tableName}.${describeDatabaseError(error)}`)
 	}
 }
 
@@ -129,7 +169,7 @@ async function handleUpdate<TS extends Schema<string>>(
 		return createErrorResponse(`Schema for ${tableName} not found.`)
 	}
 
-	const parsedData = schemas[tableName].partial().safeParse(parseResult.data)
+	const parsedData = createUpdateSchema(schemas[tableName]).safeParse(parseResult.data)
 
 	if (!parsedData.success) {
 		const prettyError = z.prettifyError(parsedData.error)
@@ -147,13 +187,13 @@ async function handleUpdate<TS extends Schema<string>>(
 			.set(dataToUpdate)
 			.where(eq(table.id, updateId))
 			.returning({ successfullyUpdated: table.id })
-		await invalidateSearch()
 
 		if (result.length !== 1 || result[0] === undefined) {
 			logger.error(`No ${tableName} found with ID: ${updateId}`)
 			return createErrorResponse(`No ${tableName} found with ID: ${updateId}`)
 		}
 
+		await refreshSearchAfterWrite(tableName)
 		return createResponse(`Successfully updated ${tableName} with ID: ${updateId}`)
 	} catch (error) {
 		logger.error(
@@ -172,9 +212,7 @@ async function handleUpdate<TS extends Schema<string>>(
 			`Database error updating ${tableName}`,
 		)
 
-		return createErrorResponse(
-			`Database error: Failed to update ${tableName}. ${error instanceof Error ? error.message : "Unknown error"}`,
-		)
+		return createErrorResponse(`Database error: Failed to update ${tableName}.${describeDatabaseError(error)}`)
 	}
 }
 

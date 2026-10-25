@@ -13,8 +13,6 @@ import { entityGetters as questGetters } from "./quest-tools"
 import { entityGetters as regionGetters } from "./region-tools"
 import type { ToolDefinition, ToolHandler, ToolHandlerReturn } from "./utils/types"
 
-// Note: embedding-tools do not follow the standard getter pattern
-
 const combinedGetters = {
 	...consequenceGetters,
 	...conflictGetters,
@@ -85,18 +83,15 @@ const getEntityHandler: ToolHandler = async (args?: Record<string, unknown>) => 
 
 		if (id !== undefined && (result === null || result === undefined)) {
 			logger.info(`${entity_type} with ID ${id} not found.`)
-			return formatResponse(`${entity_type} with ID ${id} not found.`)
+			return formatResponse(`${entity_type} with ID ${id} not found.`, true)
 		}
 
 		logger.info(`Successfully retrieved ${entity_type}${id ? ` (ID: ${id})` : "s"}`)
-		return result
+		return formatResponse(JSON.stringify(result, null, 2))
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : String(error)
 		logger.error({ err: error, entity_type, id, getterKey }, "Error fetching entity")
 		return formatResponse(
-			id
-				? `Error fetching ${entity_type} by ID ${id}: ${errorMessage}`
-				: `Error fetching all ${entity_type}s: ${errorMessage}`,
+			id !== undefined ? `Error fetching ${entity_type} by ID ${id}.` : `Error fetching all ${entity_type}.`,
 			true,
 		)
 	}

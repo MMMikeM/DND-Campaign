@@ -6,7 +6,6 @@ import { createJsonResource } from "./resource-utils"
 const listFactionResponses: ResourceLister = async (): Promise<Resource[]> => {
 	const factions = await db.query.factions.findMany({
 		columns: { id: true, name: true },
-		limit: 3,
 	})
 	return factions.map(
 		(faction): Resource => ({

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test"
 import { z } from "zod/v4"
-import { createManageSchema } from "./schema"
+import { createManageSchema, createUpdateSchema } from "./schema"
 
 // createManageSchema now returns the zod schema itself (the SDK converts it for
 // tools/list); these tests inspect the JSON Schema the SDK would advertise.
@@ -138,5 +138,31 @@ describe("createManageSchema", () => {
 		expect(jsonSchema.properties).toHaveProperty("table")
 		expect(jsonSchema.properties).toHaveProperty("operation")
 		expect(jsonSchema.properties).toHaveProperty("data")
+	})
+})
+
+describe("updates to a table whose schema has a refinement", () => {
+	const links = z
+		.object({ sourceId: z.number(), targetId: z.number(), note: z.string() })
+		.strict()
+		.refine((data) => data.sourceId !== data.targetId, { message: "A link cannot point at itself" })
+	const manageSchema = createManageSchema({ links }, ["links"] as const)
+
+	it("accepts a partial update that leaves the refined fields out", () => {
+		const result = manageSchema.safeParse({ table: "links", operation: "update", id: 1, data: { note: "changed" } })
+		expect(result.success).toBe(true)
+	})
+
+	it("still rejects keys the table does not have", () => {
+		expect(createUpdateSchema(links).safeParse({ bogus: 1 }).success).toBe(false)
+	})
+
+	it("still applies the refinement on create", () => {
+		const result = manageSchema.safeParse({
+			table: "links",
+			operation: "create",
+			data: { sourceId: 1, targetId: 1, note: "loop" },
+		})
+		expect(result.success).toBe(false)
 	})
 })

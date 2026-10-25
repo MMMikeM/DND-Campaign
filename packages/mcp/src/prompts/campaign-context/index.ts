@@ -15,27 +15,17 @@ import { type CampaignContextArgs, campaignContextSchema } from "./types"
 async function campaignContextHandler(args: CampaignContextArgs) {
 	logger.info(args, "Executing campaign context prompt")
 
-	const [lore, conflicts, foreshadowing, npcs, consequences] = await Promise.all([
+	const [lore, conflicts, foreshadowing, npcs, quests, factions, consequences] = await Promise.all([
 		getLoreContext(),
-		getConsequences(),
 		getConflictContext(),
 		getForehadowingContext(),
 		getNpcContext(),
+		getQuestContext(),
+		getFactionContext(),
 		getConsequences(),
 	])
 
-	const questContext = await getQuestContext()
-	const factionContext = await getFactionContext()
-
-	const context = {
-		lore,
-		conflicts,
-		foreshadowing,
-		npcs,
-		quests: questContext,
-		factions: factionContext,
-		consequences,
-	}
+	const context = { lore, conflicts, foreshadowing, npcs, quests, factions, consequences }
 
 	const cleanedContext = cleanObject(context)
 

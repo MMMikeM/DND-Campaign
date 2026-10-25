@@ -1,4 +1,4 @@
-import type { RunResult } from "@tome-master/shared/db"
+import type { CallToolResult } from "@modelcontextprotocol/server"
 import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import type { z } from "zod/v4"
 
@@ -7,7 +7,7 @@ export type baseTableWithId = PgTable & {
 	id: PgColumn
 }
 
-export type ToolHandlerReturn = RunResult | Record<string, unknown> | Record<string, unknown>[]
+export type ToolHandlerReturn = CallToolResult
 
 export type ToolDefinition = {
 	enums?: Record<string, readonly string[]>

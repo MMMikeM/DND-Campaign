@@ -32,7 +32,7 @@ export const schemas = {
 		occupation: (s) => s.describe("Profession, role, or primary activity"),
 		quirk: (s) => s.describe("Single odd habit or trait that stands out"),
 		race: z.enum(races).describe("Species or ancestry (human, elf, dwarf, etc.)"),
-		voiceNotes: list.describe("Vocal qualities and accent for roleplaying"),
+		voiceNotes: (s) => s.describe("Vocal qualities and accent for roleplaying"),
 		tags: list.describe("Tags for this NPC"),
 	})
 		.omit({ id: true })

@@ -7,11 +7,9 @@ const listLocationContexts: ResourceLister = async (): Promise<Resource[]> => {
 	const [sites, regions] = await Promise.all([
 		db.query.sites.findMany({
 			columns: { id: true, name: true },
-			limit: 3,
 		}),
 		db.query.regions.findMany({
 			columns: { id: true, name: true },
-			limit: 2,
 		}),
 	])
 

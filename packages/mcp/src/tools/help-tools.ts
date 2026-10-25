@@ -114,7 +114,7 @@ const createToolHelpResponse = (toolName: string, allDefinitions: Record<string,
 		return {
 			content: [
 				{
-					type: "text",
+					type: "text" as const,
 					text: `Tool "${toolName}" not found. Use help() to see all available tools.`,
 				},
 			],
@@ -139,7 +139,7 @@ const createToolHelpResponse = (toolName: string, allDefinitions: Record<string,
 	const helpText = `# Tool: ${foundName}\n\n${description}\n\n${paramsText}${examplesText}${enumsText}`
 
 	return {
-		content: [{ type: "text", text: helpText }],
+		content: [{ type: "text" as const, text: helpText }],
 	}
 }
 
@@ -163,7 +163,7 @@ const createGeneralHelpResponse = (
 	const helpText = `# Available Tool Categories\n\n${categoriesText}\n\n## General Tools\n${generalToolsText}\n\nFor tool details: \`help({tool: 'tool_name'})\``
 
 	return {
-		content: [{ type: "text", text: helpText }],
+		content: [{ type: "text" as const, text: helpText }],
 	}
 }
 

@@ -1,4 +1,17 @@
+import { tables as conflictTables } from "@tome-master/shared/entities/conflicts"
+import { tables as consequenceTables } from "@tome-master/shared/entities/consequences"
+import { tables as factionTables } from "@tome-master/shared/entities/factions"
+import { tables as foreshadowingTables } from "@tome-master/shared/entities/foreshadowing"
+import { tables as loreTables } from "@tome-master/shared/entities/lore"
+import { tables as npcTables } from "@tome-master/shared/entities/npcs"
+import { tables as questTables } from "@tome-master/shared/entities/quests"
+import { tables as regionTables } from "@tome-master/shared/entities/regions"
+import type { InferSelectModel, Table } from "drizzle-orm"
 import { db } from ".."
+
+// Drizzle checks column names only in object literals written inline, so a selection kept in a constant is
+// checked here instead.
+type Columns<TTable extends Table> = { [K in keyof InferSelectModel<TTable>]?: boolean }
 
 // Common column configurations organized by entity type
 const COMMON_COLUMNS = {
@@ -11,7 +24,7 @@ const COMMON_COLUMNS = {
 			publicPerception: true,
 			publicAlignment: true,
 			publicGoal: true,
-		},
+		} satisfies Columns<typeof factionTables.factions>,
 		detailed: {
 			id: true,
 			name: true,
@@ -21,46 +34,51 @@ const COMMON_COLUMNS = {
 			publicGoal: true,
 			publicPerception: true,
 			description: true,
-		},
+		} satisfies Columns<typeof factionTables.factions>,
 	},
 
 	npc: {
 		basic: {
 			id: true,
 			name: true,
-			description: true,
+			summary: true,
 			occupation: true,
-			alignment: true,
-		},
+		} satisfies Columns<typeof npcTables.npcs>,
 		detailed: {
 			id: true,
 			name: true,
-			description: true,
+			summary: true,
 			occupation: true,
+			attitude: true,
+			socialStatusAndReputation: true,
+		} satisfies Columns<typeof npcTables.npcs>,
+	},
+
+	npcDetails: {
+		basic: {
 			alignment: true,
-			complexityProfile: true,
-			playerPerceptionGoal: true,
-			currentGoals: true,
+		} satisfies Columns<typeof npcTables.npcDetails>,
+		detailed: {
+			alignment: true,
+			complexity: true,
+			goalsAndFears: true,
 			preferredTopics: true,
 			avoidTopics: true,
-		},
+		} satisfies Columns<typeof npcTables.npcDetails>,
 	},
 
 	site: {
 		basic: {
 			id: true,
 			name: true,
-			type: true,
-		},
+			intendedSiteFunction: true,
+		} satisfies Columns<typeof regionTables.sites>,
 		detailed: {
 			id: true,
 			name: true,
 			description: true,
-			type: true,
 			intendedSiteFunction: true,
-			mood: true,
-			environment: true,
-		},
+		} satisfies Columns<typeof regionTables.sites>,
 	},
 
 	area: {
@@ -68,16 +86,15 @@ const COMMON_COLUMNS = {
 			id: true,
 			name: true,
 			type: true,
-		},
+		} satisfies Columns<typeof regionTables.areas>,
 		detailed: {
 			id: true,
 			name: true,
 			description: true,
-			atmosphereType: true,
-			leadership: true,
-			primaryActivity: true,
 			type: true,
-		},
+			cultureAndLeadership: true,
+			featuresAndHazards: true,
+		} satisfies Columns<typeof regionTables.areas>,
 	},
 
 	region: {
@@ -85,15 +102,16 @@ const COMMON_COLUMNS = {
 			id: true,
 			name: true,
 			type: true,
-		},
+		} satisfies Columns<typeof regionTables.regions>,
 		detailed: {
 			id: true,
 			name: true,
 			description: true,
-			atmosphereType: true,
-			rumors: true,
-			secrets: true,
-		},
+			type: true,
+			dangerLevel: true,
+			atmosphereAndCulture: true,
+			loreAndSecrets: true,
+		} satisfies Columns<typeof regionTables.regions>,
 	},
 
 	quest: {
@@ -101,15 +119,15 @@ const COMMON_COLUMNS = {
 			id: true,
 			name: true,
 			type: true,
-		},
+		} satisfies Columns<typeof questTables.quests>,
 		detailed: {
 			id: true,
 			name: true,
 			description: true,
 			type: true,
 			urgency: true,
-			visibility: true,
-		},
+			stakes: true,
+		} satisfies Columns<typeof questTables.quests>,
 	},
 
 	conflict: {
@@ -120,7 +138,7 @@ const COMMON_COLUMNS = {
 			moralDilemma: true,
 			description: true,
 			stakes: true,
-		},
+		} satisfies Columns<typeof conflictTables.conflicts>,
 	},
 
 	lore: {
@@ -129,7 +147,7 @@ const COMMON_COLUMNS = {
 			name: true,
 			loreType: true,
 			summary: true,
-		},
+		} satisfies Columns<typeof loreTables.lore>,
 		detailed: {
 			id: true,
 			name: true,
@@ -137,7 +155,7 @@ const COMMON_COLUMNS = {
 			loreType: true,
 			tags: true,
 			surfaceImpression: true,
-		},
+		} satisfies Columns<typeof loreTables.lore>,
 	},
 
 	foreshadowing: {
@@ -147,17 +165,7 @@ const COMMON_COLUMNS = {
 			description: true,
 			suggestedDeliveryMethods: true,
 			subtlety: true,
-		},
-	},
-
-	narrativeDestination: {
-		detailed: {
-			id: true,
-			name: true,
-			type: true,
-			status: true,
-			stakes: true,
-		},
+		} satisfies Columns<typeof foreshadowingTables.foreshadowing>,
 	},
 
 	// Common relationship patterns
@@ -167,33 +175,33 @@ const COMMON_COLUMNS = {
 		description: true,
 		timeframe: true,
 		consequenceType: true,
-	},
+	} satisfies Columns<typeof consequenceTables.consequences>,
 
 	factionInfluence: {
 		id: true,
 		description: true,
 		priorities: true,
-	},
+	} satisfies Columns<typeof factionTables.factionInfluence>,
 
 	factionMembership: {
 		id: true,
 		role: true,
 		loyalty: true,
-	},
+	} satisfies Columns<typeof npcTables.npcFactionMemberships>,
 
 	questParticipant: {
 		id: true,
 		roleInQuest: true,
 		involvementDetails: true,
 		importanceInQuest: true,
-	},
+	} satisfies Columns<typeof questTables.questParticipants>,
 
 	regionConnection: {
 		id: true,
 		connectionType: true,
 		sourceRegionId: true,
 		targetRegionId: true,
-	},
+	} satisfies Columns<typeof regionTables.regionConnections>,
 
 	factionAgenda: {
 		id: true,
@@ -203,14 +211,14 @@ const COMMON_COLUMNS = {
 		importance: true,
 		ultimateAim: true,
 		description: true,
-	},
+	} satisfies Columns<typeof factionTables.factionAgendas>,
 
 	factionDiplomacy: {
 		id: true,
 		strength: true,
 		diplomaticStatus: true,
 		description: true,
-	},
+	} satisfies Columns<typeof factionTables.factionDiplomacy>,
 } as const
 
 export const getSiteContext = async () =>
@@ -219,6 +227,7 @@ export const getSiteContext = async () =>
 		with: {
 			npcs: {
 				columns: COMMON_COLUMNS.npc.basic,
+				with: { details: { columns: COMMON_COLUMNS.npcDetails.basic } },
 			},
 			factionHqs: {
 				columns: COMMON_COLUMNS.faction.basic,
@@ -296,8 +305,9 @@ export const getForehadowingContext = async () => {
 	})
 }
 
-export const getFactionContext = async () => {
+export const getFactionContext = async (factionId?: number) => {
 	return db.query.factions.findMany({
+		...(factionId !== undefined && { where: { id: factionId } }),
 		columns: COMMON_COLUMNS.faction.detailed,
 		with: {
 			members: {
@@ -347,6 +357,7 @@ export const getNpcContext = async () => {
 	return await db.query.npcs.findMany({
 		columns: COMMON_COLUMNS.npc.detailed,
 		with: {
+			details: { columns: COMMON_COLUMNS.npcDetails.detailed },
 			questStageDeliveries: true,
 			stageInvolvement: true,
 			questHooks: true,

@@ -65,7 +65,7 @@ export const npcToolDefinitions: Record<"manage_npc", ToolDefinition> = {
 		annotations: {
 			title: "Manage NPCs",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

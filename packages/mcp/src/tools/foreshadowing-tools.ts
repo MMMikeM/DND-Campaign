@@ -14,7 +14,7 @@ export const entityGetters = createEntityGetters({
 		db.query.foreshadowing.findFirst({
 			where: { id },
 			with: {
-				incomingLoreLinks: nameAndId,
+				incomingLoreLinks: { with: { lore: nameAndId } },
 				sourceItem: nameAndId,
 				sourceLore: nameAndId,
 				sourceNpc: nameAndId,
@@ -42,7 +42,7 @@ export const foreshadowingToolDefinitions: Record<"manage_foreshadowing", ToolDe
 		annotations: {
 			title: "Manage Foreshadowing",
 			readOnlyHint: false,
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: false,
 			openWorldHint: false,
 		},

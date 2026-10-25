@@ -23,6 +23,7 @@ type TableNames = CreateTableNames<typeof tables>
 
 export const tableEnum = [
 	"regions",
+	"regionConnections",
 	"areas",
 	"sites",
 	"siteLinks",

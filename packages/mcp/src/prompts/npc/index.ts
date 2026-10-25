@@ -1,7 +1,7 @@
 /**
  * NPC Creation
  *
- * Provides the "create-npc" prompt for generating detailed NPCs
+ * Provides the "create_npc" prompt for generating detailed NPCs
  * with automatic relationship mapping, faction affiliations, quest hook
  * suggestions, and full campaign integration based on existing context.
  */
@@ -31,8 +31,8 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
     *   Synthesize the user's hints (name, location, role) with the contextual opportunities.
 
 2.  **Create the Core NPC:**
-    *   First, you **must** call the \`manage_npc\` tool with \`create\` on the \`npc\` table to establish the foundational character.
-    *   Use the context and hints to populate the NPC's core attributes (description, personality, goals, etc.) thoughtfully. Ground them in the world.
+    *   First, you **must** call the \`manage_npc\` tool with \`create\` on the \`npcs\` table to establish the foundational character.
+    *   Use the context and hints to populate the NPC's core attributes (summary, appearance, attitude, voice, etc.) thoughtfully. Ground them in the world.
 
 3.  **Establish Connections (CRUCIAL):**
     *   A newly created NPC is isolated. Your most important follow-up task is to weave them into the campaign's fabric by creating relationships.
@@ -95,15 +95,18 @@ A user wants to create a new Non-Player Character (NPC). Your job is to analyze 
 
 	prompt += `
 4.  **Create Optional Connections:**
-    *   \`manage_conflict\` on the \`conflict_participant\` table
-    *   \`manage_narrative_event\` on the \`narrative_event_consequence\` table
+    *   \`manage_npc\` on the \`npcDetails\` table (alignment, goals and fears, secrets, knowledge)
+    *   \`manage_npc\` on the \`npcFactionMemberships\` table
+    *   \`manage_npc\` on the \`npcRelations\` table
+    *   \`manage_conflict\` on the \`conflictParticipants\` table
+    *   \`manage_consequence\` on the \`consequences\` table (set \`affectedNpcId\`)
     *   \`manage_foreshadowing\` on the \`foreshadowing\` table
-    *   \`manage_item\` on the \`item_relation\` table
-    *   \`manage_narrative_destination\` on the \`narrative_destination_participant\` table
-    *   \`manage_quest\` on the \`quest_hook\` table
-    *   \`manage_quest\` on the \`quest_stage_delivery\` table
-    *   \`manage_stage\` on the \`stage_involvement\` table
-    *   \`manage_lore\` on the \`lore_link\` table
+    *   \`manage_item\` on the \`itemConnections\` table
+    *   \`manage_quest\` on the \`questHooks\` table (set \`deliveryNpcId\`)
+    *   \`manage_quest\` on the \`questParticipants\` table
+    *   \`manage_stage\` on the \`questStages\` table (set \`deliveryNpcId\`)
+    *   \`manage_stage\` on the \`npcStageInvolvement\` table
+    *   \`manage_lore\` on the \`loreLinks\` table
   `
 
 	return {

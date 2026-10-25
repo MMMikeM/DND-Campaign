@@ -6,7 +6,6 @@ import { createJsonResource } from "./resource-utils"
 const listNpcDialogueContexts: ResourceLister = async (): Promise<Resource[]> => {
 	const npcs = await db.query.npcs.findMany({
 		columns: { id: true, name: true },
-		limit: 3,
 	})
 	return npcs.map(
 		(npc): Resource => ({

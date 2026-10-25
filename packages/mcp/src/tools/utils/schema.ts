@@ -1,5 +1,16 @@
 import { z } from "zod/v4"
 
+/**
+ * zod refuses `.partial()` on a schema with refinements, and the refinements compare fields against each other,
+ * so they would reject any update that leaves one of those fields out. Updates are checked field by field; most
+ * cross-field rules are also database CHECK constraints, which see the whole row after the update.
+ */
+export const createUpdateSchema = (schema: z.ZodObject) => {
+	const unrefined = z.object(schema.shape)
+	const { catchall } = schema.def
+	return (catchall ? unrefined.catchall(catchall) : unrefined).partial()
+}
+
 export const createManageSchema = <T extends Record<K[number], z.ZodObject>, K extends readonly [string, ...string[]]>(
 	schemaObject: T,
 	tableEnum: K,
@@ -57,7 +68,7 @@ export const createManageSchema = <T extends Record<K[number], z.ZodObject>, K e
 
 			// For create operations, require full data
 			// For update operations, allow partial data
-			const dataSchema = operation === "update" ? tableSchema.partial() : tableSchema
+			const dataSchema = operation === "update" ? createUpdateSchema(tableSchema) : tableSchema
 			const result = dataSchema.safeParse(data)
 
 			if (!result.success) {

@@ -12,7 +12,8 @@ const { mapVariants, mapGroups } = mapTables
 
 type TableNames = CreateTableNames<typeof mapTables>
 
-export const tableEnum = ["mapVariants", "mapGroups"] as const satisfies TableNames
+export const mapGroupTableEnum = ["mapGroups"] as const satisfies TableNames
+export const mapVariantTableEnum = ["mapVariants"] as const satisfies TableNames
 
 export const schemas = {
 	mapVariants: createInsertSchema(mapVariants, {
