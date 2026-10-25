@@ -1,27 +1,18 @@
-import { fileURLToPath } from "node:url"
-import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql"
-import { drizzle } from "drizzle-orm/node-postgres"
-import { migrate } from "drizzle-orm/node-postgres/migrator"
-import pg from "pg"
+import type pg from "pg"
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test"
+import { startMigratedDatabase } from "./test-database"
 
 const BOOT_TIMEOUT = 180_000
 
-let container: StartedPostgreSqlContainer
+let database: Awaited<ReturnType<typeof startMigratedDatabase>>
 let pool: pg.Pool
 
 beforeAll(async () => {
-	container = await new PostgreSqlContainer("postgres:17").start()
-	pool = new pg.Pool({ connectionString: container.getConnectionUri() })
-	await migrate(drizzle({ client: pool }), {
-		migrationsFolder: fileURLToPath(new URL("../../drizzle", import.meta.url)),
-	})
+	database = await startMigratedDatabase()
+	pool = database.pool
 }, BOOT_TIMEOUT)
 
-afterAll(async () => {
-	await pool?.end()
-	await container?.stop()
-})
+afterAll(() => database?.stop())
 
 type Row = Record<string, unknown>
 

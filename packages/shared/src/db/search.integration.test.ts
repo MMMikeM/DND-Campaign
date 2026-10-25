@@ -1,26 +1,19 @@
-import { fileURLToPath } from "node:url"
-import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql"
 import { sql } from "drizzle-orm"
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres"
-import { migrate } from "drizzle-orm/node-postgres/migrator"
-import pg from "pg"
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test"
 import { selectEntityNames } from "./entity-names"
 import { buildFullTextQuery, type FullTextHit } from "./search-query"
+import { startMigratedDatabase } from "./test-database"
 
 // Booting a container and pulling the image the first time is slow.
 const BOOT_TIMEOUT = 180_000
 
-let container: StartedPostgreSqlContainer
-let pool: pg.Pool
+let database: Awaited<ReturnType<typeof startMigratedDatabase>>
 let db: NodePgDatabase
 
-// Runs the whole generated migration chain against an empty database, as a fresh clone would.
 beforeAll(async () => {
-	container = await new PostgreSqlContainer("postgres:17").start()
-	pool = new pg.Pool({ connectionString: container.getConnectionUri() })
-	db = drizzle({ client: pool })
-	await migrate(db, { migrationsFolder: fileURLToPath(new URL("../../drizzle", import.meta.url)) })
+	database = await startMigratedDatabase()
+	db = drizzle({ client: database.pool })
 
 	await db.execute(sql`
 		INSERT INTO regions (name, description, tags, danger_level, type, atmosphere_and_culture, features_and_hazards, history_and_economy, lore_and_secrets) VALUES
@@ -35,10 +28,7 @@ beforeAll(async () => {
 	`)
 }, BOOT_TIMEOUT)
 
-afterAll(async () => {
-	await pool?.end()
-	await container?.stop()
-})
+afterAll(() => database?.stop())
 
 const search = async (...args: Parameters<typeof buildFullTextQuery>): Promise<FullTextHit[]> => {
 	const { rows } = await db.execute<FullTextHit>(buildFullTextQuery(...args))
