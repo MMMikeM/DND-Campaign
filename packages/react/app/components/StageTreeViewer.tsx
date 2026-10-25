@@ -59,8 +59,10 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 			})
 		})
 
-		// Find root node (has no parent)
-		const rootStage = stages.find((stage) => !childToParentMap.has(stage.id))
+		// Find root node (has no parent); when every stage sits on a cycle, start from the first by stage order
+		const rootStage =
+			stages.find((stage) => !childToParentMap.has(stage.id)) ??
+			stages.toSorted((a, b) => a.stageOrder - b.stageOrder)[0]
 		if (!rootStage) return { nodes, edges }
 
 		// Generate hierarchical numbers
@@ -68,6 +70,7 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 
 		// Recursive function to assign numbers like 1, 1.1, 1.2, 1.1.1, etc.
 		const assignNumbersRecursive = (stageId: number, prefix: string) => {
+			if (hierarchicalNumbers.has(stageId)) return
 			hierarchicalNumbers.set(stageId, prefix)
 
 			// Get all children
@@ -88,11 +91,14 @@ const QuestStageFlow = ({ stages, currentStageId, onStageSelect }: QuestStageFlo
 
 		if (currentStageId) {
 			let currentId = currentStageId
+			const traced = new Set([currentId])
 
 			// Trace path back to root
 			while (childToParentMap.has(currentId)) {
 				const { parentId } = childToParentMap.get(currentId)!
 				animatedEdges.add(`edge-stage-${parentId}-stage-${currentId}`)
+				if (traced.has(parentId)) break
+				traced.add(parentId)
 				currentId = parentId
 			}
 		}

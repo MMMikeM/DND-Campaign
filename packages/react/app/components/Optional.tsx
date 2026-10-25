@@ -1,13 +1,12 @@
+import { Children } from "react"
+
 type OptionalChildrenProps = {
 	children: React.ReactNode
 	fallback: React.ReactNode
 }
 
 export const Optional = ({ children, fallback }: OptionalChildrenProps) => {
-	const isEmpty =
-		!children ||
-		(Array.isArray(children) && children.length === 0) ||
-		(Array.isArray(children) && children.every((child) => child == null))
+	const isEmpty = Children.toArray(children).length === 0
 
 	return isEmpty ? fallback : children
 }

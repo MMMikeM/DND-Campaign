@@ -9,11 +9,7 @@ import { getAllFactions } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const allFactions = await getAllFactions()
-	if (!allFactions) {
-		return new Response("No factions found", { status: 404 })
-	}
-	return allFactions
+	return await getAllFactions()
 }
 
 export default function FactionsIndex({ loaderData }: Route.ComponentProps) {

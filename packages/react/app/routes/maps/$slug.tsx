@@ -5,16 +5,12 @@ import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { getMap } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import MapVariants from "./components/VariantContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const map = await getMap(params.slug)
-	if (!map) {
-		throw new Response("Map not found", { status: 404 })
-	}
-
-	return map
+	return orNotFound(getMap(params.slug))
 }
 
 export default function MapDetail({ loaderData }: Route.ComponentProps) {
@@ -24,7 +20,7 @@ export default function MapDetail({ loaderData }: Route.ComponentProps) {
 		<>
 			<div className="container mx-auto py-6 px-4 sm:px-6 space-y-6">
 				<div className="flex justify-between items-center mb-6">
-					<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+					<NavLink to="/maps" className={buttonVariants({ variant: "outline", size: "sm" })}>
 						<Icons.ChevronLeft className="h-4 w-4 mr-2" />
 						Back to Maps
 					</NavLink>
@@ -55,7 +51,15 @@ export default function MapDetail({ loaderData }: Route.ComponentProps) {
 					<List items={description} heading="Description" spacing="sm" textColor="muted" />
 					<List items={creativePrompts} heading="Creative Prompts" spacing="sm" textColor="muted" />
 				</InfoCard>
-				<MapVariants variants={variants} />
+				{variants.length > 0 ? (
+					<MapVariants variants={variants} />
+				) : (
+					<InfoCard
+						title="Map Variants"
+						icon={<Icons.Map className="h-4 w-4 mr-2 text-primary" />}
+						emptyMessage="This map has no variants yet."
+					/>
+				)}
 			</div>
 		</>
 	)

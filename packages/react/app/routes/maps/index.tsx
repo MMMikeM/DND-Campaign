@@ -5,24 +5,18 @@ import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
 import { Badge } from "~/components/ui/badge"
-import { buttonVariants } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllMaps } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
 export async function loader() {
-	const maps = await getAllMaps()
-	if (!maps) {
-		throw new Response("Maps not found", { status: 404 })
-	}
-
-	return maps
+	return await getAllMaps()
 }
 
 export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
-	const allMaps = loaderData ?? []
+	const allMaps = loaderData
 
 	const filteredMaps = useSearchFilter(allMaps, searchTerm)
 
@@ -33,10 +27,6 @@ export default function MapsIndex({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Battle Maps</h1>
 					<p className="text-muted-foreground">Browse tactical battle maps for encounters and locations.</p>
 				</div>
-				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
-					<span className="mr-2">New Map</span>
-					<Icons.Map className="h-4 w-4" />
-				</NavLink>
 			</div>
 
 			<div className="mb-6">

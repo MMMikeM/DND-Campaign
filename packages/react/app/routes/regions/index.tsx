@@ -2,7 +2,6 @@ import * as Icons from "lucide-react"
 import { useState } from "react"
 import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
 import { getAllRegions } from "~/lib/entities"
@@ -30,12 +29,6 @@ export default function RegionsIndexPage({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Regions</h1>
 					<p className="text-muted-foreground">Browse and manage locations in your campaign world</p>
 				</div>
-				<Button>
-					<NavLink to="/regions/new" className="flex items-center">
-						<span className="mr-2">New Region</span>
-						<Icons.Map className="h-4 w-4" />
-					</NavLink>
-				</Button>
 			</div>
 
 			<div className="mb-6">

@@ -9,16 +9,11 @@ import type { Route } from "./+types/index"
 import { getArcStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const consequences = await getAllConsequences()
-	if (!consequences) {
-		console.warn("No consequences found or failed to load.")
-		return []
-	}
-	return consequences
+	return await getAllConsequences()
 }
 
 export default function ConsequencesIndex({ loaderData }: Route.ComponentProps) {
-	const allConsequences = loaderData ?? []
+	const allConsequences = loaderData
 	const [searchTerm, setSearchTerm] = useState("")
 
 	const filteredConsequences = useMemo(() => {

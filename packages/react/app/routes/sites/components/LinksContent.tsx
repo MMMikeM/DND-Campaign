@@ -12,8 +12,8 @@ export const LinksContent = ({ relations }: Pick<Site, "relations">) => {
 			icon={<Icons.Link2 className="h-4 w-4 mr-2 text-primary" />}
 			emptyMessage="No other sites are directly linked to this one."
 		>
-			{relations.map(({ linkType, creativePrompts, description, site }) => (
-				<div key={`link-${site?.id}`} className="border rounded p-4">
+			{relations.map(({ id, linkType, creativePrompts, description, site }) => (
+				<div key={`link-${id}`} className="border rounded p-4">
 					<div className="flex justify-between items-start mb-1">
 						<Link href={`/sites/${site?.slug}`}>
 							<h4 className="font-medium flex items-center">

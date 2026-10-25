@@ -34,18 +34,3 @@ export const getUrgencyVariant = (urgency: string) => {
 			return "outline"
 	}
 }
-
-export const getVisibilityVariant = (visibility: string) => {
-	switch (visibility) {
-		case "featured":
-			return "default"
-		case "known":
-			return "secondary"
-		case "rumored":
-			return "outline"
-		case "hidden":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}

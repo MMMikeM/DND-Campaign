@@ -2,14 +2,6 @@ import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAnd
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 
-const nameIdAndDescription = {
-	columns: {
-		id: true,
-		name: true,
-		description: true,
-	},
-} as const
-
 const loreConfig = {
 	findBy: (where: { id: number } | { slug: string }) =>
 		db.query.lore.findFirst({
@@ -19,14 +11,14 @@ const loreConfig = {
 				outgoingForeshadowing: foreshadowingWithTargets,
 				links: {
 					with: {
-						region: nameIdAndDescription,
-						faction: nameIdAndDescription,
-						npc: nameIdAndDescription,
-						conflict: nameIdAndDescription,
-						quest: nameIdAndDescription,
-						foreshadowing: nameIdAndDescription,
-						relatedLore: nameIdAndDescription,
-						item: nameIdAndDescription,
+						region: { columns: { id: true, name: true, slug: true, description: true } },
+						faction: { columns: { id: true, name: true, slug: true, description: true } },
+						npc: { columns: { id: true, name: true, slug: true, summary: true } },
+						conflict: { columns: { id: true, name: true, slug: true, description: true } },
+						quest: { columns: { id: true, name: true, slug: true, description: true } },
+						foreshadowing: { columns: { id: true, name: true, slug: true, description: true } },
+						relatedLore: { columns: { id: true, name: true, slug: true, description: true } },
+						item: { columns: { id: true, name: true, slug: true, description: true } },
 					},
 				},
 			},
@@ -38,8 +30,6 @@ const loreConfig = {
 export type Lore = NonNullable<Awaited<ReturnType<typeof loreConfig.findBy>>>
 
 export const getAllLore = () => loreConfig.getAll()
-
-export const getLoreById = (id: number) => loreConfig.findBy({ id })
 
 export const getLore = async (slugOrId: string) => {
 	const lore = await loreConfig.findBy(bySlugOrId(slugOrId))

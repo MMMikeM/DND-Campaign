@@ -3,7 +3,6 @@ import { useState } from "react"
 import { NavLink } from "react-router"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { buttonVariants } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllSites } from "~/lib/entities"
@@ -25,10 +24,6 @@ export default function SitesIndexPage({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Sites</h1>
 					<p className="text-muted-foreground">Browse specific locations within areas</p>
 				</div>
-				<NavLink to="/sites/new" className={buttonVariants({ variant: "default", size: "sm" })}>
-					<span className="mr-2">New Site</span>
-					<Icons.LocateFixed className="h-4 w-4" />
-				</NavLink>
 			</div>
 
 			<div className="mb-6">

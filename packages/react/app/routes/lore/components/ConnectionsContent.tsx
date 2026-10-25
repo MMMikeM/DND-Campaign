@@ -39,6 +39,7 @@ const LoreLinks = ({ links }: Pick<Lore, "links">) => {
 		>
 			{links.map(
 				({
+					id,
 					creativePrompts,
 					description,
 					linkDetailsText,
@@ -54,21 +55,26 @@ const LoreLinks = ({ links }: Pick<Lore, "links">) => {
 					region,
 					relatedLore,
 				}) => (
-					<div key={description[0]} className="border-b last:border-b-0 p-3 space-y-3">
+					<div key={id} className="border-b last:border-b-0 p-3 space-y-3">
 						<Tags tags={tags} variant="secondary" maxDisplay={8} />
 						<p>{linkDetailsText}</p>
 						<p>{linkRoleOrTypeText}</p>
 						<p>{linkStrength}</p>
 						<List items={description} heading="Description" spacing="sm" textColor="muted" />
 						<List items={creativePrompts} heading="Creative Prompts" spacing="sm" textColor="muted" />
-						<LoreLink link={conflict} type="conflict" />
-						<LoreLink link={faction} type="faction" />
-						<LoreLink link={foreshadowing} type="foreshadowing" />
-						<LoreLink link={item} type="item" />
-						<LoreLink link={npc} type="npc" />
-						<LoreLink link={quest} type="quest" />
-						<LoreLink link={region} type="region" />
-						<LoreLink link={relatedLore} type="lore" />
+						<LoreLink label="conflict" route="conflicts" entity={conflict} details={conflict?.description} />
+						<LoreLink label="faction" route="factions" entity={faction} details={faction?.description} />
+						<LoreLink
+							label="foreshadowing"
+							route="foreshadowing"
+							entity={foreshadowing}
+							details={foreshadowing?.description}
+						/>
+						<LoreLink label="item" entity={item} details={item?.description} />
+						<LoreLink label="npc" route="npcs" entity={npc} details={npc?.summary} />
+						<LoreLink label="quest" route="quests" entity={quest} details={quest?.description} />
+						<LoreLink label="region" route="regions" entity={region} details={region?.description} />
+						<LoreLink label="lore" route="lore" entity={relatedLore} details={relatedLore?.description} />
 					</div>
 				),
 			)}
@@ -77,43 +83,22 @@ const LoreLinks = ({ links }: Pick<Lore, "links">) => {
 }
 
 const LoreLink = ({
-	link,
-	type,
+	label,
+	route,
+	entity,
+	details,
 }: {
-	link: { id: number; name: string; description?: string[] | null } | null
-	type: string
+	label: string
+	route?: string
+	entity: { name: string; slug: string } | null
+	details?: string[] | null
 }) => {
-	if (!link) return null
+	if (!entity) return null
 	return (
 		<div>
-			<p>{type}</p>
-			<Link href={getHref(type, link.id.toString())}>{link.name}</Link>
-			<List items={link.description ?? undefined} spacing="sm" textColor="muted" />
+			<p>{label}</p>
+			{route ? <Link href={`/${route}/${entity.slug}`}>{entity.name}</Link> : <span>{entity.name}</span>}
+			<List items={details ?? undefined} spacing="sm" textColor="muted" />
 		</div>
 	)
-}
-
-const getHref = (targetEntityType: string, slug: string) => {
-	if (targetEntityType === "conflict") {
-		return `/conflicts/${slug}`
-	}
-
-	if (targetEntityType === "faction") {
-		return `/factions/${slug}`
-	}
-
-	if (targetEntityType === "npc") {
-		return `/npcs/${slug}`
-	}
-	if (targetEntityType === "quest") {
-		return `/quests/${slug}`
-	}
-	if (targetEntityType === "region") {
-		return `/regions/${slug}`
-	}
-	if (targetEntityType === "lore") {
-		return `/lore/${slug}`
-	}
-
-	throw new Error(`Unknown target entity type: ${targetEntityType}`)
 }

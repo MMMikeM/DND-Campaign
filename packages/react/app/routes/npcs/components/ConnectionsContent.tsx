@@ -165,9 +165,7 @@ export function ConnectionsContent({
 				{itemConnections.map(({ id, sourceItem, relationship }) => (
 					<div key={`item-relation-${id}`} className="border-b last:border-b-0 p-3 space-y-3">
 						<div className="flex justify-between">
-							<Link href={`/items/${sourceItem.id}`}>
-								<h4 className="font-medium">{sourceItem.name}</h4>
-							</Link>
+							<h4 className="font-medium">{sourceItem.name}</h4>
 							<BadgeWithTooltip variant="secondary" tooltipContent="Relationship Type">
 								{relationship}
 							</BadgeWithTooltip>

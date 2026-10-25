@@ -95,7 +95,7 @@ export function QuestsContent({ questParticipation, questHooks }: Pick<Faction, 
 							)}
 
 							{site && (
-								<Link href={`/locations/${site.slug}`} className="text-sm text-indigo-500">
+								<Link href={`/sites/${site.slug}`} className="text-sm text-indigo-500">
 									{site.name}
 								</Link>
 							)}

@@ -33,17 +33,3 @@ export const getParticipantRoleVariant = (role: string): "default" | "destructiv
 			return "outline"
 	}
 }
-
-export const getQuestImpactVariant = (impact: string): "default" | "destructive" | "outline" | "secondary" => {
-	switch (impact) {
-		case "escalates":
-			return "destructive"
-		case "deescalates":
-			return "default"
-		case "reveals_truth":
-		case "changes_sides":
-			return "secondary"
-		default:
-			return "outline"
-	}
-}

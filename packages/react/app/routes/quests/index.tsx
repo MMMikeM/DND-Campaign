@@ -3,18 +3,13 @@ import { useState } from "react"
 import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
-import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { getAllQuests } from "~/lib/entities"
 import type { Route } from "./+types/index"
 import { getTypeVariant, getUrgencyVariant } from "./utils"
 
 export async function loader() {
-	const quests = await getAllQuests()
-	if (!quests) {
-		throw new Response("No quests found", { status: 404 })
-	}
-	return quests
+	return await getAllQuests()
 }
 
 export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
@@ -35,12 +30,6 @@ export default function QuestsIndexPage({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">Quests</h1>
 					<p className="text-muted-foreground">Manage and track adventures in your campaign</p>
 				</div>
-				<Button>
-					<NavLink to="/quests/new" className="flex items-center">
-						<span className="mr-2">New Quest</span>
-						<Icons.Scroll className="h-4 w-4" />
-					</NavLink>
-				</Button>
 			</div>
 
 			<div className="mb-6">

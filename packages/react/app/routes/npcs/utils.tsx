@@ -33,16 +33,3 @@ export const getAdaptabilityVariant = (adaptability: string | undefined) => {
 			return "outline"
 	}
 }
-
-export const getRelationshipTypeVariant = (type: string) => {
-	switch (type) {
-		case "ally":
-			return "default"
-		case "neutral":
-			return "secondary"
-		case "enemy":
-			return "destructive"
-		default:
-			return "outline"
-	}
-}

@@ -17,7 +17,7 @@ export default function StageOverviewTab() {
 	}
 
 	if (!stageTab) {
-		return <Navigate to={`/quests/${questSlug}/stages/${stageSlug}/overview`} />
+		return <Navigate replace to={`/quests/${questSlug}/stages/${stageSlug}/overview`} />
 	}
 
 	const handleTabChange = (value: string) => {

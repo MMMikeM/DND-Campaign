@@ -4,7 +4,6 @@ import { NavLink } from "react-router" // Corrected import source
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { InfoCard } from "~/components/InfoCard"
 import { List } from "~/components/List"
-import { buttonVariants } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
 import { getAllConflicts } from "~/lib/entities"
@@ -12,16 +11,12 @@ import type { Route } from "./+types/index"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const conflicts = await getAllConflicts()
-	if (!conflicts) {
-		return new Response("No conflicts found", { status: 404 })
-	}
-	return conflicts
+	return await getAllConflicts()
 }
 
 export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 	const [searchTerm, setSearchTerm] = useState("")
-	const allConflicts = loaderData ?? []
+	const allConflicts = loaderData
 
 	const filteredConflicts = useSearchFilter(allConflicts, searchTerm)
 
@@ -34,10 +29,6 @@ export default function ConflictsIndex({ loaderData }: Route.ComponentProps) {
 						Browse and manage ongoing or historical conflicts in the campaign world.
 					</p>
 				</div>
-				<NavLink to="/conflicts/new" className={buttonVariants({ variant: "default", size: "sm" })}>
-					<span className="mr-2">New Conflict</span>
-					<Icons.Swords className="h-4 w-4" />
-				</NavLink>
 			</div>
 
 			<div className="mb-6">

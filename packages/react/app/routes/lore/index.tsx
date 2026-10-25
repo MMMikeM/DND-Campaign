@@ -8,11 +8,7 @@ import { getAllLore } from "~/lib/entities"
 import type { Route } from "./+types/index"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const lore = await getAllLore()
-	if (!lore) {
-		throw new Response("Lore not found", { status: 404 })
-	}
-	return lore
+	return await getAllLore()
 }
 
 export default function LoreIndex({ loaderData }: Route.ComponentProps) {

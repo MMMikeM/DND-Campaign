@@ -6,7 +6,7 @@ import { List } from "~/components/List"
 import { Tags } from "~/components/Tags"
 import type { Faction } from "~/lib/entities"
 
-export function MembersContent({ members }: Pick<Faction, "members">) {
+export function MembersContent({ name, members }: Pick<Faction, "name" | "members">) {
 	return (
 		<InfoCard
 			title="Members"

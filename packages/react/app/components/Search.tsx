@@ -2,7 +2,7 @@ import * as Icons from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { createNameSearch, mergeSearchResults, type SearchResult } from "@tome-master/shared/search"
 import { useMemo, useState } from "react"
-import { NavLink, useFetcher, useNavigation } from "react-router"
+import { NavLink, useFetcher } from "react-router"
 import { useEntityNames } from "~/lib/search"
 import type { loader } from "~/routes/api/search"
 import { Input } from "./ui/input"
@@ -10,17 +10,15 @@ import { Input } from "./ui/input"
 const RESULT_LIMIT = 10
 
 export function Search() {
-	const navigation = useNavigation()
-
 	const fetcher = useFetcher<typeof loader>()
-	const isPending = navigation.state === "loading"
+	const isPending = fetcher.state !== "idle"
 	const [isFocused, setIsFocused] = useState(false)
 	const [searchQuery, setSearchQuery] = useState("")
 	const { names, refresh: refreshNames } = useEntityNames()
 	const searchNames = useMemo(() => createNameSearch(names ?? []), [names])
 
 	const query = searchQuery.trim()
-	const textHits = query.length >= 3 ? (fetcher.data ?? []) : []
+	const textHits = query.length >= 3 && !isPending ? (fetcher.data ?? []) : []
 	const results = query ? mergeSearchResults(searchNames(query), textHits, RESULT_LIMIT) : []
 
 	return (

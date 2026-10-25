@@ -5,6 +5,7 @@ import { Tags } from "~/components/Tags"
 import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getLore, type Lore } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
@@ -14,16 +15,7 @@ import { LoreOverviewContent } from "./components/OverviewContent"
 import { getLoreTypeVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const lore = await getLore(params.slug)
-	if (!lore) {
-		throw new Response("Lore not found", { status: 404 })
-	}
-
-	return lore
+	return orNotFound(getLore(params.slug))
 }
 
 const TABS = ["Overview", "Details", "Impact", "Connections"]

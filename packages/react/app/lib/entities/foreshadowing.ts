@@ -1,4 +1,4 @@
-import { bySlugOrId, nameAndId } from "."
+import { bySlugOrId, foreshadowingWithSources, foreshadowingWithTargets, nameAndId } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
 
@@ -7,21 +7,9 @@ const foreshadowingConfig = {
 		db.query.foreshadowing.findFirst({
 			where,
 			with: {
-				sourceNpc: nameAndId,
-				sourceQuest: nameAndId,
-				sourceSite: nameAndId,
-				sourceQuestStage: nameAndId,
-				targetFaction: nameAndId,
-				targetNpc: nameAndId,
-				targetQuest: nameAndId,
-				targetSite: nameAndId,
-				targetLore: nameAndId,
-				targetItem: nameAndId,
-				targetConflict: nameAndId,
-				sourceItem: nameAndId,
-				sourceLore: nameAndId,
-				incomingLoreLinks: nameAndId,
-				targetConsequence: nameAndId,
+				...foreshadowingWithSources.with,
+				...foreshadowingWithTargets.with,
+				incomingLoreLinks: { with: { lore: nameAndId } },
 			},
 		}),
 	getAll: () => db.query.foreshadowing.findMany({}),

@@ -6,6 +6,7 @@ import { Tags } from "~/components/Tags"
 import { Button, buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getArea } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { AreaHeader } from "./components/AreaHeader"
 import { DetailsContent } from "./components/DetailsContent"
@@ -14,16 +15,7 @@ import { OverviewContent } from "./components/OverviewContent"
 import { SitesContent } from "./components/SitesContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const area = await getArea(params.slug)
-	if (!area) {
-		throw new Response("Area not found", { status: 404 })
-	}
-
-	return area
+	return orNotFound(getArea(params.slug))
 }
 
 const tabList = ["overview", "details", "sites", "influence", "consequences", "foreshadowing"]

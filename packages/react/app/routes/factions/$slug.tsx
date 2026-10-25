@@ -6,6 +6,7 @@ import { Link } from "~/components/ui/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Faction as FactionType } from "~/lib/entities"
 import { getFaction } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { AgendasContent } from "./components/AgendasContent"
 import { CultureContent } from "./components/CultureContent"
@@ -16,18 +17,10 @@ import { OverviewContent } from "./components/OverviewContent"
 import { QuestsContent } from "./components/QuestsContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const faction = await getFaction(params.slug)
+	const faction = await orNotFound(getFaction(params.slug))
 
 	if (Number.isInteger(Number(params.slug))) {
-		return replace(`/factions/${faction.slug}`)
-	}
-
-	if (!faction) {
-		throw new Response("Faction not found", { status: 404 })
+		return replace(`/factions/${faction.slug}${params.tab ? `/${params.tab}` : ""}`)
 	}
 
 	return faction
@@ -177,7 +170,7 @@ export default function Faction({ loaderData }: Route.ComponentProps) {
 					</TabsContent>
 
 					<TabsContent value="members" className="animate-in fade-in-50 duration-300">
-						<MembersContent members={members} />
+						<MembersContent name={name} members={members} />
 					</TabsContent>
 				</Tabs>
 			</div>

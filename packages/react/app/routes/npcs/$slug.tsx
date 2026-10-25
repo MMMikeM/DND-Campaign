@@ -4,6 +4,7 @@ import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getNpc } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 import { KnowledgeContent } from "./components/KnowledgeContent"
@@ -13,16 +14,7 @@ import { DetailsContent } from "./components/PersonalityContent"
 import { SocialContent } from "./components/SocialContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const npc = await getNpc(params.slug)
-	if (!npc) {
-		throw new Response("NPC not found", { status: 404 })
-	}
-
-	return npc
+	return orNotFound(getNpc(params.slug))
 }
 
 export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
@@ -68,7 +60,7 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="container mx-auto py-6">
 			<div className="mb-6">
-				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+				<NavLink to="/npcs" className={buttonVariants({ variant: "outline", size: "sm" })}>
 					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
 					Back to NPCs
 				</NavLink>
@@ -107,14 +99,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 					<BadgeWithTooltip variant="outline" className="flex items-center" tooltipContent="Character identity">
 						<Icons.Users className="h-3.5 w-3.5 mr-1" />
 						{gender}
-					</BadgeWithTooltip>
-					<BadgeWithTooltip
-						variant={getTrustVariant(details?.adaptability || "")}
-						className="flex items-center"
-						tooltipContent="How readily this character trusts others"
-					>
-						<Icons.UserCheck className="h-3.5 w-3.5 mr-1" />
-						{details?.adaptability} trust
 					</BadgeWithTooltip>
 					<BadgeWithTooltip
 						variant={getAdaptabilityVariant(details?.adaptability || "")}
@@ -189,21 +173,6 @@ export default function NpcDetailPage({ loaderData }: Route.ComponentProps) {
 			</Tabs>
 		</div>
 	)
-}
-
-const getTrustVariant = (trust: string): "default" | "destructive" | "outline" | "secondary" => {
-	switch (trust) {
-		case "high":
-			return "default"
-		case "medium":
-			return "default"
-		case "low":
-			return "secondary"
-		case "none":
-			return "destructive"
-		default:
-			return "outline"
-	}
 }
 
 const getAdaptabilityVariant = (adaptability: string): "default" | "destructive" | "outline" | "secondary" => {

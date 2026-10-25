@@ -58,7 +58,7 @@ export function OverviewContent({
 				{primaryHqSite && (
 					<Fragment key={primaryHqSite.id}>
 						<Link
-							href={`/locations/${primaryHqSite.slug}`}
+							href={`/sites/${primaryHqSite.slug}`}
 							className="text-lg font-medium text-slate-900 dark:text-slate-100 hover:text-primary transition-colors flex items-center"
 						>
 							<Icons.MapPin className="h-4 w-4 mr-2 text-rose-500" />

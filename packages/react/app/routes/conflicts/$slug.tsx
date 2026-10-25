@@ -7,6 +7,7 @@ import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import type { Conflict } from "~/lib/entities"
 import { getConflict } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import { titleToCamelCase } from "~/lib/utils"
 import type { Route } from "./+types/$slug"
 import { ItemsContent } from "./components/ItemsContent"
@@ -17,12 +18,7 @@ import { ProgressionContent } from "./components/ProgressionContent"
 import { getConflictStatusVariant } from "./utils"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const conflict = await getConflict(params.slug)
-	if (!conflict) {
-		throw new Response("Conflict not found", { status: 404 })
-	}
-
-	return conflict
+	return orNotFound(getConflict(params.slug))
 }
 
 export function Header({ name, scope, nature, status }: Pick<Conflict, "name" | "scope" | "nature" | "status">) {

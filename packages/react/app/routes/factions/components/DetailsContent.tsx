@@ -118,9 +118,7 @@ export function DetailsContent({
 			>
 				{itemConnections.map(({ id, relationship, details, sourceItem }) => (
 					<div key={`item-${id}`} className="border-b last:border-0 p-3">
-						<Link href={`/items/${sourceItem.slug}`} className="text-sm font-medium">
-							{sourceItem.name}
-						</Link>
+						<p className="text-sm font-medium">{sourceItem.name}</p>
 						<p className="text-sm text-muted-foreground">{relationship}</p>
 						<List items={details} />
 					</div>

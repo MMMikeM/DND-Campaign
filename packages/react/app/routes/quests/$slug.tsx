@@ -6,6 +6,7 @@ import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getQuest } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 import { OverviewContent } from "./components/OverviewContent"
@@ -14,13 +15,7 @@ import { StagesContent } from "./components/StagesContent"
 import { ThemesContent } from "./components/ThemesContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const quest = await getQuest(params.slug)
-
-	return quest
+	return orNotFound(getQuest(params.slug))
 }
 
 export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
@@ -70,7 +65,7 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 
 	const handleTabChange = (value: string) => {
 		if (value === "stages" && selectedStage) {
-			navigate(`/quests/${slug}/stages/${selectedStage.slug}`)
+			navigate(`/quests/${slug}/stages/${selectedStage.slug}/overview`)
 		} else {
 			navigate(`/quests/${slug}/${value === "overview" ? "" : value}`)
 		}
@@ -79,11 +74,7 @@ export default function QuestDetailPage({ loaderData }: Route.ComponentProps) {
 	const handleStageSelect = (stageId: number) => {
 		const stage = stages.find((s) => s.id === stageId)
 		if (stage) {
-			if (stageTab) {
-				navigate(`/quests/${slug}/stages/${stage.slug}/${stageTab}`)
-			} else {
-				navigate(`/quests/${slug}/stages/${stage.slug}`)
-			}
+			navigate(`/quests/${slug}/stages/${stage.slug}/${stageTab ?? "overview"}`)
 		}
 	}
 

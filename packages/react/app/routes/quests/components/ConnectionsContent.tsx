@@ -31,14 +31,8 @@ export const ConnectionsContent: React.FC<ConnectionsContentProps> = ({
 	const factionParticipants = participants.filter((participant) => participant.faction !== null)
 	const npcParticipants = participants.filter((participant) => participant.npc !== null)
 
-	// "prerequisite" and "hidden_connection" point away from this quest; the rest point back toward it.
-	const leadsTo = relations.filter(
-		({ relationshipType }) => relationshipType === "prerequisite" || relationshipType === "hidden_connection",
-	)
-	const followsFrom = relations.filter(
-		({ relationshipType }) =>
-			relationshipType === "sequel" || relationshipType === "parallel" || relationshipType === "alternative",
-	)
+	const leadsTo = relations.filter(pointsAway)
+	const followsFrom = relations.filter((relation) => !pointsAway(relation))
 
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -198,23 +192,43 @@ const ParticipantEntry = ({
 	)
 }
 
-const relationTooltips: Record<string, string> = {
-	prerequisite: "This quest must be completed before the linked quest",
-	hidden_connection: "Hidden connection to this quest",
-	sequel: "This quest follows the linked quest",
-	parallel: "This quest runs alongside the linked quest",
-	alternative: "Alternative path to the linked quest",
+/**
+ * A relation reads "source <type> target": a prerequisite or hidden connection points from the source to the
+ * target, and the other types point back at the source. Seen from the target's page, the direction flips.
+ */
+const pointsAway = ({ relationshipType, direction }: Relation) =>
+	(relationshipType === "prerequisite" || relationshipType === "hidden_connection") === (direction === "outgoing")
+
+const relationTooltips: Record<Relation["direction"], Record<Relation["relationshipType"], string>> = {
+	outgoing: {
+		prerequisite: "This quest must be completed before the linked quest",
+		hidden_connection: "Hidden connection to the linked quest",
+		sequel: "This quest follows the linked quest",
+		parallel: "This quest runs alongside the linked quest",
+		alternative: "Alternative path to the linked quest",
+	},
+	incoming: {
+		prerequisite: "The linked quest must be completed before this quest",
+		hidden_connection: "Hidden connection from the linked quest",
+		sequel: "The linked quest follows this quest",
+		parallel: "The linked quest runs alongside this quest",
+		alternative: "The linked quest is an alternative path to this quest",
+	},
 }
 
 const RelationEntry = ({ relation }: { relation: Relation }) => {
-	const { creativePrompts, description, quest, relationshipType } = relation
+	const { creativePrompts, description, direction, quest, relationshipType } = relation
 
 	return (
 		<div className="border-b pb-3 last:border-0">
 			<Link href={`/quests/${quest.slug}`} className="font-medium hover:text-primary">
 				{quest.name}
 			</Link>
-			<BadgeWithTooltip variant="outline" className="ml-2" tooltipContent={relationTooltips[relationshipType]}>
+			<BadgeWithTooltip
+				variant="outline"
+				className="ml-2"
+				tooltipContent={relationTooltips[direction][relationshipType]}
+			>
 				{relationshipType.replace("_", " ")}
 			</BadgeWithTooltip>
 

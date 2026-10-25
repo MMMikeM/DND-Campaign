@@ -3,7 +3,7 @@ import { InfoCard } from "~/components/InfoCard"
 import { Link } from "~/components/ui/link"
 import type { Consequence } from "~/lib/entities"
 
-type EntityRef = { id: number; name: string; slug: string } | null
+type EntityRef = { id: number; name: string; slug: string }
 
 type ConnectionsContentProps = Pick<
 	Consequence,
@@ -21,8 +21,6 @@ type ConnectionsContentProps = Pick<
 >
 
 const Ref = ({ label, to, entity }: { label: string; to?: string; entity: EntityRef }) => {
-	if (!entity) return null
-
 	return (
 		<div className="border-b last:border-0 p-3">
 			<span className="text-sm font-medium mr-2">{label}:</span>
@@ -46,14 +44,14 @@ export function ConnectionsContent({
 }: ConnectionsContentProps) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-			{/* chk_single_trigger allows at most one of these. */}
+			{/* chk_trigger_matches_source allows at most one of these. */}
 			<InfoCard
 				title="Caused By"
 				icon={<Icons.ArrowLeftCircle className="h-4 w-4 mr-2 text-blue-600" />}
 				emptyMessage="No trigger recorded."
 			>
-				<Ref label="Quest" to="quests" entity={triggerQuest} />
-				<Ref label="Decision" entity={triggerQuestStageDecision} />
+				{triggerQuest && <Ref label="Quest" to="quests" entity={triggerQuest} />}
+				{triggerQuestStageDecision && <Ref label="Decision" entity={triggerQuestStageDecision} />}
 			</InfoCard>
 
 			{/* chk_single_affected_entity allows exactly one of these. */}
@@ -62,14 +60,14 @@ export function ConnectionsContent({
 				icon={<Icons.ArrowRightCircle className="h-4 w-4 mr-2 text-amber-600" />}
 				emptyMessage="No affected entity recorded."
 			>
-				<Ref label="Quest" to="quests" entity={affectedQuest} />
-				<Ref label="NPC" to="npcs" entity={affectedNpc} />
-				<Ref label="Conflict" to="conflicts" entity={affectedConflict} />
-				<Ref label="Faction" to="factions" entity={affectedFaction} />
-				<Ref label="Site" to="sites" entity={affectedSite} />
-				<Ref label="Area" to="areas" entity={affectedArea} />
-				<Ref label="Region" to="regions" entity={affectedRegion} />
-				<Ref label="Consequence" to="consequences" entity={affectedConsequence} />
+				{affectedQuest && <Ref label="Quest" to="quests" entity={affectedQuest} />}
+				{affectedNpc && <Ref label="NPC" to="npcs" entity={affectedNpc} />}
+				{affectedConflict && <Ref label="Conflict" to="conflicts" entity={affectedConflict} />}
+				{affectedFaction && <Ref label="Faction" to="factions" entity={affectedFaction} />}
+				{affectedSite && <Ref label="Site" to="sites" entity={affectedSite} />}
+				{affectedArea && <Ref label="Area" to="areas" entity={affectedArea} />}
+				{affectedRegion && <Ref label="Region" to="regions" entity={affectedRegion} />}
+				{affectedConsequence && <Ref label="Consequence" to="consequences" entity={affectedConsequence} />}
 			</InfoCard>
 
 			<InfoCard

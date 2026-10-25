@@ -6,16 +6,13 @@ import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { type Consequence, getConsequence } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { ConnectionsContent } from "./components/ConnectionsContent"
 import { OverviewContent } from "./components/OverviewContent"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	return await getConsequence(params.slug)
+	return orNotFound(getConsequence(params.slug))
 }
 
 export default function ConsequenceDetail({ loaderData }: Route.ComponentProps) {
@@ -60,7 +57,7 @@ export default function ConsequenceDetail({ loaderData }: Route.ComponentProps) 
 	return (
 		<div className="container mx-auto py-6 px-4 sm:px-6">
 			<div className="flex justify-between items-center mb-6">
-				<NavLink to="/quests" className={buttonVariants({ variant: "outline", size: "sm" })}>
+				<NavLink to="/consequences" className={buttonVariants({ variant: "outline", size: "sm" })}>
 					<Icons.ChevronLeft className="h-4 w-4 mr-2" />
 					Back to Consequences
 				</NavLink>

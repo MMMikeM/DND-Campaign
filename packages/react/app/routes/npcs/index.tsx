@@ -2,7 +2,6 @@ import * as Icons from "lucide-react"
 import { useState } from "react"
 import { NavLink } from "react-router"
 import { BadgeWithTooltip } from "~/components/badge-with-tooltip"
-import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
 import { useSearchFilter } from "~/hooks/useSearchFilter"
@@ -25,12 +24,6 @@ export default function NpcsIndexPage({ loaderData }: Route.ComponentProps) {
 					<h1 className="text-3xl font-bold">NPCs</h1>
 					<p className="text-muted-foreground">Browse and manage characters in your campaign world</p>
 				</div>
-				<Button>
-					<NavLink to="/npcs/new" className="flex items-center">
-						<span className="mr-2">New NPC</span>
-						<Icons.User className="h-4 w-4" />
-					</NavLink>
-				</Button>
 			</div>
 
 			<div className="mb-6">

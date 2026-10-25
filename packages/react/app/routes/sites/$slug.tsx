@@ -4,6 +4,7 @@ import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getSite } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { DetailsContent } from "./components/DetailsContent"
 import { EncountersContent } from "./components/EncountersContent"
@@ -17,16 +18,7 @@ import { SecretsContent } from "./components/SecretsContent"
 import { SiteHeader } from "./components/SiteHeader"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const site = await getSite(params.slug)
-	if (!site) {
-		throw new Response("Site not found", { status: 404 })
-	}
-
-	return site
+	return orNotFound(getSite(params.slug))
 }
 
 export default function SiteDetailPage({ loaderData }: Route.ComponentProps) {

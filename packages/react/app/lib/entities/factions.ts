@@ -8,7 +8,6 @@ const factionConfig = {
 		db.query.factions.findFirst({
 			where,
 			columns: {
-				primaryHqSiteId: false,
 				id: false,
 				hqSiteId: false,
 			},

@@ -8,7 +8,6 @@ import {
 } from "."
 import { db } from "../db"
 import { EntityNotFoundError } from "../errors"
-import { unifyRelations } from "../utils/unify"
 
 const questConfig = {
 	findBy: (where: { id: number } | { slug: string }) =>
@@ -31,7 +30,6 @@ const questConfig = {
 						deliveryNpc: nameAndId,
 						incomingDecisions: { with: { sourceStage: true } },
 						itemConnections: { with: { sourceItem: nameAndId } },
-						items: true,
 						npcInvolvement: true,
 						outgoingDecisions: { with: { targetStage: true, consequences: true } },
 						outgoingForeshadowing: true,
@@ -75,10 +73,23 @@ export const getQuest = async (slugOrId: string) => {
 		throw new EntityNotFoundError("Quest", slugOrId)
 	}
 
-	return unifyRelations(quest)
-		.from({ property: "incomingRelations", key: "sourceQuest" })
-		.with({ property: "outgoingRelations", key: "targetQuest" })
-		.to({ property: "relations", key: "quest" })
+	const { incomingRelations, outgoingRelations, ...rest } = quest
+
+	return {
+		...rest,
+		relations: [
+			...outgoingRelations.map(({ targetQuest, ...relation }) => ({
+				...relation,
+				quest: targetQuest,
+				direction: "outgoing" as const,
+			})),
+			...incomingRelations.map(({ sourceQuest, ...relation }) => ({
+				...relation,
+				quest: sourceQuest,
+				direction: "incoming" as const,
+			})),
+		],
+	}
 }
 
 export const getQuestNames = () => questConfig.getNamesAndIds()

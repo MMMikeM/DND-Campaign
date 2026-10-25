@@ -38,7 +38,7 @@ type RefKey = keyof ForeshadowingSeed & (`source${string}` | `target${string}`)
 
 type RefConfig = { key: RefKey; label: string; route: string | null }
 
-const sourceRefs: RefConfig[] = [
+export const sourceRefs: RefConfig[] = [
 	{ key: "sourceQuest", label: "Quest", route: "quests" },
 	{ key: "sourceQuestStage", label: "Quest Stage", route: null },
 	{ key: "sourceNpc", label: "NPC", route: "npcs" },
@@ -47,7 +47,7 @@ const sourceRefs: RefConfig[] = [
 	{ key: "sourceItem", label: "Item", route: null },
 ]
 
-const targetRefs: RefConfig[] = [
+export const targetRefs: RefConfig[] = [
 	{ key: "targetQuest", label: "Quest", route: "quests" },
 	{ key: "targetNpc", label: "NPC", route: "npcs" },
 	{ key: "targetConflict", label: "Conflict", route: "conflicts" },
@@ -78,20 +78,31 @@ const ForeshadowingRefs = ({
 	return (
 		<div className="mt-2 text-sm">
 			<h5 className="font-semibold">{heading}</h5>
-			{present.map(({ key, label, route }) => {
-				const entity = seed[key] as NonNullable<EntityRef>
-
-				return route && entity.slug ? (
-					<Link key={key} className="text-primary hover:underline" href={`/${route}/${entity.slug}`}>
-						{label}: {entity.name}
-					</Link>
-				) : (
-					<span key={key}>
-						{label}: {entity.name}
-					</span>
-				)
-			})}
+			{present.map((config) => (
+				<ForeshadowingRef key={config.key} seed={seed} config={config} />
+			))}
 		</div>
+	)
+}
+
+/** Renders one source or target of `seed`; the caller filters out refs the seed doesn't have. */
+export const ForeshadowingRef = ({
+	seed,
+	config: { key, label, route },
+}: {
+	seed: ForeshadowingSeed
+	config: RefConfig
+}) => {
+	const entity = seed[key] as NonNullable<EntityRef>
+
+	return route && entity.slug ? (
+		<Link className="text-primary hover:underline" href={`/${route}/${entity.slug}`}>
+			{label}: {entity.name}
+		</Link>
+	) : (
+		<span>
+			{label}: {entity.name}
+		</span>
 	)
 }
 

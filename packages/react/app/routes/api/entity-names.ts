@@ -16,3 +16,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 	}
 	return new Response(body, { headers: { ...headers, "Content-Type": "application/json" } })
 }
+
+// fetcher.load requests `/api/entity-names.data`, where single fetch drops loader headers this doesn't forward.
+export const headers: Route.HeadersFunction = ({ loaderHeaders }) => loaderHeaders

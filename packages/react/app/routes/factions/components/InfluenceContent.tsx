@@ -137,12 +137,7 @@ function FactionRelationsCard({ relations }: { relations: Faction["relations"] }
 					<List items={description} heading="Description" initialCollapsed />
 					<List items={creativePrompts} heading="Creative Prompts" initialCollapsed />
 				</div>
-			)) ?? (
-				<div className="py-8 text-center">
-					<Icons.AlertCircle className="h-10 w-10 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
-					<p className="text-muted-foreground">No relations with other factions established.</p>
-				</div>
-			)}
+			))}
 		</InfoCard>
 	)
 }

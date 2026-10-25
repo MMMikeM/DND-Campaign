@@ -7,6 +7,12 @@ import type { Faction } from "~/lib/entities"
 export function AgendasContent({ agendas }: Pick<Faction, "agendas">) {
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			{agendas.length === 0 && (
+				<div className="col-span-full py-12 text-center border rounded-lg bg-slate-50 dark:bg-slate-900">
+					<Icons.AlertCircle className="h-10 w-10 mx-auto text-slate-400 mb-3" />
+					<p className="text-muted-foreground">No active agendas for this faction.</p>
+				</div>
+			)}
 			{agendas.map((agenda) => (
 				<InfoCard
 					key={`agenda-${agenda.id}`}
@@ -45,12 +51,7 @@ export function AgendasContent({ agendas }: Pick<Faction, "agendas">) {
 						initialCollapsed={true}
 					/>
 				</InfoCard>
-			)) ?? (
-				<div className="col-span-full py-12 text-center border rounded-lg bg-slate-50 dark:bg-slate-900">
-					<Icons.AlertCircle className="h-10 w-10 mx-auto text-slate-400 mb-3" />
-					<p className="text-muted-foreground">No active agendas for this faction.</p>
-				</div>
-			)}
+			))}
 		</div>
 	)
 }

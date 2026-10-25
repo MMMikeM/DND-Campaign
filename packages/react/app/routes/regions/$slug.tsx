@@ -6,6 +6,7 @@ import { Tags } from "~/components/Tags"
 import { buttonVariants } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { getRegion } from "~/lib/entities"
+import { orNotFound } from "~/lib/errors"
 import type { Route } from "./+types/$slug"
 import { AreasContent } from "./components/AreasContent"
 import { ConnectionsContent } from "./components/ConnectionsContent"
@@ -15,16 +16,7 @@ import { OverviewContent } from "./components/OverviewContent"
 import { RegionHeader } from "./components/RegionHeader"
 
 export async function loader({ params }: Route.LoaderArgs) {
-	if (!params.slug) {
-		throw new Response("No slug provided", { status: 400 })
-	}
-
-	const region = await getRegion(params.slug)
-	if (!region) {
-		throw new Response("Region not found", { status: 404 })
-	}
-
-	return region
+	return orNotFound(getRegion(params.slug))
 }
 
 export default function RegionDetailPage({ loaderData }: Route.ComponentProps) {

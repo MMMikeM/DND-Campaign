@@ -15,7 +15,6 @@ const consequenceConfig = {
 				affectedQuestId: false,
 				affectedRegionId: false,
 				affectedSiteId: false,
-				affectingConsequences: false,
 				triggerQuestId: false,
 				triggerQuestStageDecisionId: false,
 			},
