@@ -1,35 +1,7 @@
 import { sql } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
-import type { PgColumn, PgTable } from "drizzle-orm/pg-core"
 import type { EntityRef } from "../search"
-import { conflicts } from "../schemas/conflicts/tables"
-import { consequences } from "../schemas/consequences/tables"
-import { factions } from "../schemas/factions/tables"
-import { foreshadowing } from "../schemas/foreshadowing/tables"
-import { items } from "../schemas/items/tables"
-import { lore } from "../schemas/lore/tables"
-import { npcs } from "../schemas/npcs/tables"
-import { quests } from "../schemas/quests/tables"
-import { areas, regions, sites } from "../schemas/regions/tables"
-import { questStageDecisions, questStages } from "../schemas/stages/tables"
-
-type NamedTable = PgTable & { id: PgColumn; name: PgColumn; slug: PgColumn }
-
-const searchableTables: Record<string, NamedTable> = {
-	areas,
-	conflicts,
-	consequences,
-	factions,
-	foreshadowing,
-	items,
-	lore,
-	npcs,
-	quest_stage_decisions: questStageDecisions,
-	quest_stages: questStages,
-	quests,
-	regions,
-	sites,
-}
+import { searchableTables } from "../schemas/searchable-tables"
 
 /**
  * Every searchable entity's name, read from the base tables rather than `search_index`,

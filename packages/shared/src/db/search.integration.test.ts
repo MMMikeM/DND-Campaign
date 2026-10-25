@@ -17,19 +17,21 @@ let db: NodePgDatabase
 
 // Runs the whole generated migration chain against an empty database, as a fresh clone would.
 beforeAll(async () => {
-	container = await new PostgreSqlContainer("pgvector/pgvector:pg17").start()
+	container = await new PostgreSqlContainer("postgres:17").start()
 	pool = new pg.Pool({ connectionString: container.getConnectionUri() })
 	db = drizzle({ client: pool })
 	await migrate(db, { migrationsFolder: fileURLToPath(new URL("../../drizzle", import.meta.url)) })
 
 	await db.execute(sql`
-		INSERT INTO regions (name, description, tags, danger_level, type) VALUES
-			('Sword Coast', '{"A long stretch of wild shoreline where goblin raiders prowl"}', '{}', 'low', 'coastal'),
-			('Moonsea', '{"Cold water ringed by goblin warrens and goblin forts"}', '{}', 'high', 'inland');
+		INSERT INTO regions (name, description, tags, danger_level, type, atmosphere_and_culture, features_and_hazards, history_and_economy, lore_and_secrets) VALUES
+			('Sword Coast', '{"A long stretch of wild shoreline where goblin raiders prowl"}', '{}', 'low', 'coastal', '{}', '{}', '{}', '{}'),
+			('Moonsea', '{"Cold water ringed by goblin warrens and goblin forts under dragon wings"}', '{}', 'high', 'inland', '{}', '{}', '{}', '{}'),
+			('Cyprian Shore', '{"Lyra grew up in Paphos, where the king was kind"}', '{}', 'low', 'coastal', '{}', '{}', '{}', '{}');
 		INSERT INTO areas (name, description, tags, region_id, type, culture_and_leadership, features_and_hazards, lore_and_secrets)
-			SELECT 'Phandalin Outskirts', '{"Farmland ringed by old ruins"}', '{}', id, 'rural', '{}', '{}', '{}'
+			SELECT 'Phandalin Outskirts', '{"Farmland ringed by old ruins and dragon wings"}', '{}', id, 'rural', '{}', '{}', '{}'
 			FROM regions WHERE name = 'Sword Coast';
 		REFRESH MATERIALIZED VIEW search_index;
+		REFRESH MATERIALIZED VIEW entity_words;
 	`)
 }, BOOT_TIMEOUT)
 
@@ -82,7 +84,52 @@ describe("buildFullTextQuery", () => {
 		expect(await search("goblin", 1)).toHaveLength(1)
 	})
 
-	it("leaves misspellings to name search", async () => {
-		expect(await search("shorline")).toEqual([])
+	it("filters by table before applying the limit", async () => {
+		const [unfiltered] = await search("coast", 1)
+		expect(unfiltered).toMatchObject({ source_table: "regions" })
+
+		expect(await search("coast", 1, ["areas"])).toEqual([
+			expect.objectContaining({ source_table: "areas", name: "Phandalin Outskirts" }),
+		])
+	})
+
+	it("returns nothing for an empty table filter", async () => {
+		expect(await search("goblin", 10, [])).toEqual([])
+	})
+
+})
+
+describe("spelling correction", () => {
+	const names = async (term: string) => (await search(term)).map((r) => r.name)
+
+	it("corrects a misspelled word to one an entity uses", async () => {
+		expect(await names("shorline")).toContain("Sword Coast")
+	})
+
+	it("corrects a word spelled the way it sounds", async () => {
+		expect(await names("Pafos")).toEqual(["Cyprian Shore"])
+	})
+
+	it("corrects every misspelled word of the term", async () => {
+		expect(await names("lira pafos")).toEqual(["Cyprian Shore"])
+	})
+
+	it("corrects a short word when one candidate is closest", async () => {
+		expect(await names("lira")).toEqual(["Cyprian Shore"])
+	})
+
+	// "wings" is as close to "kings" as "king" is, and more entities use it.
+	it("leaves a word alone when it matches as written", async () => {
+		expect(await names("kings")).toEqual(["Cyprian Shore"])
+	})
+
+	it("leaves a short word alone when candidates tie", async () => {
+		expect(await names("kine")).toEqual([])
+	})
+})
+
+describe("materialized views", () => {
+	it.each(["search_index", "entity_words"])("refreshes %s concurrently", async (view) => {
+		await db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY ${sql.identifier(view)}`)
 	})
 })
