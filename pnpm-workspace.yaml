@@ -14,8 +14,7 @@ allowBuilds:
   better-sqlite3: false
 catalog:
   "@types/node": ^26.6.5
-  drizzle-orm: 1.0.0-rc.4
-  tailwindcss: ^4.0.0
+  drizzle-orm: 1.0.0-rc.5
   typescript: ^7.0.2
   zod: ^4.6.7
   vite: npm:@voidzero-dev/vite-plus-core@1.4.0

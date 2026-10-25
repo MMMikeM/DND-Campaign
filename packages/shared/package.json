@@ -41,10 +41,11 @@
 	},
 	"devDependencies": {
 		"@arethetypeswrong/core": "^0.18.5",
+		"@mmmike/extra-drizzle-kit": "1.0.0",
 		"@testcontainers/postgresql": "^12.2.1",
 		"@types/node": "catalog:",
 		"@types/pg": "^8.23.1",
-		"drizzle-kit": "1.0.0-rc.4",
+		"drizzle-kit": "1.0.0-rc.5",
 		"publint": "^0.3.25",
 		"typescript": "catalog:"
 	},
