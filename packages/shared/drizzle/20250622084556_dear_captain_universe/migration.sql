@@ -1,1 +1,0 @@
-ALTER TABLE "lore" ADD COLUMN "description" text[];
