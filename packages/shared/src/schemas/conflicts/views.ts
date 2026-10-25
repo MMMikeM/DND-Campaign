@@ -7,7 +7,7 @@ import { itemConnections } from "../items/tables"
 import { loreLinks } from "../lore/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
-import { entityJson, jsonAgg, jsonObject, optionalEntityJson } from "../view-utils"
+import { entityJsonWhen, jsonAgg, jsonObject, optionalEntityJson } from "../view-utils"
 import { conflictParticipants, conflicts } from "./tables"
 
 export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb) =>
@@ -16,7 +16,7 @@ export const conflictSearchDataView = pgView("conflict_search_data_view").as((qb
 			id: conflicts.id,
 			sourceTable: sql<string>`'conflicts'`.as("source_table"),
 			entityMain: sql`to_jsonb(${conflicts}.*)`.as("entity_main"),
-			region: sql`COALESCE(${entityJson(regions)}, '{}'::jsonb)`.as("region"),
+			region: entityJsonWhen(conflicts.regionId, regions).as("region"),
 			participants: jsonAgg(
 				jsonObject([
 					sql`'participant', to_jsonb(${conflictParticipants}.*)`,

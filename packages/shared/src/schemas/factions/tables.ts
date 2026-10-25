@@ -2,6 +2,7 @@
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
 import {
+	arcFk,
 	cascadeFk,
 	list,
 	manyOf,
@@ -121,9 +122,9 @@ export const factionInfluence = pgTable(
 
 		factionId: cascadeFk("faction_id", factions.id),
 
-		regionId: nullableFk("region_id", () => regions.id),
-		areaId: nullableFk("area_id", () => areas.id),
-		siteId: nullableFk("site_id", () => sites.id),
+		regionId: arcFk("region_id", () => regions.id),
+		areaId: arcFk("area_id", () => areas.id),
+		siteId: arcFk("site_id", () => sites.id),
 
 		influenceLevel: oneOf("influence_level", influenceLevels),
 
@@ -132,7 +133,7 @@ export const factionInfluence = pgTable(
 		priorities: list("priorities"),
 	},
 	(t) => [
-		unique().on(t.factionId, t.regionId, t.areaId, t.siteId),
+		unique().on(t.factionId, t.regionId, t.areaId, t.siteId).nullsNotDistinct(),
 		check(
 			"single_fk_check",
 			sql`((CASE WHEN ${t.regionId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.areaId} IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN ${t.siteId} IS NOT NULL THEN 1 ELSE 0 END)) = 1`,

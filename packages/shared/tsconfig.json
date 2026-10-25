@@ -18,14 +18,14 @@
 		"strict": true,
 		"noEmit": true,
 		"strictNullChecks": true,
+		"lib": [
+			"ES2015"
+		],
+		"outDir": "./dist",
+		"types": [
+			"node"
+		],
 	},
-	"lib": [
-		"ES2015"
-	],
-	"outDir": "./dist",
-	"types": [
-		"node"
-	],
 	"include": [
 		"."
 	],

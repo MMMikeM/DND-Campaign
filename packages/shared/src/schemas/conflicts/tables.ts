@@ -1,7 +1,7 @@
 // conflicts/tables.ts
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
+import { arcFk, cascadeFk, list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { regions } from "../regions/tables"
@@ -48,8 +48,8 @@ export const conflictParticipants = pgTable(
 
 		conflictId: cascadeFk("conflict_id", conflicts.id),
 
-		npcId: nullableFk("npc_id", npcs.id),
-		factionId: nullableFk("faction_id", factions.id),
+		npcId: arcFk("npc_id", npcs.id),
+		factionId: arcFk("faction_id", factions.id),
 
 		role: oneOf("role", participantRolesInConflict),
 

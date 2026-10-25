@@ -18,8 +18,12 @@ Two named concepts are at work:
 row so it can carry attributes. A graph database would call this an edge with properties.
 
 **Exclusive arc** — the polymorphic endpoint. Instead of one FK, there are N nullable FKs plus a
-`CHECK` constraint that exactly one is non-null. See `chk_single_affected_entity`,
-`chk_single_trigger`, `single_fk_check`.
+`CHECK` constraint that exactly one is non-null. See `chk_single_affected_entity` and
+`single_fk_check`.
+
+A consequence's source end is the one exception: `sourceType` decides which trigger FK it needs, and
+a world event or the passage of time has nothing to point at. `chk_trigger_matches_source` holds
+each source type to its own column, or to none.
 
 Together: *a reified relationship with exclusive arcs at both ends.*
 
@@ -41,7 +45,7 @@ starts failing. It is not worth the migration today — see "When to revisit".
 
 ## The rendering rule
 
-Because each row has **exactly one source and exactly one target**, the two ends want different
+Because each row has **at most one source and exactly one target**, the two ends want different
 views. This applies to all three tables, not just consequences:
 
 - **The source renders all of them, and links out.** A quest lists every consequence it triggers.

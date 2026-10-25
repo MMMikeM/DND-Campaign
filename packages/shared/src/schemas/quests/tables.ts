@@ -1,7 +1,7 @@
 // quests/tables.ts
 import { sql } from "drizzle-orm"
-import { type AnyPgColumn, check, integer, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, slug, string } from "../../db/utils"
+import { type AnyPgColumn, check, pgTable, unique } from "drizzle-orm/pg-core"
+import { arcFk, cascadeFk, list, nullableFk, nullableOneOf, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
 import { sites } from "../regions/tables"
@@ -47,7 +47,7 @@ export const quests = pgTable("quests", {
 	objectives: list("objectives"),
 	rewards: list("rewards"),
 
-	prerequisiteQuestId: integer("prerequisite_quest_id").references((): AnyPgColumn => quests.id),
+	prerequisiteQuestId: nullableFk("prerequisite_quest_id", (): AnyPgColumn => quests.id),
 	otherUnlockConditionsNotes: nullableString("other_unlock_conditions_notes"),
 })
 
@@ -81,9 +81,9 @@ export const questHooks = pgTable(
 		questId: cascadeFk("quest_id", quests.id),
 
 		hookSourceType: oneOf("hook_source_type", questHookSourceTypes),
-		siteId: nullableFk("site_id", sites.id),
-		factionId: nullableFk("faction_id", factions.id),
-		deliveryNpcId: nullableFk("delivery_npc_id", npcs.id),
+		siteId: arcFk("site_id", sites.id),
+		factionId: arcFk("faction_id", factions.id),
+		deliveryNpcId: arcFk("delivery_npc_id", npcs.id),
 
 		hookType: oneOf("hook_type", hookTypes),
 		presentationStyle: oneOf("presentation_style", presentationStyles),
@@ -121,8 +121,8 @@ export const questParticipants = pgTable(
 		tags: list("tags"),
 
 		questId: cascadeFk("quest_id", quests.id),
-		npcId: nullableFk("npc_id", npcs.id),
-		factionId: nullableFk("faction_id", factions.id),
+		npcId: arcFk("npc_id", npcs.id),
+		factionId: arcFk("faction_id", factions.id),
 
 		roleInQuest: string("role_in_quest"),
 

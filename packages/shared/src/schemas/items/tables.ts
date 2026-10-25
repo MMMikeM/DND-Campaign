@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, slug, string } from "../../db/utils"
+import { arcFk, cascadeFk, list, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { lore } from "../lore/tables"
@@ -39,27 +39,29 @@ export const itemConnections = pgTable(
 		relationship: string("relationship"),
 		details: list("details"),
 
-		connectedNpcId: nullableFk("connected_npc_id", npcs.id),
-		connectedFactionId: nullableFk("connected_faction_id", factions.id),
-		connectedSiteId: nullableFk("connected_site_id", sites.id),
-		connectedQuestId: nullableFk("connected_quest_id", quests.id),
-		connectedConflictId: nullableFk("connected_conflict_id", conflicts.id),
-		connectedLoreId: nullableFk("connected_lore_id", () => lore.id),
-		connectedItemId: nullableFk("connected_item_id", () => items.id),
-		connectedQuestStageId: nullableFk("connected_quest_stage_id", questStages.id),
+		connectedNpcId: arcFk("connected_npc_id", npcs.id),
+		connectedFactionId: arcFk("connected_faction_id", factions.id),
+		connectedSiteId: arcFk("connected_site_id", sites.id),
+		connectedQuestId: arcFk("connected_quest_id", quests.id),
+		connectedConflictId: arcFk("connected_conflict_id", conflicts.id),
+		connectedLoreId: arcFk("connected_lore_id", () => lore.id),
+		connectedItemId: arcFk("connected_item_id", () => items.id),
+		connectedQuestStageId: arcFk("connected_quest_stage_id", questStages.id),
 	},
 	(table) => [
-		unique().on(
-			table.itemId,
-			table.connectedNpcId,
-			table.connectedFactionId,
-			table.connectedSiteId,
-			table.connectedQuestId,
-			table.connectedConflictId,
-			table.connectedLoreId,
-			table.connectedItemId,
-			table.connectedQuestStageId,
-		),
+		unique()
+			.on(
+				table.itemId,
+				table.connectedNpcId,
+				table.connectedFactionId,
+				table.connectedSiteId,
+				table.connectedQuestId,
+				table.connectedConflictId,
+				table.connectedLoreId,
+				table.connectedItemId,
+				table.connectedQuestStageId,
+			)
+			.nullsNotDistinct(),
 		check(
 			"chk_single_connected_fk",
 			sql`(

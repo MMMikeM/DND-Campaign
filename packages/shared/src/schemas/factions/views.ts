@@ -8,6 +8,7 @@ import { loreLinks } from "../lore/tables"
 import { npcFactionMemberships, npcs } from "../npcs/tables"
 import { questHooks, questParticipants, quests } from "../quests/tables"
 import { areas, regions, sites } from "../regions/tables"
+import { entityJsonWhen } from "../view-utils"
 import { factionAgendas, factionDiplomacy, factionInfluence, factions } from "./tables"
 
 export const factionSearchDataView = pgView("faction_search_data_view").as((qb) =>
@@ -16,10 +17,7 @@ export const factionSearchDataView = pgView("faction_search_data_view").as((qb) 
 			id: factions.id,
 			sourceTable: sql<string>`'factions'`.as("source_table"),
 			entityMain: sql<string>`to_jsonb(${factions})`.as("entity_main"),
-			primaryHqSite:
-				sql<string>`COALESCE(jsonb_build_object('id', ${sites.id}, 'name', ${sites.name}), '{}'::jsonb)`.as(
-					"primaryHqSite",
-				),
+			primaryHqSite: entityJsonWhen(factions.hqSiteId, sites).as("primaryHqSite"),
 			agendas:
 				sql<string>`COALESCE(jsonb_agg(DISTINCT to_jsonb(${factionAgendas}.*)) FILTER (WHERE ${factionAgendas.id} IS NOT NULL), '[]'::jsonb)`.as(
 					"agendas",

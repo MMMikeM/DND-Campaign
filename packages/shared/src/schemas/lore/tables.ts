@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { check, pgTable, text, unique } from "drizzle-orm/pg-core"
-import { cascadeFk, list, nullableFk, oneOf, pk, slug, string } from "../../db/utils"
+import { arcFk, cascadeFk, list, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { foreshadowing } from "../foreshadowing/tables"
@@ -47,29 +47,31 @@ export const loreLinks = pgTable(
 		loreId: cascadeFk("lore_id", lore.id),
 
 		linkStrength: oneOf("link_strength", linkStrengths),
-		regionId: nullableFk("region_id", regions.id),
-		factionId: nullableFk("faction_id", factions.id),
-		npcId: nullableFk("npc_id", npcs.id),
-		conflictId: nullableFk("conflict_id", conflicts.id),
-		questId: nullableFk("quest_id", quests.id),
-		foreshadowingId: nullableFk("foreshadowing_id", () => foreshadowing.id),
-		relatedLoreId: nullableFk("related_lore_id", lore.id),
-		itemId: nullableFk("item_id", () => items.id),
+		regionId: arcFk("region_id", regions.id),
+		factionId: arcFk("faction_id", factions.id),
+		npcId: arcFk("npc_id", npcs.id),
+		conflictId: arcFk("conflict_id", conflicts.id),
+		questId: arcFk("quest_id", quests.id),
+		foreshadowingId: arcFk("foreshadowing_id", () => foreshadowing.id),
+		relatedLoreId: arcFk("related_lore_id", lore.id),
+		itemId: arcFk("item_id", () => items.id),
 		linkRoleOrTypeText: string("link_role_or_type_text"),
 		linkDetailsText: string("link_details_text"),
 	},
 	(table) => [
-		unique("unique_lore_link").on(
-			table.loreId,
-			table.regionId,
-			table.factionId,
-			table.npcId,
-			table.conflictId,
-			table.questId,
-			table.foreshadowingId,
-			table.relatedLoreId,
-			table.itemId,
-		),
+		unique("unique_lore_link")
+			.on(
+				table.loreId,
+				table.regionId,
+				table.factionId,
+				table.npcId,
+				table.conflictId,
+				table.questId,
+				table.foreshadowingId,
+				table.relatedLoreId,
+				table.itemId,
+			)
+			.nullsNotDistinct(),
 		check(
 			"single_fk_check",
 			sql`(

@@ -2,7 +2,7 @@
 
 import { sql } from "drizzle-orm"
 import { type AnyPgColumn, check, pgTable } from "drizzle-orm/pg-core"
-import { list, nullableFk, nullableString, oneOf, pk, slug, string } from "../../db/utils"
+import { arcFk, list, nullableString, oneOf, pk, slug, string } from "../../db/utils"
 import { conflicts } from "../conflicts/tables"
 import { factions } from "../factions/tables"
 import { npcs } from "../npcs/tables"
@@ -39,27 +39,34 @@ export const consequences = pgTable(
 		escalationDetails: nullableString("escalation_details"),
 		twistRevealDetails: nullableString("twist_reveal_details"),
 
-		triggerQuestId: nullableFk("trigger_quest_id", () => quests.id),
-		triggerQuestStageDecisionId: nullableFk("trigger_quest_stage_decision_id", () => questStageDecisions.id),
+		triggerQuestId: arcFk("trigger_quest_id", () => quests.id),
+		triggerQuestStageDecisionId: arcFk("trigger_quest_stage_decision_id", () => questStageDecisions.id),
 
-		affectedFactionId: nullableFk("affected_faction_id", () => factions.id),
-		affectedRegionId: nullableFk("affected_region_id", () => regions.id),
-		affectedAreaId: nullableFk("affected_area_id", () => areas.id),
-		affectedSiteId: nullableFk("affected_site_id", () => sites.id),
-		affectedNpcId: nullableFk("affected_npc_id", () => npcs.id),
-		affectedConsequenceId: nullableFk("affected_consequence_id", (): AnyPgColumn => consequences.id),
-		affectedConflictId: nullableFk("affected_conflict_id", () => conflicts.id),
-		affectedQuestId: nullableFk("affected_quest_id", () => quests.id),
+		affectedFactionId: arcFk("affected_faction_id", () => factions.id),
+		affectedRegionId: arcFk("affected_region_id", () => regions.id),
+		affectedAreaId: arcFk("affected_area_id", () => areas.id),
+		affectedSiteId: arcFk("affected_site_id", () => sites.id),
+		affectedNpcId: arcFk("affected_npc_id", () => npcs.id),
+		affectedConsequenceId: arcFk("affected_consequence_id", (): AnyPgColumn => consequences.id),
+		affectedConflictId: arcFk("affected_conflict_id", () => conflicts.id),
+		affectedQuestId: arcFk("affected_quest_id", () => quests.id),
 
 		conflictImpactDescription: nullableString("conflict_impact_description"),
 	},
 	(t) => [
 		check(
-			"chk_single_trigger",
-			sql`(
-        (CASE WHEN ${t.triggerQuestId} IS NOT NULL THEN 1 ELSE 0 END) +
-        (CASE WHEN ${t.triggerQuestStageDecisionId} IS NOT NULL THEN 1 ELSE 0 END)
-      ) <= 1`,
+			"chk_trigger_matches_source",
+			sql`CASE
+        WHEN ${t.sourceType} = 'decision'
+          THEN ${t.triggerQuestStageDecisionId} IS NOT NULL AND ${t.triggerQuestId} IS NULL
+        WHEN ${t.sourceType} IN ('quest_completion', 'quest_completion_affecting_conflict')
+          THEN ${t.triggerQuestId} IS NOT NULL AND ${t.triggerQuestStageDecisionId} IS NULL
+        WHEN ${t.sourceType} = 'player_choice'
+          THEN ${t.triggerQuestId} IS NULL
+        WHEN ${t.sourceType} IN ('world_event', 'time_passage')
+          THEN ${t.triggerQuestId} IS NULL AND ${t.triggerQuestStageDecisionId} IS NULL
+        ELSE FALSE
+      END`,
 		),
 		check(
 			"chk_single_affected_entity",
